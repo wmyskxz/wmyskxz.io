@@ -1,0 +1,1185 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="Redis(6)——GeoHash查找附近的人, 我没有三颗心脏的博客">
+    <meta name="description" content="
+像微信 “附近的人”，美团 “附近的餐厅”，支付宝共享单车 “附近的车” 是怎么设计实现的呢？
+一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，经度范围 *[-180, 180]，纬度范围 ">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Redis(6)——GeoHash查找附近的人 | 我没有三颗心脏的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">我没有三颗心脏的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">我没有三颗心脏的博客</div>
+        <div class="logo-desc">
+            
+            分享知识&amp;技术&amp;思考&amp;成长
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/wmyskxz/" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/wmyskxz/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        Redis(6)——GeoHash查找附近的人
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/原创/" target="_blank">
+                                <span class="chip bg-color">原创</span>
+                            </a>
+                        
+                            <a href="/tags/Redis/" target="_blank">
+                                <span class="chip bg-color">Redis</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Redis/" class="post-category" target="_blank">
+                                Redis
+                            </a>
+                        
+                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                                中间件学习
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-12
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        3k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        11 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="/images/pasted-10.png" alt></p>
+<p>像微信 <strong>“附近的人”</strong>，美团 <strong>“附近的餐厅”</strong>，支付宝共享单车 <strong>“附近的车”</strong> 是怎么设计实现的呢？</p>
+<h1 id="一、使用数据库实现查找附近的人"><a href="#一、使用数据库实现查找附近的人" class="headerlink" title="一、使用数据库实现查找附近的人"></a>一、使用数据库实现查找附近的人</h1><p>我们都知道，地球上的任何一个位置都可以使用二维的 <strong>经纬度</strong> 来表示，经度范围 *[-180, 180]<em>，纬度范围 *[-90, 90]</em>，纬度正负以赤道为界，北正南负，经度正负以本初子午线 <em>(英国格林尼治天文台)</em> 为界，东正西负。比如说，北京人民英雄纪念碑的经纬度坐标就是 <em>(39.904610, 116.397724)</em>，都是正数，因为中国位于东北半球。</p>
+<p>所以，当我们使用数据库存储了所有人的 <strong>经纬度</strong> 信息之后，我们就可以基于当前的坐标节点，来划分出一个矩形的范围，来得知附近的人，如下图：</p>
+<p><img src="/images/pasted-11.png" alt></p>
+<p>所以，我们很容易写出下列的伪 SQL 语句：</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> id <span class="token keyword">FROM</span> positions <span class="token keyword">WHERE</span> x0 <span class="token operator">-</span> r <span class="token operator">&lt;</span> x <span class="token operator">&lt;</span> x0 <span class="token operator">+</span> r <span class="token operator">AND</span> y0 <span class="token operator">-</span> r <span class="token operator">&lt;</span> y <span class="token operator">&lt;</span> y0 <span class="token operator">+</span> r</code></pre>
+<p>如果我们还想进一步地知道与每个坐标元素的距离并排序的话，就需要一定的计算。</p>
+<p>当两个坐标元素的距离不是很远的时候，我们就可以简单利用 <strong>勾股定理</strong> 就能够得出他们之间的 <strong>距离</strong>。不过需要注意的是，地球不是一个标准的球体，<strong>经纬度的密度</strong> 是 <strong>不一样</strong> 的，所以我们使用勾股定理计算平方之后再求和时，需要按照一定的系数 <strong>加权</strong> 再进行求和。当然，如果不准求精确的话，加权也不必了。</p>
+<p>参考下方 <em>参考资料 2</em> 我们能够差不多能写出如下优化之后的 SQL 语句来：<em>(仅供参考)</em></p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span>
+    <span class="token operator">*</span> 
+<span class="token keyword">FROM</span>
+    users_location 
+<span class="token keyword">WHERE</span>
+    latitude <span class="token operator">></span> <span class="token string">'.$lat.'</span> <span class="token operator">-</span> <span class="token number">1</span> 
+    <span class="token operator">AND</span> latitude <span class="token operator">&lt;</span> <span class="token string">'.$lat.'</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">AND</span> longitude <span class="token operator">></span> <span class="token string">'.$lon.'</span> <span class="token operator">-</span> <span class="token number">1</span> 
+    <span class="token operator">AND</span> longitude <span class="token operator">&lt;</span> <span class="token string">'.$lon.'</span> <span class="token operator">+</span> <span class="token number">1</span> 
+<span class="token keyword">ORDER</span> <span class="token keyword">BY</span>
+    ACOS<span class="token punctuation">(</span>
+        SIN<span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token string">'.$lat.'</span> <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">*</span> SIN<span class="token punctuation">(</span> <span class="token punctuation">(</span> latitude <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">+</span> COS<span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token string">'.$lat.'</span> <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">*</span> COS<span class="token punctuation">(</span> <span class="token punctuation">(</span> latitude <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">*</span> COS<span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token string">'.$lon.'</span> <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token operator">-</span> <span class="token punctuation">(</span> longitude <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> 
+    <span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">6380</span> <span class="token keyword">ASC</span> 
+    <span class="token keyword">LIMIT</span> <span class="token number">10</span> '<span class="token punctuation">;</span></code></pre>
+<p>为了满足高性能的矩形区域算法，数据表也需要把经纬度坐标加上 <strong>双向复合索引 (x, y)</strong>，这样可以满足最大优化查询性能。</p>
+<h1 id="二、GeoHash-算法简述"><a href="#二、GeoHash-算法简述" class="headerlink" title="二、GeoHash 算法简述"></a>二、GeoHash 算法简述</h1><p>这是业界比较通用的，用于 <strong>地理位置距离排序</strong> 的一个算法，<strong>Redis</strong> 也采用了这样的算法。GeoHash 算法将 <strong>二维的经纬度</strong> 数据映射到 <strong>一维</strong> 的整数，这样所有的元素都将在挂载到一条线上，距离靠近的二维坐标映射到一维后的点之间距离也会很接近。当我们想要计算 <strong>「附近的人时」</strong>，首先将目标位置映射到这条线上，然后在这个一维的线上获取附近的点就行了。</p>
+<p>它的核心思想就是把整个地球看成是一个 <strong>二维的平面</strong>，然后把这个平面不断地等分成一个一个小的方格，<strong>每一个</strong> 坐标元素都位于其中的 <strong>唯一一个方格</strong> 中，等分之后的 <strong>方格越小</strong>，那么坐标也就 <strong>越精确</strong>，类似下图：</p>
+<p><img src="/images/pasted-12.png" alt></p>
+<p>经过划分的地球，我们需要对其进行编码：</p>
+<p><img src="/images/pasted-13.png" alt></p>
+<p>经过这样顺序的编码之后，如果你仔细观察一会儿，你就会发现一些规律：</p>
+<ul>
+<li>横着的所有编码中，<strong>第 2 位和第 4 位都是一样的</strong>，例如第一排第一个 <code>0101</code> 和第二个 <code>0111</code>，他们的第 2 位和第 4 位都是 <code>1</code>；</li>
+<li>竖着的所有编码中，<strong>第 1 位和第 3 位是递增的</strong>，例如第一排第一个 <code>0101</code>，如果单独把第 1 位和第 3 位拎出来的话，那就是 <code>00</code>，同理看第一排第二个 <code>0111</code>，同样的方法第 1 位和第 3 位拎出来是 <code>01</code>，刚好是 <code>00</code> 递增一个；</li>
+</ul>
+<p>通过这样的规律我们就把每一个小方块儿进行了一定顺序的编码，这样做的 <strong>好处</strong> 是显而易见的：每一个元素坐标既能够被 <strong>唯一标识</strong> 在这张被编码的地图上，也不至于 <strong>暴露特别的具体的位置</strong>，因为区域是共享的，我可以告诉你我就在公园附近，但是在具体的哪个地方你就无从得知了。</p>
+<p>总之，我们通过上面的思想，能够把任意坐标变成一串二进制的编码了，类似于 <code>11010010110001000100</code> 这样 <em>(注意经度和维度是交替出现的哦..)</em>，通过这个整数我们就可以还原出元素的坐标，整数越长，还原出来的坐标值的损失程序就越小。对于 <strong>“附近的人”</strong> 这个功能来说，损失的一点经度可以忽略不计。</p>
+<p>最后就是一个 <code>Base32</code> <em>(0<del>9, a</del>z, 去掉 a/i/l/o 四个字母)</em> 的编码操作，让它变成一个字符串，例如上面那一串儿就变成了 <code>wx4g0ec1</code>。</p>
+<p>在 <strong>Redis</strong> 中，经纬度使用 <code>52</code> 位的整数进行编码，放进了 zset 里面，zset 的 <code>value</code> 是元素的 <code>key</code>，<code>score</code> 是 <strong>GeoHash</strong> 的 <code>52</code> 位整数值。zset 的 <code>score</code> 虽然是浮点数，但是对于 <code>52</code> 位的整数值来说，它可以无损存储。</p>
+<h1 id="三、在-Redis-中使用-Geo"><a href="#三、在-Redis-中使用-Geo" class="headerlink" title="三、在 Redis 中使用 Geo"></a>三、在 Redis 中使用 Geo</h1><blockquote>
+<p>下方内容引自 <em>参考资料 1 - 《Redis 深度历险》</em></p>
+</blockquote>
+<p>在使用 <strong>Redis</strong> 进行 <strong>Geo 查询</strong> 时，我们要时刻想到它的内部结构实际上只是一个 <strong>zset(skiplist)</strong>。通过 zset 的 <code>score</code> 排序就可以得到坐标附近的其他元素 <em>(实际情况要复杂一些，不过这样理解足够了)</em>，通过将 <code>score</code> 还原成坐标值就可以得到元素的原始坐标了。</p>
+<p>Redis 提供的 Geo 指令只有 6 个，很容易就可以掌握。</p>
+<h2 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h2><p><code>geoadd</code> 指令携带集合名称以及多个经纬度名称三元组，注意这里可以加入多个三元组。</p>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geoadd company 116.48105 39.996794 juejin
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+127.0.0.1:6379<span class="token operator">></span> geoadd company 116.514203 39.905409 ireader
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+127.0.0.1:6379<span class="token operator">></span> geoadd company 116.489033 40.007669 meituan
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
+127.0.0.1:6379<span class="token operator">></span> geoadd company 116.562108 39.787602 jd 116.334255 40.027400 xiaomi
+<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 2</code></pre>
+<p>不过很奇怪.. Redis 没有直接提供 Geo 的删除指令，但是我们可以通过 zset 相关的指令来操作 Geo 数据，所以元素删除可以使用 <code>zrem</code> 指令即可。</p>
+<h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p><code>geodist</code> 指令可以用来计算两个元素之间的距离，携带集合名称、2 个名称和距离单位。</p>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geodist company juejin ireader km
+<span class="token string">"10.5501"</span>
+127.0.0.1:6379<span class="token operator">></span> geodist company juejin meituan km
+<span class="token string">"1.3878"</span>
+127.0.0.1:6379<span class="token operator">></span> geodist company juejin jd km
+<span class="token string">"24.2739"</span>
+127.0.0.1:6379<span class="token operator">></span> geodist company juejin xiaomi km
+<span class="token string">"12.9606"</span>
+127.0.0.1:6379<span class="token operator">></span> geodist company juejin juejin km
+<span class="token string">"0.0000"</span></code></pre>
+<p>我们可以看到掘金离美团最近，因为它们都在望京。距离单位可以是 <code>m</code>、<code>km</code>、<code>ml</code>、<code>ft</code>，分别代表米、千米、英里和尺。</p>
+<h2 id="获取元素位置"><a href="#获取元素位置" class="headerlink" title="获取元素位置"></a>获取元素位置</h2><p><code>geopos</code> 指令可以获取集合中任意元素的经纬度坐标，可以一次获取多个。</p>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geopos company juejin
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48104995489120483"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"39.99679348858259686"</span>
+127.0.0.1:6379<span class="token operator">></span> geopos company ireader
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.5142020583152771"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"39.90540918662494363"</span>
+127.0.0.1:6379<span class="token operator">></span> geopos company juejin ireader
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48104995489120483"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"39.99679348858259686"</span>
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.5142020583152771"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"39.90540918662494363"</span></code></pre>
+<p>我们观察到获取的经纬度坐标和 <code>geoadd</code> 进去的坐标有轻微的误差，原因是 <strong>Geohash</strong> 对二维坐标进行的一维映射是有损的，通过映射再还原回来的值会出现较小的差别。对于 <strong>「附近的人」</strong> 这种功能来说，这点误差根本不是事。</p>
+<h2 id="获取元素的-hash-值"><a href="#获取元素的-hash-值" class="headerlink" title="获取元素的 hash 值"></a>获取元素的 hash 值</h2><p><code>geohash</code> 可以获取元素的经纬度编码字符串，上面已经提到，它是 <code>base32</code> 编码。 你可以使用这个编码值去 <code>http://geohash.org/${hash}</code> 中进行直接定位，它是 <strong>Geohash</strong> 的标准编码值。</p>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geohash company ireader
+1<span class="token punctuation">)</span> <span class="token string">"wx4g52e1ce0"</span>
+127.0.0.1:6379<span class="token operator">></span> geohash company juejin
+1<span class="token punctuation">)</span> <span class="token string">"wx4gd94yjn0"</span></code></pre>
+<p>让我们打开地址 <code>http://geohash.org/wx4g52e1ce0</code>，观察地图指向的位置是否正确：</p>
+<p><img src="/images/pasted-14.png" alt></p>
+<p>很好，就是这个位置，非常准确。</p>
+<h2 id="附近的公司"><a href="#附近的公司" class="headerlink" title="附近的公司"></a>附近的公司</h2><p><code>georadiusbymember</code> 指令是最为关键的指令，它可以用来查询指定元素附近的其它元素，它的参数非常复杂。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 范围 20 公里以内最多 3 个元素按距离正排，它不会排除自身</span>
+127.0.0.1:6379<span class="token operator">></span> georadiusbymember company ireader 20 km count 3 asc
+1<span class="token punctuation">)</span> <span class="token string">"ireader"</span>
+2<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
+3<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
+<span class="token comment" spellcheck="true"># 范围 20 公里以内最多 3 个元素按距离倒排</span>
+127.0.0.1:6379<span class="token operator">></span> georadiusbymember company ireader 20 km count 3 desc
+1<span class="token punctuation">)</span> <span class="token string">"jd"</span>
+2<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
+3<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
+<span class="token comment" spellcheck="true"># 三个可选参数 withcoord withdist withhash 用来携带附加参数</span>
+<span class="token comment" spellcheck="true"># withdist 很有用，它可以用来显示距离</span>
+127.0.0.1:6379<span class="token operator">></span> georadiusbymember company ireader 20 km withcoord withdist withhash count 3 asc
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"ireader"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"0.0000"</span>
+ 3<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4069886008361398
+ 4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.5142020583152771"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"39.90540918662494363"</span>
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"10.5501"</span>
+ 3<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4069887154388167
+ 4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48104995489120483"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"39.99679348858259686"</span>
+3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"11.5748"</span>
+ 3<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4069887179083478
+ 4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48903220891952515"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"40.00766997707732031"</span></code></pre>
+<p>除了 <code>georadiusbymember</code> 指令根据元素查询附近的元素，<strong>Redis</strong> 还提供了根据坐标值来查询附近的元素，这个指令更加有用，它可以根据用户的定位来计算「附近的车」，「附近的餐馆」等。它的参数和 <code>georadiusbymember</code> 基本一致，除了将目标元素改成经纬度坐标值：</p>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> georadius company 116.514202 39.905409 20 km withdist count 3 asc
+1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"ireader"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"0.0000"</span>
+2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"10.5501"</span>
+3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
+ 2<span class="token punctuation">)</span> <span class="token string">"11.5748"</span></code></pre>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在一个地图应用中，车的数据、餐馆的数据、人的数据可能会有百万千万条，如果使用 <strong>Redis</strong> 的 <strong>Geo</strong> 数据结构，它们将 <strong>全部放在一个</strong> zset 集合中。在 <strong>Redis</strong> 的集群环境中，集合可能会从一个节点迁移到另一个节点，如果单个 key 的数据过大，会对集群的迁移工作造成较大的影响，在集群环境中单个 key 对应的数据量不宜超过 1M，否则会导致集群迁移出现卡顿现象，影响线上服务的正常运行。</p>
+<p>所以，这里建议 <strong>Geo</strong> 的数据使用 <strong>单独的 Redis 实例部署</strong>，不使用集群环境。</p>
+<p>如果数据量过亿甚至更大，就需要对 <strong>Geo</strong> 数据进行拆分，按国家拆分、按省拆分，按市拆分，在人口特大城市甚至可以按区拆分。这样就可以显著降低单个 zset 集合的大小。</p>
+<h1 id="相关阅读"><a href="#相关阅读" class="headerlink" title="相关阅读"></a>相关阅读</h1><ol>
+<li>Redis(1)——5种基本数据结构 - <a href="https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/</a></li>
+<li>Redis(2)——跳跃表 - <a href="https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/">https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/</a></li>
+<li>Redis(3)——分布式锁深入探究 - <a href="https://www.wmyskxz.com/2020/03/01/redis-3/">https://www.wmyskxz.com/2020/03/01/redis-3/</a></li>
+<li>Reids(4)——神奇的HyperLoglog解决统计问题 - <a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/</a></li>
+<li>Redis(5)——亿级数据过滤和布隆过滤器 - <a href="https://www.wmyskxz.com/2020/03/11/redis-5-yi-ji-shu-ju-guo-lu-he-bu-long-guo-lu-qi/">https://www.wmyskxz.com/2020/03/11/redis-5-yi-ji-shu-ju-guo-lu-he-bu-long-guo-lu-qi/</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《Redis 深度历险》 - 钱文品/ 著 - <a href="https://book.douban.com/subject/30386804/" target="_blank" rel="noopener">https://book.douban.com/subject/30386804/</a></li>
+<li>mysql经纬度查询并且计算2KM范围内附近用户的sql查询性能优化实例教程 - <a href="https://www.cnblogs.com/mgbert/p/4146538.html" target="_blank" rel="noopener">https://www.cnblogs.com/mgbert/p/4146538.html</a></li>
+<li>Geohash算法原理及实现 - <a href="https://www.jianshu.com/p/2fd0cf12e5ba" target="_blank" rel="noopener">https://www.jianshu.com/p/2fd0cf12e5ba</a></li>
+<li>GeoHash算法学习讲解、解析及原理分析 - <a href="https://zhuanlan.zhihu.com/p/35940647" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/35940647</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="/images/pasted-15.png" alt></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+            </div>
+            <hr/>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <style>
+    .foot-copyright-note {
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        margin-bottom: 20px;
+        background-color: #f5f5f5;
+    }
+</style>
+
+
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <!--            <div class="center-align">-->
+            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                    <img alt=""-->
+            <!--                         style="border-width:0"-->
+            <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
+            <!--                </a>-->
+            <!--            </div>-->
+            <!--            <br/>-->
+            <div class="foot-copyright-note">
+                <i class="fa fa-lightbulb-o"></i> 本文由
+                <a xmlns:cc="http://creativecommons.org/ns#" href="/2020/03/12/redis-6-geohash-cha-zhao-fu-jin-de-ren/"
+                   property="cc:attributionName"
+                   rel="cc:attributionURL">
+                    我没有三颗心脏
+                </a> 创作， 采用
+                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                    知识共享署名 4.0 国际许可协议
+                </a>进行许可。
+                可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
+                也欢迎想要交流的朋友加入QQ群：「3382693」。
+            </div>
+        
+    </div>
+
+    <script async defer>
+        document.addEventListener("copy", function (e) {
+            let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+            M.toast({html: toastHTML})
+        });
+
+        function navToReprintStatement() {
+            $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+        }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'a9f57bed080703426741',
+        clientSecret: '03fe7aec06a7794dedfcc123b6475f0231f6a0ce',
+        repo: 'wmyskxz.github.io',
+        owner: 'wmyskxz',
+        admin: "wmyskxz",
+        id: '2020-03-12T08-12-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/03/12/redis-6-geohash-cha-zhao-fu-jin-de-ren/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Redis(6)——GeoHash查找附近的人">
+                        
+                        <span class="card-title">Redis(6)——GeoHash查找附近的人</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+像微信 “附近的人”，美团 “附近的餐厅”，支付宝共享单车 “附近的车” 是怎么设计实现的呢？
+一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，经度范围 *[-180, 180]，纬度范围 
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Redis/" class="post-category" target="_blank">
+                                    Redis
+                                </a>
+                            
+                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                                    中间件学习
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/原创/" target="_blank">
+                        <span class="chip bg-color">原创</span>
+                    </a>
+                    
+                    <a href="/tags/Redis/" target="_blank">
+                        <span class="chip bg-color">Redis</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/03/11/redis-5-yi-ji-shu-ju-guo-lu-he-bu-long-guo-lu-qi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Redis(5)——亿级数据过滤和布隆过滤器">
+                        
+                        <span class="card-title">Redis(5)——亿级数据过滤和布隆过滤器</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+一、布隆过滤器简介上一次 我们学会了使用 HyperLogLog 来对大数据进行一个估算，它非常有价值，可以解决很多精确度不高的统计需求。但是如果我们想知道某一个值是不是已经在 HyperLogLog 结构里面了，它就无能为力了，它只提供
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-03-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Redis/" class="post-category" target="_blank">
+                                    Redis
+                                </a>
+                            
+                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                                    中间件学习
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/原创/" target="_blank">
+                        <span class="chip bg-color">原创</span>
+                    </a>
+                    
+                    <a href="/tags/Redis/" target="_blank">
+                        <span class="chip bg-color">Redis</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 我没有三颗心脏的博客<br />'
+            + '作者: 我没有三颗心脏<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="http://www.wmyskxz/" target="_blank">我没有三颗心脏</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">500.3k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wmyskxz" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub"
+       data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:wmyskxz@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+       data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=939419061" class="tooltipped"
+       data-tooltip="QQ联系我: 939419061" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="#" class="tooltipped" data-tooltip="微信公众号: wmyskxz" data-position="top"
+       data-delay="50" title="微信公众号: wmyskxz">
+        <i class="fa fa-wechat"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-142668321-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-142668321-1');
+</script>
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
