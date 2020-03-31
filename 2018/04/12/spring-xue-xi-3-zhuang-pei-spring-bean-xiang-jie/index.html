@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Spring学习(3)——装配Spring Bean详解, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -30,7 +30,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -361,7 +361,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -427,7 +427,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073806.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073806.png" alt=""></p>
 <h2 id="装配-Bean-的概述"><a href="#装配-Bean-的概述" class="headerlink" title="装配 Bean 的概述"></a>装配 Bean 的概述</h2><p>前面已经介绍了 Spring IoC 的理念和设计，这一篇文章将介绍的是如何将自己开发的 Bean 装配到 Spring IoC 容器中。</p>
 <p>大部分场景下，我们都会使用 ApplicationContext 的具体实现类，因为对应的 Spring IoC 容器功能相对强大。</p>
 <p>而在 Spring 中提供了 3 种方法进行配置：</p>
@@ -453,7 +453,7 @@
 </ul>
 <hr>
 <h2 id="通过-XML-配置装配-Bean"><a href="#通过-XML-配置装配-Bean" class="headerlink" title="通过 XML 配置装配 Bean"></a>通过 XML 配置装配 Bean</h2><p>使用 XML 装配 Bean 需要定义对应的 XML，这里需要引入对应的 XML 模式（XSD）文件，这些文件会定义配置 Spring Bean 的一些元素，当我们在 IDEA 中创建 XML 文件时，会有友好的提示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073813.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073813.png" alt=""></p>
 <p>一个简单的 XML 配置文件如下：</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>beans</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans<span class="token punctuation">"</span></span>
@@ -468,8 +468,7 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span></code></pre>
 <p>简单解释一下：</p>
 <ul>
-<li><code>id</code> 属性是 Spring 能找到当前 Bean 的一个依赖的编号，<strong>遵守 XML 语法的 ID 唯一性约束。必须以字母开头，</strong>可以使用<em>字母、数字、连字符、下划线、句号、冒号</em>，<strong>不能以 <code>/</code> 开头</strong>。
-不过 <code>id</code> 属性<strong>不是一个必需的属性</strong>，<code>name</code> 属性也可以定义 bean 元素的名称，能以逗号或空格隔开<strong>起多个别名</strong>，并且可以<strong>使用很多的特殊字符</strong>，比如在 Spring 和 Spring MVC 的整合中，就得使用 <code>name</code> 属性来定义 bean 的名称，并且使用 <code>/</code> 开头。</li>
+<li><code>id</code> 属性是 Spring 能找到当前 Bean 的一个依赖的编号，<strong>遵守 XML 语法的 ID 唯一性约束。必须以字母开头，</strong>可以使用<em>字母、数字、连字符、下划线、句号、冒号</em>，<strong>不能以 <code>/</code> 开头</strong>。<br>不过 <code>id</code> 属性<strong>不是一个必需的属性</strong>，<code>name</code> 属性也可以定义 bean 元素的名称，能以逗号或空格隔开<strong>起多个别名</strong>，并且可以<strong>使用很多的特殊字符</strong>，比如在 Spring 和 Spring MVC 的整合中，就得使用 <code>name</code> 属性来定义 bean 的名称，并且使用 <code>/</code> 开头。</li>
 </ul>
 <p><strong>注意：</strong> 从 Spring 3.1 开始，<code>id</code> 属性也可以是 String 类型了，也就是说 <code>id</code> 属性也可以使用 <code>/</code> 开头，而 bean 元素的 id 的唯一性由容器负责检查。<br>如果 <code>id</code> 和 <code>name</code> 属性都没有声明的话，那么 Spring 将会采用 <strong>“全限定名#{number}”</strong> 的格式生成编号。 例如这里，如果没有声明 “<code>id=&quot;c&quot;</code>” 的话，那么 Spring 为其生成的编号就是 “<code>pojo.Category#0</code>”，当它第二次声明没有 <code>id</code> 属性的 Bean 时，编号就是 “<code>pojo.Category#1</code>”，以此类推。</p>
 <ul>
@@ -598,7 +597,7 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span></code></pre>
 <h4 id="命名空间装配"><a href="#命名空间装配" class="headerlink" title="命名空间装配"></a>命名空间装配</h4><p>除了上述的配置之外， Spring 还提供了对应的命名空间的定义，只是在使用命名空间的时候要先引入对应的命名空间和 XML 模式（XSD）文件。</p>
 <h5 id="——【①-c-命名空间】——"><a href="#——【①-c-命名空间】——" class="headerlink" title="——【① c-命名空间】——"></a>——【① c-命名空间】——</h5><p>c-命名空间是在 Spring 3.0 中引入的，它是在 XML 中更为简洁地描述构造器参数的方式，要使用它的话，必须要在 XML 的顶部声明其模式：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073827.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073827.png" alt=""></p>
 <ul>
 <li><strong>注意：是通过构造器参数的方式</strong></li>
 </ul>
@@ -633,7 +632,7 @@
       <span class="token attr-name"><span class="token namespace">c:</span>_0</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>3<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">c:</span>_1</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>学生3<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span></code></pre>
 <p>我们将参数的名称替换成了 “0” 和 “1” ，也就是参数的索引。因为在 XML 中不允许数字作为属性的第一个字符，因此必须要添加一个下划线来作为前缀。</p>
 <h5 id="——【②-p-命名空间】——"><a href="#——【②-p-命名空间】——" class="headerlink" title="——【② p-命名空间】——"></a>——【② p-命名空间】——</h5><p>c-命名空间通过构造器注入的方式来配置 bean，p-命名空间则是用setter的注入方式来配置 bean ，同样的，我们需要引入声明：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073840.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073840.png" alt=""></p>
 <p>然后我们就可以通过 p-命名空间来设置属性：</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- 引入p-命名空间之前 --></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>student1<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pojo.Student<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -649,7 +648,7 @@
 <pre class=" language-xml"><code class="language-xml">    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>student2<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pojo.Student<span class="token punctuation">"</span></span>
           <span class="token attr-name"><span class="token namespace">p:</span>id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>2<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">p:</span>name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>学生2<span class="token punctuation">"</span></span> <span class="token attr-name"><span class="token namespace">p:</span>cdCard-ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cdCard1<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span></code></pre>
 <h5 id="——【③-util-命名空间】——"><a href="#——【③-util-命名空间】——" class="headerlink" title="——【③ util-命名空间】——"></a>——【③ util-命名空间】——</h5><p>工具类的命名空间，可以简化集合类元素的配置，同样的我们需要引入其声明（无需担心怎么声明的问题，IDEA会有很友好的提示）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073846.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073846.png" alt=""></p>
 <p>我们来看看引入前后的变化：</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- 引入util-命名空间之前 --></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
@@ -705,7 +704,7 @@
 <p>2.在 applicationContext.xml 文件中写入：</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>import</span> <span class="token attr-name">resource</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>bean.xml<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span></code></pre>
 <p>3.运行测试代码，仍然能正确获取到 bean:</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073900.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073900.png" alt=""></p>
 <hr>
 <h2 id="通过注解装配-Bean"><a href="#通过注解装配-Bean" class="headerlink" title="通过注解装配 Bean"></a>通过注解装配 Bean</h2><p>上面，我们已经了解了如何使用 XML 的方式去装配 Bean，但是更多的时候已经不再推荐使用 XML 的方式去装配 Bean，更多的时候回考虑使用注解（annotation） 的方式去装配 Bean。</p>
 <ul>
@@ -852,7 +851,7 @@ student<span class="token punctuation">.</span><span class="token function">prin
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>运行代码：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073917.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714073917.png" alt=""></p>
 <ul>
 <li><strong>再次理解：</strong> <code>@Autowired</code> 注解表示在 Spring IoC 定位所有的 Bean 后，再根据类型寻找资源，然后将其注入。</li>
 <li><strong>过程：</strong> 定义 Bean  ——》 初始化 Bean（扫描） ——》  根据属性需要从 Spring IoC 容器中搜寻满足要求的 Bean ——》 满足要求则注入</li>
@@ -1168,7 +1167,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1182,7 +1181,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1287,7 +1286,7 @@ AOP 即 Aspect Oriented Program 面向切面编程首
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1351,7 +1350,7 @@ Spring IoC 概述IoC：Inverse of Control（控制反转）
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     

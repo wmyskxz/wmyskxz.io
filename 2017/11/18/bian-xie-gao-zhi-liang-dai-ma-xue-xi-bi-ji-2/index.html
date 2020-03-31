@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="《编写高质量代码》学习笔记(2), 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -32,7 +32,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -363,15 +363,15 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/学习笔记/" target="_blank">
+                            <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">
                                 <span class="chip bg-color">学习笔记</span>
                             </a>
                         
-                            <a href="/tags/代码规范/" target="_blank">
+                            <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
                                 <span class="chip bg-color">代码规范</span>
                             </a>
                         
@@ -383,11 +383,11 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java基础/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
                                 Java基础
                             </a>
                         
-                            <a href="/categories/Java基础/学习笔记/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
                                 学习笔记
                             </a>
                         
@@ -807,12 +807,12 @@ s <span class="token operator">=</span> s <span class="token operator">+</span> 
 <span class="token punctuation">}</span></code></pre>
 <p>程序很简单，编写了4个方法，arrayMethod方法接收String数组和Integer数组，这是一个典型的重载，listMethod接收元素类型为String和Integer的list变量。现在的问题是，这段程序是否能编译？如果不能？问题出在什么地方？</p>
 <p>事实上，这段程序时无法编译的，编译时报错信息如下：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/7896890-47feae6351adb49c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
-<p>这段错误的意思：简单的的说就是方法签名重复，其实就是说listMethod(List<integer> intList)方法在编译时擦除类型后是listMethod(List<e> intList)与另一个方法重复。这就是Java泛型擦除引起的问题：在编译后所有的泛型类型都会做相应的转化。转换规则如下：</e></integer></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/7896890-47feae6351adb49c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这段错误的意思：简单的的说就是方法签名重复，其实就是说listMethod(List<Integer> intList)方法在编译时擦除类型后是listMethod(List<E> intList)与另一个方法重复。这就是Java泛型擦除引起的问题：在编译后所有的泛型类型都会做相应的转化。转换规则如下：</p>
 <ul>
-<li>List<string>、List<integer>、List<t>擦除后的类型为List</t></integer></string></li>
-<li>List<string>[] 擦除后的类型为List[].</string></li>
-<li>List&lt;? extends E&gt; 、List&lt;? super E&gt; 擦除后的类型为List<e>.</e></li>
+<li>List<String>、List<Integer>、List<T>擦除后的类型为List</li>
+<li>List<String>[] 擦除后的类型为List[].</li>
+<li>List&lt;? extends E&gt; 、List&lt;? super E&gt; 擦除后的类型为List<E>.</li>
 <li>List&lt;T extends Serializable &amp; Cloneable &gt;擦除后的类型为List&lt; Serializable&gt;.</li>
 </ul>
 <p>明白了这些规则，再看如下代码：</p>
@@ -827,7 +827,7 @@ s <span class="token operator">=</span> s <span class="token operator">+</span> 
         list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         String str <span class="token operator">=</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span></code></pre>
-<p>Java编译后字节码中已经没有泛型的任何信息了，也就是说一个泛型类和一个普通类在经过编译后都指向了同一字节码，比如Foo<t>类，经过编译后将只有一份Foo.class类，不管是Foo<string>还是Foo<integer>引用的都是同一字节码。Java之所以如此处理，有两个原因：</integer></string></t></p>
+<p>Java编译后字节码中已经没有泛型的任何信息了，也就是说一个泛型类和一个普通类在经过编译后都指向了同一字节码，比如Foo<T>类，经过编译后将只有一份Foo.class类，不管是Foo<String>还是Foo<Integer>引用的都是同一字节码。Java之所以如此处理，有两个原因：</p>
 <ul>
 <li><strong>避免JVM的大换血。</strong>C++泛型生命期延续到了运行期，而Java是在编译期擦除掉的，我们想想，如果JVM也把泛型类型延续到运行期，那么JVM就需要进行大量的重构工作了。</li>
 <li><strong>版本兼容：</strong>在编译期擦除可以更好的支持原生类型(Raw Type)，在Java1.5或1.6…平台上，即使声明一个List这样的原生类型也是可以正常编译通过的，只是会产生警告信息而已。</li>
@@ -839,23 +839,23 @@ s <span class="token operator">=</span> s <span class="token operator">+</span> 
         List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> list2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>Integer<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span>list2<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span></code></pre>
-<p>以上代码返回true，原因很简单，List<string>和List<integer>擦除后的类型都是List，没有任何区别。</integer></string></p>
+<p>以上代码返回true，原因很简单，List<String>和List<Integer>擦除后的类型都是List，没有任何区别。</p>
 <p>*<em>2.泛型数组初始化时不能声明泛型，如下代码编译时通不过：　*</em></p>
 <pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span> listArray <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">List</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
-<p>原因很简单，可以声明一个带有泛型参数的数组，但不能初始化该数组，因为执行了类型擦除操作，List<object>[]与List<string>[] 就是同一回事了，编译器拒绝如此声明。</string></object></p>
+<p>原因很简单，可以声明一个带有泛型参数的数组，但不能初始化该数组，因为执行了类型擦除操作，List<Object>[]与List<String>[] 就是同一回事了，编译器拒绝如此声明。</p>
 <p><strong>3.instanceof不允许存在泛型参数</strong>:以下代码不能通过编译，原因一样，泛型类型被擦除了：　　　</p>
 <pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>String<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>list <span class="token keyword">instanceof</span> <span class="token class-name">List</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <hr>
-<h2 id="建议98：建议的采用顺序是List中泛型顺序依次为T、-、Object"><a href="#建议98：建议的采用顺序是List中泛型顺序依次为T、-、Object" class="headerlink" title="建议98：建议的采用顺序是List中泛型顺序依次为T、?、Object"></a>建议98：建议的采用顺序是List中泛型顺序依次为T、?、Object</h2><p><strong>List<t>、List<?>、List<object>这三者都可以容纳所有的对象，但使用的顺序应该是首选List<t>，次之List<?>，最后选择List<object>，</object></t></object></t></strong>原因如下：</p>
-<p><strong>(1)、List<t>是确定的某一个类型</t></strong></p>
-<p>List<t>表示的是List集合中的元素都为T类型，具体类型在运行期决定；List&lt;？&gt;表示的是任意类型，与List<t>类似，而List<object>则表示List集合中的所有元素为Object类型，因为Object是所有类的父类，所以List<object>也可以容纳所有的类类型，从这一字面意义上分析，List<t>更符合习惯：编码者知道它是某一个类型，只是在运行期才确定而已。</t></object></object></t></t></p>
-<p><strong>(2)List<t>可以进行读写操作</t></strong></p>
-<p>List<t>可以进行诸如add，remove等操作，因为它的类型是固定的T类型，在编码期不需要进行任何的转型操作。</t></p>
-<p><strong>List<t>是只读类型的，不能进行增加、修改操作，</t></strong>因为编译器不知道List中容纳的是什么类型的元素，也就无法校验类型是否安全了，<strong>而且List&lt;?&gt;读取出的元素都是Object类型的，需要主动转型，</strong>所以它经常用于泛型方法的返回值。注意List&lt;？&gt;虽然无法增加，修改元素，但是却可以删除元素，比如执行remove、clear等方法，那是因为它的删除动作与泛型类型无关。</p>
-<p><strong>List<object> 也可以读写操作，但是它执行写入操作时需要向上转型(Up cast)，在读取数据的时候需要向下转型，</object></strong>而此时已经失去了泛型存在的意义了。</p>
-<p>打个比方，有一个篮子用来容纳物品，比如西瓜，番茄等.List<?>的意思是说，“嘿，我这里有一个篮子，可以容纳固定类别的东西，比如西瓜，番茄等”。List<?>的意思是说：“嘿，我有一个篮子，我可以容纳任何东西，只要是你想得到的”。而List<object>就更有意思了，它说” 嘿，我也有一个篮子，我可以容纳所有物质，只要你认为是物质的东西都可以容纳进来 “。</object></p>
-<p>推而广之，Dao<t>应该比Dao&lt;？&gt;、Dao<object>更先采用，Desc<person>则比Desc&lt;？&gt;、Desc<object>更优先采用。</object></person></object></t></p>
+<h2 id="建议98：建议的采用顺序是List中泛型顺序依次为T、-、Object"><a href="#建议98：建议的采用顺序是List中泛型顺序依次为T、-、Object" class="headerlink" title="建议98：建议的采用顺序是List中泛型顺序依次为T、?、Object"></a>建议98：建议的采用顺序是List中泛型顺序依次为T、?、Object</h2><p><strong>List<T>、List<?>、List<Object>这三者都可以容纳所有的对象，但使用的顺序应该是首选List<T>，次之List<?>，最后选择List<Object>，</strong>原因如下：</p>
+<p><strong>(1)、List<T>是确定的某一个类型</strong></p>
+<p>List<T>表示的是List集合中的元素都为T类型，具体类型在运行期决定；List&lt;？&gt;表示的是任意类型，与List<T>类似，而List<Object>则表示List集合中的所有元素为Object类型，因为Object是所有类的父类，所以List<Object>也可以容纳所有的类类型，从这一字面意义上分析，List<T>更符合习惯：编码者知道它是某一个类型，只是在运行期才确定而已。</p>
+<p><strong>(2)List<T>可以进行读写操作</strong></p>
+<p>List<T>可以进行诸如add，remove等操作，因为它的类型是固定的T类型，在编码期不需要进行任何的转型操作。</p>
+<p><strong>List<T>是只读类型的，不能进行增加、修改操作，</strong>因为编译器不知道List中容纳的是什么类型的元素，也就无法校验类型是否安全了，<strong>而且List&lt;?&gt;读取出的元素都是Object类型的，需要主动转型，</strong>所以它经常用于泛型方法的返回值。注意List&lt;？&gt;虽然无法增加，修改元素，但是却可以删除元素，比如执行remove、clear等方法，那是因为它的删除动作与泛型类型无关。</p>
+<p><strong>List<Object> 也可以读写操作，但是它执行写入操作时需要向上转型(Up cast)，在读取数据的时候需要向下转型，</strong>而此时已经失去了泛型存在的意义了。</p>
+<p>打个比方，有一个篮子用来容纳物品，比如西瓜，番茄等.List<?>的意思是说，“嘿，我这里有一个篮子，可以容纳固定类别的东西，比如西瓜，番茄等”。List<?>的意思是说：“嘿，我有一个篮子，我可以容纳任何东西，只要是你想得到的”。而List<Object>就更有意思了，它说” 嘿，我也有一个篮子，我可以容纳所有物质，只要你认为是物质的东西都可以容纳进来 “。</p>
+<p>推而广之，Dao<T>应该比Dao&lt;？&gt;、Dao<Object>更先采用，Desc<Person>则比Desc&lt;？&gt;、Desc<Object>更优先采用。</p>
 <hr>
 <h2 id="建议101：注意Class类的特殊性"><a href="#建议101：注意Class类的特殊性" class="headerlink" title="建议101：注意Class类的特殊性"></a>建议101：注意Class类的特殊性</h2><p>Java语言是先把Java源文件编译成后缀为class的字节码文件，然后再通过ClassLoader机制把这些类文件加载到内存中，最后生成实例执行的，这是Java处理的基本机制，但是加载到内存中的数据的如何描述一个类的呢？比如在Dog.class文件中定义一个Dog类，那它在内存中是如何展现的呢？</p>
 <p>Java使用一个元类(MetaClass)来描述加载到内存中的类数据，这就是Class类，它是一个描述类的类对象，比如Dog.class文件加载到内存中后就会有一个class的实例对象描述之。因为是Class类是“类中类”，也就有预示着它有很多特殊的地方：</p>
@@ -1389,7 +1389,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1403,7 +1403,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1491,11 +1491,11 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java基础/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
                                     Java基础
                                 </a>
                             
-                            <a href="/categories/Java基础/学习笔记/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
                                     学习笔记
                                 </a>
                             
@@ -1506,15 +1506,15 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/学习笔记/" target="_blank">
+                    <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">
                         <span class="chip bg-color">学习笔记</span>
                     </a>
                     
-                    <a href="/tags/代码规范/" target="_blank">
+                    <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
                         <span class="chip bg-color">代码规范</span>
                     </a>
                     
@@ -1557,11 +1557,11 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java基础/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
                                     Java基础
                                 </a>
                             
-                            <a href="/categories/Java基础/学习笔记/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
                                     学习笔记
                                 </a>
                             
@@ -1572,15 +1572,15 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/学习笔记/" target="_blank">
+                    <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">
                         <span class="chip bg-color">学习笔记</span>
                     </a>
                     
-                    <a href="/tags/代码规范/" target="_blank">
+                    <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
                         <span class="chip bg-color">代码规范</span>
                     </a>
                     

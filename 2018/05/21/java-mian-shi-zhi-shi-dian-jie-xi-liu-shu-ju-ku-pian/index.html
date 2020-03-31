@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Java面试知识点解析(六)——数据库篇, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -34,7 +34,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -365,7 +365,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -373,7 +373,7 @@
                                 <span class="chip bg-color">Java Web</span>
                             </a>
                         
-                            <a href="/tags/面试/" target="_blank">
+                            <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
                                 <span class="chip bg-color">面试</span>
                             </a>
                         
@@ -427,7 +427,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175604.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175604.png" alt=""></p>
 <blockquote>
 <ul>
 <li>前言： </li>
@@ -474,7 +474,7 @@ go
 </ul>
 </blockquote>
 <p>我们现在需要建立一个描述学校教务的数据库，该数据库涉及的对象包括学生的学号（Sno）、所在系（Sdept）、系主任姓名（Mname）、课程号（Cno）和成绩（Grade），假设我们使用单一的关系模式 Student 来表示，那么根据现实世界已知的信息，会描述成以下这个样子：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175614.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175614.png" alt=""></p>
 <p>但是，这个关系模式存在以下问题：</p>
 <p><strong>（1） 数据冗余</strong><br>比如，每一个系的系主任姓名重复出现，重复次数与该系所有学生的所有课程成绩出现次数相同，这将浪费大量的存储空间。<br><strong>（2）更新异常（update anomalies）</strong><br>由于数据冗余，当更新数据库中的数据时，系统要付出很大的代价来维护数据库的完整性，否则会面临数据不一致的危险。比如，某系更换系主任后，必须修改与该系学生有关的每一个元组。<br><strong>（3）插入异常（insertion anomalies）</strong><br>如果一个系刚成立，尚无学生，则无法把这个系及其系主任的信息存入数据库。<br><strong>（4）删除异常（deletion anomalies）</strong><br>如果某个系的学生全部毕业了，则在删除该系学生信息的同时，这个系及其系主任的信息也丢失了。</p>
 <ul>
@@ -486,7 +486,7 @@ go
 </ul>
 </blockquote>
 <p>1NF（第一范式）是对属性具有<strong>原子性</strong>的要求，不可再分，例如：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175630.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175630.png" alt=""></p>
 <p>如果认为最后一列还可以再分成出生年，出生月，出生日，则它就不满足第一范式的要求。</p>
 <blockquote>
 <ul>
@@ -494,7 +494,7 @@ go
 </ul>
 </blockquote>
 <p>2NF（第二范式）是对记录有<strong>唯一性</strong>的要求，即实体的唯一性，不存在部分依赖，每一列与主键都相关，例如：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175640.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175640.png" alt=""></p>
 <p>该表明显说明了两个事物：学生信息和课程信息；正常的依赖应该是：学分依赖课程号，姓名依赖学号，但这里存在非主键字段对码的部分依赖，即与主键不相关，不满足第二范式的要求。</p>
 <p><strong>可能存在的问题：</strong></p>
 <ul>
@@ -504,14 +504,14 @@ go
 <li><strong>更新异常</strong>：调整课程学分，所有行都调整。</li>
 </ul>
 <p><strong>正确的做法：</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175650.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175650.png" alt=""></p>
 <blockquote>
 <ul>
 <li><strong>第三范式：</strong> 消除非主属性对码的传递函数依赖</li>
 </ul>
 </blockquote>
 <p>3NF（第三范式）对字段有<strong>冗余性</strong>的要求，任何字段不能由其他字段派生出来，它要求字段没有冗余，即不存在依赖传递，例如：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175658.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175658.png" alt=""></p>
 <p>很明显，学院电话是一个冗余字段，因为存在依赖传递：（学号）→（学生）→（学院）→（学院电话）</p>
 <p><strong>可能会存在的问题：</strong></p>
 <ul>
@@ -519,7 +519,7 @@ go
 <li><strong>更新异常</strong>：有重复的冗余信息，修改时需要同时修改多条记录，否则会出现数据不一致的情况 。</li>
 </ul>
 <p><strong>正确的做法：</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175706.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175706.png" alt=""></p>
 <hr>
 <h3 id="3）数据库索引"><a href="#3）数据库索引" class="headerlink" title="3）数据库索引"></a>3）数据库索引</h3><blockquote>
 <ul>
@@ -882,11 +882,11 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
 <h3 id="17）主键就是聚集索引吗？主键和索引有什么区别？"><a href="#17）主键就是聚集索引吗？主键和索引有什么区别？" class="headerlink" title="17）主键就是聚集索引吗？主键和索引有什么区别？"></a>17）主键就是聚集索引吗？主键和索引有什么区别？</h3><p><strong>主键是一种特殊的唯一性索引，其可以是聚集索引，也可以是非聚集索引。</strong>在SQLServer中，主键的创建必须依赖于索引，默认创建的是聚集索引，但也可以显式指定为非聚集索引。InnoDB作为MySQL存储引擎时，默认按照主键进行聚集，如果没有定义主键，InnoDB会试着使用唯一的非空索引来代替。如果没有这种索引，InnoDB就会定义隐藏的主键然后在上面进行聚集。所以，对于聚集索引来说，你创建主键的时候，自动就创建了主键的聚集索引。</p>
 <hr>
 <h3 id="18）实践中如何优化MySQL"><a href="#18）实践中如何优化MySQL" class="headerlink" title="18）实践中如何优化MySQL"></a>18）实践中如何优化MySQL</h3><p>实践中，MySQL的优化主要涉及SQL语句及索引的优化、数据表结构的优化、系统配置的优化和硬件的优化四个方面，如下图所示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175733.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175733.png" alt=""></p>
 <h4 id="⑴-SQL语句优化："><a href="#⑴-SQL语句优化：" class="headerlink" title="⑴ SQL语句优化："></a>⑴ SQL语句优化：</h4><p>SQL语句的优化主要包括三个问题，即如何发现有问题的SQL、如何分析SQL的执行计划以及如何优化SQL，下面将逐一解释。</p>
 <p><strong>① 怎么发现有问题的SQL?（通过MySQL慢查询日志对有效率问题的SQL进行监控）</strong></p>
 <p>MySQL的慢查询日志是MySQL提供的一种日志记录，它用来记录在MySQL中响应时间超过阀值的语句，具体指运行时间超过long_query_time值的SQL，则会被记录到慢查询日志中。long_query_time的默认值为10，意思是运行10s以上的语句。慢查询日志的相关参数如下所示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175759.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713175759.png" alt=""></p>
 <p>通过MySQL的慢查询日志，我们可以查询出执行的次数多占用的时间长的SQL、可以通过pt_query_disgest(一种mysql慢日志分析工具)分析Rows examine(MySQL执行器需要检查的行数)项去找出IO大的SQL以及发现未命中索引的SQL，对于这些SQL，都是我们优化的对象。</p>
 <p><strong>② 通过explain查询和分析SQL的执行计划：</strong></p>
 <p>使用 EXPLAIN 关键字可以知道MySQL是如何处理你的SQL语句的，以便分析查询语句或是表结构的性能瓶颈。通过explain命令可以得到表的读取顺序、数据读取操作的操作类型、哪些索引可以使用、哪些索引被实际使用、表之间的引用以及每张表有多少行被优化器查询等问题。当扩展列extra出现Using filesort和Using temporay，则往往表示SQL需要优化了。</p>
@@ -1126,7 +1126,7 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1140,7 +1140,7 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1245,7 +1245,7 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1253,7 +1253,7 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/面试/" target="_blank">
+                    <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
                         <span class="chip bg-color">面试</span>
                     </a>
                     
@@ -1308,7 +1308,7 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1316,7 +1316,7 @@ preparedStatement<span class="token punctuation">.</span><span class="token func
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/面试/" target="_blank">
+                    <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
                         <span class="chip bg-color">面试</span>
                     </a>
                     

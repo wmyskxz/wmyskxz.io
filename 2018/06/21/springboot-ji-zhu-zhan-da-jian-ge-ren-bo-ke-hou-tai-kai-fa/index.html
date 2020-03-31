@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="SpringBoot技术栈搭建个人博客【后台开发】, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -32,7 +32,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -363,7 +363,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -371,7 +371,7 @@
                                 <span class="chip bg-color">Java Web</span>
                             </a>
                         
-                            <a href="/tags/项目/" target="_blank">
+                            <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
                                 <span class="chip bg-color">项目</span>
                             </a>
                         
@@ -429,7 +429,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173348.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173348.png" alt=""></p>
 <blockquote>
 <p><strong>前言</strong>：在之前，我们已经完成了项目的基本准备，那么就可以开始后台开发了，突然又想到一个问题，就是准备的时候只是设计了前台的RESTful APIs，但是后台管理我们同样也是需要API的，那么就在这一篇里面一起实现了吧…</p>
 <ul>
@@ -443,7 +443,7 @@
 <li>3）<strong>命名规范的问题</strong>：因为使用MyBatis逆向工程自动生成的时候，配置了一个<code>useActualColumnNames</code>使用表真正名称的东西，所以整得来生成POJO类基础字段有下划线，看着着实有点不爽，把它给干掉干掉…；</li>
 </ul>
 <h2 id="数据库调整"><a href="#数据库调整" class="headerlink" title="数据库调整"></a>数据库调整</h2><p>把字段规范了一下，并且删除了分类下是否有效的字段（感觉这种不经常变换的字段留着也没啥用干脆干掉..），所以调整为了下面这个样子（调整字段已标红）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173356.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173356.png" alt=""></p>
 <p>然后重新使用生成器自动生成对应的文件，注意记得修改generatorConfig.xml文件中对应的数据库名称；</p>
 <h3 id="创建和修改时间的字段设置"><a href="#创建和修改时间的字段设置" class="headerlink" title="创建和修改时间的字段设置"></a>创建和修改时间的字段设置</h3><p>通过查资料发现其实我们可以通过直接设置数据库来自动更新我们的modified_by字段，并且可以像设置初始值那样给create_by和modified_by两个字段以当前时间戳设置默认值，这里具体以<strong>tbl_article_info</strong>这张表为例：</p>
 <pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>tbl_article_info<span class="token punctuation">`</span> <span class="token punctuation">(</span>
@@ -459,12 +459,12 @@
 <p>我们通过设置<code>DEFAULT</code>为<code>CURRENT_TIMESTAMP</code>，然后给modified_by字段多添加了一句<code>ON UPDATE CURRENT_TIMESTAMP</code>，这样它就会在更新的时候将该字段的值设置为更新时间，这样我们就不用在后台关心这两个值了，也少写了一些代码（其实是写代码的时候发现可以这样偷懒..hhh…）；</p>
 <h2 id="RESTful-APIs重新设计"><a href="#RESTful-APIs重新设计" class="headerlink" title="RESTful APIs重新设计"></a>RESTful APIs重新设计</h2><p>我们需要把一些不能够暴露给前台的API收回，然后再设计一下后台的API，捣鼓了一下，最后大概是这个样子了：</p>
 <p><strong>后台Restful APIs：</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173403.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173403.png" alt=""></p>
 <p><strong>前台开放RESful APIs：</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173416.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173416.png" alt=""></p>
 <p>这些API只是用来和前端交互的接口，另外一些关于日志啊之类的东西就直接在后台写就行了，OK，这样就爽多了，可以开始着手写代码了；</p>
 <h1 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h1><p>随着配置内容的增多，我逐渐的想要放弃.yml的配置文件，主要的一点是这东西不好对内容进行分类（下图是简单配置了一些基本文件后的.yml和.properties文件的对比）..</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173424.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173424.png" alt=""></p>
 <p>最后还是用回.properties文件吧，不分类还是有点难受</p>
 <h2 id="编码设置"><a href="#编码设置" class="headerlink" title="编码设置"></a>编码设置</h2><p>我们首先需要解决的是中文乱码的问题，对应<strong>GET请求</strong>，我们可以通过修改Tomcat的配置文件【server.xml】来把它默认的编码格式改为UTF-8，而对于<strong>POST请求</strong>，我们需要统一配置一个拦截器一样的东西把请求的编码统一改成UTF-8：</p>
 <pre class=" language-properties"><code class="language-properties"><span class="token comment" spellcheck="true">## ——————————编码设置——————————</span>
@@ -557,7 +557,7 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span></code></pre>
 <p>在Spring Boot中你只要按照规则组织文件名，就能够使得配置文件能够被正确加载，并且官方推荐优先使用带有<code>-spring</code>的文件名作为日志的配置（如上面使用的<code>logback-spring.xml</code>，而不是<code>logback.xml</code>），满足这样的命名规范并且保证文件在<code>src/main/resources</code>下就好了；</p>
 <h3 id="第二步：重启项目检查是否成功"><a href="#第二步：重启项目检查是否成功" class="headerlink" title="第二步：重启项目检查是否成功"></a>第二步：重启项目检查是否成功</h3><p>我们定义的目录位置为<code>/log/wmyskxz/</code>，但是在项目的根目录下并没有发现这样的目录，反而是在当前盘符的根目录..不是很懂这个规则..总之是成功了的..</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173434.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173434.png" alt=""></p>
 <p>打开是密密麻麻一堆跟控制台一样的【info】级别的信息，因为这个系统本身就比较简单，所以就没有必要去搞什么文本切割之类的东西了，ok..日志算是配置完成；</p>
 <blockquote>
 <p>实际测试了一下，上线之后肯定需要调整输出级别的，不然日志文件就会特别大…</p>
@@ -1100,7 +1100,7 @@
 <span class="token punctuation">}</span></code></pre>
 <p>其实就是添加上<code>@Bean</code>注解让ForeInterceptor提前加载；</p>
 <h2 id="3）数据库sys-log表中operate-by字段的坑"><a href="#3）数据库sys-log表中operate-by字段的坑" class="headerlink" title="3）数据库sys_log表中operate_by字段的坑"></a>3）数据库sys_log表中operate_by字段的坑</h2><p>当时设计表的时候，就只是单纯的想要保存一下用户使用的浏览器是什么，其实当时并不知道应该怎么获取获取到的东西又是什么，<strong>只是觉得</strong>保存浏览器20个字段够了，但后来发现这是很蠢萌的…所以不得不调整数据库的字段长度，好在只需要单方面调整数据库的字段长度就好了：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173506.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173506.png" alt=""></p>
 <h2 id="4）保存文章的方式的坑"><a href="#4）保存文章的方式的坑" class="headerlink" title="4）保存文章的方式的坑"></a>4）保存文章的方式的坑</h2><p>因为我想要在数据库中保存的是md源码，而返回前台前端希望的是直接拿到html代码，这样就能很方便的输出了，所以这要怎么做呢？找到一篇参考文章：<a href="https://my.oschina.net/u/566591/blog/1535380" target="_blank" rel="noopener">https://my.oschina.net/u/566591/blog/1535380</a></p>
 <p>我们不要搞那么复杂的封装，只要简单弄一个工具类就可以了，在【util】包下新建一个【Markdown2HtmlUtil】：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
@@ -1304,7 +1304,7 @@
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1318,7 +1318,7 @@
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1421,7 +1421,7 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1429,7 +1429,7 @@
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/项目/" target="_blank">
+                    <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
                         <span class="chip bg-color">项目</span>
                     </a>
                     
@@ -1486,7 +1486,7 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1494,7 +1494,7 @@
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/项目/" target="_blank">
+                    <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
                         <span class="chip bg-color">项目</span>
                     </a>
                     

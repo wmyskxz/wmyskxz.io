@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="高并发编程学习(2)——线程通信详解, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -35,7 +35,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -366,15 +366,15 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java基础/" target="_blank">
+                            <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
                                 <span class="chip bg-color">Java基础</span>
                             </a>
                         
-                            <a href="/tags/并发编程/" target="_blank">
+                            <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_blank">
                                 <span class="chip bg-color">并发编程</span>
                             </a>
                         
@@ -419,7 +419,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142243.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142243.png" alt=""></p>
 <blockquote>
 <p>前序文章</p>
 <ul>
@@ -428,8 +428,8 @@
 </blockquote>
 <h1 id="一、经典的生产者消费者案例"><a href="#一、经典的生产者消费者案例" class="headerlink" title="一、经典的生产者消费者案例"></a>一、经典的生产者消费者案例</h1><hr>
 <p>上一篇文章我们提到一个应用可以创建多个线程去执行不同的任务，如果这些任务之间有着某种关系，那么线程之间<strong>必须能够通信</strong>来协调完成工作。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142251.png" alt></p>
-<p><strong>生产者消费者问题</strong>（英语：Producer-consumer problem）就是典型的多线程同步案例，它也被称为<strong>有限缓冲问题</strong>（英语：Bounded-buffer problem）。该问题描述了共享固定大小<a href="https://zh.wikipedia.org/wiki/%E7%BC%93%E5%86%B2%E5%8C%BA" title="缓冲区" target="_blank" rel="noopener">缓冲区</a>的两个线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。<strong>该问题的关键就是要保证生产者不会在缓冲区满时加入数据，消费者也不会在缓冲区中空时消耗数据。</strong>(摘自维基百科：<a href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98" target="_blank" rel="noopener">生产者消费者问题</a>)</p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142251.png" alt=""></p>
+<p><strong>生产者消费者问题</strong>（英语：Producer-consumer problem）就是典型的多线程同步案例，它也被称为<strong>有限缓冲问题</strong>（英语：Bounded-buffer problem）。该问题描述了共享固定大小<a href="https://zh.wikipedia.org/wiki/%E7%BC%93%E5%86%B2%E5%8C%BA" target="_blank" rel="noopener" title="缓冲区">缓冲区</a>的两个线程——即所谓的“生产者”和“消费者”——在实际运行时会发生的问题。生产者的主要作用是生成一定量的数据放到缓冲区中，然后重复此过程。与此同时，消费者也在缓冲区消耗这些数据。<strong>该问题的关键就是要保证生产者不会在缓冲区满时加入数据，消费者也不会在缓冲区中空时消耗数据。</strong>(摘自维基百科：<a href="https://zh.wikipedia.org/wiki/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E9%97%AE%E9%A2%98" target="_blank" rel="noopener">生产者消费者问题</a>)</p>
 <ul>
 <li><strong>注意</strong>： 生产者-消费者模式中的内存缓存区的主要功能是数据在多线程间的共享，此外，通过该缓冲区，可以缓解生产者和消费者的性能差；</li>
 </ul>
@@ -651,7 +651,7 @@
 <li><strong>注意</strong>：上面的代码中通知使用的 <code>notify()</code> 方法，这是因为例子中写死了只有一个消费者和生产者，在实际情况中建议还是使用 <code>notifyAll()</code> 方法，这样多个消费和生产者逻辑也能够保证（可以自己试一下）；</li>
 </ul>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>通过初始版本一步步地分析问题和解决问题，我们就差不多写出了我们经典生产者消费者的经典代码，但通常消费和生产的逻辑是写在各自的消费者和生产者代码里的，这里我为了方便阅读，把他们都抽离到了共享资源上，我们可以简单地再来回顾一下这个消费生产和等待通知的整个过程：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142305.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142305.png" alt=""></p>
 <p>以上就是关于生产者生产一条数据，消费者消费一次的过程了，涉及的一些具体细节我们下面来说。</p>
 <h1 id="二、线程间的通信方式"><a href="#二、线程间的通信方式" class="headerlink" title="二、线程间的通信方式"></a>二、线程间的通信方式</h1><hr>
 <h2 id="等待唤醒机制的替代：Lock-和-Condition"><a href="#等待唤醒机制的替代：Lock-和-Condition" class="headerlink" title="等待唤醒机制的替代：Lock 和 Condition"></a>等待唤醒机制的替代：Lock 和 Condition</h2><p>我们从上面的中看到了 <code>wait()</code> 和 <code>notify()</code> 方法，只能被同步监听锁对象来调用，否则就会报出 <code>IllegalMonitorZStateException</code> 的异常，那么现在问题来了，我们在上一篇提到的 <code>Lock</code> 机制根本就没有同步锁了，也就是没有自动获取锁和自动释放锁的概念，因为没有同步锁，也就意味着 <code>Lock</code> 机制不能调用 <code>wait</code> 和 <code>notify</code> 方法，我们怎么办呢？</p>
@@ -909,18 +909,18 @@
 <p>我们开启了一个主线程和一个子线程，我们期望子线程能够感知到 <code>isOver</code> 变量的变化以结束掉死循环正常返回，但是运行程序却发现并不是像我们期望的那样发生，子线程一直处在了死循环的状态！</p>
 <p><strong>为什么会这样呢？</strong></p>
 <h3 id="Java-内存模型"><a href="#Java-内存模型" class="headerlink" title="Java 内存模型"></a>Java 内存模型</h3><p>关于这一点，我们有几点需要说明，首先需要搞懂 Java 的内存模型：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142324.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142324.png" alt=""></p>
 <p>Java 虚拟机规范中试图定义一种 Java 内存模型（Java Memory Model, JMM）来屏蔽掉各层硬件和操作系统的内存访问差异，以实现让 Java 程序在各种平台下都能达到一致的内存访问效果。</p>
 <p><strong>Java 内存模型规定了所有的变量都存储在主内存（Main Memory）中</strong>。每条线程还有自己的工作内存（Working Memory），线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作（读取、赋值等）都必须在主内存中进行，而不能直接读写主内存中的变量。<strong>不同的线程之间也无法直接访问对方工作内存中的变量</strong>，线程间的变量值的传递均需要通过主内存来完成，线程、主内存、工作内存三者的关系如上图。</p>
 <p><strong>那么不同的线程之间是如何通信的呢？</strong></p>
 <p>在<strong>共享内存</strong>的并发模型里，线程之间共享程序的公共状态，线程之间通过写-读内存中的公共状态来隐式进行通信，典型的共享内存通信方式就是通过共享对象进行通信。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142335.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142335.png" alt=""></p>
 <p>例如上图线程 A 与 线程 B 之间如果要通信的话，那么就必须经历下面两个步骤：</p>
 <ol>
 <li>首先，线程 A 把本地内存 A 更新过的共享变量刷新到主内存中去</li>
 <li>然后，线程 B 到主内存中去读取线程 A 之前更新过的共享变量</li>
 </ol>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142342.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142342.png" alt=""></p>
 <p>在消息传递的并发模型里，线程之间没有公共状态，线程之间必须通过明确的发送消息来显式进行通信，在 Java 中典型的消息传递方式就是 <code>wait()</code> 和 <code>notify()</code>。</p>
 <p>说回刚才出现的问题，就很容易理解了：每个线程都有独占的内存区域，如操作栈、本地变量表等。<strong>线程本地保存了引用变量在堆内存中的副本，线程对变量的所有操作都在本地内存区域中进行，执行结束后再同步到堆内存中去</strong>。也就是说，我们在主线程中修改的 <code>isOver</code> 的值并没有被子线程读取到（没有被刷入主内存），也就造成了子线程对于 <code>isOver</code> 变量不可见。</p>
 <p>解决方法也很简单，只需要在 <code>isOver</code> 变量前加入 <code>volatile</code> 关键字就可以了，这是<strong>因为加入了 <code>volatile</code> 修饰的变量允许直接与主内存交互，进行读写操作</strong>，保证可见性。</p>
@@ -950,7 +950,7 @@
 <li>写回 WB</li>
 </ul>
 <p>由于每一个步骤可能使用不同的硬件完成，因此，聪明的工程师就发明了流水线技术来执行指令，如下图所示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142349.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142349.png" alt=""></p>
 <p>可以看到，当第 2 条指令执行时，第 1 条执行其实并没有执行完，确切地说第一条指令还没有开始执行，只是刚刚完成了取值操作而已。这样的好处非常明显，假如这里每一个步骤都需要花费 1 毫秒，那么指令 2 等待指令 1 完全执行后再执行，则需要等待 5 毫秒，而使用流水线指令，指令 2 只需要等待 1 毫秒就可以执行了。如此大的性能提升，当然让人眼红。</p>
 <p>回到最初的问题，我们分析一下：<strong>对于 Java 编译器来说，初始化 TransactionService 实例和将对象地址写到 <code>service</code> 字段并非原子操作，且这两个阶段的执行顺序是未定义的</strong>。加入某个线程执行 <code>new TransactionService()</code> 时，构造方法还未被调用，编译器仅仅为该对象分配了内存空间并设为默认值，此时若另一个线程调用 <code>getTransactionService()</code> 方法，由于 <code>service != null</code>，但是此时 <code>service</code> 对象还没有被赋予真正的有效值，从而无法取到正确的 <code>service</code> 单例对象。</p>
 <p>对于此问题，一种较为简单的解决方案就是用 <code>volatile</code> 关键字修饰目标属性（适用于 JDK5 及以上版本），这样 <code>service</code> 就限制了编译器对它的相关读写操作，对它的读写操作进行指令重排，确定对象实例化之后才返回引用。</p>
@@ -1002,7 +1002,7 @@
 <li>追加字节方式来优化队列性能？ - <a href="https://my.oschina.net/u/3694754/blog/2990652" target="_blank" rel="noopener">https://my.oschina.net/u/3694754/blog/2990652</a></li>
 </ul>
 <h2 id="保证原子性：synchronized"><a href="#保证原子性：synchronized" class="headerlink" title="保证原子性：synchronized"></a>保证原子性：synchronized</h2><p>Java 中任何一个对象都有一个唯一与之关联的锁，这样的锁作为该对象的一系列标志位存储在对象信息的头部。Java 对象头里的 Mark Word 里默认的存放的对象的 Hashcode/ 分代年龄和锁标记位。32 为JVM Mark Word 默认存储结构如下：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142400.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142400.png" alt=""></p>
 <p>Java SE 1.6中，锁一共有 4 种状态，级别从低到高依次是：<strong>无锁状态、偏向锁状态、轻量级锁状态和重量级锁状态</strong>，这几个状态会随着竞争情况逐渐升级。<strong>锁可以升级但不能降级</strong>，意味着偏向锁升级成轻量级锁后不能降级成偏向锁。这种锁升级却不能降级的策略，目的是为了提高获得锁和释放锁的效率。</p>
 <h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>HotSpot 的作者经过研究发现，大多数情况下，锁不仅不存在多线程竞争，而且总是由同一线程多次获得，为了让线程获得锁的代价更低而引入了偏向锁。</p>
 <ul>
@@ -1012,18 +1012,18 @@
 </li>
 </ul>
 <p>下图线程 1 展示了偏向锁获取的过程，线程 2 展示了偏向锁撤销的过程。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142411.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142411.png" alt=""></p>
 <h3 id="轻量级锁和自旋锁"><a href="#轻量级锁和自旋锁" class="headerlink" title="轻量级锁和自旋锁"></a>轻量级锁和自旋锁</h3><p>如果偏向锁失败，虚拟机并不会立即挂起线程。它还会使用一种称为轻量级锁的优化手段。</p>
 <p>线程在执行同步块之前，JVM 会先在当前线程的栈桢中创建用于存储锁记录的空间，并将对象头中的 Mark Word 复制到锁记录中，官方称为 <strong>Displaced Mark Word</strong>。然后线程尝试使用 CAS 将对象头中的 Mark Word 替换为指向锁记录的指针。如果成功，当前线程获得锁，如果失败，表示其他线程竞争锁，当前线程便尝试使用<strong>自旋</strong>（自己执行几个空循环再进行尝试）来获取锁。</p>
 <p>轻量级解锁时，会使用原子的 CAS 操作将 Displaced Mark Word 替换回到对象头，如果成功，则表示没有竞争发生。<strong>如果失败，表示当前锁存在竞争，锁就会膨胀成重量级锁</strong>。下图是两个线程同时争夺锁，导致锁膨胀的流程图。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142421.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142421.png" alt=""></p>
 <h3 id="几种锁的比较"><a href="#几种锁的比较" class="headerlink" title="几种锁的比较"></a>几种锁的比较</h3><p>下图就简单概括了一下几种锁的比较：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142427.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142427.png" alt=""></p>
 <h2 id="每人一支笔：ThreadLocal"><a href="#每人一支笔：ThreadLocal" class="headerlink" title="每人一支笔：ThreadLocal"></a>每人一支笔：ThreadLocal</h2><p>除了控制资源的访问外，我们还可以通过增加资源来保证所有对象的线程安全。比如，让 100 个人填写个人信息表，如果只有一支笔，那么大家就得挨个写，对于管理人员来说，必须保证大家不会去哄抢这仅存的一支笔，否则，谁也填不完。从另外一个角度出发，我们可以干脆就准备 100 支笔，那么所有人都可以各自为营，很快就能完成表格的填写工作。</p>
 <p>如果说锁是使用第一种思路，那么 ThreadLocal 就是使用第二种思路了。</p>
 <p>当使用 ThreadLocal 维护变量时，其为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立的改变自己的副本，而不会影响其他线程对应的副本。</p>
 <p><strong>ThreadLocal 内部实现机制</strong>：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142433.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191202142433.png" alt=""></p>
 <ol>
 <li><p>每个线程内部都会维护一个类似 HashMap 的对象，称为 ThreadLocalMap，里边会包含若干了 Entry（K-V 键值对），相应的线程被称为这些 Entry 的属主线程；</p>
 </li>
@@ -1070,7 +1070,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
 <p>以上两个问题的解决办法很简单，就是在每次使用完 ThreadLocal 时，必须要及时调用 <code>remove()</code> 方法清理。</p>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
 <ol>
-<li>《Java 零基础入门教程》 - <a href="http://study.163.com/course/courseMain.htm?courseId=1003108028" title="http://study.163.com/course/courseMain.htm?courseId=1003108028" target="_blank" rel="noopener">http://study.163.com/course/courseMain.htm?courseId=1003108028</a></li>
+<li>《Java 零基础入门教程》 - <a href="http://study.163.com/course/courseMain.htm?courseId=1003108028" target="_blank" rel="noopener" title="http://study.163.com/course/courseMain.htm?courseId=1003108028">http://study.163.com/course/courseMain.htm?courseId=1003108028</a></li>
 <li>《Java 并发编程的艺术》</li>
 <li>《码出高效 Java 开发手册》 - 杨冠宝（孤尽） 高海慧（鸣莎）著</li>
 <li>Java面试知识点解析(二)——高并发编程篇 - <a href="https://www.wmyskxz.com/2018/05/10/java-mian-shi-zhi-shi-dian-jie-xi-er-gao-bing-fa-bian-cheng-pian/">https://www.wmyskxz.com/2018/05/10/java-mian-shi-zhi-shi-dian-jie-xi-er-gao-bing-fa-bian-cheng-pian/</a></li>
@@ -1237,7 +1237,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1251,7 +1251,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1343,7 +1343,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/人类观察所/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" class="post-category" target="_blank">
                                     人类观察所
                                 </a>
                             
@@ -1354,12 +1354,12 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/喜欢的三观/" target="_blank">
-                        <span class="chip bg-color">喜欢的三观</span>
+                    <a href="/tags/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" target="_blank">
+                        <span class="chip bg-color">人类观察所</span>
                     </a>
                     
-                    <a href="/tags/人类观察所/" target="_blank">
-                        <span class="chip bg-color">人类观察所</span>
+                    <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" target="_blank">
+                        <span class="chip bg-color">喜欢的三观</span>
                     </a>
                     
                 </div>
@@ -1402,11 +1402,11 @@ public cla
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java基础/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
                                     Java基础
                                 </a>
                             
-                            <a href="/categories/Java基础/并发编程/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" class="post-category" target="_blank">
                                     并发编程
                                 </a>
                             
@@ -1417,11 +1417,11 @@ public cla
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/并发编程/" target="_blank">
+                    <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" target="_blank">
                         <span class="chip bg-color">并发编程</span>
                     </a>
                     

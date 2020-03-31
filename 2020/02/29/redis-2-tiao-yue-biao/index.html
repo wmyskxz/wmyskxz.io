@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Redis(2)——跳跃表, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -29,7 +29,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -360,7 +360,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -380,7 +380,7 @@
                                 Redis
                             </a>
                         
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                 中间件学习
                             </a>
                         
@@ -422,9 +422,9 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152606.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152606.png" alt=""></p>
 <h1 id="一、跳跃表简介"><a href="#一、跳跃表简介" class="headerlink" title="一、跳跃表简介"></a>一、跳跃表简介</h1><p>跳跃表（skiplist）是一种随机化的数据结构，由 <strong>William Pugh</strong> 在论文<a href="https://www.cl.cam.ac.uk/teaching/0506/Algorithms/skiplists.pdf" target="_blank" rel="noopener">《Skip lists: a probabilistic alternative to balanced trees》</a>中提出，是一种可以于平衡树媲美的层次化链表结构——查找、删除、添加等操作都可以在对数期望时间下完成，以下是一个典型的跳跃表例子：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152612.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152612.png" alt=""></p>
 <p>我们在上一篇中提到了 Redis 的五种基本结构中，有一个叫做 <strong>有序列表 zset</strong> 的数据结构，它类似于 Java 中的 <strong>SortedSet</strong> 和 <strong>HashMap</strong> 的结合体，一方面它是一个 set 保证了内部 value 的唯一性，另一方面又可以给每个 value 赋予一个排序的权重值 score，来达到 <strong>排序</strong> 的目的。</p>
 <p>它的内部实现就依赖了一种叫做 <strong>「跳跃列表」</strong> 的数据结构。</p>
 <h2 id="为什么使用跳跃表"><a href="#为什么使用跳跃表" class="headerlink" title="为什么使用跳跃表"></a>为什么使用跳跃表</h2><p>首先，因为 zset 要支持随机的插入和删除，所以它 <strong>不宜使用数组来实现</strong>，关于排序问题，我们也很容易就想到 <strong>红黑树/ 平衡树</strong> 这样的树形结构，为什么 Redis 不使用这样一些结构呢？</p>
@@ -434,25 +434,25 @@
 </ol>
 <p>基于以上的一些考虑，Redis 基于 <strong>William Pugh</strong> 的论文做出一些改进后采用了 <strong>跳跃表</strong> 这样的结构。</p>
 <h2 id="本质是解决查找问题"><a href="#本质是解决查找问题" class="headerlink" title="本质是解决查找问题"></a>本质是解决查找问题</h2><p>我们先来看一个普通的链表结构：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152620.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152620.png" alt=""></p>
 <p>我们需要这个链表按照 score 值进行排序，这也就意味着，当我们需要添加新的元素时，我们需要定位到插入点，这样才可以继续保证链表是有序的，通常我们会使用 <strong>二分查找法</strong>，但二分查找是有序数组的，链表没办法进行位置定位，我们除了遍历整个找到第一个比给定数据大的节点为止 <em>（时间复杂度 O(n))</em> 似乎没有更好的办法。</p>
 <p>但假如我们每相邻两个节点之间就增加一个指针，让指针指向下一个节点，如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152625.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152625.png" alt=""></p>
 <p>这样所有新增的指针连成了一个新的链表，但它包含的数据却只有原来的一半 _（图中的为 3，11）_。</p>
 <p>现在假设我们想要查找数据时，可以根据这条新的链表查找，如果碰到比待查找数据大的节点时，再回到原来的链表中进行查找，比如，我们想要查找 7，查找的路径则是沿着下图中标注出的红色指针所指向的方向进行的：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152630.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152630.png" alt=""></p>
 <p>这是一个略微极端的例子，但我们仍然可以看到，通过新增加的指针查找，我们不再需要与链表上的每一个节点逐一进行比较，这样改进之后需要比较的节点数大概只有原来的一半。</p>
 <p>利用同样的方式，我们可以在新产生的链表上，继续为每两个相邻的节点增加一个指针，从而产生第三层链表：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152635.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152635.png" alt=""></p>
 <p>在这个新的三层链表结构中，我们试着 <strong>查找 13</strong>，那么沿着最上层链表首先比较的是 11，发现 11 比 13 小，于是我们就知道只需要到 11 后面继续查找，<strong>从而一下子跳过了 11 前面的所有节点。</strong></p>
 <p>可以想象，当链表足够长，这样的多层链表结构可以帮助我们跳过很多下层节点，从而加快查找的效率。</p>
 <h2 id="更进一步的跳跃表"><a href="#更进一步的跳跃表" class="headerlink" title="更进一步的跳跃表"></a>更进一步的跳跃表</h2><p><strong>跳跃表 skiplist</strong> 就是受到这种多层链表结构的启发而设计出来的。按照上面生成链表的方式，上面每一层链表的节点个数，是下面一层的节点个数的一半，这样查找过程就非常类似于一个二分查找，使得查找的时间复杂度可以降低到 _O(logn)_。</p>
 <p>但是，这种方法在插入数据的时候有很大的问题。新插入一个节点之后，就会打乱上下相邻两层链表上节点个数严格的 2:1 的对应关系。如果要维持这种对应关系，就必须把新插入的节点后面的所有节点 <em>（也包括新插入的节点）</em> 重新进行调整，这会让时间复杂度重新蜕化成 _O(n)_。删除数据也有同样的问题。</p>
 <p><strong>skiplist</strong> 为了避免这一问题，它不要求上下相邻两层链表之间的节点个数有严格的对应关系，而是 <strong>为每个节点随机出一个层数(level)</strong>。比如，一个节点随机出的层数是 3，那么就把它链入到第 1 层到第 3 层这三层链表中。为了表达清楚，下图展示了如何通过一步步的插入操作从而形成一个 skiplist 的过程：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152643.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152643.png" alt=""></p>
 <p>从上面的创建和插入的过程中可以看出，每一个节点的层数（level）是随机出来的，而且新插入一个节点并不会影响到其他节点的层数，因此，<strong>插入操作只需要修改节点前后的指针，而不需要对多个节点都进行调整</strong>，这就降低了插入操作的复杂度。</p>
 <p>现在我们假设从我们刚才创建的这个结构中查找 23 这个不存在的数，那么查找路径会如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152651.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152651.png" alt=""></p>
 <h1 id="二、跳跃表的实现"><a href="#二、跳跃表的实现" class="headerlink" title="二、跳跃表的实现"></a>二、跳跃表的实现</h1><p>Redis 中的跳跃表由 <code>server.h/zskiplistNode</code> 和 <code>server.h/zskiplist</code> 两个结构定义，前者为跳跃表节点，后者则保存了跳跃节点的相关信息，同之前的 <code>集合 list</code> 结构类似，其实只有 <code>zskiplistNode</code> 就可以实现了，但是引入后者是为了更加方便的操作：</p>
 <pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* ZSETs use a specialized version of Skiplists */</span>
 <span class="token keyword">typedef</span> <span class="token keyword">struct</span> zskiplistNode <span class="token punctuation">{</span>
@@ -518,7 +518,7 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>即执行完之后创建了如下结构的初始化跳跃表：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152701.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152701.png" alt=""></p>
 <h2 id="插入节点实现"><a href="#插入节点实现" class="headerlink" title="插入节点实现"></a>插入节点实现</h2><p>这几乎是最重要的一段代码了，但总体思路也比较清晰简单，如果理解了上面所说的跳跃表的原理，那么很容易理清楚插入节点时发生的几个动作 <em>（几乎跟链表类似）</em>：</p>
 <ol>
 <li>找到当前我需要插入的位置 <em>（其中包括相同 score 时的处理）</em>；</li>
@@ -703,7 +703,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152714.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152714.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -865,7 +865,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -879,7 +879,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -976,7 +976,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1024,7 +1024,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
                                     Redis
                                 </a>
                             
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                     中间件学习
                                 </a>
                             
@@ -1035,7 +1035,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     

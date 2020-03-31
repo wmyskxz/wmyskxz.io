@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Redis(8)——发布/订阅与Stream, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -32,7 +32,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -363,7 +363,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -383,7 +383,7 @@
                                 Redis
                             </a>
                         
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                 中间件学习
                             </a>
                         
@@ -425,20 +425,20 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/images/pasted-23.png" alt></p>
+                <p><img src="/images/pasted-23.png" alt=""></p>
 <h1 id="一、Redis-中的发布-订阅功能"><a href="#一、Redis-中的发布-订阅功能" class="headerlink" title="一、Redis 中的发布/订阅功能"></a>一、Redis 中的发布/订阅功能</h1><p><strong>发布/ 订阅系统</strong> 是 Web 系统中比较常用的一个功能。简单点说就是 <strong>发布者发布消息，订阅者接受消息</strong>，这有点类似于我们的报纸/ 杂志社之类的： <em>(借用前边的一张图)</em></p>
-<p><img src="/images/pasted-24.png" alt></p>
+<p><img src="/images/pasted-24.png" alt=""></p>
 <ul>
 <li>图片引用自：「消息队列」看过来! - <a href="https://www.wmyskxz.com/2019/07/16/xiao-xi-dui-lie-kan-guo-lai/">https://www.wmyskxz.com/2019/07/16/xiao-xi-dui-lie-kan-guo-lai/</a></li>
 </ul>
 <p>从我们 <em>前面(下方相关阅读)</em> 学习的知识来看，我们虽然可以使用一个 <code>list</code> 列表结构结合 <code>lpush</code> 和 <code>rpop</code> 来实现消息队列的功能，但是似乎很难实现实现 <strong>消息多播</strong> 的功能：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-526a5b110a7c4ea2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7896890-526a5b110a7c4ea2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>为了支持消息多播，<strong>Redis</strong> 不能再依赖于那 5 种基础的数据结构了，它单独使用了一个模块来支持消息多播，这个模块就是 <strong>PubSub</strong>，也就是 <strong>PublisherSubscriber</strong> <em>(发布者/ 订阅者模式)</em>。</p>
 <h2 id="PubSub-简介"><a href="#PubSub-简介" class="headerlink" title="PubSub 简介"></a>PubSub 简介</h2><p>我们从 <em>上面的图</em> 中可以看到，基于 <code>list</code> 结构的消息队列，是一种 <code>Publisher</code> 与 <code>Consumer</code> 点对点的强关联关系，<strong>Redis</strong> 为了消除这样的强关联，引入了另一种概念：<strong>频道</strong> <em>(channel)</em>：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-cc3bb012eeca9fca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7896890-cc3bb012eeca9fca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>当 <code>Publisher</code> 往 <code>channel</code> 中发布消息时，关注了指定 <code>channel</code> 的 <code>Consumer</code> 就能够同时受到消息。但这里的 <strong>问题</strong> 是，消费者订阅一个频道是必须 <strong>明确指定频道名称</strong> 的，这意味着，如果我们想要 <strong>订阅多个</strong> 频道，那么就必须 <strong>显式地关注多个</strong> 名称。</p>
 <p>为了简化订阅的繁琐操作，<strong>Redis</strong> 提供了 <strong>模式订阅</strong> 的功能 <strong>Pattern Subscribe</strong>，这样就可以 <strong>一次性关注多个频道</strong> 了，即使生产者新增了同模式的频道，消费者也可以立即受到消息：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-18ac258e4e9387da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7896890-18ac258e4e9387da.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>例如上图中，<strong>所有</strong> 位于图片下方的 <strong><code>Consumer</code> 都能够受到消息</strong>。</p>
 <p><code>Publisher</code> 往 <code>wmyskxz.chat</code> 这个 <code>channel</code> 中发送了一条消息，不仅仅关注了这个频道的 <code>Consumer 1</code> 和 <code>Consumer 2</code> 能够受到消息，图片中的两个 <code>channel</code> 都和模式 <code>wmyskxz.*</code> 匹配，所以 <strong>Redis</strong> 此时会同样发送消息给订阅了 <code>wmyskxz.*</code> 这个模式的 <code>Consumer 3</code> 和关注了在这个模式下的另一个频道 <code>wmyskxz.log</code> 下的 <code>Consumer 4</code> 和 <code>Consumer 5</code>。</p>
 <p>另一方面，如果接收消息的频道是 <code>wmyskxz.chat</code>，那么 <code>Consumer 3</code> 也会受到消息。  </p>
@@ -452,7 +452,7 @@ PUBLISH channel message  <span class="token comment" spellcheck="true"># 将消�
 UNSUBSCRIBE <span class="token punctuation">[</span>channel <span class="token punctuation">[</span>channel <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">]</span><span class="token punctuation">]</span>   <span class="token comment" spellcheck="true"># 退订指定的频道</span>
 PUNSUBSCRIBE <span class="token punctuation">[</span>pattern <span class="token punctuation">[</span>pattern <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">]</span><span class="token punctuation">]</span>  <span class="token comment" spellcheck="true">#退订所有给定模式的频道</span></code></pre>
 <p>我们可以在本地快速地来体验一下 <strong>PubSub</strong>：</p>
-<p><img src="/images/redis8.gif" alt></p>
+<p><img src="/images/redis8.gif" alt=""></p>
 <p>具体步骤如下：</p>
 <ol>
 <li>开启本地 Redis 服务，新建两个控制台窗口；</li>
@@ -468,7 +468,7 @@ PUNSUBSCRIBE <span class="token punctuation">[</span>pattern <span class="token 
     <span class="token comment" spellcheck="true">// ...</span>
 <span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
 <h3 id="订阅频道原理"><a href="#订阅频道原理" class="headerlink" title="订阅频道原理"></a>订阅频道原理</h3><p>当客户端订阅某一个频道之后，Redis 就会往 <code>pubsub_channels</code> 这个字典中新添加一条数据，实际上这个 <code>dict</code> 字典维护的是一张链表，比如，下图展示的 <code>pubsub_channels</code> 示例中，<code>client 1</code>、<code>client 2</code> 就订阅了 <code>channel 1</code>，而其他频道也分别被其他客户端订阅：</p>
-<p><img src="/images/pasted-28.png" alt></p>
+<p><img src="/images/pasted-28.png" alt=""></p>
 <h4 id="SUBSCRIBE-命令"><a href="#SUBSCRIBE-命令" class="headerlink" title="SUBSCRIBE 命令"></a>SUBSCRIBE 命令</h4><p><code>SUBSCRIBE</code> 命令的行为可以用下列的伪代码表示：</p>
 <pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">SUBSCRIBE</span><span class="token punctuation">(</span>client<span class="token punctuation">,</span> channels<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment" spellcheck="true"># 遍历所有输入频道</span>
@@ -483,7 +483,7 @@ PUNSUBSCRIBE <span class="token punctuation">[</span>pattern <span class="token 
         <span class="token comment" spellcheck="true"># 将信息发送给它们</span>
         send_message<span class="token punctuation">(</span>client<span class="token punctuation">,</span> message<span class="token punctuation">)</span></code></pre>
 <h4 id="UNSUBSCRIBE-命令"><a href="#UNSUBSCRIBE-命令" class="headerlink" title="UNSUBSCRIBE 命令"></a>UNSUBSCRIBE 命令</h4><p>使用 <code>UNSUBSCRIBE</code> 命令可以退订指定的频道，这个命令执行的是订阅的反操作：它从 <code>pubsub_channels</code> 字典的给定频道（键）中，删除关于当前客户端的信息，这样被退订频道的信息就不会再发送给这个客户端。</p>
-<h3 id="订阅模式原理"><a href="#订阅模式原理" class="headerlink" title="订阅模式原理"></a>订阅模式原理</h3><p><img src="/images/pasted-27.png" alt></p>
+<h3 id="订阅模式原理"><a href="#订阅模式原理" class="headerlink" title="订阅模式原理"></a>订阅模式原理</h3><p><img src="/images/pasted-27.png" alt=""></p>
 <p>正如我们上面说到了，当发送一条消息到 <code>wmyskxz.chat</code> 这个频道时，Redis 不仅仅会发送到当前的频道，还会发送到匹配于当前模式的所有频道，实际上，<code>pubsub_patterns</code> 背后还维护了一个 <code>redis.h/pubsubPattern</code> 结构：</p>
 <pre class=" language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> pubsubPattern <span class="token punctuation">{</span>
     redisClient <span class="token operator">*</span>client<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 订阅模式的客户端</span>
@@ -491,9 +491,9 @@ PUNSUBSCRIBE <span class="token punctuation">[</span>pattern <span class="token 
 <span class="token punctuation">}</span> pubsubPattern<span class="token punctuation">;</span></code></pre>
 <p>每当调用 <code>PSUBSCRIBE</code> 命令订阅一个模式时，程序就创建一个包含客户端信息和被订阅模式的 <code>pubsubPattern</code> 结构，并将该结构添加到 <code>redisServer.pubsub_patterns</code> 链表中。</p>
 <p>我们来看一个 <code>pusub_patterns</code> 链表的示例：</p>
-<p><img src="/images/pasted-29.png" alt></p>
+<p><img src="/images/pasted-29.png" alt=""></p>
 <p>这个时候客户端 <code>client 3</code> 执行 <code>PSUBSCRIBE wmyskxz.java.*</code>，那么 <code>pubsub_patterns</code> 链表就会被更新成这样：</p>
-<p><img src="/images/pasted-30.png" alt></p>
+<p><img src="/images/pasted-30.png" alt=""></p>
 <p>通过遍历整个 <code>pubsub_patterns</code> 链表，程序可以检查所有正在被订阅的模式，以及订阅这些模式的客户端。</p>
 <h4 id="PUBLISH-命令-1"><a href="#PUBLISH-命令-1" class="headerlink" title="PUBLISH 命令"></a>PUBLISH 命令</h4><p>上面给出的伪代码并没有 <strong>完整描述</strong> <code>PUBLISH</code> 命令的行为，因为 <code>PUBLISH</code> 除了将 <code>message</code> 发送到 <strong>所有订阅 <code>channel</code> 的客户端</strong> 之外，它还会将 <code>channel</code> 和 <code>pubsub_patterns</code> 中的 <strong>模式</strong> 进行对比，如果 <code>channel</code> 和某个模式匹配的话，那么也将 <code>message</code> 发送到 <strong>订阅那个模式的客户端</strong>。</p>
 <p>完整描述 <code>PUBLISH</code> 功能的伪代码定于如下：</p>
@@ -515,9 +515,9 @@ PUNSUBSCRIBE <span class="token punctuation">[</span>pattern <span class="token 
 <li><strong>不持久化消息：</strong> 如果 Redis 停机重启，PubSub 的消息是不会持久化的，毕竟 Redis 宕机就相当于一个消费者都没有，所有的消息都会被直接丢弃。</li>
 </ul>
 <p>基于上述缺点，Redis 的作者甚至单独开启了一个 Disque 的项目来专门用来做多播消息队列，不过该项目目前好像都没有成熟。不过后来在 2018 年 6 月，<strong>Redis 5.0</strong> 新增了 <code>Stream</code> 数据结构，这个功能给 Redis 带来了 <strong>持久化消息队列</strong>，从此 PubSub 作为消息队列的功能可以说是就消失了..</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-3a144fda1a0dafcb.gif?imageMogr2/auto-orient/strip" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7896890-3a144fda1a0dafcb.gif?imageMogr2/auto-orient/strip" alt=""></p>
 <h1 id="二、更为强大的-Stream-持久化的发布-订阅系统"><a href="#二、更为强大的-Stream-持久化的发布-订阅系统" class="headerlink" title="二、更为强大的 Stream | 持久化的发布/订阅系统"></a>二、更为强大的 Stream | 持久化的发布/订阅系统</h1><p><strong>Redis Stream</strong> 从概念上来说，就像是一个 <strong>仅追加内容</strong> 的 <strong>消息链表</strong>，把所有加入的消息都一个一个串起来，每个消息都有一个唯一的 ID 和内容，这很简单，让它复杂的是从 Kafka 借鉴的另一种概念：<strong>消费者组(Consumer Group)</strong> <em>(思路一致，实现不同)</em>：</p>
-<p><img src="/images/pasted-31.png" alt></p>
+<p><img src="/images/pasted-31.png" alt=""></p>
 <p>上图就展示了一个典型的 <strong>Stream</strong> 结构。每个 Stream 都有唯一的名称，它就是 Redis 的 <code>key</code>，在我们首次使用 <code>xadd</code> 指令追加消息时自动创建。我们对图中的一些概念做一下解释：</p>
 <ul>
 <li><strong>Consumer Group</strong>：消费者组，可以简单看成记录流状态的一种数据结构。消费者既可以选择使用 <code>XREAD</code> 命令进行 <strong>独立消费</strong>，也可以多个消费者同时加入一个消费者组进行 <strong>组内消费</strong>。同一个消费者组内的消费者共享所有的 Stream 信息，<strong>同一条消息只会有一个消费者消费到</strong>，这样就可以应用在分布式的应用场景中来保证消息的唯一性。</li>
@@ -810,7 +810,7 @@ OK
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="/images/pasted-32.png" alt></p>
+<p><img src="/images/pasted-32.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -972,7 +972,7 @@ OK
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -986,7 +986,7 @@ OK
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1080,7 +1080,7 @@ OK
                                     Redis
                                 </a>
                             
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                     中间件学习
                                 </a>
                             
@@ -1091,7 +1091,7 @@ OK
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1138,7 +1138,7 @@ OK
                                     Redis
                                 </a>
                             
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                     中间件学习
                                 </a>
                             
@@ -1149,7 +1149,7 @@ OK
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     

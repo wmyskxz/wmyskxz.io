@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Redis(7)——持久化【一文了解】, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -29,7 +29,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -360,7 +360,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -380,7 +380,7 @@
                                 Redis
                             </a>
                         
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                 中间件学习
                             </a>
                         
@@ -422,10 +422,10 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/images/pasted-16.png" alt></p>
+                <p><img src="/images/pasted-16.png" alt=""></p>
 <h1 id="一、持久化简介"><a href="#一、持久化简介" class="headerlink" title="一、持久化简介"></a>一、持久化简介</h1><p><strong>Redis</strong> 的数据 <strong>全部存储</strong> 在 <strong>内存</strong> 中，如果 <strong>突然宕机</strong>，数据就会全部丢失，因此必须有一套机制来保证 Redis 的数据不会因为故障而丢失，这种机制就是 Redis 的 <strong>持久化机制</strong>，它会将内存中的数据库状态 <strong>保存到磁盘</strong> 中。</p>
 <h2 id="持久化发生了什么-从内存到磁盘"><a href="#持久化发生了什么-从内存到磁盘" class="headerlink" title="持久化发生了什么 | 从内存到磁盘"></a>持久化发生了什么 | 从内存到磁盘</h2><p>我们来稍微考虑一下 <strong>Redis</strong> 作为一个 <strong>“内存数据库”</strong> 要做的关于持久化的事情。通常来说，从客户端发起请求开始，到服务器真实地写入磁盘，需要发生如下几件事情：</p>
-<p><img src="/images/pasted-17.png" alt></p>
+<p><img src="/images/pasted-17.png" alt=""></p>
 <p><strong>详细版</strong> 的文字描述大概就是下面这样：</p>
 <ol>
 <li>客户端向数据库 <strong>发送写命令</strong> <em>(数据在客户端的内存中)</em></li>
@@ -455,17 +455,17 @@ ssize_t <span class="token function">read</span><span class="token punctuation">
 </ul>
 <p>所以，我们有很好的可用的 <code>API</code> 来完成 <strong>第三步</strong>，但是对于成功返回之前，我们对系统调用花费的时间没有太多的控制权。</p>
 <p>然后我们来说说 <strong>第四步</strong>。我们知道，除了早期对电脑特别了解那帮人 <em>(操作系统就这帮人搞的)</em>，实际的物理硬件都不是我们能够 <strong>直接操作</strong> 的，都是通过 <strong>操作系统调用</strong> 来达到目的的。为了防止过慢的 I/O 操作拖慢整个系统的运行，操作系统层面做了很多的努力，譬如说 <strong>上述第四步</strong> 提到的 <strong>写缓冲区</strong>，并不是所有的写操作都会被立即写入磁盘，而是要先经过一个缓冲区，默认情况下，Linux 将在 <strong>30 秒</strong> 后实际提交写入。</p>
-<p><img src="/images/pasted-19.png" alt></p>
+<p><img src="/images/pasted-19.png" alt=""></p>
 <p>但是很明显，<strong>30 秒</strong> 并不是 Redis 能够承受的，这意味着，如果发生故障，那么最近 30 秒内写入的所有数据都可能会丢失。幸好 <code>PROSIX API</code> 提供了另一个解决方案：<code>fsync</code>，该命令会 <strong>强制</strong> 内核将 <strong>缓冲区</strong> 写入 <strong>磁盘</strong>，但这是一个非常消耗性能的操作，每次调用都会 <strong>阻塞等待</strong> 直到设备报告 IO 完成，所以一般在生产环境的服务器中，<strong>Redis</strong> 通常是每隔 1s 左右执行一次 <code>fsync</code> 操作。</p>
 <p>到目前为止，我们了解到了如何控制 <code>第三步</code> 和 <code>第四步</code>，但是对于 <strong>第五步</strong>，我们 <strong>完全无法控制</strong>。也许一些内核实现将试图告诉驱动实际提交物理介质上的数据，或者控制器可能会为了提高速度而重新排序写操作，不会尽快将数据真正写到磁盘上，而是会等待几个多毫秒。这完全是我们无法控制的。</p>
-<h1 id="二、Redis-中的两种持久化方式"><a href="#二、Redis-中的两种持久化方式" class="headerlink" title="二、Redis 中的两种持久化方式"></a>二、Redis 中的两种持久化方式</h1><h2 id="方式一：快照"><a href="#方式一：快照" class="headerlink" title="方式一：快照"></a>方式一：快照</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-9a4d234c53120b33.gif?imageMogr2/auto-orient/strip" alt></p>
+<h1 id="二、Redis-中的两种持久化方式"><a href="#二、Redis-中的两种持久化方式" class="headerlink" title="二、Redis 中的两种持久化方式"></a>二、Redis 中的两种持久化方式</h1><h2 id="方式一：快照"><a href="#方式一：快照" class="headerlink" title="方式一：快照"></a>方式一：快照</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-9a4d234c53120b33.gif?imageMogr2/auto-orient/strip" alt=""></p>
 <p><strong>Redis 快照</strong> 是最简单的 Redis 持久性模式。当满足特定条件时，它将生成数据集的时间点快照，例如，如果先前的快照是在2分钟前创建的，并且现在已经至少有 <em>100</em> 次新写入，则将创建一个新的快照。此条件可以由用户配置 Redis 实例来控制，也可以在运行时修改而无需重新启动服务器。快照作为包含整个数据集的单个 <code>.rdb</code> 文件生成。</p>
 <p>但我们知道，Redis 是一个 <strong>单线程</strong> 的程序，这意味着，我们不仅仅要响应用户的请求，还需要进行内存快照。而后者要求 Redis 必须进行 IO 操作，这会严重拖累服务器的性能。</p>
 <p>还有一个重要的问题是，我们在 <strong>持久化的同时</strong>，<strong>内存数据结构</strong> 还可能在 <strong>变化</strong>，比如一个大型的 hash 字典正在持久化，结果一个请求过来把它删除了，可是这才刚持久化结束，咋办？</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-fbfcbd606e95f105.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7896890-fbfcbd606e95f105.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <h3 id="使用系统多进程-COW-Copy-On-Write-机制-fork-函数"><a href="#使用系统多进程-COW-Copy-On-Write-机制-fork-函数" class="headerlink" title="使用系统多进程 COW(Copy On Write) 机制 | fork 函数"></a>使用系统多进程 COW(Copy On Write) 机制 | fork 函数</h3><p>操作系统多进程 <strong>COW(Copy On Write) 机制</strong> 拯救了我们。<strong>Redis</strong> 在持久化时会调用 <code>glibc</code> 的函数 <code>fork</code> 产生一个子进程，简单理解也就是基于当前进程 <strong>复制</strong> 了一个进程，主进程和子进程会共享内存里面的代码块和数据段：</p>
-<p><img src="/images/pasted-21.png" alt></p>
-<p>这里多说一点，<strong>为什么 fork 成功调用后会有两个返回值呢？</strong> 因为子进程在复制时复制了父进程的堆栈段，所以两个进程都停留在了 <code>fork</code> 函数中 <em>(都在同一个地方往下继续”同时”执行)</em>，等待返回，所以 <strong>一次在父进程中返回子进程的 pid，另一次在子进程中返回零，系统资源不够时返回负数</strong>。 <em>(伪代码如下)</em></p>
+<p><img src="/images/pasted-21.png" alt=""></p>
+<p>这里多说一点，<strong>为什么 fork 成功调用后会有两个返回值呢？</strong> 因为子进程在复制时复制了父进程的堆栈段，所以两个进程都停留在了 <code>fork</code> 函数中 <em>(都在同一个地方往下继续”同时”执行)<em>，等待返回，所以 *</em>一次在父进程中返回子进程的 pid，另一次在子进程中返回零，系统资源不够时返回负数**。 *(伪代码如下)</em></p>
 <pre class=" language-python"><code class="language-python">pid <span class="token operator">=</span> os<span class="token punctuation">.</span>fork<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">if</span> pid <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">:</span>
   handle_client_request<span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true"># 父进程继续处理客户端请求</span>
@@ -476,7 +476,7 @@ ssize_t <span class="token function">read</span><span class="token punctuation">
 <p>所以 <strong>快照持久化</strong> 可以完全交给 <strong>子进程</strong> 来处理，<strong>父进程</strong> 则继续 <strong>处理客户端请求</strong>。<strong>子进程</strong> 做数据持久化，它 <strong>不会修改现有的内存数据结构</strong>，它只是对数据结构进行遍历读取，然后序列化写到磁盘中。但是 <strong>父进程</strong> 不一样，它必须持续服务客户端请求，然后对 <strong>内存数据结构进行不间断的修改</strong>。</p>
 <p>这个时候就会使用操作系统的 COW 机制来进行 <strong>数据段页面</strong> 的分离。数据段是由很多操作系统的页面组合而成，当父进程对其中一个页面的数据进行修改时，会将被共享的页面复<br>制一份分离出来，然后 <strong>对这个复制的页面进行修改</strong>。这时 <strong>子进程</strong> 相应的页面是 <strong>没有变化的</strong>，还是进程产生时那一瞬间的数据。</p>
 <p>子进程因为数据没有变化，它能看到的内存里的数据在进程产生的一瞬间就凝固了，再也不会改变，这也是为什么 <strong>Redis</strong> 的持久化 <strong>叫「快照」的原因</strong>。接下来子进程就可以非常安心的遍历数据了进行序列化写磁盘了。</p>
-<h2 id="方式二：AOF"><a href="#方式二：AOF" class="headerlink" title="方式二：AOF"></a>方式二：AOF</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-e4e08ebef2cf0144.gif?imageMogr2/auto-orient/strip" alt></p>
+<h2 id="方式二：AOF"><a href="#方式二：AOF" class="headerlink" title="方式二：AOF"></a>方式二：AOF</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-e4e08ebef2cf0144.gif?imageMogr2/auto-orient/strip" alt=""></p>
 <p><strong>快照不是很持久</strong>。如果运行 Redis 的计算机停止运行，电源线出现故障或者您 <code>kill -9</code> 的实例意外发生，则写入 Redis 的最新数据将丢失。尽管这对于某些应用程序可能不是什么大问题，但有些使用案例具有充分的耐用性，在这些情况下，快照并不是可行的选择。</p>
 <p><strong>AOF(Append Only File - 仅追加文件)</strong> 它的工作方式非常简单：每次执行 <strong>修改内存</strong> 中数据集的写操作时，都会 <strong>记录</strong> 该操作。假设 AOF 日志记录了自 Redis 实例创建以来 <strong>所有的修改性指令序列</strong>，那么就可以通过对一个空的 Redis 实例 <strong>顺序执行所有的指令</strong>，也就是 <strong>「重放」</strong>，来恢复 Redis 当前实例的内存数据结构的状态。</p>
 <p>为了展示 AOF 在实际中的工作方式，我们来做一个简单的实验：</p>
@@ -525,17 +525,17 @@ key1</code></pre>
 <li>更多讨论参见：<a href="https://www.zhihu.com/question/342427472" target="_blank" rel="noopener">为什么Redis先执行指令，再记录AOF日志，而不是像其它存储引擎一样反过来呢？ - https://www.zhihu.com/question/342427472</a></li>
 </ul>
 </blockquote>
-<h3 id="AOF-重写"><a href="#AOF-重写" class="headerlink" title="AOF 重写"></a>AOF 重写</h3><p><img src="https://upload-images.jianshu.io/upload_images/7896890-c21e2a37892ee989.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt></p>
+<h3 id="AOF-重写"><a href="#AOF-重写" class="headerlink" title="AOF 重写"></a>AOF 重写</h3><p><img src="https://upload-images.jianshu.io/upload_images/7896890-c21e2a37892ee989.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p><strong>Redis</strong> 在长期运行的过程中，AOF 的日志会越变越长。如果实例宕机重启，重放整个 AOF 日志会非常耗时，导致长时间 Redis 无法对外提供服务。所以需要对 <strong>AOF 日志 “瘦身”</strong>。</p>
 <p><strong>Redis</strong> 提供了 <code>bgrewriteaof</code> 指令用于对 AOF 日志进行瘦身。其 <strong>原理</strong> 就是 <strong>开辟一个子进程</strong> 对内存进行 <strong>遍历</strong> 转换成一系列 Redis 的操作指令，<strong>序列化到一个新的 AOF 日志文件</strong> 中。序列化完毕后再将操作期间发生的 <strong>增量 AOF 日志</strong> 追加到这个新的 AOF 日志文件中，追加完毕后就立即替代旧的 AOF 日志文件了，瘦身工作就完成了。</p>
-<h3 id="fsync"><a href="#fsync" class="headerlink" title="fsync"></a>fsync</h3><p><img src="https://upload-images.jianshu.io/upload_images/7896890-384a546b5bf6b86d.gif?imageMogr2/auto-orient/strip" alt></p>
+<h3 id="fsync"><a href="#fsync" class="headerlink" title="fsync"></a>fsync</h3><p><img src="https://upload-images.jianshu.io/upload_images/7896890-384a546b5bf6b86d.gif?imageMogr2/auto-orient/strip" alt=""></p>
 <p>AOF 日志是以文件的形式存在的，当程序对 AOF 日志文件进行写操作时，实际上是将内容写到了内核为文件描述符分配的一个内存缓存中，然后内核会异步将脏数据刷回到磁盘的。</p>
 <p>就像我们 <em>上方第四步</em> 描述的那样，我们需要借助 <code>glibc</code> 提供的 <code>fsync(int fd)</code> 函数来讲指定的文件内容 <strong>强制从内核缓存刷到磁盘</strong>。但 <strong>“强制开车”</strong> 仍然是一个很消耗资源的一个过程，需要 <strong>“节制”</strong>！通常来说，生产环境的服务器，Redis 每隔 1s 左右执行一次 <code>fsync</code> 操作就可以了。</p>
 <p>Redis 同样也提供了另外两种策略，一个是 <strong>永不 <code>fsync</code></strong>，来让操作系统来决定合适同步磁盘，很不安全，另一个是 <strong>来一个指令就 <code>fsync</code> 一次</strong>，非常慢。但是在生产环境基本不会使用，了解一下即可。</p>
-<h2 id="Redis-4-0-混合持久化"><a href="#Redis-4-0-混合持久化" class="headerlink" title="Redis 4.0 混合持久化"></a>Redis 4.0 混合持久化</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-7de9f7706be6216c.gif?imageMogr2/auto-orient/strip" alt></p>
+<h2 id="Redis-4-0-混合持久化"><a href="#Redis-4-0-混合持久化" class="headerlink" title="Redis 4.0 混合持久化"></a>Redis 4.0 混合持久化</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-7de9f7706be6216c.gif?imageMogr2/auto-orient/strip" alt=""></p>
 <p>重启 Redis 时，我们很少使用 <code>rdb</code> 来恢复内存状态，因为会丢失大量数据。我们通常使用 AOF 日志重放，但是重放 AOF 日志性能相对 <code>rdb</code> 来说要慢很多，这样在 Redis 实例很大的情况下，启动需要花费很长的时间。</p>
 <p><strong>Redis 4.0</strong> 为了解决这个问题，带来了一个新的持久化选项——<strong>混合持久化</strong>。将 <code>rdb</code> 文件的内容和增量的 AOF 日志文件存在一起。这里的 AOF 日志不再是全量的日志，而是 <strong>自持久化开始到持久化结束</strong> 的这段时间发生的增量 AOF 日志，通常这部分 AOF 日志很小：</p>
-<p><img src="/images/pasted-22.png" alt></p>
+<p><img src="/images/pasted-22.png" alt=""></p>
 <p>于是在 Redis 重启的时候，可以先加载 <code>rdb</code> 的内容，然后再重放增量 AOF 日志就可以完全替代之前的 AOF 全量文件重放，重启效率因此大幅得到提升。</p>
 <h1 id="相关阅读"><a href="#相关阅读" class="headerlink" title="相关阅读"></a>相关阅读</h1><ol>
 <li>Redis(1)——5种基本数据结构 - <a href="https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/</a></li>
@@ -560,7 +560,7 @@ key1</code></pre>
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="/images/pasted-15.png" alt></p>
+<p><img src="/images/pasted-15.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -722,7 +722,7 @@ key1</code></pre>
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -736,7 +736,7 @@ key1</code></pre>
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -832,7 +832,7 @@ key1</code></pre>
                                     Redis
                                 </a>
                             
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                     中间件学习
                                 </a>
                             
@@ -843,7 +843,7 @@ key1</code></pre>
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -876,7 +876,7 @@ key1</code></pre>
                         
                             
 像微信 “附近的人”，美团 “附近的餐厅”，支付宝共享单车 “附近的车” 是怎么设计实现的呢？
-一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，经度范围 *[-180, 180]，纬度范围 
+一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，经度范围 [-180, 180]，纬度范围 *
                         
                     </div>
                     <div class="publish-info">
@@ -891,7 +891,7 @@ key1</code></pre>
                                     Redis
                                 </a>
                             
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                     中间件学习
                                 </a>
                             
@@ -902,7 +902,7 @@ key1</code></pre>
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     

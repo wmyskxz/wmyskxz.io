@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Reids(4)——神奇的HyperLoglog解决统计问题, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -29,7 +29,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -360,7 +360,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -376,11 +376,11 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                 中间件学习
                             </a>
                         
-                            <a href="/categories/中间件学习/Redis/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/Redis/" class="post-category" target="_blank">
                                 Redis
                             </a>
                         
@@ -422,12 +422,12 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164843.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164843.png" alt=""></p>
 <h1 id="一、HyperLogLog-简介"><a href="#一、HyperLogLog-简介" class="headerlink" title="一、HyperLogLog 简介"></a>一、HyperLogLog 简介</h1><p><strong>HyperLogLog</strong> 是最早由 <a href="http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf" target="_blank" rel="noopener">Flajolet</a> 及其同事在 2007 年提出的一种 <strong>估算基数的近似最优算法</strong>。但跟原版论文不同的是，好像很多书包括 Redis 作者都把它称为一种 <strong>新的数据结构(new datastruct)</strong> <em>(算法实现确实需要一种特定的数据结构来实现)</em>。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-777e33805ed91600.gif?imageMogr2/auto-orient/strip" alt></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/7896890-777e33805ed91600.gif?imageMogr2/auto-orient/strip" alt=""></p>
 <h2 id="关于基数统计"><a href="#关于基数统计" class="headerlink" title="关于基数统计"></a>关于基数统计</h2><p><strong>基数统计(Cardinality Counting)</strong> 通常是用来统计一个集合中不重复的元素个数。</p>
 <p><strong>思考这样的一个场景：</strong> 如果你负责开发维护一个大型的网站，有一天老板找产品经理要网站上每个网页的 <strong>UV(独立访客，每个用户每天只记录一次)</strong>，然后让你来开发这个统计模块，你会如何实现？</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164856.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164856.png" alt=""></p>
 <p>如果统计 <strong>PV(浏览量，用户没点一次记录一次)</strong>，那非常好办，给每个页面配置一个独立的 Redis 计数器就可以了，把这个计数器的 key 后缀加上当天的日期。这样每来一个请求，就执行 <code>INCRBY</code> 指令一次，最终就可以统计出所有的 <strong>PV</strong> 数据了。</p>
 <p>但是 <strong>UV</strong> 不同，它要去重，<strong>同一个用户一天之内的多次访问请求只能计数一次</strong>。这就要求了每一个网页请求都需要带上用户的 ID，无论是登录用户还是未登录的用户，都需要一个唯一 ID 来标识。</p>
 <p>你也许马上就想到了一个 <em>简单的解决方案</em>：那就是 <strong>为每一个页面设置一个独立的 set 集合</strong> 来存储所有当天访问过此页面的用户 ID。但这样的 <strong>问题</strong> 就是：</p>
@@ -435,15 +435,15 @@
 <li><strong>存储空间巨大：</strong> 如果网站访问量一大，你需要用来存储的 set 集合就会非常大，如果页面再一多.. 为了一个去重功能耗费的资源就可以直接让你 <strong>老板打死你</strong>；</li>
 <li><strong>统计复杂：</strong> 这么多 set 集合如果要聚合统计一下，又是一个复杂的事情；</li>
 </ol>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164908.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164908.png" alt=""></p>
 <h2 id="基数统计的常用方法"><a href="#基数统计的常用方法" class="headerlink" title="基数统计的常用方法"></a>基数统计的常用方法</h2><p>对于上述这样需要 <strong>基数统计</strong> 的事情，通常来说有两种比 set 集合更好的解决方案：</p>
 <h3 id="第一种：B-树"><a href="#第一种：B-树" class="headerlink" title="第一种：B 树"></a>第一种：B 树</h3><p><strong>B 树最大的优势就是插入和查找效率很高</strong>，如果用 B 树存储要统计的数据，可以快速判断新来的数据是否存在，并快速将元素插入 B 树。要计算基础值，只需要计算 B 树的节点个数就行了。</p>
 <p>不过将 B 树结构维护到内存中，能够解决统计和计算的问题，但是 <strong>并没有节省内存</strong>。</p>
 <h3 id="第二种：bitmap"><a href="#第二种：bitmap" class="headerlink" title="第二种：bitmap"></a>第二种：bitmap</h3><p><strong>bitmap</strong> 可以理解为通过一个 bit 数组来存储特定数据的一种数据结构，<strong>每一个 bit 位都能独立包含信息</strong>，bit 是数据的最小存储单位，因此能大量节省空间，也可以将整个 bit 数据一次性 load 到内存计算。如果定义一个很大的 bit 数组，基础统计中 <strong>每一个元素对应到 bit 数组中的一位</strong>，例如：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164914.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164914.png" alt=""></p>
 <p>bitmap 还有一个明显的优势是 <strong>可以轻松合并多个统计结果</strong>，只需要对多个结果求异或就可以了，也可以大大减少存储内存。可以简单做一个计算，如果要统计 <strong>1 亿</strong> 个数据的基数值，<strong>大约需要的内存</strong>：<code>100_000_000/ 8/ 1024/ 1024 ≈ 12 M</code>，如果用 <strong>32 bit</strong> 的 int 代表 <strong>每一个</strong> 统计的数据，<strong>大约需要内存</strong>：<code>32 * 100_000_000/ 8/ 1024/ 1024 ≈ 381 M</code></p>
 <p>可以看到 bitmap 对于内存的节省显而易见，但仍然不够。统计一个对象的基数值就需要 <code>12 M</code>，如果统计 1 万个对象，就需要接近 <code>120 G</code>，对于大数据的场景仍然不适用。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164926.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164926.png" alt=""></p>
 <h2 id="概率算法"><a href="#概率算法" class="headerlink" title="概率算法"></a>概率算法</h2><p>实际上目前还没有发现更好的在 <strong>大数据场景</strong> 中 <strong>准确计算</strong> 基数的高效算法，因此在不追求绝对精确的情况下，使用概率算法算是一个不错的解决方案。</p>
 <p>概率算法 <strong>不直接存储</strong> 数据集合本身，通过一定的 <strong>概率统计方法预估基数值</strong>，这种方法可以大大节省内存，同时保证误差控制在一定范围内。目前用于基数计数的概率算法包括:</p>
 <ul>
@@ -452,13 +452,13 @@
 <li><strong>HyperLogLog Counting(HLL)</strong>：HyperLogLog Counting 是基于 LLC 的优化和改进，在同样空间复杂度情况下，能够比 LLC 的基数估计误差更小</li>
 </ul>
 <p>其中，<strong>HyperLogLog</strong> 的表现是惊人的，上面我们简单计算过用 <strong>bitmap</strong> 存储 <strong>1 个亿</strong> 统计数据大概需要 <code>12 M</code> 内存，而在 <strong>HyperLoglog</strong> 中，只需要不到 <strong>1 K</strong> 内存就能够做到！在 Redis 中实现的 <strong>HyperLoglog</strong> 也只需要 <strong>12 K</strong> 内存，在 <strong>标准误差 0.81%</strong> 的前提下，<strong>能够统计 2<sup>64</sup> 个数据</strong>！</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164932.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164932.png" alt=""></p>
 <p><strong>这是怎么做到的？！</strong> 下面赶紧来了解一下！</p>
 <h1 id="二、HyperLogLog-原理"><a href="#二、HyperLogLog-原理" class="headerlink" title="二、HyperLogLog 原理"></a>二、HyperLogLog 原理</h1><p>我们来思考一个抛硬币的游戏：你连续掷 n 次硬币，然后说出其中<strong>连续掷为正面的最大次数，我来猜你一共抛了多少次</strong>。</p>
 <p>这很容易理解吧，例如：你说你这一次 <em>最多连续出现了 2 次</em> 正面，那么我就可以知道你这一次投掷的次数并不多，所以 <em>我可能会猜是 5</em> 或者是其他小一些的数字，但如果你说你这一次 <em>最多连续出现了 20 次</em> 正面，虽然我觉得不可能，但我仍然知道你花了特别多的时间，所以 <em>我说 GUN…</em>。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164943.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164943.png" alt=""></p>
 <p>这期间我可能会要求你重复实验，然后我得到了更多的数据之后就会估计得更准。<strong>我们来把刚才的游戏换一种说法</strong>：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164951.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302164951.png" alt=""></p>
 <p>这张图的意思是，我们给定一系列的随机整数，<strong>记录下低位连续零位的最大长度 K</strong>，即为图中的 <code>maxbit</code>，<strong>通过这个 K 值我们就可以估算出随机数的数量 N</strong>。</p>
 <h2 id="代码实验"><a href="#代码实验" class="headerlink" title="代码实验"></a>代码实验</h2><p>我们可以简单编写代码做一个实验，来探究一下 <code>K</code> 和 <code>N</code> 之间的关系：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PfTest</span> <span class="token punctuation">{</span>
@@ -583,7 +583,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>这个过程有点 <strong>类似于选秀节目里面的打分</strong>，一堆专业评委打分，但是有一些评委因为自己特别喜欢所以给高了，一些评委又打低了，所以一般都要 <strong>屏蔽最高分和最低分</strong>，然后 <strong>再计算平均值</strong>，这样的出来的分数就差不多是公平公正的了。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165000.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165000.png" alt=""></p>
 <p>上述代码就有 <strong>1024</strong> 个 “评委”，并且在计算平均值的时候，采用了 <strong>调和平均数</strong>，也就是倒数的平均值，它能有效地平滑离群值的影响：</p>
 <pre class=" language-java"><code class="language-java">avg <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">+</span> <span class="token number">4</span> <span class="token operator">+</span> <span class="token number">5</span> <span class="token operator">+</span> <span class="token number">104</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">4</span> <span class="token operator">=</span> <span class="token number">29</span>
 avg <span class="token operator">=</span> <span class="token number">4</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">/</span><span class="token number">3</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">4</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">5</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">104</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">5.044</span></code></pre>
@@ -599,7 +599,7 @@ avg <span class="token operator">=</span> <span class="token number">4</span> <s
 <span class="token number">900000</span> <span class="token number">944683.53</span> <span class="token number">0.05</span></code></pre>
 <p>真实的 HyperLogLog 要比上面的示例代码更加复杂一些，也更加精确一些。上面这个算法在随机次数很少的情况下会出现除零错误，因为 <code>maxbit = 0</code> 是不可以求倒数的。</p>
 <h2 id="真实的-HyperLogLog"><a href="#真实的-HyperLogLog" class="headerlink" title="真实的 HyperLogLog"></a>真实的 HyperLogLog</h2><p>有一个神奇的网站，可以动态地让你观察到 HyperLogLog 的算法到底是怎么执行的：<a href="http://content.research.neustar.biz/blog/hll.html" target="_blank" rel="noopener">http://content.research.neustar.biz/blog/hll.html</a></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165012.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165012.png" alt=""></p>
 <p>其中的一些概念这里稍微解释一下，您就可以自行去点击 <code>step</code> 来观察了：</p>
 <ul>
 <li><strong>m 表示分桶个数：</strong> 从图中可以看到，这里分成了 64 个桶；</li>
@@ -612,7 +612,7 @@ avg <span class="token operator">=</span> <span class="token number">4</span> <s
 <p><strong>而Redis 最大能够统计的数据量是 2<sup>64</sup></strong>，即每个桶的 <code>maxbit</code> 需要 <strong>6</strong> 个 bit 来存储，最大可以表示 <code>maxbit = 63</code>，于是总共占用内存就是：<strong>(2<sup>14</sup>) x 6 / 8</strong> <em>(每个桶 6 bit，而这么多桶本身要占用 16384 bit，再除以 8 转换成 KB)</em>,算出来的结果就是 <code>12 KB</code>。</p>
 <h1 id="三、Redis-中的-HyperLogLog-实现"><a href="#三、Redis-中的-HyperLogLog-实现" class="headerlink" title="三、Redis 中的 HyperLogLog 实现"></a>三、Redis 中的 HyperLogLog 实现</h1><p>从上面我们算是对 <strong>HyperLogLog</strong> 的算法和思想有了一定的了解，并且知道了一个 <strong>HyperLogLog</strong> 实际占用的空间大约是 <code>12 KB</code>，但 Redis 对于内存的优化非常变态，当 <strong>计数比较小</strong> 的时候，大多数桶的计数值都是 <strong>零</strong>，这个时候 Redis 就会适当节约空间，转换成另外一种 <strong>稀疏存储方式</strong>，与之相对的，正常的存储模式叫做 <strong>密集存储</strong>，这种方式会恒定地占用 <code>12 KB</code>。</p>
 <h2 id="密集型存储结构"><a href="#密集型存储结构" class="headerlink" title="密集型存储结构"></a>密集型存储结构</h2><p>密集型的存储结构非常简单，就是 <strong>16384 个 6 bit 连续串成</strong> 的字符串位图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165040.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165040.png" alt=""></p>
 <p>我们都知道，一个字节是由 8 个 bit 组成的，这样 6 bit 排列的结构就会导致，有一些桶会 <strong>跨越字节边界</strong>，我们需要 <strong>对这一个或者两个字节进行适当的移位拼接</strong> 才可以得到具体的计数值。</p>
 <p>假设桶的编号为 <code>index</code>，这个 6 bity 计数值的起始字节偏移用 <code>offset_bytes</code> 表示，它在这个字节的其实比特位置偏移用 <code>offset_bits</code> 表示，于是我们有：</p>
 <pre class=" language-python"><code class="language-python">offset_bytes <span class="token operator">=</span> <span class="token punctuation">(</span>index <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">8</span>
@@ -652,7 +652,7 @@ val <span class="token operator">=</span> <span class="token punctuation">(</spa
     _p[_byte+1] |= _v >> _fb8; \
 } while(0)</span></code></pre>
 <h2 id="稀疏存储结构"><a href="#稀疏存储结构" class="headerlink" title="稀疏存储结构"></a>稀疏存储结构</h2><p>稀疏存储适用于很多计数值都是零的情况。下图表示了一般稀疏存储计数值的状态：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165049.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200302165049.png" alt=""></p>
 <p>当 <strong>多个连续桶的计数值都是零</strong> 时，Redis 提供了几种不同的表达形式：</p>
 <ul>
 <li><code>00xxxxxx</code>：前缀两个零表示接下来的 6bit 整数值加 1 就是零值计数器的数量，注意这里要加 1 是因为数量如果为零是没有意义的。比如 <code>00010101</code> 表示连续 <code>22</code> 个零值计数器。</li>
@@ -737,7 +737,7 @@ OK
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152714.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200229152714.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -899,7 +899,7 @@ OK
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -913,7 +913,7 @@ OK
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1004,11 +1004,11 @@ OK
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/人类观察所/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" class="post-category" target="_blank">
                                     人类观察所
                                 </a>
                             
-                            <a href="/categories/人类观察所/好奇星人/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" class="post-category" target="_blank">
                                     好奇星人
                                 </a>
                             
@@ -1019,11 +1019,11 @@ OK
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/人类观察所/" target="_blank">
+                    <a href="/tags/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" target="_blank">
                         <span class="chip bg-color">人类观察所</span>
                     </a>
                     
-                    <a href="/tags/好奇星人/" target="_blank">
+                    <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" target="_blank">
                         <span class="chip bg-color">好奇星人</span>
                     </a>
                     
@@ -1070,7 +1070,7 @@ OK
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Redis(5)——亿级数据过滤和布隆过滤器, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -29,7 +29,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -360,7 +360,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -380,7 +380,7 @@
                                 Redis
                             </a>
                         
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                 中间件学习
                             </a>
                         
@@ -422,20 +422,20 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/images/pasted-9.png" alt></p>
+                <p><img src="/images/pasted-9.png" alt=""></p>
 <h1 id="一、布隆过滤器简介"><a href="#一、布隆过滤器简介" class="headerlink" title="一、布隆过滤器简介"></a>一、布隆过滤器简介</h1><p><a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">上一次</a> 我们学会了使用 <strong>HyperLogLog</strong> 来对大数据进行一个估算，它非常有价值，可以解决很多精确度不高的统计需求。但是如果我们想知道某一个值是不是已经在 <strong>HyperLogLog</strong> 结构里面了，它就无能为力了，它只提供了 <code>pfadd</code> 和 <code>pfcount</code> 方法，没有提供类似于 <code>contains</code> 的这种方法。</p>
 <p>就举一个场景吧，比如你 <strong>刷抖音</strong>：</p>
-<p><img src="/images/pasted-1.png" alt></p>
+<p><img src="/images/pasted-1.png" alt=""></p>
 <p>你有 <strong>刷到过重复的推荐内容</strong> 吗？这么多的推荐内容要推荐给这么多的用户，它是怎么保证每个用户在看推荐内容时，保证不会出现之前已经看过的推荐视频呢？也就是说，抖音是如何实现 <strong>推送去重</strong> 的呢？</p>
 <p>你会想到服务器 <strong>记录</strong> 了用户看过的 <strong>所有历史记录</strong>，当推荐系统推荐短视频时会从每个用户的历史记录里进行 <strong>筛选</strong>，过滤掉那些已经存在的记录。问题是当 <strong>用户量很大</strong>，每个用户看过的短视频又很多的情况下，这种方式，推荐系统的去重工作 <strong>在性能上跟的上么？</strong></p>
 <p>实际上，如果历史记录存储在关系数据库里，去重就需要频繁地对数据库进行 <code>exists</code> 查询，当系统并发量很高时，数据库是很难抗住压力的。</p>
-<p><img src="/images/pasted-2.png" alt></p>
+<p><img src="/images/pasted-2.png" alt=""></p>
 <p>你可能又想到了 <strong>缓存</strong>，但是这么多用户这么多的历史记录，如果全部缓存起来，那得需要 <strong>浪费多大的空间</strong> 啊.. <em>(可能老板看一眼账单，看一眼你..)</em> 并且这个存储空间会随着时间呈线性增长，就算你用缓存撑得住一个月，但是又能继续撑多久呢？不缓存性能又跟不上，咋办呢？</p>
-<p><img src="/images/pasted-3.png" alt></p>
+<p><img src="/images/pasted-3.png" alt=""></p>
 <p>如上图所示，<strong>布隆过滤器(Bloom Filter)</strong> 就是这样一种专门用来解决去重问题的高级数据结构。但是跟 <strong>HyperLogLog</strong> 一样，它也一样有那么一点点不精确，也存在一定的误判概率，但它能在解决去重的同时，在 <strong>空间上能节省 90%</strong> 以上，也是非常值得的。</p>
 <h2 id="布隆过滤器是什么"><a href="#布隆过滤器是什么" class="headerlink" title="布隆过滤器是什么"></a>布隆过滤器是什么</h2><p><strong>布隆过滤器（Bloom Filter）</strong> 是 1970 年由布隆提出的。它 <strong>实际上</strong> 是一个很长的二进制向量和一系列随机映射函数 <em>(下面详细说)</em>，实际上你也可以把它 <strong>简单理解</strong> 为一个不怎么精确的 <strong>set</strong> 结构，当你使用它的 <code>contains</code> 方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判概率。</p>
 <p>当布隆过滤器说某个值存在时，这个值 <strong>可能不存在</strong>；当它说不存在时，那么 <strong>一定不存在</strong>。打个比方，当它说不认识你时，那就是真的不认识，但是当它说认识你的时候，可能是因为你长得像它认识的另外一个朋友 <em>(脸长得有些相似)</em>，所以误判认识你。</p>
-<p><img src="/images/pasted-4.png" alt></p>
+<p><img src="/images/pasted-4.png" alt=""></p>
 <h2 id="布隆过滤器的使用场景"><a href="#布隆过滤器的使用场景" class="headerlink" title="布隆过滤器的使用场景"></a>布隆过滤器的使用场景</h2><p>基于上述的功能，我们大致可以把布隆过滤器用于以下的场景之中：</p>
 <ul>
 <li><strong>大数据判断是否存在</strong>：这就可以实现出上述的去重功能，如果你的服务器内存足够大的话，那么使用 HashMap 可能是一个不错的解决方案，理论上时间复杂度可以达到 O(1 的级别，但是当数据量起来之后，还是只能考虑布隆过滤器。</li>
@@ -443,12 +443,12 @@
 <li><strong>爬虫/ 邮箱等系统的过滤</strong>：平时不知道你有没有注意到有一些正常的邮件也会被放进垃圾邮件目录中，这就是使用布隆过滤器 <strong>误判</strong> 导致的。</li>
 </ul>
 <h1 id="二、布隆过滤器原理解析"><a href="#二、布隆过滤器原理解析" class="headerlink" title="二、布隆过滤器原理解析"></a>二、布隆过滤器原理解析</h1><p>布隆过滤器 <strong>本质上</strong> 是由长度为 <code>m</code> 的位向量或位列表（仅包含 <code>0</code> 或 <code>1</code> 位值的列表）组成，最初所有的值均设置为 <code>0</code>，所以我们先来创建一个稍微长一些的位向量用作展示：</p>
-<p><img src="/images/pasted-5.png" alt></p>
+<p><img src="/images/pasted-5.png" alt=""></p>
 <p>当我们向布隆过滤器中添加数据时，会使用 <strong>多个</strong> <code>hash</code> 函数对 <code>key</code> 进行运算，算得一个证书索引值，然后对位数组长度进行取模运算得到一个位置，每个 <code>hash</code> 函数都会算得一个不同的位置。再把位数组的这几个位置都置为 <code>1</code> 就完成了 <code>add</code> 操作，例如，我们添加一个 <code>wmyskxz</code>：</p>
-<p><img src="/images/pasted-6.png" alt></p>
+<p><img src="/images/pasted-6.png" alt=""></p>
 <p>向布隆过滤器查查询 <code>key</code> 是否存在时，跟 <code>add</code> 操作一样，会把这个 <code>key</code> 通过相同的多个 <code>hash</code> 函数进行运算，查看 <strong>对应的位置</strong> 是否 <strong>都</strong> 为 <code>1</code>，<strong>只要有一个位为 <code>0</code></strong>，那么说明布隆过滤器中这个 <code>key</code> 不存在。如果这几个位置都是 <code>1</code>，并不能说明这个 <code>key</code> 一定存在，只能说极有可能存在，因为这些位置的 <code>1</code> 可能是因为其他的 <code>key</code> 存在导致的。</p>
 <p>就比如我们在 <code>add</code> 了一定的数据之后，查询一个 <strong>不存在</strong> 的 <code>key</code>：</p>
-<p><img src="/images/pasted-7.png" alt></p>
+<p><img src="/images/pasted-7.png" alt=""></p>
 <p>很明显，<code>1/3/5</code> 这几个位置的 <code>1</code> 是因为上面第一次添加的 <code>wmyskxz</code> 而导致的，所以这里就存在 <strong>误判</strong>。幸运的是，布隆过滤器有一个可以预判误判率的公式，比较复杂，感兴趣的朋友可以自行去阅读，比较烧脑.. 只需要记住以下几点就好了：</p>
 <ul>
 <li>使用时 <strong>不要让实际元素数量远大于初始化数量</strong>；</li>
@@ -702,7 +702,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="/images/pasted-8.png" alt></p>
+<p><img src="/images/pasted-8.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -864,7 +864,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -878,7 +878,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -957,7 +957,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                         
                             
 像微信 “附近的人”，美团 “附近的餐厅”，支付宝共享单车 “附近的车” 是怎么设计实现的呢？
-一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，经度范围 *[-180, 180]，纬度范围 
+一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，经度范围 [-180, 180]，纬度范围 *
                         
                     </div>
                     <div class="publish-info">
@@ -972,7 +972,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                                     Redis
                                 </a>
                             
-                            <a href="/categories/Redis/中间件学习/" class="post-category" target="_blank">
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
                                     中间件学习
                                 </a>
                             
@@ -983,7 +983,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1028,11 +1028,11 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/人类观察所/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" class="post-category" target="_blank">
                                     人类观察所
                                 </a>
                             
-                            <a href="/categories/人类观察所/好奇星人/" class="post-category" target="_blank">
+                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" class="post-category" target="_blank">
                                     好奇星人
                                 </a>
                             
@@ -1043,11 +1043,11 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/人类观察所/" target="_blank">
+                    <a href="/tags/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" target="_blank">
                         <span class="chip bg-color">人类观察所</span>
                     </a>
                     
-                    <a href="/tags/好奇星人/" target="_blank">
+                    <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" target="_blank">
                         <span class="chip bg-color">好奇星人</span>
                     </a>
                     

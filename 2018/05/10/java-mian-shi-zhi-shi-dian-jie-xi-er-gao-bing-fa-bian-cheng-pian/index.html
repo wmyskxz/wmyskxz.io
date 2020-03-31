@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Java面试知识点解析(二)——高并发编程篇, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -34,7 +34,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -365,7 +365,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -373,7 +373,7 @@
                                 <span class="chip bg-color">Java Web</span>
                             </a>
                         
-                            <a href="/tags/面试/" target="_blank">
+                            <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
                                 <span class="chip bg-color">面试</span>
                             </a>
                         
@@ -427,7 +427,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182023.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182023.png" alt=""></p>
 <blockquote>
 <ul>
 <li>前言： </li>
@@ -475,18 +475,18 @@
 </blockquote>
 <h4 id="2）多线程一定快吗？"><a href="#2）多线程一定快吗？" class="headerlink" title="2）多线程一定快吗？"></a>2）多线程一定快吗？</h4><p>答：不一定。</p>
 <p>比如，我们尝试使用并行和串行来分别执行累加的操作观察是否并行执行一定比串行执行更快：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182042.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182042.png" alt=""></p>
 <p>以下是我测试的结果，可以看出，当不超过1百万的时候，并行是明显比串行要慢的，为什么并发执行的速度会比串行慢呢？这是因为线程有创建和上下文切换的开销。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182055.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182055.png" alt=""></p>
 <h4 id="3）什么是同步？什么又是异步？"><a href="#3）什么是同步？什么又是异步？" class="headerlink" title="3）什么是同步？什么又是异步？"></a>3）什么是同步？什么又是异步？</h4><p>解析：这是对多线程基础知识的考察</p>
 <p>答：同步和异步通常用来形容一次方法调用。</p>
 <p>同步方法调用一旦开始，调用者必须等到方法返回后，才能继续后续的行为。这就好像是我们去商城买一台空调，你看中了一台空调，于是就跟售货员下了单，然后售货员就去仓库帮你调配物品，这天你热的实在不行，就催着商家赶紧发货，于是你就在商店里等着，知道商家把你和空调都送回家，一次愉快的购物才结束，这就是同步调用。</p>
 <p>而异步方法更像是一个消息传递，一旦开始，方法调用就会立即返回，调用者就可以继续后续的操作。回到刚才买空调的例子，我们可以坐在里打开电脑，在网上订购一台空调。当你完成网上支付的时候，对你来说购物过程已经结束了。虽然空调还没有送到家，但是你的任务都已经完成了。商家接到你的订单后，就会加紧安排送货，当然这一切已经跟你无关了，你已经支付完成，想什么就能去干什么了，出去溜达几圈都不成问题。等送货上门的时候，接到商家电话，回家一趟签收即可。这就是异步调用。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182106.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182106.png" alt=""></p>
 <p><strong>面试官：那并发（Concurrency）和并行（Parallelism）的区别呢？</strong></p>
 <p>解析：并行性和并发性是既相似又有区别的两个概念。</p>
 <p><strong>答：并行性是指两个或多个事件在同一时刻发生。而并发性是指连个或多个事件在同一时间间隔内发生。</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182116.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182116.png" alt=""></p>
 <p>在多道程序环境下，并发性是指在一段时间内宏观上有多个程序在同时运行，但在单处理机环境下（一个处理器），每一时刻却仅能有一道程序执行，故微观上这些程序只能是分时地交替执行。例如，在1秒钟时间内，0-15ms程序A运行；15-30ms程序B运行；30-45ms程序C运行；45-60ms程序D运行，因此可以说，在1秒钟时间间隔内，宏观上有四道程序在同时运行，但微观上，程序A、B、C、D是分时地交替执行的。</p>
 <p>如果在计算机系统中有多个处理机，这些可以并发执行的程序就可以被分配到多个处理机上，实现并发执行，即利用每个处理机处理一个可并发执行的程序。这样，多个程序便可以同时执行。以此就能提高系统中的资源利用率，增加系统的吞吐量。</p>
 <h4 id="4）线程和进程的区别：（必考）"><a href="#4）线程和进程的区别：（必考）" class="headerlink" title="4）线程和进程的区别：（必考）"></a>4）线程和进程的区别：（必考）</h4><p>答：</p>
@@ -517,7 +517,7 @@
 <p>比如，在一个办公室里有一台打印机，打印机一次只能执行一个任务。如果小王和小明同时需要打印文件，很显然，如果小王先下发了打印任务，打印机就开始打印小王的文件了，小明的任务就只能等待小王打印结束后才能打印，这里的打印机就是一个临界区的例子。</p>
 <p>在并行程序中，临界区资源是保护的对象，如果意外出现打印机同时执行两个打印任务，那么最可能的结果就是打印出来的文件就会是损坏的文件，它既不是小王想要的，也不是小明想要的。</p>
 <h4 id="6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？"><a href="#6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？" class="headerlink" title="6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？"></a>6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？</h4><p>答：死锁、饥饿和活锁都属于多线程的活跃性问题，如果发现上述几种情况，那么相关线程可能就不再活跃，也就说它可能很难再继续往下执行了。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182125.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182125.png" alt=""></p>
 <ol>
 <li><p>死锁应该是最糟糕的一种情况了，它表示两个或者两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程。 </p>
 </li>
@@ -554,7 +554,7 @@
 </li>
 </ol>
 <h4 id="9）Java-中线程有几种状态？"><a href="#9）Java-中线程有几种状态？" class="headerlink" title="9）Java 中线程有几种状态？"></a>9）Java 中线程有几种状态？</h4><p>答：六种（查看 Java 源码也可以看到是 6 种），并且某个时刻 Java 线程只能处于其中的一个状态。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182137.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182137.png" alt=""></p>
 <ol>
 <li><p>新建（NEW）状态：表示新创建了一个线程对象，而此时线程并没有开始执行。</p>
 </li>
@@ -620,7 +620,7 @@
 <li><p>Entry 对 Key 的引用是弱引用；Entry 对 Value 的引用是强引用。</p>
 </li>
 </ol>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182147.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182147.png" alt=""></p>
 <h4 id="6）线程池有了解吗？（必考）"><a href="#6）线程池有了解吗？（必考）" class="headerlink" title="6）线程池有了解吗？（必考）"></a>6）线程池有了解吗？（必考）</h4><p>答：java.util.concurrent.ThreadPoolExecutor 类就是一个线程池。客户端调用 ThreadPoolExecutor.submit(Runnable task) 提交任务，线程池内部维护的工作者线程的数量就是该线程池的线程池大小，有 3 种形态：</p>
 <blockquote>
 <ul>
@@ -707,7 +707,7 @@ obj<span class="token punctuation">.</span><span class="token function">wait</sp
 <span class="token punctuation">}</span></code></pre>
 <p>参见 Effective Java 第 69 条，获取更多关于为什么应该在循环中来调用 wait 方法的内容。</p>
 <h4 id="15）什么是多线程环境下的伪共享（false-sharing）？"><a href="#15）什么是多线程环境下的伪共享（false-sharing）？" class="headerlink" title="15）什么是多线程环境下的伪共享（false sharing）？"></a>15）什么是多线程环境下的伪共享（false sharing）？</h4><p>答：伪共享是多线程系统（每个处理器有自己的局部缓存）中一个众所周知的性能问题。伪共享发生在不同处理器的上的线程对变量的修改依赖于相同的缓存行，如下图所示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182207.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713182207.png" alt=""></p>
 <p>伪共享问题很难被发现，因为线程可能访问完全不同的全局变量，内存中却碰巧在很相近的位置上。如其他诸多的并发问题，避免伪共享的最基本方式是仔细审查代码，根据缓存行来调整你的数据结构。</p>
 <h4 id="16）用-wait-notify-写一段代码来解决生产者-消费者问题？"><a href="#16）用-wait-notify-写一段代码来解决生产者-消费者问题？" class="headerlink" title="16）用 wait-notify 写一段代码来解决生产者-消费者问题？"></a>16）用 wait-notify 写一段代码来解决生产者-消费者问题？</h4><p>解析：这是常考的基础类型的题，只要记住在同步块中调用 wait() 和 notify()方法，如果阻塞，通过循环来测试等待条件。</p>
 <p>答：</p>
@@ -1104,7 +1104,7 @@ Queue is empty Consumer is waiting <span class="token punctuation">,</span> size
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1118,7 +1118,7 @@ Queue is empty Consumer is waiting <span class="token punctuation">,</span> size
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1223,7 +1223,7 @@ Queue is empty Consumer is waiting <span class="token punctuation">,</span> size
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1231,7 +1231,7 @@ Queue is empty Consumer is waiting <span class="token punctuation">,</span> size
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/面试/" target="_blank">
+                    <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
                         <span class="chip bg-color">面试</span>
                     </a>
                     
@@ -1286,7 +1286,7 @@ Queue is empty Consumer is waiting <span class="token punctuation">,</span> size
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1294,7 +1294,7 @@ Queue is empty Consumer is waiting <span class="token punctuation">,</span> size
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/面试/" target="_blank">
+                    <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
                         <span class="chip bg-color">面试</span>
                     </a>
                     

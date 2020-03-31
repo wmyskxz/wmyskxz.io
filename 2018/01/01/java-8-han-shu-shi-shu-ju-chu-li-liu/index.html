@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Java 8——函数式数据处理（流）, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -32,7 +32,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -363,7 +363,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -375,7 +375,7 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java基础/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
                                 Java基础
                             </a>
                         
@@ -423,15 +423,15 @@
 <h2 id="流是什么？"><a href="#流是什么？" class="headerlink" title="流是什么？"></a>流是什么？</h2><p>流是<code>Java API</code>的新成员，它允许你以声明性方式处理数据集合（通过查询语句来表达，而不是临时写一个实现）。</p>
 <p>就现在来说，你可以把它们看成遍历数据集合的高级迭代器。此外，流还可以<em>透明地</em>并行处理，你无需写任何多线程代码！</p>
 <p>下面两段代码都是用来返回低热量的菜肴名称的，并按照卡路里排序，一个使用<code>java 7</code>写的，另一个是用<code>java 8</code>的流写的，比较一下，不用太关心java 8的语法：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082706.png" alt></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082712.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082706.png" alt=""></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082712.png" alt=""></p>
 <p>现在，你可以看出，从软件工程师的角度来看，新的方法有几个显而易见的好处。</p>
 <ul>
 <li><p><strong>代码是以声明性方式写的：</strong>说明想要完成什么（筛选热量低的菜肴）而不是说明如何实现一个操作（利用循环和if条件等控制流语句）。这种方法加上行为参数化让你可以轻松应对变化的需求：你很容易创建一个代码版本，利用Lambda表达式来筛选高卡路里的菜肴，而用不着去复制粘贴代码。</p>
 </li>
 <li><p><strong>你可以把几个基础操作链接起来，</strong>来表达复杂的数据处理流水线（在filter后面接上sorted、map和collect操作），同时保持代码清晰可读。</p>
 <blockquote>
-<p>因为filter、sorted、map和coleect等操作是与具体线程模型无关的高层次构件，所以它们的内部实现可以是单线程的，也可能<em>透明地</em>充分利用你的多核架构！在实践中，这意味着你用不着为了让某些数据处理任务并行而去操心线程和锁了，<code>Steam API</code>都替你做好了！<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082753.png" alt></p>
+<p>因为filter、sorted、map和coleect等操作是与具体线程模型无关的高层次构件，所以它们的内部实现可以是单线程的，也可能<em>透明地</em>充分利用你的多核架构！在实践中，这意味着你用不着为了让某些数据处理任务并行而去操心线程和锁了，<code>Steam API</code>都替你做好了！<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082753.png" alt=""></p>
 </blockquote>
 </li>
 </ul>
@@ -440,21 +440,21 @@
         menu<span class="token punctuation">.</span><span class="token function">steam</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token function">groupingBy</span><span class="token punctuation">(</span>Dish<span class="token operator">:</span><span class="token operator">:</span>getType<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <h2 id="流简介"><a href="#流简介" class="headerlink" title="流简介"></a>流简介</h2><p>要讨论流，就要先来讨论集合，这是最容易上手的方式了。<code>Java 8</code>中的集合支持一个新的stream方法，它会返回一个流（接口定义在<code>java.util,steam.Steam</code>里）。</p>
 <p>那么，流到底是什么呢？简短的定义就是<strong>“从支持数据处理操作的源，生成的元素序列”</strong>。Oh，听上去就让人头大。让我们一步步来剖析这个定义：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082908.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082908.png" alt=""></p>
 <p>让我们来看一段能够体现所有这些概念的代码：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082804.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082804.png" alt=""></p>
 <p>在本例中，我们先是对menu调用steam方法，由菜单得到一个流。<em>数据源</em>是菜肴列表（菜单），它给流提供一个<em>元素序列。</em>接下来，对流应用一系列<em>数据处理操作：</em>filter、map、limit和collect。</p>
 <p>除了collect之外，所有这些操作都会返回另一个流，这样它们就可以竭诚一条流水线，于是就可以看作对源的一个查询。最后，collect操作开始处理流水线，并返回结果。下图展示了该流操作的每个操作的简介：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082810.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082810.png" alt=""></p>
 <p>感觉像不像变魔术呢？不过至少看起来，是挺酷的。</p>
-<h2 id="集合与流"><a href="#集合与流" class="headerlink" title="集合与流"></a>集合与流</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082817.png" alt></p>
+<h2 id="集合与流"><a href="#集合与流" class="headerlink" title="集合与流"></a>集合与流</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714082817.png" alt=""></p>
 <p>上图很好的说明了在<code>Java 8</code>中的集合与流的关系，集合就像是DVD一样，保存了完整的数据结构和所有的值，而流则像是现在视频网站中的视频那样，不必提前下好完整的视频，只需要提前下载好用户播放位置的那几帧就好了。</p>
 <blockquote>
 <p>请注意：流和迭代器一样，都只能遍历一次。</p>
 </blockquote>
 <h2 id="流操作"><a href="#流操作" class="headerlink" title="流操作"></a>流操作</h2><p><code>java.util.steam.Steam</code>中的<code>Steam</code>接口定义了许多操作。它们可以分为两大类，一类是<code>中间操作</code>，另一类是<code>终端操作</code>。</p>
 <p>为了方便，下面总结了一些<code>Steam API</code>提供的操作：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083329.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083329.png" alt=""></p>
 <p>流的使用一般包括三件事：</p>
 <ul>
 <li><strong>一个数据源（如集合）来执行一个查询；</strong></li>
@@ -624,7 +624,7 @@
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -638,7 +638,7 @@
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -741,7 +741,7 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -786,7 +786,7 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java基础/" class="post-category" target="_blank">
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
                                     Java基础
                                 </a>
                             
@@ -797,7 +797,7 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     

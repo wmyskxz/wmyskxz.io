@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 
 
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
     <meta charset="utf-8">
     <meta name="keywords" content="Java Web—【分页功能】详解, 我没有三颗心脏的博客">
     <meta name="description" content="
@@ -38,7 +38,7 @@
     </style>
 
     <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
 <body>
@@ -369,7 +369,7 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/原创/" target="_blank">
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
@@ -427,7 +427,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065354.png" alt></p>
+                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065354.png" alt=""></p>
 <h2 id="分页简介"><a href="#分页简介" class="headerlink" title="分页简介"></a>分页简介</h2><p>分页功能在网页中是非常常见的一个功能，<strong>其作用也就是将数据分割成多个页面来进行显示。</strong></p>
 <blockquote>
 <ul>
@@ -461,14 +461,14 @@
 </blockquote>
 <hr>
 <h2 id="传统的分页方式"><a href="#传统的分页方式" class="headerlink" title="传统的分页方式"></a>传统的分页方式</h2><p>对于假分页的实现方式很简单，只需要准备一个集合保存从数据库中取出的所有数据，然后根据当前页面的码数，取出对应范围的数据显示就好了，<strong>我们这里基于物理分页来实现。</strong></p>
-<h4 id="分页的原理"><a href="#分页的原理" class="headerlink" title="分页的原理"></a>分页的原理</h4><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065406.png" alt></p>
+<h4 id="分页的原理"><a href="#分页的原理" class="headerlink" title="分页的原理"></a>分页的原理</h4><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065406.png" alt=""></p>
 <blockquote>
 <ul>
-<li><strong>页面中的数据有：</strong><br>结果集：通过 SQL 语句查询得来的——<strong>List<student></student></strong></li>
+<li><strong>页面中的数据有：</strong><br>结果集：通过 SQL 语句查询得来的——<strong>List<Student></strong></li>
 <li><strong>分页条中的数据有：</strong><br>当前页：用户传递到后台——<strong>currentPage</strong><br>总页数：计算的来——<strong>totalPage</strong><br>上一页：计算的来——<strong>prePage</strong><br>下一页：计算的来——<strong>nextPage</strong><br>尾页：计算的来（总页数）——<strong>lastPage</strong><br>页面大小（即每一页显示的条数）：用户传递到后台——<strong>count</strong><br>总条数：通过 SQL 语句查询得来的——<strong>totalCount</strong></li>
 </ul>
 </blockquote>
-<p>可以发现页面功能中需要用到的数据<strong>有两个是需要通过 SQL 语句查询得来</strong>的：一个是页面中显示的数据 <strong>List<student></student></strong> ，另一个是数据的总条数 <strong>totalCount</strong>，分别对应以下两条 SQL 语句：</p>
+<p>可以发现页面功能中需要用到的数据<strong>有两个是需要通过 SQL 语句查询得来</strong>的：一个是页面中显示的数据 <strong>List<Student></strong> ，另一个是数据的总条数 <strong>totalCount</strong>，分别对应以下两条 SQL 语句：</p>
 <blockquote>
 <ul>
 <li><code>SELECT * FROM student LIMIT #{param1}, #{param2}</code></li>
@@ -570,7 +570,7 @@
 <span class="token punctuation">}</span></code></pre>
 <hr>
 <h2 id="前台实现分页设计"><a href="#前台实现分页设计" class="headerlink" title="前台实现分页设计"></a>前台实现分页设计</h2><p>首先我们在前台需要完成我们分页条的设计，这里可以直接引入 <strong>Bootstrap</strong> 来完成：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065417.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065417.png" alt=""></p>
 <blockquote>
 <p>上面是使用 <strong>Bootstrap</strong> 实现一个分页条的简单例子，如果不熟悉的童鞋可以去菜鸟教程中查看：<a href="http://www.runoob.com/bootstrap/bootstrap-pagination.html" target="_blank" rel="noopener">点这里</a></p>
 </blockquote>
@@ -710,7 +710,7 @@
 <li>status.index 是从0开始遍历</li>
 <li><strong>要求：</strong>显示当前页码的前两个和后两个就可，例如当前页码为3的时候，就显示 1 2 3(当前页) 4 5 的页码</li>
 <li><strong>理解测试条件：</strong></li>
-<li>10 &lt;= 当前页*每一页显示的数目 - 当前页开始的数据编号 &lt;= 30<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065432.png" alt></li>
+<li>10 &lt;= 当前页*每一页显示的数目 - 当前页开始的数据编号 &lt;= 30<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065432.png" alt=""></li>
 <li>只要理解了这个判断条件，其他的就都好理解了</li>
 </ul>
 <blockquote>
@@ -810,7 +810,7 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
 &lt;!--&lt;select id=&quot;getTotal&quot; resultType=&quot;int&quot;&gt;--&gt;
     &lt;!--SELECT COUNT(*) FROM student--&gt;
 &lt;!--&lt;/select&gt;--&gt;</code></pre><p>在 Dao 类和 Service 类中修改相应的地方：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065446.png" alt></p>
+<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065446.png" alt=""></p>
 <p>然后修改掉 StudentController 中的方法：</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/listStudent"</span><span class="token punctuation">)</span>
 <span class="token keyword">public</span> String <span class="token function">listStudent</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span> HttpServletResponse response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -1000,7 +1000,7 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
         </p>
         
             <!--            <div class="center-align">-->
-            <!--                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
             <!--                    <img alt=""-->
             <!--                         style="border-width:0"-->
             <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
@@ -1014,7 +1014,7 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
                    rel="cc:attributionURL">
                     我没有三颗心脏
                 </a> 创作， 采用
-                <a rel="license" href="https://creativecommons.org/licenses/by/4.0/deed.zh">
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
                     知识共享署名 4.0 国际许可协议
                 </a>进行许可。
                 可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
@@ -1115,7 +1115,7 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1123,12 +1123,12 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/项目/" target="_blank">
-                        <span class="chip bg-color">项目</span>
-                    </a>
-                    
                     <a href="/tags/SSM/" target="_blank">
                         <span class="chip bg-color">SSM</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
+                        <span class="chip bg-color">项目</span>
                     </a>
                     
                 </div>
@@ -1182,7 +1182,7 @@ Java基础知识
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/原创/" target="_blank">
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
@@ -1190,12 +1190,12 @@ Java基础知识
                         <span class="chip bg-color">Java Web</span>
                     </a>
                     
-                    <a href="/tags/项目/" target="_blank">
-                        <span class="chip bg-color">项目</span>
-                    </a>
-                    
                     <a href="/tags/SSM/" target="_blank">
                         <span class="chip bg-color">SSM</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
+                        <span class="chip bg-color">项目</span>
                     </a>
                     
                 </div>
