@@ -423,19 +423,20 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://upload-images.jianshu.io/upload_images/7896890-80c61b0ae541a750.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+                <p><img src="https://imgkr.cn-bj.ufileos.com/27a5aa9f-8bc6-4a31-9540-af290c4174f6.png" alt=""></p>
 <h1 id="一、Redis-集群概述"><a href="#一、Redis-集群概述" class="headerlink" title="一、Redis 集群概述"></a>一、Redis 集群概述</h1><h4 id="Redis-主从复制"><a href="#Redis-主从复制" class="headerlink" title="Redis 主从复制"></a>Redis 主从复制</h4><p>到 <a href="#相关阅读">目前</a> 为止，我们所学习的 Redis 都是 <strong>单机版</strong> 的，这也就意味着一旦我们所依赖的 Redis 服务宕机了，我们的主流程也会受到一定的影响，这当然是我们不能够接受的。</p>
 <p>所以一开始我们的想法是：搞一台备用机。这样我们就可以在一台服务器出现问题的时候切换动态地到另一台去：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-c48d255bc0b13672.gif?imageMogr2/auto-orient/strip" alt=""></p>
-<p>幸运的是，两个节点数据的同步我们可以使用 Redis 的 <strong>主从同步</strong> 功能帮助到我们，这样一来，有个备份，心里就踏实多了。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-4a32b9efa3885655.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/74666f1b-692c-4970-bb84-0bd61575aa28.gif" alt=""></p>
+<p>幸运的是，两个节点数据的</p>
+<p>同步我们可以使用 Redis 的 <strong>主从同步</strong> 功能帮助到我们，这样一来，有个备份，心里就踏实多了。</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/72488759-d0b8-4c9e-90fb-57438646ca1e.png" alt=""></p>
 <h4 id="Redis-哨兵"><a href="#Redis-哨兵" class="headerlink" title="Redis 哨兵"></a>Redis 哨兵</h4><p>后来因为某种神秘力量，Redis 老会在莫名其妙的时间点出问题 <em>(比如半夜 2 点)</em>，我总不能 24 小时时刻守在电脑旁边切换节点吧，于是另一个想法又开始了：给所有的节点找一个 <strong>“管家”</strong>，自动帮我监听照顾节点的状态并切换：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-de8d9ce9e77bf211.gif?imageMogr2/auto-orient/strip" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/404ebb01-794e-4179-837a-d25643540485.webp" alt=""></p>
 <p>这大概就是 <strong>Redis 哨兵</strong> <em>(Sentinel)</em> 的简单理解啦。什么？管家宕机了怎么办？相较于有大量请求的 Redis 服务来说，管家宕机的概率就要小得多啦.. 如果真的宕机了，我们也可以直接切换成当前可用的节点保证可用..</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-c7657fb8140d7cc6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/72488759-d0b8-4c9e-90fb-57438646ca1e.png" alt=""></p>
 <h4 id="Redis-集群化"><a href="#Redis-集群化" class="headerlink" title="Redis 集群化"></a>Redis 集群化</h4><p>好了，通过上面的一些解决方案我们对 Redis 的 <strong>稳定性</strong> 稍微有了一些底气了，但单台节点的计算能力始终有限，所谓人多力量大，如果我们把 <strong>多个节点组合</strong> 成 <strong>一个可用的工作节点</strong>，那就大大增加了 Redis 的  <strong>高可用、可扩展、分布式、容错</strong> 等特性：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-8957aa6d1484c5de.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<h1 id="二、主从复制"><a href="#二、主从复制" class="headerlink" title="二、主从复制"></a>二、主从复制</h1><p><img src="https://upload-images.jianshu.io/upload_images/7896890-4956a718c124a81f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/b52663fc-9d21-465a-b409-9d474111ccdb.png" alt=""></p>
+<h1 id="二、主从复制"><a href="#二、主从复制" class="headerlink" title="二、主从复制"></a>二、主从复制</h1><p><img src="https://imgkr.cn-bj.ufileos.com/88d02a81-2b4a-4f2e-9b7b-039894cdf327.png" alt=""></p>
 <p><strong>主从复制</strong>，是指将一台 Redis 服务器的数据，复制到其他的 Redis 服务器。前者称为 <strong>主节点(master)</strong>，后者称为 <strong>从节点(slave)</strong>。且数据的复制是 <strong>单向</strong> 的，只能由主节点到从节点。Redis 主从复制支持 <strong>主从同步</strong> 和 <strong>从从同步</strong> 两种，后者是 Redis 后续版本新增的功能，以减轻主节点的同步负担。</p>
 <h4 id="主从复制主要的作用"><a href="#主从复制主要的作用" class="headerlink" title="主从复制主要的作用"></a>主从复制主要的作用</h4><ul>
 <li><strong>数据冗余：</strong> 主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
@@ -489,10 +490,10 @@ OK</code></pre><ul>
 61496:M 17 Mar 2020 08:10:22.749 * MASTER MODE enabled (user request from &#39;id=4 addr=127.0.0.1:55096 fd=8 name= age=1664 idle=0 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=34 qbuf-free=32734 obl=0 oll=0 omem=0 events=r cmd=slaveof&#39;)
 
 # 主节点打印日志
-61467:M 17 Mar 2020 08:10:22.749 # Connection with replica 127.0.0.1:6380 lost.</code></pre><h2 id="实现原理简析"><a href="#实现原理简析" class="headerlink" title="实现原理简析"></a>实现原理简析</h2><p><img src="https://upload-images.jianshu.io/upload_images/7896890-c97a6bcc0936cd17.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+61467:M 17 Mar 2020 08:10:22.749 # Connection with replica 127.0.0.1:6380 lost.</code></pre><h2 id="实现原理简析"><a href="#实现原理简析" class="headerlink" title="实现原理简析"></a>实现原理简析</h2><p><img src="https://imgkr.cn-bj.ufileos.com/f58ed581-c91d-4b7d-818b-13c24e57b173.png" alt=""></p>
 <p>为了节省篇幅，我把主要的步骤都 <strong>浓缩</strong> 在了上图中，其实也可以 <strong>简化成三个阶段：准备阶段-数据同步阶段-命令传播阶段</strong>。下面我们来进行一些必要的说明。</p>
 <h4 id="身份验证-主从复制安全问题"><a href="#身份验证-主从复制安全问题" class="headerlink" title="身份验证 | 主从复制安全问题"></a>身份验证 | 主从复制安全问题</h4><p>在上面的 <strong>快速体验</strong> 过程中，你会发现 <code>slaveof</code> 这个命令居然不需要验证？这意味着只要知道了 ip 和端口就可以随意拷贝服务器上的数据了？</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-d0c7a74da972fca3.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/3e707593-2161-4510-b06b-59df58150050.png" alt=""></p>
 <p>那当然不能够了，我们可以通过在 <strong>主节点</strong> 配置 <code>requirepass</code> 来设置密码，这样就必须在 <strong>从节点</strong> 中对应配置好 <code>masterauth</code> 参数 <em>(与主节点 <code>requirepass</code> 保持一致)</em> 才能够进行正常复制了。</p>
 <h4 id="SYNC-命令是一个非常耗费资源的操作"><a href="#SYNC-命令是一个非常耗费资源的操作" class="headerlink" title="SYNC 命令是一个非常耗费资源的操作"></a>SYNC 命令是一个非常耗费资源的操作</h4><p>每次执行 <code>SYNC</code> 命令，主从服务器需要执行如下动作：</p>
 <ol>
@@ -510,7 +511,7 @@ OK</code></pre><ul>
 <blockquote>
 <p>更多的详细内容可以参考下方 <em>参考资料 3</em></p>
 </blockquote>
-<h1 id="三、Redis-Sentinel-哨兵"><a href="#三、Redis-Sentinel-哨兵" class="headerlink" title="三、Redis Sentinel 哨兵"></a>三、Redis Sentinel 哨兵</h1><p><img src="https://upload-images.jianshu.io/upload_images/7896890-884d5be9a2ddfebc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="三、Redis-Sentinel-哨兵"><a href="#三、Redis-Sentinel-哨兵" class="headerlink" title="三、Redis Sentinel 哨兵"></a>三、Redis Sentinel 哨兵</h1><p><img src="https://imgkr.cn-bj.ufileos.com/ba406b1c-58dc-44ef-985c-078760161d53.png" alt=""></p>
 <p><em>上图</em> 展示了一个典型的哨兵架构图，它由两部分组成，哨兵节点和数据节点：</p>
 <ul>
 <li><strong>哨兵节点：</strong> 哨兵系统由一个或多个哨兵节点组成，哨兵节点是特殊的 Redis 节点，不存储数据；</li>
@@ -525,7 +526,7 @@ OK</code></pre><ul>
 </ul>
 <p>其中，监控和自动故障转移功能，使得哨兵可以及时发现主节点故障并完成转移。而配置提供者和通知功能，则需要在与客户端的交互中才能体现。</p>
 <h2 id="快速体验-1"><a href="#快速体验-1" class="headerlink" title="快速体验"></a>快速体验</h2><h4 id="第一步：创建主从节点配置文件并启动"><a href="#第一步：创建主从节点配置文件并启动" class="headerlink" title="第一步：创建主从节点配置文件并启动"></a>第一步：创建主从节点配置文件并启动</h4><p>正确安装好 Redis 之后，我们去到 Redis 的安装目录 <em>(mac 默认在 <code>/usr/local/</code>)*，找到 <code>redis.conf</code> 文件复制三份分别命名为 <code>redis-master.conf</code>/<code>redis-slave1.conf</code>/<code>redis-slave2.conf</code>，分别作为 <code>1</code> 个主节点和 <code>2</code> 个从节点的配置文件 *(下图演示了我本机的 <code>redis.conf</code> 文件的位置)</em></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-34de77bfca56d32e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/e0377611-f8d0-4c88-b310-95de9468af07.png" alt=""></p>
 <p>打开可以看到这个 <code>.conf</code> 后缀的文件里面有很多说明的内容，全部删除然后分别改成下面的样子：</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#redis-master.conf</span>
 port 6379
@@ -551,7 +552,7 @@ slaveof 127.0.0.1 6379</code></pre>
 redis-server /usr/local/redis-5.0.3/redis-slave1.conf
 redis-server /usr/local/redis-5.0.3/redis-slave2.conf</code></pre>
 <p>节点启动后，我们执行 <code>redis-cli</code> 默认连接到我们端口为 <code>6379</code> 的主节点执行 <code>info Replication</code> 检查一下主从状态是否正常：<em>(可以看到下方正确地显示了两个从节点)</em></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-a1c935f094240cac.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/05699c87-fbbd-4f4d-9740-574ae0070476.png" alt=""></p>
 <h4 id="第二步：创建哨兵节点配置文件并启动"><a href="#第二步：创建哨兵节点配置文件并启动" class="headerlink" title="第二步：创建哨兵节点配置文件并启动"></a>第二步：创建哨兵节点配置文件并启动</h4><p>按照上面同样的方法，我们给哨兵节点也创建三个配置文件。<em>(哨兵节点本质上是特殊的 Redis 节点，所以配置几乎没什么差别，只是在端口上做区分就好)</em></p>
 <pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># redis-sentinel-1.conf</span>
 port 26379
@@ -641,16 +642,16 @@ master0:name<span class="token operator">=</span>mymaster,status<span class="tok
 <li><strong>增加对哨兵的监听：</strong> 这样当发生故障转移时，客户端便可以收到哨兵的通知，从而完成主节点的切换。具体做法是：利用 Redis 提供的 <strong>发布订阅</strong> 功能，为每一个哨兵节点开启一个单独的线程，订阅哨兵节点的 + switch-master 频道，当收到消息时，重新初始化连接池。</li>
 </ol>
 <h2 id="新的主服务器是怎样被挑选出来的？"><a href="#新的主服务器是怎样被挑选出来的？" class="headerlink" title="新的主服务器是怎样被挑选出来的？"></a>新的主服务器是怎样被挑选出来的？</h2><p><strong>故障转移操作的第一步</strong> 要做的就是在已下线主服务器属下的所有从服务器中，挑选出一个状态良好、数据完整的从服务器，然后向这个从服务器发送 <code>slaveof no one</code> 命令，将这个从服务器转换为主服务器。但是这个从服务器是怎么样被挑选出来的呢？</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-02dfea57f44fc27e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/f741aa5c-97fe-429b-87cc-2565f59a0ef9.png" alt=""></p>
 <p>简单来说 Sentinel 使用以下规则来选择新的主服务器：</p>
 <ol>
 <li>在失效主服务器属下的从服务器当中， 那些被标记为主观下线、已断线、或者最后一次回复 PING 命令的时间大于五秒钟的从服务器都会被 <strong>淘汰</strong>。</li>
 <li>在失效主服务器属下的从服务器当中， 那些与失效主服务器连接断开的时长超过 down-after 选项指定的时长十倍的从服务器都会被 <strong>淘汰</strong>。</li>
 <li>在 <strong>经历了以上两轮淘汰之后</strong> 剩下来的从服务器中， 我们选出 <strong>复制偏移量（replication offset）最大</strong> 的那个 <strong>从服务器</strong> 作为新的主服务器；如果复制偏移量不可用，或者从服务器的复制偏移量相同，那么 <strong>带有最小运行 ID</strong> 的那个从服务器成为新的主服务器。</li>
 </ol>
-<h1 id="四、Redis-集群"><a href="#四、Redis-集群" class="headerlink" title="四、Redis 集群"></a>四、Redis 集群</h1><p><img src="https://upload-images.jianshu.io/upload_images/7896890-516eb4a9465451a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h1 id="四、Redis-集群"><a href="#四、Redis-集群" class="headerlink" title="四、Redis 集群"></a>四、Redis 集群</h1><p><img src="https://imgkr.cn-bj.ufileos.com/47bf7b57-b5db-4a4d-8949-1b870e3c7a37.png" alt=""></p>
 <p><em>上图</em> 展示了 <strong>Redis Cluster</strong> 典型的架构图，集群中的每一个 Redis 节点都 <strong>互相两两相连</strong>，客户端任意 <strong>直连</strong> 到集群中的 <strong>任意一台</strong>，就可以对其他 Redis 节点进行 <strong>读写</strong> 的操作。</p>
-<h4 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h4><p><img src="https://upload-images.jianshu.io/upload_images/7896890-f65c71ca6811c634.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h4><p><img src="https://imgkr.cn-bj.ufileos.com/44ebdeea-25de-4cc6-a6d8-d6635a81dc41.png" alt=""></p>
 <p>Redis 集群中内置了 <code>16384</code> 个哈希槽。当客户端连接到 Redis 集群之后，会同时得到一份关于这个 <strong>集群的配置信息</strong>，当客户端具体对某一个 <code>key</code> 值进行操作时，会计算出它的一个 Hash 值，然后把结果对 <code>16384</code>  <strong>求余数</strong>，这样每个 <code>key</code> 都会对应一个编号在 <code>0-16383</code> 之间的哈希槽，Redis 会根据节点数量 <strong>大致均等</strong> 的将哈希槽映射到不同的节点。 </p>
 <p>再结合集群的配置信息就能够知道这个 <code>key</code> 值应该存储在哪一个具体的 Redis 节点中，如果不属于自己管，那么就会使用一个特殊的 <code>MOVED</code> 命令来进行一个跳转，告诉客户端去连接这个节点以获取数据：</p>
 <pre class=" language-bash"><code class="language-bash">GET x
@@ -685,7 +686,7 @@ redis-server ~/Desktop/redis-cluster/redis_7003.conf
 redis-server ~/Desktop/redis-cluster/redis_7004.conf
 redis-server ~/Desktop/redis-cluster/redis_7005.conf</code></pre>
 <p>然后执行 <code>ps -ef | grep redis</code> 查看是否启动成功：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-452c3152054c36f1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/ffcb200e-f764-4eb1-add6-dfc932a0ea84.png" alt=""></p>
 <p>可以看到 <code>6</code> 个 Redis 节点都以集群的方式成功启动了，<strong>但是现在每个节点还处于独立的状态</strong>，也就是说它们每一个都各自成了一个集群，还没有互相联系起来，我们需要手动地把他们之间建立起联系。</p>
 <h4 id="第三步：建立集群"><a href="#第三步：建立集群" class="headerlink" title="第三步：建立集群"></a>第三步：建立集群</h4><p>执行下列命令：</p>
 <pre class=" language-bash"><code class="language-bash">redis-cli --cluster create --cluster-replicas 1 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005</code></pre>
@@ -693,7 +694,7 @@ redis-server ~/Desktop/redis-cluster/redis_7005.conf</code></pre>
 <li>这里稍微解释一下这个 <code>--replicas 1</code> 的意思是：我们希望为集群中的每个主节点创建一个从节点。</li>
 </ul>
 <p>观察控制台输出：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-d5ab644e76e9cc87.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/4940072b-a818-4871-b541-f9da246b9349.png" alt=""></p>
 <p>看到 <code>[OK]</code> 的信息之后，就表示集群已经搭建成功了，可以看到，这里我们正确地创建了三主三从的集群。</p>
 <h4 id="第四步：验证集群"><a href="#第四步：验证集群" class="headerlink" title="第四步：验证集群"></a>第四步：验证集群</h4><p>我们先使用 <code>redic-cli</code> 任意连接一个节点：</p>
 <pre class=" language-bash"><code class="language-bash">redis-cli -c -h 127.0.0.1 -p 7000
@@ -738,7 +739,7 @@ a3406db9ae7144d17eb7df5bffe8b70bb5dd06b8 127.0.0.1:7002@17002 master - 0 1584428
 <h2 id="数据分区方案简析"><a href="#数据分区方案简析" class="headerlink" title="数据分区方案简析"></a>数据分区方案简析</h2><h4 id="方案一：哈希值-节点数"><a href="#方案一：哈希值-节点数" class="headerlink" title="方案一：哈希值 % 节点数"></a>方案一：哈希值 % 节点数</h4><p>哈希取余分区思路非常简单：计算 <code>key</code> 的 hash 值，然后对节点数量进行取余，从而决定数据映射到哪个节点上。</p>
 <p>不过该方案最大的问题是，<strong>当新增或删减节点时</strong>，节点数量发生变化，系统中所有的数据都需要 <strong>重新计算映射关系</strong>，引发大规模数据迁移。</p>
 <h4 id="方案二：一致性哈希分区"><a href="#方案二：一致性哈希分区" class="headerlink" title="方案二：一致性哈希分区"></a>方案二：一致性哈希分区</h4><p>一致性哈希算法将 <strong>整个哈希值空间</strong> 组织成一个虚拟的圆环，范围是 *[0 - 2<sup>32 - 1</sup>]*，对于每一个数据，根据 <code>key</code> 计算 hash 值，确数据在环上的位置，然后从此位置沿顺时针行走，找到的第一台服务器就是其应该映射到的服务器：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-40e8a2c096c8da92.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/b8a8b976-fdc6-4eac-8c54-33d19c5cf0c3.png" alt=""></p>
 <p>与哈希取余分区相比，一致性哈希分区将 <strong>增减节点的影响限制在相邻节点</strong>。以上图为例，如果在 <code>node1</code> 和 <code>node2</code> 之间增加 <code>node5</code>，则只有 <code>node2</code> 中的一部分数据会迁移到 <code>node5</code>；如果去掉 <code>node2</code>，则原 <code>node2</code> 中的数据只会迁移到 <code>node4</code> 中，只有 <code>node4</code> 会受影响。</p>
 <p>一致性哈希分区的主要问题在于，当 <strong>节点数量较少</strong> 时，增加或删减节点，<strong>对单个节点的影响可能很大</strong>，造成数据的严重不平衡。还是以上图为例，如果去掉 <code>node2</code>，<code>node4</code> 中的数据由总数据的 <code>1/4</code> 左右变为 <code>1/2</code> 左右，与其他节点相比负载过高。</p>
 <h4 id="方案三：带有虚拟节点的一致性哈希分区"><a href="#方案三：带有虚拟节点的一致性哈希分区" class="headerlink" title="方案三：带有虚拟节点的一致性哈希分区"></a>方案三：带有虚拟节点的一致性哈希分区</h4><p>该方案在 <strong>一致性哈希分区的基础上</strong>，引入了 <strong>虚拟节点</strong> 的概念。Redis 集群使用的便是该方案，其中的虚拟节点称为 <strong>槽（slot）</strong>。槽是介于数据和实际节点之间的虚拟概念，每个实际节点包含一定数量的槽，每个槽包含哈希值在一定范围内的数据。</p>
@@ -834,7 +835,7 @@ a3406db9ae7144d17eb7df5bffe8b70bb5dd06b8 127.0.0.1:7002@17002 master - 0 1584428
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="https://upload-images.jianshu.io/upload_images/7896890-fca34cfd601e7449.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/e81e6198-408e-4692-98f2-fb9482c2bc8f.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
