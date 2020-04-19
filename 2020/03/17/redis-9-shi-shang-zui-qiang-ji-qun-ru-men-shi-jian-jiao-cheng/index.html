@@ -465,32 +465,31 @@ redis-cli -p 6380
 OK</code></pre>
 <h4 id="第三步：观察效果"><a href="#第三步：观察效果" class="headerlink" title="第三步：观察效果"></a>第三步：观察效果</h4><p>下面我们来验证一下，主节点的数据是否会复制到从节点之中：</p>
 <ul>
-<li>先在 <strong>从节点</strong> 中查询一个 <strong>不存在</strong> 的 key：<br>```bash</li>
+<li>先在 <strong>从节点</strong> 中查询一个 <strong>不存在</strong> 的 key：</li>
 </ul>
-<p>127.0.0.1:6380&gt; GET mykey<br>(nil)</p>
-<pre><code>- 再在 **主节点** 中添加这个 key：
-```bash
-127.0.0.1:6379&gt; SET mykey myvalue
-OK</code></pre><ul>
-<li>此时再从 <strong>从节点</strong> 中查询，会发现已经从 <strong>主节点</strong> 同步到 <strong>从节点</strong>：<br>```bash</li>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6380<span class="token operator">></span> GET mykey
+<span class="token punctuation">(</span>nil<span class="token punctuation">)</span></code></pre>
+<ul>
+<li>再在 <strong>主节点</strong> 中添加这个 key：</li>
 </ul>
-<p>127.0.0.1:6380&gt; GET mykey<br>“myvalue”</p>
-<pre><code>
-#### 第四步：断开复制
-
-通过 `slaveof &lt;masterip&gt; &lt;masterport&gt;` 命令建立主从复制关系以后，可以通过 `slaveof no one` 断开。需要注意的是，从节点断开复制后，**不会删除已有的数据**，只是不再接受主节点新的数据变化。
-
-从节点执行 `slaveof no one` 之后，从节点和主节点分别打印日志如下：、
-
-```bash
-# 从节点打印日志
-61496:M 17 Mar 2020 08:10:22.749 # Connection with master lost.
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> SET mykey myvalue
+OK</code></pre>
+<ul>
+<li>此时再从 <strong>从节点</strong> 中查询，会发现已经从 <strong>主节点</strong> 同步到 <strong>从节点</strong>：</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">127.0.0.1:6380<span class="token operator">></span> GET mykey
+<span class="token string">"myvalue"</span></code></pre>
+<h4 id="第四步：断开复制"><a href="#第四步：断开复制" class="headerlink" title="第四步：断开复制"></a>第四步：断开复制</h4><p>通过 <code>slaveof &lt;masterip&gt; &lt;masterport&gt;</code> 命令建立主从复制关系以后，可以通过 <code>slaveof no one</code> 断开。需要注意的是，从节点断开复制后，<strong>不会删除已有的数据</strong>，只是不再接受主节点新的数据变化。</p>
+<p>从节点执行 <code>slaveof no one</code> 之后，从节点和主节点分别打印日志如下：、</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 从节点打印日志</span>
+61496:M 17 Mar 2020 08:10:22.749 <span class="token comment" spellcheck="true"># Connection with master lost.</span>
 61496:M 17 Mar 2020 08:10:22.749 * Caching the disconnected master state.
 61496:M 17 Mar 2020 08:10:22.749 * Discarding previously cached master state.
-61496:M 17 Mar 2020 08:10:22.749 * MASTER MODE enabled (user request from &#39;id=4 addr=127.0.0.1:55096 fd=8 name= age=1664 idle=0 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=34 qbuf-free=32734 obl=0 oll=0 omem=0 events=r cmd=slaveof&#39;)
+61496:M 17 Mar 2020 08:10:22.749 * MASTER MODE enabled <span class="token punctuation">(</span>user request from <span class="token string">'id=4 addr=127.0.0.1:55096 fd=8 name= age=1664 idle=0 flags=N db=0 sub=0 psub=0 multi=-1 qbuf=34 qbuf-free=32734 obl=0 oll=0 omem=0 events=r cmd=slaveof'</span><span class="token punctuation">)</span>
 
-# 主节点打印日志
-61467:M 17 Mar 2020 08:10:22.749 # Connection with replica 127.0.0.1:6380 lost.</code></pre><h2 id="实现原理简析"><a href="#实现原理简析" class="headerlink" title="实现原理简析"></a>实现原理简析</h2><p><img src="https://imgkr.cn-bj.ufileos.com/f58ed581-c91d-4b7d-818b-13c24e57b173.png" alt=""></p>
+<span class="token comment" spellcheck="true"># 主节点打印日志</span>
+61467:M 17 Mar 2020 08:10:22.749 <span class="token comment" spellcheck="true"># Connection with replica 127.0.0.1:6380 lost.</span></code></pre>
+<h2 id="实现原理简析"><a href="#实现原理简析" class="headerlink" title="实现原理简析"></a>实现原理简析</h2><p><img src="https://imgkr.cn-bj.ufileos.com/f58ed581-c91d-4b7d-818b-13c24e57b173.png" alt=""></p>
 <p>为了节省篇幅，我把主要的步骤都 <strong>浓缩</strong> 在了上图中，其实也可以 <strong>简化成三个阶段：准备阶段-数据同步阶段-命令传播阶段</strong>。下面我们来进行一些必要的说明。</p>
 <h4 id="身份验证-主从复制安全问题"><a href="#身份验证-主从复制安全问题" class="headerlink" title="身份验证 | 主从复制安全问题"></a>身份验证 | 主从复制安全问题</h4><p>在上面的 <strong>快速体验</strong> 过程中，你会发现 <code>slaveof</code> 这个命令居然不需要验证？这意味着只要知道了 ip 和端口就可以随意拷贝服务器上的数据了？</p>
 <p><img src="https://imgkr.cn-bj.ufileos.com/3e707593-2161-4510-b06b-59df58150050.png" alt=""></p>
