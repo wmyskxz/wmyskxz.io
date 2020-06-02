@@ -1,0 +1,1353 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="「MoreThanJava」一文了解二进制和CPU工作原理, 我没有三颗心脏的博客">
+    <meta name="description" content="
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学习」。
+当然 不论新老朋友 我相信您都可以 从中获">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>「MoreThanJava」一文了解二进制和CPU工作原理 | 我没有三颗心脏的博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<meta name="generator" content="Hexo 4.2.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">我没有三颗心脏的博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>首页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/tags" class="waves-effect waves-light">
+            
+            <i class="fa fa-tags"></i>
+            
+            <span>标签</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">我没有三颗心脏的博客</div>
+        <div class="logo-desc">
+            
+            分享知识&amp;技术&amp;思考&amp;成长
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                首页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/tags" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-tags"></i>
+                
+                标签
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于
+            </a>
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/wmyskxz/" class="waves-effect waves-light" target="_blank">
+                <i class="fa fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/wmyskxz/" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        「MoreThanJava」一文了解二进制和CPU工作原理
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
+                                <span class="chip bg-color">原创</span>
+                            </a>
+                        
+                            <a href="/tags/MoreThanJava/" target="_blank">
+                                <span class="chip bg-color">MoreThanJava</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/MoreThanJava/" class="post-category" target="_blank">
+                                MoreThanJava
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-06-02
+                </div>
+
+                
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
+                        6.8k
+                    </div>
+                    
+
+                    
+                    <div class="info-break-policy">
+                        <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                        24 分
+                    </div>
+                    
+                
+				
+				
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="fa fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="https://imgkr.cn-bj.ufileos.com/def6144e-d6a2-4f06-9d6c-7f2c0acf6cc9.png" alt=""></p>
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="Part-1-原来，我们是这样记数的"><a href="#Part-1-原来，我们是这样记数的" class="headerlink" title="Part 1. 原来，我们是这样记数的"></a>Part 1. 原来，我们是这样记数的</h1><p><img src="https://imgkr.cn-bj.ufileos.com/83f0e7c4-541d-4eaf-9cc0-b14456176188.png" alt=""></p>
+<blockquote>
+<p>本节内容节选自下方 <a href="https://www.jianshu.com/p/58844323e4fb" target="_blank" rel="noopener">参考资料 1</a></p>
+</blockquote>
+<p>在讨论「二进制」和「CPU 如何工作」之前，我们先来讨论一下我们生活中最稀疏平常的 <strong>数字</strong>，我们与之频繁地打交道：一个约定的时间、一件商品的价格、一个人的身高….却很少有人细细想过，这些数字是如何表达出来的？为什么你理所当然地把 <code>1024</code> 理解为「一千零二十四」而不是别的含义？</p>
+<p>也许你从未想过，在这简单的记数中，沉淀着人类的大智慧。</p>
+<h2 id="一进制计数法"><a href="#一进制计数法" class="headerlink" title="一进制计数法"></a>一进制计数法</h2><p><img src="https://imgkr.cn-bj.ufileos.com/f5e44afe-03d7-4d2c-831e-35e736168d8e.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://www.goethe.de/ins/cn/cn/kul/mag/20629923.html" target="_blank" rel="noopener">https://www.goethe.de/ins/cn/cn/kul/mag/20629923.html</a></li>
+</ul>
+<p>早在数字的概念产生之前，人类就学会了使用树枝、石子、贝壳等自然界随处可见的小物件表示猎物的、果实的、部落人口的数量。比如在某个角落堆上一堆石子，每打到 1 只猎物，就扔 1 颗石子进去，每吃掉 2 只猎物，就从中取走 2 颗石子。他们并不在意石子的总数，只是时不时地瞅一眼，心底大致有数。</p>
+<p>其实这是一种最朴素的记数方式，数学家称之为 <strong>一进制记数法</strong>（unary numeral system）。我们把它符号化一下，比如用斜杠 <code>/</code> 来表示：</p>
+<ul>
+<li><code>1</code> 就是 <code>/</code>；</li>
+<li><code>2</code> 就是 <code>//</code>；</li>
+<li><code>4</code> 就是 <code>////</code>；</li>
+</ul>
+<p>好像没毛病，我们平时掰手指用的就是这种记数法，但数字一大，场面就要失控了。</p>
+<h2 id="符值相加记数法"><a href="#符值相加记数法" class="headerlink" title="符值相加记数法"></a>符值相加记数法</h2><p>为了解决记录大数的问题，于是我们得发明一些其他符号来表示更大的数值，比如用横杠 <code>-</code> 表示 <code>10</code>，用十字 <code>+</code> 表示 <code>100</code>。那么：</p>
+<ul>
+<li><code>16</code> 就是 <code>-//////</code>;</li>
+<li><code>32</code> 就是 <code>---//</code>;</li>
+<li><code>128</code> 就是 <code>+--////////</code>;</li>
+</ul>
+<p>漂亮….这种靠符号类型和符号数量表示数字的方法被称为 <strong>符值相加记数法</strong>（sign-value notation），古埃及和古罗马用的都是它，只不过符号各不相同。</p>
+<p>古埃及的记数符号：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">10</th>
+<th align="left">100</th>
+<th align="left">1000</th>
+<th align="left">10000</th>
+<th align="left">100000</th>
+<th align="left">1000000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/d839c948-f105-43ac-9688-c0c7e13d28c5.png" alt=""></td>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/10753b12-a82a-4774-9212-dc3a72bd6c91.png" alt=""></td>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/2d45cfc9-d218-417a-936d-a19fc1fe03d5.png" alt=""></td>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/67543119-6827-41e7-a30b-e0df3ebc3083.png" alt=""></td>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/0c7aa4c0-c740-4ccb-90d9-9d38f6166b88.png" alt=""></td>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/7619118b-a246-4a33-b056-c9909d34e3d8.png" alt=""></td>
+<td align="left"><img src="https://imgkr.cn-bj.ufileos.com/aa1a4235-9dbd-453e-9718-8a90d3c88758.png" alt=""></td>
+</tr>
+</tbody></table>
+<p><code>1024</code> 在古埃及就写作：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/1d9cc9a9-8c9c-41ca-bf64-ff47cab8e2cb.png" alt=""></p>
+<p><strong>你会发现，符值相加记数法的一大优点是，符号的顺序可以任意打乱，数字含义不受影响</strong>。我国藏族曾用石子表示 <code>1</code>、木棍表示 <code>10</code>、果核表示 <code>100</code>、蚕豆表示 <code>1000</code>、瓦片表示 <code>10000</code>，那么，当你把 <code>1</code> 颗蚕豆、<code>2</code> 根木棍和 <code>4</code> 颗石子胡乱地攥在手里，别人依然知道它们是 <code>1024</code>。</p>
+<p>古罗马的做法略有不同，他们对五进制情有独钟：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">5</th>
+<th align="left">10</th>
+<th align="left">50</th>
+<th align="left">100</th>
+<th align="left">500</th>
+<th align="left">1000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">I</td>
+<td align="left">V</td>
+<td align="left">X</td>
+<td align="left">L</td>
+<td align="left">C</td>
+<td align="left">D</td>
+<td align="left">M</td>
+</tr>
+</tbody></table>
+<p>这些符号沿用至今，想必大家（至少对前 <code>3</code> 个）都比较熟悉，许多钟表仍保留着使用罗马数字的习惯，<code>1~12</code> 分别表示为：<code>I</code>、<code>II</code>、<code>III</code>、<code>IV</code>、<code>V</code>、<code>VI</code>、<code>VII</code>、<code>VIII</code>、<code>IX</code>、<code>X</code>、<code>XI</code>、<code>XII</code>。你会发现，罗马记数法是符值相加记数法的变种，因为它不光「相加」，还「相减」。这种方式就不允许符号乱序了，<code>IV</code> 和 <code>VI</code> 表示的是不同的数字。</p>
+<p>那罗马人何苦要使用这种更复杂的记数法呢？无非是为了读写方便。同样表示 <code>9</code>，<code>IX</code> 比 <code>VIIII</code> 更简洁。</p>
+<p>其实有一种更好使的方法——用另外一些列符号来表示符号的数量。比如用 <code>A</code> 表示 <code>1</code> 个符号，用 <code>B</code> 表示 <code>2</code> 个符号，以此类推，用 <code>I</code> 表示 <code>9</code> 个符号。</p>
+<p>如此，上文表示 <code>256</code> 的 <code>++-----//////</code> 就可以写作 <code>B+E-F/</code>。你一定感觉莫名其妙，这种写法哪里方便了。其实中文的数字表示就是这种形式，只不过我们用得太习惯了，以至于没有发现。</p>
+<p>在中文中，<code>个</code>、<code>十</code>、<code>百</code> 代替了 <code>/</code>、<code>-</code>、<code>+</code>，而 <code>一</code>、<code>二</code>、<code>三</code> 代替了 <code>A</code>、<code>B</code>、<code>C</code>。<code>256</code> 就写作 <code>二百五十六个</code>，<code>个</code> 比较累赘，我们通常把它省略了。</p>
+<p>其实像日语、英语用的也同样是这种记数法，简洁、优雅。</p>
+<p>美中不足的是，这种形式虽便于读写，却不便于计算。中国古人为算筹和算盘这类经典算具搭建起广阔的舞台，却没给笔算留出一席之地。想象一下，如果让你把这些汉字写在草稿纸上，列个竖式，你的内心一定非常别扭。</p>
+<h2 id="位值制记数法"><a href="#位值制记数法" class="headerlink" title="位值制记数法"></a>位值制记数法</h2><p>公元5世纪，印度数学家阿耶波多（Aryabhata 476–550）创立了现在广泛使用的 <strong>位值制记数法</strong>（positional notation/place-value notation），该记数法使用的主要符号，是同为印度人发明的阿拉伯数字：<code>0</code>、<code>1</code>、<code>2</code>、<code>3</code>、<code>4</code>、<code>5</code>、<code>6</code>、<code>7</code>、<code>8</code>、<code>9</code>。</p>
+<p>与符值相加记数法类比，位值制中的 <code>1</code>、<code>2</code>、<code>3</code> 代替的是 <code>A</code>、<code>B</code>、<code>C</code>，那 <code>/</code>、<code>-</code>、<code>+</code> 呢？是 <strong>靠阿拉伯数字的位置来表示的</strong>。众所周知，最右位相当于 <code>/</code>，次右位相当于 <code>-</code>。<strong>靠每个位置上的数值来表示数字，故名位值制。</strong></p>
+<p>严谨的数学家用一种多项式高度概括了位值制记数法的本质，在十进制中，这个多项式是这样的：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/a2505d07-0f69-4e2c-bd4d-22a5c804ee08.png" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/51f19109-4b4c-4d64-8c3a-a06f83c5409b.png" alt=""></p>
+<p>这是一个 <code>n</code> 位十进制数，a<sub>i</sub> 就是第 i 位上的数值。为便于直观理解，举个 <code>1024</code> 的例子吧：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/a50973c7-92e6-4e83-a0fa-eb83b9b2f729.png" alt=""></p>
+<p>由于我们熟悉了十进制，这样费心费力的展开可能会让你觉得好笑，但当我们把它推广到其他进制时，这个多项式的价值就体现了出来。<strong>n 位 b 进制数的位值制表示：</strong></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/1fa1b1a0-cdfc-4754-904c-970f285c2817.png" alt=""></p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/7020f1e3-3bc5-4731-ad1a-32dada7d995e.png" alt=""></p>
+<p><code>1024</code> 用二进制怎么表示？</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/1b267d5e-54bb-4042-9b41-b560640b8291.png" alt=""></p>
+<p>因此，<code>1024</code> 的二进制写作 <code>10000000000</code>。</p>
+<p>除了最普遍的十进制和计算机中的二进制，常见的还有七进制（如 <code>1</code> 周 <code>7</code> 天）、十二进制（如 <code>1</code> 年 <code>12</code> 个月）、十六进制（如古代 <code>1</code> 斤 <code>16</code> 两）、六十进制（如六十甲子）等等，只要有意义，任何进制都可以为你所用。</p>
+<h2 id="非标准位值制"><a href="#非标准位值制" class="headerlink" title="非标准位值制"></a>非标准位值制</h2><p>在上述的多项式中，如果 a<sub>i</sub> 或 b 的取值奇葩一点，就形成了 <strong>非标准位值制</strong>（non-standard positional numeral systems），这类记数法往往应用于专业领域，很难在日常生活中见到。比如标准位值制中的三进制 a<sub>i</sub> 的取值为 <code>0</code>、<code>1</code>、<code>2</code>，但在一种名为平衡三进制（balanced ternary）的非标准位值制中，a<sub>i</sub> 取 <code>-1</code>、<code>0</code>、<code>1</code>，苏联曾使用这种进制研发电子计算机。</p>
+<h1 id="Part-2-二进制简介"><a href="#Part-2-二进制简介" class="headerlink" title="Part 2. 二进制简介"></a>Part 2. 二进制简介</h1><p><img src="https://imgkr.cn-bj.ufileos.com/d5bff8fa-f4a7-4f96-8ef9-1ea4cb8e66ed.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://zhuanlan.zhihu.com/p/26743163" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26743163</a></li>
+</ul>
+<p>至此，你对「二进制」应该会感觉亲切了些，它只是一种数制而已，本质上与我们熟悉的十进制没有很大的差别，我们这一 Part 来稍微理解一下二进制。（至于电脑为什么使用二进制我们在下一 Part 中介绍）</p>
+<h2 id="二进制的基本运算"><a href="#二进制的基本运算" class="headerlink" title="二进制的基本运算"></a>二进制的基本运算</h2><p>十进制中的那些基本运算原则，二进制中同样适用，只不过需要稍加变幻而已，下面我们分别就加、减、乘、除四则运算来介绍。</p>
+<h3 id="二级制加法"><a href="#二级制加法" class="headerlink" title="二级制加法"></a>二级制加法</h3><p>根据「逢二进一」规则，二进制数加法的法则为：</p>
+<pre class=" language-text"><code class="language-text">0＋0＝0
+0＋1＝1＋0＝1
+1＋1＝0　（进位为1） 
+1＋1＋1＝1 （进位为1）</code></pre>
+<p>例如：<code>1101</code> 和 <code>1011</code> 相加过程如下：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/6074fc2f-1723-4559-a083-503c8ad1e0ac.png" alt=""></p>
+<h3 id="二进制数的减法"><a href="#二进制数的减法" class="headerlink" title="二进制数的减法"></a>二进制数的减法</h3><p>根据「借一有二」的规则，二进制数减法的法则为：</p>
+<pre class=" language-text"><code class="language-text">0－0＝0
+1－1＝0
+1－0＝1
+0－1＝1 （借位为1）</code></pre>
+<p>例如：<code>1101</code> 减去 <code>1011</code> 的过程如下：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/7671d357-2c8d-48a6-9d16-934c3a63f253.png" alt=""></p>
+<h3 id="二进制的乘法"><a href="#二进制的乘法" class="headerlink" title="二进制的乘法"></a>二进制的乘法</h3><p>二进制数乘法过程可仿照十进制数乘法进行。但由于二进制数只有 <code>0</code> 或 <code>1</code> 两种可能的乘数位，导致二进制乘法更为简单。二进制数乘法的法则为：</p>
+<pre class=" language-text"><code class="language-text">0×0＝0
+0×1＝1×0＝0
+1×1＝1</code></pre>
+<p>例如：<code>1001</code> 和 <code>1010</code> 相乘的过程如下：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/3391b16e-8ca0-4934-b09a-03268868ac19.png" alt=""></p>
+<h3 id="二进制的除法"><a href="#二进制的除法" class="headerlink" title="二进制的除法"></a>二进制的除法</h3><p>二进制数除法与十进制数除法很类似。</p>
+<p>例如：<code>100110</code> ÷ <code>110</code> 的过程如下：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/974fb531-d1b1-494e-b640-f4d665003143.png" alt=""></p>
+<h2 id="二进制为什么能表示所有的数据"><a href="#二进制为什么能表示所有的数据" class="headerlink" title="二进制为什么能表示所有的数据"></a>二进制为什么能表示所有的数据</h2><p><strong>因为编码规定。</strong></p>
+<p>之前我们有说到，所有保存的程序和数据在计算机中都被描述为 <strong>文件</strong>，也就是说我们能够知道当前的数据集合被期望的用途是什么，也就能够找到对应的 <strong>处理器</strong> 来正确处理当前的数据。</p>
+<h3 id="例如保存文字"><a href="#例如保存文字" class="headerlink" title="例如保存文字"></a>例如保存文字</h3><p>拿文字举例，为了让一串 <code>0</code>、<code>1</code> 能够代表特定的文字，人们规定使用一个字节中的七位来表达特定的文字， 这就是大名鼎鼎 <strong>ASCII</strong> <em>(American Standard Code for Information Interchange)</em> 码，ASCll 码能够表达 <strong>2<sup>7</sup>=128</strong> 种字符(编码从 <code>0~127</code>)，对于 <code>26</code> 个英文字母和一些常用的可打印字符，这完全足够了：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/f0258468-a7d8-4512-9de6-d960770269d3.png" alt=""></p>
+<p>可是，世界文化是多元的，面对类似汉字这样的象形文字，ASCll码表用起来自然是捉襟见肘。</p>
+<p>穷则思变，一个字节不行，那就两个字节，这就是大名鼎鼎的 <strong>Unicode</strong> 码，不难看出，Unicode 码有 <strong>2<sup>16</sup>=65536</strong> 种表示方式，这样就足以表达一些常用的字符了，值得一提的是，Unicode 码算是在 ASCll 码上的一种扩充,其第 <code>0~127</code> 个编码字符与 ASCll 码表一模一样。</p>
+<h3 id="再比如图片"><a href="#再比如图片" class="headerlink" title="再比如图片"></a>再比如图片</h3><p>这里涉及一点点物理知识，话说很久以前，牛顿通过三棱镜把白色的光分解成七种不同颜色的光，后来又通过各种实验发现红、绿、蓝三种颜色的光是无法被分解的，因此我们就称为红蓝绿为光的三原色。</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/036a4ca5-f491-41dd-ad7f-ed1ce4bc1d6f.png" alt=""></p>
+<p>至此人类已经知道了：<strong>可以通过组合不同比例的红、绿、蓝三种颜色来获得各种各样的颜色</strong>，那么我们就可以在计算机上模拟了。现在的计算机，一般使用 <code>32</code> 位来表示颜色，<code>32</code> 位平分给四个分量，也就是每个分量 <code>8</code> 位。</p>
+<p><strong>为啥是四个颜色分量?</strong></p>
+<p>因为颜色模型中有一个 alpha 值，用来表示透明度，这一点我们先不考虑。总之三种颜色，每个使用 <code>8</code> 位来表示的话，我们就能够表示 <code>256 * 256 * 256 = 16777216</code> 种颜色了，已经足够基础的使用了。</p>
+<p>先来看一张图片：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/f69cfd26-cac6-40b9-b2d7-cccc47a5a941.png" alt=""></p>
+<p>这张图像的尺寸是 <code>600px * 664px</code>（px 是一种图片单位，中文名称为像素，你可以暂时理解为一个点）。我们把它放大一下，如下图所示：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/83d476cf-c8bd-4884-873f-520324241a10.png" alt=""></p>
+<p>看见了吗？实际上，大部分图像（你拍摄的照片、你扫描的图片、你使用 iPad 画的图片等等…）都是位图文件，位图就是由像素点构成的，它就像是一个网格一样，每个格子里面填一个颜色。（除了位图外，还有一种图是矢量图，它描述的是形状而非网格）</p>
+<p>OK，我想你已经能理解图像是由像素点组成的了（事实上我们的显示器也是），我们只需要在编码中附带上一些额外的信息，例如图像有多大的尺寸、时间、作者、颜色深度、是否支持透明度之类的就能够对图像进行正确表示了。（视频可以简单理解成一张张连续不断的图片）</p>
+<p>要让显示器正确显示图片或者视频，只需要让显示器上每个像素显示特定的颜色就好了。</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/b6369f63-1301-4351-8b5a-54baaddd3796.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://www.bbc.co.uk/bitesize/topics/zf2f9j6/articles/z2tgr82" target="_blank" rel="noopener">https://www.bbc.co.uk/bitesize/topics/zf2f9j6/articles/z2tgr82</a></li>
+</ul>
+<h1 id="Part-3-为什么是二进制？"><a href="#Part-3-为什么是二进制？" class="headerlink" title="Part 3. 为什么是二进制？"></a>Part 3. 为什么是二进制？</h1><p><img src="https://imgkr.cn-bj.ufileos.com/d73490ba-d000-460e-9d55-ab7fb1efdfb8.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://zhuanlan.zhihu.com/p/33439000" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33439000</a></li>
+</ul>
+<p>可为什么一定是二进制呢？使用人类习惯的十进制不好吗？</p>
+<h2 id="理由一：物理上易于实现"><a href="#理由一：物理上易于实现" class="headerlink" title="理由一：物理上易于实现"></a>理由一：物理上易于实现</h2><p>计算机依靠电力工作，这也就意味着需要将数字信号映射到电信号，实现这种映射最简单的方法是：</p>
+<ul>
+<li>0 - 没有电（0 V）</li>
+<li>1 - 有点（5 V）</li>
+</ul>
+<p>二进制在技术上最容易实现。这是因为具有两种 <strong>稳定状态</strong> 的物理器件很多，如门电路的导通与截止、电压的高与低等，而它们恰好可以对应表示 “1” 和 “0” 这两个数码。假如采用十进制，那么就要制造具有 <code>10</code> 种 <strong>稳定状态</strong> 的物理电路，而这是非常困难的。</p>
+<h2 id="理由二：机器可靠性高"><a href="#理由二：机器可靠性高" class="headerlink" title="理由二：机器可靠性高"></a>理由二：机器可靠性高</h2><p>为什么使用更复杂的数字系统是一个问题？</p>
+<p>假设我们使用三元（3 位数字）数字系统涉及计算机，如果我们具有从 <code>0 V</code> 到 <code>5 V</code> 的电压，那么我们可以进行以下的映射：</p>
+<ul>
+<li>0 - 0 V;</li>
+<li>1 - 2.5 V;</li>
+<li>2 - 5 V;</li>
+</ul>
+<p><img src="https://imgkr.cn-bj.ufileos.com/a710c884-6400-422f-92e0-bd8798bbd589.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://pmihaylov.com/intro-binary-numbers/" target="_blank" rel="noopener">https://pmihaylov.com/intro-binary-numbers/</a></li>
+</ul>
+<p>看起来合理吧？但是，想象一下，我以 <code>2.5 V</code> 的电压发送了一个数字。但是由于电路中的一些噪声，我在输出端得到 <code>2.3 V</code> 的电压，因此将其视为 <code>0</code>。结果是？</p>
+<p>有人给我发送了 <code>1</code>，但我将其视为 <code>0</code>。数据丢失可是一个非常严重的问题。</p>
+<p>使用二进制则可靠得多，由于电压的高和低、电流的有和无等都是一种 <strong>质的变化</strong>，两种物理状态稳定、分明，因此，二进制码传输的抗干扰能力强，鉴别信息的可靠性高。</p>
+<h3 id="为什么计算机系统必须有时钟"><a href="#为什么计算机系统必须有时钟" class="headerlink" title="为什么计算机系统必须有时钟"></a>为什么计算机系统必须有时钟</h3><p><img src="https://imgkr.cn-bj.ufileos.com/f759123c-c615-4c79-ae65-b1a58ac5827f.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="http://programmedlessons.org/Java9/chap02/ch02_11.html" target="_blank" rel="noopener">http://programmedlessons.org/Java9/chap02/ch02_11.html</a></li>
+</ul>
+<p>建立数字系统的目的是 <strong>仅在某些时间点测试开/关（二进制）值</strong>，这使电线（或其他设备）有时间更换。<strong>这就是计算机系统有时钟的原因。</strong></p>
+<p>时钟会周期性地进行信号的测量，图中所示的 T1 和 T2 就是可以测量信号的时间点。</p>
+<p>时钟利用所有这些时间点来保持同步。更快的时钟意味着每秒可以对电线进行更多次测试，并且整个系统运行得更快。<code>2 GHz</code> 处理器每秒检查二进制值 <code>20</code> 亿次。在这些时间之间，允许值改变并稳定下来。处理器芯片速度越快，每秒可以测试的次数就越多，每秒可以做出的决策就越多。</p>
+<h2 id="理由三：运算规则简单"><a href="#理由三：运算规则简单" class="headerlink" title="理由三：运算规则简单"></a>理由三：运算规则简单</h2><p>数学推导已经证明，对 <code>N</code> 进制数进行算术求和或求积运算，其运算规则各有 <code>N(N+1)/2</code> 种。如采用十进制，则 <code>N=10</code>，就有 <code>55</code> 种求和或求积的运算规则；而采用二进制，则 <code>N=2</code>，仅有 <code>3</code> 种求和或求积的运算规则，以上面提到的加法为例：</p>
+<pre class=" language-text"><code class="language-text">0+0=0，0+1=1 (1+0=1)，1+1=10</code></pre>
+<p>因而可以大大简化运算器等物理器件的设计。</p>
+<h2 id="理由四：逻辑判断方便"><a href="#理由四：逻辑判断方便" class="headerlink" title="理由四：逻辑判断方便"></a>理由四：逻辑判断方便</h2><p>采用二进制后，仅有的两个符号 “1” 和 “0” 正好可以与逻辑命题的两个值 “真” 和 “假” 相对应，能够方便地使用逻辑代数这一有力工具来分析和设计计算机的逻辑电路。</p>
+<p>虽然在 1950 年代就造出了更加高效的三元计算机，但在效率和复杂度的取舍上，始终抵不过二进制。二进制仍然在当今世界中长期存在。</p>
+<h1 id="Part-4-CPU-的实际工作方式"><a href="#Part-4-CPU-的实际工作方式" class="headerlink" title="Part 4. CPU 的实际工作方式"></a>Part 4. CPU 的实际工作方式</h1><p>上面我们了解到计算机以二进制的形式运行，它们只有两种状态：开（1）和关（0），为了执行二进制计算，我们需要采用一种特殊的电子元器件，称为 <strong>「晶体管」</strong>。暂时我们把它理解为一种开关吧，通电就打开，没电流通过就关闭。</p>
+<h2 id="利用”开关”搭建逻辑电路"><a href="#利用”开关”搭建逻辑电路" class="headerlink" title="利用”开关”搭建逻辑电路"></a>利用”开关”搭建逻辑电路</h2><p>我们知道，给电灯通上电，它就会亮：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/0f4e3c78-41a3-4703-9cd1-01b081012ca3.png" alt=""></p>
+<p>于是，结合上开关，我们就能搭建出最基础的 <strong>与门</strong> 和 <strong>或门</strong>。</p>
+<h4 id="与门"><a href="#与门" class="headerlink" title="与门"></a>与门</h4><p><img src="https://imgkr.cn-bj.ufileos.com/0fe9a48c-20d6-4725-ae77-5ca6925b9116.png" alt=""></p>
+<p>该电路的逻辑是：<strong>只有当 A 和 B 同时开启时，LED 灯才会亮</strong>，也就是认为输出 1，我们可以利用电信号来简单模拟一下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">A</th>
+<th align="left">B</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left"><strong>1</strong></td>
+<td align="left"><strong>1</strong></td>
+<td align="left"><strong>1</strong></td>
+</tr>
+</tbody></table>
+<h4 id="或门"><a href="#或门" class="headerlink" title="或门"></a>或门</h4><p><img src="https://imgkr.cn-bj.ufileos.com/dee70872-6f4f-4a29-b2e2-d69a5d371e29.png" alt=""></p>
+<p>该电路的逻辑是：<strong>当 A 或者 B 开启时，LED 灯就会亮</strong>，也就是认为输出 1，我们可以利用电信号来简单模拟一下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">A</th>
+<th align="left">B</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left"><strong>1</strong></td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left"><strong>1</strong></td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left"><strong>1</strong></td>
+</tr>
+</tbody></table>
+<h4 id="其他门"><a href="#其他门" class="headerlink" title="其他门"></a>其他门</h4><p>类似地，我们可以借助更多的电子元器件来创造出基础的 <code>7</code> 种逻辑门电路：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/889969e5-c76e-4932-a90e-3d55c917c9c3.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://www.zhihu.com/question/348237008/answer/843382847" target="_blank" rel="noopener">https://www.zhihu.com/question/348237008/answer/843382847</a> | @Zign</li>
+</ul>
+<p>这里需要特别提一下 <strong>异或门</strong>，我们需要先知道有一种电子元器件可以利用电气特性对 <strong>输入取反</strong>，也就是说输入 <code>1</code> 则输出 <code>0</code>，输入 <code>0</code> 则输出 <code>1</code>，那么我们就可以 <strong>简单模拟</strong> 出异或门逻辑电路（实际会更复杂些，这里仅展示出异或的意思）：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/14532d29-f949-4b9a-9e36-bc5065718269.png" alt=""></p>
+<p><code>A&#39;</code> 和 <code>B&#39;</code> 分别表示 <code>A</code> 和 <code>B</code> 开关的反值，从图中我们很容易知道只有当 <code>A</code>、<code>B</code> 只存在一个输入 <code>1</code> 时，整个电路才会输出 <code>1</code>。</p>
+<h2 id="利用逻辑门简单计算加法"><a href="#利用逻辑门简单计算加法" class="headerlink" title="利用逻辑门简单计算加法"></a>利用逻辑门简单计算加法</h2><p>OK，上面我们了解到我们能够利用 “开关” 来模拟逻辑的运算，我们接下来试着还原一个简单的加法运算器是如何实现的：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/aacd0c7c-de35-4f98-8b5d-318603173491.png" alt=""></p>
+<p>仅需两个门，就可以完成基本的二进制加法运算。上图是利用 <code>logic.ly</code> 创建的半加法器，<code>A</code>、<code>B</code> 相当于使我们计算的两个数，最后一块相当于是我们的数显芯片，它的功能是根据输入显示数字，从上到下的引脚（也就是图中输入的地方，通常我们这样称呼）分别对应了 <strong>2<sup>0</sup>=1</strong>、<strong>2<sup>1</sup>=2</strong>、<strong>2<sup>2</sup>=4</strong>、<strong>2<sup>3</sup>=8</strong> 的输入，没有任何输入时显示为 <code>0</code>，如果 <code>引脚 1</code>（对应 <strong>2<sup>0</sup>=1</strong>）像上图一样有输入，则显示 <code>0 + 1 = 1</code>。</p>
+<p>我们来理解一下上方的电路：</p>
+<ul>
+<li>如果仅打开一个输入，但不同时打开两个输入，则此处的 XOR 门（异或门）将打开，此时对应输入 <code>引脚 1</code>，显示 <code>数字 1</code>（类似于 <code>1 + 0 和 0 + 1</code>)；</li>
+<li>如果两个输入均打开，则 AND 门(与门)将打开，此时对应输入 <code>引脚 2</code>，显示 <code>数字 2</code>（类似于 <code>1 + 1</code>）；</li>
+<li>如果没有输入，则 AND 门和 XOR 门都保持关闭，此时显示 <code>数字 0</code>（类似于 <code>0 + 0</code>）；</li>
+</ul>
+<p>因此，如果两个都打开，则 XOR 保持关闭，并且 AND 门打开，得出正确的答案为 <code>2</code>：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/0e9af4ae-e1ab-4e20-be70-937d0b31ece4.png" alt=""></p>
+<p>但这只是最基础的半加法运算器，不是太有用，因为它只能解决最简单的数学问题之一。但如果我们把它们两个与另一个输入连接，就会得到一个完整的加法器：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/7e3ac4f0-f7f8-4d89-9c7c-004b2b6ef477.png" alt=""></p>
+<p>仔细思考几遍，你就会得知这个三个输入的加法器已经可以计算 <code>3</code> 个二进制数字的加法运算了，我们如法炮制，可以通过连接更多的”进位”来使这个加法器能够运算更多的数，这当然也意味着这个计算链条更长。 </p>
+<p>大多数其他数学运算都可以加法完成。乘法只是重复加法，减法可以通过一些奇特的位反转来完成，而除法只是重复减法。并且，尽管所有现代计算机都具有基于硬件的解决方案以加快更复杂的操作，但从技术上讲，您可以使用完整的加法器来完成全部操作。</p>
+<h2 id="总线和内存"><a href="#总线和内存" class="headerlink" title="总线和内存"></a>总线和内存</h2><p>现在，我们的计算机只不过是一个计算器，它记不住任何内容也对输出没有任何操作，上述电路只是接了一个显示单元而已。</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/c4aefa87-3291-4158-a5e4-bf4e5e36d82b.png" alt=""></p>
+<p>上面展示的是一个存储单元。它使用了大量的 NAND 门，并且在实际生产中，根据存储技术的不同，它们可能会大不相同，但其功能是相同的。</p>
+<p>您给它一些输入，并打开“写”位（<code>Write</code> 输入 <code>1</code>），它将把输入存储在单元内。这不仅是一个存储单元，因为我们还需要一种从中读取信息的方法。这是通过一个使能器完成的，该使能器是「存储器」中每个位的“与”门的集合，所有位都与另一个输入（即“读取”位）绑定在一起。写入和读取位通常也称为“设置”(<code>set</code>)和“启用”(<code>enable</code>)。</p>
+<p>上面整个存储单元都包裹在所谓的寄存器中。这些寄存器连接到 <strong>总线</strong>，总线是围绕整个系统运行的一束电线，并连接到每个组件。即使现代计算机也具有总线，尽管它们可能具有多个总线以提高多任务处理性能。</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/30885f0a-ca29-4942-96bb-4d1b6727e651.png" alt=""></p>
+<p>每个寄存器仍有一个读写位，但是在这种设置下，输入和输出是一样的。这实际上很好。例如：如果要将 R1 的内容复制到 R2，则应打开 R1 的读取位，这会将 R1 的内容压入总线。当读取位打开时，您将打开 R2 的写入位，这会将总线内容复制到 R2 中。</p>
+<p>寄存器也用于制作 RAM。RAM 通常布置在网格中，并且导线有两个方向：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/9a164cca-3268-4cf4-b9ea-e89d1798f14f.png" alt=""></p>
+<p>解码器采用二进制输入并打开相应的编号线。例如，<code>11</code> 在二进制数中是 <code>3</code>，即最高的 <code>2</code> 位数字，因此解码器将打开最高的线路。每个路口都有一个寄存器。所有这些都连接到中央总线以及中央写入和读取输入。只有跨寄存器的两条导线也都打开时，读和写输入才会打开，从而有效地允许您选择要从中进行读写的寄存器。同样，现代 RAM 要复杂得多，但是此设置仍然有效。</p>
+<h2 id="时钟，步进器和解码器"><a href="#时钟，步进器和解码器" class="headerlink" title="时钟，步进器和解码器"></a>时钟，步进器和解码器</h2><p>寄存器无处不在，是在 CPU 中移动数据并将信息存储在 CPU 中的基本工具。那么，是什么告诉他们移动数据的呢？</p>
+<p>时钟是 CPU 核心中的第一个组件，它将按设置的时间间隔（以赫兹或每秒周期为单位）关闭和打开。这就是您看到的最直观的 CPU 速度指标。</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/64edfb0a-8965-4922-8a16-05fe368125d0.png" alt=""></p>
+<p>时钟具有三种不同的状态：基本时钟，使能时钟和设置时钟。基本时钟将打开半个周期，另一半关闭。使能时钟用于打开寄存器，并且需要更长的时间才能确保数据被使能。设置时钟必须始终与使能时钟同时打开，否则可能会写入错误的数据。</p>
+<p>时钟连接到步进器，步进器将从 <code>1</code> 到最大步数进行计数，并在完成后将自身重置为 <code>1</code>。时钟还连接到 CPU 可以写入的每个寄存器的 AND 门：</p>
+<p><img src="https://imgkr.cn-bj.ufileos.com/23ee10b5-2222-4bdd-b9bf-f9e132165b9e.png" alt=""></p>
+<p>这些 “与” 门还连接到另一个组件的输出，即指令解码器。指令解码器接受 <code>SET R2 TO R1</code> 之类的指令，并将其解码为 CPU 可以理解的内容。它有自己的内部寄存器，称为“指令寄存器”，该寄存器存储了当前操作。它的精确程度取决于您正在运行的系统，但是一旦解码，它将打开正确的设置并启用正确寄存器的位，这些寄存器将根据时钟触发。</p>
+<p>程序指令存储在 RAM（或现代系统中的 L1 高速缓存，更靠近 CPU）中。由于程序数据与其他所有变量一样都存储在寄存器中，因此可以随时对其进行操作以在程序中跳转。这就是程序通过循环和 <code>if</code> 语句获取结构的方式。跳转指令将指令解码器正在读取的存储器中的当前位置设置到其他位置。</p>
+<h2 id="一切如何配合"><a href="#一切如何配合" class="headerlink" title="一切如何配合"></a>一切如何配合</h2><p><img src="https://imgkr.cn-bj.ufileos.com/68f6b4f3-0a10-4598-9194-64c39159cdff.png" alt=""></p>
+<p>现在，我们对 CPU 工作原理的有了一些基本的了解。主总线跨越整个系统，并连接到所有寄存器。完整的加法器以及其他一系列运算都打包在算术逻辑单元或 ALU 中。该 ALU 将与总线建立连接，并且还将具有自己的寄存器来存储正在操作的第二个数字。</p>
+<p>为了执行计算，将程序数据从系统 RAM 加载到控制部分。控制部分从 RAM 中读取两个数字，将第一个数字加载到 ALU 的指令寄存器中，然后将第二个数字加载到总线上。同时，它向 ALU 发送指令代码，告知其操作方法。然后，ALU 执行所有计算，并将结果存储在另一个寄存器中，CPU 可以从该寄存器中读取该值，然后继续该过程。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>原来，我们是这样记数的 - <a href="https://www.jianshu.com/p/58844323e4fb" target="_blank" rel="noopener">https://www.jianshu.com/p/58844323e4fb</a></li>
+<li>二进制数的运算方法 - <a href="https://www.jianshu.com/p/560aba49c9a4" target="_blank" rel="noopener">https://www.jianshu.com/p/560aba49c9a4</a></li>
+<li>文字,图片,视频,音频的二进制表示 - <a href="https://blog.csdn.net/c46550/article/details/91040925" target="_blank" rel="noopener">https://blog.csdn.net/c46550/article/details/91040925</a></li>
+<li>知乎 - 计算机只认识0和1但是怎么表示图像和影视等等众多应用的？ | @kross - <a href="https://www.zhihu.com/question/36269548" target="_blank" rel="noopener">https://www.zhihu.com/question/36269548</a></li>
+<li>Introduction to binary numbers - <a href="https://pmihaylov.com/intro-binary-numbers/" target="_blank" rel="noopener">https://pmihaylov.com/intro-binary-numbers/</a></li>
+<li>What is Binary, and Why Do Computers Use It? - <a href="https://www.howtogeek.com/367621/what-is-binary-and-why-do-computers-use-it/" target="_blank" rel="noopener">https://www.howtogeek.com/367621/what-is-binary-and-why-do-computers-use-it/</a></li>
+<li>CPU 是怎样认识代码的？ | 知乎 - <a href="https://www.zhihu.com/question/348237008/answer/843382847" target="_blank" rel="noopener">https://www.zhihu.com/question/348237008/answer/843382847</a> | @Zign</li>
+<li>HTG Explains: How Does a CPU Actually Work? - <a href="https://www.howtogeek.com/367931/htg-explains-how-does-a-cpu-actually-work/" target="_blank" rel="noopener">https://www.howtogeek.com/367931/htg-explains-how-does-a-cpu-actually-work/</a></li>
+</ol>
+<h1 id="往期推荐"><a href="#往期推荐" class="headerlink" title="往期推荐"></a>往期推荐</h1><ol>
+<li><a href="https://www.wmyskxz.com/2020/04/02/morethanjava-dang-da-xue-xuan-ze-liao-ji-suan-ji-zhi-hou-ying-gai-zhi-dao-de/">「MoreThanJava」当大学选择了计算机之后应该知道的</a></li>
+<li><a href="https://www.wmyskxz.com/2020/04/07/morethanjava-ji-suan-ji-fa-zhan-shi-cong-zhi-bu-ji-dao-ibm/">「MoreThanJava」计算机发展史—从织布机到IBM</a></li>
+<li><a href="https://www.wmyskxz.com/2020/06/01/morethanjava-ji-suan-ji-xi-tong-gai-shu/">「MoreThanJava」计算机系统概述</a></li>
+<li><a href="https://www.wmyskxz.com/2020/03/25/dong-yi-dian-python-xi-lie-kuai-su-ru-men-1/">妈妈再也不担心我面试被Redis问得脸都绿了</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://imgkr.cn-bj.ufileos.com/ace97ed9-3cfd-425f-85e5-c1a1e5ca7d3f.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+            </div>
+            <hr/>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <style>
+    .foot-copyright-note {
+        padding: 15px;
+        border-radius: 4px;
+        border: 1px solid transparent;
+        margin-bottom: 20px;
+        background-color: #f5f5f5;
+    }
+</style>
+
+
+
+    <div class="reprint" id="reprint-statement">
+        <p class="reprint-tip">
+            <i class="fa fa-exclamation-triangle"></i>&nbsp;&nbsp;
+            <span>转载规则</span>
+        </p>
+        
+            <!--            <div class="center-align">-->
+            <!--                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">-->
+            <!--                    <img alt=""-->
+            <!--                         style="border-width:0"-->
+            <!--                         src="https://i.creativecommons.org/l/by/4.0/88x31.png"/>-->
+            <!--                </a>-->
+            <!--            </div>-->
+            <!--            <br/>-->
+            <div class="foot-copyright-note">
+                <i class="fa fa-lightbulb-o"></i> 本文由
+                <a xmlns:cc="http://creativecommons.org/ns#" href="/2020/06/02/morethanjava-yi-wen-liao-jie-er-jin-zhi-he-cpu-gong-zuo-yuan-li/"
+                   property="cc:attributionName"
+                   rel="cc:attributionURL">
+                    我没有三颗心脏
+                </a> 创作， 采用
+                <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank">
+                    知识共享署名 4.0 国际许可协议
+                </a>进行许可。
+                可自由转载、引用，但需要注明作者且注明文章出处。如需转载至微信公众号，请关注「wmyskxz」公众号后台留言。
+                也欢迎想要交流的朋友加入QQ群：「3382693」。
+            </div>
+        
+    </div>
+
+    <script async defer>
+        document.addEventListener("copy", function (e) {
+            let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+            M.toast({html: toastHTML})
+        });
+
+        function navToReprintStatement() {
+            $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+        }
+    </script>
+
+
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: 'a9f57bed080703426741',
+        clientSecret: '03fe7aec06a7794dedfcc123b6475f0231f6a0ce',
+        repo: 'wmyskxz.github.io',
+        owner: 'wmyskxz',
+        admin: "wmyskxz",
+        id: '2020-06-02T08-10-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/06/02/morethanjava-yi-wen-liao-jie-er-jin-zhi-he-cpu-gong-zuo-yuan-li/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="「MoreThanJava」一文了解二进制和CPU工作原理">
+                        
+                        <span class="card-title">「MoreThanJava」一文了解二进制和CPU工作原理</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学习」。
+当然 不论新老朋友 我相信您都可以 从中获
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-06-02
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/MoreThanJava/" class="post-category" target="_blank">
+                                    MoreThanJava
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
+                        <span class="chip bg-color">原创</span>
+                    </a>
+                    
+                    <a href="/tags/MoreThanJava/" target="_blank">
+                        <span class="chip bg-color">MoreThanJava</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6 overflow-policy" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/06/01/morethanjava-ji-suan-ji-xi-tong-gai-shu/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="「MoreThanJava」计算机系统概述">
+                        
+                        <span class="card-title">「MoreThanJava」计算机系统概述</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学习」。
+当然 不论新老朋友 我相信您都可以 从中获
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2020-06-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/MoreThanJava/" class="post-category" target="_blank">
+                                    MoreThanJava
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
+                        <span class="chip bg-color">原创</span>
+                    </a>
+                    
+                    <a href="/tags/MoreThanJava/" target="_blank">
+                        <span class="chip bg-color">MoreThanJava</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 我没有三颗心脏的博客<br />'
+            + '作者: 我没有三颗心脏<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fa fa-list"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h1, h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h1, h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).slideUp(500);
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).slideDown(500);
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="http://www.wmyskxz/" target="_blank">我没有三颗心脏</a>基于
+            <a href="https://hexo.io/" target="_blank">Hexo</a> 的
+            <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">hexo-theme-matery</a>主题搭建.
+
+            
+                &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
+                <span class="white-color">577k</span>
+            
+
+            
+			
+                <br>
+                
+                <span id="busuanzi_container_site_pv">
+                    <i class="fa fa-heart-o"></i>
+                    本站总访问量 <span id="busuanzi_value_site_pv" class="white-color"></span>
+                </span>
+                
+                
+                <span id="busuanzi_container_site_uv">
+                    <i class="fa fa-users"></i>
+                    次,&nbsp;访客数 <span id="busuanzi_value_site_uv" class="white-color"></span> 人.
+                </span>
+                
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/wmyskxz" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub"
+       data-position="top" data-delay="50">
+        <i class="fa fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:wmyskxz@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+       data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=939419061" class="tooltipped"
+       data-tooltip="QQ联系我: 939419061" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+
+    <a href="#" class="tooltipped" data-tooltip="微信公众号: wmyskxz" data-position="top"
+       data-delay="50" title="微信公众号: wmyskxz">
+        <i class="fa fa-wechat"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-142668321-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-142668321-1');
+</script>
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+
+
+</body>
+</html>
