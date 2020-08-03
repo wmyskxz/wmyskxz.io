@@ -369,14 +369,23 @@ Servlet 的请求流程
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java-Web/" target="_blank">
-                                <span class="chip bg-color">Java Web</span>
+                            <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                                <span class="chip bg-color">JavaWeb基础</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                JavaWeb基础
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -414,7 +423,7 @@ Servlet 的请求流程
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081110.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-65cb65e46c091671.png" alt=""></p>
 <blockquote>
 <p>经过一段时间的学习，对于Servlet有了新的不一样的见解，在这里做一下总结，将近来学习到的知识总结一下。</p>
 </blockquote>
@@ -477,7 +486,7 @@ Servlet obj <span class="token operator">=</span> cache<span class="token punctu
 </ol>
 <hr>
 <h3 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h3><p>在 Web 容器中，Servlet 主要经历 4 个阶段，如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081117.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-2599bf65a828350d.png" alt="Servlet 生命周期"></p>
 <ol>
 <li><strong>加载 Servlet：</strong>当 Tomcat <strong>第一次访问 Servlet</strong> 的时候，Tomcat 会负责<strong>创建 Servlet 的实例。</strong></li>
 <li><strong>初始化 Servlet：</strong>当 Servlet 被实例化之后，Tomcat 会调用 <strong>init()</strong> 方法来初始化这个对象。</li>
@@ -551,28 +560,27 @@ Servlet obj <span class="token operator">=</span> cache<span class="token punctu
 <ul>
 <li><strong>终极解决方案：</strong></li>
 </ul>
-<p><strong>1.对于 POST 请求：</strong><br>设置请求的编码方式：<code>request.setCharacterEncoding(&quot;UTF-8&quot;);</code><br><strong>注意：</strong>必须在获取<strong>第一个参数之前设置</strong>，并且该方式<strong>只对 POST 方式有效。</strong><br><strong>2.对于 GET 请求：</strong><br>重新设置 Tomcat 的编码方式，修改 Tomcat 的配置文件:<br><code>Tomcat根目录/conf/server.xml(修改端口的那一行)</code></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081127.png" alt=""></p>
+<p><strong>1.对于 POST 请求：</strong><br>设置请求的编码方式：<code>request.setCharacterEncoding(&quot;UTF-8&quot;);</code><br><strong>注意：</strong>必须在获取<strong>第一个参数之前设置</strong>，并且该方式<strong>只对 POST 方式有效。</strong><br><strong>2.对于 GET 请求：</strong><br>重新设置 Tomcat 的编码方式，修改 Tomcat 的配置文件:<br><code>Tomcat根目录/conf/server.xml(修改端口的那一行)</code><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-cd366b295c8ed531.png" alt=""></p>
 <hr>
 <h3 id="Servlet-细节"><a href="#Servlet-细节" class="headerlink" title="Servlet 细节"></a>Servlet 细节</h3><ul>
 <li>1.一个 Servlet 可以有<strong>多个</strong> <code>&lt;url-pattern&gt;</code> ，可以使用多个资源名称找到当前的 Servlet</li>
 <li>2.配置 Servlet 可以使用<strong>通配符</strong>（<em>）<br><code>*</code>表示任意字符<br><code>/*</code>：可以使用<strong>任意的字符</strong>访问当前的 Servlet<br>`</em>.xxx`：如 wmyskxz.wudi</li>
-<li>3.<strong>自定义的 Servlet 的 <code>&lt;servlet-name&gt;</code> 不能够为 default ，</strong>使用它会造成项目下面的静态资源找不到，在 <code>Tomcat/conf/web.xml</code> 文件中配置一个名字为default的Servlet,该Servlet在负责访问项目下的静态资源<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081145.png" alt=""></li>
+<li>3.<strong>自定义的 Servlet 的 <code>&lt;servlet-name&gt;</code> 不能够为 default ，</strong>使用它会造成项目下面的静态资源找不到，在 <code>Tomcat/conf/web.xml</code> 文件中配置一个名字为default的Servlet,该Servlet在负责访问项目下的静态资源<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-23070ab172726a2e.png" alt="web.xml 中配置的默认项"></li>
 <li>4.关于 <strong>Servlet 的初始化操作，</strong>如果初始化操作非常的耗时，那么第一个请求的用户的用户体验就非常差</li>
 </ul>
-<p><strong>解决思路：</strong>将初始化操作<strong>向前移,</strong>在服务器启动的时候执行 Servlet 的初始化<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081202.png" alt=""></p>
+<p><strong>解决思路：</strong>将初始化操作<strong>向前移,</strong>在服务器启动的时候执行 Servlet 的初始化<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-afae824b9279c9ff.png" alt=""></p>
 <hr>
 <h3 id="通过注解配置-Servlet"><a href="#通过注解配置-Servlet" class="headerlink" title="通过注解配置 Servlet"></a>通过注解配置 Servlet</h3><p>这是 Servlet 3.0 提出的新特性，支持注解配置，这大大简化了我们的工作。</p>
 <p>在之前的开发工作中，我们总是去 <code>web.xml</code> 文件中进行配置，至少会出现8行：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081208.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-1e9520edba4da3bc.png" alt="web.xml 中配置 Servlet"></p>
 <p>而当一个项目中存在<strong>很多 Servlet **，那么配置文件就会变得</strong>非常臃肿，不便于后期的维护，<strong>在 Servlet 3.0 推出之后，我们可以使用</strong>注解来配置 Servlet，**上面 8 行的配置可以简化为下面的简单的注解：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081214.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-9bb5cb4ed2098464.png" alt=""></p>
 <p>或者也可以使用属性 <code>value</code> 定义访问的 URL，<strong>只有 URL 这个属性是必要的，</strong><code>name</code> 是可以缺省的值，而默认的 <code>value</code> 也可以省略不写，所以可以简写成：</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/foreServlet"</span><span class="token punctuation">)</span></code></pre>
 <hr>
 <h3 id="Web-组件之间的跳转方式"><a href="#Web-组件之间的跳转方式" class="headerlink" title="Web 组件之间的跳转方式"></a>Web 组件之间的跳转方式</h3><h4 id="1-请求转发（forward）"><a href="#1-请求转发（forward）" class="headerlink" title="1.请求转发（forward）"></a><strong>1.请求转发（forward）</strong></h4><p>又叫做<strong>直接转发方式，</strong>客户端和浏览器<strong>只发出一次请求，</strong>Servlet、HTML、JSP或其它信息资源，由<strong>第二个信息资源响应该请求，</strong>在请求对象request中，保存的对象对于<strong>每个信息资源是共享的。</strong></p>
 <p>比如：从 AServlet 请求转发到 BServlet</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081220.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-881fc9bb05d46ac8.png" alt=""></p>
 <ul>
 <li><strong>语法：</strong></li>
 </ul>
@@ -584,7 +592,7 @@ Servlet obj <span class="token operator">=</span> cache<span class="token punctu
 <p><strong>1.地址栏中的地址【不会】改变</strong><br>通常看作是服务端的跳转<br><strong>2.只有一个请求</strong><br><strong>3.资源是共享的，</strong>也就是说在两个 Servlet 中可以共享请求的资源<br>可以通过<code>request.setAttribute(String var1,Object var2)</code><strong>设置要共享的数据资源</strong>，并通过<code>request.getAttribute(String var1);</code>来<strong>获取传递的资源</strong><br><strong>4.【可以】访问 WEB-INF 中的资源</strong><br><strong>WEB-INF</strong> 文件夹是 Java Web 应用的<strong>默认安全目录，</strong>即客户端无法直接访问，只有服务端可以访问的目录。<br>如果想在页面中<strong>直接访问</strong>其中的文件，<strong>必须通过web.xml文件</strong>对要访问的文件进行<strong>相应映射</strong>才能访问。<br><strong>注意：</strong>在实际的开发中，可以把不希望用户直接访问到（通过浏览器输入地址栏）的网页放在文件夹中<strong>通过此方式访问。</strong><br><strong>5.请求转发【不能】跨域访问</strong><br>所谓的同域，是指<strong>域名，协议，端口均相同</strong></p>
 <h4 id="2-URl-重定向（redirect）"><a href="#2-URl-重定向（redirect）" class="headerlink" title="2.URl 重定向（redirect）"></a>2.URl 重定向（redirect）</h4><p>又叫做<strong>间接转发方式（Redirect）</strong>实际是<strong>两次HTTP请求，</strong>服务器端在响应第一次请求的时候，让浏览器再向另外一个URL发出请求，从而达到转发的目的。</p>
 <p>比如:从AServlet重定向到BServlet</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714081227.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-c49539085575bc26.png" alt=""></p>
 <ul>
 <li><strong>语法：</strong></li>
 </ul>
@@ -605,6 +613,10 @@ Servlet obj <span class="token operator">=</span> cache<span class="token punctu
 <li><strong>C 代表 控制器（controller)</strong><br>控制器是什么？ <strong>控制器的作用就是把不同的数据(Model)，显示在不同的视图(View)上。</strong></li>
 </ul>
 <p>这部分可以参考一下<a href="http://how2j.cn/k/mvc/mvc-tutorials/561.html" target="_blank" rel="noopener">这里</a></p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -868,8 +880,8 @@ HTTP 是 hypertext transfer protocol（超文本传输协议）的简写，它�
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
                                 </a>
                             
                             
@@ -883,8 +895,8 @@ HTTP 是 hypertext transfer protocol（超文本传输协议）的简写，它�
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                 </div>
@@ -921,8 +933,12 @@ HTTP 是 hypertext transfer protocol（超文本传输协议）的简写，它�
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fa fa-user fa-fw"></i>
-                            我没有三颗心脏
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -934,8 +950,8 @@ HTTP 是 hypertext transfer protocol（超文本传输协议）的简写，它�
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                 </div>
@@ -1093,7 +1109,7 @@ HTTP 是 hypertext transfer protocol（超文本传输协议）的简写，它�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

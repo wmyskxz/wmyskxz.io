@@ -365,8 +365,16 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
+                            <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                                <span class="chip bg-color">JavaWeb进阶</span>
+                            </a>
+                        
                             <a href="/tags/Redis/" target="_blank">
                                 <span class="chip bg-color">Redis</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                                <span class="chip bg-color">中间件</span>
                             </a>
                         
                     </div>
@@ -377,12 +385,12 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                Redis
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                中间件
                             </a>
                         
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                中间件学习
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                JavaWeb进阶
                             </a>
                         
                     </div>
@@ -423,11 +431,11 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/images/pasted-10.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-8ccb98beab9aff6a.png" alt=""></p>
 <p>像微信 <strong>“附近的人”</strong>，美团 <strong>“附近的餐厅”</strong>，支付宝共享单车 <strong>“附近的车”</strong> 是怎么设计实现的呢？</p>
 <h1 id="一、使用数据库实现查找附近的人"><a href="#一、使用数据库实现查找附近的人" class="headerlink" title="一、使用数据库实现查找附近的人"></a>一、使用数据库实现查找附近的人</h1><p>我们都知道，地球上的任何一个位置都可以使用二维的 <strong>经纬度</strong> 来表示，经度范围 <em>[-180, 180]<em>，纬度范围 *[-90, 90]</em>，纬度正负以赤道为界，北正南负，经度正负以本初子午线 *(英国格林尼治天文台)</em> 为界，东正西负。比如说，北京人民英雄纪念碑的经纬度坐标就是 <em>(39.904610, 116.397724)</em>，都是正数，因为中国位于东北半球。</p>
 <p>所以，当我们使用数据库存储了所有人的 <strong>经纬度</strong> 信息之后，我们就可以基于当前的坐标节点，来划分出一个矩形的范围，来得知附近的人，如下图：</p>
-<p><img src="/images/pasted-11.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-c5e82d3cab59ad22.png" alt=""></p>
 <p>所以，我们很容易写出下列的伪 SQL 语句：</p>
 <pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> id <span class="token keyword">FROM</span> positions <span class="token keyword">WHERE</span> x0 <span class="token operator">-</span> r <span class="token operator">&lt;</span> x <span class="token operator">&lt;</span> x0 <span class="token operator">+</span> r <span class="token operator">AND</span> y0 <span class="token operator">-</span> r <span class="token operator">&lt;</span> y <span class="token operator">&lt;</span> y0 <span class="token operator">+</span> r</code></pre>
 <p>如果我们还想进一步地知道与每个坐标元素的距离并排序的话，就需要一定的计算。</p>
@@ -449,9 +457,9 @@
 <p>为了满足高性能的矩形区域算法，数据表也需要把经纬度坐标加上 <strong>双向复合索引 (x, y)</strong>，这样可以满足最大优化查询性能。</p>
 <h1 id="二、GeoHash-算法简述"><a href="#二、GeoHash-算法简述" class="headerlink" title="二、GeoHash 算法简述"></a>二、GeoHash 算法简述</h1><p>这是业界比较通用的，用于 <strong>地理位置距离排序</strong> 的一个算法，<strong>Redis</strong> 也采用了这样的算法。GeoHash 算法将 <strong>二维的经纬度</strong> 数据映射到 <strong>一维</strong> 的整数，这样所有的元素都将在挂载到一条线上，距离靠近的二维坐标映射到一维后的点之间距离也会很接近。当我们想要计算 <strong>「附近的人时」</strong>，首先将目标位置映射到这条线上，然后在这个一维的线上获取附近的点就行了。</p>
 <p>它的核心思想就是把整个地球看成是一个 <strong>二维的平面</strong>，然后把这个平面不断地等分成一个一个小的方格，<strong>每一个</strong> 坐标元素都位于其中的 <strong>唯一一个方格</strong> 中，等分之后的 <strong>方格越小</strong>，那么坐标也就 <strong>越精确</strong>，类似下图：</p>
-<p><img src="/images/pasted-12.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-6396ae153a485857.png" alt=""></p>
 <p>经过划分的地球，我们需要对其进行编码：</p>
-<p><img src="/images/pasted-13.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-573525c3f1179bbc.png" alt=""></p>
 <p>经过这样顺序的编码之后，如果你仔细观察一会儿，你就会发现一些规律：</p>
 <ul>
 <li>横着的所有编码中，<strong>第 2 位和第 4 位都是一样的</strong>，例如第一排第一个 <code>0101</code> 和第二个 <code>0111</code>，他们的第 2 位和第 4 位都是 <code>1</code>；</li>
@@ -507,7 +515,7 @@
 127.0.0.1:6379<span class="token operator">></span> geohash company juejin
 1<span class="token punctuation">)</span> <span class="token string">"wx4gd94yjn0"</span></code></pre>
 <p>让我们打开地址 <code>http://geohash.org/wx4g52e1ce0</code>，观察地图指向的位置是否正确：</p>
-<p><img src="/images/pasted-14.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-b5d4215d6397729c.png" alt=""></p>
 <p>很好，就是这个位置，非常准确。</p>
 <h2 id="附近的公司"><a href="#附近的公司" class="headerlink" title="附近的公司"></a>附近的公司</h2><p><code>georadiusbymember</code> 指令是最为关键的指令，它可以用来查询指定元素附近的其它元素，它的参数非常复杂。</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 范围 20 公里以内最多 3 个元素按距离正排，它不会排除自身</span>
@@ -568,7 +576,7 @@
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="/images/pasted-15.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-fca34cfd601e7449.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -833,12 +841,12 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                    Redis
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                    中间件学习
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
                                 </a>
                             
                             
@@ -852,8 +860,16 @@
                         <span class="chip bg-color">原创</span>
                     </a>
                     
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
                     <a href="/tags/Redis/" target="_blank">
                         <span class="chip bg-color">Redis</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                 </div>
@@ -891,12 +907,12 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                    Redis
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                    中间件学习
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
                                 </a>
                             
                             
@@ -910,8 +926,16 @@
                         <span class="chip bg-color">原创</span>
                     </a>
                     
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
                     <a href="/tags/Redis/" target="_blank">
                         <span class="chip bg-color">Redis</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                 </div>
@@ -1069,7 +1093,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

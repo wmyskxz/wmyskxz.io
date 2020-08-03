@@ -367,12 +367,12 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java-Web/" target="_blank">
-                                <span class="chip bg-color">Java Web</span>
-                            </a>
-                        
                             <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
                                 <span class="chip bg-color">项目</span>
+                            </a>
+                        
+                            <a href="/tags/Java-Web/" target="_blank">
+                                <span class="chip bg-color">Java Web</span>
                             </a>
                         
                     </div>
@@ -402,7 +402,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        4.6k
+                        4.7k
                     </div>
                     
 
@@ -425,7 +425,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713162413.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F%E7%AE%80%E5%8D%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/7896890-2d624373a30e7283.png" alt=""></p>
 <blockquote>
 <p><strong>前言：</strong>由于导师在我的毕设项目里加了消息系统（本来想水水就过的..），没办法…来稍微研究研究吧..简单简单…</p>
 </blockquote>
@@ -457,7 +457,7 @@
 </li>
 </ul>
 <p>OK，大致就是以上的功能，那么问题来了：<strong>这要怎么设计啊？</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713162419.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F%E7%AE%80%E5%8D%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/7896890-26443fb35747a887.png" alt=""></p>
 <h2 id="进一步分析"><a href="#进一步分析" class="headerlink" title="进一步分析"></a>进一步分析</h2><p>其实可以根据上面的需求分析，把上面的消息大致可以分为<strong>公告（Announcement）、提醒（Remind）、私信（Message）</strong>三类，我们可以大致抽象出一个 <strong>通知（Notify） 模型：</strong></p>
 <table>
 <thead>
@@ -510,7 +510,7 @@
 </tbody></table>
 <p>上面加了一些数据以便理解，不过话说粉丝1号果然是真爱粉，又关注又喜欢又评论，嘻嘻嘻嘻…</p>
 <p>emm.这样的模型能够胜任我们的工作吗？<strong>我也不知道..</strong>不过根据这个模型能够想出大概的这样的创建通知的逻辑：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713162428.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F%E7%AE%80%E5%8D%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/7896890-4953f69cd6fd451e.png" alt=""></p>
 <p>似乎看上去也没有什么大问题..不过既然消息内容都可以根据动作类型自动生成的了，加上私信和公告的内容因为长度问题也肯定不保存在这张表里的好，所以我们在设计数据库时干脆把通知内容这条去掉不要，当信息类型是公告或者私信时可以根据这条通知的 id 在相应的表中找到相应的数据就可以了，emm..我觉得可以</p>
 <p>顺下去想想其实脑中有了一个大概，这样的模型还容易设计和想到，其实主要的问题还是下面的那些</p>
 <h3 id="问题一：单表数据大了怎么办？"><a href="#问题一：单表数据大了怎么办？" class="headerlink" title="问题一：单表数据大了怎么办？"></a>问题一：单表数据大了怎么办？</h3><p>如果当用户量上去到一定量的时候，那么这张 通知表 势必会变得巨大，因为不管是我们的公告、提醒还是私信都会在这个通知表上创建一条数据，到时候就会面临查询慢的问题，<strong>问题的答案是：我也不知道..</strong></p>
@@ -546,41 +546,41 @@
 <li><strong>发送私信时：</strong>先查询之前是否有记录，然后同上建立聊天框，点击发送之后把发送方设为自己接收方设为私信对象，然后在通知表中新建一条未读数据通知私信对象有私信来了；</li>
 </ul>
 <p>这完全能满足要求，只不过感觉查询多了些..</p>
-<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h1><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713162439.png" alt=""></p>
+<h1 id="数据库设计"><a href="#数据库设计" class="headerlink" title="数据库设计"></a>数据库设计</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F%E7%AE%80%E5%8D%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/7896890-190fef4c08e8ef48.png" alt=""></p>
 <p>简单弄了弄弄..看着挺难受的，不过能简单实现功能，并且为了演示，这里是做了一张user_follow表，表示用户之间的关联关系，点赞和评论与这个类似，就不多弄了..下面给一下建表语句吧：</p>
 <p><strong>user表：</strong></p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span><span class="token keyword">user</span><span class="token punctuation">`</span> <span class="token punctuation">(</span>
-  <span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token keyword">COMMENT</span> <span class="token string">'主键'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>username<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'用户姓名'</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token operator">=</span><span class="token number">5</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8<span class="token punctuation">;</span></code></pre>
+<pre class=" language-SQL"><code class="language-SQL">CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `username` varchar(50) NOT NULL COMMENT '用户姓名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;</code></pre>
 <p><strong>user_follow表：</strong></p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>user_follow<span class="token punctuation">`</span> <span class="token punctuation">(</span>
-  <span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token keyword">COMMENT</span> <span class="token string">'主键'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>uid<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'用户ID'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>follow_uid<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'关注的用户id'</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8 <span class="token keyword">COMMENT</span><span class="token operator">=</span><span class="token string">'用户关注表,记录了所有用户的关注信息'</span><span class="token punctuation">;</span></code></pre>
+<pre class=" language-SQL"><code class="language-SQL">CREATE TABLE `user_follow` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `uid` bigint(20) NOT NULL COMMENT '用户ID',
+  `follow_uid` bigint(20) NOT NULL COMMENT '关注的用户id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户关注表,记录了所有用户的关注信息';</code></pre>
 <p><strong>notify表：</strong></p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>notify<span class="token punctuation">`</span> <span class="token punctuation">(</span>
-  <span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token keyword">COMMENT</span> <span class="token string">'主键'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>sender_id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'发送者用户ID'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>reciver_id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'接受者用户ID'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span><span class="token keyword">type</span><span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'消息类型:announcement公告/remind提醒/message私信'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>is_read<span class="token punctuation">`</span> <span class="token keyword">bit</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token number">b</span><span class="token string">'0'</span> <span class="token keyword">COMMENT</span> <span class="token string">'是否已读,0未读,1已读'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>create_time<span class="token punctuation">`</span> <span class="token keyword">datetime</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">COMMENT</span> <span class="token string">'创建时间:按当前时间自动创建'</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8 <span class="token keyword">COMMENT</span><span class="token operator">=</span><span class="token string">'用户通知表,包含了所有用户的消息'</span><span class="token punctuation">;</span></code></pre>
+<pre class=" language-SQL"><code class="language-SQL">CREATE TABLE `notify` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `sender_id` bigint(20) NOT NULL COMMENT '发送者用户ID',
+  `reciver_id` bigint(20) NOT NULL COMMENT '接受者用户ID',
+  `type` varchar(50) NOT NULL COMMENT '消息类型:announcement公告/remind提醒/message私信',
+  `is_read` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否已读,0未读,1已读',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间:按当前时间自动创建',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户通知表,包含了所有用户的消息';</code></pre>
 <p><strong>message表：</strong></p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>message<span class="token punctuation">`</span> <span class="token punctuation">(</span>
-  <span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token keyword">COMMENT</span> <span class="token string">'主键'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>notify_id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'对应通知消息的id'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>sender_id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'发送者用户ID'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>reciver_id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'接受者用户ID'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>content<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">COMMENT</span> <span class="token string">'消息内容,最长长度不允许超过1000'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>create_time<span class="token punctuation">`</span> <span class="token keyword">datetime</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">COMMENT</span> <span class="token string">'创建时间:按当前时间自动创建'</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8 <span class="token keyword">COMMENT</span><span class="token operator">=</span><span class="token string">'私信信息表,包含了所有用户的私信信息'</span><span class="token punctuation">;</span></code></pre>
+<pre class=" language-SQL"><code class="language-SQL">CREATE TABLE `message` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `notify_id` bigint(20) NOT NULL COMMENT '对应通知消息的id',
+  `sender_id` bigint(20) NOT NULL COMMENT '发送者用户ID',
+  `reciver_id` bigint(20) NOT NULL COMMENT '接受者用户ID',
+  `content` varchar(1000) NOT NULL COMMENT '消息内容,最长长度不允许超过1000',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间:按当前时间自动创建',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='私信信息表,包含了所有用户的私信信息';</code></pre>
 <p><strong>根据《Java开发手册》5.3 第六条 没有使用任何级联和外键，bingo！</strong></p>
 <h1 id="Spring-Boot-MyBatis-实例"><a href="#Spring-Boot-MyBatis-实例" class="headerlink" title="Spring Boot + MyBatis 实例"></a>Spring Boot + MyBatis 实例</h1><h2 id="第一步：基础环境搭建"><a href="#第一步：基础环境搭建" class="headerlink" title="第一步：基础环境搭建"></a>第一步：基础环境搭建</h2><p>SpringBoot项目怎么搭就不说了吧，给一给几个关键的配置文件：</p>
 <p><strong>pom包依赖：</strong></p>
@@ -784,7 +784,7 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>context</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>generatorConfiguration</span><span class="token punctuation">></span></span></code></pre>
 <p>运行我们的【MybatisGenerator】类中的 main 方法就能看到自动生成的实体、Xml文件以及 Mapper 类</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713162456.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F%E7%AE%80%E5%8D%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/7896890-e94e0d8bae8e406e.png" alt=""></p>
 <h2 id="第三步：Service-层"><a href="#第三步：Service-层" class="headerlink" title="第三步：Service 层"></a>第三步：Service 层</h2><p>不给接口了，直接给实现吧，方法都很简单，而且没有做任何的安全限制，只是为了实现简单的消息系统，看效果</p>
 <p><strong>UserServiceImpl：</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
@@ -974,7 +974,12 @@
 <h2 id="第五步：测试"><a href="#第五步：测试" class="headerlink" title="第五步：测试"></a>第五步：测试</h2><p>通过 REST 测试工具，可以看到正确的效果，这里就不给出所有的测试了。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上的项目简单而且没有任何的安全验证，不过能够基本完成我们的需求，还有一些功能没有实现，例如管理员发通告（上面只演示了私信和关注信息），按照上面的系统就直接暴力给每个用户都加一条通知消息，感觉有点自闭..我也不知道怎么设计好..希望有经验的大大能指条路啊！</p>
 <p>其实关于这个简单的系统我查了好多好多资料..把自己都看自闭了，后来我干脆把所有网页都关掉，开始用 JPA 自己开始抽象实体，把各个实体写出来并把所有实体需要的数据啊相互之间的关联关系啊写清楚，然后再从自动生成的数据库中找思路…hhh…要不是我 JPA 不是很熟我觉得用 JPA 就能写出来了，不用 JPA 的原因在于一些数据的懒加载不知道怎么处理，还有就是查询语句太复杂，免不了要浪费一些资源…emmm..说到底还是不是特别懂 JPA，下面给一张复杂的用 JPA 建立的 User 实体吧（随手截的..hhh…很乱..）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713162521.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E6%B6%88%E6%81%AF%E7%B3%BB%E7%BB%9F%E7%AE%80%E5%8D%95%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/7896890-786f54eb4de109f9.png" alt=""></p>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1240,8 +1245,12 @@ Elasticsearch 简介Elasticsearch 是一个分布式、RESTful 风格的搜索�
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
                             
@@ -1255,8 +1264,12 @@ Elasticsearch 简介Elasticsearch 是一个分布式、RESTful 风格的搜索�
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                     <a href="/tags/Elasticsearch/" target="_blank">
@@ -1300,8 +1313,12 @@ Apache Shiro™ is a powerful and easy-to-use Java security framework that perfo
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
                             
@@ -1315,8 +1332,12 @@ Apache Shiro™ is a powerful and easy-to-use Java security framework that perfo
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                     <a href="/tags/Shiro/" target="_blank">
@@ -1478,7 +1499,7 @@ Apache Shiro™ is a powerful and easy-to-use Java security framework that perfo
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

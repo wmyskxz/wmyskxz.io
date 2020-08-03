@@ -373,8 +373,8 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java-Web/" target="_blank">
-                                <span class="chip bg-color">Java Web</span>
+                            <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                                <span class="chip bg-color">JavaWeb基础</span>
                             </a>
                         
                     </div>
@@ -385,8 +385,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                JavaWeb基础
                             </a>
                         
                     </div>
@@ -404,14 +404,14 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        2.8k
+                        3.1k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        12 分
+                        14 分
                     </div>
                     
                 
@@ -427,7 +427,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065354.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-Web--%E3%80%90%E5%88%86%E9%A1%B5%E5%8A%9F%E8%83%BD%E3%80%91%E8%AF%A6%E8%A7%A3/7896890-0ce014f6dad48288.png" alt=""></p>
 <h2 id="分页简介"><a href="#分页简介" class="headerlink" title="分页简介"></a>分页简介</h2><p>分页功能在网页中是非常常见的一个功能，<strong>其作用也就是将数据分割成多个页面来进行显示。</strong></p>
 <blockquote>
 <ul>
@@ -461,7 +461,7 @@
 </blockquote>
 <hr>
 <h2 id="传统的分页方式"><a href="#传统的分页方式" class="headerlink" title="传统的分页方式"></a>传统的分页方式</h2><p>对于假分页的实现方式很简单，只需要准备一个集合保存从数据库中取出的所有数据，然后根据当前页面的码数，取出对应范围的数据显示就好了，<strong>我们这里基于物理分页来实现。</strong></p>
-<h4 id="分页的原理"><a href="#分页的原理" class="headerlink" title="分页的原理"></a>分页的原理</h4><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065406.png" alt=""></p>
+<h4 id="分页的原理"><a href="#分页的原理" class="headerlink" title="分页的原理"></a>分页的原理</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-Web--%E3%80%90%E5%88%86%E9%A1%B5%E5%8A%9F%E8%83%BD%E3%80%91%E8%AF%A6%E8%A7%A3/7896890-bf9595ac0edbf696.png" alt=""></p>
 <blockquote>
 <ul>
 <li><strong>页面中的数据有：</strong><br>结果集：通过 SQL 语句查询得来的——<strong>List<Student></strong></li>
@@ -493,84 +493,83 @@
 </blockquote>
 <hr>
 <p>所有我们可以创建一个 Page 工具类备用：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Page</span> <span class="token punctuation">{</span>
+<pre><code>public class Page {
 
-    <span class="token keyword">int</span> start<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 开始数据的索引</span>
-    <span class="token keyword">int</span> count<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 每一页的数量</span>
-    <span class="token keyword">int</span> total<span class="token punctuation">;</span>        <span class="token comment" spellcheck="true">// 总共的数据量</span>
+    int start;        // 开始数据的索引
+    int count;        // 每一页的数量
+    int total;        // 总共的数据量
 
-    <span class="token comment" spellcheck="true">/**
+    /**
      * 提供一个构造方法
      * @param start
      * @param count
-     */</span>    
-    <span class="token keyword">public</span> <span class="token function">Page</span><span class="token punctuation">(</span><span class="token keyword">int</span> start<span class="token punctuation">,</span> <span class="token keyword">int</span> count<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>start <span class="token operator">=</span> start<span class="token punctuation">;</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>count <span class="token operator">=</span> count<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+     */    
+    public Page(int start, int count) {
+        super();
+        this.start = start;
+        this.count = count;
+    }
 
-    <span class="token comment" spellcheck="true">/**
+    /**
      * 判断是否有上一页
      * @return
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isHasPreviouse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>start<span class="token operator">==</span><span class="token number">0</span><span class="token punctuation">)</span>
-            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+     */
+    public boolean isHasPreviouse(){
+        if(start==0)
+            return false;
+        return true;
 
-    <span class="token punctuation">}</span>
+    }
 
-    <span class="token comment" spellcheck="true">/**
+    /**
      * 判断是否有下一页
      * @return
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">isHasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">if</span><span class="token punctuation">(</span>start<span class="token operator">==</span><span class="token function">getLast</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+     */
+    public boolean isHasNext(){
+        if(start==getLast())
+            return false;
+        return true;
+    }
 
-    <span class="token comment" spellcheck="true">/**
+    /**
      * 计算得到总页数
      * @return
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getTotalPage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">int</span> totalPage<span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 假设总数是50，是能够被5整除的，那么就有10页</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token number">0</span> <span class="token operator">==</span> total <span class="token operator">%</span> count<span class="token punctuation">)</span>
-            totalPage <span class="token operator">=</span> total <span class="token operator">/</span>count<span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">// 假设总数是51，不能够被5整除的，那么就有11页</span>
-        <span class="token keyword">else</span>
-            totalPage <span class="token operator">=</span> total <span class="token operator">/</span> count <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+     */
+    public int getTotalPage(){
+        int totalPage;
+        // 假设总数是50，是能够被5整除的，那么就有10页
+        if (0 == total % count)
+            totalPage = total /count;
+            // 假设总数是51，不能够被5整除的，那么就有11页
+        else
+            totalPage = total / count + 1;
 
-        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token operator">==</span>totalPage<span class="token punctuation">)</span>
-            totalPage <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> totalPage<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+        if(0==totalPage)
+            totalPage = 1;
+        return totalPage;
+    }
 
-    <span class="token comment" spellcheck="true">/**
+    /**
      * 计算得到尾页
      * @return
-     */</span>
-    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getLast</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">int</span> last<span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 假设总数是50，是能够被5整除的，那么最后一页的开始就是45</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token number">0</span> <span class="token operator">==</span> total <span class="token operator">%</span> count<span class="token punctuation">)</span>
-            last <span class="token operator">=</span> total <span class="token operator">-</span> count<span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">// 假设总数是51，不能够被5整除的，那么最后一页的开始就是50</span>
-        <span class="token keyword">else</span>
-            last <span class="token operator">=</span> total <span class="token operator">-</span> total <span class="token operator">%</span> count<span class="token punctuation">;</span>
+     */
+    public int getLast(){
+        int last;
+        // 假设总数是50，是能够被5整除的，那么最后一页的开始就是45
+        if (0 == total % count)
+            last = total - count;
+            // 假设总数是51，不能够被5整除的，那么最后一页的开始就是50
+        else
+            last = total - total % count;
 
-        last <span class="token operator">=</span> last<span class="token operator">&lt;</span><span class="token number">0</span><span class="token operator">?</span><span class="token number">0</span><span class="token operator">:</span>last<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> last<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
+        last = last&lt;0?0:last;
+        return last;
+    }
 
-    <span class="token comment" spellcheck="true">/* getter and setter */</span>
-<span class="token punctuation">}</span></code></pre>
-<hr>
+    /* getter and setter */
+}</code></pre><hr>
 <h2 id="前台实现分页设计"><a href="#前台实现分页设计" class="headerlink" title="前台实现分页设计"></a>前台实现分页设计</h2><p>首先我们在前台需要完成我们分页条的设计，这里可以直接引入 <strong>Bootstrap</strong> 来完成：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065417.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-Web--%E3%80%90%E5%88%86%E9%A1%B5%E5%8A%9F%E8%83%BD%E3%80%91%E8%AF%A6%E8%A7%A3/7896890-925ca8cf718ac094.png" alt=""></p>
 <blockquote>
 <p>上面是使用 <strong>Bootstrap</strong> 实现一个分页条的简单例子，如果不熟悉的童鞋可以去菜鸟教程中查看：<a href="http://www.runoob.com/bootstrap/bootstrap-pagination.html" target="_blank" rel="noopener">点这里</a></p>
 </blockquote>
@@ -590,127 +589,118 @@
 <li>上一页超链：</li>
 </ul>
 </blockquote>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span>  <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.start-page.count}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>‹<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span></code></pre>
-<blockquote>
+<pre><code>&lt;li &gt;
+    &lt;a  href=&quot;?page.start=${page.start-page.count}&quot;&gt;
+        &lt;span&gt;‹&lt;/span&gt;
+    &lt;/a&gt;
+&lt;/li&gt;</code></pre><blockquote>
 <ul>
 <li>下一页超链：</li>
 </ul>
 </blockquote>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.start+page.count}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>›<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span></code></pre>
-<blockquote>
+<pre><code>&lt;li &gt;
+    &lt;a href=&quot;?page.start=${page.start+page.count}&quot;&gt;
+        &lt;span&gt;›&lt;/span&gt;
+    &lt;/a&gt;
+&lt;/li&gt;</code></pre><blockquote>
 <ul>
 <li>最后一页超链：指向了最后一页</li>
 </ul>
 </blockquote>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.last}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>»<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span></code></pre>
-<blockquote>
+<pre><code>&lt;li &gt;
+    &lt;a href=&quot;?page.start=${page.last}&quot;&gt;
+        &lt;span&gt;»&lt;/span&gt;
+    &lt;/a&gt;
+&lt;/li&gt;</code></pre><blockquote>
 <ul>
 <li>中间页：</li>
 </ul>
 </blockquote>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">c:</span>forEach</span> <span class="token attr-name">begin</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span> <span class="token attr-name">end</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${page.totalPage-1}<span class="token punctuation">"</span></span> <span class="token attr-name">varStatus</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>status<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${status.index*page.count}<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>current<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>${status.count}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>forEach</span><span class="token punctuation">></span></span></code></pre>
-<blockquote>
+<pre><code>&lt;c:forEach begin=&quot;0&quot; end=&quot;${page.totalPage-1}&quot; varStatus=&quot;status&quot;&gt;
+    &lt;li&gt;
+        &lt;a href=&quot;?page.start=${status.index*page.count}&quot; class=&quot;current&quot;&gt;${status.count}&lt;/a&gt;
+    &lt;/li&gt;
+&lt;/c:forEach&gt;</code></pre><blockquote>
 <ul>
 <li>所以写完看起来会是这样子的：</li>
 </ul>
 </blockquote>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nav</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pagination<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span>  <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>0<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>«<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+<pre><code>&lt;nav&gt;
+    &lt;ul class=&quot;pagination&quot;&gt;
+        &lt;li&gt;
+            &lt;a  href=&quot;?page.start=0&quot;&gt;
+                &lt;span&gt;«&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
 
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span>  <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.start-page.count}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>‹<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+        &lt;li &gt;
+            &lt;a  href=&quot;?page.start=${page.start-page.count}&quot;&gt;
+                &lt;span&gt;‹&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
 
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">c:</span>forEach</span> <span class="token attr-name">begin</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span> <span class="token attr-name">end</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${page.totalPage-1}<span class="token punctuation">"</span></span> <span class="token attr-name">varStatus</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>status<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${status.index*page.count}<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>current<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>${status.count}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>forEach</span><span class="token punctuation">></span></span>
+        &lt;c:forEach begin=&quot;0&quot; end=&quot;${page.totalPage-1}&quot; varStatus=&quot;status&quot;&gt;
+            &lt;li&gt;
+                &lt;a href=&quot;?page.start=${status.index*page.count}&quot; class=&quot;current&quot;&gt;${status.count}&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/c:forEach&gt;
 
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.start+page.count}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>›<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.last}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>»<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>nav</span><span class="token punctuation">></span></span></code></pre>
-<ul>
+        &lt;li &gt;
+            &lt;a href=&quot;?page.start=${page.start+page.count}&quot;&gt;
+                &lt;span&gt;›&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li &gt;
+            &lt;a href=&quot;?page.start=${page.last}&quot;&gt;
+                &lt;span&gt;»&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</code></pre><ul>
 <li><strong>存在的问题：</strong><br>① 没有边界判断，即在首页仍然可以点击前一页，不符合逻辑也影响用户体验<br>② 会显示完所有的分页，即如果 totalPage 有50页，那么分页栏将会显得特别长，影响体验</li>
 </ul>
 <hr>
 <h4 id="改良版本的分页条"><a href="#改良版本的分页条" class="headerlink" title="改良版本的分页条"></a>改良版本的分页条</h4><p>1.写好头和尾</p>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>nav</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pageDIV<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pagination<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<pre><code>&lt;nav class=&quot;pageDIV&quot;&gt;
+    &lt;ul class=&quot;pagination&quot;&gt;
     .....
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>nav</span><span class="token punctuation">></span></span></code></pre>
-<p>2.写好<code>«</code> <code>‹</code>这两个功能按钮<br>使用 <code>&lt;c:if&gt;</code>标签来增加边界判断，如果没有前面的页码了则设置为disable状态</p>
-<pre class=" language-html"><code class="language-html">        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name"><span class="token namespace">&lt;c:</span>if</span> <span class="token attr-name">test</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${!page.hasPreviouse}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>class="disabled"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>if</span><span class="token punctuation">></span></span>>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>0<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>«<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+    &lt;/ul&gt;
+&lt;/nav&gt;</code></pre><p>2.写好<code>«</code> <code>‹</code>这两个功能按钮<br>使用 <code>&lt;c:if&gt;</code>标签来增加边界判断，如果没有前面的页码了则设置为disable状态</p>
+<pre><code>        &lt;li &lt;c:if test=&quot;${!page.hasPreviouse}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=0&quot;&gt;
+                &lt;span&gt;«&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
 
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name"><span class="token namespace">&lt;c:</span>if</span> <span class="token attr-name">test</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${!page.hasPreviouse}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>class="disabled"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>if</span><span class="token punctuation">></span></span>>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${page.start-page.count}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>‹<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span></code></pre>
-<p>再通过 JavaScrip 代码来完成禁用功能：</p>
-<pre class=" language-javascript"><code class="language-javascript"><span class="token operator">&lt;</span>script<span class="token operator">></span>
-    <span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"ul.pagination li.disabled a"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">click</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span></code></pre>
-<p>3.完成中间页码的编写</p>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">c:</span>forEach</span> <span class="token attr-name">begin</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>0<span class="token punctuation">"</span></span> <span class="token attr-name">end</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${page.totalPage-1}<span class="token punctuation">"</span></span> <span class="token attr-name">varStatus</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>status<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        &lt;li &lt;c:if test=&quot;${!page.hasPreviouse}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=${page.start-page.count}&quot;&gt;
+                &lt;span&gt;‹&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;</code></pre><p>再通过 JavaScrip 代码来完成禁用功能：</p>
+<pre><code>&lt;script&gt;
+    $(function () {
+        $(&quot;ul.pagination li.disabled a&quot;).click(function () {
+            return false;
+        });
+    });
+&lt;/script&gt;</code></pre><p>3.完成中间页码的编写</p>
+<pre><code>&lt;c:forEach begin=&quot;0&quot; end=&quot;${page.totalPage-1}&quot; varStatus=&quot;status&quot;&gt;
 
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">c:</span>if</span> <span class="token attr-name">test</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${status.count*page.count-page.start&lt;<span class="token punctuation">=</span>30 &amp;&amp; status.count*page.count-page.start<span class="token punctuation">></span><span class="token punctuation">=</span>-10}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name"><span class="token namespace">&lt;c:</span>if</span> <span class="token attr-name">test</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${status.index*page.count<span class="token punctuation">=</span><span class="token punctuation">=</span>page.start}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>class="disabled"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>if</span><span class="token punctuation">></span></span>>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span>
-                    <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>?page.start<span class="token punctuation">=</span>${status.index*page.count}<span class="token punctuation">"</span></span>
-                    <span class="token attr-name"><span class="token namespace">&lt;c:</span>if</span> <span class="token attr-name">test</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>${status.index*page.count<span class="token punctuation">=</span><span class="token punctuation">=</span>page.start}<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>class="current"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>if</span><span class="token punctuation">></span></span>
-            >${status.count}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>if</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">c:</span>forEach</span><span class="token punctuation">></span></span></code></pre>
-<p>从 <code>0</code> 循环到 <code>page.totalPage - 1</code> ，<code>varStatus</code> 相当于是循环变量</p>
+    &lt;c:if test=&quot;${status.count*page.count-page.start&lt;=30 &amp;&amp; status.count*page.count-page.start&gt;=-10}&quot;&gt;
+        &lt;li &lt;c:if test=&quot;${status.index*page.count==page.start}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a
+                    href=&quot;?page.start=${status.index*page.count}&quot;
+                    &lt;c:if test=&quot;${status.index*page.count==page.start}&quot;&gt;class=&quot;current&quot;&lt;/c:if&gt;
+            &gt;${status.count}&lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/c:if&gt;
+&lt;/c:forEach&gt;</code></pre><p>从 <code>0</code> 循环到 <code>page.totalPage - 1</code> ，<code>varStatus</code> 相当于是循环变量</p>
 <ul>
 <li>status.count 是从1开始遍历</li>
 <li>status.index 是从0开始遍历</li>
 <li><strong>要求：</strong>显示当前页码的前两个和后两个就可，例如当前页码为3的时候，就显示 1 2 3(当前页) 4 5 的页码</li>
 <li><strong>理解测试条件：</strong></li>
-<li>10 &lt;= 当前页*每一页显示的数目 - 当前页开始的数据编号 &lt;= 30<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065432.png" alt=""></li>
+<li>10 &lt;= 当前页*每一页显示的数目 - 当前页开始的数据编号 &lt;= 30<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-Web--%E3%80%90%E5%88%86%E9%A1%B5%E5%8A%9F%E8%83%BD%E3%80%91%E8%AF%A6%E8%A7%A3/7896890-1f82d91e47a31c7f.png" alt=""></li>
 <li>只要理解了这个判断条件，其他的就都好理解了</li>
 </ul>
 <blockquote>
@@ -720,127 +710,124 @@
 </blockquote>
 <hr>
 <h2 id="后台中的分页"><a href="#后台中的分页" class="headerlink" title="后台中的分页"></a>后台中的分页</h2><p>首页在项目中引入上面提到的 Page 工具类，然后我们在 DAO 类中使用 LIMIT 关键字来查询数据库中的信息：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> List<span class="token operator">&lt;</span>Student<span class="token operator">></span> <span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> <span class="token function">list</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> Short<span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
+<pre><code>public List&lt;Student&gt; list() {
+    return list(0, Short.MAX_VALUE);
+}
 
-<span class="token keyword">public</span> List<span class="token operator">&lt;</span>Student<span class="token operator">></span> <span class="token function">list</span><span class="token punctuation">(</span><span class="token keyword">int</span> start<span class="token punctuation">,</span> <span class="token keyword">int</span> count<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+public List&lt;Student&gt; list(int start, int count) {
 
-    List<span class="token operator">&lt;</span>Student<span class="token operator">></span> students <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List&lt;Student&gt; students = new ArrayList&lt;&gt;();
 
-    String sql <span class="token operator">=</span> <span class="token string">"SELECT * FROM student ORDER BY student_id desc limit ?,?"</span><span class="token punctuation">;</span>
+    String sql = &quot;SELECT * FROM student ORDER BY student_id desc limit ?,?&quot;;
 
-    <span class="token keyword">try</span> <span class="token punctuation">(</span>Connection c <span class="token operator">=</span> DBUtil<span class="token punctuation">.</span><span class="token function">getConnection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> PreparedStatement ps <span class="token operator">=</span> c<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    try (Connection c = DBUtil.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
 
-        ps<span class="token punctuation">.</span><span class="token function">setInt</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> start<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        ps<span class="token punctuation">.</span><span class="token function">setInt</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ps.setInt(1, start);
+        ps.setInt(2, count);
 
-        <span class="token comment" spellcheck="true">// 获取结果集...</span>
-    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">SQLException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> students<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>在 Servlet 中获取分页参数并使首页显示的 StudentList 用 page 的参数来获取：</p>
-<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 获取分页参数</span>
-<span class="token keyword">int</span> start <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        // 获取结果集...
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return students;
+}</code></pre><p>在 Servlet 中获取分页参数并使首页显示的 StudentList 用 page 的参数来获取：</p>
+<pre><code>// 获取分页参数
+int start = 0;
+int count = 10;
 
-<span class="token keyword">try</span> <span class="token punctuation">{</span>
-    start <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"page.start"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    count <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"page.count"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-<span class="token punctuation">}</span>
-Page page <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Page</span><span class="token punctuation">(</span>start<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+try {
+    start = Integer.parseInt(req.getParameter(&quot;page.start&quot;));
+    count = Integer.parseInt(req.getParameter(&quot;page.count&quot;));
+} catch (Exception e) {
+}
+Page page = new Page(start, count);
 
-List<span class="token operator">&lt;</span>Student<span class="token operator">></span> students <span class="token operator">=</span> studentDAO<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>page<span class="token punctuation">.</span><span class="token function">getStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> page<span class="token punctuation">.</span><span class="token function">getCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+List&lt;Student&gt; students = studentDAO.list(page.getStart(), page.getCount());
 
-<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+....
 
-<span class="token comment" spellcheck="true">// 共享数据</span>
-req<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"page"</span><span class="token punctuation">,</span> page<span class="token punctuation">)</span><span class="token punctuation">;</span>
-req<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"students"</span><span class="token punctuation">,</span> students<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>以上即可完成分页功能，但这是基于 Servlet 的版本，在之前写过的项目（<a href="https://www.jianshu.com/p/553fc76bb8eb" target="_blank" rel="noopener">学生管理系统(简易版)</a>）中实际的使用了这种方法，感兴趣的可以去看一下。</p>
+// 共享数据
+req.setAttribute(&quot;page&quot;, page);
+req.setAttribute(&quot;students&quot;, students);</code></pre><p>以上即可完成分页功能，但这是基于 Servlet 的版本，在之前写过的项目（<a href="https://www.jianshu.com/p/553fc76bb8eb" target="_blank" rel="noopener">学生管理系统(简易版)</a>）中实际的使用了这种方法，感兴趣的可以去看一下。</p>
 <hr>
 <h2 id="SSM-中的分页"><a href="#SSM-中的分页" class="headerlink" title="SSM 中的分页"></a>SSM 中的分页</h2><p>在 SSM 项目中，我们可以使用 MyBatis 的一款分页插件： PageHelper 来帮助我们更加简单的完成分页的需求，官网在这里： <a href="https://github.com/pagehelper/Mybatis-PageHelper" target="_blank" rel="noopener">PageHelper</a> </p>
 <p>在这里，我们演示一下如何使用上面的工具重构我们之前写过的 SSM 项目 —— <a href="https://www.jianshu.com/p/6a594fbea51d" target="_blank" rel="noopener">学生管理系统-SSM 版</a> </p>
 <h4 id="第一步：添加相关-jar-依赖包"><a href="#第一步：添加相关-jar-依赖包" class="headerlink" title="第一步：添加相关 jar 依赖包"></a>第一步：添加相关 jar 依赖包</h4><p>PageHelper 需要依赖两个 jar 包，我们直接在 pom.xml 中增加两个 jar 包依赖：</p>
-<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- pageHelper --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.github.pagehelper<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>pagehelper<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>5.1.2-beta<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<pre><code>&lt;!-- pageHelper --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
+    &lt;artifactId&gt;pagehelper&lt;/artifactId&gt;
+    &lt;version&gt;5.1.2-beta&lt;/version&gt;
+&lt;/dependency&gt;
 
-<span class="token comment" spellcheck="true">&lt;!--jsqlparser--></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>com.github.jsqlparser<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>jsqlparser<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>1.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
-<h4 id="第二步：配置相关环境"><a href="#第二步：配置相关环境" class="headerlink" title="第二步：配置相关环境"></a>第二步：配置相关环境</h4><p>在 MyBatis 的 SessionFactory 配置中新增加一个属性名 plugins 的配置：</p>
-<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- 配置SqlSessionFactory对象 --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sqlSessionFactory<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>org.mybatis.spring.SqlSessionFactoryBean<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token comment" spellcheck="true">&lt;!-- 注入数据库连接池 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dataSource<span class="token punctuation">"</span></span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dataSource<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-    <span class="token comment" spellcheck="true">&lt;!-- 扫描entity包 使用别名 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>typeAliasesPackage<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cn.wmyskxz.entity<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-    <span class="token comment" spellcheck="true">&lt;!-- 扫描sql配置文件:mapper需要的xml文件 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>mapperLocations<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>classpath:mapper/*.xml<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-    <span class="token comment" spellcheck="true">&lt;!-- 让MyBatis支持PageHelper插件 --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>plugins<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>array</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>com.github.pagehelper.PageInterceptor<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>properties<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-                    <span class="token comment" spellcheck="true">&lt;!--使用下面的方式配置参数，一行配置一个 --></span>
-                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>value</span><span class="token punctuation">></span></span>
-                    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>value</span><span class="token punctuation">></span></span>
-                <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
-            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>array</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>property</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span></code></pre>
-<h4 id="第三步：重构项目"><a href="#第三步：重构项目" class="headerlink" title="第三步：重构项目"></a>第三步：重构项目</h4><p>首先我们把 LIMIT 关键字从映射文件中干掉：</p>
-<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- 查询从start位置开始的count条数据--></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>select</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>list<span class="token punctuation">"</span></span> <span class="token attr-name">resultMap</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>student<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+&lt;!--jsqlparser--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.github.jsqlparser&lt;/groupId&gt;
+    &lt;artifactId&gt;jsqlparser&lt;/artifactId&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><h4 id="第二步：配置相关环境"><a href="#第二步：配置相关环境" class="headerlink" title="第二步：配置相关环境"></a>第二步：配置相关环境</h4><p>在 MyBatis 的 SessionFactory 配置中新增加一个属性名 plugins 的配置：</p>
+<pre><code>&lt;!-- 配置SqlSessionFactory对象 --&gt;
+&lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
+    &lt;!-- 注入数据库连接池 --&gt;
+    &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+    &lt;!-- 扫描entity包 使用别名 --&gt;
+    &lt;property name=&quot;typeAliasesPackage&quot; value=&quot;cn.wmyskxz.entity&quot;/&gt;
+    &lt;!-- 扫描sql配置文件:mapper需要的xml文件 --&gt;
+    &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:mapper/*.xml&quot;/&gt;
+    &lt;!-- 让MyBatis支持PageHelper插件 --&gt;
+    &lt;property name=&quot;plugins&quot;&gt;
+        &lt;array&gt;
+            &lt;bean class=&quot;com.github.pagehelper.PageInterceptor&quot;&gt;
+                &lt;property name=&quot;properties&quot;&gt;
+                    &lt;!--使用下面的方式配置参数，一行配置一个 --&gt;
+                    &lt;value&gt;
+                    &lt;/value&gt;
+                &lt;/property&gt;
+            &lt;/bean&gt;
+        &lt;/array&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;</code></pre><h4 id="第三步：重构项目"><a href="#第三步：重构项目" class="headerlink" title="第三步：重构项目"></a>第三步：重构项目</h4><p>首先我们把 LIMIT 关键字从映射文件中干掉：</p>
+<pre><code>&lt;!-- 查询从start位置开始的count条数据--&gt;
+&lt;select id=&quot;list&quot; resultMap=&quot;student&quot;&gt;
     SELECT * FROM student ORDER BY student_id desc
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>select</span><span class="token punctuation">></span></span></code></pre>
-<p>然后注释掉查询数据总条数的 SQL 语句：</p>
+&lt;/select&gt;</code></pre><p>然后注释掉查询数据总条数的 SQL 语句：</p>
 <pre><code>&lt;!--&amp;lt;!&amp;ndash; 查询数据条目 &amp;ndash;&amp;gt;--&gt;
 &lt;!--&lt;select id=&quot;getTotal&quot; resultType=&quot;int&quot;&gt;--&gt;
     &lt;!--SELECT COUNT(*) FROM student--&gt;
 &lt;!--&lt;/select&gt;--&gt;</code></pre><p>在 Dao 类和 Service 类中修改相应的地方：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714065446.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-Web--%E3%80%90%E5%88%86%E9%A1%B5%E5%8A%9F%E8%83%BD%E3%80%91%E8%AF%A6%E8%A7%A3/7896890-bfdb81b11494b415.png" alt=""></p>
 <p>然后修改掉 StudentController 中的方法：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/listStudent"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> String <span class="token function">listStudent</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span> HttpServletResponse response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre><code>@RequestMapping(&quot;/listStudent&quot;)
+public String listStudent(HttpServletRequest request, HttpServletResponse response) {
 
-    <span class="token comment" spellcheck="true">// 获取分页参数</span>
-    <span class="token keyword">int</span> start <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+    // 获取分页参数
+    int start = 0;
+    int count = 10;
 
-    <span class="token keyword">try</span> <span class="token punctuation">{</span>
-        start <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"page.start"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        count <span class="token operator">=</span> Integer<span class="token punctuation">.</span><span class="token function">parseInt</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"page.count"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token punctuation">}</span>
+    try {
+        start = Integer.parseInt(request.getParameter(&quot;page.start&quot;));
+        count = Integer.parseInt(request.getParameter(&quot;page.count&quot;));
+    } catch (Exception e) {
+    }
 
-    Page page <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Page</span><span class="token punctuation">(</span>start<span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Page page = new Page(start, count);
 
-    <span class="token comment" spellcheck="true">//  使用 PageHelper 来设置分页</span>
-    PageHelper<span class="token punctuation">.</span><span class="token function">offsetPage</span><span class="token punctuation">(</span>page<span class="token punctuation">.</span><span class="token function">getStart</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>page<span class="token punctuation">.</span><span class="token function">getCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    List<span class="token operator">&lt;</span>Student<span class="token operator">></span> students <span class="token operator">=</span> studentService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">//  使用 PageHelper 来获取总数</span>
-    <span class="token keyword">int</span> total <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token keyword">new</span> <span class="token class-name">PageInfo</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>students<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getTotal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    page<span class="token punctuation">.</span><span class="token function">setTotal</span><span class="token punctuation">(</span>total<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    //  使用 PageHelper 来设置分页
+    PageHelper.offsetPage(page.getStart(),page.getCount());
+    List&lt;Student&gt; students = studentService.list();
+    //  使用 PageHelper 来获取总数
+    int total = (int) new PageInfo&lt;&gt;(students).getTotal();
+    page.setTotal(total);
 
-    request<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"students"</span><span class="token punctuation">,</span> students<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    request<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"page"</span><span class="token punctuation">,</span> page<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    request.setAttribute(&quot;students&quot;, students);
+    request.setAttribute(&quot;page&quot;, page);
 
-    <span class="token keyword">return</span> <span class="token string">"listStudent"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>重启服务器，能看到也能够正确的使用分页功能。</p>
+    return &quot;listStudent&quot;;
+}</code></pre><p>重启服务器，能看到也能够正确的使用分页功能。</p>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>其实我自己对于这个工具比较无感..因为只是弱化了少一部分的功能，并没有我想象中的那样 “智能” ，也没有看到什么好的博文能够点通我的认知，希望了解的大大们能无私分享一下，谢谢！</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1104,8 +1091,16 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/" class="post-category" target="_blank">
+                                    SSM
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/" class="post-category" target="_blank">
+                                    项目
                                 </a>
                             
                             
@@ -1119,8 +1114,8 @@ req<span class="token punctuation">.</span><span class="token function">setAttri
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                     <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
@@ -1171,8 +1166,16 @@ Java基础知识
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/" class="post-category" target="_blank">
+                                    SSM
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/" class="post-category" target="_blank">
+                                    项目
                                 </a>
                             
                             
@@ -1186,8 +1189,8 @@ Java基础知识
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                     <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
@@ -1353,7 +1356,7 @@ Java基础知识
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

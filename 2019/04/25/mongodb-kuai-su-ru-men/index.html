@@ -406,7 +406,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        19 分
+                        20 分
                     </div>
                     
                 
@@ -422,7 +422,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161858.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2572826f53174702.png" alt=""></p>
 <h1 id="1-MongDB-简介"><a href="#1-MongDB-简介" class="headerlink" title="1.MongDB 简介"></a>1.MongDB 简介</h1><p><strong>MongoDB</strong>（来自于英文单词“Humongous”，中文含义为“庞大”）是可以应用于各种规模的企业、各个行业以及各类应用程序的开源数据库。作为一个适用于敏捷开发的数据库，MongoDB 的数据模式可以随着应用程序的发展而灵活地更新。与此同时，它也为开发人员 提供了传统数据库的功能：二级索引，完整的查询系统以及严格一致性等等。 MongoDB 能够使企业更加具有敏捷性和可扩展性，各种规模的企业都可以通过使用 MongoDB 来创建新的应用，提高与客户之间的工作效率，加快产品上市时间，以及降低企业成本。</p>
 <p><strong>MongoDB</strong> 是专为可扩展性，高性能和高可用性而设计的数据库。它可以从单服务器部署扩展到大型、复杂的多数据中心架构。利用内存计算的优势，MongoDB 能够提供高性能的数据读写操作。 MongoDB 的本地复制和自动故障转移功能使您的应用程序具有企业级的可靠性和操作灵活性。</p>
 <blockquote>
@@ -473,7 +473,7 @@
 </tr>
 </tbody></table>
 <p>也借用一下<a href="[http://www.runoob.com/mongodb/mongodb-databases-documents-collections.html](http://www.runoob.com/mongodb/mongodb-databases-documents-collections.html)">菜鸟教程</a>的图来更加形象生动的说明一下：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161905.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-dee79a699491eb9a.png" alt=""></p>
 <p>这很容易理解，但是问题在于：<strong>我们为什么要引入新的概念呢？</strong>（也就是为什么我们要把“表”替换成“集合”，“行”替换成“文档”，“列”替换成“域”呢？）原因在于，其实在 <strong>MySQL 这样的典型关系型数据</strong>中，我们是在<strong>定义表的时候定义列</strong>的，但是由于上述<strong>文档型数据库</strong>的特点，它允许文档的数据类型可以对应到语言的数据类型，所以我们是在<strong>定义文档的时候才会定义域</strong>的。</p>
 <p>也就是说，集合中的每个文档都可以有独立的域。因此，虽说集合相对于表来说是一个简化了的容器，而文档则包含了比行要多得多的信息。</p>
 <h1 id="2-搭建环境"><a href="#2-搭建环境" class="headerlink" title="2 搭建环境"></a>2 搭建环境</h1><p>怎么样都好，搭建好环境就行，这里以 OS 环境为例，你可以使用 OSX 的 brew 安装 mongodb：</p>
@@ -483,7 +483,7 @@
 <p>然后启动 mongodb，默认数据库目录即为 <code>/data/db</code>（如果不是，可以使用 <code>--dbpath</code> 指令来指定）：</p>
 <pre class=" language-shell"><code class="language-shell">sudo mongd</code></pre>
 <p>过一会儿你就能看到你的 mongodb 运行起来的提示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161938.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d36d3a631ee47120.png" alt=""></p>
 <blockquote>
 <p>具体的搭建过程可以参考菜鸟的教程：<a href="http://www.runoob.com/mongodb/mongodb-window-install.html" target="_blank" rel="noopener">http://www.runoob.com/mongodb/mongodb-window-install.html</a></p>
 </blockquote>
@@ -492,7 +492,7 @@
 <p>由于上面运行的 mongodb 运行在 27017 端口，并且灭有启动安全模式，所以我们也不需要输入用户名和密码就可以直接连接：</p>
 <pre class=" language-shell"><code class="language-shell">mongo 127.0.0.1:27017</code></pre>
 <p>或者通过 <code>--host</code> 和 <code>--port</code> 选项指定主机和端口。一切顺利的话，就进入了 mongoDB <code>shell</code>，<code>shell</code> 会报出一连串权限警告，不过不用担心，这并不会影响之后的操作。在添加授权用户和开启认证后，这些警告会自动消失。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161943.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d95f2f6b1df42f2d.png" alt=""></p>
 <h2 id="3-2-CRUD-操作"><a href="#3-2-CRUD-操作" class="headerlink" title="3.2 CRUD 操作"></a>3.2 CRUD 操作</h2><p>在进行增删改查操作之前，我们需要先了解一下常用的 <code>shell</code> 命令：</p>
 <ul>
 <li><code>db</code> 显示当前所在数据库，默认为 <code>test</code></li>
@@ -670,6 +670,11 @@ db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', m
 <p>当把嵌入文档引进来的时候，讨论就会变得更加有意思了。最常见的例子就是博客系统。是应该分别维护 <code>posts</code> 和 <code>comments</code> 两个集合，还是在每个 <code>post</code> 中嵌入一个 <code>comments</code> 数组？暂且不考虑那个 4MB 的限制（哈姆雷特所有的评论也不超过200KB，谁的博客会比他更受欢迎？），大多数的开发者还是倾向于把数据划分开。因为这样既简洁又明确。</p>
 <p>没有什么硬性的规定（呃，除了 4MB 的限制）。做了不同的尝试之后您就可以凭感觉知道怎样做是对的了。 </p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此已经对 MongoDB 有了一个基本的了解和入门，但是要运用在实际的项目中仍然有许多实践需要自己去完成</p>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -995,8 +1000,12 @@ Elasticsearch 简介Elasticsearch 是一个分布式、RESTful 风格的搜索�
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
                             
@@ -1010,8 +1019,12 @@ Elasticsearch 简介Elasticsearch 是一个分布式、RESTful 风格的搜索�
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                     <a href="/tags/Elasticsearch/" target="_blank">
@@ -1173,7 +1186,7 @@ Elasticsearch 简介Elasticsearch 是一个分布式、RESTful 风格的搜索�
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

@@ -365,8 +365,16 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
+                            <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                                <span class="chip bg-color">JavaWeb进阶</span>
+                            </a>
+                        
                             <a href="/tags/Redis/" target="_blank">
                                 <span class="chip bg-color">Redis</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                                <span class="chip bg-color">中间件</span>
                             </a>
                         
                     </div>
@@ -377,12 +385,12 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                Redis
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                JavaWeb进阶
                             </a>
                         
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                中间件学习
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                中间件
                             </a>
                         
                     </div>
@@ -423,7 +431,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215721.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-2899175817bb0069.png" alt=""></p>
 <h1 id="一、Redis-简介"><a href="#一、Redis-简介" class="headerlink" title="一、Redis 简介"></a>一、Redis 简介</h1><blockquote>
 <p><strong>“Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.”</strong> —— Redis是一个开放源代码（BSD许可）的内存中数据结构存储，用作数据库，缓存和消息代理。 <em>(摘自官网)</em></p>
 </blockquote>
@@ -438,7 +446,7 @@
 <h2 id="Redis-的安装"><a href="#Redis-的安装" class="headerlink" title="Redis 的安装"></a>Redis 的安装</h2><p>这一步比较简单，你可以在网上搜到许多满意的教程，这里就不再赘述。</p>
 <p>给一个菜鸟教程的安装教程用作参考：<a href="https://www.runoob.com/redis/redis-install.html" target="_blank" rel="noopener">https://www.runoob.com/redis/redis-install.html</a></p>
 <h2 id="测试本地-Redis-性能"><a href="#测试本地-Redis-性能" class="headerlink" title="测试本地 Redis 性能"></a>测试本地 Redis 性能</h2><p>当你安装完成之后，你可以先执行 <code>redis-server</code> 让 Redis 启动起来，然后运行命令 <code>redis-benchmark -n 100000 -q</code> 来检测本地同时执行 10 万个请求时的性能：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215734.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-7aea279e8fcdafe5.png" alt=""></p>
 <p>当然不同电脑之间由于各方面的原因会存在性能差距，这个测试您可以权当是一种 <strong>「乐趣」</strong> 就好。</p>
 <h1 id="二、Redis-五种基本数据结构"><a href="#二、Redis-五种基本数据结构" class="headerlink" title="二、Redis 五种基本数据结构"></a>二、Redis 五种基本数据结构</h1><p><strong>Redis</strong> 有 5 种基础数据结构，它们分别是：<strong>string(字符串)</strong>、<strong>list(列表)</strong>、<strong>hash(字典)</strong>、<strong>set(集合)</strong> 和 <strong>zset(有序集合)</strong>。这 5 种是 Redis 相关知识中最基础、最重要的部分，下面我们结合源码以及一些实践来给大家分别讲解一下。</p>
 <h2 id="1）字符串-string"><a href="#1）字符串-string" class="headerlink" title="1）字符串 string"></a>1）字符串 string</h2><p>Redis 中的字符串是一种 <strong>动态字符串</strong>，这意味着使用者可以修改，它的底层实现有点类似于 Java 中的 <strong>ArrayList</strong>，有一个字符数组，从源码的 <strong>sds.h/sdshdr 文件</strong> 中可以看到 Redis 底层对于字符串的定义 <strong>SDS</strong>，即 <em>Simple Dynamic String</em> 结构：</p>
@@ -475,7 +483,7 @@
 <p>你会发现同样一组结构 Redis 使用泛型定义了好多次，<strong>为什么不直接使用 int 类型呢？</strong></p>
 <p>因为当字符串比较短的时候，len 和 alloc 可以使用 byte 和 short 来表示，<strong>Redis 为了对内存做极致的优化，不同长度的字符串使用不同的结构体来表示。</strong></p>
 <h3 id="SDS-与-C-字符串的区别"><a href="#SDS-与-C-字符串的区别" class="headerlink" title="SDS 与 C 字符串的区别"></a>SDS 与 C 字符串的区别</h3><p>为什么不考虑直接使用 C 语言的字符串呢？因为 C 语言这种简单的字符串表示方式 <strong>不符合 Redis 对字符串在安全性、效率以及功能方面的要求</strong>。我们知道，C 语言使用了一个长度为 N+1 的字符数组来表示长度为 N 的字符串，并且字符数组最后一个元素总是 <code>&#39;\0&#39;</code>。<em>(下图就展示了 C 语言中值为 “Redis” 的一个字符数组)</em></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215747.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-3a7d503c81b6e6e4.png" alt=""></p>
 <p>这样简单的数据结构可能会造成以下一些问题：</p>
 <ul>
 <li><strong>获取字符串长度为 O(N) 级别的操作</strong> → 因为 C 不保存数组的长度，每次都需要遍历一遍整个数组；</li>
@@ -542,15 +550,15 @@ OK
 ...                # 等待 5s
 > GET key
 (nil)</code></pre>
-<p>等价于 <code>SET</code> + <code>EXPIRE</code> 的 <code>SETEX</code> 命令：</p>
-<pre class=" language-console"><code class="language-console">> SETEX key value1
+<p>等价于 <code>SET</code> + <code>EXPIRE</code> 的 <code>SETNX</code> 命令：</p>
+<pre class=" language-console"><code class="language-console">> SETNX key value1
 ...                # 等待 5s 后获取
 > GET key
 (nil)
 
-> SETEX key value1  # 如果 key 不存在则 SET 成功
+> SETNX key value1  # 如果 key 不存在则 SET 成功
 (integer) 1
-> SETEX key value1  # 如果 key 存在则 SET 失败
+> SETNX key value1  # 如果 key 存在则 SET 失败
 (integer) 0
 > GET key
 "value"             # 没有改变 </code></pre>
@@ -589,9 +597,9 @@ OK
     <span class="token keyword">unsigned</span> <span class="token keyword">long</span> len<span class="token punctuation">;</span>
 <span class="token punctuation">}</span> list<span class="token punctuation">;</span></code></pre>
 <p>可以看到，多个 listNode 可以通过 <code>prev</code> 和 <code>next</code> 指针组成双向链表：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215810.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-8f569f06506845c1.png" alt=""></p>
 <p>虽然仅仅使用多个 listNode 结构就可以组成链表，但是使用 <code>adlist.h/list</code> 结构来持有链表的话，操作起来会更加方便：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215815.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-c6fb10cdbb32f517.png" alt=""></p>
 <h3 id="链表的基本操作"><a href="#链表的基本操作" class="headerlink" title="链表的基本操作"></a>链表的基本操作</h3><ul>
 <li><code>LPUSH</code> 和 <code>RPUSH</code> 分别可以向 list 的左边（头部）和右边（尾部）添加一个新元素；</li>
 <li><code>LRANGE</code> 命令可以从 list 中取出一定范围的元素；</li>
@@ -665,7 +673,7 @@ OK
 <span class="token punctuation">}</span> dictEntry<span class="token punctuation">;</span></code></pre>
 <p>可以从上面的源码中看到，<strong>实际上字典结构的内部包含两个 hashtable</strong>，通常情况下只有一个 hashtable 是有值的，但是在字典扩容缩容时，需要分配新的 hashtable，然后进行 <strong>渐进式搬迁</strong> <em>(下面说原因)</em>。</p>
 <h3 id="渐进式-rehash"><a href="#渐进式-rehash" class="headerlink" title="渐进式 rehash"></a>渐进式 rehash</h3><p>大字典的扩容是比较耗时间的，需要重新申请新的数组，然后将旧字典所有链表中的元素重新挂接到新的数组下面，这是一个 O(n) 级别的操作，作为单线程的 Redis 很难承受这样耗时的过程，所以 Redis 使用 <strong>渐进式 rehash</strong> 小步搬迁：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215829.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-325d968300c47100.png" alt=""></p>
 <p>渐进式 rehash 会在 rehash 的同时，保留新旧两个 hash 结构，如上图所示，查询时会同时查询两个 hash 结构，然后在后续的定时任务以及 hash 操作指令中，循序渐进的把旧字典的内容迁移到新字典中。当搬迁完成了，就会使用新的 hash 结构取而代之。</p>
 <h3 id="扩缩容的条件"><a href="#扩缩容的条件" class="headerlink" title="扩缩容的条件"></a>扩缩容的条件</h3><p>正常情况下，当 hash 表中 <strong>元素的个数等于第一维数组的长度时</strong>，就会开始扩容，扩容的新数组是 <strong>原数组大小的 2 倍</strong>。不过如果 Redis 正在做 <code>bgsave(持久化命令)</code>，为了减少内存也得过多分离，Redis 尽量不去扩容，但是如果 hash 表非常满了，<strong>达到了第一维数组长度的 5 倍了</strong>，这个时候就会 <strong>强制扩容</strong>。</p>
 <p>当 hash 表因为元素逐渐被删除变得越来越稀疏时，Redis 会对 hash 表进行缩容来减少 hash 表的第一维数组空间占用。所用的条件是 <strong>元素个数低于数组长度的 10%</strong>，缩容不会考虑 Redis 是否在做 <code>bgsave</code>。</p>
@@ -705,7 +713,7 @@ OK</code></pre>
 "java"</code></pre>
 <h2 id="5）有序列表-zset"><a href="#5）有序列表-zset" class="headerlink" title="5）有序列表 zset"></a>5）有序列表 zset</h2><p>这可能使 Redis 最具特色的一个数据结构了，它类似于 Java 中 <strong>SortedSet</strong> 和 <strong>HashMap</strong> 的结合体，一方面它是一个 set，保证了内部 value 的唯一性，另一方面它可以为每个 value 赋予一个 score 值，用来代表排序的权重。</p>
 <p>它的内部实现用的是一种叫做 <strong>「跳跃表」</strong> 的数据结构，由于比较复杂，所以在这里简单提一下原理就好了：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215838.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-efd5114939a651ed.png" alt=""></p>
 <p>想象你是一家创业公司的老板，刚开始只有几个人，大家都平起平坐。后来随着公司的发展，人数越来越多，团队沟通成本逐渐增加，渐渐地引入了组长制，对团队进行划分，于是有一些人<strong>又是员工又有组长的身份</strong>。</p>
 <p>再后来，公司规模进一步扩大，公司需要再进入一个层级：部门。于是每个部门又会从组长中推举一位选出部长。</p>
 <p>跳跃表就类似于这样的机制，最下面一层所有的元素都会串起来，都是员工，然后每隔几个元素就会挑选出一个代表，再把这几个代表使用另外一级指针串起来。然后再在这些代表里面挑出二级代表，再串起来。<strong>最终形成了一个金字塔的结构。</strong></p>
@@ -767,7 +775,7 @@ OK</code></pre>
 <li><strong>个人公众号</strong> ：wmyskxz，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20200228215849.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-fca34cfd601e7449.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -1032,12 +1040,12 @@ OK</code></pre>
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                    Redis
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
                                 </a>
                             
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                    中间件学习
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
                             
@@ -1051,8 +1059,16 @@ OK</code></pre>
                         <span class="chip bg-color">原创</span>
                     </a>
                     
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
                     <a href="/tags/Redis/" target="_blank">
                         <span class="chip bg-color">Redis</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                 </div>
@@ -1093,8 +1109,8 @@ OK</code></pre>
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" class="post-category" target="_blank">
-                                    人类观察所
+                            <a href="/categories/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" class="post-category" target="_blank">
+                                    喜欢的三观
                                 </a>
                             
                             
@@ -1106,10 +1122,6 @@ OK</code></pre>
                     
                     <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" target="_blank">
                         <span class="chip bg-color">喜欢的三观</span>
-                    </a>
-                    
-                    <a href="/tags/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" target="_blank">
-                        <span class="chip bg-color">人类观察所</span>
                     </a>
                     
                 </div>
@@ -1267,7 +1279,7 @@ OK</code></pre>
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

@@ -6,9 +6,11 @@
     <meta charset="utf-8">
     <meta name="keywords" content="Java8流操作-基本使用&amp;性能测试, 我没有三颗心脏的博客">
     <meta name="description" content="
+为获得更好的阅读体验，请访问原文：传送门
+
+
 一、流(Stream)简介
-流是 Java8 中 API 的新成员，它允许你以声明式的方式处理数据集合（通过查询语句来表达，而不是临时编写一个实现）。这有点儿像是我们操作数据库一样，例如我想要查询出热量较低的菜品名字我就可以像下面这样：
-">
+流是 Java8 中 API 的新成员，它允许你以声明式的方式处理数据集合（通过查询语句来表达，而不是临时编写一个实现）。这有点儿像是我们操作数据库一样，例如我想要">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -366,10 +368,6 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java/" target="_blank">
-                                <span class="chip bg-color">Java</span>
-                            </a>
-                        
                             <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
                                 <span class="chip bg-color">Java基础</span>
                             </a>
@@ -405,7 +403,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        6.1k
+                        6.2k
                     </div>
                     
 
@@ -428,7 +426,10 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195158.png" alt=""></p>
+                <blockquote>
+<p>为获得更好的阅读体验，请访问原文：<a href="https://www.wmyskxz.com/2019/08/03/java8-liu-cao-zuo-ji-ben-shi-yong-xing-neng-ce-shi/">传送门</a></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-a7d61498c60e469f.png" alt=""></p>
 <h1 id="一、流-Stream-简介"><a href="#一、流-Stream-简介" class="headerlink" title="一、流(Stream)简介"></a>一、流(Stream)简介</h1><hr>
 <p>流是 Java8 中 API 的新成员，它允许你以<strong>声明式</strong>的方式处理数据集合（通过查询语句来表达，而不是临时编写一个实现）。这有点儿像是我们操作数据库一样，例如我想要查询出热量较低的菜品名字我就可以像下面这样：</p>
 <pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> name <span class="token keyword">FROM</span> dishes <span class="token keyword">WHERE</span> calorie <span class="token operator">&lt;</span> <span class="token number">400</span><span class="token punctuation">;</span></code></pre>
@@ -436,7 +437,7 @@
 <p>另外一点，如果我们想要处理大量的数据又该怎么办？是否是考虑使用多线程进行并发处理呢？如果是，那么可能编写的关于并发的代码比使用迭代器本身更加的复杂，而且调试起来也会变得麻烦。</p>
 <p>基于以上的几点考虑，Java 设计者在 Java 8 版本中，引入了流的概念，来帮助您节约时间！并且有了 lambda 的参与，流操作的使用将更加顺畅！</p>
 <h2 id="特点一：内部迭代"><a href="#特点一：内部迭代" class="headerlink" title="特点一：内部迭代"></a>特点一：内部迭代</h2><p>就现在来说，您可以把它简单的当成一种高级的迭代器（Iterator），或者是高级的 for 循环，区别在于，前面两者都是属于外部迭代，而<strong>流采用内部迭代。</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195226.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-75e654c79727b555.png" alt=""></p>
 <p>上图简要说明了内部迭代与外部迭代的差异，我们再举一个生活中实际的例子（引自《Java 8 实战》），比如您想让您两岁的孩子索菲亚把她的玩具都收到盒子里面去，你们之间可能会产生如下的对话：</p>
 <ul>
 <li>你：“索菲亚，我们把玩具收起来吧，地上还有玩具吗？”</li>
@@ -512,7 +513,7 @@ words<span class="token punctuation">.</span><span class="token function">stream
 <span class="token comment" spellcheck="true">// wmyskxz</span>
 <span class="token comment" spellcheck="true">// wow</span></code></pre>
 <p>这个过程类似下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195235.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-f2fb24e64fc76686.png" alt=""></p>
 <p>当然如果您不是想要输出而是想要返回一个集合，那么可以使用 <code>.collect(toList())</code>，就像下面这样：</p>
 <pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>String<span class="token operator">></span> words <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"wmyskxz"</span><span class="token punctuation">,</span> <span class="token string">"say"</span><span class="token punctuation">,</span> <span class="token string">"wow"</span><span class="token punctuation">,</span> <span class="token string">"to"</span><span class="token punctuation">,</span> <span class="token string">"everybody"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 List<span class="token operator">&lt;</span>String<span class="token operator">></span> filteredWords <span class="token operator">=</span> words<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -597,7 +598,7 @@ words<span class="token punctuation">.</span><span class="token function">stream
 <span class="token comment" spellcheck="true">// [Ljava.lang.String;@238e0d81</span>
 <span class="token comment" spellcheck="true">// [Ljava.lang.String;@31221be2</span></code></pre>
 <p>为什么会这样呢？这个方法的问题自傲与，传递给 map 方法的 lambda 表达式为每个单词返回了一个 <code>String[]</code>，所以经过 map 方法之后返回的流就不是我们预想的 <code>Stream&lt;String&gt;</code>，而是 <code>Stream&lt;String[]&gt;</code>，下图就说明了这个问题：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195247.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-55e2df9d377af8e2.png" alt=""></p>
 <p>幸好我们可以使用 <strong>flatMap</strong> 来解决这个问题：</p>
 <pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>String<span class="token operator">></span> words <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token string">"Hello"</span><span class="token punctuation">,</span> <span class="token string">"World"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 words<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -615,7 +616,7 @@ words<span class="token punctuation">.</span><span class="token function">stream
 <span class="token comment" spellcheck="true">// r</span>
 <span class="token comment" spellcheck="true">// d</span></code></pre>
 <p>使用 flatMap 方法的效果是，各个数组并不是分别映射成一个流，而是映射成流的内容。一言蔽之就是 flatMap 让你一个流中的每个值都转换成另一个六，然后把所有的流连接起来成为一个流，具体过程如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195306.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-daa99ee5fc4ba797.png" alt=""></p>
 <h2 id="3、查找和匹配"><a href="#3、查找和匹配" class="headerlink" title="3、查找和匹配"></a>3、查找和匹配</h2><p>另一个常见的数据处理套路是看看数据集中的某些元素是否匹配一个给定的属性，Stream API 通过 <strong>allMatch</strong>、<strong>anyMatch</strong>、<strong>noneMatch</strong>、<strong>findFirst</strong> 和 <strong>findAny</strong> 方法提供了这样的工具(<em>其实到这里看名字就会大概能够知道怎么使用了</em>)。</p>
 <p>我们简单的举两个例子就好。</p>
 <p>比如，你可以用它来看看集合里面是否有偶数：</p>
@@ -671,7 +672,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <p>你也可以很容易改造成所有元素相乘的形式，只需要将另一个 Lambda：<code>(a, b) -&gt; a * b</code> 传递给 reduce 就可以了：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> product <span class="token operator">=</span> numbers<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a <span class="token operator">*</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>我们先来深入研究一下 reduce 是如何对一个数字流进行求和的：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195315.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-29feabe9de67c576.png" alt=""></p>
 <p>如上图所示一样的，reduce 每一次都把结果返回并与下一次的元素进行操作，比如第一次当遍历到元素 1 时，此时返回初始值 0 + 1 = 1，然后再用此时的返回值 1 与第二个元素进行叠加操作，如此往复，便完成了对数字列表的求和运算。</p>
 <p>当然你也可以使用方法引用让这段代码更加简洁：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> sum <span class="token operator">=</span> numbers<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> Integer<span class="token operator">:</span><span class="token operator">:</span>sum<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
@@ -716,7 +717,7 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
 <p>根据上面介绍的规则，同样的当第一次执行 <code>.forEach()</code> 的时候，会回溯到第一个 <code>peek</code> 操作，打印出 <code>A1</code>，然后执行 <code>skip</code>，这个操作的意思就是跳过，也就是相当于 for 循环里面的 continue，所以前六次的 <code>forEach()</code> 操作都只会打印 A。</p>
 <p>而第七次开始，<code>skip</code> 失效之后，就会开始分别执行 <code>.peek()</code> 和 <code>forEach()</code> 里面的打印语句了，就会看到输出的是：<code>A7B7C7</code>。</p>
 <p>OK，到这里也算是对 Stream API 有了一定的认识，下面我们对中间操作和结束操作做一个总结：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195328.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-68bb112ff24d36db.png" alt=""></p>
 <ul>
 <li>图片截自：<a href="https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/6-Stream%20Pipelines.md" target="_blank" rel="noopener">https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/6-Stream%20Pipelines.md</a></li>
 </ul>
@@ -760,11 +761,11 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
 <p>测试数据由程序随机生成。为防止一次测试带来的抖动，测试4次求出平均时间作为运行时间。</p>
 <h2 id="实验一-基本类型迭代"><a href="#实验一-基本类型迭代" class="headerlink" title="实验一 基本类型迭代"></a>实验一 基本类型迭代</h2><p>测试内容：找出整型数组中的最小值。对比for循环外部迭代和Stream API内部迭代性能。</p>
 <p>测试程序<a href="https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/perf/StreamBenchmark/src/lee/IntTest.java" target="_blank" rel="noopener">IntTest</a>，测试结果如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195347.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-831f1148734ba757.png" alt=""></p>
 <p>图中展示的是for循环外部迭代耗时为基准的时间比值。分析如下：</p>
 <p>对于基本类型Stream串行迭代的性能开销明显高于外部迭代开销（两倍）；<br>Stream并行迭代的性能比串行迭代和外部迭代都好。</p>
 <p>并行迭代性能跟可利用的核数有关，上图中的并行迭代使用了全部 12 个核，为考察使用核数对性能的影响，我们专门测试了不同核数下的Stream并行迭代效果：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195358.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-4f96578cebc68c1a.png" alt=""></p>
 <p>分析，对于基本类型：</p>
 <ol>
 <li>使用Stream并行API在单核情况下性能很差，比Stream串行API的性能还差；</li>
@@ -774,14 +775,14 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
 <h2 id="实验二-对象迭代"><a href="#实验二-对象迭代" class="headerlink" title="实验二 对象迭代"></a>实验二 对象迭代</h2><p>再来看对象的迭代效果。</p>
 <p>测试内容：找出字符串列表中最小的元素（自然顺序），对比for循环外部迭代和Stream API内部迭代性能。</p>
 <p>测试程序<a href="https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/perf/StreamBenchmark/src/lee/StringTest.java" target="_blank" rel="noopener">StringTest</a>，测试结果如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195405.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-caf02e4d9a85b2f1.png" alt=""></p>
 <p>结果分析如下：</p>
 <ol>
 <li>对于对象类型Stream串行迭代的性能开销仍然高于外部迭代开销（1.5倍），但差距没有基本类型那么大。</li>
 <li>Stream并行迭代的性能比串行迭代和外部迭代都好。</li>
 </ol>
 <p>再来单独考察Stream并行迭代效果：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195413.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-a460de6916c20d9d.png" alt=""></p>
 <p>分析，对于对象类型：</p>
 <ol>
 <li>使用Stream并行API在单核情况下性能比for循环外部迭代差；</li>
@@ -791,13 +792,13 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
 <h2 id="实验三-复杂对象归约"><a href="#实验三-复杂对象归约" class="headerlink" title="实验三 复杂对象归约"></a>实验三 复杂对象归约</h2><p>从实验一、二的结果来看，Stream串行执行的效果都比外部迭代差（很多），是不是说明Stream真的不行了？先别下结论，我们再来考察一下更复杂的操作。</p>
 <p>测试内容：给定订单列表，统计每个用户的总交易额。对比使用外部迭代手动实现和Stream API之间的性能。</p>
 <p>我们将订单简化为<code>&lt;userName, price, timeStamp&gt;</code>构成的元组，并用<code>Order</code>对象来表示。测试程序<a href="https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/perf/StreamBenchmark/src/lee/ReductionTest.java" target="_blank" rel="noopener">ReductionTest</a>，测试结果如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195420.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-7a1368e732c7ccc9.png" alt=""></p>
 <p>分析，对于复杂的归约操作：</p>
 <ol>
 <li>Stream API的性能普遍好于外部手动迭代，并行Stream效果更佳；</li>
 </ol>
 <p>再来考察并行度对并行效果的影响，测试结果如下：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190803195432.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java8%E4%B8%AD%E7%9A%84%E6%B5%81%E6%93%8D%E4%BD%9C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8&%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/7896890-5ef8bfda3d545415.png" alt=""></p>
 <p>分析，对于复杂的归约操作：</p>
 <ol>
 <li>使用Stream并行归约在单核情况下性能比串行归约以及手动归约都要差，简单说就是最差的；</li>
@@ -819,6 +820,11 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
 <li><a href="https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/8-Stream%20Performance.md" target="_blank" rel="noopener">https://github.com/CarpenterLee/JavaLambdaInternals/blob/master/8-Stream%20Performance.md</a> - Stream Performance</li>
 <li>《Java 8 实战》</li>
 </ol>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1070,9 +1076,11 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
                     <div class="summary block-with-text">
                         
                             
+为了获得更好的阅读体验，请访问原文：传送门
+
+
 一、前言
-代码是什么呢？或者说作为程序员的我们，对于写代码这件事又是抱着怎样的一种态度呢？我时常都在想，如今我如愿成为了一名程序员（虽然还很菜），写代码这件事成了我的工作，我期望从工作中获得些什么？而工作又能给予我什么呢？
-我在短暂的工作
+代码是什么呢？或者说作为程序员的我们，对于写代码这件事又是抱着怎样的一种态度呢？我时常都在想，如今我如愿成为了一名程序员（虽然还很菜），写代码这件事成了我的工作，我期望从工作中获得
                         
                     </div>
                     <div class="publish-info">
@@ -1126,11 +1134,11 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
                     <div class="summary block-with-text">
                         
                             
-前言： 最近公司来了个大佬，从他那里学到不少东西，其中一个就是计时的新姿势「StopWatch」，赶紧来一起了解了解吧!
+为获得更好的阅读体验，请访问原文：传送门前言： 最近公司来了个大佬，从他那里学到不少东西，其中一个就是计时的新姿势「StopWatch」，赶紧来一起了解了解吧!
 
 
 一、最简单的计时
-在我们的程序中不免需要对某一个运算或者方法进行计时，以便我们来观察该运算或方法是否符合我们的预
+在我们的程序中不免需要对某一个运算或者方法进行计时，以
                         
                     </div>
                     <div class="publish-info">
@@ -1141,8 +1149,8 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
                                 </a>
                             
                             
@@ -1156,8 +1164,8 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
                     </a>
                     
                 </div>
@@ -1315,7 +1323,7 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

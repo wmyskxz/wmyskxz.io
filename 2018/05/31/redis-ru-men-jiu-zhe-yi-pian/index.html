@@ -364,12 +364,12 @@ Redis 概述在我们日常的Java Web开发中，无不都是使用数据库来
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java-Web/" target="_blank">
-                                <span class="chip bg-color">Java Web</span>
-                            </a>
-                        
                             <a href="/tags/Redis/" target="_blank">
                                 <span class="chip bg-color">Redis</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                                <span class="chip bg-color">中间件</span>
                             </a>
                         
                     </div>
@@ -380,8 +380,12 @@ Redis 概述在我们日常的Java Web开发中，无不都是使用数据库来
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                Java Web
+                            <a href="/categories/Redis/" class="post-category" target="_blank">
+                                Redis
+                            </a>
+                        
+                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                中间件
                             </a>
                         
                     </div>
@@ -422,7 +426,7 @@ Redis 概述在我们日常的Java Web开发中，无不都是使用数据库来
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174038.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-42d0747d8e2a3d8f.png" alt=""></p>
 <h2 id="Redis-概述"><a href="#Redis-概述" class="headerlink" title="Redis 概述"></a>Redis 概述</h2><p>在我们日常的Java Web开发中，无不都是使用数据库来进行数据的存储，由于一般的系统任务中通常不会存在高并发的情况，所以这样看起来并没有什么问题，可是一旦涉及大数据量的需求，比如一些商品抢购的情景，或者是主页访问量瞬间较大的时候，单一使用数据库来保存数据的系统会因为面向磁盘，磁盘读/写速度比较慢的问题而存在严重的性能弊端，一瞬间成千上万的请求到来，需要系统在极短的时间内完成成千上万次的读/写操作，这个时候往往不是数据库能够承受的，极其容易造成数据库系统瘫痪，最终导致服务宕机的严重生产问题。</p>
 <h4 id="NoSQL-技术"><a href="#NoSQL-技术" class="headerlink" title="NoSQL 技术"></a>NoSQL 技术</h4><p>为了克服上述的问题，Java Web项目通常会引入NoSQL技术，这是一种<strong>基于内存的数据库</strong>，并且提供一定的持久化功能。</p>
 <p><strong>Redis</strong>和<strong>MongoDB</strong>是当前使用最广泛的NoSQL，而就Redis技术而言，它的性能十分优越，可以<strong>支持每秒十几万此的读/写操作</strong>，其性能远超数据库，并且还<strong>支持集群、分布式、主从同步等</strong>配置，原则上可以无限扩展，让更多的数据存储在内存中，更让人欣慰的是它还<strong>支持一定的事务能力</strong>，这保证了高并发的场景下数据的安全和一致性。</p>
@@ -440,7 +444,7 @@ Redis 概述在我们日常的Java Web开发中，无不都是使用数据库来
 <li><strong>业务数据大小如何？</strong>如果要存储几百兆字节的文件，会给缓存带来很大的压力，这样也没有必要；</li>
 </ul>
 <p>在考虑了这些问题之后，如果觉得有必要使用缓存，那么就使用它！使用 Redis 作为缓存的读取逻辑如下图所示：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174046.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-404e89059b6a96b5.png" alt=""></p>
 <p>从上图我们可以知道以下两点：</p>
 <ol>
 <li>当<strong>第一次读取数据的时候</strong>，读取 Redis 的数据就会失败，此时就会触发程序读取数据库，把数据读取出来，并且写入 Redis 中；</li>
@@ -448,33 +452,33 @@ Redis 概述在我们日常的Java Web开发中，无不都是使用数据库来
 </ol>
 <p>从上面的分析可以知道，读操作的可能性是远大于写操作的，所以使用 Redis 来处理日常中需要经常读取的数据，速度提升是显而易见的，同时也降低了对数据库的依赖，使得数据库的压力大大减少。</p>
 <p>分析了读操作的逻辑，下面我们来看看<strong>写操作的流程</strong>：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174055.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-82c820c6c6447504.png" alt=""></p>
 <p>从流程可以看出，更新或者写入的操作，需要多个 Redis 的操作，如果业务数据写次数远大于读次数那么就没有必要使用 Redis。</p>
 <blockquote>
 <p>关于使用内存存储数据，我知道谷歌好像就是<strong>把所有互联网的数据都存储在内存条</strong>的，所以才会有如此高质量、高效的搜索，但它毕竟是谷歌…</p>
 </blockquote>
 <h4 id="高速读-写的场合"><a href="#高速读-写的场合" class="headerlink" title="高速读/写的场合"></a>高速读/写的场合</h4><p>在如今的互联网中，越来越多的存在高并发的情况，比如天猫双11、抢红包、抢演唱会门票等，这些场合都是在某一个瞬间或者是某一个短暂的时刻有<strong>成千上万的请求</strong>到达服务器，如果单纯的使用数据库来进行处理，就算不崩，也会很慢的，<strong>轻则造成用户体验极差用户量流失</strong>，<strong>重则数据库瘫痪，服务宕机</strong>，而这样的场合都是不允许的！</p>
 <p>所以我们需要使用 Redis 来应对这样的高并发需求的场合，我们先来看看<strong>一次请求操作的流程图</strong>：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174107.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-6995e2980a8aae6a.png" alt=""></p>
 <p>我们来进一步阐述这个过程：</p>
 <ol>
 <li>当一个请求到达服务器时，只是把业务数据在 Redis 上进行读写，而没有对数据库进行任何的操作，这样就能大大提高读写的速度，从而满足<strong>高速响应的需求</strong>；</li>
 <li>但是这些缓存的数据仍然需要持久化，也就是存入数据库之中，所以在一个请求操作完 Redis 的读/写之后，会去<strong>判断该高速读/写的业务是否结束</strong>，这个判断通常会在秒杀商品为0，红包金额为0时成立，如果不成立，则不会操作数据库；如果成立，则触发事件将 Redis 的缓存的数据以批量的形式<strong>一次性写入数据库</strong>，从而完成持久化的工作。</li>
 </ol>
 <h4 id="Redis-的安装"><a href="#Redis-的安装" class="headerlink" title="Redis 的安装"></a>Redis 的安装</h4><p>访问地址：<a href="https://github.com/ServiceStack/redis-windows/tree/master/downloads" target="_blank" rel="noopener">https://github.com/ServiceStack/redis-windows/tree/master/downloads</a> </p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174115.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-02ae79ed7bac2f17.png" alt=""></p>
 <p>把 Redis 下载下来后找到一个合适的地方解压，就能得到如下图所示的目录（这里空格被替换成了%20…）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174122.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-503eabe717b358ba.png" alt=""></p>
 <p>为了方便启动，我们在该目录下新建一个 startup.cmd 的文件，然后将以下内容写入文件：</p>
 <pre><code>redis-server redis.windows.conf</code></pre><p>这个命令其实就是在调用 redis-server.exe 命令来读取 redis.window.conf 的内容，我们双击刚才创建好的 startup.cmd 文件，就能成功的看到 Redis 启动：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174131.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-c68cc2678deb3391.png" alt=""></p>
 <p>上图的提示信息告诉了我们：① Redis 当前的版本为 3.0.503；<strong>② Redis 运行在 6379 端口；</strong>③ Redis 进程的 PID 为 14748；④ 64 位。</p>
 <p>我们可以打开同一个文件夹下的 redis-cli.exe 文件，这是 Redis 自带的一个客户端工具，它可以用来连接到我们当前的 Redis 服务器，我们做以下测试：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174140.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-aa1039abf8482a8e.png" alt=""></p>
 <p>如此，我们便在 Windows 的环境下安装好了 Redis。</p>
 <hr>
 <h2 id="在-Java-中使用-Redis"><a href="#在-Java-中使用-Redis" class="headerlink" title="在 Java 中使用 Redis"></a>在 Java 中使用 Redis</h2><h4 id="第一步：添加-Jedis-依赖"><a href="#第一步：添加-Jedis-依赖" class="headerlink" title="第一步：添加 Jedis 依赖"></a>第一步：添加 Jedis 依赖</h4><p>想要在 Java 中使用 Redis 缓存，需要添加相关的Jar包依赖，打开Maven仓库的网站：<a href="https://mvnrepository.com/" target="_blank" rel="noopener">https://mvnrepository.com/</a> ，搜索Jedis：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174158.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-97fae00cb761ed4e.png" alt=""></p>
 <p>把它导入工程中去就可以啦，下面我们来对<strong>Redis的写入性能</strong>做一下测试：</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">redisTester</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -500,9 +504,9 @@ Redis 概述在我们日常的Java Web开发中，无不都是使用数据库来
 redis每秒操作：<span class="token number">10734</span>次</code></pre>
 <p>据说 Redis 的性能能达到十万级别，我不敢相信我的台式机电脑只有十分之一不到的性能，虽然说这里不是流水线的操作，会造成一定的影响，但我还是不信邪，我查到了官方的性能测试方法：</p>
 <p><strong>首先在Redis根目录下召唤Cmd：</strong>具体方法是按住【Shift】点击右键</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174208.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-8f418575a848a459.png" alt=""></p>
 <p><strong>然后输入命令：【redis-benchmark -n 100000  -q】：</strong>来同时执行10万个请求测试性能</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174218.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-2f9199dc20c1415f.png" alt=""></p>
 <p>好吧，我同时在我的笔记本上测试了一下，结果更加惨淡…low啊low…</p>
 <h4 id="第二步：使用-Redis-连接池"><a href="#第二步：使用-Redis-连接池" class="headerlink" title="第二步：使用 Redis 连接池"></a>第二步：使用 Redis 连接池</h4><p>跟数据库连接池相同，Java Redis也同样提供了类<code>redis.clients.jedis.JedisPool</code>来管理我们的Reids连接池对象，并且我们可以使用<code>redis.clients.jedis.JedisPoolConfig</code>来对连接池进行配置，代码如下：</p>
 <pre class=" language-java"><code class="language-java">JedisPoolConfig poolConfig <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JedisPoolConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -521,7 +525,7 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
 <p>Redis 只能支持六种数据类型（string/hash/list/set/zset/hyperloglog）的操作，但在 Java 中我们却通常以类对象为主，所以在需要 Redis 存储的五中数据类型与 Java 对象之间进行转换，如果自己编写一些工具类，比如一个角色对象的转换，还是比较容易的，但是涉及到许多对象的时候，这其中无论工作量还是工作难度都是很大的，所以总体来说，<strong>就操作对象而言，使用 Redis 还是挺难的</strong>，好在 Spring 对这些进行了封装和支持。</p>
 <h4 id="第三步：在-Spring-中使用-Redis"><a href="#第三步：在-Spring-中使用-Redis" class="headerlink" title="第三步：在 Spring 中使用 Redis"></a>第三步：在 Spring 中使用 Redis</h4><p>上面说到了 Redis 无法操作对象的问题，无法在那些基础类型和 Java 对象之间方便的转换，但是在 Spring 中，这些问题都可以<strong>通过使用RedisTemplate</strong>得到解决！</p>
 <p>想要达到这样的效果，除了 Jedis 包以外还需要在 Spring 引入 spring-data-redis 包：<a href="https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis" target="_blank" rel="noopener">https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis</a></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174248.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-09354a1b8f0d8629.png" alt=""></p>
 <p>这里把2.0.7最新版本标红的意思是：<strong>别老想着使用最新的Jar包</strong>，特别是涉及到框架的一些东西，笔者用实际的操作体验告诉你们，引入该版本的包是会导致Jar包冲突的（也就是莫名其妙的错误），我乖乖换回了<strong>1.7.2</strong>的版本，代码就通了…我们来看看怎么做吧：</p>
 <p><strong>（1）第一步：使用Spring配置JedisPoolConfig对象</strong></p>
 <p>大部分的情况下，我们还是会用到连接池的，于是先用 Spring 配置一个 JedisPoolConfig 对象：</p>
@@ -554,7 +558,7 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span></code></pre>
 <p><strong>（3）第三步：配置RedisTemplate</strong></p>
 <p>普通的连接根本没有办法直接将对象直接存入 Redis 内存中，我们需要替代的方案：将对象序列化（可以简单的理解为继承Serializable接口）。我们可以把对象序列化之后存入Redis缓存中，然后在取出的时候又通过转换器，将序列化之后的对象反序列化回对象，这样就完成了我们的要求：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174300.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-a7711b612a0a53cd.png" alt=""></p>
 <p>RedisTemplate可以帮助我们完成这份工作，它会找到对应的序列化器去转换Redis的键值：</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>redisTemplate<span class="token punctuation">"</span></span>
       <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>org.springframework.data.redis.core.RedisTemplate<span class="token punctuation">"</span></span>
@@ -611,34 +615,34 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
     student1<span class="token punctuation">.</span><span class="token function">service</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 <p>运行可以成功看到结果：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174314.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-b35c44cfd1462580.png" alt=""></p>
 <h4 id="第四步：在-SpringBoot-中使用-Redis"><a href="#第四步：在-SpringBoot-中使用-Redis" class="headerlink" title="第四步：在 SpringBoot 中使用 Redis"></a>第四步：在 SpringBoot 中使用 Redis</h4><p><strong>（1）在SpringBoot中添加Redis依赖：</strong></p>
-<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- Radis --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-data-redis<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<pre class=" language-XML"><code class="language-XML"><!-- Radis -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency></code></pre>
 <p><strong>（2）添加配置文件：</strong></p>
 <p>在SpringBoot中使用<code>.properties</code>或者<code>.yml</code>都可以，这里给出<code>.properties</code>的例子，因为自己的<code>.yml</code>文件看上去感觉乱糟糟的：</p>
-<pre class=" language-properties"><code class="language-properties"><span class="token comment" spellcheck="true"># REDIS (RedisProperties)</span>
-<span class="token comment" spellcheck="true"># Redis数据库索引（默认为0）</span>
-<span class="token attr-name">spring.redis.database</span><span class="token punctuation">=</span><span class="token attr-value">0</span>
-<span class="token comment" spellcheck="true"># Redis服务器地址</span>
-<span class="token attr-name">spring.redis.host</span><span class="token punctuation">=</span><span class="token attr-value">localhost</span>
-<span class="token comment" spellcheck="true"># Redis服务器连接端口</span>
-<span class="token attr-name">spring.redis.port</span><span class="token punctuation">=</span><span class="token attr-value">6379</span>
-<span class="token comment" spellcheck="true"># Redis服务器连接密码（默认为空）</span>
-<span class="token attr-name">spring.redis.password</span><span class="token punctuation">=</span>
-<span class="token comment" spellcheck="true"># 连接池最大连接数（使用负值表示没有限制）</span>
-<span class="token attr-name">spring.redis.pool.max-active</span><span class="token punctuation">=</span><span class="token attr-value">8</span>
-<span class="token comment" spellcheck="true"># 连接池最大阻塞等待时间（使用负值表示没有限制）</span>
-<span class="token attr-name">spring.redis.pool.max-wait</span><span class="token punctuation">=</span><span class="token attr-value">-1</span>
-<span class="token comment" spellcheck="true"># 连接池中的最大空闲连接</span>
-<span class="token attr-name">spring.redis.pool.max-idle</span><span class="token punctuation">=</span><span class="token attr-value">8</span>
-<span class="token comment" spellcheck="true"># 连接池中的最小空闲连接</span>
-<span class="token attr-name">spring.redis.pool.min-idle</span><span class="token punctuation">=</span><span class="token attr-value">0</span>
-<span class="token comment" spellcheck="true"># 连接超时时间（毫秒）</span>
-<span class="token attr-name">spring.redis.timeout</span><span class="token punctuation">=</span><span class="token attr-value">0</span></code></pre>
+<pre class=" language-XML"><code class="language-XML"># REDIS (RedisProperties)
+# Redis数据库索引（默认为0）
+spring.redis.database=0
+# Redis服务器地址
+spring.redis.host=localhost
+# Redis服务器连接端口
+spring.redis.port=6379
+# Redis服务器连接密码（默认为空）
+spring.redis.password=
+# 连接池最大连接数（使用负值表示没有限制）
+spring.redis.pool.max-active=8
+# 连接池最大阻塞等待时间（使用负值表示没有限制）
+spring.redis.pool.max-wait=-1
+# 连接池中的最大空闲连接
+spring.redis.pool.max-idle=8
+# 连接池中的最小空闲连接
+spring.redis.pool.min-idle=0
+# 连接超时时间（毫秒）
+spring.redis.timeout=0</code></pre>
 <p><strong>（3）测试访问：</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span>SpringJUnit4ClassRunner<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
 <span class="token annotation punctuation">@SpringBootTest</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -658,7 +662,7 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
 <span class="token punctuation">}</span></code></pre>
 <p>通过上面这段极为简单的测试案例演示了如何通过自动配置的<strong>StringRedisTemplate</strong>对象进行Redis的读写操作，该对象从命名中就可注意到支持的是String类型。原本是RedisTemplate&lt;K, V&gt;接口，StringRedisTemplate就相当于RedisTemplate&lt;String, String&gt;的实现。</p>
 <p>运行测试，如果一切成功则不会报错，如果我们没有拿到或者拿到的数不是我们想要的 “111” ，那么则会报错，这是使用Assert的好处（下面是我改成112之后运行报错的结果）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174329.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-f02bff82595cf24a.png" alt=""></p>
 <p><strong>（4）存储对象：</strong></p>
 <p>这一步跟上面使用Spring一样，只需要将POJO类实现<strong>Serializable接口</strong>就可以了，我这里就贴一下测试代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span>SpringJUnit4ClassRunner<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
@@ -682,7 +686,7 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>仍然没有任何问题：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713174345.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-530efa9d71480abc.png" alt=""></p>
 <blockquote>
 <p>参考文章：<br>1.<a href="https://www.cnblogs.com/ityouknow/p/5748830.html" target="_blank" rel="noopener">https://www.cnblogs.com/ityouknow/p/5748830.html</a><br>2.<a href="http://blog.didispace.com/springbootredis/" target="_blank" rel="noopener">http://blog.didispace.com/springbootredis/</a></p>
 </blockquote>
@@ -763,6 +767,9 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
     logger<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"size:{}"</span><span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>在网上看到了关于MySQL的性能测试，读写操作大概就<strong>每秒1000以下</strong>的样子，而且这还和引擎相关，所以可以看出Redis确实能在性能方面帮助许多</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1026,8 +1033,8 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%94%9F%E6%B4%BB/" class="post-category" target="_blank">
-                                    生活
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" class="post-category" target="_blank">
+                                    编程人生
                                 </a>
                             
                             
@@ -1043,6 +1050,10 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
                     
                     <a href="/tags/%E6%80%BB%E7%BB%93/" target="_blank">
                         <span class="chip bg-color">总结</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" target="_blank">
+                        <span class="chip bg-color">编程人生</span>
                     </a>
                     
                 </div>
@@ -1080,8 +1091,8 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
                                 </a>
                             
                             
@@ -1095,8 +1106,8 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                 </div>
@@ -1254,7 +1265,7 @@ Jedis jedis <span class="token operator">=</span> pool<span class="token punctua
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

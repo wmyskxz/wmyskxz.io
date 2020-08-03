@@ -362,6 +362,10 @@
                     
                     <div class="article-tag">
                         
+                            <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_blank">
+                                <span class="chip bg-color">多线程</span>
+                            </a>
+                        
                             <a href="/tags/MoreThanJava/" target="_blank">
                                 <span class="chip bg-color">MoreThanJava</span>
                             </a>
@@ -424,7 +428,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://imgkr2.cn-bj.ufileos.com/db1944cc-0cc4-4ee0-befd-c3cd2059a58d.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=oo617Eq22IS84ftmiXEcXP2k4Bs%253D&Expires=1596272169" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/db1944cc-0cc4-4ee0-befd-c3cd2059a58d.png" alt=""></p>
 <ul>
 <li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
 <li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
@@ -432,7 +436,7 @@
 <h1 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h1><p>该文章的大部分内容都是翻译自是黑莓 <code>10</code> 实时操作系统 <code>QNX Neutrino</code> 的<a href="https://developer.blackberry.com/native/documentation/dev/rtos/arch/about_system_architecture.html" target="_blank" rel="noopener">开发手册</a>，该手册不仅详细地阐述了 BlackBerry 10 OS 的原理以及 OS 的体系结构，还描述了其 QNX Neutrino 微内核的详细信息 <em>(包括进程线程、多和处理、网络架构、文件系统等…非常完整..)</em>。</p>
 <p>我阅读了其中「描述进程和线程」的精华部分，觉得写的非常不错，特意翻译 <em>(主要靠有道和 Google 翻译)</em> 跟大家分享一下 <em>(部分内容有改动)</em>。</p>
 <p>手册中详细描述了许多关于 Linux 函数调用涉及底层方面的细节，在本文中我大都没有贴出来，<strong>感兴趣的朋友强烈建议去拜读一下原文！</strong></p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/336441d3-e4fc-450e-9271-1b4ef3a4f6ed.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=9VR8cSORG5jWR8cqJTrBoc4TXIo%253D&Expires=1596271687" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/336441d3-e4fc-450e-9271-1b4ef3a4f6ed.png" alt=""></p>
 <blockquote>
 <ul>
 <li>原文地址：<a href="https://developer.blackberry.com/native/documentation/dev/rtos/arch/about_system_architecture.html" target="_blank" rel="noopener">https://developer.blackberry.com/native/documentation/dev/rtos/arch/about_system_architecture.html</a></li>
@@ -440,10 +444,10 @@
 </blockquote>
 <h1 id="Part-1-进程和线程基础"><a href="#Part-1-进程和线程基础" class="headerlink" title="Part 1. 进程和线程基础"></a>Part 1. 进程和线程基础</h1><p>在我们开始讨论线程、进程、时间片和所有其他的精彩的概念之前，让我们先来建立一个类比。</p>
 <p>我要做的首先是 <strong>说明线程和进程是如何工作的</strong>。我能想到的最好的方法 <em>(不涉及实时系统的设计)</em> 是在某种情况下想象我们的线程和进程。</p>
-<h2 id="进程就像一栋房子"><a href="#进程就像一栋房子" class="headerlink" title="进程就像一栋房子"></a>进程就像一栋房子</h2><p><img src="https://imgkr2.cn-bj.ufileos.com/e283ed13-3541-4a3d-8ec9-6b845d6434f4.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=kecaKX3GOyWpSaR9vTCJZBokCR4%253D&Expires=1596244026" alt=""></p>
+<h2 id="进程就像一栋房子"><a href="#进程就像一栋房子" class="headerlink" title="进程就像一栋房子"></a>进程就像一栋房子</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/e283ed13-3541-4a3d-8ec9-6b845d6434f4.png" alt=""></p>
 <p>房子实际上是 <strong>具有某些属性的容器</strong> <em>(例如卧室数量、占地面积、区域划分等)</em>。</p>
 <p>如果您以这个角度来看，房子实际上并不会主动做任何事情————它是一个 <strong>被动的对象</strong>。这实际上就是进程干的事情了 <em>(充当容器)</em>。</p>
-<h2 id="线程就像是居住者"><a href="#线程就像是居住者" class="headerlink" title="线程就像是居住者"></a>线程就像是居住者</h2><p><img src="https://imgkr2.cn-bj.ufileos.com/3d262b67-f931-41fa-8328-bcce20034a5b.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=F7QcbvtpKj0DWD1dvrh8Jx7sqhw%253D&Expires=1596244392" alt=""></p>
+<h2 id="线程就像是居住者"><a href="#线程就像是居住者" class="headerlink" title="线程就像是居住者"></a>线程就像是居住者</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/3d262b67-f931-41fa-8328-bcce20034a5b.png" alt=""></p>
 <p>居住在房子里面的人是 <strong>活动的对象</strong>，他们可以使用各种房间，看电视、做饭、洗澡等等等…</p>
 <h3 id="单线程"><a href="#单线程" class="headerlink" title="单线程"></a>单线程</h3><p>如果您独居过，那么您就会知道————<strong>您可以在家里的任何时间做您任何想做的事</strong>，因为家里面没有其他人，您只要遵从内心的规则就好。</p>
 <h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>如果在您的房子中再另外添加一个人，情况将发生巨变。</p>
@@ -464,7 +468,7 @@
 <p><strong>从日常的生活中我们知道，事情并不是那么简单。</strong></p>
 <p>现在我们已经了解了基本特征 <em>(所有内容都是共享的)</em>，下面我们来深入探究一下事情变得有趣的地方以及原因。</p>
 <p>下图显示了我们表示线程和进程的方式。进程是一个圆圈，代表“容器”概念（地址空间），三个长方形是线程。在本文中，您将看到类似这样的图。</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/2c253102-4bd3-4164-892f-315c5fba4467.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=WnCM4PjMf048bO3dnw%252FgnGCI8jo%253D&Expires=1596244922" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/2c253102-4bd3-4164-892f-315c5fba4467.png" alt=""></p>
 <h2 id="互斥"><a href="#互斥" class="headerlink" title="互斥"></a>互斥</h2><p>在生活中，如果您想洗个澡，并且已经有人在洗手间了，您将不得不等待。线程又是如何处理的呢？</p>
 <p>这是通过一种叫做 <strong>互斥</strong> <em>(mutual exclusion)</em> 的操作完成的。和你想的差不多——当涉及到 <strong>特定资源</strong> 时，许多线程是互斥的。</p>
 <p>当你想要独占浴室洗澡时，你通常会走进浴室，从里面锁上门。任何想要上厕所的人都会被锁挡住。当你洗完之后，你会打开门，允许其他人进入。</p>
@@ -531,9 +535,9 @@
 <p>如果线程进入睡眠状态，或者在信号量上阻塞，那么是的，一个低优先级的线程可以运行 <em>(如上所述)</em>。</p>
 <p>但是还有一个 <strong>“特殊” 调用，<a href="http://www.qnx.com/developers/docs/6.4.1/neutrino/lib_ref/s/sched_yield.html" target="_blank" rel="noopener"><code>sched_yield()</code></a></strong> <em>(基于内核调用 <code>SchedYield()</code>)</em>，它仅将 CPU 让给另一个具有相同优先级的线程 —— 如果高优先级的线程已经准备好运行，那么低优先级的线程将永远不会有机会运行。如果一个线程确实调用了 <code>sched_yield()</code>，并且没有其他具有相同优先级的线程准备运行，那么原始线程将继续运行。实际上，<code>sched_yield()</code> 用于在 CPU 上对另一个具有相同优先级的线程进行访问。</p>
 <p>在下面的图中，我们看到三个线程在两个不同的进程中运行:</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/d1dcc7d2-65c5-411d-b392-e9e5f68b901f.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=9IsHiil41mGZXGCu0BiXBOkCURM%3D&Expires=1596260602" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/d1dcc7d2-65c5-411d-b392-e9e5f68b901f.png" alt=""></p>
 <p>如果我们假设线程“A”和“B”已经准备好了，线程“C”被阻塞了(可能在等待互斥)，线程“D”(没有显示)正在执行，那么内核维护的就绪队列的一部分看起来是这样的：</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/990839a3-c5e9-44c1-a4a8-5c57d885b15a.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=2E%2F2JZeM6FlDNeZBFH0wcsuvv4k%3D&Expires=1596261100" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/990839a3-c5e9-44c1-a4a8-5c57d885b15a.png" alt=""></p>
 <p>这显示了内核的 <strong>内部就绪队列</strong>，内核使用它来决定下一步调度谁。注意，线程“C”没有在就绪队列中，因为它被阻塞了；线程“D”也没有在就绪队列中，因为它正在运行。</p>
 <h4 id="轮循-Round-Robin"><a href="#轮循-Round-Robin" class="headerlink" title="轮循(Round Robin)"></a>轮循(Round Robin)</h4><p><strong>RR 调度算法</strong> 与 FIFO 相同，只是如果有另一个具有相同优先级的线程，则该线程不会永远运行。它只对系统定义的时间片运行，您可以使用函数 <a href="http://www.qnx.com/developers/docs/6.4.1/neutrino/lib_ref/c/clockperiod.html" target="_blank" rel="noopener"><code>sched_rr_get_interval()</code></a> 来确定时间片的值。时间片通常为 <code>4</code> 毫秒，但实际上是 <code>ticksize</code> 的 <code>4</code> 倍，您可以查询或使用 <a href="http://www.qnx.com/developers/docs/6.4.1/neutrino/lib_ref/s/sched_rr_get_interval.html" target="_blank" rel="noopener"><code>ClockPeriod()</code></a> 设置 <code>ticksize</code>。</p>
 <p>实际发生的情况是，内核启动一个 RR 线程，并记录时间。如果 RR 线程运行了一段时间，分配给它的时间就会超时 <em>(时间片已经过期)</em>。内核查看是否有另一个具有相同优先级的线程已经准备好了。如果有，内核运行它。如果没有，那么内核将继续运行 RR 线程 <em>(内核授予线程另一个时间片)</em>。</p>
@@ -545,7 +549,7 @@
 <li>RR 线程将运行它的时间片，然后内核将重新安排它 <em>(如果需要)</em>。</li>
 </ul>
 <p>下面的流程图显示了内核做出的决策：</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/b0053516-c0fb-4655-91d1-a725cba0681d.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=p6DZfBCt5m%2B4iBy491D3YTrm2%2Fc%3D&Expires=1596263209" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/b0053516-c0fb-4655-91d1-a725cba0681d.png" alt=""></p>
 <p>对于多 CPU 系统，规则是相同的，除了多个 CPU 可以并发地运行多个线程。线程运行的顺序 <em>(在多个 CPU 上运行哪些线程)</em> 的确定方法与在单个 CPU 上完全相同 —— 最高优先级的就绪线程将在一个 CPU 上运行。对于优先级较低或等待时间较长的线程，内核在安排它们以避免缓存使用效率低下方面具有一定的灵活性。</p>
 <h2 id="内核状态"><a href="#内核状态" class="headerlink" title="内核状态"></a>内核状态</h2><p>我们一直在松散地讨论 “运行”、“就绪” 和 “阻塞” —— 现在让我们更加深入地来讨论这些线程状态。</p>
 <h3 id="运行态（RUNNING）"><a href="#运行态（RUNNING）" class="headerlink" title="运行态（RUNNING）"></a>运行态（RUNNING）</h3><p>运行状态仅仅意味着线程正在积极地消耗 CPU。在一个 SMP 系统上，会有多个线程在运行;在单处理器系统中，只有一个线程在运行。</p>
@@ -664,7 +668,7 @@
 <p>将问题 “分解” 成几个独立问题的能力是一个强大的概念。它也是系统的核心。一个系统由许多独立的模块组成，每个模块都有一定的职责。这些独立的模块是不同的进程。QSS 的人员使用这个技巧来开发独立的模块，而不需要模块相互依赖。模块之间唯一的 “依赖” 是通过少量定义良好的接口实现的。</p>
 <p>由于缺乏相互依赖关系，这自然会增强可维护性。因为每个模块都有自己的特定定义，所以修复一个模块相当容易 —— 尤其是在它不绑定到任何其他模块的情况下。</p>
 <p><strong>然而，可靠性可能是最重要的一点</strong>。进程就像房子一样，有一些定义明确的 “边界”。住在房子里的人很清楚自己什么时候在房子里，什么时候不在房子里。一个线程有一个很好的想法 —— 如果它在进程中访问内存，它可以存活。如果它超出了进程地址空间的范围，它就会被杀死。这意味着运行在不同进程中的两个线程可以有效地相互隔离。</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/bbe2b7f2-7b04-44a7-a5fe-712433286783.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=LeNN0yU22H6okm89xqzgNB5Afog%3D&Expires=1596263701" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/bbe2b7f2-7b04-44a7-a5fe-712433286783.png" alt=""></p>
 <p>进程地址空间由系统的进程管理器模块维护和执行。当一个进程启动时，进程管理器会分配一些内存给它，并启动一个正在运行的线程。内存被标记为该进程所拥有。</p>
 <p>这意味着如果进程中有多个线程，内核需要在它们之间进行上下文切换，这是一个非常高效的操作 —— 我们不需要改变地址空间，只需要改变哪个线程在运行。但是，如果我们必须切换到另一个进程中的另一个线程，那么进程管理器就会介入并导致地址空间的切换。不用担心，虽然在这个额外的步骤中会有一些额外的开销，但是在系统的作用下仍然是非常快的。</p>
 <h2 id="如何启动一个进程"><a href="#如何启动一个进程" class="headerlink" title="如何启动一个进程"></a>如何启动一个进程</h2><p>现在让我们将注意力稍微转向可用于处理线程和进程的函数调用 。<strong>任何线程都可以启动一个进程</strong>；唯一施加的限制是那些来自基本安全性的限制 <em>(文件访问、特权限制等)</em>。</p>
@@ -696,10 +700,10 @@
 <p>第一类问题很容易理解，把同一个问题分成四份并让四个 CPU 同时计算，这当然感觉会快上不少。</p>
 <p>第二类问题稍微麻烦一些，我们借助网络中一台「计算图形结果并发往远端的节点」用来演示，并进一步说明「为什么单核 CPU 系统使用多线程仍然是一个好主意」。</p>
 <p>假设我们有一个程序，需要先计算图形的部分 <em>(假设使用 “C” 表示)</em>，然后需要传输到远端 <em>(假设使用 “X” 表示)</em>，并最终等待远端回应做下一步操作 <em>(假设使用 “W” 表示)</em>，以下就是该程序在单核 CPU 下的使用情况：</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/fee14383-a2e8-484c-bcfa-f7ccf0845420.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=96sX3T0LAO51JoyM8McWrDSwAfA%253D&Expires=1596268074" alt="序列化的单核 CPU"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/fee14383-a2e8-484c-bcfa-f7ccf0845420.png" alt="序列化的单核 CPU"></p>
 <p>等一下！这浪费了我们许多宝贵的可用于计算的时间！因为等待远端回复的过程，CPU 做的仅仅是 “等待” 而已..</p>
 <p>如果我们使用多线程，应该可以更好地利用我们的 CPU，对吗？</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/99911d6b-3116-47ea-9f3d-8bca77e5abea.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=LfyDJ0c6Hs0I9C5jrhYp4C3nETg%253D&Expires=1596268344" alt="多线程单 CPU"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/99911d6b-3116-47ea-9f3d-8bca77e5abea.png" alt="多线程单 CPU"></p>
 <p>这样好得多，因为现在，即使第二个线程花了一些时间等待，我们也减少了计算所需的总时间。</p>
 <p>我们可以来简单计算一下。假设我们计算的时间记为 <em>T<sub>计算</sub><em>，发送和等待的时间分别记为：</em>T<sub>发送</sub></em> 和 <em>T<sub>等待</sub></em>。那么在第一种情况下，我们的总运行时间为：</p>
 <p>（<em>T<sub>计算</sub></em> + <em>T<sub>发送</sub></em> + <em>T<sub>等待</sub></em>） x <code>任务数量</code></p>
@@ -713,7 +717,7 @@
 <p>因为我们必须至少进行一次完整的计算，并且必须将数据传输到硬件之外 —— 尽管我们可以使用多线程覆盖计算周期，但只有一个硬件资源可以传输。</p>
 </blockquote>
 <p>现在，我们创建一个四线程的版本，并且在 <code>4</code> 核的系统上运行它，那么我们最终将得到如下图示的结果：</p>
-<p><img src="https://imgkr2.cn-bj.ufileos.com/b669fc01-c058-4df2-9853-73f0b5705c41.png?UCloudPublicKey=TOKEN_8d8b72be-579a-4e83-bfd0-5f6ce1546f13&Signature=QCugWjxGwC63F%252FZ11dL%252BlLs6zyQ%253D&Expires=1596269380" alt="4 核 4 CPU 图示"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/b669fc01-c058-4df2-9853-73f0b5705c41.png" alt="4 核 4 CPU 图示"></p>
 <p><strong>请注意，四个 CPU 的每个利用率均未得到充分利用</strong> <em>(如图示  “利用率” 中的灰色矩形所示)</em>。上图中有两个有趣的区域。当四个线程启动时，它们各自进行计算。不过，当线程在每次计算完成时，它们都在争夺传输硬件 <em>(图中的 “X” 部分 —— 一次只能进行一次传输)</em>。这算是在启动部分给了我们一个小异常。一旦线程经过此阶段，由于传输时间比计算周期的 <code>1/4</code> 小得多，因此它们自然会与传输硬件同步。首先，忽略小异常，该系统的特征在于以下公式：</p>
 <p>（<em>T<sub>计算</sub></em> + <em>T<sub>发送</sub></em> + <em>T<sub>等待</sub></em>） x <code>任务数量</code> / <code>CPU 数量</code></p>
 <p>该公式指出，在四个 CPU 上使用四个线程将比我们刚开始使用的单线程模型快大约 <code>4</code> 倍。</p>
@@ -732,7 +736,7 @@
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="https://imgkr.cn-bj.ufileos.com/ace97ed9-3cfd-425f-85e5-c1a1e5ca7d3f.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%90%E5%A5%BD%E6%96%87%E6%8E%A8%E8%8D%90%E3%80%91%E9%BB%91%E8%8E%93OS%E6%89%8B%E5%86%8C%E6%98%AF%E5%A6%82%E4%BD%95%E8%AF%A6%E7%BB%86%E9%98%90%E8%BF%B0%E5%BA%95%E5%B1%82%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B%E7%9A%84%EF%BC%9F/ace97ed9-3cfd-425f-85e5-c1a1e5ca7d3f.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -1016,6 +1020,10 @@
                 
                 <div class="card-action article-tags">
                     
+                    <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_blank">
+                        <span class="chip bg-color">多线程</span>
+                    </a>
+                    
                     <a href="/tags/MoreThanJava/" target="_blank">
                         <span class="chip bg-color">MoreThanJava</span>
                     </a>
@@ -1062,12 +1070,8 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/MoreThanJava/" class="post-category" target="_blank">
-                                    MoreThanJava
-                                </a>
-                            
-                            <a href="/categories/MoreThanJava/%E7%94%9F%E6%B4%BB/" class="post-category" target="_blank">
-                                    生活
+                            <a href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" class="post-category" target="_blank">
+                                    编程人生
                                 </a>
                             
                             
@@ -1081,8 +1085,12 @@
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/MoreThanJava/" target="_blank">
-                        <span class="chip bg-color">MoreThanJava</span>
+                    <a href="/tags/%E6%80%BB%E7%BB%93/" target="_blank">
+                        <span class="chip bg-color">总结</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" target="_blank">
+                        <span class="chip bg-color">编程人生</span>
                     </a>
                     
                 </div>
@@ -1240,7 +1248,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

@@ -372,10 +372,6 @@
                                 <span class="chip bg-color">学习笔记</span>
                             </a>
                         
-                            <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
-                                <span class="chip bg-color">代码规范</span>
-                            </a>
-                        
                     </div>
                     
                 </div>
@@ -384,12 +380,12 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
-                                Java基础
+                            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
+                                学习笔记
                             </a>
                         
-                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
-                                学习笔记
+                            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Java%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                Java进阶
                             </a>
                         
                     </div>
@@ -436,28 +432,29 @@
 </blockquote>
 <hr>
 <h2 id="建议1：不要在常量和变量中出现易混淆的字母"><a href="#建议1：不要在常量和变量中出现易混淆的字母" class="headerlink" title="建议1：不要在常量和变量中出现易混淆的字母"></a>建议1：不要在常量和变量中出现易混淆的字母</h2><p><strong>包名全小写，类名首字母全大写，常量全部大写并用下划线分隔，变量采用驼峰命名法命名等，</strong>这些都是最基本的Java编码规范，是每个Javaer都应熟知的规则，但是在变量的声明中药注意不要引入容易混淆的字母。看下面的例子，请思考以下程序打印的i等于多少：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client</span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">long</span> i <span class="token operator">=</span> 1l<span class="token punctuation">;</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"i 的两倍是："</span> <span class="token operator">+</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>肯定有人会说，这么简单的例子还能出错？运行结果肯定是22！实践是检验真理的唯一标准，将这一段程序拷贝到任一编译器中，run以下，你会发现运行结果是2，而不是22，难道是编译器显示有问题？少了一个“2”？</p>
-<p>因为赋值给i的值就是“1”，只是后面加了长整型变量的标示字母“l”（L的小写）而已。</p>
-<p><strong>如果字母和数字必须混合使用，字母“l”务必大写，字母“O”则增加注释。</strong></p>
-<hr>
-<h2 id="建议9：少用静态导入"><a href="#建议9：少用静态导入" class="headerlink" title="建议9：少用静态导入"></a>建议9：少用静态导入</h2><p>从Java 5开始引入了静态导入语法（import static），其目的是为了减少字符输入量，提高代码的可阅读性，以便更好的理解程序。先来看一个例子：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MathUtils</span><span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">//计算圆面积</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">double</span> <span class="token function">calCircleArea</span><span class="token punctuation">(</span><span class="token keyword">double</span> r<span class="token punctuation">)</span><span class="token punctuation">{</span>
-            <span class="token keyword">return</span> Math<span class="token punctuation">.</span>PI ＊ r ＊ r<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">//计算球面积</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">double</span> <span class="token function">calBallArea</span><span class="token punctuation">(</span><span class="token keyword">double</span> r<span class="token punctuation">)</span><span class="token punctuation">{</span>
-            <span class="token keyword">return</span> <span class="token number">4</span>＊ Math<span class="token punctuation">.</span>PI ＊ r ＊ r<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>这是很简单的数学工具类，我们在这两个计算面积的方法中都引入了java.lang.Math类（该类是默认导入的）中的PI（圆周率）常量，而Math这个类写在这里有点多余，特别是如果MathUtils中的方法比较多时，如果每次都要敲入Math这个类，繁琐且多余，<em>静态导入可解决此类问题，</em>使用静态导入后的程序如下：</p>
+<p>public class Client{<br>    public static void main(String[] args){<br>        long i = 1l;<br>        System.out.println(“i 的两倍是：” + (i + i));<br>    }<br>}</p>
+<pre><code>肯定有人会说，这么简单的例子还能出错？运行结果肯定是22！实践是检验真理的唯一标准，将这一段程序拷贝到任一编译器中，run以下，你会发现运行结果是2，而不是22，难道是编译器显示有问题？少了一个“2”？
+
+因为赋值给i的值就是“1”，只是后面加了长整型变量的标示字母“l”（L的小写）而已。
+
+**如果字母和数字必须混合使用，字母“l”务必大写，字母“O”则增加注释。**
+
+***
+
+## 建议9：少用静态导入
+从Java 5开始引入了静态导入语法（import static），其目的是为了减少字符输入量，提高代码的可阅读性，以便更好的理解程序。先来看一个例子：
+
+```java
+public class MathUtils{
+    //计算圆面积
+    public static double calCircleArea(double r){
+            return Math.PI ＊ r ＊ r;
+    }
+    //计算球面积
+    public static double calBallArea(double r){
+            return 4＊ Math.PI ＊ r ＊ r;
+    }
+}</code></pre><p>这是很简单的数学工具类，我们在这两个计算面积的方法中都引入了java.lang.Math类（该类是默认导入的）中的PI（圆周率）常量，而Math这个类写在这里有点多余，特别是如果MathUtils中的方法比较多时，如果每次都要敲入Math这个类，繁琐且多余，<em>静态导入可解决此类问题，</em>使用静态导入后的程序如下：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>Math<span class="token punctuation">.</span>PI<span class="token punctuation">;</span>
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MathUtils</span><span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">//计算圆面积</span>
@@ -845,70 +842,68 @@ valueOf产生的对象：<span class="token boolean">false</span>
 valueOf产生的对象：<span class="token boolean">false</span></code></pre>
 <p>很不可思议呀，数字127的比较结果竟然和其它两个数字不同，它的装箱动作所产生的对象竟然是同一个对象，valueOf产生的也是同一个对象，但是大于127的数字和128和555的比较过程中产生的却不是同一个对象，这是为什么？我们来一个一个解释。</p>
 <ul>
-<li><p><strong>(1)new产生的Integer对象</strong><br>new声明的就是要生成一个新的对象，没二话，这是两个对象，地址肯定不等，比较结果为false。</p>
-</li>
-<li><p><strong>(2)装箱生成的对象</strong><br>对于这一点，首先要说明的是装箱动作是通过valueOf方法实现的，也就是说后两个算法相同的，那结果肯定也是一样的，现在问题是：valueOf是如何生成对象的呢？我们来阅读以下Integer.valueOf的源码</p>
-<pre class=" language-java"><code class="language-java">  <span class="token comment" spellcheck="true">/**
-   * Returns an {@code Integer} instance representing the specified
-   * {@code int} value.  If a new {@code Integer} instance is not
-   * required, this method should generally be used in preference to
-   * the constructor {@link #Integer(int)}, as this method is likely
-   * to yield significantly better space and time performance by
-   * caching frequently requested values.
-   *
-   * This method will always cache values in the range -128 to 127,
-   * inclusive, and may cache other values outside of this range.
-   *
-   * @param  i an {@code int} value.
-   * @return an {@code Integer} instance representing {@code i}.
-   * @since  1.5
-   */</span>
-  <span class="token keyword">public</span> <span class="token keyword">static</span> Integer <span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-      <span class="token keyword">assert</span> IntegerCache<span class="token punctuation">.</span>high <span class="token operator">>=</span> <span class="token number">127</span><span class="token punctuation">;</span>
-      <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">>=</span> IntegerCache<span class="token punctuation">.</span>low <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;=</span> IntegerCache<span class="token punctuation">.</span>high<span class="token punctuation">)</span>
-          <span class="token keyword">return</span> IntegerCache<span class="token punctuation">.</span>cache<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token operator">-</span>IntegerCache<span class="token punctuation">.</span>low<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-      <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">}</span></code></pre>
-<p>这段代码的意思已经很明了了，如果是-128到127之间的int类型转换为Integer对象，则直接从cache数组中获得，那cache数组里是什么东西，JDK7的源代码如下：</p>
-<pre class=" language-java"><code class="language-java">  <span class="token comment" spellcheck="true">/**
-   * Cache to support the object identity semantics of autoboxing for values between
-   * -128 and 127 (inclusive) as required by JLS.
-   *
-   * The cache is initialized on first usage.  The size of the cache
-   * may be controlled by the -XX:AutoBoxCacheMax=&lt;size> option.
-   * During VM initialization, java.lang.Integer.IntegerCache.high property
-   * may be set and saved in the private system properties in the
-   * sun.misc.VM class.
-   */</span>
-
-  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">IntegerCache</span> <span class="token punctuation">{</span>
-      <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> low <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">128</span><span class="token punctuation">;</span>
-      <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> high<span class="token punctuation">;</span>
-      <span class="token keyword">static</span> <span class="token keyword">final</span> Integer cache<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-
-      <span class="token keyword">static</span> <span class="token punctuation">{</span>
-          <span class="token comment" spellcheck="true">// high value may be configured by property</span>
-          <span class="token keyword">int</span> h <span class="token operator">=</span> <span class="token number">127</span><span class="token punctuation">;</span>
-          String integerCacheHighPropValue <span class="token operator">=</span>
-              sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>VM<span class="token punctuation">.</span><span class="token function">getSavedProperty</span><span class="token punctuation">(</span><span class="token string">"java.lang.Integer.IntegerCache.high"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-          <span class="token keyword">if</span> <span class="token punctuation">(</span>integerCacheHighPropValue <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-              <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>integerCacheHighPropValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
-              i <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token number">127</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-              <span class="token comment" spellcheck="true">// Maximum array size is Integer.MAX_VALUE</span>
-              h <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">min</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> Integer<span class="token punctuation">.</span>MAX_VALUE <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token operator">-</span>low<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-          <span class="token punctuation">}</span>
-          high <span class="token operator">=</span> h<span class="token punctuation">;</span>
-
-          cache <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">[</span><span class="token punctuation">(</span>high <span class="token operator">-</span> low<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-          <span class="token keyword">int</span> j <span class="token operator">=</span> low<span class="token punctuation">;</span>
-          <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> k <span class="token operator">&lt;</span> cache<span class="token punctuation">.</span>length<span class="token punctuation">;</span> k<span class="token operator">++</span><span class="token punctuation">)</span>
-              cache<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span>j<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-      <span class="token punctuation">}</span>
-
-      <span class="token keyword">private</span> <span class="token function">IntegerCache</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
-  <span class="token punctuation">}</span></code></pre>
-</li>
+<li><strong>(1)new产生的Integer对象</strong><br>new声明的就是要生成一个新的对象，没二话，这是两个对象，地址肯定不等，比较结果为false。</li>
+<li><strong>(2)装箱生成的对象</strong><br>对于这一点，首先要说明的是装箱动作是通过valueOf方法实现的，也就是说后两个算法相同的，那结果肯定也是一样的，现在问题是：valueOf是如何生成对象的呢？我们来阅读以下Integer.valueOf的源码</li>
 </ul>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
+     * Returns an {@code Integer} instance representing the specified
+     * {@code int} value.  If a new {@code Integer} instance is not
+     * required, this method should generally be used in preference to
+     * the constructor {@link #Integer(int)}, as this method is likely
+     * to yield significantly better space and time performance by
+     * caching frequently requested values.
+     *
+     * This method will always cache values in the range -128 to 127,
+     * inclusive, and may cache other values outside of this range.
+     *
+     * @param  i an {@code int} value.
+     * @return an {@code Integer} instance representing {@code i}.
+     * @since  1.5
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Integer <span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">assert</span> IntegerCache<span class="token punctuation">.</span>high <span class="token operator">>=</span> <span class="token number">127</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>i <span class="token operator">>=</span> IntegerCache<span class="token punctuation">.</span>low <span class="token operator">&amp;&amp;</span> i <span class="token operator">&lt;=</span> IntegerCache<span class="token punctuation">.</span>high<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> IntegerCache<span class="token punctuation">.</span>cache<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token operator">-</span>IntegerCache<span class="token punctuation">.</span>low<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>这段代码的意思已经很明了了，如果是-128到127之间的int类型转换为Integer对象，则直接从cache数组中获得，那cache数组里是什么东西，JDK7的源代码如下：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
+     * Cache to support the object identity semantics of autoboxing for values between
+     * -128 and 127 (inclusive) as required by JLS.
+     *
+     * The cache is initialized on first usage.  The size of the cache
+     * may be controlled by the -XX:AutoBoxCacheMax=&lt;size> option.
+     * During VM initialization, java.lang.Integer.IntegerCache.high property
+     * may be set and saved in the private system properties in the
+     * sun.misc.VM class.
+     */</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">IntegerCache</span> <span class="token punctuation">{</span>
+        <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> low <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">128</span><span class="token punctuation">;</span>
+        <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> high<span class="token punctuation">;</span>
+        <span class="token keyword">static</span> <span class="token keyword">final</span> Integer cache<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">static</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// high value may be configured by property</span>
+            <span class="token keyword">int</span> h <span class="token operator">=</span> <span class="token number">127</span><span class="token punctuation">;</span>
+            String integerCacheHighPropValue <span class="token operator">=</span>
+                sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>VM<span class="token punctuation">.</span><span class="token function">getSavedProperty</span><span class="token punctuation">(</span><span class="token string">"java.lang.Integer.IntegerCache.high"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>integerCacheHighPropValue <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token function">parseInt</span><span class="token punctuation">(</span>integerCacheHighPropValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                i <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> <span class="token number">127</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">// Maximum array size is Integer.MAX_VALUE</span>
+                h <span class="token operator">=</span> Math<span class="token punctuation">.</span><span class="token function">min</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> Integer<span class="token punctuation">.</span>MAX_VALUE <span class="token operator">-</span> <span class="token punctuation">(</span><span class="token operator">-</span>low<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            high <span class="token operator">=</span> h<span class="token punctuation">;</span>
+
+            cache <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">[</span><span class="token punctuation">(</span>high <span class="token operator">-</span> low<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> j <span class="token operator">=</span> low<span class="token punctuation">;</span>
+            <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> k <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> k <span class="token operator">&lt;</span> cache<span class="token punctuation">.</span>length<span class="token punctuation">;</span> k<span class="token operator">++</span><span class="token punctuation">)</span>
+                cache<span class="token punctuation">[</span>k<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span>j<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">private</span> <span class="token function">IntegerCache</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
 <p><strong>cache是IntegerCache内部类的一个静态数组，容纳的是-128到127之间的Integer对象。</strong>通过valueOf产生包装对象时，如果int参数在-128到127之间，则直接从整型池中获得对象，不在该范围内的int类型则通过new生成包装对象。</p>
 <p>明白了这一点，要理解上面的输出结果就迎刃而解了，127的包装对象是直接从整型池中获得的，不管你输入多少次127这个数字，获得的对象都是同一个，那地址自然是相等的。而128、555超出了整型池范围，是通过new产生一个新的对象，地址不同，当然也就不相等了。</p>
 <p><strong>以上的理解也是整型池的原理，整型池的存在不仅仅提高了系统性能，同时也节约了内存空间，这也是我们使用整型池的原因，也就是在声明包装对象的时候使用valueOf生成，而不是通过构造函数来生成的原因。</strong>顺便提醒大家，在判断对象是否相等的时候，最好使用equals方法，避免使用”==”产生非预期效果。</p>
@@ -1210,7 +1205,7 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
 <span class="token punctuation">}</span></code></pre>
 <p>注意ArrayList后面的不通点：list1变量后面什么都没有，list2后面有一对{},list3后面有两个嵌套的{},这段程序能否编译呢？若能编译，那输结果是什么呢？</p>
 <p>答案是能编译，输出的是3个false。list1很容易理解，就是生命了ArrayList的实例对象，那list2和list3代表的是什么呢？</p>
-<p>(1)、<code>list2 = new ArrayList(){}</code>：list2代表的是一个匿名类的声明和赋值，它定义了一个继承于ArrayList的匿名类，只是没有任何覆写的方法而已，其代码类似于：　</p>
+<p>(1)、list2 = new ArrayList(){}：list2代表的是一个匿名类的声明和赋值，它定义了一个继承于ArrayList的匿名类，只是没有任何覆写的方法而已，其代码类似于：　</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 定义一个继承ArrayList的内部类</span>
     <span class="token keyword">class</span> <span class="token class-name">Sub</span> <span class="token keyword">extends</span> <span class="token class-name">ArrayList</span> <span class="token punctuation">{</span>
 
@@ -1218,7 +1213,7 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
 
     <span class="token comment" spellcheck="true">// 声明和赋值</span>
     List list2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sub</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>(2)、<code>list3 = new ArrayList(){{}}</code>：这个语句就有点奇怪了，带了两对{}，我们分开解释就明白了，这也是一个匿名类的定义，它的代码类似于：　</p>
+<p>(2)、<code>list3 = new ArrayList(){ {} }</code>：这个语句就有点奇怪了，带了两对{}，我们分开解释就明白了，这也是一个匿名类的定义，它的代码类似于：　</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 定义一个继承ArrayList的内部类</span>
     <span class="token keyword">class</span> <span class="token class-name">Sub</span> <span class="token keyword">extends</span> <span class="token class-name">ArrayList</span> <span class="token punctuation">{</span>
         <span class="token punctuation">{</span>
@@ -1274,6 +1269,9 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
 <p>还真说对了，p2.equals(p2)确实是false，看看我们的equals方法，它把第二个参数进行了剪切！也就是说比较的如下等式：</p>
 <p><code>&quot;张三  &quot;.equalsIgnoreCase(&quot;张三&quot;);</code></p>
 <p>注意前面的那个张三，是有空格的，那结果肯定是false了，错误也就此产生了，这是一个想做好事却办成了 “坏事” 的典型案例，它违背了equlas方法的自反性原则：对于任何非空引用x，x.equals(x)应该返回true，问题直到了，解决非常简单，只要把trim()去掉即可。注意解决的只是当前问题，该equals方法还存在其它问题。</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1539,12 +1537,12 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
-                                    Java基础
+                            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
+                                    学习笔记
                                 </a>
                             
-                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-category" target="_blank">
-                                    学习笔记
+                            <a href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Java%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    Java进阶
                                 </a>
                             
                             
@@ -1560,10 +1558,6 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
                     
                     <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank">
                         <span class="chip bg-color">学习笔记</span>
-                    </a>
-                    
-                    <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
-                        <span class="chip bg-color">代码规范</span>
                     </a>
                     
                 </div>
@@ -1601,8 +1595,8 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
-                                    计算机基础
+                            <a href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-category" target="_blank">
+                                    多线程
                                 </a>
                             
                             
@@ -1614,6 +1608,10 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
                     
                     <a href="/tags/%E7%BF%BB%E8%AF%91/" target="_blank">
                         <span class="chip bg-color">翻译</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_blank">
+                        <span class="chip bg-color">多线程</span>
                     </a>
                     
                 </div>
@@ -1771,7 +1769,7 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

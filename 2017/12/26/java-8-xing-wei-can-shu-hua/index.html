@@ -364,6 +364,10 @@ Java 8中新增的功能是自Java 1.0发布以来18年">
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
+                            <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                                <span class="chip bg-color">Java基础</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -398,7 +402,7 @@ Java 8中新增的功能是自Java 1.0发布以来18年">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        11 分
+                        12 分
                     </div>
                     
                 
@@ -483,7 +487,7 @@ List<span class="token operator">&lt;</span>Apple<span class="token operator">><
     <span class="token keyword">boolean</span> <span class="token function">test</span> <span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 <p>现在你可以使用ApplePredicate的多个实现代表 不同的选择标准了，比如：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083713.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-6b3b61b9e067c9c8.png" alt=""></p>
 <p>你可以把这些标准看作filter方法的不同行为。你刚做的这些和“策略设计模式”相关，它让你定义一族算法，把它们封装起来（称为“策略”），然后在运行时选择一个算法。在这里算法簇就是ApplePredicate，不同的策略就是AppleHeavyWeightPredicate和AppleGreenColorPredicate。</p>
 <p>但是，该怎么利用ApplePredicate的不同实现呢？你需要filterApples方法接受ApplePredicate对象，对Apple做条件测试。<strong>这就是行为参数化：让方法接受多种行为（或战略）作为参数，并在内部使用，完成不同的行为。</strong></p>
 <p>利用ApplePredicate改过之后，filter方法看起来就是这样的：</p>
@@ -502,7 +506,7 @@ List<span class="token operator">&lt;</span>Apple<span class="token operator">><
 <p>你已经做成了一件很酷的事：filterApples方法的行为取决于你通过ApplePredicate对象传递的代码，换句话说，你把filterApples方法的行为参数化了！</p>
 <h4 id="第五次尝试：使用匿名类"><a href="#第五次尝试：使用匿名类" class="headerlink" title="第五次尝试：使用匿名类"></a>第五次尝试：使用匿名类</h4><p>这样做起来已经很棒了，还有什么问题呢？</p>
 <p>我们都知道，人们都不愿意用那些很麻烦的功能或者概念，目前，当要把新的行为传递给filterApples方法的时候，你不得不声明好几个实现ApplePredicate接口的类，然后实例化好几个只会提到一次的ApplePredicate对象。下面这段程序总结了你目前看到的一切，这真的很啰嗦而且费时间：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083723.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-6757199f3264a67c.png" alt=""></p>
 <p>费这么大劲儿，真的没什么必要。能不能做得更好呢？Java有一个机制称为<em>匿名类</em>，它可以让你同时声明和实例化一个类，它可以帮助你进一步改善代码，让它变得更简洁：</p>
 <pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> redApples <span class="token operator">=</span> <span class="token function">filterApples</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Applepredicate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -517,9 +521,9 @@ List<span class="token operator">&lt;</span>Apple<span class="token operator">><
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>但是匿名类仍然不够好。</p>
 <p>第一，它往往很笨重，因为它占用了很多空间，还拿前面的例子来说：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083740.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-ade67d8d57a7c16b.png" alt=""></p>
 <p>第二，很多程序员觉得它用起来很让人费解，比如这里有一道经典的Java谜题，它让大多数程序员都措手不及，来试试看：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083748.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-8930c2b3599523d5.png" alt=""></p>
 <blockquote>
 <p>答案是5，因为this指的是包含它的Runnable，而不是外面的类MeaningOfThis。</p>
 </blockquote>
@@ -530,7 +534,7 @@ List<span class="token operator">&lt;</span>Apple<span class="token operator">><
 <pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> 
     <span class="token function">filterApples</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"red"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>不得不承认这代码看上去比先前干净很多，这很好，因为它看起来更像问题陈述本身了。我们现在已经解决了啰嗦的问题，下图总结了到目前为止的工作：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083755.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-b553d0d19c39c0aa.png" alt=""></p>
 <h4 id="第七次尝试：将List类型抽象化"><a href="#第七次尝试：将List类型抽象化" class="headerlink" title="第七次尝试：将List类型抽象化"></a>第七次尝试：将List类型抽象化</h4><p>在通往抽象的道路上，我们还可以更近一步。目前filterApples方法还只适用于Apple。你还可以将List类型抽象画，从而超越你眼前要处理的问题：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Predicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
     <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>T t<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -560,6 +564,10 @@ List<span class="token operator">&lt;</span>Integer<span class="token operator">
 </blockquote>
 <pre class=" language-java"><code class="language-java">button<span class="token punctuation">.</span><span class="token function">setOnAction</span><span class="token punctuation">(</span><span class="token punctuation">(</span>ActionEvent event<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> label<span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span><span class="token string">"Sent!!"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <p>看起来酷极了吧？不过想要熟练地运用，就要足够了解Lambda表达式，这将在下一节中再来说。</p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -839,6 +847,10 @@ List<span class="token operator">&lt;</span>Integer<span class="token operator">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
+                    <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">Java基础</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -891,6 +903,10 @@ List<span class="token operator">&lt;</span>Integer<span class="token operator">
                     
                     <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
+                    </a>
+                    
+                    <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">Java基础</span>
                     </a>
                     
                 </div>
@@ -1048,7 +1064,7 @@ List<span class="token operator">&lt;</span>Integer<span class="token operator">
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

@@ -367,8 +367,8 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java-Web/" target="_blank">
-                                <span class="chip bg-color">Java Web</span>
+                            <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                                <span class="chip bg-color">JavaWeb进阶</span>
                             </a>
                         
                             <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
@@ -387,8 +387,12 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                JavaWeb进阶
+                            </a>
+                        
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/" class="post-category" target="_blank">
+                                Spring Boot
                             </a>
                         
                     </div>
@@ -406,7 +410,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        6.7k
+                        6.8k
                     </div>
                     
 
@@ -429,11 +433,11 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173348.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-f17a042a65d2b5c5.png" alt=""></p>
 <blockquote>
 <p><strong>前言</strong>：在之前，我们已经完成了项目的基本准备，那么就可以开始后台开发了，突然又想到一个问题，就是准备的时候只是设计了前台的RESTful APIs，但是后台管理我们同样也是需要API的，那么就在这一篇里面一起实现了吧…</p>
 <ul>
-<li>前序文章链接：SpringBoot技术栈搭建个人博客【项目准备】：<a href="https://www.wmyskxz.com/2018/06/14/springboot-ji-zhu-zhan-da-jian-ge-ren-bo-ke-xiang-mu-zhun-bei/">https://www.wmyskxz.com/2018/06/14/springboot-ji-zhu-zhan-da-jian-ge-ren-bo-ke-xiang-mu-zhun-bei/</a></li>
+<li>前序文章链接：SpringBoot技术栈搭建个人博客【项目准备】：<a href="https://www.jianshu.com/p/0293368fe750" target="_blank" rel="noopener">https://www.jianshu.com/p/0293368fe750</a></li>
 </ul>
 </blockquote>
 <h1 id="一些设计上的调整"><a href="#一些设计上的调整" class="headerlink" title="一些设计上的调整"></a>一些设计上的调整</h1><p>在查了一些资料和吸收了一些评论给出良好的建议之后，我觉得有必要对一些设计进行一些调整：</p>
@@ -443,28 +447,28 @@
 <li>3）<strong>命名规范的问题</strong>：因为使用MyBatis逆向工程自动生成的时候，配置了一个<code>useActualColumnNames</code>使用表真正名称的东西，所以整得来生成POJO类基础字段有下划线，看着着实有点不爽，把它给干掉干掉…；</li>
 </ul>
 <h2 id="数据库调整"><a href="#数据库调整" class="headerlink" title="数据库调整"></a>数据库调整</h2><p>把字段规范了一下，并且删除了分类下是否有效的字段（感觉这种不经常变换的字段留着也没啥用干脆干掉..），所以调整为了下面这个样子（调整字段已标红）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173356.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-6e427cb9d9ba2070.png" alt=""></p>
 <p>然后重新使用生成器自动生成对应的文件，注意记得修改generatorConfig.xml文件中对应的数据库名称；</p>
 <h3 id="创建和修改时间的字段设置"><a href="#创建和修改时间的字段设置" class="headerlink" title="创建和修改时间的字段设置"></a>创建和修改时间的字段设置</h3><p>通过查资料发现其实我们可以通过直接设置数据库来自动更新我们的modified_by字段，并且可以像设置初始值那样给create_by和modified_by两个字段以当前时间戳设置默认值，这里具体以<strong>tbl_article_info</strong>这张表为例：</p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>tbl_article_info<span class="token punctuation">`</span> <span class="token punctuation">(</span>
-  <span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">bigint</span><span class="token punctuation">(</span><span class="token number">40</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span> <span class="token keyword">COMMENT</span> <span class="token string">'主键'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>title<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">''</span> <span class="token keyword">COMMENT</span> <span class="token string">'文章标题'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>summary<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">300</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">''</span> <span class="token keyword">COMMENT</span> <span class="token string">'文章简介，默认100个汉字以内'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>is_top<span class="token punctuation">`</span> <span class="token keyword">tinyint</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'0'</span> <span class="token keyword">COMMENT</span> <span class="token string">'文章是否置顶，0为否，1为是'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>traffic<span class="token punctuation">`</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'0'</span> <span class="token keyword">COMMENT</span> <span class="token string">'文章访问量'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>create_by<span class="token punctuation">`</span> <span class="token keyword">datetime</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">COMMENT</span> <span class="token string">'创建时间'</span><span class="token punctuation">,</span>
-  <span class="token punctuation">`</span>modified_by<span class="token punctuation">`</span> <span class="token keyword">datetime</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">ON</span> <span class="token keyword">UPDATE</span> <span class="token keyword">CURRENT_TIMESTAMP</span> <span class="token keyword">COMMENT</span> <span class="token string">'修改日期'</span><span class="token punctuation">,</span>
-  <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8<span class="token punctuation">;</span></code></pre>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_article_info` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '文章标题',
+  `summary` varchar(300) NOT NULL DEFAULT '' COMMENT '文章简介，默认100个汉字以内',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0' COMMENT '文章是否置顶，0为否，1为是',
+  `traffic` int(10) NOT NULL DEFAULT '0' COMMENT '文章访问量',
+  `create_by` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `modified_by` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
 <p>我们通过设置<code>DEFAULT</code>为<code>CURRENT_TIMESTAMP</code>，然后给modified_by字段多添加了一句<code>ON UPDATE CURRENT_TIMESTAMP</code>，这样它就会在更新的时候将该字段的值设置为更新时间，这样我们就不用在后台关心这两个值了，也少写了一些代码（其实是写代码的时候发现可以这样偷懒..hhh…）；</p>
 <h2 id="RESTful-APIs重新设计"><a href="#RESTful-APIs重新设计" class="headerlink" title="RESTful APIs重新设计"></a>RESTful APIs重新设计</h2><p>我们需要把一些不能够暴露给前台的API收回，然后再设计一下后台的API，捣鼓了一下，最后大概是这个样子了：</p>
 <p><strong>后台Restful APIs：</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173403.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-95d69603a2207d32.png" alt=""></p>
 <p><strong>前台开放RESful APIs：</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173416.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-b63cc4e27d093611.png" alt=""></p>
 <p>这些API只是用来和前端交互的接口，另外一些关于日志啊之类的东西就直接在后台写就行了，OK，这样就爽多了，可以开始着手写代码了；</p>
 <h1 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h1><p>随着配置内容的增多，我逐渐的想要放弃.yml的配置文件，主要的一点是这东西不好对内容进行分类（下图是简单配置了一些基本文件后的.yml和.properties文件的对比）..</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173424.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-2ae8b02bf2d84418.png" alt=""></p>
 <p>最后还是用回.properties文件吧，不分类还是有点难受</p>
 <h2 id="编码设置"><a href="#编码设置" class="headerlink" title="编码设置"></a>编码设置</h2><p>我们首先需要解决的是中文乱码的问题，对应<strong>GET请求</strong>，我们可以通过修改Tomcat的配置文件【server.xml】来把它默认的编码格式改为UTF-8，而对于<strong>POST请求</strong>，我们需要统一配置一个拦截器一样的东西把请求的编码统一改成UTF-8：</p>
 <pre class=" language-properties"><code class="language-properties"><span class="token comment" spellcheck="true">## ——————————编码设置——————————</span>
@@ -557,7 +561,7 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>configuration</span><span class="token punctuation">></span></span></code></pre>
 <p>在Spring Boot中你只要按照规则组织文件名，就能够使得配置文件能够被正确加载，并且官方推荐优先使用带有<code>-spring</code>的文件名作为日志的配置（如上面使用的<code>logback-spring.xml</code>，而不是<code>logback.xml</code>），满足这样的命名规范并且保证文件在<code>src/main/resources</code>下就好了；</p>
 <h3 id="第二步：重启项目检查是否成功"><a href="#第二步：重启项目检查是否成功" class="headerlink" title="第二步：重启项目检查是否成功"></a>第二步：重启项目检查是否成功</h3><p>我们定义的目录位置为<code>/log/wmyskxz/</code>，但是在项目的根目录下并没有发现这样的目录，反而是在当前盘符的根目录..不是很懂这个规则..总之是成功了的..</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173434.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-4908c91669a40e06.png" alt=""></p>
 <p>打开是密密麻麻一堆跟控制台一样的【info】级别的信息，因为这个系统本身就比较简单，所以就没有必要去搞什么文本切割之类的东西了，ok..日志算是配置完成；</p>
 <blockquote>
 <p>实际测试了一下，上线之后肯定需要调整输出级别的，不然日志文件就会特别大…</p>
@@ -1100,7 +1104,7 @@
 <span class="token punctuation">}</span></code></pre>
 <p>其实就是添加上<code>@Bean</code>注解让ForeInterceptor提前加载；</p>
 <h2 id="3）数据库sys-log表中operate-by字段的坑"><a href="#3）数据库sys-log表中operate-by字段的坑" class="headerlink" title="3）数据库sys_log表中operate_by字段的坑"></a>3）数据库sys_log表中operate_by字段的坑</h2><p>当时设计表的时候，就只是单纯的想要保存一下用户使用的浏览器是什么，其实当时并不知道应该怎么获取获取到的东西又是什么，<strong>只是觉得</strong>保存浏览器20个字段够了，但后来发现这是很蠢萌的…所以不得不调整数据库的字段长度，好在只需要单方面调整数据库的字段长度就好了：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713173506.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91%E3%80%91/7896890-6d3a4d6c82637c2a.png" alt=""></p>
 <h2 id="4）保存文章的方式的坑"><a href="#4）保存文章的方式的坑" class="headerlink" title="4）保存文章的方式的坑"></a>4）保存文章的方式的坑</h2><p>因为我想要在数据库中保存的是md源码，而返回前台前端希望的是直接拿到html代码，这样就能很方便的输出了，所以这要怎么做呢？找到一篇参考文章：<a href="https://my.oschina.net/u/566591/blog/1535380" target="_blank" rel="noopener">https://my.oschina.net/u/566591/blog/1535380</a></p>
 <p>我们不要搞那么复杂的封装，只要简单弄一个工具类就可以了，在【util】包下新建一个【Markdown2HtmlUtil】：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
@@ -1145,6 +1149,9 @@
 <hr>
 <h1 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h1><p>关于统计啊日志类的Controller还没有开发，RESful API也没有设计，这里就先发布文章了，因为好像时间有点紧，后台的页面暂时可能开发不完，准备直接开始前台页面显示的开发（主要是自己对前端不熟悉还要学习..），这里对后台进行一个简单的总结：</p>
 <p>其实发现当数据库设计好了，RESful APIs设计好了之后，<strong>后台的任务变得非常明确</strong>，开发起来也就思路很清晰了，只是自己还是缺少一些必要的经验，如对一些通用方法的抽象/层与层之间数据交互的典型设计之类的东西，特别是一些<strong>安全方面</strong>的东西，网上的资料也比较少一些，也是自己需要学习的地方；</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1410,8 +1417,16 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/" class="post-category" target="_blank">
+                                    Spring Boot
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/%E9%A1%B9%E7%9B%AE/" class="post-category" target="_blank">
+                                    项目
                                 </a>
                             
                             
@@ -1425,8 +1440,12 @@
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%80%BB%E7%BB%93/" target="_blank">
+                        <span class="chip bg-color">总结</span>
                     </a>
                     
                     <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
@@ -1475,8 +1494,12 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
+                                </a>
+                            
+                            <a href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/" class="post-category" target="_blank">
+                                    Spring Boot
                                 </a>
                             
                             
@@ -1490,8 +1513,8 @@
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
                     </a>
                     
                     <a href="/tags/%E9%A1%B9%E7%9B%AE/" target="_blank">
@@ -1657,7 +1680,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

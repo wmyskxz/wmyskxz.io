@@ -365,8 +365,8 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java/" target="_blank">
-                                <span class="chip bg-color">Java</span>
+                            <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                                <span class="chip bg-color">Java基础</span>
                             </a>
                         
                     </div>
@@ -419,17 +419,17 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>当我们使用计算机时，可以同时做许多事情，例如一边打游戏一边听音乐。这是因为操作系统支持并发任务，从而使得这些工作得以同时进行。</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当我们使用计算机时，可以同时做许多事情，例如一边打游戏一边听音乐。这是因为操作系统支持并发任务，从而使得这些工作得以同时进行。</p>
 <blockquote>
-<p><strong>那么提出一个问题：</strong>如果我们要实现一个程序能一边听音乐一边玩游戏怎么实现呢？<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084351.png" alt=""><br>我们使用了循环来模拟过程，因为播放音乐和打游戏都是连续的，但是结果却不尽人意，因为函数体总是要执行完之后才能返回。那么到底怎么解决这个问题？下面来说。</p>
+<p><strong>那么提出一个问题：</strong>如果我们要实现一个程序能一边听音乐一边玩游戏怎么实现呢？<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-b6c28e4f108ec11d.png" alt="提出的问题"><br>我们使用了循环来模拟过程，因为播放音乐和打游戏都是连续的，但是结果却不尽人意，因为函数体总是要执行完之后才能返回。那么到底怎么解决这个问题？下面来说。</p>
 </blockquote>
-<h1 id="并行与并发"><a href="#并行与并发" class="headerlink" title="并行与并发"></a>并行与并发</h1><p>并行性和并发性是既相似又有区别的两个概念。</p>
+<h2 id="并行与并发"><a href="#并行与并发" class="headerlink" title="并行与并发"></a>并行与并发</h2><p>并行性和并发性是既相似又有区别的两个概念。</p>
 <p><strong>并行性是指两个或多个事件在同一时刻发生。而并发性是指连个或多个事件在同一时间间隔内发生。</strong>在多道程序环境下，并发性是指在一段时间内宏观上有多个程序在同时运行，但在单处理机环境下（一个处理器），每一时刻却仅能有一道程序执行，故微观上这些程序只能是分时地交替执行。例如，在1秒钟时间内，0-15ms程序A运行；15-30ms程序B运行；30-45ms程序C运行；45-60ms程序D运行，<strong>因此可以说，在1秒钟时间间隔内，宏观上有四道程序在同时运行，但微观上，程序A、B、C、D是分时地交替执行的。</strong></p>
 <p>如果在计算机系统中有多个处理机，这些可以并发执行的程序就可以被分配到多个处理机上，实现并发执行，即利用每个处理机爱处理一个可并发执行的程序。这样，多个程序便可以同时执行。<strong>以此就能提高系统中的资源利用率，增加系统的吞吐量。</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084357.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-1fce0d8c98910442.png" alt="并发和并行"></p>
 <h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p><strong>进程是指一个内存中运行的应用程序。</strong>一个应用程序可以同时启动多个进程，那么上面的问题就有了解决的思路：<strong>我们启动两个进程，一个用来打游戏，一个用来播放音乐。</strong>这当然是一种解决方案，但是想象一下，如果一个应用程序需要执行的任务非常多，<em>例如LOL游戏吧，光是需要播放的音乐就有非常多，人物本身的语音，技能的音效，游戏的背景音乐，塔攻击的声音等等等，还不用说游戏本身，就光播放音乐就需要创建许多许多的进程，</em>而进程本身是一种非常消耗资源的东西，这样的设计显然是不合理的。更何况大多数的操作系统都不需要一个进程访问其他进程的内存空间，<strong>也就是说，进程之间的通信很不方便，此时我们就得引入“线程”这门技术，来解决这个问题。</strong></p>
 <p><strong>线程是指进程中的一个执行任务（控制单元），一个进程可以同时并发运行多个线程。</strong>打开我们的任务管理器，在【查看】里面点击【选择列】，有一个线程数的勾选项，找到并勾选，可以看到：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084403.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-072d37a7ca6863d9.png" alt="任务管理器"></p>
 <h2 id="进程和线程的区别："><a href="#进程和线程的区别：" class="headerlink" title="进程和线程的区别："></a>进程和线程的区别：</h2><p><strong>进程：</strong>有独立的内存空间，进程中的数据存放空间（堆空间和栈空间）是独立的，至少有一个线程。</p>
 <p><strong>线程：</strong>堆空间是共享的，栈空间是独立的，线程消耗的资源也比进程小，相互之间可以影响的，又称为轻型进程或进程元。</p>
 <p>因为一个进程中的多个线程是并发运行的，那么从微观角度上考虑也是有先后顺序的，那么<strong>哪个线程执行完全取决于CPU调度器(JVM来调度)</strong>，程序员是控制不了的。我们可以把多线程并发性看作是多个线程在瞬间抢CPU资源，谁抢到资源谁就运行，这也造就了<strong>多线程的随机性。</strong>下面我们将看到更生动的例子。</p>
@@ -458,10 +458,12 @@
 <span class="token number">5</span><span class="token operator">|</span> 总共需要<span class="token number">12</span>秒</code></pre>
 <p>CPU等待第一个文件被读取完。然后开始读取第二个文件。当第二文件在被读取的时候，CPU会去处理第一个文件。记住，在等待磁盘读取文件的时候，CPU大部分时间是空闲的。</p>
 <p><strong>总的说来，CPU能够在等待IO的时候做一些其他的事情。</strong>这个不一定就是磁盘IO。它也可以是网络的IO，或者用户输入。通常情况下，网络和磁盘的IO比CPU和内存的IO慢的多。</p>
-<h3 id="（2）程序设计更简单"><a href="#（2）程序设计更简单" class="headerlink" title="（2）程序设计更简单"></a>（2）程序设计更简单</h3><p>在单线程应用程序中，如果你想编写程序手动处理上面所提到的读取和处理的顺序，你必须记录每个文件读取和处理的状态。相反，你可以启动两个线程，每个线程处理一个文件的读取和操作。线程会在等待磁盘读取文件的过程中被阻塞。在等待的时候，其他的线程能够使用CPU去处理已经读取完的文件。其结果就是，磁盘总是在繁忙地读取不同的文件到内存中。这会带来磁盘和CPU利用率的提升。而且每个线程只需要记录一个文件，因此这种方式也很容易编程实现。</p>
+<p>###（2）程序设计更简单</p>
+<p>在单线程应用程序中，如果你想编写程序手动处理上面所提到的读取和处理的顺序，你必须记录每个文件读取和处理的状态。相反，你可以启动两个线程，每个线程处理一个文件的读取和操作。线程会在等待磁盘读取文件的过程中被阻塞。在等待的时候，其他的线程能够使用CPU去处理已经读取完的文件。其结果就是，磁盘总是在繁忙地读取不同的文件到内存中。这会带来磁盘和CPU利用率的提升。而且每个线程只需要记录一个文件，因此这种方式也很容易编程实现。</p>
 <h3 id="（3）程序响应更快"><a href="#（3）程序响应更快" class="headerlink" title="（3）程序响应更快"></a>（3）程序响应更快</h3><p>有时我们会编写一些较为复杂的代码（这里的复杂不是说复杂的算法，而是复杂的业务逻辑），例如，一笔订单的创建，它包括插入订单数据、生成订单赶快找、发送邮件通知卖家和记录货品销售数量等。用户从单击“订购”按钮开始，就要等待这些操作全部完成才能看到订购成功的结果。但是这么多业务操作，如何能够让其更快地完成呢？</p>
 <p>在上面的场景中，可以使用多线程技术，即将数据一致性不强的操作派发给其他线程处理（也可以使用消息队列），如生成订单快照、发送邮件等。<strong>这样做的好处是响应用户请求的线程能够尽可能快地处理完成，缩短了响应时间，提升了用户体验。</strong></p>
-<h4 id="多线程的还有一些优势也显而易见："><a href="#多线程的还有一些优势也显而易见：" class="headerlink" title="多线程的还有一些优势也显而易见："></a>多线程的还有一些优势也显而易见：</h4><blockquote>
+<p>####多线程的还有一些优势也显而易见：</p>
+<blockquote>
 <ul>
 <li>①  进程之前不能共享内存，而线程之间共享内存(堆内存)则很简单。</li>
 <li>② 系统创建进程时需要为该进程重新分配系统资源,创建线程则代价小很多,因此实现多任务并发时,多线程效率更高.</li>
@@ -473,21 +475,20 @@
 <blockquote>
 <p>这就像我们同时读两本书，当我们在读一本英文的技术书时，发现某个单词不认识，于是打开中英文字典，但是在放下英文技术书之前，大脑必须先记住这本书独到了多少页的多少行，等查完单词之后，能够继续读这本书。这样的切换是会影响读书效率的，同样上下文切换也会影响多线程的执行速度。</p>
 </blockquote>
-<h2 id="创建线程的两种方式"><a href="#创建线程的两种方式" class="headerlink" title="创建线程的两种方式"></a>创建线程的两种方式</h2><h3 id="继承Thead类："><a href="#继承Thead类：" class="headerlink" title="继承Thead类："></a>继承Thead类：</h3><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084456.png" alt=""></p>
+<h2 id="创建线程的两种方式"><a href="#创建线程的两种方式" class="headerlink" title="创建线程的两种方式"></a>创建线程的两种方式</h2><h3 id="继承Thead类："><a href="#继承Thead类：" class="headerlink" title="继承Thead类："></a>继承Thead类：</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-a8667d8f1d94e5b8.png" alt="继承Thread类"></p>
 <p>运行结果发现打游戏和播放音乐交替出现，说明已经成功了。</p>
-<h3 id="实现Runnable接口："><a href="#实现Runnable接口：" class="headerlink" title="实现Runnable接口："></a>实现Runnable接口：</h3><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084504.png" alt=""></p>
-<p>也能完成效果。</p>
+<h3 id="实现Runnable接口："><a href="#实现Runnable接口：" class="headerlink" title="实现Runnable接口："></a>实现Runnable接口：</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-66383da0574a934f.png" alt="实现Runnable接口"><br>也能完成效果。</p>
 <p>以上就是传统的两种创建线程的方式，事实上还有第三种，我们后边再讲。</p>
 <h2 id="多线程一定快吗？"><a href="#多线程一定快吗？" class="headerlink" title="多线程一定快吗？"></a>多线程一定快吗？</h2><p>先来一段代码，通过并行和串行来分别执行累加操作，分析：下面的代码并发执行一定比串行执行快吗？</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084514.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-5e780c2fde5128e2.png" alt="多线程一定快吗？"></p>
 <p>以下是我测试的结果，可以看出，当不超过1百万的时候，并行是明显比串行要慢的，为什么并发执行的速度会比串行慢呢？这是因为线程有创建和上下文切换的开销。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084524.png" alt="测试结果"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-833820aebe7e9445.png" alt="测试结果"></p>
 <h2 id="继承Thread类还是实现Runnable接口？"><a href="#继承Thread类还是实现Runnable接口？" class="headerlink" title="继承Thread类还是实现Runnable接口？"></a>继承Thread类还是实现Runnable接口？</h2><h3 id="吃苹果比赛"><a href="#吃苹果比赛" class="headerlink" title="吃苹果比赛"></a>吃苹果比赛</h3><p>想象一个这样的例子：给出一共50个苹果，让三个同学一起来吃，并且给苹果编上号码，让他们吃的时候顺便要说出苹果的编号：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084542.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-1bec6d919415871c.png" alt="吃苹果比赛"></p>
 <p>运行结果可以看到，使用继承方式实现，每一个线程都吃了50个苹果。<strong>这样的结果显而易见：是因为显式地创建了三个不同的Person对象，而每个对象在堆空间中有独立的区域来保存定义好的50个苹果。</strong></p>
 <p>而使用实现方式则满足要求，<strong>这是因为三个线程共享了同一个Apple对象，而对象中的num数量是一定的。</strong></p>
 <blockquote>
-<p>所以可以简单总结出继承方式和实现方式的区别：<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084548.png" alt=""></p>
+<p>所以可以简单总结出继承方式和实现方式的区别：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-f0793fe663aa2754.png" alt="两种方式的区别"></p>
 </blockquote>
 <p>对于这两种方式哪种好并没有一个确定的答案，它们都能满足要求。就我个人意见，我更倾向于实现Runnable接口这种方法。因为线程池可以有效的管理实现了Runnable接口的线程，如果线程池满了，新的线程就会排队等候执行，直到线程池空闲出来为止。而如果线程是通过实现Thread子类实现的，这将会复杂一些。</p>
 <p>有时我们要同时融合实现Runnable接口和Thread子类两种方式。<strong>例如，实现了Thread子类的实例可以执行多个实现了Runnable接口的线程。一个典型的应用就是线程池。</strong></p>
@@ -496,7 +497,7 @@
 <span class="token number">2</span><span class="token operator">|</span> newThread<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//should be start();</span></code></pre>
 <p>起初你并不会感觉到有什么不妥，因为run()方法的确如你所愿的被调用了。但是，事实上,<strong>run()方法并非是由刚创建的新线程所执行的，而是被创建新线程的当前线程所执行了。</strong>也就是被执行上面两行代码的线程所执行的。想要让创建的新线程执行run()方法，必须调用新线程的start方法。</p>
 <h2 id="吃苹果比赛的问题：线程不安全问题"><a href="#吃苹果比赛的问题：线程不安全问题" class="headerlink" title="吃苹果比赛的问题：线程不安全问题"></a>吃苹果比赛的问题：线程不安全问题</h2><p>尽管，Java并不保证线程的顺序执行，具有随机性，但吃苹果比赛的案例运行多次也并没有发现什么太大的问题。这并不是因为程序没有问题，而只是问题出现的不够明显，为了让问题更加明显，我们使用Thread.sleep()方法（经常用来模拟网络延迟）来让线程休息10ms，让其他线程去抢资源。<strong>（注意：在程序中并不是使用Thread.sleep(10)之后,程序才出现问题,而是使用之后,问题更明显.）</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084556.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-36d8665713e7af89.png" alt="吃苹果比赛中的问题"></p>
 <p><strong>为什么会出现这样的错误呢？</strong></p>
 <p>先来分析第一种错误：为什么会吃重复的苹果呢？就拿B和C都吃了编号为47的苹果为例吧：</p>
 <blockquote>
@@ -515,7 +516,7 @@
 </blockquote>
 <p><strong>归根结底是因为没有任何操作来限制线程来获取相同的资源并对他们进行操作，这就造成了线程安全性问题。</strong></p>
 <blockquote>
-<p>如果我们把打印和减一的操作分成两个步骤，会更加明显：<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084621.png" alt=""><br>ABC三个线程同时打印了50的苹果，然后同时做出减一操作。</p>
+<p>如果我们把打印和减一的操作分成两个步骤，会更加明显：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-70ac6aba006c7adf.png" alt="拆成两个步骤"><br>ABC三个线程同时打印了50的苹果，然后同时做出减一操作。</p>
 </blockquote>
 <p><strong>像这样的原子操作，是不允许分步骤进行的，必须保证同步进行，不然可能会引发不可设想的后果。</strong></p>
 <p>要解决上述多线程并发访问一个资源的安全性问题，就需要<strong>引入线程同步</strong>的概念。</p>
@@ -523,10 +524,10 @@
 <p>为了帮助编程人员实现这个临界区，Java（以及大多数编程语言）提供了同步机制，当一个线程试图访问一个临界区时，它将使用一种同步机制来查看是不是已经有其他线程进入临界区。如果没有其他线程进入临界区，他就可以进入临界区。如果已经有线程进入了临界区，它就被同步机制挂起，直到进入的线程离开这个临界区。如果在等待进入临界区的线程不止一个，JVM会选择其中的一个，其余的将继续等待。</p>
 <h3 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h3><p>如果一个对象已用synchronized关键字声明，那么只有一个执行线程被允许访问它。使用<strong>synchronized</strong>的好处显而易见：保证了多线程并发访问时的同步操作，避免线程的安全性问题。但是坏处是：<strong>使用synchronized的方法/代码块的性能比不用要低一些。所以好的做法是：尽量减小synchronized的作用域。</strong></p>
 <blockquote>
-<p>我们还是先来解决吃苹果的问题，考虑一下synchronized关键字应该加在哪里呢？<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084631.png" alt=""><br>发现如果还再把synchronized关键字加在if里面的话，0和-1又会出来了。这其实是因为当ABC同是进入到if语句中，等待临界区释放的时，拿到1编号的线程已经又把num减一操作了，而此时最后一个等待临界区的进程拿到的就会是-1了。</p>
+<p>我们还是先来解决吃苹果的问题，考虑一下synchronized关键字应该加在哪里呢？<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-35c4ba08104cd881.png" alt="synchronized应放在哪里？"><br>发现如果还再把synchronized关键字加在if里面的话，0和-1又会出来了。这其实是因为当ABC同是进入到if语句中，等待临界区释放的时，拿到1编号的线程已经又把num减一操作了，而此时最后一个等待临界区的进程拿到的就会是-1了。</p>
 </blockquote>
 <h3 id="同步锁（Lock）"><a href="#同步锁（Lock）" class="headerlink" title="同步锁（Lock）"></a>同步锁（Lock）</h3><p>Lock机制提供了比synchronized代码块和synchronized方法更广泛的锁定操作,同步代码块/同步方法具有的功能Lock都有,除此之外更强大,更体现面向对象。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714084640.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-09f6539ee1859746.png" alt="摘自JDK1.6中文版说明的代码"></p>
 <blockquote>
 <p>参考资料：</p>
 <ul>
@@ -534,6 +535,10 @@
 <li>《Java并发编程的艺术》</li>
 <li>《Java 7并发编程实战手册》</li>
 </ul>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
 </blockquote>
 
             </div>
@@ -748,7 +753,7 @@
         repo: 'wmyskxz.github.io',
         owner: 'wmyskxz',
         admin: "wmyskxz",
-        id: '2017-10-31T08-19-00',
+        id: '2017-10-31T13-50-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -797,8 +802,8 @@
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
-                                    计算机基础
+                            <a href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" class="post-category" target="_blank">
+                                    多线程
                                 </a>
                             
                             
@@ -810,6 +815,10 @@
                     
                     <a href="/tags/%E7%BF%BB%E8%AF%91/" target="_blank">
                         <span class="chip bg-color">翻译</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" target="_blank">
+                        <span class="chip bg-color">多线程</span>
                     </a>
                     
                 </div>
@@ -864,8 +873,8 @@
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java/" target="_blank">
-                        <span class="chip bg-color">Java</span>
+                    <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">Java基础</span>
                     </a>
                     
                 </div>
@@ -1023,7 +1032,7 @@
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

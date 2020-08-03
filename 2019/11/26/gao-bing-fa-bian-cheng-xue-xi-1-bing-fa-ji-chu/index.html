@@ -6,12 +6,13 @@
     <meta charset="utf-8">
     <meta name="keywords" content="高并发编程学习(1)——并发基础, 我没有三颗心脏的博客">
     <meta name="description" content="
+
+为更良好的阅读体验，请访问原文：传送门
+
 一、前言
 当我们使用计算机时，可以同时做许多事情，例如一边打游戏一边听音乐。这是因为操作系统支持并发任务，从而使得这些工作得以同时进行。
 
-那么提出一个问题：如果我们要实现一个程序能一边听音乐一边玩游戏怎么实现呢？
-
-public cla">
+那么提出一个问题：如果我们要实现一个程序能一边听音乐一">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -404,14 +405,14 @@ public cla">
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        6.1k
+                        6.2k
                     </div>
                     
 
                     
                     <div class="info-break-policy">
                         <i class="fa fa-clock-o fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                        21 分
+                        22 分
                     </div>
                     
                 
@@ -427,7 +428,10 @@ public cla">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126222857.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-1a6bb9de6dadad3a.png" alt=""></p>
+<blockquote>
+<p>为更良好的阅读体验，请访问原文：<a href="https://www.wmyskxz.com/2019/11/26/gao-bing-fa-bian-cheng-xue-xi-1-bing-fa-ji-chu/">传送门</a></p>
+</blockquote>
 <h1 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h1><hr>
 <p>当我们使用计算机时，可以同时做许多事情，例如一边打游戏一边听音乐。这是因为操作系统支持并发任务，从而使得这些工作得以同时进行。</p>
 <ul>
@@ -455,14 +459,14 @@ public cla">
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <p>我们使用了循环来模拟过程，因为播放音乐和打游戏都是连续的，但是结果却不尽人意，因为函数体总是要执行完之后才能返回。那么到底怎么解决这个问题？</p>
-<h2 id="并行与并发"><a href="#并行与并发" class="headerlink" title="并行与并发"></a>并行与并发</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126222913.png" alt=""></p>
+<h2 id="并行与并发"><a href="#并行与并发" class="headerlink" title="并行与并发"></a>并行与并发</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-1b1557d40f0b894c.png" alt=""></p>
 <p>并行性和并发性是既相似又有区别的两个概念。</p>
 <p><strong>并行性是指两个或多个事件在同一时刻发生。而并发性是指两个或多个事件在同一时间间隔内发生。</strong></p>
 <p>在多道程序环境下，并发性是指在一段时间内宏观上有多个程序在同时运行，但在单处理机环境下（一个处理器），每一时刻却仅能有一道程序执行，故微观上这些程序只能是分时地交替执行。例如，在 1 秒钟时间内，0 - 15 ms 程序 A 运行；15 - 30 ms 程序 B 运行；30 - 45 ms 程序 C 运行；45 - 60 ms 程序 D 运行，因此可以说，在 1 秒钟时间间隔内，宏观上有四道程序在同时运行，但微观上，程序 A、B、C、D 是分时地交替执行的。</p>
 <p>如果在计算机系统中有多个处理机，这些可以并发执行的程序就可以被分配到多个处理机上，实现并发执行，即利用每个处理机爱处理一个可并发执行的程序。这样，多个程序便可以同时执行。以此就能提高系统中的资源利用率，增加系统的吞吐量。</p>
-<h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p><strong>进程是指一个内存中运行的应用程序</strong>。一个应用程序可以同时启动多个线程，那么上面的问题就有了解决的思路：<strong>我们启动两个进程，一个用来打游戏，一个用来播放音乐</strong>。这当然是一种解决方案，但是想象一下，如果一个应用程序需要执行的任务非常多，例如 LOL 游戏吧，光是需要播放的音乐就有非常多，人物本身的语音，技能的音效，游戏的背景音乐，塔攻击的声音等等等，还不用说游戏本身，就光播放音乐就需要创建许多许多的进程，而进程本身是一种非常消耗资源的东西，这样的设计显然是不合理的。更何况大多数的操作系统都不需要一个进程访问其他进程的内存空间，<strong>也就是说，进程之间的通信很不方便，此时我们就得引入“线程”这门技术，来解决这个问题。</strong></p>
+<h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p><strong>进程是指一个内存中运行的应用程序</strong>。一个应用程序可以同时启动多个进程，那么上面的问题就有了解决的思路：<strong>我们启动两个进程，一个用来打游戏，一个用来播放音乐</strong>。这当然是一种解决方案，但是想象一下，如果一个应用程序需要执行的任务非常多，例如 LOL 游戏吧，光是需要播放的音乐就有非常多，人物本身的语音，技能的音效，游戏的背景音乐，塔攻击的声音等等等，还不用说游戏本身，就光播放音乐就需要创建许多许多的进程，而进程本身是一种非常消耗资源的东西，这样的设计显然是不合理的。更何况大多数的操作系统都不需要一个进程访问其他进程的内存空间，<strong>也就是说，进程之间的通信很不方便，此时我们就得引入“线程”这门技术，来解决这个问题。</strong></p>
 <p><strong>线程是指进程中的一个执行任务（控制单元），一个进程可以同时并发运行多个线程</strong>。我们可以打开任务管理器，观察到几乎所有的进程都拥有着许多的「线程」(在 WINDOWS 中线程是默认隐藏的，需要在「查看」里面点击「选择列」，有一个线程数的勾选项，找到并勾选就可以了)。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126222922.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-bc426751ce9405c3.png" alt=""></p>
 <h2 id="进程和线程的区别"><a href="#进程和线程的区别" class="headerlink" title="进程和线程的区别"></a>进程和线程的区别</h2><p><strong>进程</strong>：有独立的内存空间，进程中的数据存放空间（堆空间和栈空间）是独立的，至少有一个线程。</p>
 <p><strong>线程</strong>：堆空间是共享的，栈空间是独立的，线程消耗的资源也比进程小，相互之间可以影响的，又称为轻型进程或进程元。</p>
 <p>因为一个进程中的多个线程是并发运行的，那么从微观角度上考虑也是有先后顺序的，<strong>那么哪个线程执行完全取决于 CPU 调度器(JVM 来调度)</strong>，程序员是控制不了的。我们可以把多线程并发性看作是多个线程在瞬间抢 CPU 资源，谁抢到资源谁就运行，这也造就了<strong>多线程的随机性</strong>。下面我们将看到更生动的例子。</p>
@@ -501,7 +505,7 @@ public cla">
 <ul>
 <li>进程之前不能共享内存，而线程之间共享内存(堆内存)则很简单。</li>
 <li>系统创建进程时需要为该进程重新分配系统资源,创建线程则代价小很多,因此实现多任务并发时,多线程效率更高.</li>
-<li>Java 语言本身内置多线程功能的支持,而不是单纯第作为底层系统的调度方式,从而简化了多线程编程.</li>
+<li>Java 语言本身内置多线程功能的支持,而不是单纯地作为底层系统的调度方式,从而简化了多线程编程.</li>
 </ul>
 <h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>即使是单核处理器也支持多线程执行代码，CPU 通过给每个线程分配 CPU 时间片来实现这个机制。时间片是 CPU 分配给各个线程的时间，因为时间片非常短，所以 CPU 通过不停地切换线程执行，让我们感觉多个线程是同时执行的，时间片一般是几十毫秒（ms）。</p>
 <p>CPU 通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务的时候，可以再加载这个任务的状态。<strong>所以任务从保存到再加载的过程就是一次上下文切换。</strong></p>
@@ -625,7 +629,7 @@ public cla">
 <span class="token punctuation">}</span></code></pre>
 <p>大家可以自己测试一下，每一台机器 CPU 不同测试结果可能也会不同，之前在 WINDOWS 本儿上测试的时候，多线程的优势从 1 千万数据的时候才开始体现出来，但是现在换了 MAC，1 亿条数据时间也差不多，到 10 亿的时候明显串行就比并行快了… 总之，为什么并发执行的速度会比串行慢呢？就是因为线程有创建和上下文切换的开销。</p>
 <h2 id="继承-Thread-类还是实现-Runnable-接口？"><a href="#继承-Thread-类还是实现-Runnable-接口？" class="headerlink" title="继承 Thread 类还是实现 Runnable 接口？"></a>继承 Thread 类还是实现 Runnable 接口？</h2><p>想象一个这样的例子：给出一共 50 个苹果，让三个同学一起来吃，并且给苹果编上号码，让他们吃的时候顺便要说出苹果的编号：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126222936.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-f293d147cf4cf01b.png" alt=""></p>
 <p>运行结果可以看到，使用继承方式实现，每一个线程都吃了 50 个苹果。这样的结果显而易见：是因为显式地创建了三个不同的 Person 对象，而每个对象在堆空间中有独立的区域来保存定义好的 50 个苹果。</p>
 <p>而使用实现方式则满足要求，这是因为三个线程共享了同一个 Apple 对象，而对象中的 num 数量是一定的。</p>
 <p>所以可以简单总结出继承方式和实现方式的区别：</p>
@@ -651,7 +655,7 @@ public cla">
 <h1 id="三、线程的安全问题"><a href="#三、线程的安全问题" class="headerlink" title="三、线程的安全问题"></a>三、线程的安全问题</h1><hr>
 <h2 id="吃苹果游戏的不安全问题"><a href="#吃苹果游戏的不安全问题" class="headerlink" title="吃苹果游戏的不安全问题"></a>吃苹果游戏的不安全问题</h2><p>我们来考虑一下上面吃苹果的例子，会有什么问题？</p>
 <p>尽管，Java 并不保证线程的顺序执行，具有随机性，但吃苹果比赛的案例运行多次也并没有发现什么太大的问题。这并不是因为程序没有问题，而只是问题出现的不够明显，为了让问题更加明显，我们使用 <code>Thread.sleep()</code> 方法（经常用来模拟网络延迟）来让线程休息 10 ms，让其他线程去抢资源。<strong>（注意：在程序中并不是使用 Thread.sleep(10)之后,程序才出现问题,而是使用之后,问题更明显.）</strong></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126222958.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-ca76c3710f41fdfb.png" alt=""></p>
 <p><strong>为什么会出现这样的错误呢？</strong></p>
 <p>先来分析第一种错误：为什么会吃重复的苹果呢？就拿 B 和 C 都吃了编号为 47 的苹果为例吧：</p>
 <blockquote>
@@ -670,7 +674,7 @@ public cla">
 </blockquote>
 <p><strong>归根结底是因为没有任何操作来限制线程来获取相同的资源并对他们进行操作，这就造成了线程安全性问题。</strong></p>
 <blockquote>
-<p>如果我们把打印和减一的操作分成两个步骤，会更加明显：<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126223013.png" alt=""><br>ABC 三个线程同时打印了 50 的苹果，然后同时做出减一操作。</p>
+<p>如果我们把打印和减一的操作分成两个步骤，会更加明显：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-4540e212223f037f.png" alt=""><br>ABC 三个线程同时打印了 50 的苹果，然后同时做出减一操作。</p>
 </blockquote>
 <p><strong>像这样的原子操作，是不允许分步骤进行的，必须保证同步进行，不然可能会引发不可设想的后果。</strong></p>
 <p>要解决上述多线程并发访问一个资源的安全性问题，就需要引入<strong>线程同步</strong>的概念。</p>
@@ -678,7 +682,7 @@ public cla">
 <p>为了帮助编程人员实现这个临界区，Java（以及大多数编程语言）提供了同步机制，当一个线程试图访问一个临界区时，它将使用一种同步机制来查看是不是已经有其他线程进入临界区。如果没有其他线程进入临界区，他就可以进入临界区。如果已经有线程进入了临界区，它就被同步机制挂起，直到进入的线程离开这个临界区。如果在等待进入临界区的线程不止一个，JVM 会选择其中的一个，其余的将继续等待。</p>
 <h3 id="synchronized-关键字"><a href="#synchronized-关键字" class="headerlink" title="synchronized 关键字"></a>synchronized 关键字</h3><p>如果一个对象已用 synchronized 关键字声明，那么只有一个执行线程被允许访问它。使用 synchronized 的好处显而易见：保证了多线程并发访问时的同步操作，避免线程的安全性问题。<strong>但是坏处是：使用 synchronized 的方法/代码块的性能比不用要低一些。所以好的做法是：尽量减小 synchronized 的作用域。</strong></p>
 <p>我们还是先来解决吃苹果的问题，考虑一下 synchronized 关键字应该加在哪里呢？</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20191126223024.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E5%AD%A6%E4%B9%A0%EF%BC%881%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-24a594bddd7a3701.png" alt=""></p>
 <p>发现如果还再把 synchronized 关键字加在 if 里面的话，0 和 -1 又会出来了。这其实是因为当 ABC 同是进入到 if 语句中，等待临界区释放的时，拿到 1 编号的线程已经又把 num 减一操作了，而此时最后一个等待临界区的进程拿到的就会是 -1 了。</p>
 <h3 id="同步锁-Lock"><a href="#同步锁-Lock" class="headerlink" title="同步锁 Lock"></a>同步锁 Lock</h3><p>Lock 机制提供了比 synchronized 代码块和 synchronized 方法更广泛的锁定操作，同步代码块/ 同步方法具有的功能 Lock 都有，除此之外更强大，更体现面向对象。在并发包的类族中，Lock 是 JUC 包的顶层接口，它的实现逻辑并未用到 synchronized，而是利用了 volatile 的可见性。</p>
 <p>使用 Lock 最典型的代码如下：</p>
@@ -715,6 +719,11 @@ public cla">
 <li>《Java 7 并发编程实战手册》</li>
 <li>《码出高效 Java 开发手册》 - 杨冠宝（孤尽） 高海慧（鸣莎）著</li>
 </ul>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书 ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener" title="@我没有三颗心脏">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener" title="wmyskxz">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加 qq 群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1027,11 +1036,11 @@ public cla">
                         
                             
 
-前言：以下所有观点均摘录 or 改编自参考资料，纯属观点分享…
+前言：以下所有观点均摘录 or 改编自参考资料，纯属观点分享…为获得良好的阅读体验，请访问原文地址：传送门
 
 一、当我们说「当代」时，我们在说什么
 
-引用自：「当代」越来越让人看不懂，我们帮你找到了观察它的 15 个新角度 | 100个生活大问题 - https://www.qd
+引用自：「当代」越来越让人看不懂，我们帮你找到了观察它的 15 个新角度 | 100个
                         
                     </div>
                     <div class="publish-info">
@@ -1052,6 +1061,10 @@ public cla">
                 </div>
                 
                 <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
+                        <span class="chip bg-color">原创</span>
+                    </a>
                     
                     <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" target="_blank">
                         <span class="chip bg-color">喜欢的三观</span>
@@ -1212,7 +1225,7 @@ public cla">
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

@@ -369,12 +369,12 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
-                                <span class="chip bg-color">代码规范</span>
-                            </a>
-                        
                             <a href="/tags/Ruby/" target="_blank">
                                 <span class="chip bg-color">Ruby</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" target="_blank">
+                                <span class="chip bg-color">代码规范</span>
                             </a>
                         
                     </div>
@@ -404,7 +404,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        14.3k
+                        14.4k
                     </div>
                     
 
@@ -427,7 +427,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161704.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8AEffective-Ruby%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-97838390a82a86dc.png" alt=""></p>
 <blockquote>
 <p>本篇是在我接触了 Ruby 很短一段时间后有幸捧起的一本书，下面结合自己的一些思考，来输出一下自己的读书笔记</p>
 </blockquote>
@@ -439,28 +439,22 @@
 <p>《Effictive Ruby》就是一本致力于让你在第二阶段更加深入和全面的了解 Ruby，编写出更具可读性、可维护性代码的书，下面我就着一些我认为的重点和自己的思考来进行一些精简和说明</p>
 <h1 id="第一章：让自己熟悉-Ruby"><a href="#第一章：让自己熟悉-Ruby" class="headerlink" title="第一章：让自己熟悉 Ruby"></a>第一章：让自己熟悉 Ruby</h1><h2 id="第-1-条：理解-Ruby-中的-True"><a href="#第-1-条：理解-Ruby-中的-True" class="headerlink" title="第 1 条：理解 Ruby 中的 True"></a>第 1 条：理解 Ruby 中的 True</h2><ul>
 <li>每一门语言对于布尔类型的值都有自己的处理方式，在 Ruby 中，除了 false 和 nil，其他值都为真值，包括数字 0 值。</li>
-<li>如果你需要区分 false 和 nil，可以使用 nil? 的方式或 “==“ 操作符并将 false 作为左操作对象。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># 将 false 放在左边意味着 Ruby 会将表达式解析为 FalseClass#== 方法的调用（该方法继承自 Object 类）</span>
+<li>如果你需要区分 false 和 nil，可以使用 nil? 的方式或 “==“ 操作符并将 false 作为左操作对象。<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># 将 false 放在左边意味着 Ruby 会将表达式解析为 FalseClass#== 方法的调用（该方法继承自 Object 类）</span>
 <span class="token comment" spellcheck="true"># 这样我们可以很放心地知道：如果右边的操作对象也是 false 对象，那么返回值为 true</span>
 <span class="token keyword">if</span> <span class="token keyword">false</span> <span class="token operator">==</span> x
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
 <span class="token keyword">end</span>
+</code></pre>
+</li>
+</ul>
+<h1 id="换句话说，把-false-置为有操作对象是有风险的，可能不同于我们的期望，因为其他类可能覆盖-Object-方法从而改变下面这个比较"><a href="#换句话说，把-false-置为有操作对象是有风险的，可能不同于我们的期望，因为其他类可能覆盖-Object-方法从而改变下面这个比较" class="headerlink" title="换句话说，把 false 置为有操作对象是有风险的，可能不同于我们的期望，因为其他类可能覆盖 Object#== 方法从而改变下面这个比较"></a>换句话说，把 false 置为有操作对象是有风险的，可能不同于我们的期望，因为其他类可能覆盖 Object#== 方法从而改变下面这个比较</h1><p>class Bad<br>    def == (other)<br>        true<br>    end<br>end</p>
+<p>irb&gt; false == Bad.new<br>—&gt; false<br>irb&gt; Bad.new == false<br>—&gt; true</p>
+<pre><code>
+## 第 2 条：所有对象的值都可能为 nil
+在 Ruby 中倡导接口高于类型，也就是说预期要求对象是某个给定类的实例，不如将注意力放在该对象能做什么上。没有什么会阻止你意外地把 Time 类型对象传递给接受 Date 对象的方法，这些类型的问题虽然可以通过测试避免，但仍然有一些多态替换的问题使这些经过测试的应用程序出现问题：
 
-<span class="token comment" spellcheck="true"># 换句话说，把 false 置为有操作对象是有风险的，可能不同于我们的期望，因为其他类可能覆盖 Object#== 方法从而改变下面这个比较</span>
-<span class="token keyword">class</span> <span class="token class-name">Bad</span>
-    <span class="token keyword">def</span> <span class="token operator">==</span> <span class="token punctuation">(</span>other<span class="token punctuation">)</span>
-        <span class="token keyword">true</span>
-    <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-irb<span class="token operator">></span> <span class="token keyword">false</span> <span class="token operator">==</span> <span class="token constant">Bad</span><span class="token punctuation">.</span><span class="token keyword">new</span>
-<span class="token operator">--</span><span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">false</span>
-irb<span class="token operator">></span> <span class="token constant">Bad</span><span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token operator">==</span> <span class="token keyword">false</span>
-<span class="token operator">--</span><span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">true</span></code></pre>
-<h2 id="第-2-条：所有对象的值都可能为-nil"><a href="#第-2-条：所有对象的值都可能为-nil" class="headerlink" title="第 2 条：所有对象的值都可能为 nil"></a>第 2 条：所有对象的值都可能为 nil</h2><p>在 Ruby 中倡导接口高于类型，也就是说预期要求对象是某个给定类的实例，不如将注意力放在该对象能做什么上。没有什么会阻止你意外地把 Time 类型对象传递给接受 Date 对象的方法，这些类型的问题虽然可以通过测试避免，但仍然有一些多态替换的问题使这些经过测试的应用程序出现问题：</p>
-<pre class=" language-ruby"><code class="language-ruby">undefined method <span class="token string">'fubar'</span> <span class="token keyword">for</span> <span class="token keyword">nil</span><span class="token symbol">:NilClass</span> <span class="token punctuation">(</span><span class="token constant">NoMethodError</span><span class="token punctuation">)</span></code></pre>
-<p>当你调用一个对象的方法而其返回值刚好是讨厌的 nil 对象时，这种情况就会发生···nil 是类 NilClass 的唯一对象。这样的错误会悄然逃过测试而仅在生产环境下出现：如果一个用户做了些超乎寻常的事。</p>
+```ruby
+undefined method &#39;fubar&#39; for nil:NilClass (NoMethodError)</code></pre><p>当你调用一个对象的方法而其返回值刚好是讨厌的 nil 对象时，这种情况就会发生···nil 是类 NilClass 的唯一对象。这样的错误会悄然逃过测试而仅在生产环境下出现：如果一个用户做了些超乎寻常的事。</p>
 <p>另一种导致该结果的情况是，当一个方法返回 nil 并将其作为参数直接传给一个方法时。事实上存在数量惊人的方式可以将 nil 意外地引入你运行中的程序。最好的防范方式是：假设任何对象都可以为 nil，包括方法参数和调用方法的返回值。</p>
 <pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># 最简单的方式是使用 nil? 方法</span>
 <span class="token comment" spellcheck="true"># 如果方法接受者（receiver）是 nil，该方法将返回真值，否则返回假值。</span>
@@ -588,7 +582,7 @@ irb<span class="token operator">></span> customer<span class="token punctuation"
 irb<span class="token operator">></span> customer<span class="token punctuation">.</span>respond_to<span class="token operator">?</span><span class="token punctuation">(</span><span class="token symbol">:name</span><span class="token punctuation">)</span>
 <span class="token operator">--</span><span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">true</span></code></pre>
 <p>上面的代码几乎就和你预想的那样，当调用 customer 对象的 name 方法时，Customer 类会首先检查自身是否有这个实例方法，没有那么就继续搜索。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161715.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8AEffective-Ruby%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-cae0794a07515b82.png" alt=""></p>
 <p>顺着集成体系向上找到了 Person 类，在该类中找到了该方法并将其执行。（如果 Person 类中没有找到的话，Ruby 会继续向上直到到达 BasicObject）</p>
 <p>但是如果方法在查找过程中直到类树的根节点仍然没有找到匹配的办法，那么它将重新从起点开始查找，不过这一次会查找 method_missing 方法。</p>
 <p>下面我们开始让事情变得更加有趣一点：</p>
@@ -608,7 +602,7 @@ irb<span class="token operator">></span> customer <span class="token operator">=
 irb<span class="token operator">></span> customer<span class="token punctuation">.</span>respond_to<span class="token operator">?</span><span class="token punctuation">(</span><span class="token symbol">:name</span><span class="token punctuation">)</span>
 <span class="token operator">--</span><span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">true</span></code></pre>
 <p>这里把 name 方法从 Person 类中取出并移到一个模块中，然后把模块引入到了 Person 类。Customer 类的实例仍然可以如你所料响应 name 方法，但是为什么呢？显然，模块 ThingsWithNames 并不在集成体系中，因为 Person 类的超类仍然是 Object 类，那会是什么呢？其实，Ruby 在这里对你撒谎了！当你 include 方法来将模块引入类时，Ruby 在幕后悄悄地做了一些事情。它创建了一个单例类并将它插入类体系中。这个匿名的不可见类被链向这个模块，因此它们共享了实力方法和常量。</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161732.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8AEffective-Ruby%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-66bef8bfaff5448e.png" alt=""></p>
 <p>当每个模块被类包含时，它会立即被插入集成体系中包含它的类的上方，以后进先出（LIFO）的方式。每个对象都通过变量 superclass 链接，像单链表一样。这唯一的结果就是，<strong>当 Ruby 寻找一个方法时，它将以逆序访问访问每个模块，最后包含的模块最先访问到。很重要的一点是，模块永远不会重载类中的方法</strong>，因为模块插入的位置是包含它的类的上方，而 Ruby 总是会在向上检查之前先检查类本身。<br>（好吧······这不是全部的事实。确保你阅读了第 35 条，来看看 Ruby 2.0 中的 prepend 方法是如何使其复杂化的）</p>
 <p><strong>要点回顾：</strong></p>
 <ul>
@@ -731,38 +725,37 @@ first <span class="token operator">+</span> <span class="token string">" "</span
     <span class="token keyword">end</span>
 <span class="token keyword">end</span></code></pre>
 <h3 id="另外从其他地方看到了关于-Struct-new-的实践"><a href="#另外从其他地方看到了关于-Struct-new-的实践" class="headerlink" title="另外从其他地方看到了关于 Struct::new 的实践"></a>另外从其他地方看到了关于 Struct::new 的实践</h3><ul>
-<li>考虑使用 Struct.new, 它可以定义一些琐碎的 accessors, constructor（构造函数） 和 comparison（比较） 操作。</li>
-</ul>
+<li><p>考虑使用 Struct.new, 它可以定义一些琐碎的 accessors, constructor（构造函数） 和 comparison（比较） 操作。</p>
 <pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># good</span>
 <span class="token keyword">class</span> <span class="token class-name">Person</span>
-  attr_reader <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
+attr_reader <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
 
-  <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
-    <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
-    <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
-  <span class="token keyword">end</span>
+<span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
+  <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
+  <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
 <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># better</span>
-<span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token operator">&lt;</span> <span class="token builtin">Struct</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span><span class="token punctuation">)</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>考虑使用 Struct.new，它替你定义了那些琐碎的存取器（accessors），构造器（constructor）以及比较操作符（comparison operators）。</li>
+<span class="token keyword">end</span>
+</code></pre>
+</li>
 </ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">class</span> <span class="token class-name">Person</span>
-  attr_accessor <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
+<h1 id="better"><a href="#better" class="headerlink" title="better"></a>better</h1><p>class Person &lt; Struct.new(:first_name, :last_name)<br>end</p>
+<pre><code>
+- 考虑使用 Struct.new，它替你定义了那些琐碎的存取器（accessors），构造器（constructor）以及比较操作符（comparison operators）。
 
-  <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
-    <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
-    <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
+```ruby
+# good
+class Person
+  attr_accessor :first_name, :last_name
 
-<span class="token comment" spellcheck="true"># better</span>
-<span class="token constant">Person</span> <span class="token operator">=</span> <span class="token builtin">Struct</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span><span class="token punctuation">)</span> <span class="token keyword">do</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
+  def initialize(first_name, last_name)
+    @first_name = first_name
+    @last_name = last_name
+  end
+end
+
+# better
+Person = Struct.new(:first_name, :last_name) do
+end</code></pre><ul>
 <li>要去 extend 一个 Struct.new - 它已经是一个新的 class。扩展它会产生一个多余的 class 层级 并且可能会产生怪异的错误如果文件被加载多次。</li>
 </ul>
 <h2 id="第-11-条：通过在模块中嵌入代码来创建命名空间"><a href="#第-11-条：通过在模块中嵌入代码来创建命名空间" class="headerlink" title="第 11 条：通过在模块中嵌入代码来创建命名空间"></a>第 11 条：通过在模块中嵌入代码来创建命名空间</h2><ul>
@@ -1271,7 +1264,7 @@ irb<span class="token operator">></span> y<span class="token punctuation">.</spa
 <p>扩展阅读：<br><a href="https://ruby-china.org/topics/37118" target="_blank" rel="noopener">Ruby GC 自述 · Ruby China</a><br><a href="http://tmm1.net/ruby21-rgengc/" target="_blank" rel="noopener">Ruby 2.1:RGenGC</a></p>
 </blockquote>
 <p>垃圾收集器是个复杂的软件工程。从很高的层次看，Ruby 垃圾收集器使用一种被称为 <strong>标记-清除（mark and sweep）</strong>的过程。（熟悉 Java 的童鞋应该会感到一丝熟悉）</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161754.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8AEffective-Ruby%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-6e38752957186ca4.png" alt=""></p>
 <p>首先，遍历对象图，能被访问到的对象会被标记为存活的。接着，任何未在第一阶段标记过的对象会被视为垃圾并被清楚，之后将内存释放回 Ruby 或操作系统。</p>
 <p>遍历整个对象图并标记可访问对象的开销太大。Ruby 2.1 通过新的<strong>分代式垃圾收集</strong>器对性能进行了优化。对象被分为两类，年轻代和年老代。</p>
 <p>分代式垃圾收集器基于一个前提：大多数对象的生存时间都不会很长。如果我们知道了一个对象可以存活很久，那么就可以优化标记阶段，自动将这些老的对象标记为可访问，而不需要遍历整个对象图。</p>
@@ -1283,7 +1276,7 @@ irb<span class="token operator">></span> y<span class="token punctuation">.</spa
 <p>在即使模式中，垃圾收集器会清除所有的未标记的对象。如果有很多对象需要被释放，那这种模式开销就很大。</p>
 <p>因此，清除阶段还支持懒惰模式，它将尝试释放尽可能少的对象。</p>
 <p>每当 Ruby 中创建一个新对象时，它可能尝试触发一次懒惰清除阶段，去释放一些空间。为了更好的理解这一点，我们需要看看垃圾收集器如何管理存储对象的内存。（简单概括：垃圾收集器通过维护一个由页组成的堆来管理内存。页又由槽组成。每个槽存储一个对象。）</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713161811.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8AEffective-Ruby%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-11e362645a4dd44e.png" alt=""></p>
 <p>我们打开一个新的 IRB 会话，运行如下命令：</p>
 <pre class=" language-ruby"><code class="language-ruby">`<span class="token constant">IRB</span>``<span class="token operator">></span> ``<span class="token constant">GC</span>``<span class="token punctuation">.</span>stat`
 
@@ -1433,6 +1426,11 @@ irb<span class="token operator">></span> y<span class="token punctuation">.</spa
 <hr>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>周末学习了两天才勉强看完了一遍，对于 Ruby 语言的有一些高级特性还是比较吃力的，需要自己反反复复的看才能理解一二。不过好在也是有收获吧，没有白费自己的努力，特地总结一个精简版方便后面的童鞋学习。</p>
 <p>另外这篇文章最开始是使用公司的文档空间创建的，发现 Markdown 虽然精简易于使用，但是功能性上比一些成熟的写文工具要差上很多，就比如对代码的支持吧，用公司的代码块还支持自定义标题、显示行号、是否能缩放、主题等一系列自定义的东西，写出来的东西也更加友好…</p>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1930,7 +1928,7 @@ Ruby 简介网上的简介要搜都能搜到，具体涉及的包括历史啦之
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

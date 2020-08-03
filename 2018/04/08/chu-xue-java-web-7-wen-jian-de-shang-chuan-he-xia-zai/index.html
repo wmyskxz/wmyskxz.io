@@ -366,8 +366,8 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
-                            <a href="/tags/Java-Web/" target="_blank">
-                                <span class="chip bg-color">Java Web</span>
+                            <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                                <span class="chip bg-color">JavaWeb基础</span>
                             </a>
                         
                     </div>
@@ -378,8 +378,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                JavaWeb基础
                             </a>
                         
                     </div>
@@ -397,7 +397,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        2.2k
+                        2.3k
                     </div>
                     
 
@@ -420,14 +420,14 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714074909.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-326744dd6c79212a.png" alt=""></p>
 <h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><h4 id="文件上传前的准备"><a href="#文件上传前的准备" class="headerlink" title="文件上传前的准备"></a>文件上传前的准备</h4><ol>
 <li>在表单中<strong>必须有一个上传的控件</strong><br><code>&lt;input type=&quot;file&quot; name=&quot;testImg&quot;/&gt;</code></li>
 <li>因为 GET 方式有请求大小的限制，所以<strong>表单的提交方式必须是 POST</strong><br><code>&lt;form action=&quot;/upload&quot; method=&quot;post&quot;&gt;</code></li>
 <li>表单默认的编码方式为 <code>application/x-www-form-urlencoded</code> ，应该修改为 <code>multipart/form-data</code> ，<strong>以二进制的形式进行数据的传输</strong><br><code>&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</code></li>
 </ol>
 <ul>
-<li><strong>注意：</strong>此时 Servlet 中就不能再使用 <code>request对象.getParameter(String name)</code> 来获取请求参数<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714074915.png" alt=""></li>
+<li><strong>注意：</strong>此时 Servlet 中就不能再使用 <code>request对象.getParameter(String name)</code> 来获取请求参数<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-9ffa6de1139ff470.png" alt=""></li>
 </ul>
 <h4 id="上传组件"><a href="#上传组件" class="headerlink" title="上传组件"></a>上传组件</h4><p>要<strong>实现文件的上传</strong>，需要基于以下两种组件的一种：</p>
 <ul>
@@ -457,7 +457,7 @@
 
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714074923.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-4103d55665ab457a.png" alt=""></p>
 <ol start="3">
 <li>编写 UploadServlet 处理相关请求：</li>
 </ol>
@@ -554,115 +554,109 @@ factory<span class="token punctuation">.</span><span class="token function">setR
 <ul>
 <li><strong>判断上传文件类型：</strong><br>限制文件类型那么就需要对文件类型进行判断</li>
 <li>语法：<code>String contentType = fileItem.getContentType();</code></li>
-<li>Servlet 源码：</li>
-</ul>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>FileItem<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>FileItemFactory<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>disk<span class="token punctuation">.</span>DiskFileItemFactory<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletFileUpload<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>io<span class="token punctuation">.</span>FilenameUtils<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletException<span class="token punctuation">;</span>
-<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>WebServlet<span class="token punctuation">;</span>
-<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServlet<span class="token punctuation">;</span>
-<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest<span class="token punctuation">;</span>
-<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse<span class="token punctuation">;</span>
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>File<span class="token punctuation">;</span>
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>UUID<span class="token punctuation">;</span>
-
-<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/upload"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UploadServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> HttpServletResponse resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头</span>
-        <span class="token keyword">boolean</span> isMultipart <span class="token operator">=</span> ServletFileUpload<span class="token punctuation">.</span><span class="token function">isMultipartContent</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 如果不满足要求就立即结束对该请求的处理</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isMultipart<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token keyword">try</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// FileItem 是表单中的每一个元素的封装</span>
-            <span class="token comment" spellcheck="true">// 创建一个 FileItem 的工厂类</span>
-            FileItemFactory factory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DiskFileItemFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">// 创建一个文件上传处理器（装饰设计模式）</span>
-            ServletFileUpload upload <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServletFileUpload</span><span class="token punctuation">(</span>factory<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">// 解析请求</span>
-            List<span class="token operator">&lt;</span>FileItem<span class="token operator">></span> items <span class="token operator">=</span> upload<span class="token punctuation">.</span><span class="token function">parseRequest</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">for</span> <span class="token punctuation">(</span>FileItem fileItem <span class="token operator">:</span>
-                    items<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token comment" spellcheck="true">// 判断空间是否是普通控件</span>
-                <span class="token keyword">if</span> <span class="token punctuation">(</span>fileItem<span class="token punctuation">.</span><span class="token function">isFormField</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                    <span class="token comment" spellcheck="true">// 普通控件</span>
-                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-                    <span class="token comment" spellcheck="true">// 上传控件</span>
-                    String contentType <span class="token operator">=</span> fileItem<span class="token punctuation">.</span><span class="token function">getContentType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>contentType<span class="token punctuation">.</span><span class="token function">startsWith</span><span class="token punctuation">(</span><span class="token string">"image/"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                        <span class="token comment" spellcheck="true">// 实现简单的错误提示</span>
-                        req<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"errorMsg"</span><span class="token punctuation">,</span> <span class="token string">"亲，您上传的文件格式不正确，请重新上传！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                        req<span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span><span class="token string">"upload.jsp"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>req<span class="token punctuation">,</span> resp<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                        <span class="token keyword">return</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 如果不是图片类型则不再对请求进行处理</span>
-                    <span class="token punctuation">}</span>
-                    <span class="token comment" spellcheck="true">// 随机命名文件名</span>
-                    String fileName <span class="token operator">=</span> UUID<span class="token punctuation">.</span><span class="token function">randomUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"."</span> <span class="token operator">+</span> FilenameUtils<span class="token punctuation">.</span><span class="token function">getExtension</span><span class="token punctuation">(</span>fileItem<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    <span class="token comment" spellcheck="true">// 将上传的文件保存到服务器</span>
-                    fileItem<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/"</span><span class="token punctuation">,</span> fileName<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="解决中文乱码问题"><a href="#解决中文乱码问题" class="headerlink" title="解决中文乱码问题"></a>解决中文乱码问题</h4><ul>
-<li><p>解决中文文件名乱码（事实上我在本地测试并没有出现乱码），得到解析器以后，就<strong>直接设置解析器的编码为UTF-8就行了</strong></p>
-<pre class=" language-Java"><code class="language-Java">fileUpload.setHeaderEncoding("UTF-8");</code></pre>
-</li>
-<li><p>解决表单数据乱码，在获取表单值的时候，按照UTF-8编码来获取</p>
-<pre class=" language-Java"><code class="language-Java">String value = fileItem.getString("UTF-8");</code></pre>
+<li>Servlet 源码：<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+</code></pre>
 </li>
 </ul>
-<h4 id="文件大小约束"><a href="#文件大小约束" class="headerlink" title="文件大小约束"></a>文件大小约束</h4><ul>
-<li>单个文件数据的大小约束<br>即整个表单之中只有一个上传控件</li>
-<li>语法：<code>upload.setFileSizeMax(1024 * 500); // 单个文件不能超过500 kb</code></li>
-<li>一次请求数据的大小约束<br>限制整个请求之中的数据大小</li>
-<li>语法：<code>upload.setSizeMax(1024 * 750); // 整个请求文件大小不能超过 750 kb</code></li>
-</ul>
-<h4 id="使用-Map-封装请求信息"><a href="#使用-Map-封装请求信息" class="headerlink" title="使用 Map 封装请求信息"></a>使用 Map 封装请求信息</h4><p>上面提到，我们已经无法用 request对象正常获取到参数，那么我们究竟应该怎么办呢？</p>
-<blockquote>
-<ul>
-<li>使用 Map 封装一下就好了，等到要用的时候再从 Map 中取出<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714074937.png" alt=""></li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="SmartUpload"><a href="#SmartUpload" class="headerlink" title="SmartUpload"></a>SmartUpload</h2><p>上面已经基于 FileUpload 实现了文件的上传，事实上也没有想象中那么复杂，让我们来看看 SmartUpload</p>
-<p>要使用SmartUpload组件，就需要导入smartupload.jar开发包</p>
-<h4 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h4><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//实例化组件</span>
-SmartUpload smartUpload <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SmartUpload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>import org.apache.commons.fileupload.FileItem;<br>import org.apache.commons.fileupload.FileItemFactory;<br>import org.apache.commons.fileupload.disk.DiskFileItemFactory;<br>import org.apache.commons.fileupload.servlet.ServletFileUpload;<br>import org.apache.commons.io.FilenameUtils;</p>
+<p>import javax.servlet.ServletException;<br>import javax.servlet.annotation.WebServlet;<br>import javax.servlet.http.HttpServlet;<br>import javax.servlet.http.HttpServletRequest;<br>import javax.servlet.http.HttpServletResponse;<br>import java.io.File;<br>import java.io.IOException;<br>import java.util.List;<br>import java.util.UUID;</p>
+<p>@WebServlet(“/upload”)<br>public class UploadServlet extends HttpServlet {</p>
+<pre><code>protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    // 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头
+    boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+    // 如果不满足要求就立即结束对该请求的处理
+    if (!isMultipart) {
+        return;
+    }
 
-<span class="token comment" spellcheck="true">//初始化上传操作</span>
-smartUpload<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getServletConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    try {
+        // FileItem 是表单中的每一个元素的封装
+        // 创建一个 FileItem 的工厂类
+        FileItemFactory factory = new DiskFileItemFactory();
+        // 创建一个文件上传处理器（装饰设计模式）
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        // 解析请求
+        List&lt;FileItem&gt; items = upload.parseRequest(req);
+        for (FileItem fileItem :
+                items) {
+            // 判断空间是否是普通控件
+            if (fileItem.isFormField()) {
+                // 普通控件
+            } else {
+                // 上传控件
+                String contentType = fileItem.getContentType();
+                if (!contentType.startsWith(&quot;image/&quot;)) {
+                    // 实现简单的错误提示
+                    req.setAttribute(&quot;errorMsg&quot;, &quot;亲，您上传的文件格式不正确，请重新上传！&quot;);
+                    req.getRequestDispatcher(&quot;upload.jsp&quot;).forward(req, resp);
+                    return;  // 如果不是图片类型则不再对请求进行处理
+                }
+                // 随机命名文件名
+                String fileName = UUID.randomUUID().toString() + &quot;.&quot; + FilenameUtils.getExtension(fileItem.getName());
+                // 将上传的文件保存到服务器
+                fileItem.write(new File(&quot;C:/&quot;, fileName));
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}</code></pre><p>}</p>
+<pre><code>
+#### 解决中文乱码问题
+- 解决中文文件名乱码（事实上我在本地测试并没有出现乱码），得到解析器以后，就**直接设置解析器的编码为UTF-8就行了**</code></pre><p> fileUpload.setHeaderEncoding(“UTF-8”);</p>
+<pre><code>- 解决表单数据乱码，在获取表单值的时候，按照UTF-8编码来获取</code></pre><p>String value = fileItem.getString(“UTF-8”);</p>
+<pre><code>
 
-<span class="token keyword">try</span> <span class="token punctuation">{</span>
+#### 文件大小约束
 
-    <span class="token comment" spellcheck="true">//上传准备</span>
-    smartUpload<span class="token punctuation">.</span><span class="token function">upload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+- 单个文件数据的大小约束
+即整个表单之中只有一个上传控件
+- 语法：`upload.setFileSizeMax(1024 * 500); // 单个文件不能超过500 kb`
+- 一次请求数据的大小约束
+限制整个请求之中的数据大小
+- 语法：`upload.setSizeMax(1024 * 750); // 整个请求文件大小不能超过 750 kb`
 
-    <span class="token comment" spellcheck="true">//对于普通数据，单纯到request对象是无法获取得到提交参数的。也是需要依赖smartUpload</span>
-    String password <span class="token operator">=</span> smartUpload<span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"password"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-    <span class="token comment" spellcheck="true">//上传到uploadFile文件夹中</span>
-    smartUpload<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span><span class="token string">"uploadFile"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+#### 使用 Map 封装请求信息
 
-<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">SmartUploadException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    
-<span class="token punctuation">}</span></code></pre>
-<ul>
+上面提到，我们已经无法用 request对象正常获取到参数，那么我们究竟应该怎么办呢？
+
+&gt; - 使用 Map 封装一下就好了，等到要用的时候再从 Map 中取出
+![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web(7)——文件的上传和下载/7896890-4e09be236b365217.png)
+
+
+---
+
+## SmartUpload
+
+上面已经基于 FileUpload 实现了文件的上传，事实上也没有想象中那么复杂，让我们来看看 SmartUpload
+
+要使用SmartUpload组件，就需要导入smartupload.jar开发包
+
+#### 快速入门
+
+``` java
+//实例化组件
+SmartUpload smartUpload = new SmartUpload();
+
+//初始化上传操作
+smartUpload.initialize(this.getServletConfig(), request, response);
+
+try {
+
+    //上传准备
+    smartUpload.upload();
+
+    //对于普通数据，单纯到request对象是无法获取得到提交参数的。也是需要依赖smartUpload
+    String password = smartUpload.getRequest().getParameter(&quot;password&quot;);
+    System.out.println(password);
+
+    //上传到uploadFile文件夹中
+    smartUpload.save(&quot;uploadFile&quot;);
+
+} catch (SmartUploadException e) {
+    e.printStackTrace();    
+}</code></pre><ul>
 <li>摘自：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483727&idx=1&sn=87db212ac7e2590c57749a9857028f14&chksm=ebd7404edca0c9583fb3074d6827952bbfb5335c13e236719cde573e52bfe89e85e133755ab3#rd" target="_blank" rel="noopener">这里</a></li>
 <li>上面链接提到 SmartUpload 组件在解决中文乱码中有一些小问题，我没有测试过，但我觉得自己写一个 FileUpload 工具类已经足够使用了</li>
 </ul>
@@ -670,7 +664,7 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
 <h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><ol>
 <li>写一个简单的 jsp 页面：</li>
 </ol>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714074950.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-6ace49a2c5c19e7e.png" alt=""></p>
 <ol start="2">
 <li>在 WEB-INF 下创建 download 文件夹，里面放入一个 test.zip</li>
 <li>编写 Servlet 处理相关请求</li>
@@ -721,6 +715,10 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
         Files<span class="token punctuation">.</span><span class="token function">copy</span><span class="token punctuation">(</span>Paths<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>f<span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> out<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -985,8 +983,8 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
                                 </a>
                             
                             
@@ -1000,8 +998,8 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                 </div>
@@ -1043,8 +1041,8 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java-Web/" class="post-category" target="_blank">
-                                    Java Web
+                            <a href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" class="post-category" target="_blank">
+                                    JavaWeb基础
                                 </a>
                             
                             
@@ -1058,8 +1056,8 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/Java-Web/" target="_blank">
-                        <span class="chip bg-color">Java Web</span>
+                    <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">JavaWeb基础</span>
                     </a>
                     
                 </div>
@@ -1217,7 +1215,7 @@ smartUpload<span class="token punctuation">.</span><span class="token function">
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

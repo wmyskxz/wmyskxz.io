@@ -11,7 +11,8 @@
 
 前序文章：
 
-数据结构与算法(1)——数组与链表（https://www.wmyskxz.com/2018/07/06/shu-ju-jie-gou-yu-su">
+数据结构与算法(1)——数组与链表（https://www.jianshu.com/p/7b93b3570875）
+数据结构与算法(2)——栈和队">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -389,6 +390,10 @@
                                 数据结构与算法
                             </a>
                         
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%9D%A2%E8%AF%95/" class="post-category" target="_blank">
+                                面试
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -427,19 +432,19 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165757.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-bf78bc61f021e9a2.png" alt=""></p>
 <blockquote>
 <p>前言：题图无关，接下来开始简单学习学习优先队列和堆的相关数据结构的知识；</p>
 </blockquote>
 <p><strong>前序文章：</strong></p>
 <ul>
-<li>数据结构与算法(1)——数组与链表（<a href="https://www.wmyskxz.com/2018/07/06/shu-ju-jie-gou-yu-suan-fa-2-zhan-he-dui-lie/）">https://www.wmyskxz.com/2018/07/06/shu-ju-jie-gou-yu-suan-fa-2-zhan-he-dui-lie/）</a></li>
-<li>数据结构与算法(2)——栈和队列(<a href="https://www.wmyskxz.com/2018/07/02/shu-ju-jie-gou-yu-suan-fa-1-shu-zu-yu-lian-biao/">https://www.wmyskxz.com/2018/07/02/shu-ju-jie-gou-yu-suan-fa-1-shu-zu-yu-lian-biao/</a>)</li>
-<li>数据结构与算法(3)——树（二叉、二叉搜索树）(<a href="https://www.wmyskxz.com/2018/07/11/shu-ju-jie-gou-yu-suan-fa-3-shu-er-cha-er-cha-sou-suo-shu/">https://www.wmyskxz.com/2018/07/11/shu-ju-jie-gou-yu-suan-fa-3-shu-er-cha-er-cha-sou-suo-shu/</a>)</li>
+<li>数据结构与算法(1)——数组与链表（<a href="https://www.jianshu.com/p/7b93b3570875）" target="_blank" rel="noopener">https://www.jianshu.com/p/7b93b3570875）</a></li>
+<li>数据结构与算法(2)——栈和队列(<a href="https://www.jianshu.com/p/5087c751cb42" target="_blank" rel="noopener">https://www.jianshu.com/p/5087c751cb42</a>)</li>
+<li>数据结构与算法(3)——树（二叉、二叉搜索树）(<a href="https://www.jianshu.com/p/4ef1f50d45b5" target="_blank" rel="noopener">https://www.jianshu.com/p/4ef1f50d45b5</a>)</li>
 </ul>
 <h1 id="什么是优先队列？"><a href="#什么是优先队列？" class="headerlink" title="什么是优先队列？"></a>什么是优先队列？</h1><p>听这个名字就能知道，优先队列也是一种队列，只不过不同的是，优先队列的出队顺序是按照优先级来的；在有些情况下，可能需要找到元素集合中的最小或者最大元素，可以利用优先队列ADT来完成操作，优先队列ADT是一种数据结构，它支持插入和删除最小值操作（返回并删除最小元素）或删除最大值操作（返回并删除最大元素）；</p>
 <p>这些操作等价于队列的<code>enQueue</code>和<code>deQueue</code>操作，区别在于，对于优先队列，元素进入队列的顺序可能与其被操作的顺序不同，作业调度是优先队列的一个应用实例，它根据优先级的高低而不是先到先服务的方式来进行调度；</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165805.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-c7a72a722781c0e2.png" alt=""></p>
 <p>如果最小键值元素拥有最高的优先级，那么这种优先队列叫作<strong>升序优先队列</strong>（即总是先删除最小的元素），类似的，如果最大键值元素拥有最高的优先级，那么这种优先队列叫作<strong>降序优先队列</strong>（即总是先删除最大的元素）；由于这两种类型时对称的，所以只需要关注其中一种，如升序优先队列；</p>
 <h2 id="优先队列ADT"><a href="#优先队列ADT" class="headerlink" title="优先队列ADT"></a>优先队列ADT</h2><p>下面操作组成了优先队列的一个ADT；</p>
 <p><strong>1.优先队列的主要操作</strong><br>优先队列是元素的容器，每个元素有一个相关的键值；</p>
@@ -515,12 +520,12 @@
 </tr>
 </tbody></table>
 <h1 id="堆和二叉堆"><a href="#堆和二叉堆" class="headerlink" title="堆和二叉堆"></a>堆和二叉堆</h1><h2 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h2><p><strong>堆是一颗具有特定性质的二叉树</strong>，堆的基本要求就是堆中所有结点的值必须大于或等于（或小于或等于）其孩子结点的值，这也称为堆的性质；堆还有另一个性质，就是当 h &gt; 0 时，所有叶子结点都处于第 h 或 h - 1 层（其中 h 为树的高度，完全二叉树），也就是说，堆应该是一颗完全二叉树；</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165839.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-38d8a1a70f849b1f.png" alt=""></p>
 <p>在下面的例子中，左边的树为堆（每个元素都大于其孩子结点的值），而右边的树不是堆（因为5大于其孩子结点2）</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165850.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-fdb654f7e2cefeb3.png" alt=""></p>
 <h2 id="二叉堆"><a href="#二叉堆" class="headerlink" title="二叉堆"></a>二叉堆</h2><p>在二叉堆中，每个结点最多有两个孩子结点，在实际应用中，二叉堆已经足够满足需求，因此接下来主要讨论二叉最小堆和二叉最大堆；</p>
 <p><strong>堆的表示：</strong>在描述堆的操作前，首先来看堆是怎样表示的，一种可能的方法就是使用数组，因为堆在形式上是一颗完全二叉树，用数组来存储它不会浪费任何空间，例如下图：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165901.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-0bce039cf9634ddf.png" alt=""></p>
 <p>用数组来表示堆不仅不会浪费空间还具有一定的优势：</p>
 <ul>
 <li>每个结点的左孩子为下标i的2倍：<code>left child(i) = i * 2</code>；每个结点的右孩子为下标i的2倍加1：<code>right child(i) = i * 2 + 1</code></li>
@@ -548,11 +553,11 @@
 <span class="token punctuation">}</span></code></pre>
 <h4 id="向堆中添加元素和Sift-Up"><a href="#向堆中添加元素和Sift-Up" class="headerlink" title="向堆中添加元素和Sift Up"></a>向堆中添加元素和Sift Up</h4><p>当插入一个元素到堆中时，它可能不满足堆的性质，在这种情况下，需要调整堆中元素的位置使之重新变成堆，这个过程称为堆化（heapifying）；在最大堆中，要堆化一个元素，需要找到它的父亲结点，如果不满足堆的基本性质则交换两个元素的位置，重复该过程直到每个结点都满足堆的性质为止，下面我们来模拟一下这个过程：</p>
 <p>下面我们在该堆中插入一个新的元素26：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165912.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-8b5d6249f0f62e7a.png" alt=""></p>
 <p>我们通过索引（上面的公式）可以很容易地找到新插入元素的父亲结点，然后比较它们的大小，如果新元素更大则交换两个元素的位置，这个操作就相当于把该元素上浮了一下：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165926.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-4965871de80dafc7.png" alt=""></p>
 <p>重复该操作直到26到了一个满足堆条件的位置，此时就完成了插入的操作：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165933.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-16fd4f5a344d152f.png" alt=""></p>
 <p>对应的代码如下：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 向堆中添加元素</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -568,17 +573,17 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <h4 id="取出堆中的最大元素和Sift-Down"><a href="#取出堆中的最大元素和Sift-Down" class="headerlink" title="取出堆中的最大元素和Sift Down"></a>取出堆中的最大元素和Sift Down</h4><p>如果理解了上述的过程，那么取出堆中的最大元素（堆顶元素）将变得容易，不过这里运用到一个小技巧，就是用最后一个元素替换掉栈顶元素，然后把最后一个元素删除掉，这样一来元素的总个数也满足条件，然后只需要把栈顶元素依次往下调整就好了，这个操作就叫做Sift Down（下沉）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165940.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-0fa8fb28068d6c91.png" alt=""></p>
 <p>用最后元素替换掉栈顶元素，然后删除最后一个元素：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713165950.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-fda14df231db5714.png" alt=""> </p>
 <p>然后比较其孩子结点的大小：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713170003.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-bf5de8b9e00bbefb.png" alt=""></p>
 <p>如果不满足堆的条件，那么就跟孩子结点中较大的一个交换位置：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713170009.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-0e9ae028105f1db9.png" alt=""></p>
 <p>重复该步骤，直到16到达合适的位置：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713170430.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-b01aa0bb1f918d43.png" alt=""></p>
 <p>完成取出最大元素的操作：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713170437.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-497dfbd2a9ab2628.png" alt=""></p>
 <p>对应的代码如下：</p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 看堆中的最大元素</span>
 <span class="token keyword">public</span> E <span class="token function">findMax</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -625,14 +630,15 @@
     <span class="token keyword">return</span> ret<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 <p><strong>Heapify</strong>翻译过来就是堆化的意思，就是将任意数组整理成堆的形状，通常的做法是遍历数组从0开始添加创建一个新的堆，但是这里存在一个小技巧就是把当前数组就看做是一个完全二叉树，然后从最后一个非叶子结点开始进行Sift Down操作就可以了，最后一个非叶子结点也很好找，就是最后一个结点的父亲结点，大家可以验证一下：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713170447.png" alt=""></p>
-<p>从22这个节点开始，依次开始Sift Down操作：<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171327.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-c1b4a31fa0c2d3d9.png" alt=""></p>
+<p>从22这个节点开始，依次开始Sift Down操作：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-fc8bcfb5d5c3f4c7.png" alt=""></p>
 <p>重复该过程直到堆顶元素：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171334.png" alt=""></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171341.png" alt=""></p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171350.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-888351adffccd447.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-5b12380ddeb1ad61.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-1513ebd00b08fdce.png" alt=""></p>
 <p>完成堆化操作：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171356.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-7dc7d63d91b1a2e6.png" alt=""></p>
 <p>将n个元素逐个插入到一个空堆中，算法复杂度是O(nlogn)，而heapify的过程，算法复杂度为O(n)，这是有一个质的飞跃的，下面是代码：</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">MaxHeap</span><span class="token punctuation">(</span>E<span class="token punctuation">[</span><span class="token punctuation">]</span> arr<span class="token punctuation">)</span><span class="token punctuation">{</span>
     data <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Array</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -684,7 +690,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>pq2<span class="token punctuation">.</span><span class="token function">poll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">", "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 <hr>
-<h1 id="LeetCode相关题目整理"><a href="#LeetCode相关题目整理" class="headerlink" title="LeetCode相关题目整理"></a>LeetCode相关题目整理</h1><h2 id="23-合并K个排序链表"><a href="#23-合并K个排序链表" class="headerlink" title="23. 合并K个排序链表"></a>23. 合并K个排序链表</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171429.png" alt=""></p>
+<h1 id="LeetCode相关题目整理"><a href="#LeetCode相关题目整理" class="headerlink" title="LeetCode相关题目整理"></a>LeetCode相关题目整理</h1><h2 id="23-合并K个排序链表"><a href="#23-合并K个排序链表" class="headerlink" title="23. 合并K个排序链表"></a>23. 合并K个排序链表</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-a2fecf661fbbb4da.png" alt=""></p>
 <p><strong>参考答案：（85ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ListNode <span class="token function">mergeKLists</span><span class="token punctuation">(</span>ListNode<span class="token punctuation">[</span><span class="token punctuation">]</span> lists<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>lists <span class="token operator">==</span> null <span class="token operator">||</span> lists<span class="token punctuation">.</span>length <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> null<span class="token punctuation">;</span>
@@ -709,7 +715,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 
     <span class="token keyword">return</span> dummy<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="215-数组中的第K个最大元素"><a href="#215-数组中的第K个最大元素" class="headerlink" title="215. 数组中的第K个最大元素"></a>215. 数组中的第K个最大元素</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171442.png" alt=""></p>
+<h2 id="215-数组中的第K个最大元素"><a href="#215-数组中的第K个最大元素" class="headerlink" title="215. 数组中的第K个最大元素"></a>215. 数组中的第K个最大元素</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-c3bf5d69077f945b.png" alt=""></p>
 <p><strong>我的答案：（75ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">findKthLargest</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">,</span> <span class="token keyword">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
 
@@ -766,7 +772,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 <blockquote>
 <p>而且我随机生成了一个100万数据的随机数组，来测试这个简单粗暴的方法的效率，发现当数据量上去之后，排序这个操作变得繁琐，我自己测试的时候，上面三个方法，第三个大概比第一个（我自己写的方法）多花仅4倍的时间；</p>
 </blockquote>
-<h2 id="239-滑动窗口最大值（类似剑指Offer面试题59）"><a href="#239-滑动窗口最大值（类似剑指Offer面试题59）" class="headerlink" title="239. 滑动窗口最大值（类似剑指Offer面试题59）"></a>239. 滑动窗口最大值（类似剑指Offer面试题59）</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171455.png" alt=""></p>
+<h2 id="239-滑动窗口最大值（类似剑指Offer面试题59）"><a href="#239-滑动窗口最大值（类似剑指Offer面试题59）" class="headerlink" title="239. 滑动窗口最大值（类似剑指Offer面试题59）"></a>239. 滑动窗口最大值（类似剑指Offer面试题59）</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-171dbeff0098e005.png" alt=""></p>
 <p><strong>参考答案：（88ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">maxSlidingWindow</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">,</span> <span class="token keyword">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>nums <span class="token operator">==</span> null <span class="token operator">||</span> k <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">int</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -821,7 +827,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> ans<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="264-丑数-II（剑指Offer面试题49）"><a href="#264-丑数-II（剑指Offer面试题49）" class="headerlink" title="264. 丑数 II（剑指Offer面试题49）"></a>264. 丑数 II（剑指Offer面试题49）</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171512.png" alt=""></p>
+<h2 id="264-丑数-II（剑指Offer面试题49）"><a href="#264-丑数-II（剑指Offer面试题49）" class="headerlink" title="264. 丑数 II（剑指Offer面试题49）"></a>264. 丑数 II（剑指Offer面试题49）</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-6f2e952994489240.png" alt=""></p>
 <p><strong>参考答案：（7ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">nthUglyNumber</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">// 正确性判断</span>
@@ -847,7 +853,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 <blockquote>
 <p>如果采用逐个判断每个整数是不是丑数的解法，直观但不够高效，所以我们就需要换一种思路，我的第一反应就是这其中一定有什么规律，但是尝试着找了一下，没找到…看了看答案才幡然醒悟，前面提到的算法之所以效率低，很大程度上是因为不管一个数是不是丑数，我们都要对它进行计算，接下来我们试着找到一种只计算丑数的方法，而不在非丑数的整数上花费时间，根据丑数的定义，丑数应该是另一个丑数乘以2、3或者5的结果（1除外），因此，我们可以创建一个数组，里面的数字是排好序的丑数，每个丑数都是前面的丑数乘以2、3或者5得到的，也就是上面的算法了..</p>
 </blockquote>
-<h2 id="295-数据流的中位数（剑指Offer面试题41）"><a href="#295-数据流的中位数（剑指Offer面试题41）" class="headerlink" title="295.数据流的中位数（剑指Offer面试题41）"></a>295.数据流的中位数（剑指Offer面试题41）</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171545.png" alt=""></p>
+<h2 id="295-数据流的中位数（剑指Offer面试题41）"><a href="#295-数据流的中位数（剑指Offer面试题41）" class="headerlink" title="295.数据流的中位数（剑指Offer面试题41）"></a>295.数据流的中位数（剑指Offer面试题41）</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-fa507452d5527f0d.png" alt=""></p>
 <p><strong>参考答案：（219ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MedianFinder</span> <span class="token punctuation">{</span>
 
@@ -880,9 +886,9 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 <span class="token punctuation">}</span></code></pre>
 <blockquote>
 <p><strong>思路：</strong>这道题的实现思路有很多，比如我们可以在插入的时候就将每个元素插入到正确的位置上，这样返回中位数的时候就会是一个O(1)的操作，下面列举一张表来说明不同实现的复杂度具体是多少：<br>数据结构 | 插入的时间复杂度 | 得到中位数的时间复杂度<br>:– | :– | :–<br>没有排序的数组 | O(1) | O(n)<br>排序的数组 | O(n) | O(1)<br>排序的链表 | O(n) | O(1)<br>二叉搜索树 | 平均O(logn)，最差O(n) | 平均O(logn)，最差O(n)<br>AVL树 | O(logn) | O(logn)<br>最大堆和最小堆 | O(logn) | O(logn)</p>
-<p>AVL树是一种很高效的数据结构，但是在大多数的语言中都没有现成的实现，所以考虑用最大堆和最小堆，对于一个已经排好序的数据容器，我们可以从中间分开分成两个部分，其中拿P1指向左半部分最大的元素，拿P2指向有半部分最小的元素，如果能够保证数据容器左边的数据都小于右边的数据，那么即使左、右两边内部的数据没有排序，我们仍然可以根据左边最大的数和右边最大的数得到中位数：<br><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171559.png" alt=""><br>如何快速从一个数据容器中找出最大数呢？我们可以使用最大堆来实现这个数据容器，因为堆顶的元素就是最大的元素；同样我们可以使用最小堆来快速找出一个数据容器中最小数。因此按照这个思路我们就可以使用一个最大堆实现左边的数据容器，使用一个最小堆实现右边的数据容器，但是需要注意的是这两个容器的大小差值不能超过1；</p>
+<p>AVL树是一种很高效的数据结构，但是在大多数的语言中都没有现成的实现，所以考虑用最大堆和最小堆，对于一个已经排好序的数据容器，我们可以从中间分开分成两个部分，其中拿P1指向左半部分最大的元素，拿P2指向有半部分最小的元素，如果能够保证数据容器左边的数据都小于右边的数据，那么即使左、右两边内部的数据没有排序，我们仍然可以根据左边最大的数和右边最大的数得到中位数：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-58cbfc45655c8a5c.png" alt=""><br>如何快速从一个数据容器中找出最大数呢？我们可以使用最大堆来实现这个数据容器，因为堆顶的元素就是最大的元素；同样我们可以使用最小堆来快速找出一个数据容器中最小数。因此按照这个思路我们就可以使用一个最大堆实现左边的数据容器，使用一个最小堆实现右边的数据容器，但是需要注意的是这两个容器的大小差值不能超过1；</p>
 </blockquote>
-<h2 id="347-前K个高频元素（类似剑指Offer面试题40）"><a href="#347-前K个高频元素（类似剑指Offer面试题40）" class="headerlink" title="347. 前K个高频元素（类似剑指Offer面试题40）"></a>347. 前K个高频元素（类似剑指Offer面试题40）</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171610.png" alt=""></p>
+<h2 id="347-前K个高频元素（类似剑指Offer面试题40）"><a href="#347-前K个高频元素（类似剑指Offer面试题40）" class="headerlink" title="347. 前K个高频元素（类似剑指Offer面试题40）"></a>347. 前K个高频元素（类似剑指Offer面试题40）</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-c8b5b908847cbf75.png" alt=""></p>
 <p><strong>参考答案：（131ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> <span class="token function">topKFrequent</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">,</span> <span class="token keyword">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     TreeMap<span class="token operator">&lt;</span>Integer<span class="token punctuation">,</span> Integer<span class="token operator">></span> map <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -911,7 +917,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
     <span class="token punctuation">}</span>
     <span class="token keyword">return</span> res<span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
-<h2 id="692-前K个高频单词"><a href="#692-前K个高频单词" class="headerlink" title="692. 前K个高频单词"></a>692. 前K个高频单词</h2><p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190713171620.png" alt=""></p>
+<h2 id="692-前K个高频单词"><a href="#692-前K个高频单词" class="headerlink" title="692. 前K个高频单词"></a>692. 前K个高频单词</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97%E5%92%8C%E5%A0%86/7896890-ab7352ea3090669b.png" alt=""></p>
 <p><strong>参考答案：（72ms）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> List<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token function">topKFrequent</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> words<span class="token punctuation">,</span> <span class="token keyword">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Integer<span class="token operator">></span> count <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -952,6 +958,9 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 </blockquote>
 <hr>
 <h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>今天算是很有收获的一天，因为这两种数据结构都是自己特别不熟悉的，特别是在刷了一些LeetCode相关题目之后，对这两种数据有了很不一样的认识，特别是堆的应用，这是一种特别适合用来找第k小/大的特殊的数据结构，并且在Java中居然有直接的实现，这可太棒了，而且今天的效率还算挺高的，满足；</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -1221,6 +1230,10 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
                                     Java基础
                                 </a>
                             
+                            <a href="/categories/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95/" class="post-category" target="_blank">
+                                    面试
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -1232,12 +1245,12 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
                         <span class="chip bg-color">原创</span>
                     </a>
                     
-                    <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
-                        <span class="chip bg-color">面试</span>
-                    </a>
-                    
                     <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
                         <span class="chip bg-color">Java基础</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%9D%A2%E8%AF%95/" target="_blank">
+                        <span class="chip bg-color">面试</span>
                     </a>
                     
                 </div>
@@ -1269,7 +1282,8 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 
 前序文章：
 
-数据结构与算法(1)——数组与链表（https://www.wmyskxz.com/2018/07/06/shu-ju-jie-gou-yu-suan-fa-2-zhan-
+数据结构与算法(1)——数组与链表（https://www.jianshu.com/p/7b93b3570875）
+数据结构与算法(2)——栈和队列(https://www
                         
                     </div>
                     <div class="publish-info">
@@ -1282,6 +1296,10 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
                             
                             <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-category" target="_blank">
                                     数据结构与算法
+                                </a>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%9D%A2%E8%AF%95/" class="post-category" target="_blank">
+                                    面试
                                 </a>
                             
                             
@@ -1458,7 +1476,7 @@ pq2<span class="token punctuation">.</span><span class="token function">add</spa
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

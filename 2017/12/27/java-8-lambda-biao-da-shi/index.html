@@ -366,6 +366,10 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
+                            <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                                <span class="chip bg-color">Java基础</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -393,7 +397,7 @@
                     
                     <div class="info-break-policy">
                         <i class="fa fa-file-word-o fa-fw"></i>文章字数:&nbsp;&nbsp;
-                        3.2k
+                        3.3k
                     </div>
                     
 
@@ -423,16 +427,16 @@
 <p>但是你同时也看到，使用匿名类来表示不同的行为并不令人满意：代码十分啰嗦，这会影响程序员在时间中使用行为参数化的积极性。Lambda表达式很好的解决了这个问题，它可以让你很简洁地表示一个行为或传递代码。<em>现在你可以把Lambda表达式看作匿名功能，它基本上就是没有声明名称的方法，但和匿名类一样，它也可以作为参数传递给一个方法。</em></p>
 <h2 id="Lambda管中窥豹"><a href="#Lambda管中窥豹" class="headerlink" title="Lambda管中窥豹"></a>Lambda管中窥豹</h2><p>可以把Lambda表达式理解为简洁地表示可传递的匿名函数的一种方式：它没有名称，但它由参数列表、函数主体、返回类型，可能还有一个抛出的异常列表。</p>
 <p>Lambda表达式鼓励你采用上一篇文章中提到的行为参数化风格，最终结果就是你的额代码变得更加清晰、更加灵活。比如，利用Lambda表达式，你可以更为简洁地自定义一个Comparator对象：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083347.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d3f5c5e9f12542c8.png" alt=""></p>
 <p>不得不承认，代码看起来更清晰了。要是现在觉得Lambda表达式看起来一头雾水的话也没关系，很快就会一点点的解释清楚的。现在，请注意你基本上只传递了比较两个苹果重量所需要的代码。看起来就像只传递了compare方法的主体。你很快就会学到，你甚至还可以进一步简化代码。</p>
 <p>为了进一步说明，下面给出了Java 8五个有效的Lambda表达式的例子：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083357.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-bb79f4b577fd7e90.png" alt=""></p>
 <p>Java语言设计者选择这样的语法，是因为C#和Scala等语言中的类似功能广受欢迎。Lambda的基本语法是：</p>
 <pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> expression</code></pre>
 <p>或<strong>（请注意语句的花括号）</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span> statements<span class="token punctuation">;</span> <span class="token punctuation">}</span></code></pre>
 <p>你可以看到，Lambda表达式的语法很简单，我们下来来测试一下你对这个模式的了解程度：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083403.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-06b3f2c0e4b6db8d.png" alt=""></p>
 <h2 id="在哪里以及如何使用Lambda"><a href="#在哪里以及如何使用Lambda" class="headerlink" title="在哪里以及如何使用Lambda"></a>在哪里以及如何使用Lambda</h2><p>现在你可能在想，在哪里可以使用Lambda表达式。直接公布答案：你可以在函数式接口上使用Lambda表达式。</p>
 <h4 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h4><p>还记得上一篇文章中，为了参数化filter方法的行为而创建的Predicate<T>接口吗？它就是一个函数式接口！为什么呢？<strong>因为Predicate仅仅定义了一个抽象方法：</strong></p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Predicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
@@ -450,12 +454,12 @@
 <p>接口现在还可以拥有<strong>默认方法（即在类没有对方法进行是现实时，其主体为方法提供默认实现的方法，如List的sort方法）。</strong>哪怕有很多默认方法，只要接口只定义了一个<strong>抽象方法</strong>，它就仍然是一个函数式接口。</p>
 </blockquote>
 <p>为了检测是否掌握了函数式接口的概念，我们来看一个小测试：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083415.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-f6f5aac41c69a941.png" alt=""></p>
 <p>用函数式接口可以干什么呢？Lambda表达式允许你直接以内联的形式为函数式接口的抽象方法提供实现，并把整个表达式作为函数式接口的实例。这听上去可能有些绕口，但是联想到上一篇文章中的Lambda表达式改造的语句，或许就会清晰许多，它不同于使用匿名内部类来完成时的笨拙，而是更加清晰直接：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083425.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-87c3fe03f78c82c7.png" alt=""></p>
 <p>你可能会想：“为什么只有在需要函数式接口的时候才可以传递Lambda呢？”语言的设计者也考虑过其他方法，例如给Java添加函数类型，但最终他们选择了现在这种方式，因为这种方式自然且能避免语言变得更加复杂。此外，大多数Java程序员都已经熟悉了具有一个抽象方法的接口的理念（例如事件处理）。</p>
 <h2 id="把Lambda付诸实践：环绕执行模式"><a href="#把Lambda付诸实践：环绕执行模式" class="headerlink" title="把Lambda付诸实践：环绕执行模式"></a>把Lambda付诸实践：环绕执行模式</h2><p>让我们通过一个例子，看看在实践中如何利用Lambda和行为参数化来让代码更为灵活，更为简洁。资源处理（例如处理文件或数据库）时一个常见的模式就是打开一个资源，做一些处理，然后关闭资源。这个设置和清理阶段总是很相似，并且会围绕着执行处理的那些重要代码。这就是所谓的环绕执行（execute around）模式：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083600.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d84c98d38f06f440.png" alt=""></p>
 <h4 id="第一步：记得行为参数化"><a href="#第一步：记得行为参数化" class="headerlink" title="第一步：记得行为参数化"></a>第一步：记得行为参数化</h4><p>现在这段代码时有局限的。你只能读文件的第一行。如果你想要返回头两行，甚至返回使用最频繁的词，该怎么办呢？在理想的情况下，你要重用执行设置和清理的代码，并告诉processFile方法对文件执行不同的操作。这听起来是不是很耳熟？是的，你需要把processFile的行为参数化。你需要一种方法把行为传递给processFile，以便它可以利用BufferedReader执行不同的行为。</p>
 <p>传递行为正是Lambda的拿手好戏。那要是想一次读两行，这个新的processFile方法看起来又该是什么样的呢？基本上，你需要一个接受BufferedReader并返回String的Lambda。例如，下面就是从BufferedReader中打印两行的写法：</p>
 <pre class=" language-java"><code class="language-java">String result <span class="token operator">=</span> <span class="token function">processFile</span><span class="token punctuation">(</span><span class="token punctuation">(</span>BufferedReader br<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> 
@@ -479,27 +483,27 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span></code></pre>
 <h4 id="第四步：传递Lambda"><a href="#第四步：传递Lambda" class="headerlink" title="第四步：传递Lambda"></a>第四步：传递Lambda</h4><p>现在你就可以通过传递不同的Lambda重用processFile方法，并以不同的方式处理文件了：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083608.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-05575cb8fe8ec81d.png" alt=""></p>
 <p>下面的图片总结了所采取的使processFile方法更加灵活的四个步骤：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083617.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-3dd5fb3566051fab.png" alt=""></p>
 <h2 id="使用函数式接口"><a href="#使用函数式接口" class="headerlink" title="使用函数式接口"></a>使用函数式接口</h2><p>如你所见的，函数式接口很有用，因为抽象方法的签名可以描述Lambda表达式的签名。Java 8的库设计师帮你在java.util.function包中引入了几个新的函数式接口。</p>
 <h4 id="Predicate"><a href="#Predicate" class="headerlink" title="Predicate"></a>Predicate</h4><p>java.util.function.Predicate<T>接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。在你需要一个涉及类型T的布尔表达式时，就可以使用这个接口：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083623.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d66c0b5eca69e0fa.png" alt=""></p>
 <h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><p>java.util.function.Consumer<T>定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。你如果需要访问类型T的对象，并对其执行某些操作，就可以使用这个接口：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083630.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-b82ecf93c4a48e75.png" alt=""></p>
 <h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p>java.util.function.Function&lt;T,R&gt;接口定义了一个叫做apply的方法，它接受一个泛型T的对象，并返回一个泛型R的对象。如果你需要定义一个Lambda，将输入对象的信息映射到输出，就可以使用这个接口（比如提取苹果的重量，或把字符串映射为它的长度）：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083636.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-94bc9527054fe819.png" alt=""></p>
 <blockquote>
 <p>还有更为丰富的一些函数式接口，这里列举了三个比较有代表性的。</p>
 </blockquote>
 <h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>方法引用让你可以重复使用现有的方法定义，并像Lambda一样传递它们。在一些情况下，比起使用Lambda表达式，它们似乎更易读，感觉也更自然。下面就是借助Java 8API，用方法引用写的一个排序的例子：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083644.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-93999b52611588fe.png" alt=""></p>
 <p>是不是更酷了？念起来就是“给库存排序，比较苹果的重量”，这样的代码读起来简直就像是在描述问题本身，太酷了。</p>
 <p>为什么要关心方法引用呢？<strong>方法引用可以被看作调用特定方法的Lambda的一种快捷写法。</strong>它的基本思想是，如果一个Lambda代表的知识“直接调用这个方法”，拿最好还是用名称来调用它，而不是去描述如何调用它。</p>
 <p>事实上，方法引用就是让你根据已有的方法实现来创建Lambda表达式，但是，显式地指明方法的名称，你的代码可读性会更好。</p>
 <p>它是如何工作的呢？当你需要使用方法引用时，目标引用放在分隔符** :: **前，方法的名称放在后面。例如，Apple::getWeight就是引用了Apple类中定义的方法getWeight。请记住，不需要括号，因为你没有实际调用这个方法，方法引用就是Lambda表达式(Apple a) -&gt; a.getWeight()的快捷写法。</p>
 <p>下面给出一些在Java 8中方法引用的例子来让你更加了解：</p>
-<p><img src="https://blog-1259634016.cos.ap-chengdu.myqcloud.com/img/20190714083650.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-c3ab872955c9ad67.png" alt=""></p>
 <p>你可以把方法引用看作针对仅仅涉及单一方法的Lambda的语法糖，因为你表达同样的事情时写的代码更少了。</p>
 <h2 id="Lambda-和方法引用实战"><a href="#Lambda-和方法引用实战" class="headerlink" title="Lambda 和方法引用实战"></a>Lambda 和方法引用实战</h2><p>我们继续来研究开始的那个问题——用不同的排序策略给一个Apple列表排序，并展示如何把一个原始粗暴的解决方案转变得更为简明：<code>inventory.sort(comparing(Apple::getWeight));</code></p>
 <h4 id="第一步：传递代码"><a href="#第一步：传递代码" class="headerlink" title="第一步：传递代码"></a>第一步：传递代码</h4><p>很幸运，Java 8的API已经为你提供了一个List可用的sort方法，你不用自己去实现它。那么最困难的部分已经搞定了！但是，如何把排序的策略传递给sort方法呢？你看，sort方法的签名是这样的：</p>
@@ -528,6 +532,10 @@ inventory<span class="token punctuation">.</span><span class="token function">so
 <h4 id="第四步：使用方法引用"><a href="#第四步：使用方法引用" class="headerlink" title="第四步：使用方法引用"></a>第四步：使用方法引用</h4><p>前面解释过，方法引用就是替代那些转发参数的Lambda表达式的语法糖。你可以用方法引用让你的代码更加简洁（假设你已经静态导入了java.util.Comparator.comparing）：</p>
 <p><code>inventory.sort(comparing(Apple::getWeight));</code></p>
 <p>恭喜你，这就是你的最终解决方案！这笔Java 8之前的代码好在哪儿呢？它比较短；它的意思也很明显，并且代码读起来和问题描述差不多：“对库存进行排序，比较苹果的重量。”</p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
 
             </div>
             <hr/>
@@ -808,6 +816,10 @@ inventory<span class="token punctuation">.</span><span class="token function">so
                         <span class="chip bg-color">原创</span>
                     </a>
                     
+                    <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">Java基础</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -856,6 +868,10 @@ Java 8中新增的功能是自Java 1.0发布以来18年
                     
                     <a href="/tags/%E5%8E%9F%E5%88%9B/" target="_blank">
                         <span class="chip bg-color">原创</span>
+                    </a>
+                    
+                    <a href="/tags/Java%E5%9F%BA%E7%A1%80/" target="_blank">
+                        <span class="chip bg-color">Java基础</span>
                     </a>
                     
                 </div>
@@ -1013,7 +1029,7 @@ Java 8中新增的功能是自Java 1.0发布以来18年
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             

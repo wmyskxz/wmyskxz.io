@@ -364,8 +364,16 @@
                                 <span class="chip bg-color">原创</span>
                             </a>
                         
+                            <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                                <span class="chip bg-color">JavaWeb进阶</span>
+                            </a>
+                        
                             <a href="/tags/Redis/" target="_blank">
                                 <span class="chip bg-color">Redis</span>
+                            </a>
+                        
+                            <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                                <span class="chip bg-color">中间件</span>
                             </a>
                         
                     </div>
@@ -376,12 +384,12 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                Redis
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                中间件
                             </a>
                         
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                中间件学习
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                JavaWeb进阶
                             </a>
                         
                     </div>
@@ -422,20 +430,20 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/images/pasted-9.png" alt=""></p>
+                <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-59d043fad3a66d7f.png" alt=""></p>
 <h1 id="一、布隆过滤器简介"><a href="#一、布隆过滤器简介" class="headerlink" title="一、布隆过滤器简介"></a>一、布隆过滤器简介</h1><p><a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">上一次</a> 我们学会了使用 <strong>HyperLogLog</strong> 来对大数据进行一个估算，它非常有价值，可以解决很多精确度不高的统计需求。但是如果我们想知道某一个值是不是已经在 <strong>HyperLogLog</strong> 结构里面了，它就无能为力了，它只提供了 <code>pfadd</code> 和 <code>pfcount</code> 方法，没有提供类似于 <code>contains</code> 的这种方法。</p>
 <p>就举一个场景吧，比如你 <strong>刷抖音</strong>：</p>
-<p><img src="/images/pasted-1.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-c7b6b5c8a47caf4a.png" alt=""></p>
 <p>你有 <strong>刷到过重复的推荐内容</strong> 吗？这么多的推荐内容要推荐给这么多的用户，它是怎么保证每个用户在看推荐内容时，保证不会出现之前已经看过的推荐视频呢？也就是说，抖音是如何实现 <strong>推送去重</strong> 的呢？</p>
 <p>你会想到服务器 <strong>记录</strong> 了用户看过的 <strong>所有历史记录</strong>，当推荐系统推荐短视频时会从每个用户的历史记录里进行 <strong>筛选</strong>，过滤掉那些已经存在的记录。问题是当 <strong>用户量很大</strong>，每个用户看过的短视频又很多的情况下，这种方式，推荐系统的去重工作 <strong>在性能上跟的上么？</strong></p>
 <p>实际上，如果历史记录存储在关系数据库里，去重就需要频繁地对数据库进行 <code>exists</code> 查询，当系统并发量很高时，数据库是很难抗住压力的。</p>
-<p><img src="/images/pasted-2.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-099f3600b7022ef6.jpg" alt="image"></p>
 <p>你可能又想到了 <strong>缓存</strong>，但是这么多用户这么多的历史记录，如果全部缓存起来，那得需要 <strong>浪费多大的空间</strong> 啊.. <em>(可能老板看一眼账单，看一眼你..)</em> 并且这个存储空间会随着时间呈线性增长，就算你用缓存撑得住一个月，但是又能继续撑多久呢？不缓存性能又跟不上，咋办呢？</p>
-<p><img src="/images/pasted-3.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-204e7440395a31b5.png" alt=""></p>
 <p>如上图所示，<strong>布隆过滤器(Bloom Filter)</strong> 就是这样一种专门用来解决去重问题的高级数据结构。但是跟 <strong>HyperLogLog</strong> 一样，它也一样有那么一点点不精确，也存在一定的误判概率，但它能在解决去重的同时，在 <strong>空间上能节省 90%</strong> 以上，也是非常值得的。</p>
 <h2 id="布隆过滤器是什么"><a href="#布隆过滤器是什么" class="headerlink" title="布隆过滤器是什么"></a>布隆过滤器是什么</h2><p><strong>布隆过滤器（Bloom Filter）</strong> 是 1970 年由布隆提出的。它 <strong>实际上</strong> 是一个很长的二进制向量和一系列随机映射函数 <em>(下面详细说)</em>，实际上你也可以把它 <strong>简单理解</strong> 为一个不怎么精确的 <strong>set</strong> 结构，当你使用它的 <code>contains</code> 方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判概率。</p>
 <p>当布隆过滤器说某个值存在时，这个值 <strong>可能不存在</strong>；当它说不存在时，那么 <strong>一定不存在</strong>。打个比方，当它说不认识你时，那就是真的不认识，但是当它说认识你的时候，可能是因为你长得像它认识的另外一个朋友 <em>(脸长得有些相似)</em>，所以误判认识你。</p>
-<p><img src="/images/pasted-4.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-757891d52045869d.jpg" alt="image"></p>
 <h2 id="布隆过滤器的使用场景"><a href="#布隆过滤器的使用场景" class="headerlink" title="布隆过滤器的使用场景"></a>布隆过滤器的使用场景</h2><p>基于上述的功能，我们大致可以把布隆过滤器用于以下的场景之中：</p>
 <ul>
 <li><strong>大数据判断是否存在</strong>：这就可以实现出上述的去重功能，如果你的服务器内存足够大的话，那么使用 HashMap 可能是一个不错的解决方案，理论上时间复杂度可以达到 O(1 的级别，但是当数据量起来之后，还是只能考虑布隆过滤器。</li>
@@ -443,12 +451,12 @@
 <li><strong>爬虫/ 邮箱等系统的过滤</strong>：平时不知道你有没有注意到有一些正常的邮件也会被放进垃圾邮件目录中，这就是使用布隆过滤器 <strong>误判</strong> 导致的。</li>
 </ul>
 <h1 id="二、布隆过滤器原理解析"><a href="#二、布隆过滤器原理解析" class="headerlink" title="二、布隆过滤器原理解析"></a>二、布隆过滤器原理解析</h1><p>布隆过滤器 <strong>本质上</strong> 是由长度为 <code>m</code> 的位向量或位列表（仅包含 <code>0</code> 或 <code>1</code> 位值的列表）组成，最初所有的值均设置为 <code>0</code>，所以我们先来创建一个稍微长一些的位向量用作展示：</p>
-<p><img src="/images/pasted-5.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-362a693c82af3c8e.png" alt=""></p>
 <p>当我们向布隆过滤器中添加数据时，会使用 <strong>多个</strong> <code>hash</code> 函数对 <code>key</code> 进行运算，算得一个证书索引值，然后对位数组长度进行取模运算得到一个位置，每个 <code>hash</code> 函数都会算得一个不同的位置。再把位数组的这几个位置都置为 <code>1</code> 就完成了 <code>add</code> 操作，例如，我们添加一个 <code>wmyskxz</code>：</p>
-<p><img src="/images/pasted-6.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-fdbf75a56fb03c02.png" alt=""></p>
 <p>向布隆过滤器查查询 <code>key</code> 是否存在时，跟 <code>add</code> 操作一样，会把这个 <code>key</code> 通过相同的多个 <code>hash</code> 函数进行运算，查看 <strong>对应的位置</strong> 是否 <strong>都</strong> 为 <code>1</code>，<strong>只要有一个位为 <code>0</code></strong>，那么说明布隆过滤器中这个 <code>key</code> 不存在。如果这几个位置都是 <code>1</code>，并不能说明这个 <code>key</code> 一定存在，只能说极有可能存在，因为这些位置的 <code>1</code> 可能是因为其他的 <code>key</code> 存在导致的。</p>
 <p>就比如我们在 <code>add</code> 了一定的数据之后，查询一个 <strong>不存在</strong> 的 <code>key</code>：</p>
-<p><img src="/images/pasted-7.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-0beb6acc89d5c927.png" alt=""></p>
 <p>很明显，<code>1/3/5</code> 这几个位置的 <code>1</code> 是因为上面第一次添加的 <code>wmyskxz</code> 而导致的，所以这里就存在 <strong>误判</strong>。幸运的是，布隆过滤器有一个可以预判误判率的公式，比较复杂，感兴趣的朋友可以自行去阅读，比较烧脑.. 只需要记住以下几点就好了：</p>
 <ul>
 <li>使用时 <strong>不要让实际元素数量远大于初始化数量</strong>；</li>
@@ -689,7 +697,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <li>Redis(1)——5种基本数据结构 - <a href="https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/</a></li>
 <li>Redis(2)——跳跃表 - <a href="https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/">https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/</a></li>
 <li>Redis(3)——分布式锁深入探究 - <a href="https://www.wmyskxz.com/2020/03/01/redis-3/">https://www.wmyskxz.com/2020/03/01/redis-3/</a></li>
-<li>Reids(4)——神奇的HyperLoglog解决统计问题 - <a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/</a></li>
+<li>Reids(4)——神奇的HyperLoglog解决统计问题 - <a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/</a>\</li>
 </ol>
 <h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
 <li>《Redis 深度历险》 - 钱文品/ 著 - <a href="https://book.douban.com/subject/30386804/" target="_blank" rel="noopener">https://book.douban.com/subject/30386804/</a></li>
@@ -702,7 +710,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 <li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
 </ul>
 </blockquote>
-<p><img src="/images/pasted-8.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-fca34cfd601e7449.png" alt=""></p>
 <p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
 <p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
 
@@ -968,12 +976,12 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Redis/" class="post-category" target="_blank">
-                                    Redis
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" class="post-category" target="_blank">
+                                    中间件
                                 </a>
                             
-                            <a href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="post-category" target="_blank">
-                                    中间件学习
+                            <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/" class="post-category" target="_blank">
+                                    JavaWeb进阶
                                 </a>
                             
                             
@@ -987,8 +995,16 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                         <span class="chip bg-color">原创</span>
                     </a>
                     
+                    <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" target="_blank">
+                        <span class="chip bg-color">JavaWeb进阶</span>
+                    </a>
+                    
                     <a href="/tags/Redis/" target="_blank">
                         <span class="chip bg-color">Redis</span>
+                    </a>
+                    
+                    <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" target="_blank">
+                        <span class="chip bg-color">中间件</span>
                     </a>
                     
                 </div>
@@ -1028,11 +1044,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" class="post-category" target="_blank">
-                                    人类观察所
-                                </a>
-                            
-                            <a href="/categories/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" class="post-category" target="_blank">
+                            <a href="/categories/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" class="post-category" target="_blank">
                                     好奇星人
                                 </a>
                             
@@ -1042,10 +1054,6 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
                 </div>
                 
                 <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E4%BA%BA%E7%B1%BB%E8%A7%82%E5%AF%9F%E6%89%80/" target="_blank">
-                        <span class="chip bg-color">人类观察所</span>
-                    </a>
                     
                     <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" target="_blank">
                         <span class="chip bg-color">好奇星人</span>
@@ -1206,7 +1214,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
 
             
                 &nbsp;<i class="fa fa-area-chart"></i>&nbsp;站点总字数:&nbsp;
-                <span class="white-color">631.3k</span>
+                <span class="white-color">654.7k</span>
             
 
             
