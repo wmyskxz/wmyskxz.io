@@ -435,6 +435,222 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/11/spring-xue-xi-2-spring-ioc-xiang-jie/">
+      Spring学习(2)——Spring IoC详解
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月11日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-34e6864b15c793ec.png" alt=""></p>
+<h2 id="Spring-IoC-概述"><a href="#Spring-IoC-概述" class="headerlink" title="Spring IoC 概述"></a>Spring IoC 概述</h2><h4 id="IoC：Inverse-of-Control（控制反转）"><a href="#IoC：Inverse-of-Control（控制反转）" class="headerlink" title="IoC：Inverse of Control（控制反转）"></a>IoC：Inverse of Control（控制反转）</h4><ul>
+<li>读作 <strong>“反转控制”</strong>，更好理解，不是什么技术，而是一种<strong>设计思想</strong>，就是<strong>将原本在程序中手动创建对象的控制权，交由Spring框架来管理。</strong></li>
+<li><strong>正控：</strong>若要使用某个对象，需要<strong>自己去负责对象的创建</strong></li>
+<li><strong>反控：</strong>若要使用某个对象，只需要<strong>从 Spring 容器中获取需要使用的对象，不关心对象的创建过程</strong>，也就是把<strong>创建对象的控制权反转给了Spring框架</strong></li>
+<li><strong>好莱坞法则：</strong> Don’t call me ,I’ll call you</li>
+</ul>
+<h4 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h4><p>控制反转显然是一个抽象的概念，我们举一个鲜明的例子来说明。</p>
+<p>在现实生活中，人们要用到一样东西的时候，第一反应就是去找到这件东西，比如想喝新鲜橙汁，在没有饮品店的日子里，最直观的做法就是：买果汁机、买橙子，然后准备开水。值得注意的是：这些都是你自己<strong>“主动”创造</strong>的过程，也就是说一杯橙汁需要你自己创造。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-e460070aba0d8ab0.png" alt=""></p>
+<p>然而到了今时今日，由于饮品店的盛行，当我们想喝橙汁时，第一想法就转换成了找到饮品店的联系方式，通过电话等渠道描述你的需要、地址、联系方式等，下订单等待，过一会儿就会有人送来橙汁了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-5cebd72ddc461d18.png" alt=""></p>
+<p><strong>请注意你并没有“主动”去创造橙汁</strong>，橙汁是由饮品店创造的，而不是你，然而也完全达到了你的要求，甚至比你创造的要好上那么一些。</p>
+<h4 id="Spring-IoC-阐述"><a href="#Spring-IoC-阐述" class="headerlink" title="Spring IoC 阐述"></a>Spring IoC 阐述</h4><p>这就是一种控制反转的理念，上述的例子已经很好的说明了问题，我们再来描述一下控制反转的概念：<strong>控制反转是一种通过描述（在 Java 中可以是 XML 或者注解）并通过第三方（Spring）去产生或获取特定对象的方式。</strong> </p>
+<ul>
+<li><strong>好处：</strong><br>降低对象之间的耦合<br>我们不需要理解一个类的具体实现，只需要知道它有什么用就好了（直接向 IoC 容器拿）</li>
+</ul>
+<p>主动创建的模式中，责任归于开发者，而在被动的模式下，责任归于 IoC 容器，<strong>基于这样的被动形式，我们就说对象被控制反转了。（也可以说是反转了控制）</strong></p>
+<hr>
+<h2 id="Spring-IoC-容器"><a href="#Spring-IoC-容器" class="headerlink" title="Spring IoC 容器"></a>Spring IoC 容器</h2><p>Spring 会提供 <strong>IoC 容器</strong>来管理和容纳我们所开发的各种各样的 Bean，并且我们可以从中获取各种发布在 Spring IoC 容器里的 Bean，并且<strong>通过描述</strong>可以得到它。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-5b59278f85cd6086.png" alt=""></p>
+<h4 id="Spring-IoC-容器的设计"><a href="#Spring-IoC-容器的设计" class="headerlink" title="Spring IoC 容器的设计"></a>Spring IoC 容器的设计</h4><p>Spring IoC 容器的设计主要是基于以下两个接口：</p>
+<ul>
+<li><strong>BeanFactory</strong></li>
+<li><strong>ApplicationContext</strong> </li>
+</ul>
+<p>其中 ApplicationContext 是 BeanFactory 的子接口之一，换句话说：<strong>BeanFactory 是 Spring IoC 容器所定义的最底层接口，</strong>而 ApplicationContext 是其最高级接口之一，并对 BeanFactory 功能做了许多的扩展，所以在<strong>绝大部分的工作场景下</strong>，都会使用 ApplicationContext 作为 Spring IoC 容器。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-539d3860abb6b3f7.png" alt="ApplicationContext 继承关系"></p>
+<h4 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h4><p>从上图中我们可以几乎看到， BeanFactory 位于设计的最底层，它提供了 Spring IoC 最底层的设计，为此，我们先来看看该类中提供了哪些方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-ec7f8eb4cc563216.png" alt=""></p>
+<p>由于这个接口的重要性，所以有必要在这里作一下简短的说明：</p>
+<ul>
+<li>【getBean】 对应了多个方法来获取配置给 Spring IoC 容器的 Bean。<br>① 按照类型拿 bean：<br><code>bean = (Bean) factory.getBean(Bean.class);</code></li>
+</ul>
+<p><strong>注意：</strong> 要求在 Spring 中只配置了一个这种类型的实例，否则报错。（如果有多个那 Spring 就懵了，不知道该获取哪一个）<br>② 按照 bean 的名字拿 bean:<br><code>bean = (Bean) factory.getBean(&quot;beanName&quot;);</code><br><strong>注意：</strong> 这种方法不太安全，IDE 不会检查其安全性（关联性）<br>③ 按照名字和类型拿 bean：<strong>（推荐）</strong><br><code>bean = (Bean) factory.getBean(&quot;beanName&quot;, Bean.class);</code></p>
+<ul>
+<li>【isSingleton】 用于判断是否单例，如果判断为真，其意思是该 Bean 在容器中是作为一个唯一单例存在的。而【isPrototype】则相反，如果判断为真，意思是当你从容器中获取 Bean，容器就为你生成一个新的实例。</li>
+</ul>
+<p><strong>注意：</strong> 在默认情况下，【isSingleton】为 ture，而【isPrototype】为 false</p>
+<ul>
+<li>关于 type 的匹配，这是一个按 Java 类型匹配的方式</li>
+<li>【getAliases】方法是获取别名的方法</li>
+</ul>
+<p>这就是 Spring IoC 最底层的设计，所有关于 Spring IoC 的容器将会遵守它所定义的方法。</p>
+<h4 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h4><p>根据 ApplicationContext 的类继承关系图，可以看到 ApplicationContext 接口扩展了许许多多的接口，因此它的功能十分强大，所以在实际应用中常常会使用到的是 ApplicationContext 接口，因为 BeanFactory 的方法和功能较少，而 ApplicationContext 的方法和功能较多。</p>
+<p>通过<a href="https://www.jianshu.com/p/1af66a499f49" target="_blank" rel="noopener">上一篇 IoC 的例子</a>，我们来认识一个 ApplicationContext 的子类——ClassPathXmlApplicationContext。</p>
+<ol>
+<li>先在【src】目录下创建一个 【bean.xml】 文件：</li>
+</ol>
+<pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>beans</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token comment" spellcheck="true">&lt;!-- 通过 xml 方式装配 bean --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>source<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pojo.Source<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fruit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>橙子<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sugar<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>多糖<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>size<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>超大杯<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>beans</span><span class="token punctuation">></span></span></code></pre>
+<ol start="2">
+<li>这里定义了一个 bean ，这样 Spring IoC 容器在初始化的时候就能找到它们，然后使用 ClassPathXmlApplicationContext 容器就可以将其初始化：</li>
+</ol>
+<pre class=" language-java"><code class="language-java">ApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ClassPathXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"bean.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+Source source <span class="token operator">=</span> <span class="token punctuation">(</span>Source<span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"source"</span><span class="token punctuation">,</span> Source<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getFruit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getSugar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>这样就会使用 Application 的实现类 ClassPathXmlApplicationContext 去初始化 Spring IoC 容器，然后开发者就可以通过 IoC 容器来获取资源了啦！</p>
+<blockquote>
+<p>关于 Spring Bean 的装配以及一些细节，会在下一篇文章中讲到</p>
+</blockquote>
+<h4 id="ApplicationContext-常见实现类："><a href="#ApplicationContext-常见实现类：" class="headerlink" title="ApplicationContext 常见实现类："></a>ApplicationContext 常见实现类：</h4><p>1.<strong>ClassPathXmlApplicationContext：</strong><br>读取classpath中的资源</p>
+<pre class=" language-java"><code class="language-java">ApplicationContext ctx <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ClassPathXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>2:<strong>FileSystemXmlApplicationContext:-</strong><br>读取指定路径的资源</p>
+<pre class=" language-java"><code class="language-java">ApplicationContext ac <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileSystemXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"c:/applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>3.<strong>XmlWebApplicationContext:</strong><br>需要在Web的环境下才可以运行</p>
+<pre class=" language-java"><code class="language-java">XmlWebApplicationContext ac <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlWebApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 这时并没有初始化容器</span>
+ac<span class="token punctuation">.</span><span class="token function">setServletContext</span><span class="token punctuation">(</span>servletContext<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 需要指定ServletContext对象</span>
+ac<span class="token punctuation">.</span><span class="token function">setConfigLocation</span><span class="token punctuation">(</span><span class="token string">"/WEB-INF/applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 指定配置文件路径，开头的斜线表示Web应用的根目录</span>
+ac<span class="token punctuation">.</span><span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 初始化容器</span></code></pre>
+<h4 id="BeanFactory-和-ApplicationContext-的区别："><a href="#BeanFactory-和-ApplicationContext-的区别：" class="headerlink" title="BeanFactory 和 ApplicationContext 的区别："></a>BeanFactory 和 ApplicationContext 的区别：</h4><ul>
+<li><strong>BeanFactory：</strong> 是Spring中最底层的接口，只提供了最简单的IoC功能,负责配置，创建和管理bean。<br>在应用中，一般不使用 BeanFactory，而推荐使用ApplicationContext（应用上下文），原因如下。</li>
+<li><strong>ApplicationContext：</strong></li>
+</ul>
+<p>1.继承了 BeanFactory，拥有了基本的 IoC 功能；<br>2.除此之外，ApplicationContext 还提供了以下功能：<br>① 支持国际化；<br>② 支持消息机制；<br>③ 支持统一的资源加载；<br>④ 支持AOP功能；</p>
+<hr>
+<h2 id="Spring-IoC-的容器的初始化和依赖注入"><a href="#Spring-IoC-的容器的初始化和依赖注入" class="headerlink" title="Spring IoC 的容器的初始化和依赖注入"></a>Spring IoC 的容器的初始化和依赖注入</h2><p>虽然 Spring IoC 容器的生成十分的复杂，但是大体了解一下 Spring IoC 初始化的过程还是必要的。这对于理解 Spring 的一系列行为是很有帮助的。</p>
+<p><strong>注意：</strong> Bean 的定义和初始化在 Spring IoC 容器是两大步骤，它是先定义，然后初始化和依赖注入的。</p>
+<ul>
+<li><strong>Bean 的定义分为 3 步：</strong></li>
+</ul>
+<p>1.Resource 定位<br>Spring IoC 容器先根据开发者的配置，进行资源的定位，在 Spring 的开发中，通过 XML 或者注解都是十分常见的方式，定位的内容是由开发者提供的。<br>2.BeanDefinition 的载入<br>这个时候只是将 Resource 定位到的信息，保存到 Bean 定义（BeanDefinition）中，此时并不会创建 Bean 的实例<br>3.BeanDefinition 的注册<br>这个过程就是将 BeanDefinition 的信息发布到 Spring IoC 容器中<br><strong>注意：</strong>此时仍然没有对应的 Bean 的实例。</p>
+<p>做完了以上 3 步，Bean 就在 Spring IoC 容器中被定义了，而没有被初始化，更没有完成依赖注入，也就是没有注入其配置的资源给 Bean，那么它还不能完全使用。</p>
+<p>对于初始化和依赖注入，Spring Bean 还有一个配置选项——<strong>【lazy-init】</strong>，其含义就是<strong>是否初始化 Spring Bean</strong>。在没有任何配置的情况下，它的默认值为 default，实际值为 false，也就是 <strong>Spring IoC 默认会自动初始化 Bean</strong>。如果将其设置为 true，那么只有当我们使用 Spring IoC 容器的 getBean 方法获取它时，它才会进行 Bean 的初始化，完成依赖注入。</p>
+<hr>
+<h2 id="IoC-是如何实现的"><a href="#IoC-是如何实现的" class="headerlink" title="IoC 是如何实现的"></a>IoC 是如何实现的</h2><p>最后我们简单说说IoC是如何实现的。想象一下如果我们自己来实现这个依赖注入的功能，我们怎么来做？ 无外乎：</p>
+<ol>
+<li>读取标注或者配置文件，看看JuiceMaker依赖的是哪个Source，拿到类名</li>
+<li>使用反射的API，基于类名实例化对应的对象实例</li>
+<li>将对象实例，通过构造函数或者 setter，传递给 JuiceMaker</li>
+</ol>
+<p>我们发现其实自己来实现也不是很难，Spring实际也就是这么做的。这么看的话其实IoC就是一个工厂模式的升级版！当然要做一个成熟的IoC框架，还是非常多细致的工作要做，Spring不仅提供了一个已经成为业界标准的Java IoC框架，还提供了更多强大的功能，所以大家就别去造轮子啦！希望了解IoC更多实现细节不妨通过学习Spring的源码来加深理解！</p>
+<blockquote>
+<p>引用地址：<a href="https://link.jianshu.com/?t=https%3A%2F%2Fwww.tianmaying.com%2Ftutorial%2Fspring-ioc" target="_blank" rel="noopener">这里</a><br>【参考资料】:《Java EE 互联网轻量级框架整合开发》、《Spring 实战（第四版）》<br>【好文推荐】：<a href="https://mp.weixin.qq.com/s?__biz=MzAxOTc0NzExNg==&mid=2665513179&idx=1&sn=772226a5be436a0d08197c335ddb52b8&scene=21#wechat_redirect" target="_blank" rel="noopener">①Spring 的本质系列(1) – 依赖注入</a>、 <a href="https://www.tianmaying.com/tutorial/spring-ioc" target="_blank" rel="noopener">②Spring的IoC原理</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/10/spring-xue-xi-1-kuai-su-ru-men/">
       Spring学习(1)——快速入门
     </a>
@@ -4226,303 +4442,6 @@ public class HelloServlet implements Servlet{
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/03/14/chu-xue-java-web-2-da-jian-java-web-kai-fa-huan-jing/">
-      初学Java Web(2)——搭建Java Web开发环境
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年3月14日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-2093e17bea460810.png" alt=""></p>
-<blockquote>
-<p>虽然说 html 和 css 等前端技术，是对于 Web 来说不可或缺的技术，但是毕竟更为简单一些，所以就不详细介绍了，没有基础的同学可以去<a href="http://www.runoob.com/" target="_blank" rel="noopener">菜鸟教程</a>或者<a href="http://www.w3school.com.cn/" target="_blank" rel="noopener">W3school</a>进行自主学习，最好的方式还是做一做简单的项目，相信你很快就可以上手啦。(有空把我仿的天猫给大家拿出来..)</p>
-</blockquote>
-<hr>
-<h2 id="——【1-JDK-的安装】——"><a href="#——【1-JDK-的安装】——" class="headerlink" title="——【1. JDK 的安装】——"></a>——【1. JDK 的安装】——</h2><p>在搭建环境之前呢，还是给搬一下一些名词的介绍和解释：</p>
-<table>
-<thead>
-<tr>
-<th>术语名</th>
-<th align="center">缩写</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Java Development Kit</td>
-<td align="center">JDK</td>
-<td align="left">编写Java程序的从程序员使用的软件</td>
-</tr>
-<tr>
-<td>Java Runtime Environment</td>
-<td align="center">JRE</td>
-<td align="left">运行Java程序的用户使用的软件</td>
-</tr>
-<tr>
-<td>Standard Edition</td>
-<td align="center">SE</td>
-<td align="left">用于桌面或简单的服务器应用的Java平台</td>
-</tr>
-<tr>
-<td>Enterprise Edition</td>
-<td align="center">EE</td>
-<td align="left">用于复杂的服务器应用的Java平台</td>
-</tr>
-<tr>
-<td>Micro Edition</td>
-<td align="center">ME</td>
-<td align="left">用于手机和其他小型设备的Java平台</td>
-</tr>
-<tr>
-<td>Java 2</td>
-<td align="center">J2</td>
-<td align="left">一个过时的术语，用于描述1998年~2006年之间的Java版本</td>
-</tr>
-<tr>
-<td>Software Development Kit</td>
-<td align="center">SDK</td>
-<td align="left">一个过时的术语，用于描述1998年~2006年之间的JDK</td>
-</tr>
-</tbody></table>
-<p>再来引用一张图片来说明 Java SE 和 Jave EE 的区别：</p>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-7598a4014e3681d4.png" alt=""></p>
-</blockquote>
-<h4 id="JDK-的下载"><a href="#JDK-的下载" class="headerlink" title="JDK 的下载"></a>JDK 的下载</h4><p>JDK的官方下载地址在这：<a href="https://link.jianshu.com/?t=http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a><br>最新的JDK已经升级到了9.0，而且据说10.0都快出来了，可能对于一些新学 Java 的同学来说，8的特性还没熟悉，9不知道是啥，10.0 眼看着都要出来了…没关系，我也是差不多这样的感受…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-1d9f0d63a970abac.png" alt="下载JDK"></p>
-<h4 id="JDK-的安装"><a href="#JDK-的安装" class="headerlink" title="JDK 的安装"></a>JDK 的安装</h4><p>上图就是一个JDK的下载过程，安装很简单，我就直接粘网上的图了<strong>（重要的是记住JDK安装的路径用于配置环境变量）</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-cebe189d85b2f197.png" alt="JDK 安装过程"></p>
-<h4 id="JDK-环境变量的配置"><a href="#JDK-环境变量的配置" class="headerlink" title="JDK 环境变量的配置"></a>JDK 环境变量的配置</h4><p>Java环境变量涉及到三个名词：JAVA_HOME、path、classpath。</p>
-<p>JAVA_HOME代表JDK安装主目录，path代表JDK下可执行文件目录，classpath代表运行java程序时需要查找class文件的目录。</p>
-<p>依据上面的安装步骤：</p>
-<p><strong>JAVA_HOME</strong>应该设置为：D:\DevelopTools\JAVA\JDK</p>
-<p><strong>path</strong>应该设置为：%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;<strong>（注意其中的分号）</strong></p>
-<p><strong>classpath</strong>应该设置为：.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;<strong>（注意最前面的点代表当前路径，JDK1.5之后这项不用设置了）</strong></p>
-<p>设置方式如下：</p>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-0d9743df88cfd7f4.png" alt="第一步"></p>
-</blockquote>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-834a801ccff8eaa8.png" alt="第二步"></p>
-</blockquote>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-3e29c0172f7678b4.png" alt="第三步"><br>到此就已经成功配置好了 JDK 所需要的环境变量，我们下面来验证一下。</p>
-</blockquote>
-<h4 id="验证-JDK-是否安装成功"><a href="#验证-JDK-是否安装成功" class="headerlink" title="验证 JDK 是否安装成功"></a>验证 JDK 是否安装成功</h4><p>打开命令提示符，WINDOWS 下的快捷键为【Win + R】，然后输入 cmd ，输入【java -version】查看是否输出正确地版本信息，如果成功，则 JRE 配置成功。（我直接贴的老图啦，所以….）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-afcd436746c47e5a.png" alt="JRE 配置成功"></p>
-<p>输入【javac】看是否输出编译信息，若有，则 JDK 配置成功：</p>
-<p> <img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-9ce212cdd86347b4.png" alt="JDK 配置成功"></p>
-<p>至此，JDK 就彻底安装成功了。</p>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-8ec728678627b5d4.png" alt=""></p>
-<h2 id="——【2-安装和配置-Tomcat-服务器】——"><a href="#——【2-安装和配置-Tomcat-服务器】——" class="headerlink" title="——【2.安装和配置 Tomcat 服务器】——"></a>——【2.安装和配置 Tomcat 服务器】——</h2><p>正如上一篇说到的，Tomcat 是使用 Java 语言编写的一个服务器（程序），所以要运行 Tomcat ，必须配置好相关的 JDK 或 JRE。Tomcat 的官方网站是：<code>http://tomcat.apache.org/</code>   你可以去官网下载最新的版本，也可以下载我提供的绿色版本（v8.5.5）：<a href="https://pan.baidu.com/s/1gROPZCovNrsMxkWLFbZ9IQ（密码:142q）" target="_blank" rel="noopener">https://pan.baidu.com/s/1gROPZCovNrsMxkWLFbZ9IQ（密码:142q）</a></p>
-<p>以我提供的绿色版本为例，安装步骤如下：</p>
-<h4 id="①-解压提供的-Tomcat-到-D-盘"><a href="#①-解压提供的-Tomcat-到-D-盘" class="headerlink" title="① 解压提供的 Tomcat 到 D 盘"></a>① 解压提供的 Tomcat 到 D 盘</h4><p>并记录下其路径，如 D:\apache-tomcat-8.5.5.</p>
-<h4 id="②-配置-CATALINA-HOME-环境变量到上面记下的路径："><a href="#②-配置-CATALINA-HOME-环境变量到上面记下的路径：" class="headerlink" title="② 配置 CATALINA_HOME 环境变量到上面记下的路径："></a>② 配置 CATALINA_HOME 环境变量到上面记下的路径：</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-ed2ff0d5386258a0.png" alt="配置 Tomcat 的环境变量"></p>
-<h4 id="③-启动-Tomcat-服务器"><a href="#③-启动-Tomcat-服务器" class="headerlink" title="③ 启动 Tomcat 服务器"></a>③ 启动 Tomcat 服务器</h4><p>找到 D:\apache-tomcat-8.5.5 路径下的 bin 目录中的 startup.bat 文件，双击运行，如果输出启动信息，并未输出任何异常，则 Tomcat 安装正确<strong>（注意，弹出的命令提示符窗口不能关闭，否则服务器将停止运行！）</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fc209705ccc487d0.png" alt="Tomcat 成功启动"></p>
-<h4 id="④-打开浏览器验证-Tomcat"><a href="#④-打开浏览器验证-Tomcat" class="headerlink" title="④ 打开浏览器验证 Tomcat"></a>④ 打开浏览器验证 Tomcat</h4><p>打开浏览器，在地址栏输入地址：<a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a> 或者 <a href="http://127.0.0.1:8080/" target="_blank" rel="noopener">http://127.0.0.1:8080/</a> ，如果能够打开 Tomcat 配置页面，则说明 Tomcat 配置成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fae8b489e0909f74.png" alt="Tomcat 配置页面"></p>
-<h4 id="关闭-Tomcat-服务器"><a href="#关闭-Tomcat-服务器" class="headerlink" title="关闭 Tomcat 服务器"></a>关闭 Tomcat 服务器</h4><p>在 Tomcat 开启的命令提示符界面按下【Ctrl + C】键，将关闭 Tomcat 服务器。再次尝试访问 Tomcat 配置页面，若出现网页不能访问提示，则说明 Tomcat 关闭成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-cb51285c022c0f6e.png" alt="Tomcat 关闭成功"></p>
-<h4 id="在-Tomcat-中新建-Web-工程"><a href="#在-Tomcat-中新建-Web-工程" class="headerlink" title="在 Tomcat 中新建 Web 工程"></a>在 Tomcat 中新建 Web 工程</h4><p><strong>步骤如下：</strong>（<a href="https://pan.baidu.com/s/18LpiltoAJA32f5ksyhkn8g" target="_blank" rel="noopener">下载文件-密码klhk</a>）<br>① 找到 Tomcat 目录下的 webapps 目录。<br>② 在 webapps 目录下新建一个目录： first_webapp。<strong>（注意 first 和 webapp 中间为下划线）</strong><br>③ 在 first_webapp 中建立一个目录： WEB-INF。<strong>（注意大小写，WEB 和 INF 之间为横线）</strong><br>④ 将上面的下载文件下载下来以后，将提供的 web.xml 文件复制到 WEB-INF 目录中。<br>⑤ 将提供的 index.html 文件复制到 first_webapp 目录下。<br>⑥ 启动 Tomcat。<br>⑦ 在浏览器中输入网址：<a href="http://localhose:8080/first_webapp" target="_blank" rel="noopener">http://localhose:8080/first_webapp</a> ，查看是否能够正确访问，如果可以正确显示页面，则表示 Tomcat 中创建新项目成功。</p>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-9acd3d85bb965e64.png" alt=""></p>
-<h2 id="——【3-安装配置-MySql-服务器】——"><a href="#——【3-安装配置-MySql-服务器】——" class="headerlink" title="——【3.安装配置 MySql 服务器】——"></a>——【3.安装配置 MySql 服务器】——</h2><p>不管怎样，服务器端总是要有数据库的，这里就给出两个绿色版本的工具，来建立一个 Web 开发所需要的 MySql 服务器：<br>链接：<a href="https://pan.baidu.com/s/1i-H4SUMcn2y5_arluK923A" target="_blank" rel="noopener">https://pan.baidu.com/s/1i-H4SUMcn2y5_arluK923A</a> 密码：1n04</p>
-<blockquote>
-<ul>
-<li><strong>xampp</strong> 是一套 Web 开发套件，里面包含了 mysql、apache、tomcat 等常用组件。这里我们主要利用其中的 mysql 组件来完成数据库的开发。</li>
-<li><strong>heidiSQL</strong> 是一款绿色版的 SQL 管理软件，能实现数据库的一些常用功能。</li>
-</ul>
-</blockquote>
-<p><strong>步骤如下：</strong><br>① 将提供的 xampp 工具解压到 D 盘根目录下。<strong>（注意 xampp 一定要解压到根目录下才有效。所谓根目录是指<br>D:\xampp\目录下不能再嵌套 xampp 目录，而是直接在 D:\xampp\目录下能够找到 mysql 目录。切记！！）</strong><br>② 双击 xampp 目录下的 xampp-control.exe 文件运行，并显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-5809de81fd592dca.png" alt="XAMPP Control 界面"></p>
-<p>③ 为了避免和本机上已经安装的 MySql 服务器冲突，我们需要更改 xampp 的服务名称：单机界面上的 Config 按<br>钮，显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-0041ed69cf0dfea7.png" alt="更改 xampp 服务名称"></p>
-<p>④ 点击“Service and Port Settings”按钮，将出现如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-2ed9787cf609403f.png" alt=""></p>
-<p>⑤ 点击 MySQL 标签页，配置 MySql，将 MySql 的 Service Name 从 mysql 更改为 mysql-xampp，然后保存：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-e41da7f359742232.png" alt="更改名称"></p>
-<p>⑥ 关闭 xampp。<strong>（ 注意 如果闭 关闭 xampp  后，xampp 。 任然在后台运行，必须从右下角系统托盘处完全关闭。）</strong>然后重新打开 xampp-control.exe 文件：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fa0caa490fe1bb5b.png" alt=""></p>
-<p>⑦ 点击 MySql 对应的 Start 按钮。如果 MySql 服务启动成功，则显示如下：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-77f7c9c22b3fe674.png" alt="MySql 服务启动成功"></p>
-<blockquote>
-<p>其中，MySql 字符的背景色变为绿色表示启动成功，PID 表示 MySql 在操作系统中的进程号，Port 表示 MySql 进程所监听的端口号。</p>
-</blockquote>
-<p>⑧ 打开提供的 heidiSQL 工具（绿色软件），将显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-508a72a1007c9a1b.png" alt="heidiSQL 工具界面"></p>
-<p>⑨ 点击 New 按钮，新建 MySql 连接：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-27ba879b7ecb728a.png" alt=""></p>
-<p>⑩ 在 hostname/IP 处填写：127.0.0.1 或者 localhost。在 User 处填写：root（这是 MySql 的登录用户名）。在 Password 处填写：root（这是 MySql 的登录密码。 <strong>注意：如果是自己下载的 xampp  工具，则密码为空。使用的我提供的 xampp  工具，则 MySql  登录密码被我改成 root</strong> ）在 Port 处填写：3306（这是 MySql 默认的监听端口），随后点击【Open】按钮，将显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-e4b1cbd954a1a6db.png" alt=""></p>
-<blockquote>
-<p>左边列出了目前 MySql 中的所有数据库，右边是当前数据库的内容。（请勿更改和删除默认数据库的内容）</p>
-</blockquote>
-<h4 id="在-Tomcat-中连接数据库"><a href="#在-Tomcat-中连接数据库" class="headerlink" title="在 Tomcat 中连接数据库"></a>在 Tomcat 中连接数据库</h4><p>将提供的 MySql 的 JDBC 驱动文件 mysql-connector-java-xxxx-bin.jar 文件复制到 Tomcat 目录下的 lib 目录中</p>
-<p>至此，就成功搭建好了 MySql 服务器。</p>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-b00ed47e7729312c.png" alt=""></p>
-<h2 id="——【4-安装-Eclipse-JEE】——"><a href="#——【4-安装-Eclipse-JEE】——" class="headerlink" title="——【4.安装 Eclipse-JEE】——"></a>——【4.安装 Eclipse-JEE】——</h2><h4 id="①-下载-Eclipse-Jee"><a href="#①-下载-Eclipse-Jee" class="headerlink" title="① 下载 Eclipse - Jee"></a>① 下载 Eclipse - Jee</h4><p>进入官网 <a href="http://www.eclipse.org/downloads/eclipse-packages" target="_blank" rel="noopener">http://www.eclipse.org/downloads/eclipse-packages</a> 选择Eclipse  IDE for Java EE Developers，根据自己电脑情况选择32位或者64位：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-298f33f5deb3562c.png" alt=""></p>
-<p>下好以后直接解压到相应位置，并找到 <strong>eclipse.exe</strong>，右键 –&gt; 发送到 –&gt; 桌面快捷方式就行了。</p>
-<h4 id="②-首次打开设置工作空间"><a href="#②-首次打开设置工作空间" class="headerlink" title="② 首次打开设置工作空间"></a>② 首次打开设置工作空间</h4><p>由于我们已经配置好了 JDK 的相关信息，所以这里的 Eclipse 可以直接打开：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-bb2a7938ed5cea78.png" alt="指定工作空间"></p>
-<p>工作空间大家设置成自己喜欢。熟悉的路径即可，以后建立的工程文件都在设置的工作空间里面。</p>
-<h4 id="③-进行简单配置"><a href="#③-进行简单配置" class="headerlink" title="③ 进行简单配置"></a>③ 进行简单配置</h4><ul>
-<li><strong>配置 Tomcat 服务器：</strong><br>1.进入 Eclipse 后首先将 Tomcat 服务器位置通知 Eclipse。选择菜单项“Window”→“Preferences”<br>2.打开“Preferences”对话框，在左边找到“Server”选项，并展开，选中其中“Runtime Environments”项目：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-41e9c8476c9e43c8.png" alt=""></p>
-<p>  3.点击右边界面中“Add”按钮，在弹出的界面中找到“Apache Tomcat 8.5”项目并选中：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-16e63ba0fd2c7026.png" alt=""></p>
-<p>  4.点击下一步，并在 Name 处输入：Apache Tomcat v8.5。然后将目标目录选定为刚刚安装的 Tomcat 目录</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-39ee47d65cb23c43.png" alt=""></p>
-<p>  5.最后点击“Finish”按钮完成服务器的配置</p>
-<ul>
-<li><strong>配置默认的格式：</strong><br>1.选择菜单项“Window”→“Preferences”，找到下方的“Web”，将其中红色框标记的选项里的【Encoding（编码格式）】均改为 UTF-8，是为防止使用中文乱码的问题。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-8c102147bbe01f1d.png" alt="配置格式"></p>
-<p>  2.点击“Apply and Close”完成配置。</p>
-<h4 id="④-创建一个动态网页项目测试"><a href="#④-创建一个动态网页项目测试" class="headerlink" title="④ 创建一个动态网页项目测试"></a>④ 创建一个动态网页项目测试</h4><ul>
-<li>1.选中 Eclipse 菜单项“New”→“Dynamic Web Project”，新建一个动态网页项目</li>
-<li>2.在新建项目界面中 project name 处输入工程名称 second_webapp（注意 second 和 webapp 中间为下划线）。并记住此名字。在 Runtime 中选择刚刚配置的 Tomat。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-0d365908b1d0b27a.png" alt=""></p>
-<ul>
-<li>3.点击“Next”按钮，并对配置不做修改，再次点击“Next”按钮，在下一个界面中，选中“Generate web.xml”选项。最后点击“Finish”按钮创建工程。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-00d15586da9c2718.png" alt=""></p>
-<ul>
-<li>4.在 second_webapp 上点击右键，并选中“Properties”菜单项，若看到工程默认编码为 GBK，则在对话框中将工程的编码方式改为 UTF-8，目的是避免以后中文出现乱码：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-34602d469d492830.png" alt=""></p>
-<ul>
-<li>5.展开 second_webapp 工程，并在“WebContent”项目上点击鼠标右键，并选中菜单项目“New”→“HTML<br>File”，然后输入网页的名字 index.html，并点击“Finish”按钮：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fc77032a30d42f59.png" alt=""></p>
-<ul>
-<li>6.此时将显示 HTML 文件内容（默认为 HTML 5 格式），编辑 index.html 文件，成如下内容：<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>我的第二个网页<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-Java EE 环境部署成功！
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
-</code></pre>
-</li>
-</ul>
-<pre><code>- 7.编辑完成后，点击 Eclipse 菜单：“Run”→“Run As”→“Run on Server”**（注意：此时在 Eclipse 外面不能启动Tomcat 服务器，即 Tomcat 的命令提示窗口不能已经打开）**，在弹出的对话框中选择，刚刚配置的 Tomcat 环境，边点击“Finish”按钮启动 Tomcat 服务器：
-
-![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web（2）——搭建Java-Web开发环境/7896890-1e386be820188f6e.png)
-
-- 8.等待服务器启动完成。然后在浏览器中输入网址：http://localhost:8080/second_webapp/index.html，查看网页。如果能正确显示页面，则 Eclipse 新建项目成功。
-
-----
-
-至此，Java Web 的开发环境就已经全部搭建好了，关于为什么选择 Eclipse 而不选择 IDEA ，是因为这学期开的 Java Web 课程中使用的也是 Eclipse ，为了避免麻烦，所以还是用 Eclipse 吧。
-
-#### 参考资料：
-&gt; [1.迷路的国王博客](http://www.cnblogs.com/kangjianwei101/p/5621750.html)
-&gt; 2.本学校的实验说明
-
-
----
-
-&gt; 欢迎转载，转载请注明出处！   
-&gt; 简书ID：[@我没有三颗心脏](https://www.jianshu.com/u/a40d61a49221)  
-&gt; github：[wmyskxz](https://github.com/wmyskxz/)  
-&gt; 欢迎关注公众微信号：wmyskxz
-&gt; 分享自己的学习 &amp; 学习资料 &amp; 生活
-&gt; 想要交流的朋友也可以加qq群：3382693
-</code></pre>
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -4758,7 +4677,7 @@ Java EE 环境部署成功！
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(12)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
@@ -4917,7 +4836,7 @@ Java EE 环境部署成功！
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 17.08px; color: #848484">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.23px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.46px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.69px; color: #656565">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.92px; color: #6a6a6a">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.54px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20.15px; color: #6f6f6f">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.77px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 17.08px; color: #848484">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.85px; color: #7f7f7f">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.85px; color: #7f7f7f">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.69px; color: #656565">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.77px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.54px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.31px; color: #898989">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.77px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.54px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.85px; color: #7f7f7f">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.77px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.62px; color: #7a7a7a">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.77px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.31px; color: #898989">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 17.08px; color: #848484">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.69px; color: #656565">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.38px; color: #747474">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

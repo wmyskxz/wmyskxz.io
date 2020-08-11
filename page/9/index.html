@@ -435,6 +435,805 @@
         
           
   <h2 class="title">
+    <a href="/2018/06/14/springboot-ji-zhu-zhan-da-jian-ge-ren-bo-ke-xiang-mu-zhun-bei/">
+      SpringBoot技术栈搭建个人博客【项目准备】
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/Spring Boot</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年6月14日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-f17a042a65d2b5c5.png" alt=""></p>
+<blockquote>
+<p><strong>前言</strong>：很早之前就想要写一个自己的博客了，趁着现在学校安排的实习有很多的空档，决定把它给做出来，也顺便完成实习的任务（搞一个项目出来…）</p>
+</blockquote>
+<h2 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h2><p><strong>总体目标：</strong>设计一套<strong>自适应/简洁/美观/易于文章管理发布</strong>的一个属于我个人的博客，最后一页能展示我个人的简历，因为大三快结束了马上就该去找工作了…哦忘了，最重要的还是要支持<strong>Markdown</strong>才行，因为已经习惯了…</p>
+<h4 id="前端需求分析"><a href="#前端需求分析" class="headerlink" title="前端需求分析"></a>前端需求分析</h4><p>首先，前端的<strong>页面要求</strong>是：</p>
+<ul>
+<li><strong>①简洁/美观</strong>——个人很喜欢像Mac那样的简洁风，越简单越好，当然也得好看；</li>
+<li><strong>②最好是单页面</strong>——单页面的目的一方面是为了简洁，另一方面也是为了实现起来比较简单；</li>
+<li><strong>③自适应</strong>——至少能适配常见的手机分辨率吧，我可不希望自己的博客存在显示差异性的问题；</li>
+</ul>
+<p>然后，思考了一下<strong>可能出现的页面</strong>：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-598fffe95ca32b77.png" alt=""></p>
+<blockquote>
+<p>1）首页：</p>
+</blockquote>
+<ul>
+<li><strong>最新的文章</strong>——我可以搞一个轮播之类的东西用来显示最新的几篇博文；</li>
+<li><strong>顶部导航</strong>——导航栏可以要有，而且可以提出来搞成通用的；</li>
+<li><strong>联系方式</strong>——首页最好再有能一眼找到我的联系方式，比如简书/博客园/微信公众号之类的；</li>
+<li><strong>时间</strong>——摁，时间；</li>
+</ul>
+<blockquote>
+<p>2）文章页：</p>
+</blockquote>
+<ul>
+<li><strong>分类栏</strong>——左侧应该有文章的分类，记得要有一个全部文章；</li>
+<li><strong>文章列表</strong>——分类栏的右边就应该是该分类下的所有文章；</li>
+<li><strong>分页栏</strong>——考虑到现在我的Java Web分栏下的文章已经有那么多了，还是有必要搞个分页；</li>
+</ul>
+<blockquote>
+<p>3）简历页：</p>
+</blockquote>
+<p>这是预留的页面，到时候用来显示个人的简历；</p>
+<blockquote>
+<p>4）关于页：</p>
+</blockquote>
+<p>用来介绍项目的搭建编写过程，还有使用的技术栈啊之类的，然后留下个人的联系方式，Nice；</p>
+<blockquote>
+<p>5）留言页：</p>
+</blockquote>
+<p>因为是个人的博客，所以我并不想要限制看官们留言的权利，我希望他们能自己能定义用于显示的用户名，但是需要填写一个Email，不然搞得我不能回复，那搞个啥…当然也可以不留Email，也就是不希望得到回复呗（那可能有些留言会让我难受死吧..思考…）…</p>
+<h4 id="后台需求分析："><a href="#后台需求分析：" class="headerlink" title="后台需求分析："></a>后台需求分析：</h4><p>最初的思考是这样的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-4179c8999d11b748.png" alt=""></p>
+<p>后来一想，<strong>文章置顶</strong>这个都给忘了…然后发现其实有一个很关键的问题就是Markdown的文章应该怎样保存？一开始还是想要保存为.md文件保存在服务器的硬盘上的，但想想直接保存在数据库里也不错，省的麻烦，而且我很明确一点的是：<strong>我并不会直接在博客上写Markdown</strong>，因为有许许多多成熟的产品能让我写的舒心的多，我没必要去搞这么麻烦复杂繁琐，而且不一定好，所以我只需要用博客来<strong>展示我写的Markdown格式的博文</strong>就好了，Nice啊…又成功骗自己少写了好多代码hhhhh（没有啦..需求就这样的嘛…）</p>
+<p>顺着这样的思路，我通常写文都是先在简书上写好的，并且简书有一个特点是所有的图片，不管是已经发布的文章还是没有发布的私人文章，都能通过地址取得，可以利用这一点让简书当个图床，诶又少弄了一部分代码，然后分析分析着就把需求搞成下面这样了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-47540922422aa24e.png" alt=""></p>
+<blockquote>
+<p>1）博文管理：</p>
+</blockquote>
+<p>这个比较常规，就不说了；</p>
+<blockquote>
+<p>2）网站数据统计：</p>
+</blockquote>
+<p>作为网站的拥有者和设计者，我当然希望能希望知道这些数据了，然后单独作为拥有者来说，最好再分为日访问量/月访问量/总访问量这样子显示出来，再搞搞样式，简直不要太爽；</p>
+<blockquote>
+<p>3）缓存管理：</p>
+</blockquote>
+<p>图片就没缓存了，因为保存文章内容我需要保存md源码，所以可能需要在Redis里缓存最近常访问的文章的md转HTML后渲染好的HTML源码；</p>
+<blockquote>
+<p>4）系统设置：</p>
+</blockquote>
+<p>网站标题可以改呀，然后导航栏的名字也可以弄弄呀，其实这个也可以不用去搞，只是以防有时候心情不好给一整捣鼓可能心情就好了，hhhhh….；</p>
+<blockquote>
+<p>5）留言管理：</p>
+</blockquote>
+<p>有一些流氓留言可以删掉，最近学习到的比较好的方法是让该条数据的状态为置为0，而不是直接删除该条数据，这个设计数据库的时候就需要多设计一个字段，也可以通过用户留下的Email地址进行回复，最好搞一个自动通知，完美；</p>
+<hr>
+<h2 id="表结构设计"><a href="#表结构设计" class="headerlink" title="表结构设计"></a>表结构设计</h2><p>通过需求分析，然后严格按照《阿里巴巴Java开发手册》（下面所说的规范均来自于此）反复分析了很多遍，最终确定了如下的几张表：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-5237118b7843ad6a.png" alt=""></p>
+<p>然后来具体说一下各个表：</p>
+<blockquote>
+<p>1）日志表（sys_log）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `sys_log` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `ip` varchar(20) NOT NULL DEFAULT '' COMMENT '操作地址的IP',
+  `create_by` datetime NOT NULL COMMENT '操作时间',
+  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '操作内容',
+  `operate_url` varchar(50) NOT NULL DEFAULT '' COMMENT '操作的访问地址',
+  `operate_by` varchar(20) DEFAULT '' COMMENT '操作的浏览器',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>这张表就是拿来保存日志，用来记录每一个用户访问了哪些地址，使用了什么样的浏览器，操作内容可以作为一个保留字段，如果以后想要监控用户行为，那也是可以的~</p>
+<p>这里首先遵守的规范是（下面雷同则不再重复赘述）：</p>
+<ul>
+<li><strong>第五章第一节第2条（强制）</strong>——<strong>表名、字段名必须使用小写字母或数字</strong>，禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑；</li>
+<li><strong>第五章第一节第3条（强制）</strong>——表名不使用复数名词；</li>
+<li><strong>第五章第一节第10条（推荐）</strong>——表的命名最好加上“业务名称_表的作用”</li>
+</ul>
+<p>想要拿出来跟大家讨论的一则规范是：</p>
+<ul>
+<li><strong>第五章第9条（强制）</strong>——表必备三个字段：id（unsigned bigint自增），gmt_create（date_time），gmt_modified（date_time）</li>
+</ul>
+<p>像如上设计的日志表，它插入进去了就不会再更新了，而且对于我这个系统也很大概率不会有趣操作这个表的可能，那么<strong>对于这样不会更新和操作的表，gmt_modified这个字段还有必要存在吗？</strong></p>
+<p>emmm..事实上我问了<strong>孤尽</strong>大大本人，他回答的简洁有力：“要的，以备不时之需；”然而原谅我还是没有听话，hhhhh，另外一点我想说的是，我忘了是在哪里看到的了，但是像gmt_create这样的字段最好设计成create_by这样，字段本身就是很好的注释，摁，就喜欢这样满满的细节…</p>
+<blockquote>
+<p>2）浏览量表（sys_view）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `sys_view` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(20) NOT NULL COMMENT '访问IP',
+  `create_by` datetime NOT NULL COMMENT '访问时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>这张表用于保存每一次访问主页的记录，我想的是<strong>每访问主页就记录增加一条数据</strong>，简单同时也增加访问量嘛，hhhhh，也是不会更新的一张表，所以没modifield_by字段；</p>
+<blockquote>
+<p>3）留言/评论表（tbl_message）</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_message` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `content` varchar(200) NOT NULL DEFAULT '' COMMENT '留言/评论内容',
+  `create_by` datetime NOT NULL COMMENT '创建日期',
+  `email` varchar(20) NOT NULL DEFAULT '' COMMENT '邮箱，用于回复消息',
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '用户自己定义的名称',
+  `ip` varchar(20) NOT NULL DEFAULT '' COMMENT '留言/评论IP',
+  `is_effective` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效，默认为1为有效，0为无效',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='因为message分为两种，一种是留言，一种是评论，这里搞成一张表是因为它们几乎是拥有相同的字段，我觉得没必要分成两张表来进行维护';</code></pre>
+<p>这是评论/留言表，因为考虑到留言和评论有几乎相同的字段，所以给弄成了一张表，这张表同样的不需要更新没有modifield_by字段，这里遵守的规范是：</p>
+<ul>
+<li><strong>第五章第一节第1条（强制）</strong>——表达是与否概念的字段，必须使用 is_xxx 的方式命名，数据类型是 unsigned tinyint（1表示是，0表示否）</li>
+<li><strong>第五章第一节第15条（参考）</strong>——设置合适的字段存储长度，不但可以节约数据库表控件和索引存储，更重要的事能够提升检索速度；</li>
+</ul>
+<blockquote>
+<p>4）分类信息表（tbl_sort_info）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_sort_info` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL COMMENT '分类名称',
+  `number` tinyint(10) NOT NULL DEFAULT '0' COMMENT '该分类下的文章数量',
+  `create_by` datetime NOT NULL COMMENT '分类创建时间',
+  `modified_by` datetime NOT NULL COMMENT '分类修改时间',
+  `is_effective` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效，默认为1有效，为0无效',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>这张表是文章的分类，一开始都忘记设计了….</p>
+<blockquote>
+<p>5）文章信息表（tbl_article_info）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_article_info` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `title` varchar(50) NOT NULL DEFAULT '' COMMENT '文章标题',
+  `summary` varchar(300) NOT NULL DEFAULT '' COMMENT '文章简介，默认100个汉字以内',
+  `is_top` tinyint(1) NOT NULL DEFAULT '0' COMMENT '文章是否置顶，0为否，1为是',
+  `traffic` int(10) NOT NULL DEFAULT '0' COMMENT '文章访问量',
+  `create_by` datetime NOT NULL COMMENT '创建时间',
+  `modified_by` datetime NOT NULL COMMENT '修改日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>这是文章信息表，都是一些基础常用的字段就不再多做解释了</p>
+<blockquote>
+<p>6）文章内容表（tbl_article_content）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_article_content` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT,
+  `content` text NOT NULL,
+  `article_id` bigint(40) NOT NULL COMMENT '对应文章ID',
+  `create_by` datetime NOT NULL COMMENT '创建时间',
+  `modifield_by` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>这是文章内容表，我们并没有直接把内容字段设计在文章信息表里，而是单独建了一个表用来保存文章的内容，然后使用主键来关联，我们这里遵守的规范是：</p>
+<ul>
+<li><strong>第五章第一节第8条（强制）</strong>——varchar是可变长字符串，不预先分配存储空间，长度不要超过5000个字符。如果存储长度大于此值，则应定义字段类型为text，独立出来一张表，用主键来对应，避免影响其他字段的索引效率；</li>
+<li><strong>第五章第三节第6条（强制）</strong>——不得使用外键与级联，一切外键概念必须在应用层解决；</li>
+</ul>
+<p>我试过我现在最长的一篇文章长度大概能存储8W长度的varchar，所以我就给单独建一个表分离出来了，使用text类型来保存文章的md源码</p>
+<blockquote>
+<p>7）文章评论表（tbl_article_message）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_article_message` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT,
+  `article_id` bigint(40) NOT NULL COMMENT '文章ID',
+  `message_id` bigint(40) NOT NULL COMMENT '对应的留言ID',
+  `create_by` datetime NOT NULL COMMENT '创建时间',
+  `is_effective` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有效，默认为1有效，置0无效',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>这其实是一个关联表，关联了文章和tbl_message表，用于专门存储某个文章下的评论信息</p>
+<blockquote>
+<p>8）文章分类表（tbl_article_sort）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_article_sort` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT,
+  `sort_id` bigint(40) NOT NULL COMMENT '分类id',
+  `article_id` bigint(40) NOT NULL COMMENT '文章id',
+  `create_by` datetime NOT NULL COMMENT '创建时间',
+  `modified_by` datetime NOT NULL COMMENT '更新时间',
+  `is_effective` tinyint(1) DEFAULT '1' COMMENT '表示当前数据是否有效，默认为1有效，0则无效',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<p>同样是一张关联表，连接了文章和分类，并且同一篇文章能属于多个分类；</p>
+<blockquote>
+<p>9）文章题图表（tbl_article_picture）：</p>
+</blockquote>
+<pre class=" language-MySQL"><code class="language-MySQL">CREATE TABLE `tbl_article_picture` (
+  `id` bigint(40) NOT NULL AUTO_INCREMENT,
+  `article_id` bigint(40) NOT NULL COMMENT '对应文章id',
+  `picture_url` varchar(100) NOT NULL DEFAULT '' COMMENT '图片url',
+  `create_by` datetime NOT NULL COMMENT '创建时间',
+  `modified_by` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='这张表用来保存题图url，每一篇文章都应该有题图';</code></pre>
+<p>这个是保存每一篇文章的题图，每一篇文章都因该有题图；</p>
+<hr>
+<h2 id="原型设计"><a href="#原型设计" class="headerlink" title="原型设计"></a>原型设计</h2><p>事实上，我是直接先去找的原型，去参考了一下大概我需要做成什么样子…</p>
+<h4 id="前端原型参考"><a href="#前端原型参考" class="headerlink" title="前端原型参考"></a>前端原型参考</h4><p>在这里先给大家推荐一个设计网站吧，找素材啊之类的还挺方便的：</p>
+<blockquote>
+<p>站酷：<a href="http://www.zcool.com.cn/" target="_blank" rel="noopener">http://www.zcool.com.cn/</a></p>
+</blockquote>
+<p>所以我在里面找到了我想要的前端原型，大概就像这个样子：</p>
+<p><strong>1）首页：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-8f7f25a8328d2372.png" alt=""></p>
+<p><strong>2）博客页：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-84e9118bb6ef8aee.png" alt=""></p>
+<p><strong>3）博文详情页：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-9f378b79ea6c70fb.png" alt=""></p>
+<p><strong>4）博文列表页：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-8949658901ee238e.png" alt=""></p>
+<p>不能再酷了..</p>
+<h4 id="后端原型参考"><a href="#后端原型参考" class="headerlink" title="后端原型参考"></a>后端原型参考</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-fec2bad0f9159957.png" alt=""></p>
+<p>emmmm…大概就像这样了吧，具体的样式可以到时候再调…</p>
+<p><strong>总体是酷的就行！</strong></p>
+<hr>
+<h2 id="项目搭建"><a href="#项目搭建" class="headerlink" title="项目搭建"></a>项目搭建</h2><p>先来介绍一下这次想要使用的一些技术：</p>
+<ul>
+<li>SpringBoot / Spring 来编写后台</li>
+<li>Vue 来写页面，准备抛弃一下JSP，虽然现在Vue还啥都不懂，学呗</li>
+<li>MyBatis 用于ORM，喜欢这玩意儿的逆向工程</li>
+<li>RESTful API / JSON 交互</li>
+<li><del>Redis 可能还会使用这个来缓存一下md转换之后的html源码</del></li>
+</ul>
+<h4 id="SpringBoot-工程搭建"><a href="#SpringBoot-工程搭建" class="headerlink" title="SpringBoot 工程搭建"></a>SpringBoot 工程搭建</h4><p>SpringBoot 项目搭建过程就不再赘述了，不熟悉的童鞋戳这边：<a href="https://www.jianshu.com/p/70963ab49f8c，这里就简单给一下配置信息：" target="_blank" rel="noopener">https://www.jianshu.com/p/70963ab49f8c，这里就简单给一下配置信息：</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-444964414de6b61d.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-2f554c138801018e.png" alt=""></p>
+<p>后台肯定是需要加安全验证的，要简单点我可以搞一个拦截器来简单弄弄，也可以用现有的安全框架，这里暂时就不加入这方面的东西了，把基本的弄进来就OK，然后它默认加入的东西不能够支持我们的业务，所以还需要手动添加进一些包：</p>
+<pre class=" language-XML"><code class="language-XML"><?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cn.wmyskxz</groupId>
+    <artifactId>blog</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>blog</name>
+    <description>Demo project for Spring Boot</description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.2.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--MyBatis-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <!--MyBatis逆向工程-->
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+            <version>1.3.6</version>
+        </dependency>
+
+        <!--SpringBoot测试支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--MySQL-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--SpringBoot热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional> <!-- 这个需要为 true 热部署才有效 -->
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project></code></pre>
+<p>热部署还是要的呀，然后再在【resrouces】下新建一个【banner.txt】文件，修改一下SpringBoot启动的提示信息：</p>
+<pre><code> __      __                                 __                        
+/\ \  __/\ \                               /\ \                       
+\ \ \/\ \ \ \    ___ ___    __  __     ____\ \ \/&#39;\    __  _  ____    
+ \ \ \ \ \ \ \ /&#39; __` __`\ /\ \/\ \   /&#39;,__\\ \ , &lt;   /\ \/&#39;\/\_ ,`\  
+  \ \ \_/ \_\ \/\ \/\ \/\ \\ \ \_\ \ /\__, `\\ \ \\`\ \/&gt;  &lt;/\/_/  /_ 
+   \ `\___x___/\ \_\ \_\ \_\\/`____ \\/\____/ \ \_\ \_\/\_/\_\ /\____\
+    &#39;\/__//__/  \/_/\/_/\/_/ `/___/&gt; \\/___/   \/_/\/_/\//\/_/ \/____/
+                                /\___/                                
+                                \/__/                                 </code></pre><p>弄弄结构，最后整个项目的目录看起来大概是这个样子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-84b958c7e9581369.png" alt=""></p>
+<p>下面对这些目录进行一些简要的说明：</p>
+<ul>
+<li>controller：控制器</li>
+<li>dao：实际上这个包可以改名叫mapper，因为里面放的应该是MyBatis逆向工程自动生成之后的mapper类，还是叫dao吧，传统…</li>
+<li>entity：实体类，还会有一些MyBatis生成的example</li>
+<li>generator：MyBatis逆向工程生成类</li>
+<li>interceptor：SpringBoot 拦截器</li>
+<li>service：Service层，里面还有一层impl目录</li>
+<li>util：一些工具类可以放在里面</li>
+<li>mapper：用于存放MyBatis逆向工程生成的.xml映射文件</li>
+<li>static：这个目录存放一些静态文件，简单了解了一下Vue的前后端分离，前台文件以后也需要放在这个目录下面</li>
+</ul>
+<p>然后我使用application.yml文件代替了application.properties，这个东西结构清晰一点儿，反正用哪个都无所谓，配置好就OK了：</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/blog?characterEncoding=UTF-8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    #Druid连接池配置相关
+    druid:
+      # 初始大小，最大，最小
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000</code></pre>
+<p>不需要检测数据库，不要整这么复杂，不过倒是需要给数据库密码加个密，明文的配置实在不安全，但是现在先不搞了；</p>
+<h4 id="MyBatis-逆向工程"><a href="#MyBatis-逆向工程" class="headerlink" title="MyBatis 逆向工程"></a>MyBatis 逆向工程</h4><p>使用过MyBatis逆向工程的朋友都应该知道，这东西有个BUG，就是重复生成的时候它并不会覆盖掉原来的内容（特指xml映射文件），而是会在后面重新生成一遍，这有点儿头疼，所以首先需要解决这个问题：</p>
+<p>首先在【util】包下新建一个【OverIsMergeablePlugin】工具类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>blog<span class="token punctuation">.</span>util<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>api<span class="token punctuation">.</span>GeneratedXmlFile<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>api<span class="token punctuation">.</span>IntrospectedTable<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>api<span class="token punctuation">.</span>PluginAdapter<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span>Field<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * 避免MyBatiis重复生成的工具类
+ *
+ * @author:wmyskxz
+ * @create:2018-06-14-上午 9:50
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OverIsMergeablePlugin</span> <span class="token keyword">extends</span> <span class="token class-name">PluginAdapter</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">validate</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>String<span class="token operator">></span> warnings<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">sqlMapGenerated</span><span class="token punctuation">(</span>GeneratedXmlFile sqlMap<span class="token punctuation">,</span> IntrospectedTable introspectedTable<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            Field field <span class="token operator">=</span> sqlMap<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getDeclaredField</span><span class="token punctuation">(</span><span class="token string">"isMergeable"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            field<span class="token punctuation">.</span><span class="token function">setAccessible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            field<span class="token punctuation">.</span><span class="token function">setBoolean</span><span class="token punctuation">(</span>sqlMap<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后在【generatorConfig.xml】中配置上该工具类：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cn.wmyskxz.blog.util.OverIsMergeablePlugin<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span></code></pre>
+<p>好的这样就搞定了，我们就正式开始我们的逆向工程：</p>
+<p><strong>1）编写generatorConfig.xml逆向工程配置文件：</strong></p>
+<pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token doctype">&lt;!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd"></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatorConfiguration</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>context</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>DB2Tables<span class="token punctuation">"</span></span> <span class="token attr-name">targetRuntime</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>MyBatis3<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token comment" spellcheck="true">&lt;!--避免生成重复代码的插件--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>plugin</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cn.wmyskxz.blog.util.OverIsMergeablePlugin<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+
+        <span class="token comment" spellcheck="true">&lt;!--是否在代码中显示注释--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>commentGenerator</span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>suppressDate<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>suppressAllComments<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>commentGenerator</span><span class="token punctuation">></span></span>
+
+        <span class="token comment" spellcheck="true">&lt;!--数据库链接地址账号密码--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>jdbcConnection</span> <span class="token attr-name">driverClass</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>com.mysql.jdbc.Driver<span class="token punctuation">"</span></span>
+                        <span class="token attr-name">connectionURL</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>jdbc:mysql://127.0.0.1:3306/blog?characterEncoding<span class="token punctuation">=</span>UTF-8<span class="token punctuation">"</span></span> <span class="token attr-name">userId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>root<span class="token punctuation">"</span></span>
+                        <span class="token attr-name">password</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>123456<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>jdbcConnection</span><span class="token punctuation">></span></span>
+
+        <span class="token comment" spellcheck="true">&lt;!--生成pojo类存放位置--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>javaModelGenerator</span> <span class="token attr-name">targetPackage</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cn.wmyskxz.blog.entity<span class="token punctuation">"</span></span> <span class="token attr-name">targetProject</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>src/main/java<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>enableSubPackages<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>trimStrings<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>javaModelGenerator</span><span class="token punctuation">></span></span>
+        <span class="token comment" spellcheck="true">&lt;!--生成xml映射文件存放位置--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>sqlMapGenerator</span> <span class="token attr-name">targetPackage</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>mapper<span class="token punctuation">"</span></span> <span class="token attr-name">targetProject</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>src/main/resources<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>enableSubPackages<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>sqlMapGenerator</span><span class="token punctuation">></span></span>
+        <span class="token comment" spellcheck="true">&lt;!--生成mapper类存放位置--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>javaClientGenerator</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>XMLMAPPER<span class="token punctuation">"</span></span> <span class="token attr-name">targetPackage</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>cn.wmyskxz.blog.dao<span class="token punctuation">"</span></span> <span class="token attr-name">targetProject</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>src/main/java<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>enableSubPackages<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>javaClientGenerator</span><span class="token punctuation">></span></span>
+
+        <span class="token comment" spellcheck="true">&lt;!--生成对应表及类名--></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sys_log<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>SysLog<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token comment" spellcheck="true">&lt;!--使用自增长键--></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token comment" spellcheck="true">&lt;!--使用数据库中实际的字段名作为生成的实体类的属性--></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sys_view<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>SysView<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tbl_article_content<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ArticleContent<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tbl_article_info<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ArticleInfo<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tbl_article_message<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ArticleMessage<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tbl_message<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>Message<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tbl_sort_info<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>SortInfo<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>table</span> <span class="token attr-name">tableName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>tbl_article_sort<span class="token punctuation">"</span></span> <span class="token attr-name">domainObjectName</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ArticleSort<span class="token punctuation">"</span></span> <span class="token attr-name">enableCountByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span>
+               <span class="token attr-name">enableUpdateByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableDeleteByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span> <span class="token attr-name">enableSelectByExample</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span>
+               <span class="token attr-name">selectByExampleQueryId</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>false<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>my.isgen.usekeys<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>useActualColumnNames<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>true<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>generatedKey</span> <span class="token attr-name">column</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>id<span class="token punctuation">"</span></span> <span class="token attr-name">sqlStatement</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JDBC<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>table</span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>context</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>generatorConfiguration</span><span class="token punctuation">></span></span></code></pre>
+<p>注意表名/生成目标目录之类的有没有写错，表名最好就直接去复制数据库中的名称；</p>
+<p><strong>2）编写逆向工程生成类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>blog<span class="token punctuation">.</span>generator<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>api<span class="token punctuation">.</span>MyBatisGenerator<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>config<span class="token punctuation">.</span>Configuration<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>config<span class="token punctuation">.</span>xml<span class="token punctuation">.</span>ConfigurationParser<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>exception<span class="token punctuation">.</span>XMLParserException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>mybatis<span class="token punctuation">.</span>generator<span class="token punctuation">.</span>internal<span class="token punctuation">.</span>DefaultShellCallback<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>InputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>sql<span class="token punctuation">.</span>SQLException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>ParseException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>SimpleDateFormat<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Date<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * MyBatis逆向工程生成类
+ *
+ * @author:wmyskxz
+ * @create:2018-06-14-上午 10:10
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MybatisGenerator</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        String today <span class="token operator">=</span> <span class="token string">"2018-6-14"</span><span class="token punctuation">;</span>
+
+        SimpleDateFormat sdf <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span><span class="token string">"yyyy-MM-dd"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Date now <span class="token operator">=</span> sdf<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>today<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Date d <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>d<span class="token punctuation">.</span><span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> now<span class="token punctuation">.</span><span class="token function">getTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1000</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">24</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"——————未成成功运行——————"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"——————未成成功运行——————"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>err<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"本程序具有破坏作用，应该只运行一次，如果必须要再运行，需要修改today变量为今天，如:"</span> <span class="token operator">+</span> sdf<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        List<span class="token operator">&lt;</span>String<span class="token operator">></span> warnings <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> overwrite <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        InputStream is <span class="token operator">=</span> MybatisGenerator<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span><span class="token string">"generatorConfig.xml"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">openStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ConfigurationParser cp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ConfigurationParser</span><span class="token punctuation">(</span>warnings<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Configuration config <span class="token operator">=</span> cp<span class="token punctuation">.</span><span class="token function">parseConfiguration</span><span class="token punctuation">(</span>is<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        is<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        DefaultShellCallback callback <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultShellCallback</span><span class="token punctuation">(</span>overwrite<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        MyBatisGenerator myBatisGenerator <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyBatisGenerator</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> callback<span class="token punctuation">,</span> warnings<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        myBatisGenerator<span class="token punctuation">.</span><span class="token function">generate</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"生成代码成功，只能执行一次，以后执行会覆盖掉mapper,pojo,xml 等文件上做的修改"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这个是参考自how2j.cn的逆向工程，这个可以说是很成熟的模块了，写的很棒，考虑了安全方面的一些东西，链接在这里：<a href="http://how2j.cn/k/tmall_ssm/tmall_ssm-1547/1547.html" target="_blank" rel="noopener">http://how2j.cn/k/tmall_ssm/tmall_ssm-1547/1547.html</a></p>
+<p><strong>3）点击运行：</strong></p>
+<p>控制台看到成功的信息之后，就能看到项目中自动多了一堆文件了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-ef97cdf127b3bd41.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-bc52c7d5ea0a5a69.png" alt=""></p>
+<h4 id="RESTful-API-设计"><a href="#RESTful-API-设计" class="headerlink" title="RESTful API 设计"></a>RESTful API 设计</h4><p>为了实现前后端分离，好的RESTful API是离不开的，正好前一段时间学习了这方面的知识，所以决定先来设计一套RESTful API，之前学习的文章链接在这里：<a href="https://www.jianshu.com/p/91600da4df95" target="_blank" rel="noopener">https://www.jianshu.com/p/91600da4df95</a></p>
+<p><strong>1）引入Swagger2来构造RESTful API：</strong></p>
+<p>既然想弄一下前后端分离，那就彻底一点儿，写后台完全不管前台，前后台的交互靠一套RESTful API和JSON数据来弄，所以需要一个文档来瞅瞅，首先在pox.xml添加相关依赖：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!--Swagger2支持--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.springfox<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>springfox-swagger2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.2.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.springfox<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>springfox-swagger-ui<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.2.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p><strong>2）创建Swagger2配置类：</strong></p>
+<p>在SpringBoot启动类的同级目录下创建Swagger2的配置类【Swagger2】：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+ * Swagger2 配置类
+ *
+ * @author:wmyskxz
+ * @create:2018-06-14-上午 10:40
+ */</span>
+<span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableSwagger2</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Swagger2</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> Docket <span class="token function">createRestApi</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Docket</span><span class="token punctuation">(</span>DocumentationType<span class="token punctuation">.</span>SWAGGER_2<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apis</span><span class="token punctuation">(</span>RequestHandlerSelectors<span class="token punctuation">.</span><span class="token function">basePackage</span><span class="token punctuation">(</span><span class="token string">"cn.wmyskxz.blog"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">paths</span><span class="token punctuation">(</span>PathSelectors<span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> ApiInfo <span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiInfoBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">"Wmyskxz个人博客RESTful APIs"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">description</span><span class="token punctuation">(</span><span class="token string">"原文地址链接：http://blog.didispace.com/springbootswagger2/"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">termsOfServiceUrl</span><span class="token punctuation">(</span><span class="token string">"http://blog.didispace.com/"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">contact</span><span class="token punctuation">(</span><span class="token string">"@我没有三颗心脏"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">"1.0"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>这样，就可以在我们启动项目之后，访问<code>http://localhost:8080/swagger-ui.html</code>地址来查看当前项目中的RESTful风格的API：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-c208961e4bd95e19.png" alt=""></p>
+<p><strong>3）设计RESTful API：</strong></p>
+<p>好的，捣鼓了半天，终于有了一些雏形：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-9e498dd965dca821.png" alt=""></p>
+<p>但是这也只是设计了API，具体都还没有实现，这些就在写后台的时候来完善了，具体的这些内容怎么显示出来的，我给一个【SortController】的参考类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+ * 分类信息控制器
+ *
+ * @author:wmyskxz
+ * @create:2018-06-14-下午 13:25
+ */</span>
+<span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/api/sort"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SortController</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 获取所有分类信息
+     *
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"获取所有分类信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/list"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>SortInfo<span class="token operator">></span> <span class="token function">listAllSortInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 通过id获取一条分类信息
+     *
+     * @param id
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"获取某一条分类信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"分类ID"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"Long"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> SortInfo <span class="token function">getSortInfoById</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 增加一条分类信息数据
+     *
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"增加分类信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"name"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"分类名称"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"String"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@PostMapping</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">addSortInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 更新/编辑一条数据
+     *
+     * @param id
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"更新/编辑分类信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"分类ID"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"Long"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@PutMapping</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">updateSortInfo</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 根据ID删除分类信息
+     *
+     * @param id
+     * @return
+     */</span>
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span><span class="token string">"删除分类信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"分类ID"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"Long"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@DeleteMapping</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">deleteSortInfo</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>简单介绍一下这些Swagger2的注解吧：</p>
+<ul>
+<li>@ApiOperation：用于给API设置提示信息，就上图中右边显示的那些，默认不写的情况下是value属性，还可以多写一个notes属性，用于详细的描述API，这里就不需要了，都还比较简单；</li>
+<li>@ApiImplicaitParam：用于说明API的参数信息，加了s的注解同理，写了这个之后呢，我们就可以利用Swagger2给我们的信息页面进行测试了，当然这里没有具体实现，也可以来看一下（下图）；</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/SpringBoot%E6%8A%80%E6%9C%AF%E6%A0%88%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E3%80%90%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87%E3%80%91/7896890-e320c37bb2974333.png" alt=""></p>
+<p>这里没有具体实现所以就不足以完成测试，等到后台编写的时候再进行测试吧…</p>
+<hr>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>至此呢，我们项目所需要的准备就差不多完成了，想要去做一个东西必须要清楚的知道要的是一个什么东西，这样才能更加好的完成我们的产品，这也是我喜欢和坚信的事情：<strong>方向永远比努力重要！</strong>（强行有联系..hhhh）</p>
+<p><strong>另外一个问题：</strong> 我在想文章信息和内容分成了两个表的问题，这样的设计我觉得是没有问题的，但是作为前端并不关心这些数据库的设计，他只要能拿到对象就可以了，在设计 API 的时候，就发现获得一篇文章，需要从三个表（文章信息/文章内容/评论）去获取信息并封装返回前端，这就需要自己在后台另外写一个实体类去封装这些信息，这无疑增加了我们的代码工作量，有没有什么好的方法解决呢？</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/06/11/da-san-xiao-bai-chu-ci-jie-hong-feng-bi-shi-kai-fa-zong-jie/">
       大三小白初次接触封闭式开发总结
     </a>
@@ -5403,523 +6202,6 @@ Stream empStream <span class="token operator">=</span> emp<span class="token pun
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/05/16/java-mian-shi-zhi-shi-dian-jie-xi-san-jvm-pian/">
-      Java面试知识点解析(三)——JVM篇
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E9%9D%A2%E8%AF%95/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>面试</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年5月16日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-958b6a30c60032e8.png" alt=""></p>
-<blockquote>
-<ul>
-<li>前言： </li>
-</ul>
-</blockquote>
-<p>在遨游了一番 Java Web 的世界之后，发现了自己的一些缺失，所以就着一篇深度好文：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">知名互联网公司校招 Java 开发岗面试知识点解析</a> ，来好好的对 Java 知识点进行复习和学习一番，大部分内容参照自这一篇文章，有一些自己补充的，也算是重新学习一下 Java 吧。</p>
-<p>前序文章链接：</p>
-<p><a href="https://www.jianshu.com/p/883260941da8" target="_blank" rel="noopener">Java 面试知识点解析(一)——基础知识篇</a></p>
-<p><a href="https://www.jianshu.com/p/7382c0a843ff" target="_blank" rel="noopener">Java 面试知识点解析(二)——高并发编程篇</a></p>
-<hr>
-<h2 id="（一）JVM-基础知识"><a href="#（一）JVM-基础知识" class="headerlink" title="（一）JVM 基础知识"></a>（一）JVM 基础知识</h2><blockquote>
-<p>问题和答案都是自行整理的，所以仅供参考！欢迎指正！</p>
-</blockquote>
-<h4 id="1）Java-是如何实现跨平台的？"><a href="#1）Java-是如何实现跨平台的？" class="headerlink" title="1）Java 是如何实现跨平台的？"></a>1）Java 是如何实现跨平台的？</h4><p><strong>注意：跨平台的是 Java 程序，而不是 JVM。JVM 是用 C/C++ 开发的，是编译后的机器码，不能跨平台，不同平台下需要安装不同版本的 JVM</strong></p>
-<p>答：我们编写的 Java 源码，编译后会生成一种 .class 文件，称为字节码文件。Java 虚拟机（JVM）就是负责将字节码文件翻译成特定平台下的机器码然后运行，也就是说，只要在不同平台上安装对应的 JVM，就可以运行字节码文件，运行我们编写的 Java 程序。</p>
-<p>而这个过程，我们编写的 Java 程序没有做任何改变，仅仅是通过 JVM 这一 “中间层” ，就能在不同平台上运行，真正实现了 “一次编译，到处运行” 的目的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-10b94c75252f5e5e.png" alt=""></p>
-<h4 id="2）什么是-JVM-？"><a href="#2）什么是-JVM-？" class="headerlink" title="2）什么是 JVM ？"></a>2）什么是 JVM ？</h4><p>解析：不仅仅是基本概念，还有 JVM 的作用。</p>
-<p>答：JVM，即 Java Virtual Machine，Java 虚拟机。它通过模拟一个计算机来达到一个计算机所具有的的计算功能。JVM 能够跨计算机体系结构来执行 Java 字节码，主要是由于 JVM 屏蔽了与各个计算机平台相关的软件或者硬件之间的差异，使得与平台相关的耦合统一由 JVM 提供者来实现。</p>
-<h4 id="3）JVM-由哪些部分组成？"><a href="#3）JVM-由哪些部分组成？" class="headerlink" title="3）JVM 由哪些部分组成？"></a>3）JVM 由哪些部分组成？</h4><p>解析：这是对 JVM 体系结构的考察</p>
-<p>答：JVM 的结构基本上由 4 部分组成：</p>
-<ul>
-<li><p>类加载器，在 JVM 启动时或者类运行时将需要的 class 加载到 JVM 中</p>
-</li>
-<li><p>执行引擎，执行引擎的任务是负责执行 class 文件中包含的字节码指令，相当于实际机器上的 CPU</p>
-</li>
-<li><p>内存区，将内存划分成若干个区以模拟实际机器上的存储、记录和调度功能模块，如实际机器上的各种功能的寄存器或者 PC 指针的记录器等</p>
-</li>
-<li><p>本地方法调用，调用 C 或 C++ 实现的本地方法的代码返回结果</p>
-</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-f42e851debb0a070.png" alt=""></p>
-<h4 id="4）类加载器是有了解吗？"><a href="#4）类加载器是有了解吗？" class="headerlink" title="4）类加载器是有了解吗？"></a>4）类加载器是有了解吗？</h4><p>解析：底层原理的考察，其中涉及到类加载器的概念，功能以及一些底层的实现。</p>
-<p>答：顾名思义，类加载器（class loader）用来加载 Java 类到 Java 虚拟机中。一般来说，Java 虚拟机使用 Java 类的方式如下：Java 源程序（.java 文件）在经过 Java 编译器编译之后就被转换成 Java 字节代码（.class 文件）。</p>
-<p>类加载器负责读取 Java 字节代码，并转换成 java.lang.Class类的一个实例。每个这样的实例用来表示一个 Java 类。通过此实例的 newInstance()方法就可以创建出该类的一个对象。实际的情况可能更加复杂，比如 Java 字节代码可能是通过工具动态生成的，也可能是通过网络下载的。</p>
-<p><strong>面试官：Java 虚拟机是如何判定两个 Java 类是相同的？</strong></p>
-<p>答：Java 虚拟机不仅要看类的全名是否相同，还要看加载此类的类加载器是否一样。只有两者都相同的情况，才认为两个类是相同的。即便是同样的字节代码，被不同的类加载器加载之后所得到的类，也是不同的。比如一个 Java 类 com.example.Sample，编译之后生成了字节代码文件 Sample.class。两个不同的类加载器 ClassLoaderA和 ClassLoaderB分别读取了这个 Sample.class文件，并定义出两个 java.lang.Class类的实例来表示这个类。这两个实例是不相同的。对于 Java 虚拟机来说，它们是不同的类。试图对这两个类的对象进行相互赋值，会抛出运行时异常 ClassCastException。</p>
-<h4 id="5）类加载器是如何加载-class-文件的？"><a href="#5）类加载器是如何加载-class-文件的？" class="headerlink" title="5）类加载器是如何加载 class 文件的？"></a>5）类加载器是如何加载 class 文件的？</h4><p>答：下图所示是 ClassLoader 加载一个 class 文件到 JVM 时需要经过的步骤：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-9b726ee9e5ed7e03.png" alt=""></p>
-<p>第一个阶段是找到 .class 文件并把这个文件包含的字节码加载到内存中</p>
-<p>第二阶段又可以分为三个步骤，分别是字节码验证、Class 类数据结构分析及相应的内存分配和最后的符号表的链接</p>
-<p>第三个阶段是类中静态属性和初始化赋值，以及静态块的执行等</p>
-<p><strong>面试官：能详细讲讲吗？</strong></p>
-<p>答：</p>
-<p><strong>1.加载</strong></p>
-<p>查找并加载类的二进制数据加载时类加载过程的第一个阶段，在加载阶段，虚拟机需要完成以下三件事情：</p>
-<ul>
-<li>通过一个类的全限定名来获取其定义的二进制字节流。</li>
-<li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。</li>
-<li>在Java堆中生成一个代表这个类的 java.lang.Class 对象，作为对方法区中这些数据的访问入口。</li>
-</ul>
-<p>相对于类加载的其他阶段而言，加载阶段（准确地说，是加载阶段获取类的二进制字节流的动作）是可控性最强的阶段，因为开发人员既可以使用系统提供的类加载器来完成加载，也可以自定义自己的类加载器来完成加载。</p>
-<p>加载阶段完成后，虚拟机外部的二进制字节流就按照虚拟机所需的格式存储在方法区之中，而且在Java堆中也创建一个 java.lang.Class类的对象，这样便可以通过该对象访问方法区中的这些数据。</p>
-<p><strong>2.连接</strong></p>
-<p><strong>验证：确保被加载的类的正确性</strong></p>
-<p>验证是连接阶段的第一步，这一阶段的目的是为了确保Class文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全。验证阶段大致会完成4个阶段的检验动作：</p>
-<ul>
-<li><strong>文件格式验证：</strong>验证字节流是否符合Class文件格式的规范；例如：是否以 0xCAFEBABE开头、主次版本号是否在当前虚拟机的处理范围之内、常量池中的常量是否有不被支持的类型。</li>
-<li><strong>元数据验证：</strong>对字节码描述的信息进行语义分析（注意：对比javac编译阶段的语义分析），以保证其描述的信息符合Java语言规范的要求；例如：这个类是否有父类，除了 java.lang.Object之外。</li>
-<li><strong>字节码验证：</strong>通过数据流和控制流分析，确定程序语义是合法的、符合逻辑的。</li>
-<li><strong>符号引用验证：</strong>确保解析动作能正确执行。</li>
-</ul>
-<p>验证阶段是非常重要的，但不是必须的，它对程序运行期没有影响，如果所引用的类经过反复验证，那么可以考虑采用 -Xverifynone 参数来关闭大部分的类验证措施，以缩短虚拟机类加载的时间。</p>
-<p><strong>准备：为类的<code>静态变量</code>分配内存，并将其初始化为默认值</strong></p>
-<p>准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在方法区中分配。对于该阶段有以下几点需要注意：</p>
-<ul>
-<li>① 这时候进行内存分配的仅包括类变量（static），而不包括实例变量，实例变量会在对象实例化时随着对象一块分配在Java堆中。</li>
-<li>② 这里所设置的初始值通常情况下是数据类型默认的零值（如0、0L、null、false等），而不是被在Java代码中被显式地赋予的值。</li>
-</ul>
-<p>假设一个类变量的定义为： <code>public static int value = 3;</code></p>
-<p>那么变量value在准备阶段过后的初始值为 0，而不是 3，因为这时候尚未开始执行任何 Java 方法，而把 value 赋值为 3 的<code>public static</code>指令是在程序编译后，存放于类构造器 <code>&lt;clinit&gt;（）</code>方法之中的，所以把value赋值为3的动作将在初始化阶段才会执行。</p>
-<blockquote>
-<p>这里还需要注意如下几点：</p>
-<ul>
-<li>对基本数据类型来说，对于类变量（static）和全局变量，如果不显式地对其赋值而直接使用，则系统会为其赋予默认的零值，而对于局部变量来说，在使用前必须显式地为其赋值，否则编译时不通过。<ul>
-<li>对于同时被static和final修饰的常量，必须在声明的时候就为其显式地赋值，否则编译时不通过；而只被final修饰的常量则既可以在声明时显式地为其赋值，也可以在类初始化时显式地为其赋值，总之，在使用前必须为其显式地赋值，系统不会为其赋予默认零值。</li>
-<li>对于引用数据类型reference来说，如数组引用、对象引用等，如果没有对其进行显式地赋值而直接使用，系统都会为其赋予默认的零值，即null。</li>
-<li>如果在数组初始化时没有对数组中的各元素赋值，那么其中的元素将根据对应的数据类型而被赋予默认的零值。</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<ul>
-<li>③ 如果类字段的字段属性表中存在 ConstantValue 属性，即同时被 final 和 static 修饰，那么在准备阶段变量 value 就会被初始化为 ConstValue 属性所指定的值。</li>
-</ul>
-<p>假设上面的类变量 value 被定义为： <code>public static final int value = 3;</code></p>
-<p>编译时 Javac 将会为 value 生成 ConstantValue 属性，在准备阶段虚拟机就会根据 ConstantValue 的设置将 value 赋值为 3。我们可以理解为 static final 常量在编译期就将其结果放入了调用它的类的常量池中</p>
-<p><strong>解析：把类中的符号引用转换为直接引用</strong></p>
-<p>解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程，解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符7类符号引用进行。符号引用就是一组符号来描述目标，可以是任何字面量。</p>
-<p>直接引用就是直接指向目标的指针、相对偏移量或一个间接定位到目标的句柄。</p>
-<p><strong>3.初始化</strong></p>
-<p>初始化，为类的静态变量赋予正确的初始值，JVM负责对类进行初始化，主要对类变量进行初始化。在Java中对类变量进行初始值设定有两种方式：</p>
-<ul>
-<li>① 声明类变量是指定初始值</li>
-<li>② 使用静态代码块为类变量指定初始值</li>
-</ul>
-<p>JVM初始化步骤</p>
-<ul>
-<li>1、假如这个类还没有被加载和连接，则程序先加载并连接该类</li>
-<li>2、假如该类的直接父类还没有被初始化，则先初始化其直接父类</li>
-<li>3、假如类中有初始化语句，则系统依次执行这些初始化语句</li>
-</ul>
-<p>类初始化时机：只有当对类的主动使用的时候才会导致类的初始化，类的主动使用包括以下六种：</p>
-<ul>
-<li>创建类的实例，也就是new的方式</li>
-<li>访问某个类或接口的静态变量，或者对该静态变量赋值</li>
-<li>调用类的静态方法</li>
-<li>反射（如 Class.forName(“com.shengsiyuan.Test”)）</li>
-<li>初始化某个类的子类，则其父类也会被初始化</li>
-<li>Java虚拟机启动时被标明为启动类的类（ JavaTest），直接使用 java.exe命令来运行某个主类</li>
-</ul>
-<p><strong>结束生命周期</strong></p>
-<p>在如下几种情况下，Java虚拟机将结束生命周期</p>
-<ul>
-<li>执行了 System.exit()方法</li>
-<li>程序正常执行结束</li>
-<li>程序在执行过程中遇到了异常或错误而异常终止</li>
-<li>由于操作系统出现错误而导致Java虚拟机进程终止</li>
-</ul>
-<blockquote>
-<p>参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NDY5Mjc1Mg==&mid=2247483934&idx=1&sn=41c46eceb2add54b7cde9eeb01412a90&chksm=ebf6da61dc81537721d36aadb5d20613b0449762842f9128753e716ce5fefe2b659d8654c4e8&scene=21#wechat_redirect" target="_blank" rel="noopener">jvm系列(一):java类的加载机制 - 纯洁的微笑</a></p>
-</blockquote>
-<h4 id="7）双亲委派模型（Parent-Delegation-Model）？"><a href="#7）双亲委派模型（Parent-Delegation-Model）？" class="headerlink" title="7）双亲委派模型（Parent Delegation Model）？"></a>7）双亲委派模型（Parent Delegation Model）？</h4><p>解析：类的加载过程采用双亲委派机制，这种机制能更好的保证 Java 平台的安全性</p>
-<p>答：类加载器 ClassLoader 是具有层次结构的，也就是父子关系，其中，Bootstrap 是所有类加载器的父亲，如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-b4a569a5cc980a34.png" alt=""></p>
-<p>该模型要求除了顶层的 Bootstrap class loader 启动类加载器外，其余的类加载器都应当有自己的父类加载器。子类加载器和父类加载器不是以继承（Inheritance）的关系来实现，而是通过组合（Composition）关系来复用父加载器的代码。每个类加载器都有自己的命名空间（由该加载器及所有父类加载器所加载的类组成，在同一个命名空间中，不会出现类的完整名字（包括类的包名）相同的两个类；在不同的命名空间中，有可能会出现类的完整名字（包括类的包名）相同的两个类）</p>
-<p><strong>面试官：双亲委派模型的工作过程？</strong></p>
-<p>答：</p>
-<p>1.当前 ClassLoader 首先从自己已经加载的类中查询是否此类已经加载，如果已经加载则直接返回原来已经加载的类。</p>
-<blockquote>
-<p>每个类加载器都有自己的加载缓存，当一个类被加载了以后就会放入缓存，<br>等下次加载的时候就可以直接返回了。</p>
-</blockquote>
-<p>2.当前 ClassLoader 的缓存中没有找到被加载的类的时候，委托父类加载器去加载，父类加载器采用同样的策略，首先查看自己的缓存，然后委托父类的父类去加载，一直到 bootstrap ClassLoader.</p>
-<blockquote>
-<p>当所有的父类加载器都没有加载的时候，再由当前的类加载器加载，并将其放入它自己的缓存中，以便下次有加载请求的时候直接返回。</p>
-</blockquote>
-<p><strong>面试官：为什么这样设计呢？</strong></p>
-<p>解析：这是对于使用这种模型来组织累加器的好处</p>
-<p>答：主要是为了安全性，避免用户自己编写的类动态替换 Java 的一些核心类，比如 String，同时也避免了重复加载，因为 JVM 中区分不同类，不仅仅是根据类名，相同的 class 文件被不同的 ClassLoader 加载就是不同的两个类，如果相互转型的话会抛java.lang.ClassCaseException. </p>
-<blockquote>
-<p>参考文章： <a href="https://segmentfault.com/a/1190000002579346" target="_blank" rel="noopener">JVM 的 工作原理，层次结构 以及 GC工作原理</a></p>
-</blockquote>
-<hr>
-<h2 id="（二）JVM-内存管理"><a href="#（二）JVM-内存管理" class="headerlink" title="（二）JVM 内存管理"></a>（二）JVM 内存管理</h2><h4 id="1）JVM-内存划分："><a href="#1）JVM-内存划分：" class="headerlink" title="1）JVM 内存划分："></a>1）JVM 内存划分：</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-cf626e0e356e89d7.png" alt=""></p>
-<p>答：</p>
-<ol>
-<li><p>方法区（线程共享）：各个线程共享的一个区域，用于存储虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。虽然 Java 虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却又一个别名叫做 Non-Heap（非堆），目的应该是与 Java 堆区分开来。</p>
-<ul>
-<li>运行时常量池：是方法区的一部分，用于存放编译器生成的各种字面量和符号引用。</li>
-</ul>
-</li>
-<li><p>堆内存（线程共享）：所有线程共享的一块区域，垃圾收集器管理的主要区域。目前主要的垃圾回收算法都是分代收集算法，所以 Java 堆中还可以细分为：新生代和老年代；再细致一点的有 Eden 空间、From Survivor 空间、To Survivor 空间等，默认情况下新生代按照8:1:1的比例来分配。根据 Java 虚拟机规范的规定，Java 堆可以处于物理上不连续的内存空间中，只要逻辑上是连续的即可，就像我们的磁盘一样。</p>
-</li>
-<li><p>程序计数器： Java 线程私有，类似于操作系统里的 PC 计数器，它可以看做是当前线程所执行的字节码的行号指示器。如果线程正在执行的是一个 Java 方法，这个计数器记录的是正在执行的虚拟机字节码指令的地址；如果正在执行的是 Native 方法，这个计数器值则为空（Undefined）。此内存区域是唯一一个在 Java 虚拟机规范中没有规定任何 OutOfMemoryError 情况的区域。</p>
-</li>
-<li><p>虚拟机栈（栈内存）：Java线程私有，虚拟机展描述的是Java方法执行的内存模型：每个方法在执行的时候，都会创建一个栈帧用于存储局部变量、操作数、动态链接、方法出口等信息；每个方法调用都意味着一个栈帧在虚拟机栈中入栈到出栈的过程；</p>
-</li>
-<li><p>本地方法栈 ：和Java虚拟机栈的作用类似，区别是该区域为 JVM 提供使用 native 方法的服务</p>
-</li>
-</ol>
-<h4 id="2）对象分配规则？"><a href="#2）对象分配规则？" class="headerlink" title="2）对象分配规则？"></a>2）对象分配规则？</h4><p>答：</p>
-<ul>
-<li><p>对象优先分配在Eden区，如果Eden区没有足够的空间时，虚拟机执行一次Minor GC。</p>
-</li>
-<li><p>大对象直接进入老年代（大对象是指需要大量连续内存空间的对象）。这样做的目的是避免在Eden区和两个Survivor区之间发生大量的内存拷贝（新生代采用复制算法收集内存）。</p>
-</li>
-<li><p>长期存活的对象进入老年代。虚拟机为每个对象定义了一个年龄计数器，如果对象经过了1次Minor GC那么对象会进入Survivor区，之后每经过一次Minor GC那么对象的年龄加1，知道达到阀值对象进入老年区。</p>
-</li>
-<li><p>动态判断对象的年龄。如果Survivor区中相同年龄的所有对象大小的总和大于Survivor空间的一半，年龄大于或等于该年龄的对象可以直接进入老年代。</p>
-</li>
-<li><p>空间分配担保。每次进行Minor GC时，JVM会计算Survivor区移至老年区的对象的平均大小，如果这个值大于老年区的剩余值大小则进行一次Full GC，如果小于检查HandlePromotionFailure设置，如果true则只进行Monitor GC,如果false则进行Full GC。 </p>
-</li>
-</ul>
-<h4 id="3）Java-的内存模型："><a href="#3）Java-的内存模型：" class="headerlink" title="3）Java 的内存模型："></a>3）Java 的内存模型：</h4><p>答：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-d385883cf2bc0725.png" alt=""></p>
-<p>Java 虚拟机规范中试图定义一种 Java 内存模型（Java Memory Model, JMM）来屏蔽掉各层硬件和操作系统的内存访问差异，以实现让 Java 程序在各种平台下都能达到一致的内存访问效果。</p>
-<p>Java 内存模型规定了所有的变量都存储在主内存（Main Memory）中。每条线程还有自己的工作内存（Working Memory），线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作（读取、赋值等）都必须在主内存中进行，而不能直接读写主内存中的变量。不同的线程之间也无法直接访问对方工作内存中的变量，线程间的变量值的传递均需要通过主内存来完成，线程、主内存、工作内存三者的关系如上图。</p>
-<p><strong>面试官：两个线程之间是如何通信的呢？</strong></p>
-<p>答：在<strong>共享内存</strong>的并发模型里，线程之间共享程序的公共状态，线程之间通过写-读内存中的公共状态来隐式进行通信，典型的共享内存通信方式就是通过共享对象进行通信。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-ef21427c586e224c.png" alt=""></p>
-<p>例如上图线程 A 与 线程 B 之间如果要通信的话，那么就必须经历下面两个步骤：</p>
-<ul>
-<li>1.首先，线程 A 把本地内存 A 更新过得共享变量刷新到主内存中去</li>
-<li>2.然后，线程 B 到主内存中去读取线程 A 之前更新过的共享变量</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-7a3d44fd74ad5da8.png" alt=""></p>
-<p>在<strong>消息传递</strong>的并发模型里，线程之间没有公共状态，线程之间必须通过明确的发送消息来显式进行通信，在 Java 中典型的消息传递方式就是 wait() 和 notify()。</p>
-<h4 id="5）内存屏障？"><a href="#5）内存屏障？" class="headerlink" title="5）内存屏障？"></a>5）内存屏障？</h4><p>解析：在这之前应该对重排序的问题有所了解，这里我找到一篇很好的文章分享一下：<a href="https://tech.meituan.com/java-memory-reordering.html" target="_blank" rel="noopener">Java内存访问重排序的研究</a></p>
-<p>答：内存屏障，又称内存栅栏，是一组处理器指令，用于实现对内存操作的顺序限制。</p>
-<p><strong>面试官：内存屏障为何重要？</strong></p>
-<p>答：对主存的一次访问一般花费硬件的数百次时钟周期。处理器通过缓存（caching）能够从数量级上降低内存延迟的成本这些缓存为了性能重新排列待定内存操 作的顺序。也就是说，程序的读写操作不一定会按照它要求处理器的顺序执行。当数据是不可变的，同时/或者数据限制在线程范围内，这些优化是无害的。如果把 这些优化与对称多处理（symmetric multi-processing）和共享可变状态（shared mutable state）结合，那么就是一场噩梦。当基于共享可变状态的内存操作被重新排序时，程序可能行为不定。一个线程写入的数据可能被其他线程可见，原因是数据 写入的顺序不一致。适当的放置内存屏障通过强制处理器顺序执行待定的内存操作来避免这个问题。</p>
-<h4 id="5）类似-Xms、-Xmn这些参数的含义："><a href="#5）类似-Xms、-Xmn这些参数的含义：" class="headerlink" title="5）类似-Xms、-Xmn这些参数的含义："></a>5）类似-Xms、-Xmn这些参数的含义：</h4><p>答：</p>
-<p>堆内存分配：</p>
-<ol>
-<li>JVM初始分配的内存由-Xms指定，默认是物理内存的1/64</li>
-<li>JVM最大分配的内存由-Xmx指定，默认是物理内存的1/4</li>
-<li>默认空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制；空余堆内存大于70%时，JVM会减少堆直到 -Xms的最小限制。</li>
-<li>因此服务器一般设置-Xms、-Xmx相等以避免在每次GC 后调整堆的大小。对象的堆内存由称为垃圾回收器的自动内存管理系统回收。</li>
-</ol>
-<p>非堆内存分配：</p>
-<ol>
-<li>JVM使用-XX:PermSize设置非堆内存初始值，默认是物理内存的1/64；</li>
-<li>由XX:MaxPermSize设置最大非堆内存的大小，默认是物理内存的1/4。</li>
-<li>-Xmn2G：设置年轻代大小为2G。</li>
-<li>-XX:SurvivorRatio，设置年轻代中Eden区与Survivor区的比值。</li>
-</ol>
-<h4 id="6）内存泄漏和内存溢出"><a href="#6）内存泄漏和内存溢出" class="headerlink" title="6）内存泄漏和内存溢出"></a>6）内存泄漏和内存溢出</h4><p>答：</p>
-<p>概念：</p>
-<ol>
-<li>内存溢出指的是内存不够用了。</li>
-<li>内存泄漏是指对象可达，但是没用了。即本该被GC回收的对象并没有被回收</li>
-<li>内存泄露是导致内存溢出的原因之一；内存泄露积累起来将导致内存溢出。</li>
-</ol>
-<p>内存泄漏的原因分析：</p>
-<ol>
-<li>长生命周期的对象引用短生命周期的对象</li>
-<li>没有将无用对象置为null</li>
-</ol>
-<blockquote>
-<p>小结：本小节涉及到 JVM 虚拟机，包括对内存的管理等知识，相对较深。除了以上问题，面试官会继续问你一些比较深的问题，可能也是为了看看你的极限在哪里吧。比如：内存调优、内存管理，是否遇到过内存泄露的实际案例、是否真正关心过内存等。</p>
-</blockquote>
-<h4 id="7）简述一下-Java-中创建一个对象的过程？"><a href="#7）简述一下-Java-中创建一个对象的过程？" class="headerlink" title="7）简述一下 Java 中创建一个对象的过程？"></a>7）简述一下 Java 中创建一个对象的过程？</h4><p>解析：回答这个问题首先就要清楚类的生命周期</p>
-<p>答：下图展示的是类的生命周期流向：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-b1d7d32f1eb7e1c5.png" alt=""></p>
-<p>Java中对象的创建就是在堆上分配内存空间的过程，此处说的对象创建仅限于new关键字创建的普通Java对象，不包括数组对象的创建。</p>
-<p>大致过程如下：</p>
-<p><strong>1.检测类是否被加载：</strong></p>
-<p>当虚拟机执行到new时，会先去常量池中查找这个类的符号引用。如果能找到符号引用，说明此类已经被加载到方法区（方法区存储虚拟机已经加载的类的信息），可以继续执行；如果找不到符号引用，就会使用类加载器执行类的加载过程，类加载完成后继续执行。</p>
-<p><strong>2.为对象分配内存：</strong></p>
-<p>类加载完成以后，虚拟机就开始为对象分配内存，此时所需内存的大小就已经确定了。只需要在堆上分配所需要的内存即可。</p>
-<p>具体的分配内存有两种情况：第一种情况是内存空间绝对规整，第二种情况是内存空间是不连续的。</p>
-<ul>
-<li>对于内存绝对规整的情况相对简单一些，虚拟机只需要在被占用的内存和可用空间之间移动指针即可，这种方式被称为指针碰撞。</li>
-<li>对于内存不规整的情况稍微复杂一点，这时候虚拟机需要维护一个列表，来记录哪些内存是可用的。分配内存的时候需要找到一个可用的内存空间，然后在列表上记录下已被分配，这种方式成为空闲列表。</li>
-</ul>
-<p>分配内存的时候也需要考虑线程安全问题，有两种解决方案：</p>
-<ul>
-<li>第一种是采用同步的办法，使用CAS来保证操作的原子性。</li>
-<li>另一种是每个线程分配内存都在自己的空间内进行，即是每个线程都在堆中预先分配一小块内存，称为本地线程分配缓冲（TLAB），分配内存的时候再TLAB上分配，互不干扰。</li>
-</ul>
-<p><strong>3.为分配的内存空间初始化零值：</strong></p>
-<p>对象的内存分配完成后，还需要将对象的内存空间都初始化为零值，这样能保证对象即使没有赋初值，也可以直接使用。</p>
-<p><strong>4.对对象进行其他设置：</strong></p>
-<p>分配完内存空间，初始化零值之后，虚拟机还需要对对象进行其他必要的设置，设置的地方都在对象头中，包括这个对象所属的类，类的元数据信息，对象的hashcode，GC分代年龄等信息。</p>
-<p><strong>5.执行 init 方法：</strong></p>
-<p>执行完上面的步骤之后，在虚拟机里这个对象就算创建成功了，但是对于Java程序来说还需要执行init方法才算真正的创建完成，因为这个时候对象只是被初始化零值了，还没有真正的去根据程序中的代码分配初始值，调用了init方法之后，这个对象才真正能使用。</p>
-<p>到此为止一个对象就产生了，这就是new关键字创建对象的过程。过程如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-d3f0b79374e52e6b.png" alt=""></p>
-<blockquote>
-<p>参考文章：<a href="http://cxis.me/2016/12/01/Java创建对象的过程简介/" target="_blank" rel="noopener">Java创建对象的过程简介</a></p>
-</blockquote>
-<p><strong>面试官：对象的内存布局是怎样的？</strong></p>
-<p>答：对象的内存布局包括三个部分：对象头，实例数据和对齐填充。</p>
-<ul>
-<li><p>对象头：对象头包括两部分信息，第一部分是存储对象自身的运行时数据，如哈希码，GC分代年龄，锁状态标志，线程持有的锁等等。第二部分是类型指针，即对象指向类元数据的指针。</p>
-</li>
-<li><p>实例数据：就是数据啦</p>
-</li>
-<li><p>对齐填充：不是必然的存在，就是为了对齐的嘛</p>
-</li>
-</ul>
-<p><strong>面试官：对象是如何定位访问的？</strong></p>
-<p>答：对象的访问定位有两种：句柄定位和直接指针</p>
-<ul>
-<li>句柄定位：Java 堆会画出一块内存来作为句柄池，reference中存储的就是对象的句柄地址，而句柄中包含了对象实例数据与类型数据各自的具体地址信息</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-24ab9d16017066ac.png" alt=""></p>
-<ul>
-<li>直接指针访问：java堆对象的不居中就必须考虑如何放置访问类型数据的相关信息，而reference中存储的直接就是对象地址</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-37413a4771387b81.png" alt=""></p>
-<p><strong>比较：使用直接指针就是速度快，使用句柄reference指向稳定的句柄，对象被移动改变的也只是句柄中实例数据的指针，而reference本身并不需要修改。</strong></p>
-<blockquote>
-<p>参考文章：<a href="https://troywu0.gitbooks.io/spark/content/java对象创建的过程.html" target="_blank" rel="noopener">JAVA对象创建的过程</a></p>
-</blockquote>
-<hr>
-<h2 id="（三）GC-相关"><a href="#（三）GC-相关" class="headerlink" title="（三）GC 相关"></a>（三）GC 相关</h2><h4 id="1）如何判断一个对象是否已经死去？"><a href="#1）如何判断一个对象是否已经死去？" class="headerlink" title="1）如何判断一个对象是否已经死去？"></a>1）如何判断一个对象是否已经死去？</h4><p>答：</p>
-<ol>
-<li><p>引用计数：每个对象有一个引用计数属性，新增一个引用时计数加1，引用释放时计数减1，计数为0时可以回收。此方法简单，无法解决对象相互循环引用的问题。</p>
-</li>
-<li><p>可达性分析（Reachability Analysis）：从GC Roots开始向下搜索，搜索所走过的路径称为引用链。当一个对象到GC Roots没有任何引用链相连时，则证明此对象是不可用的。不可达对象。</p>
-</li>
-</ol>
-<h4 id="2）垃圾回收算法有哪些？"><a href="#2）垃圾回收算法有哪些？" class="headerlink" title="2）垃圾回收算法有哪些？"></a>2）垃圾回收算法有哪些？</h4><p>答：</p>
-<ol>
-<li><p>引用计数：<br>原理是此对象有一个引用，即增加一个计数，删除一个引用则减少一个计数。垃圾回收时，只用收集计数为0的对象。此算法最致命的是无法处理循环引用的问题。</p>
-</li>
-<li><p>标记-清除：<br>此算法执行分两阶段。第一阶段从引用根节点开始标记所有被引用的对象，第二阶段遍历整个堆，把未标记的对象清除。此算法需要暂停整个应用，同时，会产生内存碎片。</p>
-</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-629206f5d8336bc5.png" alt=""></p>
-<ol start="3">
-<li>复制算法：<br>此算法把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾回收时，遍历当前使用区域，把正在使用中的对象复制到另外一个区域中。此算法每次只处理正在使用中的对象，因此复制成本比较小，同时复制过去以后还能进行相应的内存整理，不会出现“碎片”问题。当然，此算法的缺点也是很明显的，就是需要两倍内存空间。</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-45baf8ef2625fba4.png" alt=""></p>
-<ol start="4">
-<li>标记-整理：<br>此算法结合了 “标记-清除” 和 “复制” 两个算法的优点。也是分两阶段，第一阶段从根节点开始标记所有被引用对象，第二阶段遍历整个堆，把清除未标记对象并且把存活对象“压缩”到堆的其中一块，按顺序排放。此算法避免了 “标记-清除” 的碎片问题，同时也避免了 “复制” 算法的空间问题。</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-4b2c9593a91f5816.png" alt=""></p>
-<ol start="5">
-<li>分代收集算法：<ul>
-<li>分代收集算法并没有提出新的思想，只是根据对象存活周期的不同将内存划为几块。一般Java堆分为新生代和老年代，这样就可以根据各个年代的特点采用适当的收集算法。</li>
-<li>在新生袋中每次垃圾手机时都会由大批对象死去，只有少量存活，那就用复制算法，只需要付出少量存活对象的复制成本就可以。老年代中对象存活率高、没有额外担保，所以必须使用“标记-清理”或者“标记整理算法。</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p>参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NDY5Mjc1Mg==&mid=2247483952&idx=1&sn=ea12792a9b7c67baddfaf425d8272d33&chksm=ebf6da4fdc815359869107a4acd15538b3596ba006b4005b216688b69372650dbd18c0184643&scene=21#wechat_redirect" target="_blank" rel="noopener">jvm系列(三):GC算法 垃圾收集器——纯洁的微笑</a></p>
-</blockquote>
-<h4 id="3）GC什么时候开始？"><a href="#3）GC什么时候开始？" class="headerlink" title="3）GC什么时候开始？"></a>3）GC什么时候开始？</h4><p>答：GC经常发生的区域是堆区，堆区还可以细分为新生代、老年代，新生代还分为一个Eden区和两个Survivor区。</p>
-<ol>
-<li><p>对象优先在Eden中分配，当Eden中没有足够空间时，虚拟机将发生一次Minor GC，因为Java大多数对象都是朝生夕灭，所以Minor GC非常频繁，而且速度也很快；</p>
-</li>
-<li><p>Full GC，发生在老年代的GC，当老年代没有足够的空间时即发生Full GC，发生Full GC一般都会有一次Minor GC。大对象直接进入老年代，如很长的字符串数组，虚拟机提供一个-XX:PretenureSizeThreadhold参数，令大于这个参数值的对象直接在老年代中分配，避免在Eden区和两个Survivor区发生大量的内存拷贝；</p>
-</li>
-<li><p>发生Minor GC时，虚拟机会检测之前每次晋升到老年代的平均大小是否大于老年代的剩余空间大小，如果大于，则进行一次Full GC，如果小于，则查看HandlePromotionFailure设置是否允许担保失败，如果允许，那只会进行一次Minor GC，如果不允许，则改为进行一次Full GC。</p>
-</li>
-</ol>
-<h4 id="4）引用的分类？"><a href="#4）引用的分类？" class="headerlink" title="4）引用的分类？"></a>4）引用的分类？</h4><p>答：</p>
-<ul>
-<li><p>强引用：通过new出来的引用，只要强引用还存在，则不会回收。</p>
-</li>
-<li><p>软引用：通过SoftReference类来实现，用来描述一些有用但非必须的对象。在系统将要发生内存溢出异常之前，会把这些对象回收了，如果这次回收还是内存不够的话，才抛出内存溢出异常。</p>
-</li>
-<li><p>弱引用：非必须对象，通过WeakReference类来实现，被弱引用引用的对象，只要已发生GC就会把它干掉。</p>
-</li>
-<li><p>虚引用：通过PhantomReference类来实现，无法通过徐引用获得对象的实例，唯一作用就是在这个对象被GC时会收到一个系统通知。</p>
-</li>
-</ul>
-<blockquote>
-<p>扩展阅读：<a href="https://www.jianshu.com/p/39753aad9a38" target="_blank" rel="noopener">重新认识java（一） —- 万物皆对象</a> ，文章中有对这四个引用有详细的描述，还有一些典型的应用，这里就不摘过来啦…</p>
-</blockquote>
-<h4 id="5）垃圾收集器？"><a href="#5）垃圾收集器？" class="headerlink" title="5）垃圾收集器？"></a>5）垃圾收集器？</h4><p>解析：如果说收集算法是内存回收的方法论，垃圾收集器就是内存回收的具体实现</p>
-<p>答：</p>
-<p><strong>1. Serial 收集器</strong></p>
-<p>串行收集器是最古老，最稳定以及效率高的收集器，可能会产生较长的停顿，只使用一个线程去回收。新生代、老年代使用串行回收；新生代复制算法、老年代标记-压缩；垃圾收集的过程中会 Stop The World（服务暂停）</p>
-<p>参数控制： <code>-XX:+UseSerialGC</code> 串行收集器</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-ecea7511ae962fcc.png" alt=""></p>
-<p><strong>2.ParNew 收集器</strong></p>
-<p>ParNew收集器 ParNew收集器其实就是Serial收集器的多线程版本。新生代并行，老年代串行；新生代复制算法、老年代标记-压缩</p>
-<p>参数控制：</p>
-<p><code>-XX:+UseParNewGC</code> ParNew收集器<br><code>-XX:ParallelGCThreads</code> 限制线程数量</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-82bf115baf89fdbd.png" alt=""></p>
-<p><strong>3.Parallel Scavenge收集器</strong></p>
-<p>Parallel Scavenge收集器类似ParNew收集器，Parallel收集器更关注系统的吞吐量。可以通过参数来打开自适应调节策略，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或最大的吞吐量；也可以通过参数控制GC的时间不大于多少毫秒或者比例；新生代复制算法、老年代标记-压缩</p>
-<p>参数控制： <code>-XX:+UseParallelGC</code> 使用Parallel收集器+ 老年代串行</p>
-<p><strong>4.Parallel Old 收集器</strong></p>
-<p>Parallel Old是Parallel Scavenge 收集器的老年代版本，使用多线程和“标记－整理”算法。这个收集器是在 JDK 1.6 中才开始提供</p>
-<p>参数控制： <code>-XX:+UseParallelOldGC</code> 使用Parallel收集器+ 老年代并行</p>
-<p><strong>5.CMS收集器</strong></p>
-<p>CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。目前很大一部分的Java应用都集中在互联网站或B/S系统的服务端上，这类应用尤其重视服务的响应速度，希望系统停顿时间最短，以给用户带来较好的体验。</p>
-<p>从名字（包含“Mark Sweep”）上就可以看出CMS收集器是基于“标记-清除”算法实现的，它的运作过程相对于前面几种收集器来说要更复杂一些，整个过程分为4个步骤，包括：</p>
-<ul>
-<li>初始标记（CMS initial mark）</li>
-<li>并发标记（CMS concurrent mark）</li>
-<li>重新标记（CMS remark）</li>
-<li>并发清除（CMS concurrent sweep）</li>
-</ul>
-<p>其中初始标记、重新标记这两个步骤仍然需要“Stop The World”。初始标记仅仅只是标记一下GC Roots能直接关联到的对象，速度很快，并发标记阶段就是进行GC Roots Tracing的过程，而重新标记阶段则是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段稍长一些，但远比并发标记的时间短。</p>
-<p>由于整个过程中耗时最长的并发标记和并发清除过程中，收集器线程都可以与用户线程一起工作，所以总体上来说，CMS收集器的内存回收过程是与用户线程一起并发地执行。老年代收集器（新生代使用ParNew）</p>
-<p><strong>优点:</strong> 并发收集、低停顿<br><strong>缺点:</strong> 产生大量空间碎片、并发阶段会降低吞吐量</p>
-<p>参数控制：</p>
-<p><code>-XX:+UseConcMarkSweepGC</code> 使用CMS收集器<br><code>-XX:+ UseCMSCompactAtFullCollection</code> Full GC后，进行一次碎片整理；整理过程是独占的，会引起停顿时间变长<br><code>-XX:+CMSFullGCsBeforeCompaction</code> 设置进行几次Full GC后，进行一次碎片整理<br><code>-XX:ParallelCMSThreads</code> 设定CMS的线程数量（一般情况约等于可用CPU数量）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-d691b23585b39e9e.png" alt=""></p>
-<p><strong>6.G1收集器</strong></p>
-<p>G1是目前技术发展的最前沿成果之一，HotSpot开发团队赋予它的使命是未来可以替换掉JDK1.5中发布的CMS收集器。与CMS收集器相比G1收集器有以下特点：</p>
-<ol>
-<li><p><strong>空间整合</strong>，G1收集器采用标记整理算法，不会产生内存空间碎片。分配大对象时不会因为无法找到连续空间而提前触发下一次GC。</p>
-</li>
-<li><p><strong>可预测停顿</strong>，这是G1的另一大优势，降低停顿时间是G1和CMS的共同关注点，但G1除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为N毫秒的时间片段内，消耗在垃圾收集上的时间不得超过N毫秒，这几乎已经是实时Java（RTSJ）的垃圾收集器的特征了。</p>
-</li>
-</ol>
-<p>上面提到的垃圾收集器，收集的范围都是整个新生代或者老年代，而G1不再是这样。使用G1收集器时，Java堆的内存布局与其他收集器有很大差别，它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留有新生代和老年代的概念，但新生代和老年代不再是物理隔阂了，它们都是一部分（可以不连续）Region的集合。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-8e8b4f853fd38684.png" alt=""></p>
-<p>G1的新生代收集跟ParNew类似，当新生代占用达到一定比例的时候，开始出发收集。和CMS类似，G1收集器收集老年代对象会有短暂停顿。</p>
-<p>收集步骤：</p>
-<p>1、标记阶段，首先初始标记(Initial-Mark),这个阶段是停顿的(Stop the World Event)，并且会触发一次普通Mintor GC。对应GC log:GC pause (young) (inital-mark)</p>
-<p>2、Root Region Scanning，程序运行过程中会回收survivor区(存活到老年代)，这一过程必须在young GC之前完成。</p>
-<p>3、Concurrent Marking，在整个堆中进行并发标记(和应用程序并发执行)，此过程可能被young GC中断。在并发标记阶段，若发现区域对象中的所有对象都是垃圾，那个这个区域会被立即回收(图中打X)。同时，并发标记过程中，会计算每个区域的对象活性(区域中存活对象的比例)。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-6fb4792713799689.png" alt=""></p>
-<p>4、Remark, 再标记，会有短暂停顿(STW)。再标记阶段是用来收集 并发标记阶段 产生新的垃圾(并发阶段和应用程序一同运行)；G1中采用了比CMS更快的初始快照算法:snapshot-at-the-beginning (SATB)。</p>
-<p>5、Copy/Clean up，多线程清除失活对象，会有STW。G1将回收区域的存活对象拷贝到新区域，清除Remember Sets，并发清空回收区域并把它返回到空闲区域链表中。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-fbf007a6f9e8bc6c.png" alt=""></p>
-<p>6、复制/清除过程后。回收区域的活性对象已经被集中回收到深蓝色和深绿色区域。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-8ef492a1c182ae1a.png" alt=""></p>
-<blockquote>
-<p>参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4NDY5Mjc1Mg==&mid=2247483952&idx=1&sn=ea12792a9b7c67baddfaf425d8272d33&chksm=ebf6da4fdc815359869107a4acd15538b3596ba006b4005b216688b69372650dbd18c0184643&scene=21#wechat_redirect" target="_blank" rel="noopener">jvm系列(三):GC算法 垃圾收集器——纯洁的微笑</a></p>
-</blockquote>
-<hr>
-<h2 id="（四）其他-JVM-相关面试题整理"><a href="#（四）其他-JVM-相关面试题整理" class="headerlink" title="（四）其他 JVM 相关面试题整理"></a>（四）其他 JVM 相关面试题整理</h2><h4 id="1）64-位-JVM-中，int-的长度是多数？"><a href="#1）64-位-JVM-中，int-的长度是多数？" class="headerlink" title="1）64 位 JVM 中，int 的长度是多数？"></a>1）64 位 JVM 中，int 的长度是多数？</h4><p>答：Java 中，int 类型变量的长度是一个固定值，与平台无关，都是 32 位或者 4 个字节。意思就是说，在 32 位 和 64 位 的Java 虚拟机中，int 类型的长度是相同的。</p>
-<h4 id="2）怎样通过-Java-程序来判断-JVM-是-32-位-还是-64-位？"><a href="#2）怎样通过-Java-程序来判断-JVM-是-32-位-还是-64-位？" class="headerlink" title="2）怎样通过 Java 程序来判断 JVM 是 32 位 还是 64 位？"></a>2）怎样通过 Java 程序来判断 JVM 是 32 位 还是 64 位？</h4><p>答：Sun有一个Java System属性来确定JVM的位数：32或64：</p>
-<pre class=" language-java"><code class="language-java">sun<span class="token punctuation">.</span>arch<span class="token punctuation">.</span>data<span class="token punctuation">.</span>model<span class="token operator">=</span><span class="token number">32</span> <span class="token comment" spellcheck="true">// 32 bit JVM</span>
-sun<span class="token punctuation">.</span>arch<span class="token punctuation">.</span>data<span class="token punctuation">.</span>model<span class="token operator">=</span><span class="token number">64</span> <span class="token comment" spellcheck="true">// 64 bit JVM</span></code></pre>
-<p>我可以使用以下语句来确定 JVM 是 32 位还是 64 位：</p>
-<pre class=" language-java"><code class="language-java">System<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"sun.arch.data.model"</span><span class="token punctuation">)</span> </code></pre>
-<h4 id="3）32-位-JVM-和-64-位-JVM-的最大堆内存分别是多数？"><a href="#3）32-位-JVM-和-64-位-JVM-的最大堆内存分别是多数？" class="headerlink" title="3）32 位 JVM 和 64 位 JVM 的最大堆内存分别是多数？"></a>3）32 位 JVM 和 64 位 JVM 的最大堆内存分别是多数？</h4><p>答：理论上说上 32 位的 JVM 堆内存可以到达 2^32，即 4GB，但实际上会比这个小很多。不同操作系统之间不同，如 Windows 系统大约 1.5 GB，Solaris 大约 3GB。64 位 JVM允许指定最大的堆内存，理论上可以达到 2^64，这是一个非常大的数字，实际上你可以指定堆内存大小到 100GB。甚至有的 JVM，如 Azul，堆内存到 1000G 都是可能的。</p>
-<h4 id="4）你能保证-GC-执行吗？"><a href="#4）你能保证-GC-执行吗？" class="headerlink" title="4）你能保证 GC 执行吗？"></a>4）你能保证 GC 执行吗？</h4><p>答：不能，虽然你可以调用 System.gc() 或者 Runtime.gc()，但是没有办法保证 GC 的执行。</p>
-<h4 id="5）怎么获取-Java-程序使用的内存？堆使用的百分比？"><a href="#5）怎么获取-Java-程序使用的内存？堆使用的百分比？" class="headerlink" title="5）怎么获取 Java 程序使用的内存？堆使用的百分比？"></a>5）怎么获取 Java 程序使用的内存？堆使用的百分比？</h4><p>答：可以通过 java.lang.Runtime 类中与内存相关方法来获取剩余的内存，总内存及最大堆内存。通过这些方法你也可以获取到堆使用的百分比及堆内存的剩余空间。Runtime.freeMemory() 方法返回剩余空间的字节数，Runtime.totalMemory() 方法总内存的字节数，Runtime.maxMemory() 返回最大内存的字节数。</p>
-<h4 id="6）Java-中堆和栈有什么区别？"><a href="#6）Java-中堆和栈有什么区别？" class="headerlink" title="6）Java 中堆和栈有什么区别？"></a>6）Java 中堆和栈有什么区别？</h4><p>答：JVM 中堆和栈属于不同的内存区域，使用目的也不同。栈常用于保存方法帧和局部变量，而对象总是在堆上分配。栈通常都比堆小，也不会在多个线程之间共享，而堆被整个 JVM 的所有线程共享。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%89%EF%BC%89%E2%80%94%E2%80%94JVM%E7%AF%87/7896890-19ed61ccd60a57df.png" alt=""></p>
-<hr>
-<blockquote>
-<p>小结：JVM 是自己之前没有去了解过得知识，所以这次写这篇文章写了很久，也学到了很多东西；在考虑要不要开微信公众号来着…</p>
-</blockquote>
-<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><ol>
-<li>《深入理解 Java 虚拟机》</li>
-<li>《深入分析 Java Web技术内幕》</li>
-</ol>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -6155,7 +6437,7 @@ sun<span class="token punctuation">.</span>arch<span class="token punctuation">.
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(12)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
@@ -6314,7 +6596,7 @@ sun<span class="token punctuation">.</span>arch<span class="token punctuation">.
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 17.08px; color: #848484">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.23px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.46px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.69px; color: #656565">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.92px; color: #6a6a6a">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.54px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20.15px; color: #6f6f6f">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.77px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 17.08px; color: #848484">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.85px; color: #7f7f7f">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.85px; color: #7f7f7f">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.69px; color: #656565">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.77px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.54px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.31px; color: #898989">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.77px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.54px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.85px; color: #7f7f7f">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.77px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.62px; color: #7a7a7a">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.77px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.31px; color: #898989">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 17.08px; color: #848484">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.69px; color: #656565">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.38px; color: #747474">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

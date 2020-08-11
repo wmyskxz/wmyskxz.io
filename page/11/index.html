@@ -435,6 +435,754 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/23/idea-zheng-he-ssm-kuang-jia-xue-xi/">
+      IDEA整合SSM框架学习
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础/SSM</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月23日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-34e6864b15c793ec.png" alt=""></p>
+<h2 id="认识-Spring-框架"><a href="#认识-Spring-框架" class="headerlink" title="认识 Spring 框架"></a>认识 Spring 框架</h2><blockquote>
+<p>更多详情请点击这里：<a href="https://www.jianshu.com/p/1af66a499f49" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<p>Spring 框架是 Java 应用最广的框架，它的<strong>成功来源于理念，而不是技术本身</strong>，它的理念包括 <strong>IoC (Inversion of Control，控制反转)</strong> 和 <strong>AOP(Aspect Oriented Programming，面向切面编程)</strong>。</p>
+<h4 id="什么是-Spring："><a href="#什么是-Spring：" class="headerlink" title="什么是 Spring："></a>什么是 Spring：</h4><ol>
+<li>Spring 是一个<strong>轻量级的 DI / IoC 和 AOP 容器的开源框架</strong>，来源于 Rod Johnson 在其著作<strong>《Expert one on one J2EE design and development》</strong>中阐述的部分理念和原型衍生而来。</li>
+<li>Spring 提倡以<strong>“最少侵入”</strong>的方式来管理应用中的代码，这意味着我们可以随时安装或者卸载 Spring</li>
+</ol>
+<ul>
+<li><strong>适用范围：任何 Java 应用</strong></li>
+<li><strong>Spring 的根本使命：简化 Java 开发</strong></li>
+</ul>
+<blockquote>
+<p>尽管 J2EE 能够赶上 Spring 的步伐，<strong>但 Spring 并没有停止前进，</strong> Spring 继续在其他领域发展，而 J2EE 则刚刚开始涉及这些领域，或者还没有完全开始在这些领域的创新。<strong>移动开发、社交 API 集成、NoSQL 数据库、云计算以及大数据</strong>都是 Spring 正在涉足和创新的领域。Spring 的前景依然会很美好。</p>
+</blockquote>
+<h4 id="Spring-的优势"><a href="#Spring-的优势" class="headerlink" title="Spring 的优势"></a>Spring 的优势</h4><ul>
+<li><strong>低侵入 / 低耦合</strong> （降低组件之间的耦合度，实现软件各层之间的解耦）</li>
+<li><strong>声明式事务管理</strong>（基于切面和惯例）</li>
+<li><strong>方便集成其他框架</strong>（如MyBatis、Hibernate）</li>
+<li><strong>降低 Java 开发难度</strong></li>
+<li>Spring 框架中包括了 J2EE 三层的每一层的解决方案（一站式）</li>
+</ul>
+<h4 id="Spring-能帮我们做什么"><a href="#Spring-能帮我们做什么" class="headerlink" title="Spring 能帮我们做什么"></a>Spring 能帮我们做什么</h4><p><strong>①.Spring</strong> 能帮我们根据配置文件<strong>创建及组装对象之间的依赖关系</strong>。<br><strong>②.Spring 面向切面编程</strong>能帮助我们<strong>无耦合的实现日志记录，性能统计，安全控制。</strong><br><strong>③.Spring</strong> 能<strong>非常简单的帮我们管理数据库事务</strong>。<br><strong>④.Spring</strong> 还<strong>提供了与第三方数据访问框架（如Hibernate、JPA）无缝集成</strong>，而且自己也提供了一套<strong>JDBC访问模板</strong>来方便数据库访问。<br><strong>⑤.Spring</strong> 还提供与<strong>第三方Web（如Struts1/2、JSF）框架无缝集成</strong>，而且自己也提供了一套<strong>Spring MVC</strong>框架，来方便web层搭建。<br><strong>⑥.Spring</strong> 能<strong>方便的与Java EE（如Java Mail、任务调度）整合</strong>，与<strong>更多技术整合（比如缓存框架）</strong>。</p>
+<h4 id="Spring-的框架结构"><a href="#Spring-的框架结构" class="headerlink" title="Spring 的框架结构"></a>Spring 的框架结构</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-a7c003d175bd41af.png" alt=""></p>
+<ul>
+<li><strong>Data Access/Integration层</strong>包含有JDBC、ORM、OXM、JMS和Transaction模块。</li>
+<li><strong>Web层</strong>包含了Web、Web-Servlet、WebSocket、Web-Porlet模块。</li>
+<li><strong>AOP模块</strong>提供了一个符合AOP联盟标准的面向切面编程的实现。</li>
+<li><strong>Core Container(核心容器)：</strong>包含有Beans、Core、Context和SpEL模块。</li>
+<li><strong>Test模块</strong>支持使用JUnit和TestNG对Spring组件进行测试。</li>
+</ul>
+<h2 id="Spring-IoC-概述"><a href="#Spring-IoC-概述" class="headerlink" title="Spring IoC 概述"></a>Spring IoC 概述</h2><blockquote>
+<p>更多详情请点击这里：<a href="https://www.jianshu.com/p/20cea9170110" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<h4 id="IoC：Inverse-of-Control（控制反转）"><a href="#IoC：Inverse-of-Control（控制反转）" class="headerlink" title="IoC：Inverse of Control（控制反转）"></a>IoC：Inverse of Control（控制反转）</h4><ul>
+<li>读作<strong>“反转控制”</strong>，更好理解，不是什么技术，而是一种<strong>设计思想</strong>，就是<strong>将原本在程序中手动创建对象的控制权，交由Spring框架来管理。</strong></li>
+<li><strong>正控：</strong>若要使用某个对象，需要<strong>自己去负责对象的创建</strong></li>
+<li><strong>反控：</strong>若要使用某个对象，只需要<strong>从 Spring 容器中获取需要使用的对象，不关心对象的创建过程</strong>，也就是把<strong>创建对象的控制权反转给了Spring框架</strong></li>
+<li><strong>好莱坞法则：</strong>Don’t call me ,I’ll call you</li>
+</ul>
+<h4 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h4><p>控制反转显然是一个抽象的概念，我们举一个鲜明的例子来说明。</p>
+<p>在现实生活中，人们要用到一样东西的时候，第一反应就是去找到这件东西，比如想喝新鲜橙汁，在没有饮品店的日子里，最直观的做法就是：买果汁机、买橙子，然后准备开水。值得注意的是：这些都是你自己<strong>“主动”创造</strong>的过程，也就是说一杯橙汁需要你自己创造。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-e460070aba0d8ab0.png" alt=""></p>
+<p>然而到了今时今日，由于饮品店的盛行，当我们想喝橙汁时，第一想法就转换成了找到饮品店的联系方式，通过电话等渠道描述你的需要、地址、联系方式等，下订单等待，过一会儿就会有人送来橙汁了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-5cebd72ddc461d18.png" alt=""></p>
+<p><strong>请注意你并没有“主动”去创造橙汁</strong>，橙汁是由饮品店创造的，而不是你，然而也完全达到了你的要求，甚至比你创造的要好上那么一些。</p>
+<h4 id="Spring-IoC-阐述"><a href="#Spring-IoC-阐述" class="headerlink" title="Spring IoC 阐述"></a>Spring IoC 阐述</h4><p>这就是一种控制反转的理念，上述的例子已经很好的说明了问题，我们再来描述一下控制反转的概念：<strong>控制反转是一种通过描述（在 Java 中可以是 XML 或者注解）并通过第三方（Spring）去产生或获取特定对象的方式。</strong> </p>
+<ul>
+<li><strong>好处：</strong><br>降低对象之间的耦合<br>我们不需要理解一个类的具体实现，只需要知道它有什么用就好了（直接向 IoC 容器拿）</li>
+</ul>
+<p>主动创建的模式中，责任归于开发者，而在被动的模式下，责任归于 IoC 容器，<strong>基于这样的被动形式，我们就说对象被控制反转了。（也可以说是反转了控制）</strong></p>
+<h2 id="Spring-AOP-简介"><a href="#Spring-AOP-简介" class="headerlink" title="Spring AOP 简介"></a>Spring AOP 简介</h2><blockquote>
+<p>更多详情请点击这里：<a href="https://www.jianshu.com/p/994027425b44" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<p>如果说 IoC 是 Spring 的核心，那么面向切面编程就是 Spring 最为重要的功能之一了，在数据库事务中切面编程被广泛使用。 </p>
+<h4 id="AOP-即-Aspect-Oriented-Program-面向切面编程"><a href="#AOP-即-Aspect-Oriented-Program-面向切面编程" class="headerlink" title="AOP 即 Aspect Oriented Program 面向切面编程"></a>AOP 即 Aspect Oriented Program 面向切面编程</h4><p>首先，在面向切面编程的思想里面，把功能分为核心业务功能，和周边功能。 </p>
+<ul>
+<li><strong>所谓的核心业务</strong>，比如登陆，增加数据，删除数据都叫核心业务 </li>
+<li><strong>所谓的周边功能</strong>，比如性能统计，日志，事务管理等等 </li>
+</ul>
+<p>周边功能在 Spring 的面向切面编程AOP思想里，即被定义为切面 </p>
+<p>在面向切面编程AOP的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 “编织” 在一起，这就叫AOP</p>
+<h4 id="AOP-的目的"><a href="#AOP-的目的" class="headerlink" title="AOP 的目的"></a>AOP 的目的</h4><p>AOP能够将那些与业务无关，<strong>却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来</strong>，便于<strong>减少系统的重复代码</strong>，<strong>降低模块间的耦合度</strong>，并<strong>有利于未来的可拓展性和可维护性</strong>。</p>
+<h4 id="一个例子-1"><a href="#一个例子-1" class="headerlink" title="一个例子"></a>一个例子</h4><p>为了更好的说明 AOP 的概念，我们来举一个实际中的例子来说明：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-8225b1537175bd8b.png" alt=""></p>
+<p>在上面的例子中，包租婆的核心业务就是签合同，收房租，那么这就够了，灰色框起来的部分都是重复且边缘的事，交给中介商就好了，这就是 <strong>AOP 的一个思想：让关注点代码与业务代码分离！</strong></p>
+<hr>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-d2f3f8fbccb13196.png" alt=""></p>
+<h2 id="认识-MyBatis-框架"><a href="#认识-MyBatis-框架" class="headerlink" title="认识 MyBatis 框架"></a>认识 MyBatis 框架</h2><blockquote>
+<p>更多详情请点击这里：<a href="https://www.jianshu.com/p/c77e3691867d" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<h4 id="MyBatis-简介"><a href="#MyBatis-简介" class="headerlink" title="MyBatis 简介"></a>MyBatis 简介</h4><p>MyBatis 本是apache的一个开源项目iBatis, 2010年这个项目由apache software foundation 迁移到了google code，并且改名为MyBatis，是一个基于Java的持久层框架。</p>
+<ul>
+<li><strong>持久层：</strong> 可以将业务数据<strong>存储到磁盘，具备长期存储能力</strong>，只要磁盘不损坏，在断电或者其他情况下，重新开启系统仍然可以读取到这些数据。</li>
+<li><strong>优点：</strong><br>可以<strong>使用巨大的磁盘空间</strong>存储相当量的数据，并且很<strong>廉价</strong></li>
+</ul>
+<p><strong>灵活</strong>，几乎可以代替 JDBC，同时提供了接口编程。</p>
+<ul>
+<li><strong>缺点：慢</strong>（相对于内存而言）</li>
+</ul>
+<h4 id="为什么使用-MyBatis"><a href="#为什么使用-MyBatis" class="headerlink" title="为什么使用 MyBatis"></a>为什么使用 MyBatis</h4><p>在我们<strong>传统的 JDBC 中</strong>，我们除了需要自己提供 SQL 外，还必须操作 Connection、Statment、ResultSet，不仅如此，为了访问不同的表，不同字段的数据，我们需要些很多雷同模板化的代码，闲的<strong>繁琐又枯燥</strong>。</p>
+<p>而我们在使用了 <strong>MyBatis</strong> 之后，<strong>只需要提供 SQL 语句就好了</strong>，其余的诸如：建立连接、操作 Statment、ResultSet，处理 JDBC 相关异常等等都可以交给 MyBatis 去处理，我们的<strong>关注点于是可以就此集中在 SQL 语句上</strong>，关注在增删改查这些操作层面上。</p>
+<p>并且 MyBatis 支持使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录。</p>
+<hr>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-819e9584f3b19d14.png" alt=""></p>
+<h2 id="认识-Spring-MVC-框架"><a href="#认识-Spring-MVC-框架" class="headerlink" title="认识 Spring MVC 框架"></a>认识 Spring MVC 框架</h2><blockquote>
+<p>更多详情请点击这里：<a href="https://www.jianshu.com/p/91a2d0a1e45a" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<h2 id="MVC-设计概述"><a href="#MVC-设计概述" class="headerlink" title="MVC 设计概述"></a>MVC 设计概述</h2><p>在早期 Java Web 的开发中，统一把显示层、控制层、数据层的操作全部交给 JSP 或者 JavaBean 来进行处理，我们称之为 <strong>Model1：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-7b3f9cd59394b017.png" alt=""></p>
+<ul>
+<li><strong>出现的弊端：</strong></li>
+<li>JSP 和 Java Bean 之间严重耦合，Java 代码和 HTML 代码也耦合在了一起</li>
+<li>要求开发者不仅要掌握 Java ，还要有高超的前端水平</li>
+<li>前端和后端相互依赖，前端需要等待后端完成，后端也依赖前端完成，才能进行有效的测试</li>
+<li>代码难以复用</li>
+</ul>
+<p>正因为上面的种种弊端，所以很快这种方式就被 Servlet + JSP + Java Bean 所替代了，早期的 MVC 模型<strong>（Model2）</strong>就像下图这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-403a273b08fec826.png" alt=""></p>
+<p>首先用户的请求会到达 Servlet，然后根据请求调用相应的 Java Bean，并把所有的显示结果交给 JSP 去完成，这样的模式我们就称为 MVC 模式。</p>
+<ul>
+<li><strong>M 代表 模型（Model）</strong><br>模型是什么呢？ 模型就是数据，就是 dao,bean</li>
+<li><strong>V 代表 视图（View）</strong><br>视图是什么呢？ 就是网页, JSP，用来展示模型中的数据</li>
+<li><strong>C 代表 控制器（controller)</strong><br>控制器是什么？ 控制器的作用就是把不同的数据(Model)，显示在不同的视图(View)上，Servlet 扮演的就是这样的角色。</li>
+</ul>
+<blockquote>
+<p>扩展阅读：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483775&idx=1&sn=c9d7ead744c6e0c3ab2fe55c09bbe61f&chksm=ebd7407edca0c9688f3870d895b760836101271b912899821fb35c5704fe215da2fc5daff2f9#rd" target="_blank" rel="noopener">Web开发模式</a></p>
+</blockquote>
+<h4 id="Spring-MVC-的架构"><a href="#Spring-MVC-的架构" class="headerlink" title="Spring MVC 的架构"></a>Spring MVC 的架构</h4><p>为解决持久层中一直未处理好的数据库事务的编程，又为了迎合 NoSQL 的强势崛起，Spring MVC 给出了方案：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-a25782fb05f315de.png" alt=""></p>
+<p><strong>传统的模型层被拆分为了业务层(Service)和数据访问层（DAO,Data Access Object）。</strong>在 Service 下可以通过 Spring 的声明式事务操作数据访问层，而在业务层上还允许我们访问 NoSQL ，这样就能够满足异军突起的 NoSQL 的使用了，它可以大大提高互联网系统的性能。</p>
+<ul>
+<li><strong>特点：</strong><br>结构松散，几乎可以在 Spring MVC 中使用各类视图<br>松耦合，各个模块分离<br>与 Spring 无缝集成</li>
+</ul>
+<hr>
+<h2 id="Spring-Spring-MVC-MyBatis-整合开发"><a href="#Spring-Spring-MVC-MyBatis-整合开发" class="headerlink" title="Spring + Spring MVC + MyBatis 整合开发"></a>Spring + Spring MVC + MyBatis 整合开发</h2><h4 id="认识-Maven"><a href="#认识-Maven" class="headerlink" title="认识 Maven"></a>认识 Maven</h4><p>Maven 的翻译为 “专家”、“行家” ，是<strong>一个跨平台的项目管理工具。</strong></p>
+<ul>
+<li><strong>主要用于：基于 Java 平台的项目（Maven 本身也是 Java 编写的）的构建、依赖包管理和项目信息管理。</strong></li>
+</ul>
+<h4 id="Maven-主要用处一：相同的项目结构"><a href="#Maven-主要用处一：相同的项目结构" class="headerlink" title="Maven 主要用处一：相同的项目结构"></a>Maven 主要用处一：相同的项目结构</h4><p>Maven 提供了一种<strong>标准的项目目录结构</strong>，测试命名规则等项目的最佳实践方案，<strong>统一了不同项目的学习成本（约定大于配置）</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-bf70c164b4c35d67.png" alt=""></p>
+<p>在 IDEA 下创建一个默认的 Maven 项目，有着上面这样相同的结构：</p>
+<ol>
+<li>有一个 pom.xml 用于维护当前项目所依赖的 jar 包</li>
+<li>所有的 Java 代码都放在 src/main/java 目录下</li>
+<li>所有的测试代码都放在 src/test/java 目录下</li>
+</ol>
+<h4 id="Maven-主要用处二：统一维护-jar-包"><a href="#Maven-主要用处二：统一维护-jar-包" class="headerlink" title="Maven 主要用处二：统一维护 jar 包"></a>Maven 主要用处二：统一维护 jar 包</h4><p>Maven能提供一种项目的依赖配置，配置好的项目，Maven 能自动的从 Maven 的<strong>中央仓库</strong>中帮我们下载并管理项目依赖的 jar 包，并且还能<strong>自动的管理</strong>这些 jar 包依赖的其他 jar 包</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-2b71d75eba7a683a.png" alt=""></p>
+<p>比如说有 3 个 Java 项目，这些项目都不是 maven 风格。那么这3个项目，就会各自维护一套jar包。 而其中有些jar包是相同的。</p>
+<p>而 maven 风格的项目，首先把所有的 jar 包都放在”<a href="http://how2j.cn/k/maven/maven-repositories/1330.html" target="_blank" rel="noopener">仓库</a>“ 里，然后哪个项目需要用到这个 jar 包，只需要给出 jar 包的名称和版本号就行了。 这样 <strong>jar 包就实现了共享</strong></p>
+<p>如图所示，在 pom.xml 里，表示用到了 mysql 的jar包，版本号是 5.1.30。</p>
+<blockquote>
+<p>引自：<a href="http://how2j.cn/k/maven/maven-introduction/1328.html" target="_blank" rel="noopener">how2j.cn-Maven教程</a></p>
+</blockquote>
+<h4 id="使用-Maven-构建-SSM-项目"><a href="#使用-Maven-构建-SSM-项目" class="headerlink" title="使用 Maven 构建 SSM 项目"></a>使用 Maven 构建 SSM 项目</h4><p>如果对于 Maven 不熟悉的童鞋可以去上面的链接学习一下 Maven 的使用，下面是我配置好了 Maven 的 IDEA 环境下的构建过程。</p>
+<h4 id="第一步：创建-Maven-webapp-项目"><a href="#第一步：创建-Maven-webapp-项目" class="headerlink" title="第一步：创建 Maven webapp 项目"></a>第一步：创建 Maven webapp 项目</h4><p>首先新建工程，选择 Maven 标签，然后勾选上【Create from archetype】选择 webapp：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-37bca8243a63a411.png" alt=""></p>
+<p>点击下一步，填写上【GroupId】和【ArtifactId】：</p>
+<ul>
+<li>GroupId：项目组织唯一的标识符，实际对应 JAVA 的包的结构，也就是 main 目录下 java 的目录结构（包）</li>
+<li>AritifactId：项目的唯一标识符，实际对应项目的名称，就是项目根目录的名称</li>
+<li>实际上你可以乱填上试试，我就不乱填了</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-8578a1a67b1ff27e.png" alt=""></p>
+<p>确认项目路径，这一步你可以看到 Maven 配置中的参数，不需要做改动，直接下一步就可以（<em>图中的路径是我配置的本地 Maven 仓库的地址</em>）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-ba59fb1f16f74582.png" alt=""></p>
+<p>确认项目名称，点击【Finish】即可：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-7f3eccdd05d4b0e6.png" alt=""></p>
+<p>等待一会儿，控制台就会有创建成功的提示信息，我们把【Enable Auto-Import】点上，这个提示会在每次 pom.xml 有改动时出现，自动导入，省掉麻烦：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-2ebc5e0cd0503ad7.png" alt=""></p>
+<h4 id="第二步：搭建项目目录结构"><a href="#第二步：搭建项目目录结构" class="headerlink" title="第二步：搭建项目目录结构"></a>第二步：搭建项目目录结构</h4><p>下面就是 Maven 风格的 webapp 的默认目录结构：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-1532d4b3398d5bd4.png" alt=""></p>
+<ul>
+<li><strong>注意：</strong> webapp 是默认没有 java 源文件也没有 test 目录的。</li>
+</ul>
+<p>遵循 Maven 的统一项目结构，我们搭建出项目的完整目录结构如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-4c9b9d24f373c275.png" alt=""></p>
+<ul>
+<li>我们并没有使用 Log4j 来输出日志，而是使用 logback </li>
+<li><strong>提示：</strong>我们可以在 IDEA 中右键目录然后选择【Make Directory as】，让 IDEA 识别不同的目录作用</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-6ca8b5c413335048.png" alt=""></p>
+<p>这里的目录建好之后还需要设置一下，让 IDEA 识别目录作用，选择【File】&gt;【Project Structure】：</p>
+<p> <img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-c1fd4700aefb8b7b.png" alt=""></p>
+<p>设置好之后点击 OK，即完成了项目目录的搭建。</p>
+<h4 id="第三步：配置文件内容"><a href="#第三步：配置文件内容" class="headerlink" title="第三步：配置文件内容"></a>第三步：配置文件内容</h4><p>在【pom.xml】文件中声明依赖的 jar 包 ：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;packaging&gt;war&lt;/packaging&gt;
+
+    &lt;name&gt;SSM&lt;/name&gt;
+    &lt;groupId&gt;cn.wmyskxz&lt;/groupId&gt;
+    &lt;artifactId&gt;SSM&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-jetty-plugin&lt;/artifactId&gt;
+                &lt;version&gt;6.1.7&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;connectors&gt;
+                        &lt;connector implementation=&quot;org.mortbay.jetty.nio.SelectChannelConnector&quot;&gt;
+                            &lt;port&gt;8888&lt;/port&gt;
+                            &lt;maxIdleTime&gt;30000&lt;/maxIdleTime&gt;
+                        &lt;/connector&gt;
+                    &lt;/connectors&gt;
+                    &lt;webAppSourceDirectory&gt;${project.build.directory}/${pom.artifactId}-${pom.version}
+                    &lt;/webAppSourceDirectory&gt;
+                    &lt;contextPath&gt;/&lt;/contextPath&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+
+    &lt;properties&gt;
+        &lt;!-- 设置项目编码编码 --&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+        &lt;!-- spring版本号 --&gt;
+        &lt;spring.version&gt;4.3.5.RELEASE&lt;/spring.version&gt;
+        &lt;!-- mybatis版本号 --&gt;
+        &lt;mybatis.version&gt;3.4.1&lt;/mybatis.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+
+        &lt;!-- java ee --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;javax&lt;/groupId&gt;
+            &lt;artifactId&gt;javaee-api&lt;/artifactId&gt;
+            &lt;version&gt;7.0&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- 单元测试 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- 实现slf4j接口并整合 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+            &lt;version&gt;1.2.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- JSON --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+            &lt;version&gt;2.8.7&lt;/version&gt;
+        &lt;/dependency&gt;
+
+
+        &lt;!-- 数据库 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;5.1.41&lt;/version&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- 数据库连接池 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.mchange&lt;/groupId&gt;
+            &lt;artifactId&gt;c3p0&lt;/artifactId&gt;
+            &lt;version&gt;0.9.5.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- MyBatis --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+            &lt;version&gt;${mybatis.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- mybatis/spring整合包 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;
+            &lt;version&gt;1.3.1&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Spring --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+
+&lt;/project&gt;</code></pre><p>在【web.xml】中声明编码过滤器并配置 DispatcherServlet ：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
+         version=&quot;3.1&quot;&gt;
+
+    &lt;!-- 编码过滤器 --&gt;
+    &lt;filter&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;encoding&lt;/param-name&gt;
+            &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/filter&gt;
+    &lt;filter-mapping&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/filter-mapping&gt;
+
+    &lt;!-- 配置DispatcherServlet --&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;!-- 配置springMVC需要加载的配置文件--&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;classpath:spring-*.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+        &lt;async-supported&gt;true&lt;/async-supported&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt;
+        &lt;!-- 匹配所有请求 --&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;</code></pre><p>在【spring-mybatis.xml】中完成 spring 和 mybatis 的配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
+
+    &lt;!-- 扫描service包下所有使用注解的类型 --&gt;
+    &lt;context:component-scan base-package=&quot;cn.wmyskxz.service&quot;/&gt;
+
+    &lt;!-- 配置数据库相关参数properties的属性：${url} --&gt;
+    &lt;context:property-placeholder location=&quot;classpath:jdbc.properties&quot;/&gt;
+
+    &lt;!-- 数据库连接池 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
+        &lt;property name=&quot;driverClass&quot; value=&quot;${jdbc.driver}&quot;/&gt;
+        &lt;property name=&quot;jdbcUrl&quot; value=&quot;${jdbc.url}&quot;/&gt;
+        &lt;property name=&quot;user&quot; value=&quot;${jdbc.username}&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
+        &lt;property name=&quot;maxPoolSize&quot; value=&quot;${c3p0.maxPoolSize}&quot;/&gt;
+        &lt;property name=&quot;minPoolSize&quot; value=&quot;${c3p0.minPoolSize}&quot;/&gt;
+        &lt;property name=&quot;autoCommitOnClose&quot; value=&quot;${c3p0.autoCommitOnClose}&quot;/&gt;
+        &lt;property name=&quot;checkoutTimeout&quot; value=&quot;${c3p0.checkoutTimeout}&quot;/&gt;
+        &lt;property name=&quot;acquireRetryAttempts&quot; value=&quot;${c3p0.acquireRetryAttempts}&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置SqlSessionFactory对象 --&gt;
+    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
+        &lt;!-- 注入数据库连接池 --&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+        &lt;!-- 扫描entity包 使用别名 --&gt;
+        &lt;property name=&quot;typeAliasesPackage&quot; value=&quot;cn.wmyskxz.entity&quot;/&gt;
+        &lt;!-- 扫描sql配置文件:mapper需要的xml文件 --&gt;
+        &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:mapper/*.xml&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 --&gt;
+    &lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
+        &lt;!-- 注入sqlSessionFactory --&gt;
+        &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;/&gt;
+        &lt;!-- 给出需要扫描Dao接口包 --&gt;
+        &lt;property name=&quot;basePackage&quot; value=&quot;cn.wmyskxz.dao&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置事务管理器 --&gt;
+    &lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
+        &lt;!-- 注入数据库连接池 --&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置基于注解的声明式事务 --&gt;
+    &lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot;/&gt;
+
+&lt;/beans&gt;</code></pre><p>在【spring-mvc.xml】中完成 Spring MVC 的相关配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd&quot;&gt;
+
+    &lt;!-- 扫描web相关的bean --&gt;
+    &lt;context:component-scan base-package=&quot;cn.wmyskxz.controller&quot;/&gt;
+
+    &lt;!-- 开启SpringMVC注解模式 --&gt;
+    &lt;mvc:annotation-driven/&gt;
+
+    &lt;!-- 静态资源默认servlet配置 --&gt;
+    &lt;mvc:default-servlet-handler/&gt;
+
+    &lt;!-- 配置jsp 显示ViewResolver --&gt;
+    &lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;viewClass&quot; value=&quot;org.springframework.web.servlet.view.JstlView&quot;/&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/views/&quot;/&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;</code></pre><p>在【jdbc.properties】中配置 c3p0 数据库连接池：</p>
+<pre><code>jdbc.driver=com.mysql.jdbc.Driver
+#数据库地址
+jdbc.url=jdbc:mysql://localhost:3306/ssm?useUnicode=true&amp;characterEncoding=utf8
+#用户名
+jdbc.username=root
+#密码
+jdbc.password=root
+#最大连接数
+c3p0.maxPoolSize=30
+#最小连接数
+c3p0.minPoolSize=10
+#关闭连接后不自动commit
+c3p0.autoCommitOnClose=false
+#获取连接超时时间
+c3p0.checkoutTimeout=10000
+#当获取连接失败重试次数
+c3p0.acquireRetryAttempts=2</code></pre><p>在【logback.xml】中完成日志输出的相关配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration debug=&quot;true&quot;&gt;
+    &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    &lt;root level=&quot;debug&quot;&gt;
+        &lt;appender-ref ref=&quot;STDOUT&quot;/&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;</code></pre><p>以上就完成了基本的相关配置：</p>
+<ul>
+<li>添加进了 SSM 项目所需要的 jar 包</li>
+<li>配置好了 spring/mybatis/spring MVC 的相关配置信息（自动扫描 <code>cn.wmyskxz</code> 包下的带有注解的类）</li>
+<li>通过 xml 配置的方式配置好了日志和数据库</li>
+</ul>
+<h4 id="第四步：测试-SSM-框架"><a href="#第四步：测试-SSM-框架" class="headerlink" title="第四步：测试 SSM 框架"></a>第四步：测试 SSM 框架</h4><p>准备好用来测试的数据库：</p>
+<pre><code>DROP DATABASE IF EXISTS ssm;
+CREATE DATABASE ssmDEFAULT CHARACTER SET utf8;
+
+use ssm;
+CREATE TABLE user(
+  id int(11) NOT NULL AUTO_INCREMENT,
+  username varchar(50) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO user VALUES(1,&#39;我没有三颗心脏&#39;);</code></pre><p>接下来在【cn.wmyskxz.entity】包下创建好对应的实体类 User ：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>entity<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * User 实体类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-23-上午 9:23
+ */</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String username<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/* getter and setter */</span>
+<span class="token punctuation">}</span></code></pre>
+<p>在【cn.wmyskxz.dao】包下创建好 Dao 接口：</p>
+<pre><code>package cn.wmyskxz.dao;
+
+import cn.wmyskxz.entity.User;
+
+public interface UserDao {
+
+    // 根据 id 寻找对应的 User
+    User findUserById(int id);
+}</code></pre><p>在【resources/mapper】下编写 UserDao.xml 映射文件：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+
+&lt;!-- 设置为IUserDao接口方法提供sql语句配置 --&gt;
+&lt;mapper namespace=&quot;cn.wmyskxz.dao.UserDao&quot;&gt;
+
+    &lt;select id=&quot;findUserById&quot; resultType=&quot;cn.wmyskxz.entity.User&quot; parameterType=&quot;int&quot;&gt;
+        SELECT * FROM user WHERE id = #{id}
+    &lt;/select&gt;
+
+&lt;/mapper&gt;</code></pre><p>在编写好每一个 Dao 的时候，我们都需要对它进行测试，在【test/java】下创建一个【UserDaoTest】的测试类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>dao<span class="token punctuation">.</span>UserDao<span class="token punctuation">;</span>
+<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>entity<span class="token punctuation">.</span>User<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>Test<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>runner<span class="token punctuation">.</span>RunWith<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Autowired<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span>ContextConfiguration<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span>junit4<span class="token punctuation">.</span>SpringJUnit4ClassRunner<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * UserDao 的测试类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-23-上午 9:54
+ */</span>
+<span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span>SpringJUnit4ClassRunner<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ContextConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"classpath:spring-mybatis.xml"</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserDaoTest</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> UserDao userDao<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testFindUserById</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        User user <span class="token operator">=</span> userDao<span class="token punctuation">.</span><span class="token function">findUserById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> user<span class="token punctuation">.</span><span class="token function">getUsername</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>运行测试代码，能够获取到正确的信息：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-28953fb9b9cda8f3.png" alt=""></p>
+<p>接着在【cn.wmyskxz.service】包下编写好对应的 UserService 接口：</p>
+<pre><code>package cn.wmyskxz.service;
+
+import cn.wmyskxz.entity.User;
+
+public interface UserService {
+
+    // 根据 id 寻找对应的 User
+    public User findUserById(int id);
+}</code></pre><p>和对应的实现类：</p>
+<pre><code>package cn.wmyskxz.service;
+
+import cn.wmyskxz.dao.UserDao;
+import cn.wmyskxz.entity.User;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * UserService 对应的实现类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-23-上午 9:31
+ */
+
+@Service(&quot;userService&quot;)
+public class UserServiceImpl implements UserService {
+
+    @Resource
+    private UserDao userDao;
+
+    public User findUserById(int id) {
+        return userDao.findUserById(id);
+    }
+}</code></pre><p>在【cn.wmyskxz.controller】下创建【UserController】控制类：</p>
+<pre><code>package cn.wmyskxz.controller;
+
+import cn.wmyskxz.entity.User;
+import cn.wmyskxz.service.UserService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+
+/**
+ * User 的控制类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-23-上午 9:58
+ */
+@Controller
+@RequestMapping(&quot;&quot;)
+public class UserController {
+
+    @Resource
+    private UserService userService;
+
+    @RequestMapping(&quot;/findUser&quot;)
+    public String findUser(Model model) {
+        int id = 1;
+        User user = this.userService.findUserById(id);
+        model.addAttribute(&quot;user&quot;, user);
+        return &quot;index&quot;;
+    }
+}</code></pre><p>最后在【WEB-INF/views】下创建 index.jsp 用于接收并显示数据：</p>
+<pre><code>&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;SSM 框架整合&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+${user.id}：${user.username}
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>配置好 Tomcat 服务器，运行并在浏览器中输入：<code>localhost/findUser</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-27fb7adc63d20301.png" alt=""></p>
+<p>即完成了 SSM 的整合！</p>
+<blockquote>
+<p>参考资料：<a href="http://www.cnblogs.com/hackyo/p/6646051.html" target="_blank" rel="noopener">使用idea2017搭建SSM框架</a><br>最开始想要手动添加 jar 包依赖创建，但是调了 1 天的 bug 也不通，换了很多 jar 包…有点崩溃，后来直接使用 Maven 创建就成功了…参考了上面链接的文章。</p>
+</blockquote>
+<h4 id="SSM-框架架构图"><a href="#SSM-框架架构图" class="headerlink" title="SSM 框架架构图"></a>SSM 框架架构图</h4><p>为了更加能理解 SSM 处理用户请求的整个过程，下面给出一张 SSM 系统架构图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/IDEA-%E6%95%B4%E5%90%88-SSM-%E6%A1%86%E6%9E%B6%E5%AD%A6%E4%B9%A0/7896890-5eb286ecccbf5592.png" alt=""></p>
+<p>通常我们还会在 Controller 和 Service 层中引入工厂模式，这里仅仅是创建了一个简单的 SSM 项目，用以测试而已，并且没有配置 MyBatis 的相关信息，如果需要配置在 resource 目录下创建一个 SqlMapConfig.xml 文件并且完成 <code>&lt;settings&gt;</code> 的相关配置即可。</p>
+<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><ul>
+<li>《Java EE 互联网轻量级框架整合开发》</li>
+<li>《Spring MVC + MyBatis开发从入门到项目实战》</li>
+<li>全能的百度和万能的大脑</li>
+</ul>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/18/mybatis-yu-spring-zheng-he/">
       MyBatis与Spring整合
     </a>
@@ -4462,222 +5210,6 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/11/spring-xue-xi-2-spring-ioc-xiang-jie/">
-      Spring学习(2)——Spring IoC详解
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/Spring</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月11日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-34e6864b15c793ec.png" alt=""></p>
-<h2 id="Spring-IoC-概述"><a href="#Spring-IoC-概述" class="headerlink" title="Spring IoC 概述"></a>Spring IoC 概述</h2><h4 id="IoC：Inverse-of-Control（控制反转）"><a href="#IoC：Inverse-of-Control（控制反转）" class="headerlink" title="IoC：Inverse of Control（控制反转）"></a>IoC：Inverse of Control（控制反转）</h4><ul>
-<li>读作 <strong>“反转控制”</strong>，更好理解，不是什么技术，而是一种<strong>设计思想</strong>，就是<strong>将原本在程序中手动创建对象的控制权，交由Spring框架来管理。</strong></li>
-<li><strong>正控：</strong>若要使用某个对象，需要<strong>自己去负责对象的创建</strong></li>
-<li><strong>反控：</strong>若要使用某个对象，只需要<strong>从 Spring 容器中获取需要使用的对象，不关心对象的创建过程</strong>，也就是把<strong>创建对象的控制权反转给了Spring框架</strong></li>
-<li><strong>好莱坞法则：</strong> Don’t call me ,I’ll call you</li>
-</ul>
-<h4 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h4><p>控制反转显然是一个抽象的概念，我们举一个鲜明的例子来说明。</p>
-<p>在现实生活中，人们要用到一样东西的时候，第一反应就是去找到这件东西，比如想喝新鲜橙汁，在没有饮品店的日子里，最直观的做法就是：买果汁机、买橙子，然后准备开水。值得注意的是：这些都是你自己<strong>“主动”创造</strong>的过程，也就是说一杯橙汁需要你自己创造。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-e460070aba0d8ab0.png" alt=""></p>
-<p>然而到了今时今日，由于饮品店的盛行，当我们想喝橙汁时，第一想法就转换成了找到饮品店的联系方式，通过电话等渠道描述你的需要、地址、联系方式等，下订单等待，过一会儿就会有人送来橙汁了。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-5cebd72ddc461d18.png" alt=""></p>
-<p><strong>请注意你并没有“主动”去创造橙汁</strong>，橙汁是由饮品店创造的，而不是你，然而也完全达到了你的要求，甚至比你创造的要好上那么一些。</p>
-<h4 id="Spring-IoC-阐述"><a href="#Spring-IoC-阐述" class="headerlink" title="Spring IoC 阐述"></a>Spring IoC 阐述</h4><p>这就是一种控制反转的理念，上述的例子已经很好的说明了问题，我们再来描述一下控制反转的概念：<strong>控制反转是一种通过描述（在 Java 中可以是 XML 或者注解）并通过第三方（Spring）去产生或获取特定对象的方式。</strong> </p>
-<ul>
-<li><strong>好处：</strong><br>降低对象之间的耦合<br>我们不需要理解一个类的具体实现，只需要知道它有什么用就好了（直接向 IoC 容器拿）</li>
-</ul>
-<p>主动创建的模式中，责任归于开发者，而在被动的模式下，责任归于 IoC 容器，<strong>基于这样的被动形式，我们就说对象被控制反转了。（也可以说是反转了控制）</strong></p>
-<hr>
-<h2 id="Spring-IoC-容器"><a href="#Spring-IoC-容器" class="headerlink" title="Spring IoC 容器"></a>Spring IoC 容器</h2><p>Spring 会提供 <strong>IoC 容器</strong>来管理和容纳我们所开发的各种各样的 Bean，并且我们可以从中获取各种发布在 Spring IoC 容器里的 Bean，并且<strong>通过描述</strong>可以得到它。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-5b59278f85cd6086.png" alt=""></p>
-<h4 id="Spring-IoC-容器的设计"><a href="#Spring-IoC-容器的设计" class="headerlink" title="Spring IoC 容器的设计"></a>Spring IoC 容器的设计</h4><p>Spring IoC 容器的设计主要是基于以下两个接口：</p>
-<ul>
-<li><strong>BeanFactory</strong></li>
-<li><strong>ApplicationContext</strong> </li>
-</ul>
-<p>其中 ApplicationContext 是 BeanFactory 的子接口之一，换句话说：<strong>BeanFactory 是 Spring IoC 容器所定义的最底层接口，</strong>而 ApplicationContext 是其最高级接口之一，并对 BeanFactory 功能做了许多的扩展，所以在<strong>绝大部分的工作场景下</strong>，都会使用 ApplicationContext 作为 Spring IoC 容器。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-539d3860abb6b3f7.png" alt="ApplicationContext 继承关系"></p>
-<h4 id="BeanFactory"><a href="#BeanFactory" class="headerlink" title="BeanFactory"></a>BeanFactory</h4><p>从上图中我们可以几乎看到， BeanFactory 位于设计的最底层，它提供了 Spring IoC 最底层的设计，为此，我们先来看看该类中提供了哪些方法：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94Spring-IoC-%E8%AF%A6%E8%A7%A3/7896890-ec7f8eb4cc563216.png" alt=""></p>
-<p>由于这个接口的重要性，所以有必要在这里作一下简短的说明：</p>
-<ul>
-<li>【getBean】 对应了多个方法来获取配置给 Spring IoC 容器的 Bean。<br>① 按照类型拿 bean：<br><code>bean = (Bean) factory.getBean(Bean.class);</code></li>
-</ul>
-<p><strong>注意：</strong> 要求在 Spring 中只配置了一个这种类型的实例，否则报错。（如果有多个那 Spring 就懵了，不知道该获取哪一个）<br>② 按照 bean 的名字拿 bean:<br><code>bean = (Bean) factory.getBean(&quot;beanName&quot;);</code><br><strong>注意：</strong> 这种方法不太安全，IDE 不会检查其安全性（关联性）<br>③ 按照名字和类型拿 bean：<strong>（推荐）</strong><br><code>bean = (Bean) factory.getBean(&quot;beanName&quot;, Bean.class);</code></p>
-<ul>
-<li>【isSingleton】 用于判断是否单例，如果判断为真，其意思是该 Bean 在容器中是作为一个唯一单例存在的。而【isPrototype】则相反，如果判断为真，意思是当你从容器中获取 Bean，容器就为你生成一个新的实例。</li>
-</ul>
-<p><strong>注意：</strong> 在默认情况下，【isSingleton】为 ture，而【isPrototype】为 false</p>
-<ul>
-<li>关于 type 的匹配，这是一个按 Java 类型匹配的方式</li>
-<li>【getAliases】方法是获取别名的方法</li>
-</ul>
-<p>这就是 Spring IoC 最底层的设计，所有关于 Spring IoC 的容器将会遵守它所定义的方法。</p>
-<h4 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h4><p>根据 ApplicationContext 的类继承关系图，可以看到 ApplicationContext 接口扩展了许许多多的接口，因此它的功能十分强大，所以在实际应用中常常会使用到的是 ApplicationContext 接口，因为 BeanFactory 的方法和功能较少，而 ApplicationContext 的方法和功能较多。</p>
-<p>通过<a href="https://www.jianshu.com/p/1af66a499f49" target="_blank" rel="noopener">上一篇 IoC 的例子</a>，我们来认识一个 ApplicationContext 的子类——ClassPathXmlApplicationContext。</p>
-<ol>
-<li>先在【src】目录下创建一个 【bean.xml】 文件：</li>
-</ol>
-<pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>beans</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans<span class="token punctuation">"</span></span>
-       <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
-       <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-    <span class="token comment" spellcheck="true">&lt;!-- 通过 xml 方式装配 bean --></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>source<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pojo.Source<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>fruit<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>橙子<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>sugar<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>多糖<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>size<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>超大杯<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>beans</span><span class="token punctuation">></span></span></code></pre>
-<ol start="2">
-<li>这里定义了一个 bean ，这样 Spring IoC 容器在初始化的时候就能找到它们，然后使用 ClassPathXmlApplicationContext 容器就可以将其初始化：</li>
-</ol>
-<pre class=" language-java"><code class="language-java">ApplicationContext context <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ClassPathXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"bean.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Source source <span class="token operator">=</span> <span class="token punctuation">(</span>Source<span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"source"</span><span class="token punctuation">,</span> Source<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getFruit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getSugar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>source<span class="token punctuation">.</span><span class="token function">getSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>这样就会使用 Application 的实现类 ClassPathXmlApplicationContext 去初始化 Spring IoC 容器，然后开发者就可以通过 IoC 容器来获取资源了啦！</p>
-<blockquote>
-<p>关于 Spring Bean 的装配以及一些细节，会在下一篇文章中讲到</p>
-</blockquote>
-<h4 id="ApplicationContext-常见实现类："><a href="#ApplicationContext-常见实现类：" class="headerlink" title="ApplicationContext 常见实现类："></a>ApplicationContext 常见实现类：</h4><p>1.<strong>ClassPathXmlApplicationContext：</strong><br>读取classpath中的资源</p>
-<pre class=" language-java"><code class="language-java">ApplicationContext ctx <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ClassPathXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>2:<strong>FileSystemXmlApplicationContext:-</strong><br>读取指定路径的资源</p>
-<pre class=" language-java"><code class="language-java">ApplicationContext ac <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileSystemXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"c:/applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>3.<strong>XmlWebApplicationContext:</strong><br>需要在Web的环境下才可以运行</p>
-<pre class=" language-java"><code class="language-java">XmlWebApplicationContext ac <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlWebApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 这时并没有初始化容器</span>
-ac<span class="token punctuation">.</span><span class="token function">setServletContext</span><span class="token punctuation">(</span>servletContext<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 需要指定ServletContext对象</span>
-ac<span class="token punctuation">.</span><span class="token function">setConfigLocation</span><span class="token punctuation">(</span><span class="token string">"/WEB-INF/applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 指定配置文件路径，开头的斜线表示Web应用的根目录</span>
-ac<span class="token punctuation">.</span><span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 初始化容器</span></code></pre>
-<h4 id="BeanFactory-和-ApplicationContext-的区别："><a href="#BeanFactory-和-ApplicationContext-的区别：" class="headerlink" title="BeanFactory 和 ApplicationContext 的区别："></a>BeanFactory 和 ApplicationContext 的区别：</h4><ul>
-<li><strong>BeanFactory：</strong> 是Spring中最底层的接口，只提供了最简单的IoC功能,负责配置，创建和管理bean。<br>在应用中，一般不使用 BeanFactory，而推荐使用ApplicationContext（应用上下文），原因如下。</li>
-<li><strong>ApplicationContext：</strong></li>
-</ul>
-<p>1.继承了 BeanFactory，拥有了基本的 IoC 功能；<br>2.除此之外，ApplicationContext 还提供了以下功能：<br>① 支持国际化；<br>② 支持消息机制；<br>③ 支持统一的资源加载；<br>④ 支持AOP功能；</p>
-<hr>
-<h2 id="Spring-IoC-的容器的初始化和依赖注入"><a href="#Spring-IoC-的容器的初始化和依赖注入" class="headerlink" title="Spring IoC 的容器的初始化和依赖注入"></a>Spring IoC 的容器的初始化和依赖注入</h2><p>虽然 Spring IoC 容器的生成十分的复杂，但是大体了解一下 Spring IoC 初始化的过程还是必要的。这对于理解 Spring 的一系列行为是很有帮助的。</p>
-<p><strong>注意：</strong> Bean 的定义和初始化在 Spring IoC 容器是两大步骤，它是先定义，然后初始化和依赖注入的。</p>
-<ul>
-<li><strong>Bean 的定义分为 3 步：</strong></li>
-</ul>
-<p>1.Resource 定位<br>Spring IoC 容器先根据开发者的配置，进行资源的定位，在 Spring 的开发中，通过 XML 或者注解都是十分常见的方式，定位的内容是由开发者提供的。<br>2.BeanDefinition 的载入<br>这个时候只是将 Resource 定位到的信息，保存到 Bean 定义（BeanDefinition）中，此时并不会创建 Bean 的实例<br>3.BeanDefinition 的注册<br>这个过程就是将 BeanDefinition 的信息发布到 Spring IoC 容器中<br><strong>注意：</strong>此时仍然没有对应的 Bean 的实例。</p>
-<p>做完了以上 3 步，Bean 就在 Spring IoC 容器中被定义了，而没有被初始化，更没有完成依赖注入，也就是没有注入其配置的资源给 Bean，那么它还不能完全使用。</p>
-<p>对于初始化和依赖注入，Spring Bean 还有一个配置选项——<strong>【lazy-init】</strong>，其含义就是<strong>是否初始化 Spring Bean</strong>。在没有任何配置的情况下，它的默认值为 default，实际值为 false，也就是 <strong>Spring IoC 默认会自动初始化 Bean</strong>。如果将其设置为 true，那么只有当我们使用 Spring IoC 容器的 getBean 方法获取它时，它才会进行 Bean 的初始化，完成依赖注入。</p>
-<hr>
-<h2 id="IoC-是如何实现的"><a href="#IoC-是如何实现的" class="headerlink" title="IoC 是如何实现的"></a>IoC 是如何实现的</h2><p>最后我们简单说说IoC是如何实现的。想象一下如果我们自己来实现这个依赖注入的功能，我们怎么来做？ 无外乎：</p>
-<ol>
-<li>读取标注或者配置文件，看看JuiceMaker依赖的是哪个Source，拿到类名</li>
-<li>使用反射的API，基于类名实例化对应的对象实例</li>
-<li>将对象实例，通过构造函数或者 setter，传递给 JuiceMaker</li>
-</ol>
-<p>我们发现其实自己来实现也不是很难，Spring实际也就是这么做的。这么看的话其实IoC就是一个工厂模式的升级版！当然要做一个成熟的IoC框架，还是非常多细致的工作要做，Spring不仅提供了一个已经成为业界标准的Java IoC框架，还提供了更多强大的功能，所以大家就别去造轮子啦！希望了解IoC更多实现细节不妨通过学习Spring的源码来加深理解！</p>
-<blockquote>
-<p>引用地址：<a href="https://link.jianshu.com/?t=https%3A%2F%2Fwww.tianmaying.com%2Ftutorial%2Fspring-ioc" target="_blank" rel="noopener">这里</a><br>【参考资料】:《Java EE 互联网轻量级框架整合开发》、《Spring 实战（第四版）》<br>【好文推荐】：<a href="https://mp.weixin.qq.com/s?__biz=MzAxOTc0NzExNg==&mid=2665513179&idx=1&sn=772226a5be436a0d08197c335ddb52b8&scene=21#wechat_redirect" target="_blank" rel="noopener">①Spring 的本质系列(1) – 依赖注入</a>、 <a href="https://www.tianmaying.com/tutorial/spring-ioc" target="_blank" rel="noopener">②Spring的IoC原理</a></p>
-</blockquote>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -4913,7 +5445,7 @@ ac<span class="token punctuation">.</span><span class="token function">refresh</
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(12)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
@@ -5072,7 +5604,7 @@ ac<span class="token punctuation">.</span><span class="token function">refresh</
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 17.08px; color: #848484">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.23px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.46px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.69px; color: #656565">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.92px; color: #6a6a6a">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.54px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20.15px; color: #6f6f6f">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.77px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 17.08px; color: #848484">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.85px; color: #7f7f7f">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.85px; color: #7f7f7f">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.69px; color: #656565">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.77px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.54px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.31px; color: #898989">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.77px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.54px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.85px; color: #7f7f7f">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.77px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.62px; color: #7a7a7a">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.77px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.31px; color: #898989">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 17.08px; color: #848484">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.69px; color: #656565">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.38px; color: #747474">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

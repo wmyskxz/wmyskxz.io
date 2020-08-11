@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#3.0.0-rc.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>「MoreThanJava」Day 5：面向对象进阶——继承详解 - 我没有三颗心脏的博客</title>
+  
+    <meta name="keywords" content="Java基础,MoreThanJava">
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+    
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/styles/solarized-light.css">
+
+    
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body>
+  
+  
+  
+  <div class="cover-wrapper">
+    <cover class='cover post' style="display: none;">
+      <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">我没有三颗心脏</p>
+    
+    
+      <p class="subtitle">分享知识&技术&成长&思考</p>
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="search here..." />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation search'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <i class='fas fa-rss fa-fw'></i><p>博客</p>
+            </a>
+          
+            <a href="/categories/"
+              
+              
+              id="categories">
+              <i class='fas fa-folder-open fa-fw'></i><p>分类</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <i class='fas fa-tags fa-fw'></i><p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <i class='fas fa-archive fa-fw'></i><p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <i class='fas fa-info-circle fa-fw'></i><p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+    </cover>
+    <header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  </div>
+  
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper' id="pjax-container">
+      
+        <!--此文件用来存放一些不方便取值的变量--> 
+<!--思路大概是将值藏到重加载的区域内--> 
+ 
+ 
+ 
+<div id="pjax-data" style="display: none"> 
+  <div id="pjax-ispage">true</div> 
+  <div id="pjax-pageTitle">「MoreThanJava」Day 5：面向对象进阶——继承详解</div> 
+  <div id="pjax-enable-cover">true</div> 
+  <div id="pjax-comment-path">none</div> 
+  <div id="pjax-comment-placeholder">none</div> 
+</div> 
+ 
+ 
+<script> 
+  // 处理封面 此时 jquery 还没加载 
+  if ("none" == "none") { // 移除封面 
+    document.getElementsByClassName('cover')[0].style.display = "none"; 
+    document.getElementsByClassName('l_body')[0].classList.add("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
+  } else { 
+    if ("none" == "blog") { // 半屏 
+      document.getElementsByClassName('cover')[0].classList.remove("full"); 
+      document.getElementsByClassName('cover')[0].classList.add("half"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
+    } else if ("none" == "docs") { // 全屏 
+      document.getElementsByClassName('cover')[0].classList.remove("half"); 
+      document.getElementsByClassName('cover')[0].classList.add("full"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = ""; 
+    } 
+    document.getElementsByClassName('cover')[0].style.display = ""; 
+    document.getElementsByClassName('l_body', 'show')[0].classList.remove("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.remove("show"); 
+  } 
+</script> 
+
+      
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/">
+      「MoreThanJava」Day 5：面向对象进阶——继承详解
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/MoreThanJava/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>MoreThanJava</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月7日</p>
+  </a>
+</div>
+
+            
+          
+            
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-11T16:36:36+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月11日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/e973d387-618a-46bd-abe5-bce322f54a72.png" alt=""></p>
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="Part-1-继承概述"><a href="#Part-1-继承概述" class="headerlink" title="Part 1. 继承概述"></a>Part 1. 继承概述</h1><p><a href="https://www.wmyskxz.com/2020/08/04/morethanjava-day-4-mian-xiang-dui-xiang-ji-chu/">上一篇文章</a> 中我们简单介绍了继承的作用，它允许创建 <strong>具有逻辑等级结构的类体系</strong>，形成一个继承树。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/35b85013-1566-4442-a093-67dc71ec7774.png" alt="Animal 继承树"></p>
+<p>继承使您可以基于现有类定义新类。 新类与现有类相似，但是可能具有其他实例变量和方法。这使编程更加容易，因为您可以 <strong>在现有的类上构建</strong>，而不必从头开始。</p>
+<p>继承是现代软件取得巨大成功的部分原因。 程序员能够在先前的工作基础上继续发展并不断改进和升级现有软件。</p>
+<h2 id="面向对象之前，写代码的一些问题"><a href="#面向对象之前，写代码的一些问题" class="headerlink" title="面向对象之前，写代码的一些问题"></a>面向对象之前，写代码的一些问题</h2><p>如果你有一个类的源代码，你可以复制代码并改变它变成你想要的样子。在面向对象编程之前，就是这样子做的。但至少有两个问题：</p>
+<p><strong>❶ 很难保持仅仅有条。</strong></p>
+<p>假设您已经有了几十个需要的类，并且需要基于原始类创造新的一些类，再基于新的类创造出更新的类，最终您将获得数十个源文件，这些源文件都是通过其他已更改的源文件的另外版本。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/a7feeb86-9d37-406f-8aba-b9f395b437f7.png" alt=""></p>
+<p>假设现在在一个源文件中发现了错误，一些基于它的源文件需要进行修复，但是对于其他源文件来说，并不需要！没有细致的写代码的计划，您最终会陷入混乱….</p>
+<p><strong>❷ 需要学习原始代码。</strong></p>
+<p>假设您有一个复杂的类，基本上可以完成所需的工作，但是您需要进行一些小的修改。如果您修改了源代码，即使是进行了很小的更改，也可能会破坏某些内容。因此，您必须研究原始代码以确保所做的更改正确，这可能并不容易。</p>
+<p><strong>Java 的自动继承机制极大地缓解了这两个问题。</strong></p>
+<h2 id="单继承"><a href="#单继承" class="headerlink" title="单继承"></a>单继承</h2><p>用于作为新类模板的类称为 <strong>父类</strong> <em>(或超类或基类)</em>，基于父类创建的类称为 <strong>子类</strong> <em>(或派生类)</em>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/1744fdbf-cae1-4460-b4d9-0e48f00034eb.png" alt=""></p>
+<p>就像上图中演示的那样，箭头从子类指向父类。<em>(在上图中，云表示类，而矩形表示对象，这样的表示的方法来自于 Grady Booch 写的《面向对象的分析和设计》一书。而在官方的 UML-统一建模语言 中，类和对象都用矩形表示，请注意这一点)</em></p>
+<p>在 Java 中，<strong>子类仅从一个父类继承特征</strong>，这被称为 <strong>单继承</strong> <em>(与人类不同)</em>。</p>
+<p>有些语言允许”孩子”从多个”父母”那里继承，这被称为 <strong>多继承</strong>。但由于具有多重继承，有时很难说出哪个父母为孩子贡献了哪些特征 <em>(跟人类一样..)</em>。</p>
+<p>Java 通过使用单继承避免了这些问题。<em>(意思 Java 只允许单继承)</em></p>
+<h2 id="is-a-关系"><a href="#is-a-关系" class="headerlink" title="is-a 关系"></a>is-a 关系</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/2fed3fa5-88ee-460c-b839-e6bc9be6c551.png" alt=""></p>
+<p>上图显示了一个父类 <em>(Video 视频类)</em>，一个子类 <em>(Movie 电影类)</em>。它们之间的实线表示 <strong>“is-a”</strong> 的关系：电影是视频。 </p>
+<p><strong>注意，继承是在类之间，而不是在对象之间。</strong> <em>(上图两朵云都代表类)</em></p>
+<p>父类是构造对象时使用的蓝图，子类用于构造看起来像父对象的对象，但具有附加功能的对象。</p>
+<h3 id="类之间的关系简述"><a href="#类之间的关系简述" class="headerlink" title="类之间的关系简述"></a>类之间的关系简述</h3><p>简单地说，类和类之间的关系有三种：<code>is-a</code>、<code>has-a</code> 和 <code>use-a</code>。</p>
+<ul>
+<li><strong><code>is-a</code> 关系也叫继承或泛化</strong>，比如学生和人的关系、手机和电子产品的关系都属于继承关系；</li>
+<li><strong><code>has-a</code> 关系通常称之为关联</strong>，比如部门和员工的关系、汽车和引擎的关系都属于关联关系；关联关系如果是整体和部分的关联，那么我们称之为 <strong>聚合关系</strong>；如果整体进一步负责了部分的生命周期 <em>(整体和部分是不可分割的，同时同在也同时消亡)</em>，那么这种就是最强的关联关系，我们称之为 <strong>合成</strong> 关系。</li>
+<li><strong><code>use-a</code> 关系通常称之为依赖</strong>，比如司机有一个驾驶的行为 <em>(方法)*，其中 *(的参数)</em> 使用到了汽车，那么司机和汽车的关系就是依赖关系。</li>
+</ul>
+<p>利用类之间的这些关系，我们可以在已有类的基础上来完成某些操作，也可以在已有类的基础上创建新的类，这些都是实现代码复用的重要手段。复用现有的代码不仅可以减少开发的工作量，也有利于代码的管理和维护，这是我们在日常工作中都会使用到的技术手段。</p>
+<h2 id="层级结构"><a href="#层级结构" class="headerlink" title="层级结构"></a>层级结构</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/5f02652b-1840-4faf-a18b-ba3b5455663d.png" alt=""></p>
+<p>上图显示了一个父类和一个子类的 <strong>层次结构</strong>，以及从每个类构造的一些对象。这些对象用矩形表示，以表达它们比设计的类更真实。</p>
+<p>在层次结构中，每个类最多有一个父类，但可能有几个子类。 层次结构顶部的类没有父级。此类称为层次结构的 <strong>根</strong>。</p>
+<p>另外，一个类可以是另一个子类的父类，也可以是父类的子类。就像人类一样，一个人是某些人类的孩子，也是其他人类的父母。<em>(但在 Java 中，一个孩子只有一个父母)</em></p>
+<h1 id="Part-2-继承的实现"><a href="#Part-2-继承的实现" class="headerlink" title="Part 2. 继承的实现"></a>Part 2. 继承的实现</h1><p>从父类派生子类的语法是使用 <code>extend</code> 关键字：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">ChildClass</span> extend ParentClass <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 子类的新成员和构造函数....</span>
+<span class="token punctuation">}</span></code></pre>
+<p>父类的成员 <em>(变量和方法</em>) 通过继承包含在子类中。其他成员将在其类定义中添加到子类。</p>
+<h2 id="视频观影-App-示例"><a href="#视频观影-App-示例" class="headerlink" title="视频观影 App 示例"></a>视频观影 App 示例</h2><p>Java 编程是通过创建类层次结构并从中实例化对象来完成的。您可以扩展自己的类或扩展已经存在的类。Java 开发工具包 <em>(JDK)</em> 为您提供了丰富的基类集合，您可以根据需要扩展这些基类。</p>
+<p><em>(如果某些类已经使用 <code>final</code> 修饰，则无法继承)</em></p>
+<p>下面演示了一个使用 <code>Video</code> 类作为基类的视频观影 App 的程序设计：</p>
+<p><strong>Video 基类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> String title<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// name of video</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> length<span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// number of minutes</span>
+
+    <span class="token comment" spellcheck="true">// constructor</span>
+    <span class="token keyword">public</span> <span class="token function">Video</span><span class="token punctuation">(</span>String title<span class="token punctuation">,</span> <span class="token keyword">int</span> length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>title <span class="token operator">=</span> title<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>length <span class="token operator">=</span> length<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"title="</span> <span class="token operator">+</span> title <span class="token operator">+</span> <span class="token string">", length="</span> <span class="token operator">+</span> length<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">getTitle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> title<span class="token punctuation">;</span><span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setTitle</span><span class="token punctuation">(</span>String title<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">this</span><span class="token punctuation">.</span>title <span class="token operator">=</span> title<span class="token punctuation">;</span><span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getLength</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> length<span class="token punctuation">;</span><span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setLength</span><span class="token punctuation">(</span><span class="token keyword">int</span> length<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">this</span><span class="token punctuation">.</span>length <span class="token operator">=</span> length<span class="token punctuation">;</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>Movie 电影类继承 Video：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Movie</span> <span class="token keyword">extends</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> String director<span class="token punctuation">;</span><span class="token comment" spellcheck="true">// name of the director</span>
+    <span class="token keyword">private</span> String rating<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// num of rating</span>
+
+    <span class="token comment" spellcheck="true">// constructor</span>
+    <span class="token keyword">public</span> <span class="token function">Movie</span><span class="token punctuation">(</span>String title<span class="token punctuation">,</span> <span class="token keyword">int</span> length<span class="token punctuation">,</span> String director<span class="token punctuation">,</span> String rating<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>title<span class="token punctuation">,</span> length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>director <span class="token operator">=</span> director<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>rating <span class="token operator">=</span> rating<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">getDirector</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> director<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> String <span class="token function">getRating</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> rating<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这两个类均已定义：Video 类可用于构造视频类型的对象，现在 Movie 类可用于构造电影类型的对象。</p>
+<p>Movie 类具有在 Video 中定义的成员变量和公共方法。</p>
+<h2 id="使用父类的构造函数"><a href="#使用父类的构造函数" class="headerlink" title="使用父类的构造函数"></a>使用父类的构造函数</h2><p>查看上方的示例，在 Movie 类的初始化构造函数中有一条 <code>super(title, length);</code> 的语句，是 <strong>“调用父类 Video 中带有 title、length 参数的构造器”</strong> 的简写形式。</p>
+<p>由于 Movie 类的构造器不能访问 Video 类的私有字段，所以必须通过一个构造器来初始化这些私有字段。可以利用特殊的 <code>super</code> 语法调用这个构造器。</p>
+<p><strong>重要说明：<code>super()</code> 必须是子类构造函数中的第一条语句。</strong> <em>(这意味子类构造器总是会先调用父类的构造器)</em> 这件事经常被忽略，导致的结果就是一些神秘的编译器错误消息。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/f19c167d-a96e-43b4-abc1-15106fe6cdf2.png" alt=""></p>
+<p>如果子类的构造器没有显式地调用父类的构造器，将自动地调用父类的无参构造器。如果父类没有无参数的构造器，并且在子类的构造器中又没有显式地调用父类的其他构造器，Java 编译器就会报告一个错误。<em>(在我们的例子中 Video 缺少无参数的构造函数，故👆上面图片代码会报错)</em></p>
+<h2 id="创建一个无参构造函数"><a href="#创建一个无参构造函数" class="headerlink" title="创建一个无参构造函数"></a>创建一个无参构造函数</h2><p>关于构造函数的一些细节：</p>
+<ol>
+<li>您可以显式为类编写无参数的构造函数。</li>
+<li>如果您没有为类编写任何构造函数，那么将自动提供无参数构造函数 <em>（称为默认构造函数）</em>。</li>
+<li>如果为一个类编写了一个构造函数，则不会自动提供默认的构造函数。</li>
+<li>因此：如果您为类编写了额外的构造函数，那么，则还必须编写一个无参数构造函数 <em>(供子类调用)</em>。</li>
+</ol>
+<p>在示例程序中，类 Video 包含构造函数，因此不会自动提供默认构造函数。 所以，Movie 类 <code>super()</code> 函数建议默认使用的构造函数 <em>(会自动调用无参数构造函数)</em> 会导致语法错误。</p>
+<p>解决方法是将无参数构造函数显式放在类中 Video ，如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> String title<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// name of video</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> length<span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// number of minutes</span>
+
+    <span class="token comment" spellcheck="true">// no-argument constructor</span>
+    <span class="token keyword">public</span> <span class="token function">Video</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>title <span class="token operator">=</span> <span class="token string">"unknown"</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>length <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// constructor</span>
+    <span class="token keyword">public</span> <span class="token function">Video</span><span class="token punctuation">(</span>String title<span class="token punctuation">,</span> <span class="token keyword">int</span> length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>title <span class="token operator">=</span> title<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>length <span class="token operator">=</span> length<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="覆盖方法"><a href="#覆盖方法" class="headerlink" title="覆盖方法"></a>覆盖方法</h2><p>让我们来实例化 Movie 对象：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Video video <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Video</span><span class="token punctuation">(</span><span class="token string">"视频1"</span><span class="token punctuation">,</span> <span class="token number">90</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Movie movie <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Movie</span><span class="token punctuation">(</span><span class="token string">"悟空传"</span><span class="token punctuation">,</span> <span class="token number">139</span><span class="token punctuation">,</span> <span class="token string">"郭子健"</span><span class="token punctuation">,</span> <span class="token string">"5.9"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>video<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>movie<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>程序输出：</strong></p>
+<pre class=" language-text"><code class="language-text">title=视频1, length=90
+title=悟空传, length=139</code></pre>
+<p><code>movie.toString()</code> 是 Movie 类直接继承自 Video 类，它并没有使用 Movie 对象具有的新变量，因此并不会打印导演和评分。</p>
+<p>我们需要给 Movie 类添加新的 <code>toString()</code> 的使用方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 添加到 Movie 类中</span>
+<span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">"title:"</span> <span class="token operator">+</span> <span class="token function">getTitle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">", length:"</span> <span class="token operator">+</span> <span class="token function">getLength</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">", director:"</span> <span class="token operator">+</span> <span class="token function">getDirector</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token operator">+</span> <span class="token string">", rating:"</span> <span class="token operator">+</span> <span class="token function">getRating</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>现在，Movie 拥有了自己的 <code>toString()</code> 方法，该方法使用了继承自 Video 的变量和自己定义的变量。</p>
+<p>即使父类有一个 <code>toString()</code> 方法，子类中新定义的 <code>toString()</code> 也会 <strong>覆盖</strong> 父类的版本。当子类方法的 <strong>签名</strong> <em>(就是返回值 + 方法名称 + 参数列表)</em> 与父类相同时，子类的方法就会 <strong>覆盖</strong> 父类的方法。</p>
+<p>现在运行程序，Movie 打印出了我们期望的完整信息：</p>
+<pre class=" language-text"><code class="language-text">title=视频1, length=90
+title:悟空传, length:139, director:郭子健, rating:5.9</code></pre>
+<blockquote>
+<p>有些人认为 <code>super</code> 与 <code>this</code> 引用是类似的概念，实际上，这样比较并不太恰当。这是因为 <code>super</code> 不是一个对象的引用，例如，不能将值 <code>super</code> 赋给另一个对象变量，它只是一个指示编译器调用父类方法的特殊关键字。</p>
+</blockquote>
+<p>正像前面所看到的那样，在子类中可以增加字段、增加方法或覆盖父类的方法，不过，继承绝对不会删除任何字段或方法。</p>
+<h1 id="Part-3-更多细节"><a href="#Part-3-更多细节" class="headerlink" title="Part 3. 更多细节"></a>Part 3. 更多细节</h1><h2 id="protected-关键字"><a href="#protected-关键字" class="headerlink" title="protected 关键字"></a>protected 关键字</h2><p>如果类中创建的变量或者方法使用 <code>protected</code> 描述，则指明了 “就类用户而言，这是 <code>private</code> 的，但对于任何继承于此类的导出类或者任何位于同一个 <strong>包</strong> 内的类来说，它是可以访问的”。下面我们就上面的例子来演示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> String title<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// name of video</span>
+    <span class="token keyword">protected</span> <span class="token keyword">int</span> length<span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// number of minutes</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Movie</span> <span class="token keyword">extends</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"title:"</span> <span class="token operator">+</span> title <span class="token operator">+</span> <span class="token string">", length:"</span> <span class="token operator">+</span> length <span class="token operator">+</span> <span class="token string">", director:"</span> <span class="token operator">+</span> director
+            <span class="token operator">+</span> <span class="token string">", rating:"</span> <span class="token operator">+</span> rating<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<p>在 <code>protected</code> 修饰之前，如果子类 Movie 要访问父类 Video 的 <code>title</code> 私有变量只能通过父类暴露出来的 <code>getTitle()</code> 公共方法，现在则可以直接使用。</p>
+<h2 id="向上转型"><a href="#向上转型" class="headerlink" title="向上转型"></a>向上转型</h2><p>“为新的类提供方法” 并不是继承技术中最重要的方面，<strong>其最重要的方面是用来表现新类和基类之间的关系</strong>。这种关系可以用 <strong>“新类是现有类的一种类型”</strong> 这句话加以概括。</p>
+<p>由于继承可以确保基类中所有的方法在子类中也同样有效，所以能够向基类发送的所有信息也同样可以向子类发送。例如，如果 Video 类具有一个 <code>play()</code> 方法， 那么 Movie 类也将同样具备。这意味着我们可以准确地说 <strong>Movie 对象也是一种类型的 Video</strong>。<em>(体现 <code>is-a</code> 关系)</em></p>
+<p>这一概念的体现用下面的例子来说明：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">play</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span>Video video<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// ...</span>
+        video<span class="token punctuation">.</span><span class="token function">play</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 测试类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Movie movie <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Movie</span><span class="token punctuation">(</span><span class="token string">"悟空传"</span><span class="token punctuation">,</span> <span class="token number">139</span><span class="token punctuation">,</span> <span class="token string">"郭子健"</span><span class="token punctuation">,</span> <span class="token string">"5.9"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Video<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span>movie<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>在示例中，<code>start()</code> 方法可以接受 Video 类型的引用，这是在太有趣了！</p>
+<p>在测试类中，传递给 <code>start()</code> 方法的是一个 Movie 引用。鉴于 Java 是一个对类型检查十分严格的语言，接受某种类型 <em>(上例是 <code>Video</code> 类型)</em> 的方法同样可以接受另外一种类型 <em>(上例是 <code>Movie</code> 类型)</em> 就会显得很奇怪！</p>
+<p><strong>除非你认识到 Movei 对象也是一种 Video 对象</strong>。</p>
+<p>在 <code>start()</code> 方法中，程序代码可以对 Video 和它所有子类起作用，<strong>这种将 Movie 引用转换为 Video 引用的动作</strong>，我们称之为 <strong>向上转型</strong> <em>(这样称呼是因为在继承树的画法上，基类在子类的上方…)</em>。</p>
+<h2 id="Object-类"><a href="#Object-类" class="headerlink" title="Object 类"></a>Object 类</h2><p>所有的类均具有父类，除了 <code>Object</code> 类。Java 类层次结构的最顶部就是 <code>Object</code> 类。</p>
+<p>如果类没有显式地指明继承哪一个父类，那么它会自动地继承自 <code>Object</code> 类。如果一个子类继承了一个父类，那么父类要么继承它的父类，要么自动继承 <code>Object</code>。<strong>最终，所有的类都将 <code>Object</code> 作为祖先。</strong></p>
+<p>这意味着 Java 中的所有类都具有一些共同的特征。这些特征在被定义在 <code>Object</code> 中：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/925a4b38-d2b2-4508-9011-988e2f5cfb49.png" alt="Object 类拥有的方法"></p>
+<p><em>(其中 <code>finalize()</code> 方法在 Java 9 之后弃用了，原因是因为它本身存在一些问题，可能导致性能问题：死锁、挂起和其他问题…)</em></p>
+<p><em>(想看源码可以打一个 <code>Object</code>，然后按住 <code>Ctrl</code> 不放，然后点击 <code>Object</code> 就可以进入 JDK 源码查看了，源码有十分规范的注释和结构，你有时甚至会发现一些有趣的东西…)</em></p>
+<p>Java 之父 Gosling 设计的 Object 类，是对万事万物的抽象，是在哲学方向上进行的延伸思考，高度概括了事物的自然行为和社会行为。我们都知道哲学的三大经典问题：我是谁？我从哪里来？我到哪里去？在 Object 类中，这些问题都可以得到隐约的解答：</p>
+<ol>
+<li><strong>我是谁？</strong> <code>getClass()</code> 说明本质上是谁，而 <code>toString()</code> 是当前的名片；</li>
+<li><strong>我从哪里来？</strong> <code>Object()</code> 构造方法是生产对象的基本方式，<code>clone()</code> 是繁殖对象的另一种方式；</li>
+<li><strong>我到哪里去？</strong> <code>finalize()</code> 是在对象销毁时触发的方法；<em>(Java 9 之后已移除)</em></li>
+</ol>
+<p>另外，Object 还映射了社会科学领域的一些问题：</p>
+<ol>
+<li><strong>世界是否因你而不同？</strong> <code>hashCode()</code> 和 <code>equals()</code> 就是判断与其他元素是否相同的一组方法；</li>
+<li><strong>与他人如何协调？</strong> <code>wait()</code> 和 <code>notify()</code> 就是对象间通信与协作的一组方法；</li>
+</ol>
+<h2 id="理解方法调用"><a href="#理解方法调用" class="headerlink" title="理解方法调用"></a>理解方法调用</h2><p>准确地理解如何在对象上应用方法调用非常重要。下面假设我们要调用 <code>x.f(args)</code>，<code>x</code> 是声明为 <code>C</code> 的一个对象。下面是调用过程的详细描述：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/59297eb2-70b4-455b-adff-bb104e2bac70.png" alt=""></p>
+<ol>
+<li>编译器查看对象的声明类型和方法名。需要注意的是：有可能存在多个名字为 <code>f</code> 但参数类型不一样的方法。例如，可能存在 <code>f(int)</code> 和 <code>f(String)</code>。编译器将会一一列举 <code>C</code> 类中所有名为 <code>f</code> 的方法和其父类中所有名为 <code>f</code> 而且可以访问的方法 <em>(父类中的私有方法不可访问)</em>。<strong>至此，编译器一直到所有可能被调用的候选方法。</strong></li>
+<li>接下来，编译器要确定方法调用中提供的参数类型。如果在所有名为 <code>f</code> 的方法中存在一个与所提供参数类型完全匹配的方法，就选择这个方法。这个过程称为 <strong>重载解析</strong> <em>(overloading resolution)</em>。例如，对于调用 <code>x.f(&quot;Hello&quot;)</code>，编译期将会挑选 <code>f(String)</code>，而不是 <code>f(int)</code>。由于允许类型转换 <em>(例如，<code>int</code> 可以转换成 <code>double</code>)</em>，所以情况可能会变得很复杂。如果编译器没有找到与参数类型匹配的方法，或者发现经过类型转换后有多个方法与之匹配，编译器就会报错。<strong>至此，编译器已经知道需要调用的方法的名字和参数类型。</strong></li>
+<li>如果是 <code>private</code> 方法、<code>static</code> 方法、<code>final</code> 方法 <em>(有关 <code>final</code> 修饰符会在下面讲到)</em> 或者构造器，那么编译器将可以明确地知道应该调用哪个方法。这称为 <strong>静态绑定</strong> <em>(static binding)</em>。与此对应的是，如果要调用的方法依赖于隐式参数的实际类型，那么必须在运行时 <strong>动态绑定</strong>。在我们的实例中，编译器会利用动态绑定生成一个调用 <code>f(String)</code> 的指令。</li>
+<li>程序运行并且采用动态绑定调用方法时，虚拟机必须调用与 <code>x</code> 所引用对象的实际类型对应的那个方法。假设 <code>x</code> 的实际类型是 <code>D</code>，它是 <code>C</code> 类的子类。如果 <code>D</code> 类定义了方法 <code>f(String)</code>，就会调用这个方法；否则，将在 <code>D</code> 类的父类中寻找 <code>f(String)</code>，以此类推。</li>
+</ol>
+<p><strong>每次调用方法都要完成这样的搜索，时间开销相当大</strong>。因此，虚拟机预先为每个类计算了一个 <strong>方法表</strong> <em>(method table)<em>， 其中列出了所有方法的签名和要调用的实际方法 *(存着各个方法的实际入口地址)</em>。这样一来，在真正调用方法的时候，虚拟机仅查找这个表就行了。</em>(以下是 Video-父类 和 Movie-子类 的方法表结构演示图)*</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/b969be72-d055-4cb6-b680-12e8f57c4254.png" alt=""></p>
+<p>例如我们调用上述例子 Movie 类的 <code>play()</code> 方法。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">play</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>由于 <code>play()</code> 方法没有参数，因此不必担心 <strong>重载解析</strong> 的问题。又不是 <code>private/ static/ final</code> 方法，所以将采用 <strong>动态绑定</strong> 的方式。</p>
+<p>在运行时，调用 <code>object.play()</code> 的解析过程为：</p>
+<ol>
+<li>首先，虚拟机获取 <code>object</code> 的实际类型的方法表。这可能是 Video、Movie 的方法表，也可能是 Video 类的其他子类的方法表；</li>
+<li>接下来，虚拟机查找定义了 <code>play()</code> 签名的类。此时，虚拟机已经知道应该调用哪个方法了；<em>(这里如果 <code>object</code> 实际类型为 Movie 则调用 Movie.play()，为 Video 则调用 Video.play()，如果没找到才往父类去找..)</em></li>
+<li>最后，虚拟机调用这个方法。</li>
+</ol>
+<p><strong>动态绑定有一个非常重要的特性：无须对现有的代码进行修改就可以对程序进行扩展。</strong></p>
+<p>假设现在新增一个类 <code>ShortVideo</code>，并且变量 <code>object</code> 有可能引用这个类的对象，我们不需要对包含调用 <code>object.play()</code> 的代码重新进行编译。如果 <code>object</code> 恰好引用一个 <code>ShortVideo</code> 类的对象，就会自动地调用 <code>object.play()</code> 方法。</p>
+<blockquote>
+<p><strong>警告</strong>：在覆盖一个方法时，子类的方法 <strong>不能低于</strong> 父类方法的 <strong>可见性</strong> <em>(public &gt; protected &gt; private)</em>。特别是，如果父类方法是 <code>public</code>，子类方法必须也要声明为 <code>public</code>。</p>
+</blockquote>
+<h2 id="final-关键字"><a href="#final-关键字" class="headerlink" title="final 关键字"></a>final 关键字</h2><p>有时候，我们可能希望组织人们利用某个类定义子类。<strong>不允许扩展</strong> <em>(被继承)</em> 的类被称为 <strong>final 类</strong>。如果在定义类的时候使用了 <code>final</code> 修饰符就表明这个类是 <code>final</code> 类了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">ShortVideo</span> <span class="token keyword">extends</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span></code></pre>
+<p>类中的某个特定方法也可以被声明为 <code>final</code>。如果这样做，子类就不能覆盖这个方法 <em>(<code>final</code> 类中的所有方法自动地称为 <code>final</code> 方法)</em>。例如：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Video</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<p>如果一个 <strong>字段</strong> 被声明为了 <code>final</code> 类型，那么对于 <code>final</code> 字段来说，<strong>构造对象之后就不允许改变它们的值了</strong>。不过，如果将一个类声明为 <code>final</code>，只有其中的方法自动地称为 <code>final</code>，而不包括字段，这一点需要注意。</p>
+<p><strong>将方法或类声明为 <code>final</code> 的主要原因是：确保它们不会在子类中改变语义。</strong></p>
+<h3 id="JDK-中的例子"><a href="#JDK-中的例子" class="headerlink" title="JDK 中的例子"></a>JDK 中的例子</h3><ul>
+<li><strong>Calendar</strong> 类 <em>(JDK 实现的日历类)</em> 中的 <code>getTime</code> 和 <code>setTime</code> 方法都声明为了 <code>final</code>，这就表明 <strong>Calendar</strong> 类的设计者负责实现 <strong>Data</strong> 类与日历状态之间的转换，而不允许子类来添乱。</li>
+<li>同样的，<strong>String</strong> 类也是 <code>final</code> 类 <em>(甚至面试中也经常出现)</em>，这意味着不允许任何人定义 <strong>String</strong> 的子类，换而言之，如果有一个 <strong>String</strong> 引用，它引用的一定是一个 <strong>String</strong> 对象，而不可能是其他类的对象。</li>
+</ul>
+<h3 id="内联"><a href="#内联" class="headerlink" title="内联"></a>内联</h3><p>在早起的 Java 中，有些程序员为了避免动态绑定带来的系统开销而使用 <code>final</code> 关键字。如果一个方法没有被覆盖并且很短，编译器就能够对它进行优化处理，这个过程为 <strong>内联</strong> <em>(inlining)</em>。</p>
+<p>例如，内联调用 <code>e.getName()</code> 会被替换为访问字段 <code>e.name</code>。</p>
+<p>这是一项很有意义的改进，CPU 在处理当前指令时，<strong>分支会扰乱预取指令的策略</strong>，所以，CPU 不喜欢分支。然而，如果 <code>getName</code> 在另外一个类中 <strong>被覆盖</strong>，那么编译器就无法知道覆盖的代码将会做什么操作，因此也就不能对它进行内联处理了。</p>
+<p>幸运的是，虚拟机中的 <strong>即时编译器</strong> <em>(JIT)</em> 比传统编译器的处理能力强得多。这种编译器可以准确地知道类之间的继承关系，并能够检测出是否有类确实覆盖了给定的方法。</p>
+<p>如果方法很短、被频繁调用而且确实没有被覆盖，那么即时编译器就会将这个方法进行内联处理。如果虚拟机加载了另外一个子类，而这个子类覆盖了一个内联方法，那么优化器将取消对这个方法的内联。这个过程很慢，不过很少会发生这种情况。</p>
+<h2 id="抽象类"><a href="#抽象类" class="headerlink" title="抽象类"></a>抽象类</h2><p>在类的自下而上的继承层次结构中，位于上层的类更具有一般性，也更加抽象。从某种角度看，祖先类更具有一般性，人们通常只是将它作为派生其他类的基类，而不是用来构造你想使用的特定的实例。</p>
+<p>考虑一个 Person 类的继承结构：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/00ddd596-2c2c-4f94-a08b-37765be0ddfe.png" alt=""></p>
+<p>每个人都有一些属性，如名字。学生与员工都有名字。</p>
+<p>现在，假设需要增加一个 <code>getDescription()</code> 的方法，它返回对一个人简短的描述，学生类可以返回：<code>一个计算机在读的学生</code>，员工可以返回 <code>一个在阿里就职的后端工程师</code> 之类的。这在 Student 和 Employee 类中实现很容易，但是在 Person 类中应该提供什么内容呢？ 除了姓名，Person 类对这个人一无所知。</p>
+<p>有一个更好的方法，就是使用 <code>abstract</code> 关键字，把该方法定义为一个 <strong>抽象方法</strong>，这意味着你并不需要实现这个方法，只需要定义出来就好了：<em>(以下代码为 Person 类中的抽象定义)</em></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> String <span class="token function">getDescription</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre>
+<p>为了提高程序的清晰度，包含一个或多个抽象方法的类本身必须被声明为抽象的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> String <span class="token function">getDescription</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>《阿里Java开发规范》<strong>强制规定抽象类命名</strong> 使用 <code>Abstract</code> 或 <code>Base</code> 开头，这里只是做演示所以就简单用 <code>Person</code> 代替啦~</p>
+</blockquote>
+<p>抽象方法充当着占位方法的角色，它们在子类中被继承并实现。</p>
+<p>扩展抽象类可以由两种选择。一种是在子类中保留抽象类中的部分或所有抽象方法仍未实现，这样就必须将子类标记为抽象类 <em>(因为还有抽象方法)</em>；另一种做法就是实现全部方法，这样一来，子类就不是抽象的了。</p>
+<p><em>(即使不包含抽象方法，也可以将类声明为抽象类)</em></p>
+<p>抽象类不能实例化，也就是说，如果将一个类声明为 <code>abstract</code>，就不能创建这个类的实例，例如：<code>new Person();</code> 就是错误的，但可以创建具体子类的对象：<code>Person p = new Student(args);</code>，这里的 <code>p</code> 是一个抽象类型 <code>Person</code> 的变量，它引用了一个非抽象子类 <code>Student</code> 的实例。</p>
+<h1 id="Part-4-为什么不推荐使用继承？"><a href="#Part-4-为什么不推荐使用继承？" class="headerlink" title="Part 4. 为什么不推荐使用继承？"></a>Part 4. 为什么不推荐使用继承？</h1><p>先别急着奇怪和愤懑，刚学习完继承之后，就告诉说不推荐使用，这是 <strong>有原因的！</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/e29e8ed5-7853-4e7b-a89f-7ce7ab7b3fa2.png" alt=""></p>
+<p>在面向对象编程中，有一条非常经典的设计原则：<strong>组合优于继承</strong>。使用继承有什么问题？组合相比继承有哪些优势？如何判断该用组合还是继承？下面我们就围绕这三个问题，来详细讲解一下。</p>
+<blockquote>
+<p>以下内容大部分引用自：<a href="https://time.geekbang.org/column/article/169593" target="_blank" rel="noopener">https://time.geekbang.org/column/article/169593</a></p>
+</blockquote>
+<h2 id="使用继承有什么问题？"><a href="#使用继承有什么问题？" class="headerlink" title="使用继承有什么问题？"></a>使用继承有什么问题？</h2><p>上面说到，继承是面向对象的四大特性之一，用来表示类之间的 <code>is-a</code> 关系，可以解决代码复用的问题。虽然继承有诸多作用，但继承层次过深、过复杂，也会影响到代码的可维护性。我们通过一个例子来说明一下。</p>
+<p>假设我们要设计一个关于鸟的类，我们将 “鸟类” 这样一个抽象的事物概念，定义为一个抽象类 <code>AbstractBird</code>。所有更细分的鸟，比如麻雀、鸽子、乌鸦等，都继承这个抽象类。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/8afe27e4-35d6-4fa8-b90b-be2e05644eeb.png" alt=""></p>
+<p>我们知道，大部分鸟都会飞，那我们可不可以在 <code>AbstractBird</code> 抽象类中，定义一个 <code>fly()</code> 方法呢？答案是否定的。尽管大部分鸟都会飞，但也有特例，比如鸵鸟就不会飞。鸵鸟继承具有 <code>fly()</code> 方法的父类，那鸵鸟就具有“飞”这样的行为，这显然不符合我们对现实世界中事物的认识。当然，你可能会说，我在鸵鸟这个子类中重写 <em>(override)</em> <code>fly()</code> 方法，让它抛出 <code>UnSupportedMethodException</code> 异常不就可以了吗？具体的代码实现如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AbstractBird</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">//...省略其他属性和方法...</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Ostrich</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractBird</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//鸵鸟</span>
+  <span class="token comment" spellcheck="true">//...省略其他属性和方法...</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">UnSupportedMethodException</span><span class="token punctuation">(</span><span class="token string">"I can't fly.'"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这种设计思路虽然可以解决问题，但不够优美。因为除了鸵鸟之外，不会飞的鸟还有很多，比如企鹅。对于这些不会飞的鸟来说，我们都需要重写 <code>fly()</code> 方法，抛出异常。</p>
+<p>这样的设计，一方面，徒增了编码的工作量；另一方面，也违背了我们之后要讲的最小知识原则 <em>(Least Knowledge Principle，也叫最少知识原则或者迪米特法则)</em>，暴露不该暴露的接口给外部，增加了类使用过程中被误用的概率。</p>
+<p>你可能又会说，那我们再通过 <code>AbstractBird</code> 类派生出两个更加细分的抽象类：会飞的鸟类 <code>AbstractFlyableBird</code> 和不会飞的鸟类 <code>AbstractUnFlyableBird</code>，让麻雀、乌鸦这些会飞的鸟都继承 <code>AbstractFlyableBird</code>，让鸵鸟、企鹅这些不会飞的鸟，都继承 <code>AbstractUnFlyableBird</code> 类，不就可以了吗？具体的继承关系如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay5%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6-%E7%BB%A7%E6%89%BF%E8%AF%A6%E8%A7%A3/f77b3726-9183-42a2-bf29-6cc701d228f8.png" alt=""></p>
+<p>从图中我们可以看出，继承关系变成了三层。不过，整体上来讲，目前的继承关系还比较简单，层次比较浅，也算是一种可以接受的设计思路。我们再继续加点难度。在刚刚这个场景中，我们只关注“鸟会不会飞”，但如果我们关注更多的问题，例如 “鸟会不会叫”、”鸟会不会下单“ 等… 那这个时候，我们又该如何设计类之间的继承关系呢？</p>
+<p>总之，继承最大的问题就在于：<strong>继承层次过深、继承关系过于复杂会影响到代码的可读性和可维护性</strong>。这也是为什么我们不推荐使用继承。那刚刚例子中继承存在的问题，我们又该如何来解决呢？</p>
+<h2 id="组合相比继承有哪些优势？"><a href="#组合相比继承有哪些优势？" class="headerlink" title="组合相比继承有哪些优势？"></a>组合相比继承有哪些优势？</h2><p>实际上，我们可以利用组合 <em>(composition)*、接口、委托 *(delegation)</em> 三个技术手段，一块儿来解决刚刚继承存在的问题。</p>
+<p>我们前面讲到接口的时候说过，接口表示具有某种行为特性。针对“会飞”这样一个行为特性，我们可以定义一个 <code>Flyable</code> 接口 <em>(相当于定义某一种行为，下方会有代码说明)</em>，只让会飞的鸟去实现这个接口。对于会叫、会下蛋这些行为特性，我们可以类似地定义 <code>Tweetable</code> 接口、<code>EggLayable</code> 接口。我们将这个设计思路翻译成 Java 代码的话，就是下面这个样子：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Flyable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Tweetable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">void</span> <span class="token function">tweet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">EggLayable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">void</span> <span class="token function">layEgg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Ostrich</span> <span class="token keyword">implements</span> <span class="token class-name">Tweetable</span><span class="token punctuation">,</span> EggLayable <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//鸵鸟</span>
+  <span class="token comment" spellcheck="true">//... 省略其他属性和方法...</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">tweet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">layEgg</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sparrow</span> impelents Flayable<span class="token punctuation">,</span> Tweetable<span class="token punctuation">,</span> EggLayable <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//麻雀</span>
+  <span class="token comment" spellcheck="true">//... 省略其他属性和方法...</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">tweet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">layEgg</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+<span class="token punctuation">}</span></code></pre>
+<p>不过，我们知道，接口只声明方法，不定义实现。也就是说，每个会下蛋的鸟都要实现一遍 <code>layEgg()</code> 方法，并且实现逻辑是一样的，这就会导致代码重复的问题。那这个问题又该如何解决呢？</p>
+<p>我们可以针对三个接口再定义三个实现类，它们分别是：实现了 <code>fly()</code> 方法的 <code>FlyAbility</code> 类、实现了 <code>tweet()</code> 方法的 <code>TweetAbility</code> 类、实现了 <code>layEgg()</code> 方法的 <code>EggLayAbility</code> 类。然后，通过 <strong>组合和委托</strong> 技术来消除代码重复。具体的代码实现如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Flyable</span> <span class="token punctuation">{</span>
+  <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span>；
+<span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FlyAbility</span> <span class="token keyword">implements</span> <span class="token class-name">Flyable</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//省略Tweetable/TweetAbility/EggLayable/EggLayAbility</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Ostrich</span> <span class="token keyword">implements</span> <span class="token class-name">Tweetable</span><span class="token punctuation">,</span> EggLayable <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//鸵鸟</span>
+  <span class="token keyword">private</span> TweetAbility tweetAbility <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TweetAbility</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//组合</span>
+  <span class="token keyword">private</span> EggLayAbility eggLayAbility <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">EggLayAbility</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//组合</span>
+  <span class="token comment" spellcheck="true">//... 省略其他属性和方法...</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">tweet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    tweetAbility<span class="token punctuation">.</span><span class="token function">tweet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 委托</span>
+  <span class="token punctuation">}</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">layEgg</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    eggLayAbility<span class="token punctuation">.</span><span class="token function">layEgg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 委托</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>当然啦，也可以使用 <code>JDK 1.8</code> 之后支持的接口默认方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Flyable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// fly的 的默认实现</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>我们知道继承主要有三个作用：表示 <code>is-a</code> 关系，支持多态特性，代码复用。而这三个作用都可以通过其他技术手段来达成。比如：</p>
+<ul>
+<li><code>is-a</code> 关系，我们可以通过组合和接口的 <code>has-a</code> 关系来替代；</li>
+<li>多态特性我们可以利用接口来实现；</li>
+<li>代码复用我们可以通过组合和委托来实现；</li>
+</ul>
+<p>所以，从理论上讲，通过组合、接口、委托三个技术手段，我们完全可以替换掉继承，在项目中不用或者少用继承关系，特别是一些复杂的继承关系。</p>
+<h2 id="如何判断该用组合还是继承？"><a href="#如何判断该用组合还是继承？" class="headerlink" title="如何判断该用组合还是继承？"></a>如何判断该用组合还是继承？</h2><p>尽管我们鼓励多用组合少用继承，但组合也并不是完美的，继承也并非一无是处。从上面的例子来看，继承改写成组合意味着要做更细粒度的类的拆分。这也就意味着，我们要定义更多的类和接口。类和接口的增多也就或多或少地增加代码的复杂程度和维护成本。所以，在实际的项目开发中，我们还是要根据具体的情况，来具体选择该用继承还是组合。</p>
+<p>如果类之间的继承结构稳定 <em>(不会轻易改变)</em>，继承层次比较浅 *(比如，最多有两层继承关系)，继承关系不复杂，我们就可以大胆地使用继承。反之，系统越不稳定，继承层次很深，继承关系复杂，我们就尽量使用组合来替代继承。</p>
+<p>除此之外，还有一些 <strong>设计模式</strong> 会固定使用继承或者组合。比如，<strong>装饰者模式</strong>（decorator pattern）、<strong>策略模式</strong>（strategy pattern）、<strong>组合模式</strong>（composite pattern）等都使用了 <strong>组合关系</strong>，而 <strong>模板模式</strong>（template pattern）使用了 <strong>继承关系</strong>。</p>
+<p>前面我们讲到继承可以实现代码复用。利用继承特性，我们把相同的属性和方法，抽取出来，定义到父类中。子类复用父类中的属性和方法，达到代码复用的目的。<strong>但是，有的时候，从业务含义上，A 类和 B 类并不一定具有继承关系</strong>。比如，Crawler 类和 PageAnalyzer 类，它们都用到了 URL 拼接和分割的功能，但并不具有继承关系 <em>(既不是父子关系，也不是兄弟关系)</em>。<strong>仅仅为了代码复用，生硬地抽象出一个父类出来，会影响到代码的可读性</strong>。如果不熟悉背后设计思路的同事，发现 Crawler 类和 PageAnalyzer 类继承同一个父类，而父类中定义的却只是 URL 相关的操作，会觉得这个代码写得莫名其妙，理解不了。这个时候，<strong>使用组合就更加合理、更加灵活</strong>。具体的代码实现如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Url</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">//...省略属性和方法</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Crawler</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> Url url<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 组合</span>
+  <span class="token keyword">public</span> <span class="token function">Crawler</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>url <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Url</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment" spellcheck="true">//...</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PageAnalyzer</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> Url url<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 组合</span>
+  <span class="token keyword">public</span> <span class="token function">PageAnalyzer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>url <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Url</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token comment" spellcheck="true">//..</span>
+<span class="token punctuation">}</span></code></pre>
+<p>还有一些特殊的场景要求我们必须使用继承。<strong>如果你不能改变一个函数的入参类型，而入参又非接口，为了支持多态，只能采用继承来实现</strong>。比如下面这样一段代码，其中 FeignClient 是一个外部类，我们没有权限去修改这部分代码，但是我们希望能重写这个类在运行时执行的 <code>encode()</code> 函数。这个时候，我们只能采用继承来实现了。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FeignClient</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// Feign Client框架代码</span>
+  <span class="token comment" spellcheck="true">//...省略其他代码...</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">encode</span><span class="token punctuation">(</span>String url<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">demofunction</span><span class="token punctuation">(</span>FeignClient feignClient<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">//...</span>
+  feignClient<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">//...</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CustomizedFeignClient</span> <span class="token keyword">extends</span> <span class="token class-name">FeignClient</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">encode</span><span class="token punctuation">(</span>String url<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//...重写encode的实现...}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 调用</span>
+FeignClient client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CustomizedFeignClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">demofunction</span><span class="token punctuation">(</span>client<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>尽管有些人说，要杜绝继承，<code>100%</code> 用组合代替继承，但是我的观点没那么极端！之所以 “多用组合少用继承” 这个口号喊得这么响，只是因为，长期以来，我们过度使用继承。还是那句话，组合并不完美，继承也不是一无是处。只要我们控制好它们的副作用、发挥它们各自的优势，在不同的场合下，恰当地选择使用继承还是组合，这才是我们所追求的境界。</p>
+<h1 id="要点回顾"><a href="#要点回顾" class="headerlink" title="要点回顾"></a>要点回顾</h1><ol>
+<li>继承概述 / 单继承 / <code>is-a</code> 关系 / 类之间的关系 / 层级结构；</li>
+<li>继承的实现 / 覆盖方法 / <code>protedcted</code> / 向上转型；</li>
+<li>Object 类 / 方法调用 / <code>final</code> / 内联 / 为什么不推荐使用继承；</li>
+</ol>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><p>暂无；</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《Java 核心技术 卷 I》</li>
+<li>《Java 编程思想》</li>
+<li>《码出高效 Java 开发手册》</li>
+<li>设计模式之美 - 为何说要多用组合少用继承？如何决定该用组合还是继承？ - <a href="https://time.geekbang.org/column/article/169593" target="_blank" rel="noopener">https://time.geekbang.org/column/article/169593</a></li>
+<li>Introduction to Computer Science using Java - <a href="http://programmedlessons.org/Java9/index.html#part02" target="_blank" rel="noopener">http://programmedlessons.org/Java9/index.html#part02</a> </li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/common/qrcode.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/>http://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-11T16:36:36+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月11日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Java基础</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/MoreThanJava/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>MoreThanJava</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/&title=「MoreThanJava」Day 5：面向对象进阶——继承详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+          
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/&title=「MoreThanJava」Day 5：面向对象进阶——继承详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://service.weibo.com/share/share.php?url=http://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/&title=「MoreThanJava」Day 5：面向对象进阶——继承详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2020/08/04/morethanjava-day-4-mian-xiang-dui-xiang-ji-chu/'>
+                <p class='title'>「MoreThanJava」Day 4：面向对象基础<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学习」...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      <section id="comments">
+        <div id="gitalk-container"></div>
+
+      </section>
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-1-继承概述"><span class="toc-text">Part 1. 继承概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#面向对象之前，写代码的一些问题"><span class="toc-text">面向对象之前，写代码的一些问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单继承"><span class="toc-text">单继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#is-a-关系"><span class="toc-text">is-a 关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类之间的关系简述"><span class="toc-text">类之间的关系简述</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#层级结构"><span class="toc-text">层级结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-2-继承的实现"><span class="toc-text">Part 2. 继承的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#视频观影-App-示例"><span class="toc-text">视频观影 App 示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用父类的构造函数"><span class="toc-text">使用父类的构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建一个无参构造函数"><span class="toc-text">创建一个无参构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#覆盖方法"><span class="toc-text">覆盖方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-3-更多细节"><span class="toc-text">Part 3. 更多细节</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#protected-关键字"><span class="toc-text">protected 关键字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#向上转型"><span class="toc-text">向上转型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-类"><span class="toc-text">Object 类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#理解方法调用"><span class="toc-text">理解方法调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#final-关键字"><span class="toc-text">final 关键字</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#JDK-中的例子"><span class="toc-text">JDK 中的例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内联"><span class="toc-text">内联</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#抽象类"><span class="toc-text">抽象类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-4-为什么不推荐使用继承？"><span class="toc-text">Part 4. 为什么不推荐使用继承？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用继承有什么问题？"><span class="toc-text">使用继承有什么问题？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组合相比继承有哪些优势？"><span class="toc-text">组合相比继承有哪些优势？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何判断该用组合还是继承？"><span class="toc-text">如何判断该用组合还是继承？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#要点回顾"><span class="toc-text">要点回顾</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#练习"><span class="toc-text">练习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+    </div>
+    
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xxx.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/volantis-x/"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=260045301"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <div>
+    
+      
+  
+
+  <div id="rightmenu-wrapper">
+    <ul class="list-v rightmenu" id="rightmenu-content">
+      <li class='option'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-text' onclick='document.execCommand("copy")'><i class='fa fa-copy fa-fw'></i>复制文本</a>
+        <hr id='hr-text'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-href'><i class='fa fa-link fa-fw'></i>复制链接</a>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-open-href'><i class='fa fa-external-link-square-alt fa-fw'></i>在新标签页打开</a>
+        <hr id='hr-href'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-src'><i class='fa fa-image fa-fw'></i>复制图片地址</a>
+        <hr id='hr-src'>
+      </li>
+      <li class='navigation'>
+        <a class='nav icon-only fix-cursor-default' onclick='history.back()'><i class='fa fa-arrow-left fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='history.forward()'><i class='fa fa-arrow-right fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='window.location.reload()'><i class='fa fa-redo fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' href='/'><i class='fa fa-home fa-fw'></i></a>
+      </li>
+      <hr>
+      
+        
+      
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/volantis-docs/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xvolantis-docs"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 本站源码
+      </a>
+    </li>
+  
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/hexo-theme-volantis/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xhexo-theme-volantis"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 主题源码
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' 
+        
+        
+        
+          onclick="document.execCommand('print')"
+        
+        >
+        <i class='fa fa-print fa-fw'></i> 打印页面
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          <li class='music name'>
+            <p class='nav music-title fix-cursor-default'></p>
+          </li>
+          <li class='music ctrl'>
+            <a class='nav icon-only backward fix-cursor-default' onclick='aplayerBackward()'><i class='fa fa-step-backward fa-fw'></i></a>
+            <a class='nav icon-only toggle fix-cursor-default' onclick='aplayerToggle()'><i class='fa fa-play fa-fw'></i></a>
+            <a class='nav icon-only forward fix-cursor-default' onclick='aplayerForward()'><i class='fa fa-step-forward fa-fw'></i></a>
+          </li>
+          <li class='music volume'>
+            <a class='nav volume'>
+              <div class="aplayer-volume-bar-wrap">
+                <div class="aplayer-volume-bar fix-cursor-pointer">
+                  <div class="aplayer-volume"></div>
+                  <i class='left fa fa-volume-off fa-fw'></i>
+                  <i class='right fa fa-volume-up fa-fw'></i>
+                </div>
+              </div>
+            </a>
+          </li>
+        
+      
+    </ul>
+  </div>
+
+  <script>
+    window.document.oncontextmenu = function (event) {
+      if (event.ctrlKey) return true;
+      if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true;
+      return popMenu(event);
+    };
+    document.addEventListener("click", function (event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      mymenu.style.display = "none";
+    });
+    function popMenu(event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      var menuContent = document.getElementById('rightmenu-content');
+      var screenWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      var screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      mymenu.style.left = event.clientX + "px"; // 获取鼠标位置
+      mymenu.style.top = event.clientY + "px";
+      mymenu.style.display = 'block';
+      if (event.clientX * 2 > screenWidth) {
+        menuContent.classList.add('left');
+      } else {
+        menuContent.classList.remove('left');
+      }
+      if (event.clientY * 2 > screenHeight) {
+        menuContent.classList.add('top');
+      } else {
+        menuContent.classList.remove('top');
+      }
+
+      let hrText = document.getElementById('hr-text');
+      let hrSrc = document.getElementById('hr-src');
+      let hrHref = document.getElementById('hr-href');
+
+      // 选中图片
+      let copySrc = document.getElementById('menu-copy-src');
+      if (copySrc != undefined) {
+        if (event.target.currentSrc) {
+          copySrc.style.display = 'block';
+          copySrc.addEventListener("click", function (e) {
+            copyString(event.target.currentSrc);
+          },{once: true});
+          hrSrc.style.display = 'block';
+        } else {
+          copySrc.style.display = 'none';
+          hrSrc.style.display = 'none';
+        }
+      }
+
+      // 选中按钮
+      // 判断是不是按钮
+      let href = '';
+      if (event.path) {
+        for (i = 0; i < event.path.length; i++) {
+          if (event.path[i].href != undefined && event.path[i].href.length > 0) {
+            href = event.path[i].href;
+          }
+        }
+      }
+
+      let copyText = document.getElementById('menu-copy-text');
+      copyText.style.display = 'none';
+      hrText.style.display = 'none';
+      if (href.length == 0) {
+        // 选中文本
+        if (window.getSelection().toString()) {
+          copyText.style.display = 'block';
+          hrText.style.display = 'block';
+        }
+      }
+
+      // 在新标签页打开
+      let openHref = document.getElementById('menu-open-href');
+      if (openHref != undefined) {
+        if (href.length > 0) {
+          openHref.style.display = 'block';
+          openHref.addEventListener("click", function (e) {
+            window.open(href);
+          },{once: true});
+          hrHref.style.display = 'block';
+        } else {
+          openHref.style.display = 'none';
+          hrHref.style.display = 'none';
+        }
+      }
+      // 复制链接
+      let copyHref = document.getElementById('menu-copy-href');
+      if (copyHref != undefined) {
+        if (href.length > 0) {
+          copyHref.style.display = 'block';
+          copyHref.addEventListener("click", function (e) {
+            copyString(href);
+          },{once: true});
+        } else {
+          copyHref.style.display = 'none';
+        }
+      }
+
+      // 有音乐播放器
+      if (true == true) {
+        // 如果有aplayer，初始化一下
+      	try {
+      		checkAPlayer();
+          updateTitle();
+      	} catch (error) {
+      		console.log(error);
+      	}
+      }
+
+      return false; // 该行代码确保系统自带的右键菜单不会被调出
+    }
+    function hideMenu() {
+      document.getElementById('rightmenu-wrapper').style.display = 'none';
+    }
+    function copyString(str) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      document.body.appendChild(input);
+      input.setAttribute('value', str);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    document.execCommand('click');
+  </script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/001.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/002.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/003.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/004.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/005.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/006.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/012.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/016.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/019.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/025.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/034.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/035.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/038.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/039.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/046.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/051.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/052.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/054.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/056.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+  <script>
+    let APlayerController = new Object();
+    APlayerController.id = '3175833810';  // 设定全局音乐播放ID
+    APlayerController.volume = '0.7';
+  </script>
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js"></script>
+
+  
+    
+<script src="/js/aplayer.js"></script>
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  function pjax_gitalk() {
+    let pageUrl = $.trim($('#pjax-comment-path').text()) === "none" ? 
+      decodeURI(window.location.pathname) : $.trim($('#pjax-comment-path').text());
+    
+    let ALLPATH = '';
+    if(ALLPATH != '') pageUrl = ALLPATH;
+
+    if (document.getElementById('gitalk-container') != null) {
+      var gitalk = new Gitalk({
+        clientID: "a9f57bed080703426741",
+        clientSecret: "03fe7aec06a7794dedfcc123b6475f0231f6a0ce",
+        repo: "wmyskxz.github.io",
+        owner: "wmyskxz",
+        admin: "wmyskxz",
+        id: pageUrl,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      });
+      gitalk.render('gitalk-container');
+    }
+  }
+
+  $(function () {
+    pjax_gitalk();
+  });
+</script>
+
+
+
+
+<!-- darkmodejs -->
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+<!-- scrollreveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    function pjax_scrollrebeal() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '32px',
+        duration: '800',
+        interval: '20',
+        scale: '1',
+        easing: 'ease-out'
+      });
+    }
+
+    $(function () {
+      pjax_scrollrebeal();
+    });
+  </script>
+
+<!-- ******************************** -->
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+<!-- ******************************** -->
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="/js/search.js"></script>
+
+  
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js" data-pjax></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      $.fancybox.close();    // 关闭弹窗
+      $('.l_header .switcher .s-search').removeClass('active'); // 关闭移动端激活的搜索框
+      $('.l_header').removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      $('.wrapper').removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      $('.s-top').unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+
+      try{
+        pjax_fancybox();
+        
+          
+          if ('.cover') {
+            $('.cover').backstretch("resize");
+          } else {
+            $.backstretch("resize");
+          }
+        
+        
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        
+        
+          pjax_scrollrebeal();
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+          pjax_gitalk();
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>
