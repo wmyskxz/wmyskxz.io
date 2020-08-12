@@ -436,6 +436,458 @@
         
           
   <h2 class="title">
+    <a href="/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">
+      Redis(1)——5种基本数据结构
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/中间件</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月28日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-2899175817bb0069.png" alt=""></p>
+<h1 id="一、Redis-简介"><a href="#一、Redis-简介" class="headerlink" title="一、Redis 简介"></a>一、Redis 简介</h1><blockquote>
+<p><strong>“Redis is an open source (BSD licensed), in-memory data structure store, used as a database, cache and message broker.”</strong> —— Redis是一个开放源代码（BSD许可）的内存中数据结构存储，用作数据库，缓存和消息代理。 <em>(摘自官网)</em></p>
+</blockquote>
+<p><strong>Redis</strong> 是一个开源，高级的键值存储和一个适用的解决方案，用于构建高性能，可扩展的 Web 应用程序。<strong>Redis</strong> 也被作者戏称为 <em>数据结构服务器</em> ，这意味着使用者可以通过一些命令，基于带有 TCP 套接字的简单 <em>服务器-客户端</em> 协议来访问一组 <strong>可变数据结构</strong> 。<em>(在 Redis 中都采用键值对的方式，只不过对应的数据结构不一样罢了)</em></p>
+<h2 id="Redis-的优点"><a href="#Redis-的优点" class="headerlink" title="Redis 的优点"></a>Redis 的优点</h2><p>以下是 Redis 的一些优点：</p>
+<ul>
+<li><strong>异常快</strong> - Redis 非常快，每秒可执行大约 110000 次的设置(SET)操作，每秒大约可执行 81000 次的读取/获取(GET)操作。</li>
+<li><strong>支持丰富的数据类型</strong> - Redis 支持开发人员常用的大多数数据类型，例如列表，集合，排序集和散列等等。这使得 Redis 很容易被用来解决各种问题，因为我们知道哪些问题可以更好使用地哪些数据类型来处理解决。</li>
+<li><strong>操作具有原子性</strong> - 所有 Redis 操作都是原子操作，这确保如果两个客户端并发访问，Redis 服务器能接收更新的值。</li>
+<li><strong>多实用工具</strong> - Redis 是一个多实用工具，可用于多种用例，如：缓存，消息队列(Redis 本地支持发布/订阅)，应用程序中的任何短期数据，例如，web应用程序中的会话，网页命中计数等。</li>
+</ul>
+<h2 id="Redis-的安装"><a href="#Redis-的安装" class="headerlink" title="Redis 的安装"></a>Redis 的安装</h2><p>这一步比较简单，你可以在网上搜到许多满意的教程，这里就不再赘述。</p>
+<p>给一个菜鸟教程的安装教程用作参考：<a href="https://www.runoob.com/redis/redis-install.html" target="_blank" rel="noopener">https://www.runoob.com/redis/redis-install.html</a></p>
+<h2 id="测试本地-Redis-性能"><a href="#测试本地-Redis-性能" class="headerlink" title="测试本地 Redis 性能"></a>测试本地 Redis 性能</h2><p>当你安装完成之后，你可以先执行 <code>redis-server</code> 让 Redis 启动起来，然后运行命令 <code>redis-benchmark -n 100000 -q</code> 来检测本地同时执行 10 万个请求时的性能：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-7aea279e8fcdafe5.png" alt=""></p>
+<p>当然不同电脑之间由于各方面的原因会存在性能差距，这个测试您可以权当是一种 <strong>「乐趣」</strong> 就好。</p>
+<h1 id="二、Redis-五种基本数据结构"><a href="#二、Redis-五种基本数据结构" class="headerlink" title="二、Redis 五种基本数据结构"></a>二、Redis 五种基本数据结构</h1><p><strong>Redis</strong> 有 5 种基础数据结构，它们分别是：<strong>string(字符串)</strong>、<strong>list(列表)</strong>、<strong>hash(字典)</strong>、<strong>set(集合)</strong> 和 <strong>zset(有序集合)</strong>。这 5 种是 Redis 相关知识中最基础、最重要的部分，下面我们结合源码以及一些实践来给大家分别讲解一下。</p>
+<h2 id="1）字符串-string"><a href="#1）字符串-string" class="headerlink" title="1）字符串 string"></a>1）字符串 string</h2><p>Redis 中的字符串是一种 <strong>动态字符串</strong>，这意味着使用者可以修改，它的底层实现有点类似于 Java 中的 <strong>ArrayList</strong>，有一个字符数组，从源码的 <strong>sds.h/sdshdr 文件</strong> 中可以看到 Redis 底层对于字符串的定义 <strong>SDS</strong>，即 <em>Simple Dynamic String</em> 结构：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Note: sdshdr5 is never used, we just access the flags byte directly.
+ * However is here to document the layout of type 5 SDS strings. */</span>
+<span class="token keyword">struct</span> <span class="token function">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>__packed__<span class="token punctuation">)</span><span class="token punctuation">)</span> sdshdr5 <span class="token punctuation">{</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> flags<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 3 lsb of type, and 5 msb of string length */</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token function">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>__packed__<span class="token punctuation">)</span><span class="token punctuation">)</span> sdshdr8 <span class="token punctuation">{</span>
+    uint8_t len<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* used */</span>
+    uint8_t alloc<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* excluding the header and null terminator */</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> flags<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 3 lsb of type, 5 unused bits */</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token function">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>__packed__<span class="token punctuation">)</span><span class="token punctuation">)</span> sdshdr16 <span class="token punctuation">{</span>
+    uint16_t len<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* used */</span>
+    uint16_t alloc<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* excluding the header and null terminator */</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> flags<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 3 lsb of type, 5 unused bits */</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token function">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>__packed__<span class="token punctuation">)</span><span class="token punctuation">)</span> sdshdr32 <span class="token punctuation">{</span>
+    uint32_t len<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* used */</span>
+    uint32_t alloc<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* excluding the header and null terminator */</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> flags<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 3 lsb of type, 5 unused bits */</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token keyword">struct</span> <span class="token function">__attribute__</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>__packed__<span class="token punctuation">)</span><span class="token punctuation">)</span> sdshdr64 <span class="token punctuation">{</span>
+    uint64_t len<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* used */</span>
+    uint64_t alloc<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* excluding the header and null terminator */</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span> flags<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 3 lsb of type, 5 unused bits */</span>
+    <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>你会发现同样一组结构 Redis 使用泛型定义了好多次，<strong>为什么不直接使用 int 类型呢？</strong></p>
+<p>因为当字符串比较短的时候，len 和 alloc 可以使用 byte 和 short 来表示，<strong>Redis 为了对内存做极致的优化，不同长度的字符串使用不同的结构体来表示。</strong></p>
+<h3 id="SDS-与-C-字符串的区别"><a href="#SDS-与-C-字符串的区别" class="headerlink" title="SDS 与 C 字符串的区别"></a>SDS 与 C 字符串的区别</h3><p>为什么不考虑直接使用 C 语言的字符串呢？因为 C 语言这种简单的字符串表示方式 <strong>不符合 Redis 对字符串在安全性、效率以及功能方面的要求</strong>。我们知道，C 语言使用了一个长度为 N+1 的字符数组来表示长度为 N 的字符串，并且字符数组最后一个元素总是 <code>&#39;\0&#39;</code>。<em>(下图就展示了 C 语言中值为 “Redis” 的一个字符数组)</em></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-3a7d503c81b6e6e4.png" alt=""></p>
+<p>这样简单的数据结构可能会造成以下一些问题：</p>
+<ul>
+<li><strong>获取字符串长度为 O(N) 级别的操作</strong> → 因为 C 不保存数组的长度，每次都需要遍历一遍整个数组；</li>
+<li>不能很好的杜绝 <strong>缓冲区溢出/内存泄漏</strong> 的问题 → 跟上述问题原因一样，如果执行拼接 or 缩短字符串的操作，如果操作不当就很容易造成上述问题；</li>
+<li>C 字符串 <strong>只能保存文本数据</strong> → 因为 C 语言中的字符串必须符合某种编码（比如 ASCII），例如中间出现的 <code>&#39;\0&#39;</code> 可能会被判定为提前结束的字符串而识别不了；</li>
+</ul>
+<p>我们以追加字符串的操作举例，Redis 源码如下：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Append the specified binary-safe string pointed by 't' of 'len' bytes to the
+ * end of the specified sds string 's'.
+ *
+ * After the call, the passed sds string is no longer valid and all the
+ * references must be substituted with the new pointer returned by the call. */</span>
+sds <span class="token function">sdscatlen</span><span class="token punctuation">(</span>sds s<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">void</span> <span class="token operator">*</span>t<span class="token punctuation">,</span> size_t len<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 获取原字符串的长度</span>
+    size_t curlen <span class="token operator">=</span> <span class="token function">sdslen</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 按需调整空间，如果容量不够容纳追加的内容，就会重新分配字节数组并复制原字符串的内容到新数组中</span>
+    s <span class="token operator">=</span> <span class="token function">sdsMakeRoomFor</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span>len<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>s <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// 内存不足</span>
+    <span class="token function">memcpy</span><span class="token punctuation">(</span>s<span class="token operator">+</span>curlen<span class="token punctuation">,</span> t<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 追加目标字符串到字节数组中</span>
+    <span class="token function">sdssetlen</span><span class="token punctuation">(</span>s<span class="token punctuation">,</span> curlen<span class="token operator">+</span>len<span class="token punctuation">)</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">// 设置追加后的长度</span>
+    s<span class="token punctuation">[</span>curlen<span class="token operator">+</span>len<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'\0'</span><span class="token punctuation">;</span>         <span class="token comment" spellcheck="true">// 让字符串以 \0 结尾，便于调试打印</span>
+    <span class="token keyword">return</span> s<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li><strong>注：Redis 规定了字符串的长度不得超过 512 MB。</strong></li>
+</ul>
+<h3 id="对字符串的基本操作"><a href="#对字符串的基本操作" class="headerlink" title="对字符串的基本操作"></a>对字符串的基本操作</h3><p>安装好 Redis，我们可以使用 <code>redis-cli</code> 来对 Redis 进行命令行的操作，当然 Redis 官方也提供了在线的调试器，你也可以在里面敲入命令进行操作：<a href="http://try.redis.io/#run" target="_blank" rel="noopener">http://try.redis.io/#run</a></p>
+<h4 id="设置和获取键值对"><a href="#设置和获取键值对" class="headerlink" title="设置和获取键值对"></a>设置和获取键值对</h4><pre class=" language-console"><code class="language-console">> SET key value
+OK
+> GET key
+"value"</code></pre>
+<p>正如你看到的，我们通常使用 <code>SET</code> 和 <code>GET</code> 来设置和获取字符串值。</p>
+<p>值可以是任何种类的字符串（包括二进制数据），例如你可以在一个键下保存一张 <code>.jpeg</code> 图片，只需要注意不要超过 512 MB 的最大限度就好了。</p>
+<p>当 key 存在时，<code>SET</code> 命令会覆盖掉你上一次设置的值：</p>
+<pre class=" language-console"><code class="language-console">> SET key newValue
+OK
+> GET key
+"newValue"</code></pre>
+<p>另外你还可以使用 <code>EXISTS</code> 和 <code>DEL</code> 关键字来查询是否存在和删除键值对：</p>
+<pre class=" language-console"><code class="language-console">> EXISTS key
+(integer) 1
+> DEL key
+(integer) 1
+> GET key
+(nil)</code></pre>
+<h4 id="批量设置键值对"><a href="#批量设置键值对" class="headerlink" title="批量设置键值对"></a>批量设置键值对</h4><pre class=" language-console"><code class="language-console">> SET key1 value1
+OK
+> SET key2 value2
+OK
+> MGET key1 key2 key3    # 返回一个列表
+1) "value1"
+2) "value2"
+3) (nil)
+> MSET key1 value1 key2 value2
+> MGET key1 key2
+1) "value1"
+2) "value2"</code></pre>
+<h4 id="过期和-SET-命令扩展"><a href="#过期和-SET-命令扩展" class="headerlink" title="过期和 SET 命令扩展"></a>过期和 SET 命令扩展</h4><p>可以对 key 设置过期时间，到时间会被自动删除，这个功能常用来控制缓存的失效时间。<em>(过期可以是任意数据结构)</em></p>
+<pre class=" language-console"><code class="language-console">> SET key value1
+> GET key
+"value1"
+> EXPIRE name 5    # 5s 后过期
+...                # 等待 5s
+> GET key
+(nil)</code></pre>
+<p>等价于 <code>SET</code> + <code>EXPIRE</code> 的 <code>SETNX</code> 命令：</p>
+<pre class=" language-console"><code class="language-console">> SETNX key value1
+...                # 等待 5s 后获取
+> GET key
+(nil)
+
+> SETNX key value1  # 如果 key 不存在则 SET 成功
+(integer) 1
+> SETNX key value1  # 如果 key 存在则 SET 失败
+(integer) 0
+> GET key
+"value"             # 没有改变 </code></pre>
+<h4 id="计数"><a href="#计数" class="headerlink" title="计数"></a>计数</h4><p>如果 value 是一个整数，还可以对它使用 <code>INCR</code> 命令进行 <strong>原子性</strong> 的自增操作，这意味着及时多个客户端对同一个 key 进行操作，也决不会导致竞争的情况：</p>
+<pre class=" language-console"><code class="language-console">> SET counter 100
+> INCR count
+(interger) 101
+> INCRBY counter 50
+(integer) 151</code></pre>
+<h4 id="返回原值的-GETSET-命令"><a href="#返回原值的-GETSET-命令" class="headerlink" title="返回原值的 GETSET 命令"></a>返回原值的 GETSET 命令</h4><p>对字符串，还有一个 <code>GETSET</code> 比较让人觉得有意思，它的功能跟它名字一样：为 key 设置一个值并返回原值：</p>
+<pre class=" language-console"><code class="language-console">> SET key value
+> GETSET key value1
+"value"</code></pre>
+<p>这可以对于某一些需要隔一段时间就统计的 key 很方便的设置和查看，例如：系统每当由用户进入的时候你就是用 <code>INCR</code> 命令操作一个 key，当需要统计时候你就把这个 key 使用 <code>GETSET</code> 命令重新赋值为 0，这样就达到了统计的目的。</p>
+<h2 id="2）列表-list"><a href="#2）列表-list" class="headerlink" title="2）列表 list"></a>2）列表 list</h2><p>Redis 的列表相当于 Java 语言中的 <strong>LinkedList</strong>，注意它是链表而不是数组。这意味着 list 的插入和删除操作非常快，时间复杂度为 O(1)，但是索引定位很慢，时间复杂度为 O(n)。</p>
+<p>我们可以从源码的 <code>adlist.h/listNode</code> 来看到对其的定义：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Node, List, and Iterator are the only data structures used currently. */</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> listNode <span class="token punctuation">{</span>
+    <span class="token keyword">struct</span> listNode <span class="token operator">*</span>prev<span class="token punctuation">;</span>
+    <span class="token keyword">struct</span> listNode <span class="token operator">*</span>next<span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>value<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> listNode<span class="token punctuation">;</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> listIter <span class="token punctuation">{</span>
+    listNode <span class="token operator">*</span>next<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> direction<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> listIter<span class="token punctuation">;</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> list <span class="token punctuation">{</span>
+    listNode <span class="token operator">*</span>head<span class="token punctuation">;</span>
+    listNode <span class="token operator">*</span>tail<span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">(</span><span class="token operator">*</span>dup<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token punctuation">(</span><span class="token operator">*</span>free<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>match<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span>ptr<span class="token punctuation">,</span> <span class="token keyword">void</span> <span class="token operator">*</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> len<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> list<span class="token punctuation">;</span></code></pre>
+<p>可以看到，多个 listNode 可以通过 <code>prev</code> 和 <code>next</code> 指针组成双向链表：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-8f569f06506845c1.png" alt=""></p>
+<p>虽然仅仅使用多个 listNode 结构就可以组成链表，但是使用 <code>adlist.h/list</code> 结构来持有链表的话，操作起来会更加方便：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-c6fb10cdbb32f517.png" alt=""></p>
+<h3 id="链表的基本操作"><a href="#链表的基本操作" class="headerlink" title="链表的基本操作"></a>链表的基本操作</h3><ul>
+<li><code>LPUSH</code> 和 <code>RPUSH</code> 分别可以向 list 的左边（头部）和右边（尾部）添加一个新元素；</li>
+<li><code>LRANGE</code> 命令可以从 list 中取出一定范围的元素；</li>
+<li><code>LINDEX</code> 命令可以从 list 中取出指定下表的元素，相当于 Java 链表操作中的 <code>get(int index)</code> 操作；</li>
+</ul>
+<p>示范：</p>
+<pre class=" language-console"><code class="language-console">> rpush mylist A
+(integer) 1
+> rpush mylist B
+(integer) 2
+> lpush mylist first
+(integer) 3
+> lrange mylist 0 -1    # -1 表示倒数第一个元素, 这里表示从第一个元素到最后一个元素，即所有
+1) "first"
+2) "A"
+3) "B"</code></pre>
+<h4 id="list-实现队列"><a href="#list-实现队列" class="headerlink" title="list 实现队列"></a>list 实现队列</h4><p>队列是先进先出的数据结构，常用于消息排队和异步逻辑处理，它会确保元素的访问顺序：</p>
+<pre class=" language-console"><code class="language-console">> RPUSH books python java golang
+(integer) 3
+> LPOP books
+"python"
+> LPOP books
+"java"
+> LPOP books
+"golang"
+> LPOP books
+(nil)</code></pre>
+<h4 id="list-实现栈"><a href="#list-实现栈" class="headerlink" title="list 实现栈"></a>list 实现栈</h4><p>栈是先进后出的数据结构，跟队列正好相反：</p>
+<pre class=" language-console"><code class="language-console">> RPUSH books python java golang
+> RPOP books
+"golang"
+> RPOP books
+"java"
+> RPOP books
+"python"
+> RPOP books
+(nil)</code></pre>
+<h2 id="3）字典-hash"><a href="#3）字典-hash" class="headerlink" title="3）字典 hash"></a>3）字典 hash</h2><p>Redis 中的字典相当于 Java 中的 <strong>HashMap</strong>，内部实现也差不多类似，都是通过 <strong>“数组 + 链表”</strong> 的链地址法来解决部分 <strong>哈希冲突</strong>，同时这样的结构也吸收了两种不同数据结构的优点。源码定义如 <code>dict.h/dictht</code> 定义：</p>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> dictht <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 哈希表数组</span>
+    dictEntry <span class="token operator">*</span><span class="token operator">*</span>table<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 哈希表大小</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> size<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 哈希表大小掩码，用于计算索引值，总是等于 size - 1</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> sizemask<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 该哈希表已有节点的数量</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> used<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> dictht<span class="token punctuation">;</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> dict <span class="token punctuation">{</span>
+    dictType <span class="token operator">*</span>type<span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>privdata<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 内部有两个 dictht 结构</span>
+    dictht ht<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">long</span> rehashidx<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* rehashing not in progress if rehashidx == -1 */</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> iterators<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* number of iterators currently running */</span>
+<span class="token punctuation">}</span> dict<span class="token punctuation">;</span></code></pre>
+<p><code>table</code> 属性是一个数组，数组中的每个元素都是一个指向 <code>dict.h/dictEntry</code> 结构的指针，而每个 <code>dictEntry</code> 结构保存着一个键值对：</p>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> dictEntry <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 键</span>
+    <span class="token keyword">void</span> <span class="token operator">*</span>key<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 值</span>
+    <span class="token keyword">union</span> <span class="token punctuation">{</span>
+        <span class="token keyword">void</span> <span class="token operator">*</span>val<span class="token punctuation">;</span>
+        uint64_t u64<span class="token punctuation">;</span>
+        int64_t s64<span class="token punctuation">;</span>
+        <span class="token keyword">double</span> d<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> v<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 指向下个哈希表节点，形成链表</span>
+    <span class="token keyword">struct</span> dictEntry <span class="token operator">*</span>next<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> dictEntry<span class="token punctuation">;</span></code></pre>
+<p>可以从上面的源码中看到，<strong>实际上字典结构的内部包含两个 hashtable</strong>，通常情况下只有一个 hashtable 是有值的，但是在字典扩容缩容时，需要分配新的 hashtable，然后进行 <strong>渐进式搬迁</strong> <em>(下面说原因)</em>。</p>
+<h3 id="渐进式-rehash"><a href="#渐进式-rehash" class="headerlink" title="渐进式 rehash"></a>渐进式 rehash</h3><p>大字典的扩容是比较耗时间的，需要重新申请新的数组，然后将旧字典所有链表中的元素重新挂接到新的数组下面，这是一个 O(n) 级别的操作，作为单线程的 Redis 很难承受这样耗时的过程，所以 Redis 使用 <strong>渐进式 rehash</strong> 小步搬迁：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-325d968300c47100.png" alt=""></p>
+<p>渐进式 rehash 会在 rehash 的同时，保留新旧两个 hash 结构，如上图所示，查询时会同时查询两个 hash 结构，然后在后续的定时任务以及 hash 操作指令中，循序渐进的把旧字典的内容迁移到新字典中。当搬迁完成了，就会使用新的 hash 结构取而代之。</p>
+<h3 id="扩缩容的条件"><a href="#扩缩容的条件" class="headerlink" title="扩缩容的条件"></a>扩缩容的条件</h3><p>正常情况下，当 hash 表中 <strong>元素的个数等于第一维数组的长度时</strong>，就会开始扩容，扩容的新数组是 <strong>原数组大小的 2 倍</strong>。不过如果 Redis 正在做 <code>bgsave(持久化命令)</code>，为了减少内存也得过多分离，Redis 尽量不去扩容，但是如果 hash 表非常满了，<strong>达到了第一维数组长度的 5 倍了</strong>，这个时候就会 <strong>强制扩容</strong>。</p>
+<p>当 hash 表因为元素逐渐被删除变得越来越稀疏时，Redis 会对 hash 表进行缩容来减少 hash 表的第一维数组空间占用。所用的条件是 <strong>元素个数低于数组长度的 10%</strong>，缩容不会考虑 Redis 是否在做 <code>bgsave</code>。</p>
+<h3 id="字典的基本操作"><a href="#字典的基本操作" class="headerlink" title="字典的基本操作"></a>字典的基本操作</h3><p>hash 也有缺点，hash 结构的存储消耗要高于单个字符串，所以到底该使用 hash 还是字符串，需要根据实际情况再三权衡：</p>
+<pre class=" language-console"><code class="language-console">> HSET books java "think in java"    # 命令行的字符串如果包含空格则需要使用引号包裹
+(integer) 1
+> HSET books python "python cookbook"
+(integer) 1
+> HGETALL books    # key 和 value 间隔出现
+1) "java"
+2) "think in java"
+3) "python"
+4) "python cookbook"
+> HGET books java
+"think in java"
+> HSET books java "head first java"  
+(integer) 0        # 因为是更新操作，所以返回 0
+> HMSET books java "effetive  java" python "learning python"    # 批量操作
+OK</code></pre>
+<h2 id="4）集合-set"><a href="#4）集合-set" class="headerlink" title="4）集合 set"></a>4）集合 set</h2><p>Redis 的集合相当于 Java 语言中的 <strong>HashSet</strong>，它内部的键值对是无序、唯一的。它的内部实现相当于一个特殊的字典，字典中所有的 value 都是一个值 NULL。</p>
+<h3 id="集合-set-的基本使用"><a href="#集合-set-的基本使用" class="headerlink" title="集合 set 的基本使用"></a>集合 set 的基本使用</h3><p>由于该结构比较简单，我们直接来看看是如何使用的：</p>
+<pre class=" language-console"><code class="language-console">> SADD books java
+(integer) 1
+> SADD books java    # 重复
+(integer) 0
+> SADD books python golang
+(integer) 2
+> SMEMBERS books    # 注意顺序，set 是无序的 
+1) "java"
+2) "python"
+3) "golang"
+> SISMEMBER books java    # 查询某个 value 是否存在，相当于 contains
+(integer) 1
+> SCARD books    # 获取长度
+(integer) 3
+> SPOP books     # 弹出一个
+"java"</code></pre>
+<h2 id="5）有序列表-zset"><a href="#5）有序列表-zset" class="headerlink" title="5）有序列表 zset"></a>5）有序列表 zset</h2><p>这可能使 Redis 最具特色的一个数据结构了，它类似于 Java 中 <strong>SortedSet</strong> 和 <strong>HashMap</strong> 的结合体，一方面它是一个 set，保证了内部 value 的唯一性，另一方面它可以为每个 value 赋予一个 score 值，用来代表排序的权重。</p>
+<p>它的内部实现用的是一种叫做 <strong>「跳跃表」</strong> 的数据结构，由于比较复杂，所以在这里简单提一下原理就好了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-efd5114939a651ed.png" alt=""></p>
+<p>想象你是一家创业公司的老板，刚开始只有几个人，大家都平起平坐。后来随着公司的发展，人数越来越多，团队沟通成本逐渐增加，渐渐地引入了组长制，对团队进行划分，于是有一些人<strong>又是员工又有组长的身份</strong>。</p>
+<p>再后来，公司规模进一步扩大，公司需要再进入一个层级：部门。于是每个部门又会从组长中推举一位选出部长。</p>
+<p>跳跃表就类似于这样的机制，最下面一层所有的元素都会串起来，都是员工，然后每隔几个元素就会挑选出一个代表，再把这几个代表使用另外一级指针串起来。然后再在这些代表里面挑出二级代表，再串起来。<strong>最终形成了一个金字塔的结构。</strong></p>
+<p>想一下你目前所在的地理位置：亚洲 &gt; 中国 &gt; 某省 &gt; 某市 &gt; ….，<strong>就是这样一个结构！</strong></p>
+<h3 id="有序列表-zset-基础操作"><a href="#有序列表-zset-基础操作" class="headerlink" title="有序列表 zset 基础操作"></a>有序列表 zset 基础操作</h3><pre class=" language-console"><code class="language-console">> ZADD books 9.0 "think in java"
+> ZADD books 8.9 "java concurrency"
+> ZADD books 8.6 "java cookbook"
+
+> ZRANGE books 0 -1     # 按 score 排序列出，参数区间为排名范围
+1) "java cookbook"
+2) "java concurrency"
+3) "think in java"
+
+> ZREVRANGE books 0 -1  # 按 score 逆序列出，参数区间为排名范围
+1) "think in java"
+2) "java concurrency"
+3) "java cookbook"
+
+> ZCARD books           # 相当于 count()
+(integer) 3
+
+> ZSCORE books "java concurrency"   # 获取指定 value 的 score
+"8.9000000000000004"                # 内部 score 使用 double 类型进行存储，所以存在小数点精度问题
+
+> ZRANK books "java concurrency"    # 排名
+(integer) 1
+
+> ZRANGEBYSCORE books 0 8.91        # 根据分值区间遍历 zset
+1) "java cookbook"
+2) "java concurrency"
+
+> ZRANGEBYSCORE books -inf 8.91 withscores  # 根据分值区间 (-∞, 8.91] 遍历 zset，同时返回分值。inf 代表 infinite，无穷大的意思。
+1) "java cookbook"
+2) "8.5999999999999996"
+3) "java concurrency"
+4) "8.9000000000000004"
+
+> ZREM books "java concurrency"             # 删除 value
+(integer) 1
+> ZRANGE books 0 -1
+1) "java cookbook"
+2) "think in java"</code></pre>
+<h1 id="扩展-相关阅读"><a href="#扩展-相关阅读" class="headerlink" title="扩展/相关阅读"></a>扩展/相关阅读</h1><ol>
+<li>阿里云 Redis 开发规范 - <a href="https://www.infoq.cn/article/K7dB5AFKI9mr5Ugbs_px" target="_blank" rel="noopener">https://www.infoq.cn/article/K7dB5AFKI9mr5Ugbs_px</a></li>
+<li>为什么要防止 bigkey？ - <a href="https://mp.weixin.qq.com/s?__biz=Mzg2NTEyNzE0OA==&mid=2247483677&idx=1&sn=5c320b46f0e06ce9369a29909d62b401&chksm=ce5f9e9ef928178834021b6f9b939550ac400abae5c31e1933bafca2f16b23d028cc51813aec&scene=21#wechat_redirect" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=Mzg2NTEyNzE0OA==&amp;mid=2247483677&amp;idx=1&amp;sn=5c320b46f0e06ce9369a29909d62b401&amp;chksm=ce5f9e9ef928178834021b6f9b939550ac400abae5c31e1933bafca2f16b23d028cc51813aec&amp;scene=21#wechat_redirect</a></li>
+<li>Redis【入门】就这一篇！ - <a href="https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/">https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《Redis 设计与实现》 - <a href="http://redisbook.com/" target="_blank" rel="noopener">http://redisbook.com/</a></li>
+<li>【官方文档】Redis 数据类型介绍 - <a href="http://www.redis.cn/topics/data-types-intro.html" target="_blank" rel="noopener">http://www.redis.cn/topics/data-types-intro.html</a></li>
+<li>《Redis 深度历险》 - <a href="https://book.douban.com/subject/30386804/" target="_blank" rel="noopener">https://book.douban.com/subject/30386804/</a></li>
+<li>阿里云 Redis 开发规范 - <a href="https://www.infoq.cn/article/K7dB5AFKI9mr5Ugbs_px" target="_blank" rel="noopener">https://www.infoq.cn/article/K7dB5AFKI9mr5Ugbs_px</a></li>
+<li>Redis 快速入门 - 易百教程 - <a href="https://www.yiibai.com/redis/redis_quick_guide.html" target="_blank" rel="noopener">https://www.yiibai.com/redis/redis_quick_guide.html</a></li>
+<li>Redis【入门】就这一篇! - <a href="https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/">https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%881%EF%BC%89%E2%80%94%E2%80%945%E7%A7%8D%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2019/11/27/gao-bing-fa-bian-cheng-xue-xi-2-xian-cheng-tong-xin-xiang-jie/">
       高并发编程学习(2)——线程通信详解
     </a>
@@ -2167,147 +2619,6 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/11/14/fen-si-tu-po-1600-wo-gan-dao-yi-si-kui-jiu/">
-      粉丝突破1600，我感到一丝愧疚
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E7%94%9F%E6%B4%BB/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>生活</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年11月14日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>为了获得良好的阅读体验，请访问原文章：<a href="https://www.wmyskxz.com/2019/11/14/fen-si-tu-po-1600-wo-gan-dao-yi-si-kui-jiu/">传送门</a></p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E7%B2%89%E4%B8%9D%E7%AA%81%E7%A0%B41600%EF%BC%8C%E6%88%91%E6%84%9F%E5%88%B0%E4%B8%80%E4%B8%9D%E6%84%A7%E7%96%9A/7896890-c730d84cd6fa3486.png" alt=""></p>
-<h1 id="一、感恩"><a href="#一、感恩" class="headerlink" title="一、感恩"></a>一、感恩</h1><hr>
-<p>前天早上（2019 年 11 月 12 日），一如既往地打开 QQ 准备给想要加群的小伙伴点一波同意，却惊讶的发现 QQ 群因为已经超过最大限制的人数 500 而导致无法添加了，一边心里暗暗吐槽 tx 坑爹一边感慨：“哇，什么时候已经这么多人啦？！”。 </p>
-<p>晚上一如既往地打开公众号，发现公众号的关注人数已经突破 1600 了(下图为第二天早上的截图)，从 4 月份以来的将近 400 人，从这 <strong>7 个月</strong>以来佛系的更新里面，居然算得上是完成了 <strong>4 倍的增长</strong>，虽然这些都算不得什么，甚至说起来还觉得有点小尴尬.. 但是当看到这个数字的时候，脑海里面一幅一幅闪过的画面和点滴，心里满是回忆和感激。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E7%B2%89%E4%B8%9D%E7%AA%81%E7%A0%B41600%EF%BC%8C%E6%88%91%E6%84%9F%E5%88%B0%E4%B8%80%E4%B8%9D%E6%84%A7%E7%96%9A/7896890-0e5e0ce658808142.png" alt=""></p>
-<p>从申请公众号以来，自己就维持着一种「随性更新」的状态，也不会主动参与一些公众号之间的推广活动（了解到一些好像我粉丝还不够混不进群..），更不会「转载」其他公众号或者其他地方的一些文章。</p>
-<p>我希望保持自己公众号的“纯洁”，这也是我建立这个公众号的初衷，所以我坚持每一篇文章都是原创。</p>
-<p>「随性更新」加上「不推广」加上「不转载」，再加上不敢保证的文章质量，我一度怀疑为什么会越来越多的人关注我，有一天我鬼使神差的在公众号发了一个问题，以下为原问题：</p>
-<blockquote>
-<p>不知不觉间.. 突然发现公众号的关注量已经突破四位数了..？感谢各位大大关注支持的同时， 也很想知道： 「各位是因为怎样的契机关注到这个公众号」？ 「又期望从本公众号中获得什么呢」？ 另外有任何想要交流的朋友也在公众号上留言，有时间我都会一一回复的 再次感谢各位的关注和支持，我也会持续努力的更新好文跟大家一起分享</p>
-</blockquote>
-<p>虽然收到的回答不算多，但是有一条回答让我百感交集（由于公众号限制联系不上原答主，私自做主把它搬了上来..）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E7%B2%89%E4%B8%9D%E7%AA%81%E7%A0%B41600%EF%BC%8C%E6%88%91%E6%84%9F%E5%88%B0%E4%B8%80%E4%B8%9D%E6%84%A7%E7%96%9A/7896890-a1176c699224910a.png" alt=""></p>
-<p>由于 QQ 群扩容需要开通年费超级会员，在完成扩容之后，居然还有一些小伙伴在 QQ 群里发专属红包，说算是支持了，哈哈哈… 如果非要为我坚持更新博客找一个理由的话，大概这些一个一个素未谋面，但一起努力的伙伴会是很重要的一部分吧，<strong>万分感谢..</strong></p>
-<h1 id="二、回顾"><a href="#二、回顾" class="headerlink" title="二、回顾"></a>二、回顾</h1><hr>
-<p>大学一毕业，同学们就一股风儿吹散了。</p>
-<p>工作之后，能够自由支配的时间比起读书时也少了许多，但也比上学时有趣了许多。每个学期一次的考试可能变成了每天，明确的填空题也都变成了综合问答题，更难了吗？我倒觉得可发挥和可学习的空间增加了不少。</p>
-<p>工作以来最让自己满意的一件事，就是趁着空闲的时间把自己的<a href="https://www.wmyskxz.com">个人域名的博客</a>给搭建了起来，比较可惜的是没有记录上自己搭建的全过程和其中踩过的一些坑。</p>
-<p>我也从工作中我养成和学习了一些比较好的习惯，比如阅读、比如记录等。也开始尝试一些方法论的东西，其中一项包括「晨间日记」，我发现这确实有助于自己保持清醒，我以前只是怀疑我有一点懒或者怎么样，但通过这几个月的记录，我确信自己懒！（从记录数量就看得出来了）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E7%B2%89%E4%B8%9D%E7%AA%81%E7%A0%B41600%EF%BC%8C%E6%88%91%E6%84%9F%E5%88%B0%E4%B8%80%E4%B8%9D%E6%84%A7%E7%96%9A/7896890-f6a15116b334ffe6.png" alt=""></p>
-<p>我养成一些好习惯的同时，那些坏习惯似乎也如数家珍。不过好的一点是，我正在一点一点地看到他们。（我准备把他们瞪死…）</p>
-<p>不过感到奇怪的事情是，相比去年工作之后我渐渐地有些丢失了目标和方向，我想有一部分原因是发现突然接触到的知识面一下子丰富了起来有一些不知所措吧，另一部分原因我说不太上来，很多时候回到家就只想摊着，摊着可真舒服呀。</p>
-<p>所以这两个月似乎都是早上清醒，到了晚上就有点浑噩。<strong>我突然感到一丝愧疚，</strong>想起去年的自己，眼看 11 月份都快结束了，回顾今年的自己似乎还欠上了好多好多的努力。</p>
-<h1 id="三、展望"><a href="#三、展望" class="headerlink" title="三、展望"></a>三、展望</h1><hr>
-<p>然后最近没更新文章也不是因为什么太忙的原因，就是因为自己越来越懒了。</p>
-<p>转眼间 2019 年也进入了倒计时，希望自己抓住最后的尾巴学一些什么东西，目前的想法是「设计模式」方面的东西，之后也会尝试分享一些生活和工作上有趣的经历和读书笔记。也把之前自己一直想学的钢琴和做饭提上了学习的计划表。</p>
-<p>有句话是说，你如果想种一棵树，那么最好的时间是在十年前，其次是在今天。</p>
-<p>以上，希望跟优秀的大家都能够一同在 Be Better 的道路上继续前行吧。</p>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693<br>钱</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2545,7 +2856,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

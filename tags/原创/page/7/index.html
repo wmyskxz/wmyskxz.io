@@ -436,6 +436,187 @@
         
           
   <h2 class="title">
+    <a href="/2019/07/16/xiao-xi-dui-lie-kan-guo-lai/">
+      「消息队列」看过来！
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/架构之路</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2019年7月16日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>为了获得更良好的阅读体验，建议您前往个人独立域名博客观看：<a href="https://www.wmyskxz.com/2019/07/16/xiao-xi-dui-lie-kan-guo-lai/">传送门</a><br>)</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%8D%E7%9C%8B%E8%BF%87%E6%9D%A5%EF%BC%81/7896890-436a7dc8e7ea16c7.png" alt=""></p>
+<h1 id="一、什么是消息队列？"><a href="#一、什么是消息队列？" class="headerlink" title="一、什么是消息队列？"></a>一、什么是消息队列？</h1><hr>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%8D%E7%9C%8B%E8%BF%87%E6%9D%A5%EF%BC%81/7896890-b5bc2aa2417ecb88.png" alt=""></p>
+<p>当我试图用一则通俗的比喻来说明这个概念的时候，我想到一个有意思的比喻：<strong>如果把队列抽象成一个集合体，那么消息队列也就是一堆消息的集合。</strong>按照这个思路我想到了「杂志」。这不就是一堆消息的集合吗，关心这些消息的人都能通过「购买」来获得这些消息，而我可以通过不同种类的「杂志」或许到不同的消息。并且如果我作为出版方，我可以提供所有出版过的「杂志」，也可以选择让读者只能购买近期的。</p>
+<h1 id="二、为什么需要消息队列？"><a href="#二、为什么需要消息队列？" class="headerlink" title="二、为什么需要消息队列？"></a>二、为什么需要消息队列？</h1><hr>
+<h2 id="好处一：解耦"><a href="#好处一：解耦" class="headerlink" title="好处一：解耦"></a>好处一：解耦</h2><p>假设我们做了一个会议室预定系统，我们的一个设备坏了。我们需要通知预定这个会议室的所有人，于是我们需要发邮件，伪代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">EquipmentServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">EquipmentService</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span> <span class="token keyword">private</span> EmailService emailService<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Autowired</span> <span class="token keyword">private</span> EquipmentRepository equipmentRepository<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setEquipmentBroken</span><span class="token punctuation">(</span>Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Equipment equipment <span class="token operator">=</span> equipmentRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        equipment<span class="token punctuation">.</span><span class="token function">setStatus</span><span class="token punctuation">(</span>Equipment<span class="token punctuation">.</span>StatusEnum<span class="token punctuation">.</span>BROKEN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        emailService<span class="token punctuation">.</span><span class="token function">sendEmail</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>问题来了，如果我们后来发现设备坏了并且需要更改可用库存的数量，这时候我们是不是要在这里加入 <code>InventoryService</code> 库存服务的代码呢？后来如果经理说设备坏了应该通知他才对啊，所以我们要不要加入 <code>emailService.sendEmailTo(Manager)</code> 这样的代码呢？</p>
+<p>随着我们业务模块接入越来越多，我们的代码与其他模块越来越耦合，修改代码的难度也指数级的增加，所以我们引入「消息队列」，把「设备坏了」这样的消息发送到队列中，其他关心这条消息的业务就会得到这样的「通知」，然后就会去做对应的事，这样各个模块之间就<strong>解耦</strong>了。伪代码看上去如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setEquipmentBroken</span><span class="token punctuation">(</span>Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Equipment equipment <span class="token operator">=</span> equipmentRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    equipment<span class="token punctuation">.</span><span class="token function">broken</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    eventBus<span class="token punctuation">.</span><span class="token function">publish</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">EquipmentBrokenEvent</span><span class="token punctuation">(</span>equipment<span class="token punctuation">.</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="好处二：异步处理"><a href="#好处二：异步处理" class="headerlink" title="好处二：异步处理"></a>好处二：异步处理</h2><p>接着上面的例子，假设我们已经把「发送邮件」、「修改库存」以及「通知经理」的代码都写入了我们的 Service 代码中，它们分别耗时：30ms、50ms、80ms，并且我们得知，原本最主要的功能其实是「发送邮件」，但我们完成主要的功能之后却等待了更多的额外时间，这显示是不合理的。</p>
+<p>所以我们为了提高用户体验&amp;提高吞吐量，我们其实可以引入「消息队列」来进行<strong>异步</strong>的操作。</p>
+<h2 id="好处三：削峰-限流"><a href="#好处三：削峰-限流" class="headerlink" title="好处三：削峰/限流"></a>好处三：削峰/限流</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%8D%E7%9C%8B%E8%BF%87%E6%9D%A5%EF%BC%81/7896890-27b5483c76901b4a.png" alt=""></p>
+<p>假设我们的服务器最多能支持每秒 1000 个请求，而我们公司在节日要搞促销，为了避免服务器挂掉我们额外申请了两台服务器做了负载均衡，于是我们现在的机器最理想的情况能够支持每秒 3000 个请求，但奈何活动太火爆了，每秒来的请求有大概 4000 个，这些多出来的请求就可能导致服务器给直接挂掉了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%8D%E7%9C%8B%E8%BF%87%E6%9D%A5%EF%BC%81/7896890-8a975c7d2229f8b4.png" alt=""></p>
+<p>所以我们就引入了一个「消息队列」，让消息不直接到达服务器，而是先让「消息队列」保存这些数据，然后让下面的服务器每一次都取各自能处理的请求数再去处理，这样当请求数超过服务器最大负载时，就不至于把服务器搞挂了。</p>
+<h1 id="三、消息队列适用的场景"><a href="#三、消息队列适用的场景" class="headerlink" title="三、消息队列适用的场景"></a>三、消息队列适用的场景</h1><hr>
+<p>基于上面的描述，我们大概能想到「消息队列」的局限性，例如当「生产者」需要「从消费者获得反馈」时，就会出现一定的问题。例如我之前尝试着使用「事件驱动」的方式编码时，我想要把 Service 的一些主逻辑给转移到关注该事件的监听器上时，发现有点问题，我原本的意图是想让一部分代码解耦，但作为主逻辑的一部分我需要保证它们准确的执行，当我使用「消息」的方式传递出去时，我无法得到消费者的反馈，所以最终我还是把主逻辑给迁回来了，算是一次失败的尝试吧。</p>
+<h2 id="场景一：异步处理"><a href="#场景一：异步处理" class="headerlink" title="场景一：异步处理"></a>场景一：异步处理</h2><p>通过上述的问题你也看到了，「消息队列」适用于异步处理，并且是那些不期望从消费者得到反馈的处理。就好像一开始说到的设备坏了的问题，我只需要通知设备坏了，至于之后需要做什么事，关心的人自然会去做相应的处理。</p>
+<h2 id="场景二：日志收集"><a href="#场景二：日志收集" class="headerlink" title="场景二：日志收集"></a>场景二：日志收集</h2><p>上面提到的异步处理，跟日志系统似乎搭配起来也很好。特别是当你需要把日志发往单独的数据平台的时候，「消息队列」尤为有用，我们不再需要在业务代码里面侵入我们的各种打点or日志，只需要简单的发布一条消息，再去关注做处理就好了。</p>
+<h2 id="场景四：应用解耦"><a href="#场景四：应用解耦" class="headerlink" title="场景四：应用解耦"></a>场景四：应用解耦</h2><p>基于上面的例子你应该也能感受一二了。</p>
+<h2 id="场景三：流量削峰"><a href="#场景三：流量削峰" class="headerlink" title="场景三：流量削峰"></a>场景三：流量削峰</h2><p>这也是「消息队列」常见的场景，通过引入「消息队列」，我们一来可以控制请求的人数，二来也可以缓解短时间内高流量的压力。</p>
+<h2 id="场景四：消息通讯"><a href="#场景四：消息通讯" class="headerlink" title="场景四：消息通讯"></a>场景四：消息通讯</h2><p>消息通讯是指，消息队列一般都内置了高效的通信机制，因此也可以用在纯的消息通讯。比如实现点对点消息队列，或者聊天室等。</p>
+<h1 id="四、常见消息队列中间件"><a href="#四、常见消息队列中间件" class="headerlink" title="四、常见消息队列中间件"></a>四、常见消息队列中间件</h1><hr>
+<h2 id="如果自己设计一个？"><a href="#如果自己设计一个？" class="headerlink" title="如果自己设计一个？"></a>如果自己设计一个？</h2><p>我们在讨论市面上常见的「消息队列」中间件之前，我们先来考虑自己造一个怎么样？如果是你自己来设计，你会怎么做？乍一想，似乎每个语言都会有自己实现的「队列」，往队列里塞数据，再从队列里面挨个取就行了？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%8D%E7%9C%8B%E8%BF%87%E6%9D%A5%EF%BC%81/7896890-a7345069f436f2d9.png" alt=""></p>
+<p>但是一细想好像事情并不简单。作为一个「消息队列」，你首先要保证数据不能给人家弄丢了吧？存内存？万一断电了怎么办？写磁盘？消息量超过系统写磁盘速率上限了怎么办？备份又该怎么做呢？</p>
+<p>好，假设我一整捣鼓，保证了我的数据不会丢失了，下一个问题，生产者怎么往「消息队列」里面塞数据？我的意思是，生产者可能不止一个，把全量的消息放在一个队列似乎不太合适，我需要给这些消息分个类吧？新来了一个分类的消息我怎么动态的扩容呢？消费者又如何消费这些数据呢？多个消费者之间又如何进行协调呢？</p>
+<p>好吧..总之问题挺多的..并不像表面那么简单。</p>
+<h2 id="RabbitMQ"><a href="#RabbitMQ" class="headerlink" title="RabbitMQ"></a>RabbitMQ</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8C%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E3%80%8D%E7%9C%8B%E8%BF%87%E6%9D%A5%EF%BC%81/7896890-e3961ca0caffcd74.png" alt=""></p>
+<p>RabbitMQ 是使用 Erlang 编写的一个开源的消息队列，本身支持很多的协议：AMQP，XMPP, SMTP, STOMP，也正因如此，它非常重量级，更适合于企业级的开发。同时实现了 Broker 构架，这意味着消息在发送给客户端时先在中心队列排队。对路由，负 载均衡或者数据持久化都有很好的支持。</p>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><p>Redis 也能用来做「消息队列」。Redis 是一个基于 Key-Value 对的 NoSQL 数据库，开发维护很活跃。虽然它是一个 Key-Value 数据库存储系统，但它本身支持 MQ 功能， 所以完全可以当做一个轻量级的队列服务来使用。对于 RabbitMQ 和 Redis 的入队和出队操作，各执行 100 万次，每 10 万次记录一次执行时间。测试 数据分为 128 Bytes、512 Bytes、1 K和 10 K四个不同大小的数据。实验表明：入队时，当数据比较小时 Redis 的性能要高于 RabbitMQ，而如果数据大小超过了 10 K，Redis 则慢的无法忍受；出队时，无论数据大小，Redis 都表现出非常好的性能，而 RabbitMQ 的出队性能则远低于Redis。</p>
+<h2 id="Kafka-Jafka"><a href="#Kafka-Jafka" class="headerlink" title="Kafka/Jafka"></a>Kafka/Jafka</h2><p>Kafka 是 Apache 下的一个子项目，是一个高性能跨语言分布式 Publish/Subscribe 消息队列系统，而 Jafka 是在 Kafka 之上孵化而来的，即 Kafka 的一个升级版。</p>
+<p>具有以下特性：</p>
+<ul>
+<li>快速持久化，可以在O(1)的系统开销下进行消息持久化；</li>
+<li>高吞吐，在一台普通的服务器上既可以达到 10 W/s的吞吐速率；</li>
+<li>完全的分布式系统，Broker、Producer、Consumer都原生自动支持分布式，自动实现复杂均衡；</li>
+<li>支持 Hadoop 数据并行加载，对于像Hadoop的一样的日志数据和离线分析系统，但又要求实时处理的限制，这是一个可行的解决方案。</li>
+</ul>
+<p>Kafka 通过 Hadoop 的并行加载机制来统一了在线和离线的消息处理。Apache Kafka 相对于 ActiveMQ 是一个非常轻量级的消息系统，除了性能非常好之外，还是一个工作良好的分布式系统。</p>
+<h2 id="ZeroMQ"><a href="#ZeroMQ" class="headerlink" title="ZeroMQ"></a>ZeroMQ</h2><p>ZeroMQ 号称最快的消息队列系统，尤其针对大吞吐量的需求场景。ZeroMQ 能够实现 RabbitMQ 不擅长的高级 / 复杂的队列，但是开发人员需要自己组合多种技术框架，技术上的复杂度是对这 MQ 能够应用成功的挑战。ZeroMQ 具有一个独特的非中间件的模式，你不需要安装和运行一个消息服务器或中间件，因为你的应用程序将扮演这个服务器角色。你只需要简单的引用 ZeroMQ 程序库，可以使用 NuGet 安装，然后你就可以愉快的在应用程序之间发送消息了。但是 ZeroMQ 仅提供非持久性的队列，也就是说如果宕机，数据将会丢失。其中，Twitter 的 Storm 0.9.0 以前的版本中默认使用 ZeroMQ 作为数据流的传输（Storm 从 0.9 版本开始同时支持 ZeroMQ 和 Netty 作为传输模块）。</p>
+<h2 id="ActiveMQ"><a href="#ActiveMQ" class="headerlink" title="ActiveMQ"></a>ActiveMQ</h2><p>ActiveMQ 是 Apache 下的一个子项目。 类似于 ZeroMQ，它能够以代理人和点对点的技术实现队列。同时类似于 RabbitMQ，它少量代码就可以高效地实现高级应用场景。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
+<ol>
+<li><a href="https://www.infoq.cn/article/kafka-analysis-part-1" target="_blank" rel="noopener">Kafka 设计解析（一）：Kafka 背景及架构介绍</a></li>
+<li><a href="https://juejin.im/post/5b41fe36e51d45191252e79e#heading-26" target="_blank" rel="noopener">浅谈消息队列及常见的消息中间件</a></li>
+<li><a href="https://arvon.top/2018/02/23/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E4%BB%8B%E7%BB%8D%E5%8F%8A%E5%B8%B8%E7%94%A8MQ%E5%AF%B9%E6%AF%94/" target="_blank" rel="noopener">消息队列介绍及常用MQ对比
+</a></li>
+<li><a href="https://www.jianshu.com/p/1186d5e1b9be" target="_blank" rel="noopener">什么是消息队列？</a></li>
+<li><a href="https://www.zhihu.com/question/34243607" target="_blank" rel="noopener">消息队列的使用场景是怎样的？ - 知乎</a></li>
+</ol>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2019/07/09/spring-xi-lie-wen-zhang/">
       文章导航
     </a>
@@ -1972,283 +2153,6 @@ companyService<span class="token punctuation">.</span><span class="token functio
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/05/29/liao-jie-docker-cong-zhe-li-kai-shi/">
-      了解【Docker】从这里开始
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>架构之路</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年5月29日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BA%86%E8%A7%A3%E3%80%90Docker%E3%80%91%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/7896890-caeed3c30fd4dcc5.png" alt=""></p>
-<h1 id="一、环境配置的难题"><a href="#一、环境配置的难题" class="headerlink" title="一、环境配置的难题"></a>一、环境配置的难题</h1><hr>
-<p>软件开发最大的难题之一就是环境配置的问题。现在用户环境纷乱复杂，并且由于开源社区的进一步推广和许多开源项目不停地迭代更新，项目可能会有越来越多的依赖以及越来越难管理的依赖版本，如何保证编写的程序能不只是在“我的电脑上能运行”（It works on my machine）成了一个复杂麻烦的事情。</p>
-<p>于是就有人提出：能不能从根本上解决问题，让软件可以自带环境安装？也就是说，安装的时候，把原始环境一模一样地复制过来。</p>
-<h2 id="虚拟机"><a href="#虚拟机" class="headerlink" title="虚拟机"></a>虚拟机</h2><p>虚拟机（virtual machine）就是一种自带环境安装的解决方案。它可以在一个操作系统里面运行另一个操作系统，比如在 Windows 系统里运行一个 Linux 的操作系统。</p>
-<p>应用程序对虚拟机是毫无感知的，因为虚拟机看上去跟真实的操作系统一模一样，而且对于底层的系统来说，虚拟机就是一个普通文件，不需要了就删除，对其他部分毫无影响。</p>
-<p>虽然用户可以通过虚拟机还原软件的原始环境。但是，该方案有以下的几个缺点：</p>
-<p><strong>1. 资源占用多</strong></p>
-<p>虚拟机会独占一部分本属于操作系统的内存和硬盘空间。它运行的时候，其他程序就不能使用这些资源了。哪怕你想在虚拟机里面使用的应用程序它实际只会占用 1MB 的内存，虚拟机仍然需要几百 MB 的内存才能运行。</p>
-<p><strong>2. 冗余步骤多</strong></p>
-<p>虚拟机是完整的操作系统，一些系统层面上的操作步骤，往往无法调过，比如用户登录。</p>
-<p><strong>3. 启动慢</strong></p>
-<p>启动操作系统需要多久，启动虚拟机就需要多久。可能要等几分钟，才能让应用程序真正的运行起来。</p>
-<h2 id="Linux-容器"><a href="#Linux-容器" class="headerlink" title="Linux 容器"></a>Linux 容器</h2><p>由于虚拟机存在上述的这些缺点，Linux 提出了另一种虚拟机化技术：Linux 容器（Linux Containers，缩写 LXC）。</p>
-<p><strong>Linux 容器不是模拟一个完整的操作系统，而是对进程进行隔离。</strong>或者说，在正常进程的外面套了一个<a href="https://opensource.com/article/18/1/history-low-level-container-runtimes" target="_blank" rel="noopener">保护层</a>。对于容器里面的进程来说，它接触到的各种资源都是虚拟的，从而实现与底层系统的隔离。</p>
-<p>由于容器是进程级别的，相比虚拟机有很多优势。</p>
-<p><strong>1. 启动快</strong></p>
-<p>容器里面的应用，直接就是底层系统的一个进程，而不是虚拟机内部的进程。所以，启动容器相当于启动本机的一个进程，而不是启动一个操作系统，速度就快很多。</p>
-<p><strong>2. 资源占用少</strong></p>
-<p>容器只占用需要的资源，不占用那些没有用到的资源；虚拟机由于是完整的操作系统，不可避免要占用所有资源。另外，多个容器可以共享资源，虚拟机都是独享资源。</p>
-<p><strong>3. 体积小</strong></p>
-<p>容器只要包含用到的组件即可，而虚拟机是整个操作系统的打包，所以容器文件比虚拟机文件要小很多。</p>
-<p>总之，容器有点像轻量级的虚拟机，能够提供虚拟化的环境，但是成本开销小得多。</p>
-<h1 id="二、什么是-Docker？"><a href="#二、什么是-Docker？" class="headerlink" title="二、什么是 Docker？"></a>二、什么是 Docker？</h1><hr>
-<blockquote>
-<p><strong>Enterprise Container Platform for High-Velocity Innovation</strong><br>Securely build, share and run any application, anywhere</p>
-<p>译：<br><strong>企业高速容器平台</strong><br>在任何地方安全的建造、分享、运行你的应用程序</p>
-</blockquote>
-<p>官方对 Docker 的定义是一个容器平台。简单来说，<strong>Docker 属于 Linux 容器的一种封装，提供简单易用的容器使用接口。</strong>它是目前最流行的 Linux 容器解决方案。开发人员可以利用 Docker 来消除协作编码时 “在我的电脑上可以正常工作” 的问题。</p>
-<p>Docker 将应用程序与该程序的依赖，打包在一个文件里面。运行这个文件，就会生成一个虚拟容器。程序在这个虚拟容器里运行，就好像在真实的物理机上运行一样。有了 Docker，就不用担心环境问题。</p>
-<p>总体来说，Docker 的接口相当简单，用户可以方便地创建和使用容器，把自己的应用放入容器。容器还可以进行版本管理、复制、分享、修改，就像管理普通的代码一样。</p>
-<h2 id="为什么要使用-Docker？"><a href="#为什么要使用-Docker？" class="headerlink" title="为什么要使用 Docker？"></a>为什么要使用 Docker？</h2><p>Docker 是一个为开发者和运维者去开发、发布和在容器中运行应用的平台。使用 Linux 容器来部署应用程序被称为容器化。 容器不是新的概念，它的优势在于很容易发布一个应用。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BA%86%E8%A7%A3%E3%80%90Docker%E3%80%91%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/7896890-c12397c3a9cb8ee2.png" alt=""></p>
-<p>容器化变得非常的流行，因为容器化具有以下的优点：</p>
-<ul>
-<li>灵活：即使最复杂的应用也能够被容器化。</li>
-<li>轻量：容器最大化利用和分享主机的内核。</li>
-<li>可互换：你可以即时部署更新和升级应用。</li>
-<li>便捷：你可以在本地构建应用，并部署到容器云，并在任何地方运行。</li>
-<li>可扩展：你可以增加和自动分发容器的个数。</li>
-<li>可堆叠：您可以垂直堆叠服务并即时堆叠服务。</li>
-</ul>
-<p>容器除了运行其中应用外，基本不消耗额外的系统资源，使得应用的性能很高，同时系统的开销尽量小。传统虚拟机方式运行 10 个不同的应用就要起 10 个虚拟机，而Docker 只需要启动 10 个隔离的应用即可。</p>
-<p>具体说来，Docker 在如下几个方面具有较大的优势。</p>
-<p><strong>1. 更快速的交付和部署</strong></p>
-<p>对开发和运维（devop）人员来说，最希望的就是一次创建或配置，可以在任意地方正常运行。</p>
-<p>开发者可以使用一个标准的镜像来构建一套开发容器，开发完成之后，运维人员可以直接使用这个容器来部署代码。 Docker 可以快速创建容器，快速迭代应用程序，并让整个过程全程可见，使团队中的其他成员更容易理解应用程序是如何创建和工作的。 Docker 容器很轻很快！容器的启动时间是秒级的，大量地节约开发、测试、部署的时间。</p>
-<p><strong>2. 更高效的虚拟化</strong></p>
-<p>Docker 容器的运行不需要额外的 hypervisor 支持，它是内核级的虚拟化，因此可以实现更高的性能和效率。</p>
-<p><strong>3. 更轻松的迁移和扩展</strong></p>
-<p>Docker 容器几乎可以在任意的平台上运行，包括物理机、虚拟机、公有云、私有云、个人电脑、服务器等。 这种兼容性可以让用户把一个应用程序从一个平台直接迁移到另外一个。</p>
-<p><strong>4. 更简单的管理</strong></p>
-<p>使用 Docker，只需要小小的修改，就可以替代以往大量的更新工作。所有的修改都以增量的方式被分发和更新，从而实现自动化并且高效的管理。</p>
-<h2 id="Docker-VS-VM"><a href="#Docker-VS-VM" class="headerlink" title="Docker VS VM"></a>Docker VS VM</h2><p>容器和虚拟机对资源的隔离和分配有相同的优势，但不同的是容器虚拟化操作系统而不是硬件，这使得容器更加的方便和高效。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BA%86%E8%A7%A3%E3%80%90Docker%E3%80%91%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/7896890-97017f1c0f687840.png" alt=""></p>
-<p>一个容器是在 Linux 服务本地运行，并和其他的容器共享主机的内核。它运行在一个独立的进程中，相对于其他可执行的进程（比如虚拟机）来说，容器的内存占用空间更小，更加的轻量化。</p>
-<p>相比之下，虚拟机（VM）运行一个完整的“客户”操作系统，通过虚拟机管理程序虚拟访问主机资源。 一般来说，虚拟机提供的环境比大多数应用程序需要的资源更多。</p>
-<p>由于 Docker 轻量、资源占用少，使得 Docker 可以轻易的应用到构建标准化的应用中。但 Docker 目前还不够完善，比如隔离效果不如 VM，共享宿主机操作系统的一些基础库等；网络配置功能相对简单，主要以桥接方式为主；查看日志也不够方便灵活。</p>
-<h2 id="Docker-的用途"><a href="#Docker-的用途" class="headerlink" title="Docker 的用途"></a>Docker 的用途</h2><p>Docker 的主要用途，目前有三大类。</p>
-<p><strong>1. 提供一次性的环境。</strong>比如，本地测试他人的软件、持续集成的时候提供单元测试和构建的环境。</p>
-<p><strong>2. 提供弹性的云服务。</strong>因为 Docker 容器可以随开随关，很适合动态扩容和缩容。</p>
-<p><strong>3. 组建微服务架构。</strong>通过多个容器，一台机器可以跑多个服务，因此在本机就可以模拟出微服务架构。</p>
-<h1 id="三、Docker-基本概念"><a href="#三、Docker-基本概念" class="headerlink" title="三、Docker 基本概念"></a>三、Docker 基本概念</h1><hr>
-<p>下面这张图非常的经典，很形象地展示了，什么是容器，什么是镜像，什么是仓库，以及三者之间的联系。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BA%86%E8%A7%A3%E3%80%90Docker%E3%80%91%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/7896890-b4c5dd5a03dfa67e.png" alt=""></p>
-<p>接下来我们来解释一下这张图。现在我们要造一间厨房，在造之前我们首先要干的一件事，就是先列举出我们造厨房需要的东西。我们可能需要一个通了水电煤的房子以及一些必需的厨房用具诸如锅碗瓢勺、煤气灶、冰箱、水槽等等这些东西。现在我们知道需要了什么东西之后，我们就去找这些东西。首先我们先去京东购买一些厨房用具，这些用具就好比我们的Docker镜像，我们厨房的用具到了之后得找个地方把它们放在，不可能随处丢吧，不然后面用的时候就找不到它了，那么我们Docker镜像也是这样，需要一个Docker仓库去存储这些镜像。现在我们有了这些厨房用具之后就可以做饭了吗？答案当然是不能，没水没电没火啊！这时候我们得把厨房用具给装到一个通了水电煤的房子才行，那么Docker镜像也是这样，单纯的Docker镜像是不能用的，它得装到Docker容器中通了水电煤才能使用。等我们装好了厨房用具之后我们就可以开始做饭，那么我们的Docker镜像装到Docker容器之后，我们应用就可以跑起来了。</p>
-<h2 id="概念详解"><a href="#概念详解" class="headerlink" title="概念详解"></a>概念详解</h2><p>Docker是CS架构，主要有两个概念：</p>
-<ul>
-<li><strong>Docker daemon:</strong> 运行在宿主机上，Docker守护进程，用户通过Docker client(Docker命令)与Docker daemon交互</li>
-<li><strong>Docker client:</strong> Docker 命令行工具，是用户使用Docker的主要方式，Docker client与Docker daemon通信并将结果返回给用户，Docker client也可以通过socket或者RESTful api访问远程的Docker daemon</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BA%86%E8%A7%A3%E3%80%90Docker%E3%80%91%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/7896890-7f1b0975e1eee6d5.png" alt=""></p>
-<p>了解了Docker的组成，再来了解一下Docker的三个主要概念：</p>
-<ul>
-<li><strong>Docker image：</strong> 镜像是只读的，镜像中包含有需要运行的文件。镜像用来创建container，一个镜像可以运行多个container；镜像可以通过Dockerfile创建，也可以从Docker hub/registry上下载。</li>
-<li><strong>Docker container：</strong> 容器是Docker的运行组件，启动一个镜像就是一个容器，容器是一个隔离环境，多个容器之间不会相互影响，保证容器中的程序运行在一个相对安全的环境中。</li>
-<li><strong>Docker hub/registry:</strong> 共享和管理Docker镜像，用户可以上传或者下载上面的镜像，官方地址为<a href="https://registry.hub.docker.com/，也可以搭建自己私有的Docker" target="_blank" rel="noopener">https://registry.hub.docker.com/，也可以搭建自己私有的Docker</a> registry。</li>
-</ul>
-<p>镜像就相当于打包好的版本，镜像启动之后运行在容器中，仓库就是装存储镜像的地方。</p>
-<h1 id="三、Docker-安装"><a href="#三、Docker-安装" class="headerlink" title="三、Docker 安装"></a>三、Docker 安装</h1><hr>
-<p>安装过程都大同小异，这里就不细说了，详细的可以参考这里：<a href="https://www.runoob.com/docker/macos-docker-install.html" target="_blank" rel="noopener">https://www.runoob.com/docker/macos-docker-install.html</a></p>
-<p>唯一需要注意的就是由于国内网络问题，需要给 Docker 镜像加个速（详细的可以戳上面链接，最后有…）</p>
-<h1 id="四、Docker-Hello-World"><a href="#四、Docker-Hello-World" class="headerlink" title="四、Docker Hello World"></a>四、Docker Hello World</h1><hr>
-<p>首先，运行下面的命令，将 image 文件从仓库抓取到本地。</p>
-<pre class=" language-shell"><code class="language-shell">$ docker image pull library/hello-world</code></pre>
-<p>上面代码中，<code>docker image pull</code>是抓取 image 文件的命令。<code>library/hello-world</code>是 image 文件在仓库里面的位置，其中<code>library</code>是 image 文件所在的组，<code>hello-world</code>是 image 文件的名字。</p>
-<p>由于 Docker 官方提供的 image 文件，都放在<a href="https://hub.docker.com/r/library/" target="_blank" rel="noopener"><code>library</code></a>组里面，所以它的是默认组，可以省略。因此，上面的命令可以写成下面这样。</p>
-<pre class=" language-shell"><code class="language-shell">$ docker image pull hello-world</code></pre>
-<p>抓取成功以后，就可以在本机看到这个 image 文件了。</p>
-<pre class=" language-shell"><code class="language-shell">$ docker image ls</code></pre>
-<p>现在，运行这个 image 文件</p>
-<pre class=" language-shell"><code class="language-shell">$ docker container run hello-world</code></pre>
-<p><code>docker container run</code> 命令会从 image 文件，生成一个正在运行的容器实例。</p>
-<p>注意，<code>docker container run</code> 命令具有自动抓取 image 文件的功能。如果发现本地没有指定的 image 文件，就会从仓库自动抓取。因此，前面的 <code>docker image pull</code> 命令并不是必需的步骤。</p>
-<p>如果运行成功，你会在屏幕上读到下面的输出。</p>
-<pre class=" language-shell"><code class="language-shell">$ docker container run hello-world
-
-Hello from Docker!
-This message shows that your installation appears to be working correctly.
-
-... ...</code></pre>
-<p>输出这段提示以后，<code>hello world</code> 就会停止运行，容器自动终止。</p>
-<p>有些容器不会自动终止，因为提供的是服务。比如，安装运行 Ubuntu 的 image，就可以在命令行体验 Ubuntu 系统。</p>
-<pre class=" language-shell"><code class="language-shell">$ docker container run -it ubuntu bash</code></pre>
-<p>对于那些不会自动终止的容器，必须使用<a href="https://docs.docker.com/engine/reference/commandline/container_kill/" target="_blank" rel="noopener"><code>docker container kill</code></a> 命令手动终止。</p>
-<pre class=" language-shell"><code class="language-shell">$ docker container kill [containID]</code></pre>
-<h1 id="五、常用命令"><a href="#五、常用命令" class="headerlink" title="五、常用命令"></a>五、常用命令</h1><hr>
-<ul>
-<li><ol>
-<li>杀死所有正在运行的容器<br><code>docker kill $(docker ps -a -q)</code></li>
-</ol>
-</li>
-<li><ol start="2">
-<li>删除所有已经停止的容器<br><code>docker rm $(docker ps -a -q)</code></li>
-</ol>
-</li>
-<li><ol start="3">
-<li>删除所有镜像<br><code>docker rmi $(docker images -q)</code></li>
-</ol>
-</li>
-<li><ol start="4">
-<li>关闭容器<br><code>docker stop CONTAINER ID或者NAMES</code></li>
-</ol>
-</li>
-<li><ol start="5">
-<li>重新启动关闭的容器<br><code>docker start CONTAINER ID或者NAMES</code></li>
-</ol>
-</li>
-<li><ol start="6">
-<li>移除本地容器<br><code>docker rm CONTAINER ID或者NAMES</code></li>
-</ol>
-</li>
-<li><ol start="7">
-<li>查看本地容器<br><code>docker ps  //查看正在运行的容器</code><br><code>docker ps -a //查看所有容器</code></li>
-</ol>
-</li>
-<li><ol start="8">
-<li>查看本地镜像<br><code>docker images</code></li>
-</ol>
-</li>
-<li><ol start="9">
-<li>创建镜像<br><code>docker build -t name:tag Dockerfile路径</code></li>
-</ol>
-</li>
-<li><ol start="10">
-<li>修改本地镜像标记<br><code>docker tag  IMAGE ID  name:tag</code><br><code>docker rmi name:tag</code></li>
-</ol>
-</li>
-<li><ol start="11">
-<li>删除本地镜像<br><code>docker rmi name:tag或者IMAGE ID</code></li>
-</ol>
-</li>
-<li><ol start="12">
-<li>进入容器<br><code>docker exec -it IMAGE ID或者NAMES /bin/bash</code></li>
-</ol>
-</li>
-<li><ol start="13">
-<li>获取镜像中心的镜像<br><code>docker pull name:tag</code></li>
-</ol>
-</li>
-<li><ol start="14">
-<li>获取容器的端口映射配置<br><code>docker port CONTAINER ID或者NAMES</code></li>
-</ol>
-</li>
-</ul>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
-<p><a href="http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html" target="_blank" rel="noopener">1. Docker入门教程(阮一峰) - http://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html</a><br><a href="https://www.cnblogs.com/ityouknow/p/8520296.html" target="_blank" rel="noopener">2. Docker(一)：Docker入门教程(纯洁的微笑) - https://www.cnblogs.com/ityouknow/p/8520296.html</a><br><a href="https://www.runoob.com/docker/docker-tutorial.html" target="_blank" rel="noopener">3. Docker教程(菜鸟教程) - https://www.runoob.com/docker/docker-tutorial.html</a><br><a href="https://segmentfault.com/a/1190000009544565#articleHeader6" target="_blank" rel="noopener">4. - Docker入门，看这篇就够了 - https://segmentfault.com/a/1190000009544565#articleHeader6</a><br><a href="https://www.docker.com/" target="_blank" rel="noopener">5. 官方文档 - https://www.docker.com</a></p>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2486,7 +2390,7 @@ This message shows that your installation appears to be working correctly.
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

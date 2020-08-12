@@ -436,6 +436,590 @@
         
           
   <h2 class="title">
+    <a href="/2020/07/04/morethanjava-day-2-bian-liang-shu-ju-lei-xing-he-yun-suan-fu/">
+      「MoreThanJava」Day 2：变量、数据类型和运算符
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/MoreThanJava/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>MoreThanJava</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年7月4日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-7ff42cf0680bb869.png" alt=""></p>
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="Part-1-数据类型"><a href="#Part-1-数据类型" class="headerlink" title="Part 1. 数据类型"></a>Part 1. 数据类型</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-3db39f0fe11659c8.png" alt=""></p>
+<p>假设您遇到了以下撕碎的纸片，您觉得会是什么意思？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-8562ef503979c078.png" alt=""></p>
+<p>在不了解上下文的情况下，很难说出 <code>MIX</code> 的含义，它可能是罗马数字 <code>1009</code>，也可以是英语单词 <code>mix</code> 或者别的什么东西。</p>
+<p>在不知道上下文的情况下，一串字母没有任何意义。</p>
+<p>与一串字母一样，一串 <code>01</code> 的含义取决于如何使用。而决定这一串数据如何使用的方案被称为其 <strong>数据类型</strong> <em>(跟文件类型有些类似)</em>。 </p>
+<h2 id="8-种基本数据类型"><a href="#8-种基本数据类型" class="headerlink" title="8 种基本数据类型"></a>8 种基本数据类型</h2><p><strong>Java 是一种强类型语言</strong>。这意味着必须为每一条数据声明一种类型。在 Java 中共有 <code>8</code> 种基本类型 <em>(primitive type)*，其中 <code>4</code> 种整型、<code>2</code> 种浮点类型、<code>1</code> 种字符类型、<code>1</code> 种表示真值的 <code>boolean</code> *(布尔)</em> 类型。</p>
+<h3 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h3><p>整型被用来表示没有小数部分的数值，允许是负数。Java 提供了 <code>4</code> 种整型，具体内容如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">存储需求</th>
+<th align="left">取值范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">int</td>
+<td align="left">4 字节</td>
+<td align="left">-2147483648 ~ 2147483647 <em>(刚超过 <code>20</code> 亿，这个数值也就是 2<sup>32</sup> 对半分成正负值，<code>32=4字节*每个字节8位</code>)</em></td>
+</tr>
+<tr>
+<td align="left">short</td>
+<td align="left">2 字节</td>
+<td align="left">-32768 ~ 32767</td>
+</tr>
+<tr>
+<td align="left">long</td>
+<td align="left">8 字节</td>
+<td align="left">-9223372036854775808 ~ 9223372036854775807</td>
+</tr>
+<tr>
+<td align="left">byte</td>
+<td align="left">1 字节</td>
+<td align="left">-128 ~ 127</td>
+</tr>
+</tbody></table>
+<p>在通常情况下，<code>int</code> 类型最常用。但如果想要表示整个地球的居住人口，那么就需要使用 <code>long</code> 类型了。<code>byte</code> 和 <code>short</code> 类型主要用于特定的应用场合，例如，底层的文件处理或者存储空间很宝贵时的大数组 <em>(因为节约内存)</em>。</p>
+<h3 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h3><p>浮点类型用于表示有小数部分的数值。在 Java 中有两种浮点类型，具体内容如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">存储需求</th>
+<th align="left">取值范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">float</td>
+<td align="left">4 字节</td>
+<td align="left">大约 ±3.40282347E + 38F <em>(大约有效数为 6 ~ 7)</em></td>
+</tr>
+<tr>
+<td align="left">double</td>
+<td align="left">8 字节</td>
+<td align="left">大约 ±1.7976931486231580E + 308 <em>(大约有效数为 15 位)</em></td>
+</tr>
+</tbody></table>
+<p><code>double</code> 表示这种类型的数值精度是 <code>float</code> 类型的两倍 <em>(也有人称 <code>double</code> 为双精度数值)</em>。</p>
+<h4 id="浮点数精度问题"><a href="#浮点数精度问题" class="headerlink" title="浮点数精度问题"></a>浮点数精度问题</h4><p>问一个问题：<code>0.1 + 0.2 = ？</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-7dfd19a8944a0254.png" alt=""></p>
+<p>先别奇怪，在 IDEA 中尝试着输出一下这句话就知道了：</p>
+<pre class=" language-java"><code class="language-java">System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token number">0.1</span> <span class="token operator">+</span> <span class="token number">0.2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 输出：0.30000000000000004</span></code></pre>
+<p><code>0.1 + 0.2</code> 为什么会等于 <code>0.30000000000000004</code>？而不是我们想象中的 <code>0.3</code>？</p>
+<p><strong>这不是因为它们在计算时出现了错误，而是因为浮点数计算标准的要求。</strong></p>
+<p>首先我们要明确一点：<strong>编程中的浮点数并不能和数学中的小数看做同一个东西</strong>。</p>
+<ul>
+<li>编程中的浮点数的精度往往都是有限的，单精度的浮点数使用 <code>32</code> 位表示，而双精度的浮点数使用 <code>64</code> 位表示；</li>
+<li>数学中的小数系统可以通过引入无限序列….可以表示任意的实数；</li>
+</ul>
+<p>请考虑使用 <strong>十进制</strong> 表示 <code>1/3</code>：</p>
+<pre class=" language-console"><code class="language-console">0.3333333333333333....</code></pre>
+<p>如果想要完整地表达 <code>1/3</code> 的精度，那么小数点之后的 <code>3</code> 需要无限地写下去。如果需要让你在一张纸上表达清晰，显然由于纸张大小的限制你无法无限地写下去…</p>
+<p><code>0.1</code> 和 <code>0.2</code> 在 <strong>二进制</strong> 中同 <code>1/3</code> 在 <strong>十进制</strong> 中一样，不属于整数的范畴，所以只能用近似值来代替，由于精度的限制 <code>0.1</code> 和 <code>0.2</code> 使用单精度浮点数表示的实际值为：<code>0.100000001490116119384765625</code> 和 <code>0.20000000298023223876953125</code>，把它们相加起来得到的结果与我们在一开始看到的非常相似：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-d96f108475ecbd98.png" alt=""></p>
+<p>在交易系统或者科学计算的场景中，如果需要更高的精度小数，可以使用具有 <code>28</code> 个有效位数的 <code>decimal</code> 或者直接使用分数，不过这些表示方法的开销也随着有效位数的增加而提高，我们应该按照需要选择最合适的方法。</p>
+<p>重新回到最开始的问题 — <code>0.1</code> 和 <code>0.2</code> 相加不等于 <code>0.3</code> 的原因包括以下两个：</p>
+<ul>
+<li>使用二进制表达十进制的小数时，某些数字无法被有限位的二进制小数表示；</li>
+<li>单精度和双精度的浮点数只包括 <code>7</code> 位或者 <code>15</code> 位的有效小数位，存储需要无限位表示的小数时只能存储近似值；</li>
+</ul>
+<p><strong>在使用单精度和双精度浮点数时也应该牢记它们只有 <code>7</code> 位和 <code>15</code> 位的有效位数</strong>。</p>
+<h3 id="char-类型"><a href="#char-类型" class="headerlink" title="char 类型"></a>char 类型</h3><p><code>char</code> 用来表示单个字符。在 Java 中 <code>char</code> 类型的数据使用 <code>16</code> 位来存储和表示，而许多编程语言则仅用 <code>8</code> 位。</p>
+<p><code>char</code> 类型的字面量值需要用 <strong>单引号</strong> 括起来。例如：<code>&#39;A&#39;</code> 是编码值为 <code>65</code> 的 <strong>字符常量</strong>，它与 <code>&quot;A&quot;</code> 不同，<code>&quot;A&quot;</code> 是仅包含字符 <code>A</code> 的 <strong>字符串</strong> <em>(String 类型)</em>。</p>
+<p><strong>强烈建议</strong>：不要在程序中使用 <code>char</code> 类型，除非您确实需要处理 <code>UTF-16</code> 代码单元。</p>
+<p><em>(更多相关资料放入了下面的自取资料，感兴趣可以去阅读一下更多 char 类型的东西，不感兴趣跳过即可…)</em></p>
+<h3 id="boolean-类型"><a href="#boolean-类型" class="headerlink" title="boolean 类型"></a>boolean 类型</h3><p><code>boolean</code> <em>(布尔)</em> 类型有两个值：<code>false</code> 和 <code>true</code> <em>(注意这两个是布尔类型的字面常量也是保留字)</em>，用来判断逻辑条件是否成立。</p>
+<h2 id="对象类型"><a href="#对象类型" class="headerlink" title="对象类型"></a>对象类型</h2><p><strong>Java 中的所有数据都属于「基本数据类型」或「对象」中的一种。</strong></p>
+<p>虽然只有八种基本数据类型，但 Java 有许多满足您需求的相关类型的对象供您使用，例如，表示字符串的 <code>String</code> 类型。</p>
+<p>我们会在之后的内容中更多地讨论对象 <em>(因为 Java 是一种面向对象的编程语言)</em>，现在，您需要了解以下信息：</p>
+<ul>
+<li>基本数据类型使用少量的固定字节数 <em>(下面会详细介绍)</em>；</li>
+<li>只有 <code>8</code> 种基本数据类型，您无法创建新的原始数据类型；</li>
+<li>一个对象是一个较大的数据块，可能使用很多字节的内存；</li>
+<li>对象类型的数据被称为 <strong>类</strong>；</li>
+<li>Java 中已经封装了足够多的类用来满足您各类的需求，您也可以发明新的类来满足程序的特定需求；</li>
+</ul>
+<h1 id="Part-2-变量"><a href="#Part-2-变量" class="headerlink" title="Part 2. 变量"></a>Part 2. 变量</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-e16f2929acbe5b5e.png" alt=""></p>
+<p><strong>计算机内存中有数以十亿计的字节用于存储机器指令和数据。</strong> </p>
+<p>程序运行时，某些内存用于存储机器指令，而另外一些则用于存储数据。后来，当另一个程序运行时，以前保存的机器指令中的某些字节现在可以用来保存数据，而之前保存的数据中的某些字节现在可以保存机器指令。</p>
+<p>计算机先驱 <strong>约翰·冯·诺依曼</strong> <em>(John von Neumann)</em> 的想法是：<strong>使用相同的存储器来存储指令和数据</strong>。</p>
+<p>回想一下，<strong>数据类型是一种使用位模式来表示值的方案</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-f5873c69dcbfbeeb.png" alt=""></p>
+<p>可以把 <strong>变量</strong> 视为一个由一个或多个字节组成的小盒子，该盒子可以使用特定的数据类型保存值。</p>
+<p>要将值存储在内存中，以后再取回它，则程序必须为每个变量指定一个名称，如 <code>className</code>/ <code>payAmount</code> <strong>(变量名采用小驼峰命名法)</strong>。</p>
+<p>变量随运行程序的需要而变化。当正在运行的程序不再需要变量时，该内存部分可用于其他目的。</p>
+<h2 id="声明变量"><a href="#声明变量" class="headerlink" title="声明变量"></a>声明变量</h2><p>在 Java 中，每个变量都必须有一个类型 <em>(type)</em>。在声明变量时，需要先指定变量的类型，然后是变量名：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">double</span> salary<span class="token punctuation">;</span>
+<span class="token keyword">int</span> vacationDays<span class="token punctuation">;</span>
+<span class="token keyword">long</span> earthPopluation<span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> finished<span class="token punctuation">;</span></code></pre>
+<p>可以看到，每个变量都以分号 <em>(<code>;</code>)</em> 结束。由于声明是一条完整的 Java 语句，而所有的 Java 语句都以分号结束，所以这里的分号是必须的。</p>
+<h3 id="变量命名"><a href="#变量命名" class="headerlink" title="变量命名"></a>变量命名</h3><p>在 Java 中，变量命名需要遵循以下硬性规定和强烈建议遵守的非硬性规定：</p>
+<h4 id="硬性规则"><a href="#硬性规则" class="headerlink" title="硬性规则"></a>硬性规则</h4><ol>
+<li>变量名必须是一个以字母开头并由字母或数字构成的序列 <em>(尽管 <code>$</code> 是合法的，但不要在你自己的代码中使用这个字符，它只用在 Java 编译器或其他工具生成的名字中)</em>；</li>
+<li>每一个字符都有意义，且大小写敏感；</li>
+<li>不要使用 Java 中的保留字；</li>
+</ol>
+<h4 id="《阿里巴巴-Java-开发手册》规则"><a href="#《阿里巴巴-Java-开发手册》规则" class="headerlink" title="《阿里巴巴 Java 开发手册》规则"></a>《阿里巴巴 Java 开发手册》规则</h4><ol>
+<li><strong>【强制】</strong> 代码中的命名 <em>(所有标识符)</em> 均不能以下划线或美元符号开始，也不能以下划线或美元符号结束；<em>(反例: <code>$name</code>)</em></li>
+<li><strong>【强制]</strong> 代码中的命名严禁使用拼音与英文混合的方式，更不允许直接使用中文的方式；<em>(反例：<code>DaZhePromotion</code> - 打折)</em></li>
+<li><strong>【强制】</strong> 杜绝完全不规范的缩写，避免词不达意；<em>(反例：<code>condition</code> 缩写成 <code>condi</code>)</em></li>
+<li><strong>【推荐】</strong> 为了达到代码自解释的目的，任何自定义编程元素在命名时，使用尽量完整的单词组合来表达其意；<em>(反例：<code>int a;</code> 的随意命名方式)</em></li>
+</ol>
+<h2 id="变量初始化"><a href="#变量初始化" class="headerlink" title="变量初始化"></a>变量初始化</h2><p><strong>声明一个变量之后，必须用赋值语句对变量进行显式初始化，千万不要使用未初始化的变量的值</strong>。例如，Java 编译器认为下面的语句序列是错误的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> amount<span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>amount<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// ERROR -- variable not initialized</span></code></pre>
+<p>要相对一个已经声明过的变量进行赋值，就需要将变量名放在等号 <em>(<code>=</code>)</em> 左侧，再把一个适当取值放在等号的右侧：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> amount<span class="token punctuation">;</span>
+amount <span class="token operator">=</span> <span class="token number">12</span><span class="token punctuation">;</span></code></pre>
+<p>也可以将变量的声明和初始化放在同一行中。例如：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> amount <span class="token operator">=</span> <span class="token number">12</span><span class="token punctuation">;</span></code></pre>
+<p>最后，在 Java 中可以将声明放在代码中的任何地方。</p>
+<p>但让变量尽可能地靠近变量第一次使用的地方，这是一种良好的程序编写风格。</p>
+<h2 id="变量使用范例"><a href="#变量使用范例" class="headerlink" title="变量使用范例"></a>变量使用范例</h2><p>我们来使用变量完成两个数的加减乘除：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> num1 <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> num2 <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>num1 <span class="token operator">+</span> num2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>num1 <span class="token operator">-</span> num2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>num1 <span class="token operator">*</span> num2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>num1 <span class="token operator">/</span> num2<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="Part-3-运算符"><a href="#Part-3-运算符" class="headerlink" title="Part 3. 运算符"></a>Part 3. 运算符</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-abc8d1c70485052b.png" alt=""></p>
+<p>计算机的最基本用途之一就是执行数学运算，作为一门计算机语言，Java 也提供了一套丰富的运算符来操纵变量。我们可以把运算符分成以下几组：</p>
+<ul>
+<li>算术运算符;</li>
+<li>关系运算符;</li>
+<li>位运算符;</li>
+<li>逻辑运算符;</li>
+<li>赋值运算符;</li>
+<li>其他运算符;</li>
+</ul>
+<h2 id="算术运算符"><a href="#算术运算符" class="headerlink" title="算术运算符"></a>算术运算符</h2><p>算术运算符用在数学表达式中，它们的作用和在数学中的作用一样。下表列出了所有的算术运算符。</p>
+<p>表格中的实例假设整数变量 <code>A</code> 的值为 <code>10</code>，变量 <code>B</code> 的值为 <code>20</code>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-4dfffa3c16097e18.png" alt=""></p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>下面的简单示例程序演示了算术运算符。复制并粘贴下面的 Java 程序并保存为 <code>Test.java</code> 文件，然后编译并运行这个程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token number">25</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> d <span class="token operator">=</span> <span class="token number">25</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a + b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a - b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">-</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a * b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">*</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"b / a = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>b <span class="token operator">/</span> a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"b % a = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>b <span class="token operator">%</span> a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c % a = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>c <span class="token operator">%</span> a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a++   = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a--   = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a<span class="token operator">--</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 查看  d++ 与 ++d 的不同</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"d++   = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>d<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"++d   = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span><span class="token operator">++</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">a + b = 30
+a - b = -10
+a * b = 200
+b / a = 2
+b % a = 0
+c % a = 5
+a++   = 10
+a--   = 11
+d++   = 25
+++d   = 27</code></pre>
+<h3 id="i-与-i-到底有什么不同？"><a href="#i-与-i-到底有什么不同？" class="headerlink" title="i++ 与 ++i 到底有什么不同？"></a>i++ 与 ++i 到底有什么不同？</h3><p><strong>实际上，不管是<code>前置 ++</code>，还是<code>后置 ++</code>，都是先将变量的值加 <code>1</code>，然后才继续计算的。</strong></p>
+<p><strong>二者之间真正的区别是</strong>：<code>前置 ++</code> 是将变量的值加 <code>1</code> 后，使用增值后的变量进行运算的，而<code>后置 ++</code> 是首先将变量赋值给一个临时变量，接下来对变量的值加 <code>1</code>，然后使用那个临时变量进行运算。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-981ff732054c4400.png" alt=""></p>
+<h2 id="关系运算符"><a href="#关系运算符" class="headerlink" title="关系运算符"></a>关系运算符</h2><p>下表为Java支持的关系运算符。</p>
+<p>表格中的实例整数变量 <code>A</code> 的值为 <code>10</code>，变量 <code>B</code> 的值为 <code>20</code>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-cce5383cde7c712d.png" alt=""></p>
+<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><p>下面的简单示例程序演示了关系运算符。复制并粘贴下面的 Java 程序并保存为 <code>Test.java</code> 文件，然后编译并运行这个程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a == b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">==</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a != b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">!=</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a > b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">></span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a &lt; b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">&lt;</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"b >= a = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>b <span class="token operator">>=</span> a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"b &lt;= a = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>b <span class="token operator">&lt;=</span> a<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">a == b = false
+a != b = true
+a > b = false
+a < b = true
+b >= a = true
+b <= a = false</code></pre>
+<h2 id="位运算符"><a href="#位运算符" class="headerlink" title="位运算符"></a>位运算符</h2><p>Java定义了位运算符，应用于整数类型 <em>(int)<em>，长整型 *(long)</em>，短整型 <em>(short)</em>，字符型 <em>(char)</em>，和字节型 *(byte)</em> 等类型。</p>
+<p>位运算符作用在所有的位上，并且按位运算。假设 <code>a = 60，b = 13;</code> 它们的二进制格式表示将如下：</p>
+<pre class=" language-console"><code class="language-console">A = 0011 1100
+B = 0000 1101
+-----------------
+A&B = 0000 1100
+A | B = 0011 1101
+A ^ B = 0011 0001
+~A = 1100 0011</code></pre>
+<p>下表列出了位运算符的基本运算，假设整数变量 <code>A</code> 的值为 <code>60</code> 和变量 <code>B</code> 的值为 <code>13</code>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-0142813abdc73bc3.png" alt=""></p>
+<h3 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h3><p>下面的简单示例程序演示了关系运算符。复制并粘贴下面的 Java 程序并保存为 <code>Test.java</code> 文件，然后编译并运行这个程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">60</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 60 = 0011 1100 */</span>
+        <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">13</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 13 = 0000 1101 */</span>
+        <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> a <span class="token operator">&amp;</span> b<span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">/* 12 = 0000 1100 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a &amp; b = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        c <span class="token operator">=</span> a <span class="token operator">|</span> b<span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">/* 61 = 0011 1101 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a | b = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        c <span class="token operator">=</span> a <span class="token operator">^</span> b<span class="token punctuation">;</span>       <span class="token comment" spellcheck="true">/* 49 = 0011 0001 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a ^ b = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        c <span class="token operator">=</span> <span class="token operator">~</span>a<span class="token punctuation">;</span>          <span class="token comment" spellcheck="true">/*-61 = 1100 0011 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"~a = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        c <span class="token operator">=</span> a <span class="token operator">&lt;&lt;</span> <span class="token number">2</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">/* 240 = 1111 0000 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a &lt;&lt; 2 = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        c <span class="token operator">=</span> a <span class="token operator">>></span> <span class="token number">2</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">/* 15 = 1111 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a >> 2  = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        c <span class="token operator">=</span> a <span class="token operator">>>></span> <span class="token number">2</span><span class="token punctuation">;</span>     <span class="token comment" spellcheck="true">/* 15 = 0000 1111 */</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a >>> 2 = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> </code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">a & b = 12
+a | b = 61
+a ^ b = 49
+~a = -61
+a << 2 = 240
+a >> 2  = 15
+a >>> 2 = 15</code></pre>
+<h2 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h2><p>下表列出了逻辑运算符的基本运算，假设布尔变量 <code>A</code> 为真，变量 <code>B</code> 为假：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-42dfa6d7c547b0e7.png" alt=""></p>
+<h3 id="实例-3"><a href="#实例-3" class="headerlink" title="实例"></a>实例</h3><p>下面的简单示例程序演示了关系运算符。复制并粘贴下面的 Java 程序并保存为 <code>Test.java</code> 文件，然后编译并运行这个程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">boolean</span> a <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> b <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a &amp;&amp; b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">&amp;&amp;</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a || b = "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>a <span class="token operator">||</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"!(a &amp;&amp; b) = "</span> <span class="token operator">+</span> <span class="token operator">!</span><span class="token punctuation">(</span>a <span class="token operator">&amp;&amp;</span> b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">a && b = false
+a || b = true
+!(a && b) = true</code></pre>
+<h3 id="短路逻辑运算符"><a href="#短路逻辑运算符" class="headerlink" title="短路逻辑运算符"></a>短路逻辑运算符</h3><p>当使用与逻辑运算符时，在两个操作数都为 <code>true</code> 时，结果才为 <code>true</code>，但是当得到第一个操作为 <code>false</code> 时，其结果就必定是 <code>false</code>，这时候就不会再判断第二个操作了。</p>
+<p>事实上，如果所有的逻辑表达式都有一部分不必计算，那将获得潜在的性能提升。</p>
+<p><strong>实例：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LuoJi</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//定义一个变量；</span>
+        <span class="token keyword">boolean</span> b <span class="token operator">=</span> <span class="token punctuation">(</span>a <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>a<span class="token operator">++</span> <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"使用短路逻辑运算符的结果为"</span> <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"a的结果为"</span> <span class="token operator">+</span> a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">使用短路逻辑运算符的结果为false
+a的结果为5</code></pre>
+<h2 id="赋值运算符"><a href="#赋值运算符" class="headerlink" title="赋值运算符"></a>赋值运算符</h2><p>下面是 Java 语言支持的赋值运算符：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-a7e10a736acda732.png" alt=""></p>
+<h3 id="实例-4"><a href="#实例-4" class="headerlink" title="实例"></a>实例</h3><p>下面的简单示例程序演示了关系运算符。复制并粘贴下面的 Java 程序并保存为 <code>Test.java</code> 文件，然后编译并运行这个程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">20</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c = a + b = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">+=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c += a  = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">-=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c -= a = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">*=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c *= a = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> <span class="token number">15</span><span class="token punctuation">;</span>
+        c <span class="token operator">/=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c /= a = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        c <span class="token operator">=</span> <span class="token number">15</span><span class="token punctuation">;</span>
+        c <span class="token operator">%=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c %= a  = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">&lt;&lt;=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c &lt;&lt;= 2 = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">>>=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c >>= 2 = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">>>=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c >>= 2 = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">&amp;=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c &amp;= a  = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">^=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c ^= a   = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        c <span class="token operator">|=</span> a<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"c |= a   = "</span> <span class="token operator">+</span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">c = a + b = 30
+c += a  = 40
+c -= a = 30
+c *= a = 300
+c /= a = 1
+c %= a  = 5
+c <<= 2 = 20
+c >>= 2 = 5
+c >>= 2 = 1
+c &= a  = 0
+c ^= a   = 10
+c |= a   = 10</code></pre>
+<h2 id="其他运算符"><a href="#其他运算符" class="headerlink" title="其他运算符"></a>其他运算符</h2><h3 id="条件运算符"><a href="#条件运算符" class="headerlink" title="条件运算符 (?:)"></a>条件运算符 (?:)</h3><p>条件运算符也被称为三元运算符。该运算符有 <code>3</code> 个操作数，并且需要判断布尔表达式的值。该运算符的主要是决定哪个值应该赋值给变量。</p>
+<pre class=" language-java"><code class="language-java">variable x <span class="token operator">=</span> <span class="token punctuation">(</span>expression<span class="token punctuation">)</span> <span class="token operator">?</span> value <span class="token keyword">if</span> <span class="token boolean">true</span> <span class="token operator">:</span> value <span class="token keyword">if</span> <span class="token boolean">false</span></code></pre>
+<h3 id="实例-5"><a href="#实例-5" class="headerlink" title="实例"></a>实例</h3><p>下面的简单示例程序演示了关系运算符。复制并粘贴下面的 Java 程序并保存为 <code>Test.java</code> 文件，然后编译并运行这个程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> a<span class="token punctuation">,</span> b<span class="token punctuation">;</span>
+        a <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 如果 a 等于 1 成立，则设置 b 为 20，否则为 30</span>
+        b <span class="token operator">=</span> <span class="token punctuation">(</span>a <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">20</span> <span class="token operator">:</span> <span class="token number">30</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Value of b is : "</span> <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 如果 a 等于 10 成立，则设置 b 为 20，否则为 30</span>
+        b <span class="token operator">=</span> <span class="token punctuation">(</span>a <span class="token operator">==</span> <span class="token number">10</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">20</span> <span class="token operator">:</span> <span class="token number">30</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Value of b is : "</span> <span class="token operator">+</span> b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行结果：</strong></p>
+<pre class=" language-console"><code class="language-console">Value of b is : 30
+Value of b is : 20</code></pre>
+<h3 id="instanceof-运算符"><a href="#instanceof-运算符" class="headerlink" title="instanceof 运算符"></a>instanceof 运算符</h3><p>该运算符用于操作对象实例，检查该对象是否是一个特定类型（类类型或接口类型）。</p>
+<p><code>instanceof</code> 运算符使用格式如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span> Object reference variable <span class="token punctuation">)</span> <span class="token keyword">instanceof</span>  <span class="token punctuation">(</span><span class="token keyword">class</span><span class="token operator">/</span><span class="token keyword">interface</span> <span class="token class-name">type</span><span class="token punctuation">)</span></code></pre>
+<p>如果运算符左侧变量所指的对象，是操作符右侧类或接口 <em>(class/interface)</em> 的一个对象，那么结果为真。</p>
+<p>下面是一个例子：</p>
+<pre class=" language-java"><code class="language-java">String name <span class="token operator">=</span> <span class="token string">"James"</span><span class="token punctuation">;</span>
+<span class="token keyword">boolean</span> result <span class="token operator">=</span> name <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// 由于 name 是 String 类型，所以返回真</span></code></pre>
+<h1 id="要点回顾"><a href="#要点回顾" class="headerlink" title="要点回顾"></a>要点回顾</h1><ol>
+<li>Java 是一种强类型语言，任何一种数据都属于 <code>1</code> 种基本类型或者对象类型 <em>(类)</em> 中的一种；</li>
+<li><code>8</code> 种基本数据类型； </li>
+<li>为什么引入变量、如何定义使用变量以及变量名的命名规范；</li>
+<li>Java 中的运算符以及使用实例；</li>
+</ol>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h2 id="获取用户输入-Scanner"><a href="#获取用户输入-Scanner" class="headerlink" title="获取用户输入 Scanner"></a>获取用户输入 Scanner</h2><p><code>java.util.Scanner</code> 是 Java5 的新特征，我们可以通过 <code>Scanner</code> 类来获取用户的输入。</p>
+<p>下面是创建 Scanner 对象的基本语法：</p>
+<pre class=" language-java"><code class="language-java">Scanner scanner <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Scanner</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>在下面的示例中，我们将使用该类的 <code>nextLine()</code> 方法，该方法用于读取字符串：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Scanner<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// Import the Scanner class</span>
+
+<span class="token keyword">class</span> <span class="token class-name">MyClass</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Scanner scanner <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Scanner</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// Create a Scanner object</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Enter username"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        String userName <span class="token operator">=</span> scanner<span class="token punctuation">.</span><span class="token function">nextLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// Read user input</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Username is: "</span> <span class="token operator">+</span> userName<span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// Output user input</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="输入类型"><a href="#输入类型" class="headerlink" title="输入类型"></a>输入类型</h3><p>在上面的示例中，我们使用了 <code>nextLine()</code> 用于读取字符串的方法。要阅读其他类型，请查看下表：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-cb37b32c2f0462a4.png" alt=""></p>
+<ul>
+<li>引用自：<a href="https://www.w3schools.com/java/java_user_input.asp" target="_blank" rel="noopener">https://www.w3schools.com/java/java_user_input.asp</a></li>
+</ul>
+<h2 id="练习-1：输入圆的半径计算周长和面积"><a href="#练习-1：输入圆的半径计算周长和面积" class="headerlink" title="练习 1：输入圆的半径计算周长和面积"></a>练习 1：输入圆的半径计算周长和面积</h2><p>参考答案：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Scanner<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"请输入圆的半径："</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Scanner scanner <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Scanner</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> radius <span class="token operator">=</span> scanner<span class="token punctuation">.</span><span class="token function">nextInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 计算周长和面积</span>
+        <span class="token keyword">double</span> area <span class="token operator">=</span> radius <span class="token operator">*</span> radius <span class="token operator">*</span> <span class="token number">3.14</span><span class="token punctuation">;</span>
+        <span class="token keyword">double</span> perimeter <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">*</span> <span class="token number">3.14</span> <span class="token operator">*</span> radius<span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"该圆的面积为："</span> <span class="token operator">+</span> area<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"该圆的周长为："</span> <span class="token operator">+</span> perimeter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="练习-2：输入年份判断是不是闰年"><a href="#练习-2：输入年份判断是不是闰年" class="headerlink" title="练习 2：输入年份判断是不是闰年"></a>练习 2：输入年份判断是不是闰年</h2><p>提示：</p>
+<p>闰年需要满足：</p>
+<ol>
+<li>能被 <code>4</code> 整除，并且不能被 <code>100</code> 整除；</li>
+<li>或者能被 <code>400</code> 整除；</li>
+</ol>
+<p>参考答案：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Scanner<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"请输入年份："</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        Scanner scanner <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Scanner</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> year <span class="token operator">=</span> scanner<span class="token punctuation">.</span><span class="token function">nextInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">boolean</span> leapYear<span class="token punctuation">;</span>
+
+        <span class="token keyword">boolean</span> divisbleBy4 <span class="token operator">=</span> year <span class="token operator">%</span> <span class="token number">4</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> notDivisbleBy100 <span class="token operator">=</span> year <span class="token operator">%</span> <span class="token number">100</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">boolean</span> divisibleBy400 <span class="token operator">=</span> year <span class="token operator">%</span> <span class="token number">400</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        leapYear <span class="token operator">=</span> <span class="token punctuation">(</span>divisbleBy4 <span class="token operator">&amp;&amp;</span> notDivisbleBy100<span class="token punctuation">)</span> <span class="token operator">||</span> divisibleBy400<span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"该年份是否是闰年："</span> <span class="token operator">+</span> leapYear<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="自取资料"><a href="#自取资料" class="headerlink" title="自取资料"></a>自取资料</h1><h2 id="扩展阅读推荐"><a href="#扩展阅读推荐" class="headerlink" title="扩展阅读推荐"></a>扩展阅读推荐</h2><ol>
+<li>Java 基本数据类型 | 菜鸟教程 - <a href="https://www.runoob.com/java/java-basic-datatypes.html" target="_blank" rel="noopener">https://www.runoob.com/java/java-basic-datatypes.html</a></li>
+<li>浮点类型精度深度讨论：<ol>
+<li>为什么 0.1 + 0.2 = 0.3？ - <a href="https://draveness.me/whys-the-design-decimal-and-rational/" target="_blank" rel="noopener">https://draveness.me/whys-the-design-decimal-and-rational/</a></li>
+<li>为什么 0.1 + 0.2 = 0.300000004？ - <a href="https://draveness.me/whys-the-design-floating-point-arithmetic/#fn:2" target="_blank" rel="noopener">https://draveness.me/whys-the-design-floating-point-arithmetic/#fn:2</a></li>
+</ol>
+</li>
+<li>IEEE754标准: 浮点数在内存中的存储方式 - <a href="https://www.jianshu.com/p/8ee02e9bb57d" target="_blank" rel="noopener">https://www.jianshu.com/p/8ee02e9bb57d</a></li>
+<li>为什么Java中char类型不能完整表示一个字符？ - <a href="https://fookwood.com/java-string-charset-char" target="_blank" rel="noopener">https://fookwood.com/java-string-charset-char</a></li>
+</ol>
+<h2 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h2><h4 id="Java-核心技术·卷-I-原书第-11-版"><a href="#Java-核心技术·卷-I-原书第-11-版" class="headerlink" title="Java 核心技术·卷 I(原书第 11 版)"></a>Java 核心技术·卷 I(原书第 11 版)</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-1af3158a432a42e6.png" alt=""></p>
+<p><strong>推荐理由：</strong> 这本书在知识体系完整充实的同时，又比《Thinking in Java》暴风式的知识洗礼来得轻松，新人入门书籍强烈推荐！</p>
+<h4 id="码出高效：Java开发手册"><a href="#码出高效：Java开发手册" class="headerlink" title="码出高效：Java开发手册"></a>码出高效：Java开发手册</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-c1f1aa7009ba0a81.png" alt=""></p>
+<p><strong>推荐理由：</strong> 阿里系出品。从最基础的计算机基础入手，到 Java 的方方面面，加上精美的配图和通俗易懂的解释，是非常适合新手阅读的一本儿关于 Java 的技术书籍。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>Introduction to Computer Science using Java - <a href="http://programmedlessons.org/Java9/index.html#part02" target="_blank" rel="noopener">http://programmedlessons.org/Java9/index.html#part02</a></li>
+<li>Java 运算符 | 菜鸟教程 - <a href="https://www.runoob.com/java/java-operators.html" target="_blank" rel="noopener">https://www.runoob.com/java/java-operators.html</a></li>
+<li>《Java 核心技术 卷I》(第11版)</li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay2%EF%BC%9A%E5%8F%98%E9%87%8F%E3%80%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E8%BF%90%E7%AE%97%E7%AC%A6/7896890-ce254150d41f79f6.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/07/03/morethanjava-day-1-huan-jing-da-jian-he-cheng-xu-ji-ben-jie-gou-yuan-su/">
       「MoreThanJava」Day 1：环境搭建和程序基本结构元素
     </a>
@@ -2437,321 +3021,6 @@ c<span class="token operator">=</span> a<span class="token operator">*</span>b
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/04/07/morethanjava-ji-suan-ji-fa-zhan-shi-cong-zhi-bu-ji-dao-ibm/">
-      「MoreThanJava」计算机发展史—从织布机到IBM
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/MoreThanJava/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>MoreThanJava</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年4月7日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-e35d7d3c28cb7f92.png" alt=""></p>
-<ul>
-<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
-<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
-</ul>
-<h1 id="一、织布机-一切的开端"><a href="#一、织布机-一切的开端" class="headerlink" title="一、织布机 | 一切的开端"></a>一、织布机 | 一切的开端</h1><p>如今代表智能现代的计算机与老式织布机的血缘关系超乎你的想象。无论是摆在写字台上的 <strong>台式机</strong>、塞在口袋里的 <strong>掌上电脑</strong>、挂在腰上的 <strong>移动电话</strong>、乃至你家中的很多 <strong>家用电器</strong>，其实都是 <code>1804</code> 年诞生的 <strong>一台织布机的后代——雅卡尔传空纸带提花机</strong>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-72c7e7b9335fd26c.png" alt="雅卡尔的穿孔纸带提花机"></p>
-<ul>
-<li>图片源自：<a href="http://blog.sciencenet.cn/blog-528739-903746.html" target="_blank" rel="noopener">http://blog.sciencenet.cn/blog-528739-903746.html</a></li>
-</ul>
-<h2 id="织物与织布机"><a href="#织物与织布机" class="headerlink" title="织物与织布机"></a>织物与织布机</h2><h4 id="常见的织物"><a href="#常见的织物" class="headerlink" title="常见的织物"></a>常见的织物</h4><p>常见的织物有 <strong>「机织物」</strong> 和 <strong>「针织物」</strong> 两种。</p>
-<p>我们平时最为熟悉的 <strong>「针织物」</strong> 借助的工具是 <strong>“针”</strong>，利用织针按照一定方向弯曲成线圈形态，然后再将线圈相互串套而形成的织物，可以横向或者纵向地进行，横向编织称为纬编织物，而纵向编织称为经编织物。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-d09b3796c5652a7a.png" alt="针织物"></p>
-<p>而 <strong>「机织物」</strong> 由两条或两组以上的相互垂直的两个系统纱线或者丝线，在 <strong>织机</strong> 上按照一定规律相互交织而形成的织物叫机织物，<strong>纵向的纱线</strong> 叫 <strong>经纱</strong>，<strong>横向的纱线</strong> 叫 <strong>纬纱</strong>，基本组织有平纹、斜纹和缎纹。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-481c33adbc622475.png" alt="机织物"></p>
-<h4 id="织机是如何工作和迭代的"><a href="#织机是如何工作和迭代的" class="headerlink" title="织机是如何工作和迭代的"></a>织机是如何工作和迭代的</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-95fdaccdef2889ca.png" alt=""></p>
-<p>在织机上，经纱在经轴上逐根排列，根据织物纹样的要求，<strong>部分经纱被抬起</strong>，另一部分经纱则保持不动 <strong>形成织口</strong>，<strong>纬纱从织口中引入</strong>，经纱抬起的规律不同以及纱线颜色的排列变化，就会给织物带来不同的纹样：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-0961b4fb28a101fd.gif" alt=""></p>
-<p><strong>可是，经纱有那么多，是如何挑选出引入没根纬纱时要提起哪些经纱的呢？</strong></p>
-<p>最原始的织机是手动完成的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-a3d9a4231f9aae6b.png" alt="海南省黎族老太太编织传统的毯织品。"></p>
-<ul>
-<li>图片引用自：<a href="https://www.sohu.com/a/301616592_99894978" target="_blank" rel="noopener">https://www.sohu.com/a/301616592_99894978</a></li>
-</ul>
-<p>而到了战国时期的 <strong>多综式提花织机</strong>，则发明了 <strong>综框</strong> 来完成这项工作，棕框的上下梁间有垂直排列的综丝，经纱穿入综丝中，织物纹样的变化有一个规律，也就意味着经纱是随着纬纱的引入被 <strong>有规律的循环提起</strong>，将 <strong>提起规律相同的经纱</strong> 穿入 <strong>同一个综框的综丝</strong> 中，当综框被提升时，穿入的所有经纱都会被同时提起，每一个综框都有一个脚踏板，踩下脚踏板则可通过机械装置控制其抬升：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-38d0c56843297d7e.gif" alt=""></p>
-<p>不过采用综框也有一个明显的限制，那就是 <strong>无法织出比较复杂的纹样</strong>，因为纹样复杂则代表着需要更多的经纬纱以及经纱提升的规律更复杂，意味着可能引入成百上千次纬纱才能完成一个循环。</p>
-<p>如果仍然采用综框控制纱线提升，则可能需要成百上千个综框，这在机械上实现是非常困难的，因此便有了 <strong>束综提花织机</strong>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-d34ece70de4c25fe.png" alt=""></p>
-<p>束综提花织机没有综框，而是被 <strong>设计成两层</strong>，每一根经纱会穿入综丝中实现 <strong>单独的控制</strong>，<strong>上层</strong> 的人将需要提起的经纱提起，而 <strong>下层</strong> 的人则再经纱提起后通过梭子将纬纱送入织口，并用打纬装置将引入的纬纱打牢。</p>
-<p>然而通常来说，这类织机上会有成千上万根纬纱，纹样复杂，于是聪明的老祖宗们发明了 <strong>花本</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-d575751906c799f2.png" alt=""></p>
-<p>简单来说，花本存储了纹样信息。图中花本的竖线连接穿入了经纱的综丝，横线存储了每一次引入纬纱时提花信息，当竖线越过横线覆盖在横线前方时，表明对应的经纱要被提起。</p>
-<blockquote>
-<p>如果还是没有理解到这个过程的话，这里有一个比较硬核的视频，教你如何手工来制作一个简易织布机：<a href="https://www.bilibili.com/video/BV1Hi4y1b7im" target="_blank" rel="noopener">戳这里</a></p>
-</blockquote>
-<h2 id="“识字”的机器-雅卡尔织机的诞生"><a href="#“识字”的机器-雅卡尔织机的诞生" class="headerlink" title="“识字”的机器 | 雅卡尔织机的诞生"></a>“识字”的机器 | 雅卡尔织机的诞生</h2><p>上面说到的束综提花织机虽然是一大进步，但可想而知的是，它仍然效率缓慢并且织布工人的劳动量非常大，也非常辛苦。虽然聪明的祖先们进行了很多机械化的尝试，但仍然没有取得跨越式的发展。</p>
-<p>时间来到 <code>18</code> 世纪的欧洲。欧洲游历和学徒的传统，造就了许多城市独特的支柱产业，例如威尼斯的玻璃业和法国里昂的 <strong>丝织业</strong>。<code>1725</code> 年，里昂的织匠 <strong>布乔</strong> <em>(B.Bouchon)</em> 做出了开拓性的发明：他用 <strong>打孔纸带</strong> 控制经线的提起和放下，从而让织出花样成为了一种半自动的工作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-bd456560f6eff8d9.png" alt=""></p>
-<p>做为一个乐器工人的儿子，布乔把家学和自己的工作结合得很好。然而，柔软的打孔纸带不能织出太宽的织物，这是它的致命伤之一；而纸带依然需要有人照看，每穿过一次纬线，纸带就需要向下移动一格。布乔提花机的最大贡献，在于实现了花纹的二进制存储——以机器能够识别的方式。<strong>历史上第一次，机器能够读出存储介质中的内容，并且照其行事。</strong></p>
-<p>在布乔提出构想 <code>65</code> 后的 <code>1790</code> 年，<strong>约瑟夫·玛丽·雅卡尔</strong> 根据前人的成果设计了新式织机，不过正在此时，轰轰烈烈的法国大革命爆发了，雅卡尔也停下了手中的工作，投入到了家乡里昂的里昂保卫战中，这一拖就拖到了 <code>1805</code> 年，雅卡尔终于组装完成了首台 <strong>自动提花织机</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-a848c33d8c2fce75.png" alt="雅卡尔织机"></p>
-<p>雅卡尔将 <strong>穿孔纸带</strong> 改进为 <strong>穿孔卡片</strong>，根据纹样图案在卡片上打孔，<strong>通过孔的有无</strong> 带动一系列机械运动装置来 <strong>控制经纱的提升</strong>，一张卡片对应循环内一次引纬时经纱提升的信息，引纬完成后，可通过脚踏板控制卡孔卡片转动，下一张卡片翻转至工作位置以控制新一次引纬的提花：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-1aa4e10f24c21827.gif" alt=""></p>
-<p>雅卡尔织机大幅度节省了时间和工作量 <em>(全自动且效率是之前的二十五倍)</em>，而且只需一位工人，很快就被广泛使用在工厂生产中，雅卡尔也荣获了拿破仑授予的荣誉勋章。然而，迎接这位发明家的，却是失业的纺织工人迎面扔来的石头。最终导致雅卡尔客死异乡。</p>
-<blockquote>
-<p><strong>雅卡尔 = 贾卡</strong>。笔者在写文的时候，发现不同的资料文献中对于该织机作者的翻译会有偏差，有的叫 <strong>雅卡尔织机</strong>，有的叫 <strong>贾卡织机</strong>，但都是同一个人啦..</p>
-</blockquote>
-<h1 id="二、差分机-程序设计思想开始萌芽"><a href="#二、差分机-程序设计思想开始萌芽" class="headerlink" title="二、差分机 | 程序设计思想开始萌芽"></a>二、差分机 | 程序设计思想开始萌芽</h1><p><strong>穿孔卡片控制织物纹样的设计成为了程序设计思想的萌芽</strong>，为信息技术的发展开展了一条新的道路。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-6bd664ed3668b50c.png" alt=""></p>
-<p>时间来到 <code>19</code> 世纪初，法国人 <strong>巴贝奇</strong> <em>(Chanles Badbbage)</em> 在贾卡织机的启发下，设计并制造了 <strong>差分机</strong>。</p>
-<h2 id="故事背景"><a href="#故事背景" class="headerlink" title="故事背景"></a>故事背景</h2><blockquote>
-<p>以下内容大部分摘录自下方引用资料：<a href="https://www.jianshu.com/p/5d739419b93d" target="_blank" rel="noopener">现代计算机真正的鼻祖——超越时代的伟大思想</a></p>
-</blockquote>
-<p><code>18</code> 世纪末，法国政府在开创米制之后，决定在数学中统一采用十进制，竟奇葩地想把原本 <code>90</code> 度的直角划分成 <code>100</code> 度、把原本 <code>60</code> 秒的 <code>1</code> 分钟划分成 <code>100</code> 秒，尽管从现在看来这样的想法绝逼是一种倒退，但他们在当时真就实施了。这一改制带来的不光是人们在使用时直观上的别扭，原本制作好的数学用表 <em>（如三角函数表）</em> 都需要全部重制。</p>
-<p>法国政府将这项丧心病狂的工程交给了 <strong>数学家普罗尼</strong>  <em>（Gaspard de Prony）<em>，普罗尼正头疼着要如何才能完成这项艰巨的任务，突然想起著名经济学家 *</em>亚当·斯密** *（Adam Smith）</em> 的那本《富国论》，他决定采用书中提出的 <strong>劳动分工</strong> 的做法，将制表的工作人员分成三组：</p>
-<ul>
-<li><strong>第一组</strong> 由五六名牛逼的数学家组成，他们负责制定运算中所需的公式；</li>
-<li><strong>第二组</strong> 由九到十个擅长数学的人组成，他们负责计算出一些关键数据，并把第一组制定好的公式进行简化；</li>
-<li><strong>第三组</strong> 由约一百名计算人员组成，他们利用第二组提供的关键数据和公式，做最简单的加减操作就能得出最终结果。</li>
-</ul>
-<p>第三组的工作简单到什么程度，就是他们甚至都不知道自己正在算什么玩意儿，事实上他们的文化程度大部分都不高，里头好多都是理发师、失业人员什么的。可见即便文盲都能完成的计算，在那个时代还是得依靠人力去做。</p>
-<p>而为了保证用表的正确性，普罗尼要求 <strong>每个数至少算两遍</strong>，并且 <strong>要在法国的不同地点用不同的方法计算</strong>。这项劳民伤财的工程整整进行了十年才完成，然而不幸的是，<strong>最终的表里仍然有错</strong>。说到这一点，可以说，那个时代基本没有一版数学用表是完全正确的，有些版本甚至错误百出，要知道数学用表出错有时后果会很严重，比如航海表一出错就可能直接导致船毁人亡。</p>
-<p><strong>巴贝奇</strong> 在了解到普罗尼的事迹后泪流满面，决心要做一套完全正确的数学用表，为达目的，他尝试了各种减少错误的手段，比如调整纸张和墨水的颜色以提高数字的识别度，直接拿现有的多个版本的表进行誊抄、比对、让不同人员反复校对，在 <code>1827</code> 年出版了一个版本，结果里头还是有错。<strong>只要是人为的就没有完美的</strong>，巴贝奇彻底跪了，他发誓要造一台机器，让机器去生产数学表。</p>
-<p>这就是史上著名的 <strong>差分机</strong> 了。</p>
-<h2 id="重要的差分思想"><a href="#重要的差分思想" class="headerlink" title="重要的差分思想"></a>重要的差分思想</h2><p>其实早在巴贝奇出生前，有个叫 <strong>米勒</strong> <em>（Johann Helfrich von Müller）</em> 的德国工程师就提出了差分机的思想，但仅仅是提了一下，并没有进行具体设计和制造，他最终还是把研制差分机的历史重任让给了巴贝奇。</p>
-<p>之所以叫差分机这个名字，是因为它计算所使用的是帕斯卡在 <code>1654</code> 年提出的差分思想：<strong>n 次多项式的 n 次数值差分为同一常数</strong>。举个简单例子好了，对于函数 <strong>F(x) = 12x + 12</strong>，x 取自然数：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-96ac031c5ffac9ce.png" alt="一次差分定义为∆F(x) = F(x+1) - F(x)"></p>
-<p><strong>对于一次多项式，每个相邻的 x 所对应的 F(x) 之差都是一个常数</strong>，这个常数很明显就是 x 的系数。那么二次多项式呢？对于函数 <strong>F(x) = 15x<sup>2</sup> + 12x + 12</strong>，x 取自然数：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-d43781e80d39a256.png" alt="二次差分定义为∆F2(x) = F1(x+1) - F1(x)"></p>
-<p><strong>对于二次多项式，每个相邻的 x 所对应的一次差分之差仍然都是一个常数</strong>，我们可以导出这一常数的通用公式：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-5dd3b237960e875d.png" alt=""></p>
-<p>在上述例子中，<code>a = 15</code>，故二次差分常数 <code>2a</code> 即为 <code>30</code>。</p>
-<p>差分规律是一项伟大的发现，有了差分，在计算多项式时就可以 <strong>用加法替代乘法</strong>，我们只需要算出几个初始值，后面对于任意 x 所对应的 F(x) 均可以通过加法得出：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-ffaac883073ee372.png" alt=""></p>
-<p>学过高数的朋友应该知道，<strong>一个函数在满足一定条件的情况下可以用多项式逼近</strong> <em>（幂级数展开）</em>，于是常用的三角函数、对数函数都可以通过多项式来计算的，而机械时期的计算设备最擅长的就是做加法，有了差分思想，巴贝奇看到差分机的前途一片光明。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-4af5848f1dd487b2.png" alt="幂级数展开 - 即使现在计算机也是沿用这样的方式进行计算"></p>
-<h2 id="完成一半的差分机（Difference-Engine）"><a href="#完成一半的差分机（Difference-Engine）" class="headerlink" title="完成一半的差分机（Difference Engine）"></a>完成一半的差分机（Difference Engine）</h2><p>从 <code>1812</code> 年到 <code>1822</code> 年，巴贝奇克服重重困难完成了一台可以计算六位数二次多项式的模型机，他给皇家学会的主席写信，希望政府可以出资，赞助他建造真正可用的大型差分机。政府也觉得这事儿很有意义，尤其对海军很有价值，于是在 <code>1823</code> 年拨款 <code>1500</code> 英镑，巴贝奇如鱼得水，号称只要两三年时间就能完工。</p>
-<p>谁知实行起来要比想象中困难得多，那个时代的机械制造水平实在落后，差分机是十分精密的仪器，巴贝奇跑遍了欧洲都没找到多少能用的零件，于是在制造差分机之前，他还要先想着怎么制造各类零件。</p>
-<p>在英国当时一个牛逼的机械师 <strong>克莱门特</strong> <em>（Joseph Clement）</em> 的帮助下，他们真的在提高机械制造方面下足了功夫，不但做出了差分机能用的零件，还培养出大批优秀的技师。本来这两人强强联合势必能把差分机做好，但是巴贝奇是个精益求精的人，经常改动设计方案，导致工程时常要返工，工作量大大增加，外加亲人的相继去世，后来又和克莱门特闹掰，到了 <code>1833</code> 年，十年都过去了，巴贝奇只做出了机器的一小部分，却已经花费了 <code>3</code> 万英镑 <em>（远超最初预算）</em>。政府对巴贝奇大失所望，终于在 <code>1842</code> 年正式宣布不再出资，到头来巴贝奇给后世留下的就只有一个半成品，以及在 <code>1839</code> 年修订好的一大堆设计图纸，现存于伦敦科学博物馆。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-0f9393f025abd4f7.png" alt="伦敦科学博物馆·差分机设计图纸&amp;半成品"></p>
-<p>值得一提的是，巴贝奇做不出差分机实在不是客观原因所致，与他同时代的瑞典人 <strong>乔治·舒茨</strong> <em>（Per Georg Scheutz）</em> 就根据他的设计在 <code>1843</code> 年做出了切实能用的差分机，巴贝奇倒是提供了不少指导和帮助，也算是了却了自己一桩心愿吧。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-aa122f4a39fd7aa8.png" alt="乔治·舒茨和他的差分机"></p>
-<p><code>150</code> 年后，为了纪念巴贝奇 <code>200</code> 年诞辰，从 <code>1989</code> 到 <code>1991</code> 年人们根据巴贝奇的设计图纸建造了第一台真正的巴贝奇差分机，机器完美运行，工程师们惊奇地发现，巴贝奇的图纸里只有极少的错误，而且这些错误八成是当时为防止图纸被盗用而刻意为之的。这台差分机被保护在伦敦科学博物馆的玻璃柜里，后来又造了一台，放在美国硅谷的计算机历史博物馆，每天由导游给参观者讲解和演示，人们得以近距离膜拜。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-76551574069fa951.png" alt="伦敦科学博物馆·史上第一台巴贝奇差分机"></p>
-<h2 id="差分机的工作原理简析"><a href="#差分机的工作原理简析" class="headerlink" title="差分机的工作原理简析"></a>差分机的工作原理简析</h2><p>在巴贝奇 <code>1839</code> 年的设计中，差分机可以支持七次多项式的计算。由于每次参与计算的都是函数值和 1~7 次差分值的最新值，于是仅需响应的 <code>8</code> 个计数器。巴贝奇设计的计算器由 <code>31</code> 个计数轮垂直叠加而成，即支持 <code>31</code> 位十进制数：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-51570ca62e27c868.png" alt=""></p>
-<p>加上传动装置和进位装置，就成了这样一幅丧心病狂的样子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-de4a0dfde8a07622.png" alt=""></p>
-<p>巴贝奇使用梯形的传动轮实现两个计数轮之间的相加，由于有梯形齿，传动轮可以同时带动两个计数轮，也可以只带动一个。于是在进行两数相加时，传动轮先顺时针旋转，将右侧计数轮上的数字加到左侧轮上，而后上升一段距离，逆时针旋转相同度数，将右侧计数轮的示数还原到原来的位置。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-8612e1ae802b8c45.gif" alt=""></p>
-<p>仔细观察可以发现，这两个轮子上的数字排列顺序是相反的。在两轮相加的过程中，左侧轮作为累加轮朝数值增大的方向旋转，而右侧轮作为加数轮则朝数值减少方向旋转。在巴贝奇改进的并行差分算法中，两个步骤交替进行，同一个计数轮需要交替充当累加轮和加数轮的角色，于是当机器运行起来，这些齿轮需要正反方向交替旋转。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-0dfe223c50520813.gif" alt=""></p>
-<p><strong>差分机的进位机构比较复杂</strong>，简单地说，每个计数轮都有一个针对高位的 <strong>“进位提示器”</strong>，当计数轮从 <code>9</code> 转到 <code>0</code>，其对应的 <strong>“进位提示器”</strong> 就被拨到 <strong>“需要进位”</strong> 的状态，每次计算，计数轮都要转动两次，第一次是每位数相加，第二次是按照“进位提示器”进行进位。我们直观地感受一下连续进位是什么样子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-bf16b69710fd8b72.gif" alt=""></p>
-<p>最后我们来欣赏一下差分机整个运行起来的样子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-d768f67672d25643.gif" alt=""></p>
-<p>还有另外一个适用乐高还原的硬核版本：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-6270f64576778e99.gif" alt=""></p>
-<blockquote>
-<p>如果对这一部分感兴趣的童鞋请进一步阅读原版文章：<a href="https://www.jianshu.com/p/5d739419b93d" target="_blank" rel="noopener">现代计算机真正的鼻祖——超越时代的伟大思想</a></p>
-</blockquote>
-<h1 id="三、分析机-第一台真正意义上的-Computer"><a href="#三、分析机-第一台真正意义上的-Computer" class="headerlink" title="三、分析机 | 第一台真正意义上的 Computer"></a>三、分析机 | 第一台真正意义上的 Computer</h1><p>尽管没能亲手实现差分机，但巴贝奇并不会气馁，或者说他本来就是根本停不下来的那种人。明知实现不了，巴贝奇仍在一刻不停地改进着自己的设计，直到有一天，他构思出了一种空前的机器——分析机，正式成为现代计算机史上的第一位伟大先驱。 <em>(Father of computing)</em></p>
-<p><code>1834</code> 年，分析机概念诞生之际，巴贝奇自己都为之感到无比震惊。在此之前，任何一台计算机器都只能完成其被预定赋予的计算任务，要么是简单的加减乘除，要么像差分机那样只能做差分运算，它们都属于 <code>calculator</code>，而分析机才是真正的 <code>computer</code>，它不局限于特定功能，而竟然是可编程的，可以用来 <strong>计算任意函数</strong>——现代人无论如何也无法想象在一坨齿轮上写程序是怎样一种体验吧！</p>
-<p>巴贝奇设计的分析机主要包括三大部分： </p>
-<ol>
-<li>用于存储数据的计数装置，巴贝奇称之为 <strong>“仓库”（store）</strong>，相当于现在 <strong>CPU 中的存储器</strong>，这部分是从差分机上的计数装置改进而来的，我们很容易想象它的模样；</li>
-<li>专门负责四则运算的装置，巴贝奇称之为 <strong>“工厂”（mill）</strong>，相当于现在 <strong>CPU 中的运算器</strong>，这部分的结构相对复杂，巴贝奇针对乘除法还做了一些优化； </li>
-<li>控制操作顺序、选择所需处理的数据和输出结果的装置，巴贝奇没有起名字，由于其呈桶状，我们可以叫它 <strong>“控制桶”</strong>，控制桶显然相当于现在 <strong>CPU 中的控制器</strong>。 </li>
-</ol>
-<p>以上三部分，加上巴贝奇并没有疏漏的输入输出设备，我们惊讶地发现，<strong>分析机的组成部分和现在冯·诺依曼架构所要求的五大部件一模一样！</strong> </p>
-<p>巴贝奇另一大了不起的创举就是将 <strong>穿孔卡片（punched card）</strong> 引入了计算机器领域，用于控制数据输入和计算，从那时起，到第一台电子计算机诞生为止，期间几乎所有的数字计算机都使用了穿孔卡片。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-88a98d9aed673a97.png" alt="穿孔卡片的提花原理"></p>
-<p>巴贝奇在一次巴黎展览会上看到了贾卡的提花机，对其印象十分深刻，由于一直在研究计算机器，自然想到可以把穿孔卡片也应用到分析机上。于是分析机中的输入数据、存储地址、运算类型都使用穿孔卡片来表示。在机器运行时，卡片上有孔和无孔的地方会导致对应的金属杆执行不同操作，可编程性由此体现。下图可以直观地展现这一原理：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-2594db4842db5453.gif" alt=""></p>
-<p>整个分析机就是在类似这样的齿轮和拉杆作用下实现可编程运算的：先从数据卡片读入数据到存储器，再将存储器中的数据传输到运算器，运算器算完后又将数据传回存储器。</p>
-<p>可惜的是，巴贝奇穷其一生也没能真正把分析机做出来，留给后世的又是一台模型机和两千多张图纸，以及这样一段遗言：</p>
-<blockquote>
-<p>如果一个人不因我一生的借鉴而却步，仍然一往直前制成一台本身具有全部数学分析能力的机器……那么我愿将我的声誉毫不吝啬地让给他，因为只有他能够完全理解我的种种努力以及这些努力所得成果的真正价值。</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-06d4d4c8fc8d4b88.png" alt="伦敦科学博物馆·分析机设计图纸&amp;模型机"></p>
-<p>可以说，巴贝奇一生的奋斗都是孤独的，在那个年代，人们看不到分析机的巨大价值和意义，有了先前差分机的失败，政府也不再愿理会分析机的想法。巴贝奇的思想超前了整整一个世纪，但庆幸的是在有生之年，依然有着三位难能可贵的支持者： </p>
-<ol>
-<li><p>首先是他的儿子 <strong>亨利·巴贝奇</strong> <em>（Henry Prevost Babbage）</em>，直到巴贝奇过世后，亨利也继续着分析机的建造工作，但终究也力不从心未能完成； </p>
-</li>
-<li><p>而后是后来成为了意大利总理的数学家 <strong>闵那布利</strong> <em>（Luigi Federico Menabrea）</em>，他在巴贝奇 <code>1840</code> 年演讲时详细记录下了分析机的思想； </p>
-</li>
-<li><p>最后就是著名诗人拜伦的女儿，史上大名鼎鼎的 <strong>女程序员艾达</strong> <em>（Ada Lovelace）</em>，她将闵那布利记录分析机的文章翻译成英文，巴贝奇建议她在翻译时增添一些自己的理解，结果艾达注解的长度是原文的两倍，其中针对计算伯努利数的算法被视为史上第一个计算机程序，这篇名为《关于巴贝奇先生发明的分析机简讯》的译文被视为程序设计方面的第一篇著作，而 <strong>艾达本人则成了世界上第一位程序员</strong>。</p>
-</li>
-</ol>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-98adb01dd7db4d4d.png" alt="艾达和她的伯努利数程序"></p>
-<p>艾达几乎是那个时候唯一一个真正理解分析机的人，她不仅编写了许多可以在分析机上运行的程序，甚至还看到了巴贝奇自己都没有看到的事情——她说：分析机不光能用来计算，它应该还能用来表示其他东西，比如音乐。这是多么远大的目光啊！<strong>后来美国国防部将一种编程语言命名为 <code>Ada</code></strong>，就是为了纪念这位与巴贝奇同样具有超前思想的伟大女性。</p>
-<h1 id="四、制表机-穿孔时代的到来"><a href="#四、制表机-穿孔时代的到来" class="headerlink" title="四、制表机 | 穿孔时代的到来"></a>四、制表机 | 穿孔时代的到来</h1><p>从 <code>1790</code> 年开始，美国每 <code>10</code> 进行一次人口普查。百年间，随着人口繁衍和移民的增多，从 <code>1790</code> 年的 <code>400</code> 万不到，到 <code>1880</code> 年的 <code>5000</code> 多万，人口总数呈爆炸式地增长。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-85d1fc8fa7c22b0f.png" alt="1790~1880 年美国人口增长曲线"></p>
-<p>不像现在这个的互联网时代，人一出生，各种信息就已经电子化、登记好了，甚至还能数据挖掘，你无法想象，在那个计算设备简陋得基本只能靠手摇进行四则运算的 <code>19</code> 世纪，千万级的人口统计就已经成了当时政府的 <strong>“不能承受之重”</strong>。<code>1880</code> 年开始的第 <code>10</code> 次人口普查，历时 <code>8</code> 年才最终完成，也就是说，他们在休息两年之后就要开始第 <code>11</code> 次普查了，而这一次普查，需要的时间恐怕要超过 <code>10</code> 年，那第 <code>12</code> 次、<code>13</code> 次呢？本来就是 <code>10</code> 年一次的统计，如果每次耗时都在 <code>10</code> 年以上，这件事情就变得没有意义了。</p>
-<p>这可愁煞了当时的人口调查办公室，他们决定面向全社会招标，寻求能减轻手工劳动、提高统计效率的发明。正所谓机会都是给有准备的人的，一位毕业于哥伦比亚大学的年轻人 <strong>赫尔曼·霍尔瑞斯</strong> <em>（Herman Hollerith）</em> 带着他在 <code>1884</code> 年申请的专利从众多方案中脱颖而出。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-cf061bfcfb4fecfa.png" alt=""></p>
-<h2 id="制表机"><a href="#制表机" class="headerlink" title="制表机"></a>制表机</h2><p>他发明的机器叫 <strong>制表机</strong> <em>（tabulator/tabulating machine）</em>，顾名思义，就是专门用来制作数据统计表的机器。制表机主要由示数装置、穿孔机、读卡装置和分类箱组成。</p>
-<p>示数装置包含 <code>4</code> 行、<code>10</code> 列共 <code>40</code> 个示数表盘，每个盘面被均匀地分成 <code>100</code> 格，并装有两根指针，和钟表十分相像，“分针” 转一圈可计 <code>100</code>，“时针” 转一圈则计 <code>10000</code>。可见，整个示数装置可以表达很庞大的数据。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-8625118289db09b4.png" alt=""></p>
-<p>制表机的工作是围绕穿孔卡片展开的：操作员先使用穿孔机制作穿孔卡片，再使用读卡装置识别卡片上的信息，机器自动完成统计并在示数表盘上实时显示结果，最后，将卡片投入分类箱的某一格中，进行分类存放，以供下次统计使用。</p>
-<h2 id="穿孔卡片的应用"><a href="#穿孔卡片的应用" class="headerlink" title="穿孔卡片的应用"></a>穿孔卡片的应用</h2><p>此前的某一天，霍尔瑞斯正在火车站排队检票，目光不经意落到检票员手中咔咔直响的打孔机上。他发现，检票员会特意根据乘客的性别和年龄段，在车票的不同地方打孔。越来越多的人过检，他进一步确认了这个规律。一个灵感朝他袭来：如果有一张更大的卡，上面有更多的位置可以打孔，就可以用来表示更多的身份信息，包括国籍、人种、性别、生日等等。</p>
-<p>这就是用在 <code>1890</code> 年人口普查中的穿孔卡片，一张卡片记录一个居民的信息。卡片设计长约 <code>18.73cm</code>，宽约 <code>8.26cm</code>，正好是当时一张美元纸币的尺寸，因为霍尔瑞斯直接用财政部装钱的盒子来装卡片。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-570346b25b2b4607.png" alt=""></p>
-<p>卡片设有 <code>300</code> 多个孔位，与雅卡尔和巴贝奇的做法一样，靠每个孔位打孔与否来表示信息。<strong>尽管这种形式颇有几分二进制的意味，但当时的设计还远不够成熟，并没有用到二进制真正的价值</strong>。举个例子，我们现在一般用 <code>1</code> 位数据就可以表示性别，比如 <code>1</code> 表示男性，<code>0</code> 表示女性，而霍尔瑞斯在卡片上用了两个孔位，表示男性就其中一处打孔，表示女性就在另一处打孔。其实性别还凑合，表示日期时浪费得就多了，<code>12</code> 个月需要 <code>12</code> 个孔位，而常规的二进制编码只需要 <code>4</code> 位。当然，这样的局限也与制表机中简单的电路实现有关。</p>
-<p>细心的读者可能发现卡片的右下角被切掉了，那不是残缺，而是为了避免放反而专门设计的，和现在的二维码只有 <code>3</code> 个角是一个道理。</p>
-<p>这类实用的细节设计在穿孔机上表现得更为出色。下图为一位操作员正在使用穿孔机给卡片打孔的情景，她并不需要在卡片上吃力地搜寻孔位，而是直接对着孔距更大的操作面板打孔，一根杠杆将两者的孔位一一对应。操作面板还做成了弧形，颇有一分如今人体工程学键盘的风姿。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-6ba5887699128198.png" alt=""></p>
-<p>在制表机前，穿孔卡片（或纸带）多用于存储指令而不是数据。比较有代表性的，一是雅卡尔提花机，用穿孔卡片控制经线提沉；二是自动钢琴，用穿孔纸带控制琴键压放。美剧《西部世界》中，每次故事循环的开始，都会给一个自动钢琴的特写，弹奏起看似宁静安逸、实则诡异违和的背景乐。</p>
-<p>是霍尔瑞斯将穿孔卡片作为 <strong>数据存储介质</strong> 开来，并开启了一个崭新的 <strong>数据处理纪元</strong>。后来人们也把这类卡片称为霍尔瑞斯卡片，穿孔卡片和穿孔纸带作为输入输出载体，统治了计算领域整整一个世纪。</p>
-<h2 id="统计原理"><a href="#统计原理" class="headerlink" title="统计原理"></a>统计原理</h2><p>打好了孔，下一步就是将卡片上的信息统计起来。读卡装置的组成如下图所示，其外形和使用方式有点类似现在的重型订书机，将卡片置于压板和底座之间，按压手柄，就完成了对这张卡片的信息读取。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-d00dd611762a4742.png" alt=""></p>
-<p>原理上，通过电路通断识别卡上信息。底座中内嵌着诸多管状容器，位置与卡片孔位一一对应，容器里盛有水银，水银与导线相连。底座上方的压板中嵌着诸多金属针，同样与孔位一一对应，针的上部抵着弹簧，可以伸缩，压板的上下面由导电材料制成。<strong>这样，当把卡片放在底座上，按下压板时，卡片有孔的地方，针可以通过，与水银接触，电路接通，没孔的地方，针就被挡住</strong>。</p>
-<p>这一基本原理与雅卡尔提花机类似，不难理解。重头戏是，<strong>如何将电路通断对应到所需要的统计信息呢</strong>？霍尔瑞斯在专利中给出了一个简单的例子，如下图所示。这是涉及性别、国籍和人种 <code>3</code> 项信息的统计电路图，虚线为控制电路，实线为工作电路。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-6b440bf3e1e76edf.png" alt=""></p>
-<p>图顶有7根金属针，从左至右标的分别是：G（类似于总开关）、Female（女）、Male（男）、Foreign（外国籍）、Native（本国籍）、Colored（有色人种）、White（白种人）。</p>
-<p>工作电路中分散着标识为 <strong>m<sup>1</sup>~m<sup>10</sup></strong> 的电磁继电器。</p>
-<p>图底从右至左为标识为 <strong>M<sup>1</sup>~M<sup>6</sup></strong> 的 <code>6</code> 组电磁铁，所对应的统计信息为（为贴合穿孔的形象，我特意选择使用圆圈进行标记）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-4c1d4827e0e248a7.png" alt=""></p>
-<p>以 <strong>M<sup>1</sup></strong> 为例，如果表示 Native、White 和 Male 的针同时与水银接触，接通的控制电路：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-0deeb706f014bfaf.png" alt=""></p>
-<p>这一示例首先展示了针 G 的作用，它把控着所有控制电路的通断，目的有二：</p>
-<ol>
-<li><p>在卡片上留出一个专供 G 通过的孔，以防止卡片没有放正（照样可以有部分针穿过错误的孔）而统计到错误的信息。</p>
-</li>
-<li><p>令 G 比其他针短，或者 G 下的水银比其他容器里少，从而确保其他针都已经接触到水银之后，G 才最终将整个电路接通。众所周知，电路通断的瞬间容易产生火花，这样的设计可以将此类元器件的损耗集中在 G 身上，便于后期维护。</p>
-</li>
-</ol>
-<p>不得不感慨，这些发明家做设计真的特别实用、细致。</p>
-<p>控制电路的接通引起图中标有橘黄色箭头的 <code>3</code> 个电磁继电器 <strong>m<sup>1</sup></strong> 、 <strong>m<sup>3</sup></strong> 和 <strong>m<sup>5</sup></strong> 闭合，进而接通 <strong>M<sup>1</sup></strong> 所在的工作电路：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-1a218e0fdff71392.png" alt=""></p>
-<p>最终，通电的 <strong>M<sup>1</sup></strong> 将产生磁场，牵引相关杠杆，拨动齿轮完成计数，最终体现到示数表盘上指针的旋转。虽然霍尔瑞斯的专利中没有给出这一计数装置的具体结构，可以想象，从 <code>17</code> 世纪开始，机械计算器中的齿轮传动技术已经发展到足够成熟的水平，霍尔瑞斯无需重新设计，完全可以使用现成的装置，正如他在专利中所说的“any suitable mechanical counter”（任何合适的机械计数器都可以）。</p>
-<p><strong>电磁铁不单控制着计数装置，还控制着分类箱盖子的开合</strong>。将分类箱上的电磁铁接入工作电路，每次完成计数的同时，对应格子的盖子会在电磁铁的作用下自动打开，熟练的操作员甚至不用转头去看，就可以顺手将卡片投到正确的格子里，由此完成卡片的快速分类。</p>
-<p>每天工作的最后一步，就是将示数表盘上的结果誊抄下来，置零，第二天继续。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-2cd1655d6215a46a.png" alt="分类箱侧视图"></p>
-<h2 id="单元记录时代"><a href="#单元记录时代" class="headerlink" title="单元记录时代"></a>单元记录时代</h2><p>在制表机的高效运转下，<code>1890</code> 年的人口普查只花了 <code>6</code> 年时间。<code>1896</code> 年，霍尔瑞斯成立制表机公司（The Tabulating Machine Company）并不断改进自己的产品，先后与英国、意大利、德国、俄罗斯、澳大利亚、加拿大、法国、挪威、美国波多黎各、古巴、菲律宾等多个国家和地区合作开展了人口普查。</p>
-<p>到 <code>1914</code> 年，制表机公司每天生产的穿孔卡片多达 <code>200</code> 万张。不多久，一些竞争对手逐渐起家，历史迎来了繁荣的数据处理时代。它们的产品也不再局限于人口普查，逐渐扩展到会计、库存管理等一些同样需要跟大数据打交道的领域，这些机器作为制表机的后裔被统称为单元记录设备（unit record equipment）。</p>
-<p>围绕穿孔卡片的制卡、读卡、数据处理和卡片分类是它们的标准功能，穿孔机、读卡器、分类器是它们的标准配置。这些部件的自动化程度越来越高，比如手动的读卡装置很快被自动读卡机所取代，读卡速度从每分钟 <code>100</code> 张逐步提高至每分钟 <code>2000</code> 张。随着识别精度的提高，卡片的孔距也越来越小，具有 <code>80～90</code> 列孔位的卡片成为主流，有些卡片的孔位甚至多达 <code>130</code> 列。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-87b5752513fdf87c.png" alt="20 世纪典型的 80 系穿孔卡片"></p>
-<p>机器的功能也逐渐强大，不再只是简单地统计穿孔数目，减法、乘法等运算能力陆续登场。<code>1928</code> 年，哥伦比亚大学的科学家们甚至用单元记录设备计算月球的运行轨迹，他们在 <code>50</code> 万张卡片上打了 <code>2000</code> 万个孔，彰显着单元记录设备的无限潜力。</p>
-<p>机器的电路实现越来越复杂，但同时也越来越通用。<code>1890</code> 年所用的那台制表机的 <strong>线路是固定的，遇到新的统计任务，改造起来十分麻烦。</strong></p>
-<p><code>1906</code> 年，霍尔瑞斯便引入了接插线板（plugboard）——一块布满导电孔的板卡，可通过改变导线插脚在板上的位置改变线路逻辑。试想一下，接插线板的内部已经布好了具有各种功能的线路，但它们都处在断开状态，各自连接着接插线板上的某两个孔位，像一窝嗷嗷待哺的小鸟长大着嘴巴，外部的导线就像美味的虫子，当虫子的头尾分别与小鸟的上喙和下喙接触，线路就被导通，这只小鸟就开始工作了。如此，每次使用就可以激活不同的 “小鸟”，从而完成不同的任务。<strong>这已经是一种可编程性的体现。</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-446be02c4d4984e4.png" alt=""></p>
-<p><code>1911</code> 年，制表机公司与另外 <code>3</code> 家公司合并成立 <strong>CTR</strong> 公司 <em>（Computing-Tabulating-Recording Company）</em>，制表机公司作为其子公司继续运营到 <code>1933</code> 年。</p>
-<p><code>1924</code> 年，<strong>CTR</strong> 更名为 <strong>国际商业机器公司</strong>（<strong>I</strong>nternational <strong>B</strong>usiness <strong>M</strong>achines Corporation），就是现在大名鼎鼎的 <strong>IBM</strong> 公司。可见，在如今众多年轻的 IT 公司中，拥有百年历史的 IBM 是位当之无愧的前辈，它完整地参与和见证了整个现代计算机的发展史。IBM 保持了制表机公司在单元记录市场的龙头地位，到 <code>1955</code> 年，其每天生产的穿孔卡片多达 <code>7250</code> 万张。</p>
-<p><code>1937</code> 年开始，单元记录设备逐步电子化，与电子计算机的界线渐渐模糊，并最终为后者让路。随着 <code>1976</code> 年 IBM 一型最核心的单元记录产品的停产，短暂的单元记录时代也宣告谢幕，它仿佛是电子计算时代来临前的预演和铺垫，许多设计被沿用下来，比如穿孔卡片和接插线板。</p>
-<p>有趣的是，即使电子计算机逐渐普及，许多机构由于用惯了单元记录设备，迟迟不愿更换，少数机构甚至一直用到了 <code>21</code> 世纪。</p>
-<blockquote>
-<p>在翻阅资料的时候发现了一个特别有趣的谈计算机发展是的简书专栏，感兴趣的童鞋可以进一步去阅读：<a href="https://www.jianshu.com/nb/28009636" target="_blank" rel="noopener">传送门</a></p>
-</blockquote>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li><a href="https://www.sohu.com/a/163216426_660519" target="_blank" rel="noopener">机织布、针织布和无纺布的概念介绍</a></li>
-<li><a href="http://zhongxue.hujiang.com/cy/yuwen/p43333/" target="_blank" rel="noopener">从织布机到计算机</a></li>
-<li><a href="https://songshuhui.net/archives/51079" target="_blank" rel="noopener">记忆传承，信息永生（四）</a></li>
-<li><a href="http://blog.sciencenet.cn/blog-528739-903746.html" target="_blank" rel="noopener">织布机与计算机</a></li>
-<li><a href="https://www.bilibili.com/video/BV1JE411x7eN?from=search&seid=2914951861463322720" target="_blank" rel="noopener">计算机发展的引路者——贾卡织机的前世今生</a></li>
-<li><a href="https://pansci.asia/archives/92736" target="_blank" rel="noopener">布爾與電腦——《科學月刊》</a></li>
-<li><a href="https://www.computerhope.com/issues/ch001335.htm" target="_blank" rel="noopener">Who is the father of the computer?</a></li>
-<li><a href="https://www.jianshu.com/p/5d739419b93d" target="_blank" rel="noopener">现代计算机真正的鼻祖——超越时代的伟大思想</a></li>
-<li><a href="https://www.jianshu.com/p/49f23b77dced" target="_blank" rel="noopener">制表机：穿孔时代的到来</a></li>
-</ol>
-<blockquote>
-<ul>
-<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
-<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2%E2%80%94%E4%BB%8E%E7%BB%87%E5%B8%83%E6%9C%BA%E5%88%B0IBM/7896890-358a8b89021d5361.png" alt=""></p>
-<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
-<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2990,7 +3259,7 @@ c<span class="token operator">=</span> a<span class="token operator">*</span>b
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

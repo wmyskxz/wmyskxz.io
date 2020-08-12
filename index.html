@@ -680,9 +680,397 @@
         
           
         
+          
+        
       
     
     
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/08/10/morethanjava-day-6-mian-xiang-dui-xiang-jin-jie-duo-tai/">
+      「MoreThanJava」Day 6：面向对象进阶——多态
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/MoreThanJava/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>MoreThanJava</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月10日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E3%80%8CMoreThanJava%E3%80%8DDay6%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6%E2%80%94%E2%80%94%E5%A4%9A%E6%80%81/image-20200811201534863.png" alt=""></p>
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="Part-1-多态概述"><a href="#Part-1-多态概述" class="headerlink" title="Part 1. 多态概述"></a>Part 1. 多态概述</h1><p>多态，简而言之就是 <strong>同一个行为</strong> 具有 <strong>多个不同表现形式</strong> 或形态的能力。在面向对象的程序设计中，<strong>多态的能力是通过数据抽象和继承之后得来的</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay4%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E5%9F%BA%E7%A1%80/ae55c7cc-ea6e-45f6-8014-307eb774bb38.png" alt=""></p>
+<p>比如，有一杯水，我不知道它是温的、冰的还是烫的，但是我一摸我就知道了，我摸水杯的这个动作 <em>(方法)</em>，对于不同温度的水 <em>(运行时不同的对象类型)</em>，就会得到不同的结果，这就是多态。</p>
+<p><strong>代码演示：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 基类定义</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Water</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 冰水</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">IceWater</span> <span class="token keyword">extends</span> <span class="token class-name">Water</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"我的温度是: 0度"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 温水</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WarmWater</span> <span class="token keyword">extends</span> <span class="token class-name">Water</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"我的温度是: 40度"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 开水</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HotWater</span> <span class="token keyword">extends</span> <span class="token class-name">Water</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"我的温度是: 100度"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 测试类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestWater</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Water w <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WarmWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        w<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        w <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IceWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        w<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        w <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HotWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        w<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>结果输出：</strong></p>
+<pre class=" language-text"><code class="language-text">我的温度是: 40度
+我的温度是: 0度
+我的温度是: 100度</code></pre>
+<p>这里的方法 <code>showTem()</code> 就相当于你去摸水杯。我们定义的 <code>Water</code> 类型的引用变量 <code>w</code> 就相当于水杯，你在水杯里放了什么温度的水，那么我摸出来的感觉就是什么。就像代码中的那样，放置不同温度的水，得到的温度也就不同，但水杯是同一个。</p>
+<h2 id="里氏替换原则（LSP）"><a href="#里氏替换原则（LSP）" class="headerlink" title="里氏替换原则（LSP）"></a>里氏替换原则（LSP）</h2><p>面向对象的设计原则有一条关于多态的原则，它的描述大概是这样子的：<strong>子类对象</strong> <em>(object of subtype/derived class)</em> 能够 <strong>替换</strong> 程序 <em>(program)</em> 中 <strong>父类对象</strong> <em>(object of base/parent class)</em>  出现的 <strong>任何地方</strong>，并且 <strong>保证原来程序的逻辑行为 <em>(behavior)</em> 不变及正确性不被破坏</strong>。</p>
+<p>这么说可能有点抽象，简单说就是 <strong>子类和父类的行为应该保持一致</strong>。</p>
+<h3 id="哪些代码明显违背了-LSP？"><a href="#哪些代码明显违背了-LSP？" class="headerlink" title="哪些代码明显违背了 LSP？"></a>哪些代码明显违背了 LSP？</h3><p>实际上，里式替换原则还有另外一个更加能落地、更有指导意义的描述，那就是 <strong>“Design By Contract”</strong>，中文翻译就是 <strong>“按照协议来设计”</strong>。定义中父类和子类之间的关系，也可以替换成接口和实现类之间的关系。</p>
+<p>为了更好地理解这句话，我举几个违反里式替换原则的例子来解释一下。</p>
+<h4 id="1-子类违背父类声明要实现的功能"><a href="#1-子类违背父类声明要实现的功能" class="headerlink" title="1 - 子类违背父类声明要实现的功能"></a>1 - 子类违背父类声明要实现的功能</h4><p>父类中提供的 <code>sortOrdersByAmount()</code> 订单排序函数，是按照金额从小到大来给订单排序的，而子类重写这个 <code>sortOrdersByAmount()</code> 订单排序函数之后，是按照创建日期来给订单排序的。那子类的设计就违背里式替换原则。</p>
+<h4 id="2-子类违背父类对输入、输出、异常的约定"><a href="#2-子类违背父类对输入、输出、异常的约定" class="headerlink" title="2 - 子类违背父类对输入、输出、异常的约定"></a>2 - 子类违背父类对输入、输出、异常的约定</h4><p>在父类中，某个函数约定：运行出错的时候返回 <code>null</code>；获取数据为空的时候返回空集合（empty collection）。而子类重载函数之后，实现变了，运行出错返回异常（exception），获取不到数据返回 <code>null</code>。那子类的设计就违背里式替换原则。</p>
+<h4 id="3-子类违背父类注释中所罗列的任何特殊说明"><a href="#3-子类违背父类注释中所罗列的任何特殊说明" class="headerlink" title="3 - 子类违背父类注释中所罗列的任何特殊说明"></a>3 - 子类违背父类注释中所罗列的任何特殊说明</h4><p>父类中定义的 <code>withdraw()</code> 提现函数的注释是这么写的：“用户的提现金额不得超过账户余额……”，而子类重写 <code>withdraw()</code> 函数之后，针对 VIP 账号实现了透支提现的功能，也就是提现金额可以大于账户余额，那这个子类的设计也是不符合里式替换原则的。</p>
+<blockquote>
+<p>当然，当前的大环境下，注释的可信度还是得斟酌斟酌.. <em>(不可尽信..)</em></p>
+</blockquote>
+<h1 id="Part-2-向上转型-amp-amp-向下转型"><a href="#Part-2-向上转型-amp-amp-向下转型" class="headerlink" title="Part 2. 向上转型 &amp;&amp; 向下转型"></a>Part 2. 向上转型 &amp;&amp; 向下转型</h1><h2 id="再谈向上转型"><a href="#再谈向上转型" class="headerlink" title="再谈向上转型"></a>再谈向上转型</h2><p>在 <a href="https://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/">上一篇文章</a> 里面我们已经谈到 —— <strong>对象既可以作为它本身的类型使用，也可以作为它基类的类型使用</strong>。而这种把对某个对象的引用视为其基类型的引用的做法被称为 <strong>向上转型</strong> <em>(因为在继承树的画法中，基类位于子类上方)</em>。</p>
+<p>语句 <code>Water w = new WarmWater();</code> 就是向上转型的典型代码，这会将子类类型 <code>WarmWater</code> 转成父类的 <code>Water</code> 类型。</p>
+<h3 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h3><p><strong>❶ 向上转型时，子类单独定义的方法会丢失。</strong></p>
+<p>例如，我们如果在温水中定义一个喝水的方法 <code>drink()</code>，那么当 <code>w</code> 引用指向 <code>WarmWater</code> 类实例的时候是访问不到 <code>drink()</code> 方法的，<code>w.drink()</code> 会报错。</p>
+<p><strong>❷ 子类引用不能指向父类对象。</strong></p>
+<p><code>HotWater hotWater  = (HotWater)new Water();</code> 这样是不行的。</p>
+<h3 id="向上转型的好处"><a href="#向上转型的好处" class="headerlink" title="向上转型的好处"></a>向上转型的好处</h3><ul>
+<li>减少重复代码，提高代码可读性；</li>
+<li>提高系统扩展性；</li>
+</ul>
+<p>举个例子，比如我现在有许多不同温度的水，如果不用向上转型，摸水杯这个动作我需要这样写：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// Water 类中方法定义</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span>IceWater water<span class="token punctuation">)</span> <span class="token punctuation">{</span> water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span>WarmWater water<span class="token punctuation">)</span> <span class="token punctuation">{</span> water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span>HotWater water<span class="token punctuation">)</span> <span class="token punctuation">{</span> water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 测试类中调用</span>
+water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">IceWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WarmWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HotWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>每一种不同温度的水我都需要在 <code>Water</code> 中单独定义一个方法 <em>(因为都是不同的类型)</em>，数量一多，就会变得非常冗余和复杂。</p>
+<p>但使用向上转型，一切就轻松多了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// Water 类中方法定义</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span>Water water<span class="token punctuation">)</span> <span class="token punctuation">{</span> water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 测试类中调用</span>
+water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">IceWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">WarmWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+water<span class="token punctuation">.</span><span class="token function">showTem</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HotWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>就算新添加一种温度的水，我也只需要继承 <code>Water</code> 实现 <code>showTem()</code> 方法就行了，原有的代码几乎不需要修改。这也体现了软件设计原则中重要的 <strong>开闭原则 —— 对扩展开放，对修改封闭。</strong></p>
+<h2 id="向下转型"><a href="#向下转型" class="headerlink" title="向下转型"></a>向下转型</h2><p>与向上转型相对应的就是向下转型了 —— 也就是把父类对象转为子类对象。<em>(这有大坑…)</em></p>
+<p>还是用上面的摸水杯的例子来说明，我们先在温水 <code>WarmWater</code> 中加入一个喝水的方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WarmWater</span> <span class="token keyword">extends</span> <span class="token class-name">Water</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">showTem</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"我的温度是: 40度"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 新增加的喝水的方法</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">drink</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"喝水..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>示例代码：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Water water <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WarmWater</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 子类实例赋给父类引用 - 向上转型</span>
+        WarmWater warmWater <span class="token operator">=</span> <span class="token punctuation">(</span>WarmWater<span class="token punctuation">)</span> water<span class="token punctuation">;</span><span class="token comment" spellcheck="true">// Water向下转型为WarmWater</span>
+        warmWater<span class="token punctuation">.</span><span class="token function">drink</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        IceWater iceWater <span class="token operator">=</span> <span class="token punctuation">(</span>IceWater<span class="token punctuation">)</span> water<span class="token punctuation">;</span><span class="token comment" spellcheck="true">// Water向下转型为IceWater</span>
+        iceWater<span class="token punctuation">.</span><span class="token function">drink</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// IDE 提示无法找到 drink() 方法</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>为什么第一段代码不报错呢？因为 <code>water</code> 本身就是 <code>WarmWater</code> 类型的对象，所以它理所当然的可以向下转型为 <code>WarmWater</code> 类型了，也理所当然的不能转型为 <code>IceWater</code>，这就好像你见过 <strong>一条狗突然变成一只猫</strong> 的情况吗？</p>
+<p><strong>再来看下列代码：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Water water <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Water</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        WarmWater warmWater <span class="token operator">=</span> <span class="token punctuation">(</span>WarmWater<span class="token punctuation">)</span> water<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 下列代码报错：java.lang.ClassCastException: class Water cannot be cast to class WarmWater</span>
+        warmWater<span class="token punctuation">.</span><span class="token function">drink</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>上面例子想要说明的是，<strong><code>Water</code> 类型的对象 <em>(父类型)</em> 不能向下转型为任何类型的对象</strong>。这就好像你去考古，你发现了一个新生物，你知道它是一种动物，但你不能直接说它是猫或者狗…</p>
+<h3 id="向下转型注意事项"><a href="#向下转型注意事项" class="headerlink" title="向下转型注意事项"></a>向下转型注意事项</h3><ul>
+<li>向下转型的前提是父类对象指向的是子类对象；<em>(也就是对应上面实例代码中向下转型 <code>WarmWater</code> 的情况.. <code>new WarmWater()</code> 首先得完成向上的转型..)</em></li>
+<li>向下转型只能转型为本类对象；<em>(猫是不能变成狗的.. 对应上方 <code>WamWater</code> 类型就不能转成 <code>IceWarm</code> 类型的情况)</em></li>
+</ul>
+<h3 id="向下转型的意义"><a href="#向下转型的意义" class="headerlink" title="向下转型的意义"></a>向下转型的意义</h3><p>有的小伙伴可能看到这里有点懵了.. 向下转型需要先向上转型，这转来转去好玩儿是吗？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E3%80%8CMoreThanJava%E3%80%8DDay6%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6%E2%80%94%E2%80%94%E5%A4%9A%E6%80%81/6af89bc8gw1f8q76jxt2xj202a025dfn.png" alt=""></p>
+<p>向上转型让我们有了统一处理一类抽象事物的能力，这大大减少了我们的重复代码，并增加了我们代码的可扩展性。可事实上是，尽管我们尽力抽象一类事物，让他们尽可能地保证行为的统一，但总有例外！<em>(就像 <a href="https://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/">上一次</a> 我们讨论继承时提到的鸟类的例子，并不是所有鸟都能飞或者叫！)</em> </p>
+<p>所以当例外来临时，我们就可以及时判断并做对应的处理。<em>(这也比较符合现实的情况)</em></p>
+<p>最典型的例子就是 JDK 中的某一些集合类，对于集合类来说，并不需要记住存储所有存储对象的类型，而是统一抽象成了 <code>Node</code> 类型，就拿 <code>HashMap</code> 来说吧，存储一个元素 <em>(<code>putVal()</code> 方法)</em> 时就要判定当前节点时属于链表还是红黑树的部分：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E3%80%8CMoreThanJava%E3%80%8DDay6%EF%BC%9A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BF%9B%E9%98%B6%E2%80%94%E2%80%94%E5%A4%9A%E6%80%81/image-20200811180639052.png" alt="为防止 &quot;新小伙伴&quot; 看着代码头晕，简化处理了一下"></p>
+<h1 id="Part-3-多态经典案例分析"><a href="#Part-3-多态经典案例分析" class="headerlink" title="Part 3. 多态经典案例分析"></a>Part 3. 多态经典案例分析</h1><p>我们来看一个经典的例子：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// A 类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> String <span class="token function">show</span><span class="token punctuation">(</span>D object<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token string">"A and D"</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> String <span class="token function">show</span><span class="token punctuation">(</span>A object<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token string">"A and A"</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// B 类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">B</span> <span class="token keyword">extends</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> String <span class="token function">show</span><span class="token punctuation">(</span>B object<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token string">"B and B"</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">show</span><span class="token punctuation">(</span>A object<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token string">"B and A"</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// C 类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">C</span> <span class="token keyword">extends</span> <span class="token class-name">B</span><span class="token punctuation">{</span> <span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// D 类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">D</span> <span class="token keyword">extends</span> <span class="token class-name">B</span><span class="token punctuation">{</span> <span class="token punctuation">}</span></code></pre>
+<p><strong>测试类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        A a <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        A aRefB <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">B</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        B b <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">B</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        C c <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">C</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        D d <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">D</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"1-"</span> <span class="token operator">+</span> a<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"2-"</span> <span class="token operator">+</span> a<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"3-"</span> <span class="token operator">+</span> a<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"4-"</span> <span class="token operator">+</span> aRefB<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"5-"</span> <span class="token operator">+</span> aRefB<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"6-"</span> <span class="token operator">+</span> aRefB<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"7-"</span> <span class="token operator">+</span> b<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"8-"</span> <span class="token operator">+</span> b<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"9-"</span> <span class="token operator">+</span> b<span class="token punctuation">.</span><span class="token function">show</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>输出结果：</strong></p>
+<pre class=" language-text"><code class="language-text">1-A and A
+2-A and A
+3-A and D
+4-B and A
+5-B and A
+6-A and D
+7-B and B
+8-B and B
+9-A and D</code></pre>
+<p>前三个比较容易，因为 B、C 都本质上是 A 类，所以 <code>1</code> 和 <code>2</code> 都进入了 A 类中签名为 <code>show(A)</code> 的方法。</p>
+<p>但是第四个非常奇怪，A 对象类型引用了一个 B 类型的实例，输出是 <code>B and A</code>，而不是想象中的 <code>B and B</code>，为什么呢？</p>
+<p>这里有一个新知识点：<strong>决定调用哪个方法的是引用变量类型</strong>。</p>
+<p>拿这里的 <code>aRefB.show(b)</code> 来说好了，<code>aRefB</code> 虽然是 A 类型的引用，但首先会查找 B 对象中的方法 <em>(因为它实际的指向是 B)</em>，而引用 <code>b</code> 正好是一个 B 类型 <em>(实质上是 is-a A 类型)</em>，所以符合 B 对象中签名为 <code>show(A)</code> 的方法，就输出了 <code>B and A</code>。如果 B 类型中没有符合签名的方法，那么会从父类中查找，继续这个过程直到找到或者报错。</p>
+<p>如果你能理解这个过程，并分析其他的情况，那么说明你真的掌握了。</p>
+<p>再来分析 <code>b.show(d)</code> 输出 <code>A and D</code> 的情况，就简单很多了：B 对象中不存在 <code>show(D)</code> 这样的签名，所以从父类 A 中查找，故输出了 <code>A and D</code>。</p>
+<h1 id="要点回顾"><a href="#要点回顾" class="headerlink" title="要点回顾"></a>要点回顾</h1><ol>
+<li>多态概述 / 里氏替换原则 / 向上向下转型；</li>
+<li>典型多态案例分析 / 练习；</li>
+</ol>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h2 id="练习-1：工资结算系统"><a href="#练习-1：工资结算系统" class="headerlink" title="练习 1：工资结算系统"></a>练习 1：工资结算系统</h2><blockquote>
+<p>某公司有三种类型的员工，分别是部门经理、程序员和销售员。需要设计一个工资结算系统，根据提供的员工信息来计算月薪。</p>
+<p>部门经理的月薪是每月固定 <code>15000</code> 元；<br>程序员的月薪按每月工作时间计算，每小时 <code>150</code> 元；<br>销售员的月薪是 <code>1200</code> 底薪加上销售额 <code>5%</code> 的提成；</p>
+</blockquote>
+<p><strong>抽象员工类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbstractEmployee</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">AbstractEmployee</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 获取工资</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">double</span> <span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> String <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> name<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>项目经理类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Manager</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractEmployee</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token function">Manager</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token number">15000</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>程序员类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Programer</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractEmployee</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> Integer workHours<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Programer</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> Integer workHours<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>workHours <span class="token operator">=</span> workHours<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 仅提供单独的 set 方法，工作时间理论上来说是一个私人的消息..</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setWorkHours</span><span class="token punctuation">(</span>Integer workHours<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>workHours <span class="token operator">=</span> workHours<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token number">150</span> <span class="token operator">*</span> workHours<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>销售员类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Salesman</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractEmployee</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> Integer salesAmount<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Salesman</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> Integer salesAmount<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salesAmount <span class="token operator">=</span> salesAmount<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 也仅提供 set 方法，并不是所有人都能访问销售人员的销售金额</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setSalesAmount</span><span class="token punctuation">(</span>Integer salesAmount<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salesAmount <span class="token operator">=</span> salesAmount<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token number">1200</span> <span class="token operator">+</span> <span class="token number">0.05</span> <span class="token operator">*</span> salesAmount<span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><strong>测试类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 项目经理张三、996程序员李四、月销售过万的明星销售员王五</span>
+        List<span class="token operator">&lt;</span>AbstractEmployee<span class="token operator">></span> employees <span class="token operator">=</span> List
+            <span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Manager</span><span class="token punctuation">(</span><span class="token string">"张三"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Programer</span><span class="token punctuation">(</span><span class="token string">"李四"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">21</span> <span class="token operator">-</span> <span class="token number">9</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Salesman</span><span class="token punctuation">(</span><span class="token string">"王五"</span><span class="token punctuation">,</span> <span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 发工资..</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>AbstractEmployee employee <span class="token operator">:</span> employees<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>employee<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"工资为："</span> <span class="token operator">+</span> employee<span class="token punctuation">.</span><span class="token function">getSalary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>程序输出：</strong></p>
+<pre class=" language-text"><code class="language-text">张三工资为：15000.0
+李四工资为：10800.0
+王五工资为：1700.0</code></pre>
+<p><em>(ps：有感受到来自于现实主义的正义光辉洒在你的身上吗？)</em></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《Java 核心技术 卷 I》</li>
+<li>《Java 编程思想》</li>
+<li>Introduction to Computer Science using Java - <a href="http://programmedlessons.org/Java9/index.html" target="_blank" rel="noopener">http://programmedlessons.org/Java9/index.html</a></li>
+<li>重新认识java（五） —- 面向对象之多态（向上转型与向下转型） - <a href="https://blog.csdn.net/qq_31655965/article/details/54746235" target="_blank" rel="noopener">https://blog.csdn.net/qq_31655965/article/details/54746235</a></li>
+<li>极客时间 | 设计模式之美 - <a href="https://time.geekbang.org/column/article/177110" target="_blank" rel="noopener">https://time.geekbang.org/column/article/177110</a></li>
+<li>Python 100 天从新手到大师 - <a href="https://github.com/jackfrued/Python-100-Days" target="_blank" rel="noopener">https://github.com/jackfrued/Python-100-Days</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/common/qrcode.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
       
         
           <div class='post-wrapper'>
@@ -4770,230 +5158,6 @@ HelloWorld.java:6: 错误: 需要class, interface或enum
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/06/09/morethanjava-java-fa-zhan-shi-ji-qi-hang-xin-shi-jie/">
-      「MoreThanJava」Java 发展史及起航新世界
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/MoreThanJava/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>MoreThanJava</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年6月9日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-f0d1c6b175c2ab32.png" alt=""></p>
-<ul>
-<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
-<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
-</ul>
-<h1 id="Part-1-Java-发展简史"><a href="#Part-1-Java-发展简史" class="headerlink" title="Part 1. Java 发展简史"></a>Part 1. Java 发展简史</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-8de2b432253ec0a4.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://www.geeksforgeeks.org/the-complete-history-of-java-programming-language/" target="_blank" rel="noopener">https://www.geeksforgeeks.org/the-complete-history-of-java-programming-language/</a></li>
-</ul>
-<h2 id="起源：”Green”-项目"><a href="#起源：”Green”-项目" class="headerlink" title="起源：”Green” 项目"></a>起源：”Green” 项目</h2><p>20 世纪 90 年代，单片式计算机系统诞生，单片式计算机系统不仅廉价，而且功能强大，使用它可以大幅度提升消费性电子产品的智能化程度。</p>
-<p>SUN 公司为了抢占市场先机，在 <code>1991</code> 年成立了一个由詹姆斯·高斯林（James Gosling）领导，名为 <strong>“Green”</strong> 项目小组，目的是开发一种 <strong>能够在各种消费性电子产品上运行的程序架构</strong>（主要是像 <em>有线电视转换盒</em> 这一类 <em>处理能力和内存都很有限，并且 CPU 厂商又各不相同</em> 的消费设备）。</p>
-<p>由于这些消费设备的处理能力和内存都有限，所以语言必须 <strong>非常小且能够生成非常紧凑的代码</strong>。另外，由于不同厂商会选择不同的 CPU，因此很重要的一点是这种语言 <strong>不应该与任何特定的体系结构绑定</strong>。代码短小、紧凑且与平台无关，这些要求促使开发团队设计出一个 <strong>可移植的语言</strong>，可以为虚拟机生成中间代码。</p>
-<p>不过，Sun 公司的人都有 UNIX 的应用背景。因此，所开发的语言以 C++ 为基础，而不是 Lisp/ Smalltalk 或 Pascal。不过，就像 Gosling 在专访中谈道：<strong>“毕竟，语言只是实现目标的工具，而不是目标本身。”</strong></p>
-<p>Gosling 把这种语言称为 <strong>“Oak”</strong>（直译为橡树，大概是因为它非常喜欢自己办公室窗外的一颗橡树…）。后来 Sun 公司发现，Oak 是一种已有的计算机语言名字，于是 Gosling 和他的团队进行了一次头脑风暴，多次讨论后，从 Java/ DNA/ SILK/ RUBY 中决定使用 <strong>Java</strong> 来命名。事实证明这是一个很有灵感的选择。 </p>
-<h2 id="埋没：没人为-“Green”-项目买单"><a href="#埋没：没人为-“Green”-项目买单" class="headerlink" title="埋没：没人为 “Green” 项目买单"></a>埋没：没人为 “Green” 项目买单</h2><p><code>1992</code> 年，Green 项目发布了它的第一个产品，称之为 <strong>「* 7」</strong>。这个产品可以提供非常智能的远程控制。遗憾的是，Sun 公司对生产这个产品并不感兴趣。Green 项目组的人员必须找出其他的方法来讲他们的技术推向市场。</p>
-<p>然而，仍然没有任何一家标准消费品电子公司对此感兴趣。于是，Green 项目组投标了一个设计有线电视盒的项目，它能提供视频点播等新型有线服务，但他们没能拿到这个合同 <em>（有趣的是，得到这个项目的公司的领导恰恰是开辟 Netscape 公司的 Jim Clark。Netscape 公司后来对 Java 的成功给予了很大的帮助。）</em></p>
-<p>Green 项目 <em>（这时已经换了一个新名字 ———— “First Person 公司”）</em> 在 <code>1993</code> 年一整年以及 <code>1994</code> 年上半年，一直在苦苦寻找买家购买他们的技术。然而，一个也没有找到 <em>（Partick Naughton ———— 项目组的创始人之一，也是完成了大多数营销工作的人，声称为了销售这项技术，已累计飞行了 <code>300,000</code> 英里）</em>。</p>
-<p><code>1994</code> 年 First Person 公司解散了。</p>
-<h2 id="转机：Internet-的壮大"><a href="#转机：Internet-的壮大" class="headerlink" title="转机：Internet 的壮大"></a>转机：Internet 的壮大</h2><p>当这一切在 Sun 公司发生的时候，Internet 的万维网也在日渐发展壮大。<strong>万维网的关键是把超文本页面转换到屏幕上的浏览器。</strong></p>
-<p><code>1994</code> 年大多数人都在使用 Mosaic，这是一个 <code>1993</code> 年出自伊利诺斯大学超级计算中心的非商业化的 Web 浏览器（ Mosaic 的一部分是由 Marc Andreessen 编写的。当时，他作为一名参加半工半读项目的本科生， 编写了这个软件，每小时的薪水只有 <code>6.85</code> 美元。他后来成了 Netscape 公司的创始人之一和技术总监， 可谓名利双收。)</p>
-<p>在接受 SunWorld 采访的时候，Gosling 说在 <code>1994</code> 年中期，Java 语言的开发者意识到： “我们能够建立一个相当酷的浏览器。在客户机/ 服务器主流模型中，浏览器恰好需要我们已经完成的一些工作：体系结构中立、实时、可靠、安全 ———— 这些在工作站环境并不太重要，所以，我们决定开发浏览器”</p>
-<p>实际的浏览器是由 Patrick Naughton 和 Jonathan Payne 开发的，并演变为 HotJava 浏览器。<strong>为了炫耀 Java 语言超强的能力</strong>，HotJava 浏览器采用 Java 编写。设计者让 HotJava 浏览器具有在网页中执行内嵌代码的能力。 <strong>这一 “技术证明” 在 <code>1995</code> 年 <code>5</code> 月 <code>23</code> 日的 SunWorld’95 上得到展示，同时引发了人们延续至今的对 Java 的狂热追逐。</strong></p>
-<p>至此，这一场持续长达 <code>20</code> 多年的「Java 热」开始了。</p>
-<blockquote>
-<ul>
-<li>观察近 <code>20</code> 年的数据，Java 的排名从未跌出过前三，而且有将近一半的年份抢占了透明，不得不令人感叹：<strong>「流水的程序员，铁打的 Java 啊！」</strong></li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-dcfe13cb9efd976f.png" alt=""></p>
-</blockquote>
-<h1 id="Part-2-Java-与-Internet"><a href="#Part-2-Java-与-Internet" class="headerlink" title="Part 2. Java 与 Internet"></a>Part 2. Java 与 Internet</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-bd3f89152ac4f984.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://www.morethanshipping.com/internet-things-iot-will-help-logistics/" target="_blank" rel="noopener">https://www.morethanshipping.com/internet-things-iot-will-help-logistics/</a></li>
-</ul>
-<p>如果 Java 仅仅只是众多的程序设计语言中的一种，你可能就会问：为什么它如此重要呢？为什么它促使计算机编程语言向前迈进了革命性的一步？</p>
-<p>如果从传统的程序设计的角度看，问题的答案似乎不太明显。尽管 Java 对于解决传统的单机程序设计问题非常有用，但同样重要的事，<strong>它解决了在万维网（WWW）上的程序设计问题</strong>。</p>
-<h2 id="Web-1-0-时代的程序设计问题"><a href="#Web-1-0-时代的程序设计问题" class="headerlink" title="Web 1.0 时代的程序设计问题"></a>Web 1.0 时代的程序设计问题</h2><p>在刚创造 Java 的年代（<code>20</code> 世纪 <code>90</code> 年代），整个互联网还处于 <strong>Web 1.0</strong> 的网络萌芽阶段。</p>
-<blockquote>
-<p>在 <a href="https://www.wmyskxz.com/2018/03/14/chu-xue-java-web-1-web-gai-shu/">之前的一篇文章</a> 其实有对 Web 做了一些概念性的描述（概念、发展、体系结构）。</p>
-</blockquote>
-<h3 id="问题一：网页没有交互"><a href="#问题一：网页没有交互" class="headerlink" title="问题一：网页没有交互"></a>问题一：网页没有交互</h3><p><strong>Web 1.0 的网站是静态的</strong>。最初的互联网只有一种很简单的 <strong>单向过程</strong>：你 <strong>对某一个服务器发起一个请求</strong>，然后它 <strong>返回</strong> 给你一个 <strong>文件</strong>，你的机器（俗称客户端）上的 <strong>浏览器软件</strong> 根据本地机器的格式来 <strong>解读并展示</strong> 这个文件的内容。这期间没有任何的交互发生，因为最初的浏览器只是一个 “展示器”，它甚至不能执行最简单的计算任务。<em>（另一方面，它确是安全的，因为它在你的本地机器上不会执行任何程序，而这些程序可能包含 bug 和病毒）</em></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-147f2988817440fe.png" alt=""></p>
-<p>用户 <strong>只能访问</strong> 这些站点而不会对它们做出任何贡献。这就像你捧起书架中的一本书一样，它是一种 <strong>「只读」</strong> 模式的存在，如果你想与创造这本书的出版社也好，作者也好建立链接，只能通过其他的一些方式。<em>（当时的网站也是主要是向消费者展示产品，从感兴趣的消费者那里收钱）</em></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-f9ebdd0178b44256.png" alt="1996 年苹果公司主页"></p>
-<p>很快人们就不满足于只是从服务器传递回页面，人们希望实现完整的客户/ 服务器能力，使得客户可以将信息反馈给服务器，来完成例如：在服务器上进行数据查找，并将用户提供的新信息加到服务器中，服务器管理人员接受到新信息之后就下发订单的操作。</p>
-<h3 id="问题二：响应缓慢"><a href="#问题二：响应缓慢" class="headerlink" title="问题二：响应缓慢"></a>问题二：响应缓慢</h3><p>早期的浏览器不仅没有交互，而且它还趋向于让服务器和 Internet 阻塞。因为在任何时候，<strong>只要</strong> 你需要完成 <strong>通过编程</strong> 才能实现的 <strong>任务</strong>，就必须将信息发挥到 <strong>服务器</strong> 去 <strong>处理</strong>。然而在互联网中，在任意时刻都有可能会有 <strong>成百上千</strong> 的客户向服务器发出请求，所以任何小的延迟都会产生重大的影响。</p>
-<p>为了解决这个问题，人们采用了各种不同的方法。首先，图形标准得到了加强，这使得在浏览器中可以播放质量更好的动画和视频。剩下的问题通过引入 <strong>在客户端浏览器中运行程序</strong> 的能力就可以解决，这被称为 <strong>「客户端编程」</strong>。</p>
-<h3 id="问题三：客户端编程平台各异"><a href="#问题三：客户端编程平台各异" class="headerlink" title="问题三：客户端编程平台各异"></a>问题三：客户端编程平台各异</h3><p>大多数运行 Web 浏览器的机器都是能够执行大型任务的强有力的引擎。在使用原始的静态 HTML 方式的情况下，它们通常只是闲在那里，等着服务器送来下一个页面。</p>
-<p>客户端编程意味着 Web 浏览器能够用来执行任何它可以完成的工作，使得返回给用户的结果 <strong>更迅速</strong> <em>（不用全部的结果都等着服务器来运算）</em>，而且使得你的网站 <strong>更加具有交互性</strong> <em>（那些不需要使用服务器数据的操作可以完全在本地完成）</em>。</p>
-<p>但客户端编程的问题是：它与通常意义上的编程十分不同，<strong>参数几乎相同，而平台却不同</strong>。在 Web 浏览器中编程就像是使用一台功能受限的操作系统，而每一台功能还略微的有差别。最终，你不仅需要编写程序，还需要处理因为平台不同带来的兼容问题。</p>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>因为「没有交互」和「访问缓慢」的问题，所以引入「客户端编程」，因为引入客户端编程，遇到「各种各样不仅仅是平台差异带来的问题」。</p>
-<h2 id="Java-的解决方案"><a href="#Java-的解决方案" class="headerlink" title="Java 的解决方案"></a>Java 的解决方案</h2><h3 id="插件和脚本语言-“差点意思”"><a href="#插件和脚本语言-“差点意思”" class="headerlink" title="插件和脚本语言 “差点意思”"></a>插件和脚本语言 “差点意思”</h3><p>在当时，客户端编程所迈出的最重要的一步就是 <strong>插件（plug-in）</strong> 的开发。通过这种方式，用户可以下载一段代码，并将其插入到浏览器中适当的位置，以此来为浏览器添加新的功能。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-004109c093238333.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://zhuanlan.zhihu.com/p/28889449" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28889449</a></li>
-</ul>
-<p>插件又引发了浏览器 <strong>脚本语言（scripting language）</strong> 的开发。通过使用某种脚本语言，你可以将客户端程序的源代码直接嵌入到 HTML 页面中，解释这种语言的插件在 HTML 页面被显示时自动激活。<em>(脚本语言可以解决客户端编程中遇到的百分之八十的问题)</em> 脚本语言先天就相当易于理解，因为它们只是作为 HTML 页面一部分的简单文本，当服务器收到要获取该页面的请求时，它们可以被快速加载。此方法的缺点是代码会直接暴露给任何浏览（或窃取）的人，但是，通常不会使用脚本语言去做相当复杂的事情，所以这个缺点不会太严重。</p>
-<p>如果脚本语言可以解决客户端编程百分之八十的问题的话，那么剩下那百分之二十 <em>（那才是真正难啃的骨头）</em> 又该怎么办呢？</p>
-<h3 id="Java-带来了-Applet"><a href="#Java-带来了-Applet" class="headerlink" title="Java 带来了 Applet"></a>Java 带来了 Applet</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-0560a9ddf9ce43fe.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://www.ibm.com/developerworks/cn/java/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/java/</a></li>
-</ul>
-<p><strong>Java 带着 Applet 及时出现。</strong></p>
-<p><code>1995</code> 年， Java 之父 James Gosling 和 Sun 公司科学办公室主任 John Gage 一起前往蒙特利，去参加一个 TED 会议，两人要在那里展示一个划时代的技术， 号称向能把枯燥的静态网页变得栩栩如生，美轮美奂。</p>
-<p>演示开始了，James Gosling 把鼠标指向了浏览器中的一个 3D 分子模型，来回地旋转它，台下的观众发出阵阵惊叹声，他们被镇住了，从没有人想到在浏览器中也能实现这么 “美轮美奂” 的效果 !</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-28f634ba3ca3721c.png" alt="注：这是后来用 Applet Viewer 看到的效果"></p>
-<ul>
-<li>图片来源：<a href="https://zhuanlan.51cto.com/art/201911/606791.htm" target="_blank" rel="noopener">https://zhuanlan.51cto.com/art/201911/606791.htm</a></li>
-</ul>
-<p><strong>Java 火了!</strong></p>
-<p>这个演示所使用的技术就是 Applet。</p>
-<p>Applet 是只在 Web 浏览器中运行的小程序，它是作为网页的一部分而自动下载的 <em>（就像是网站图片被自动下载一样）</em>。当 Applet 被激活时，它变开始执行一个程序，这正是它优雅的地方：<strong>它提供了一种分发软件的方式</strong>，一旦用户需要客户端软件时，就自动从服务器把客户端软件分发给用户。</p>
-<p>用户获取最新版本的客户端软件时不会产生错误，而且也不需要很麻烦的重新安装过程 <em>（有点像现在的小程序）</em>。Java 的这种设计方式，使得程序员只需要创建单一的程序，而只要一台计算机有浏览器，且浏览器具有内置的 Java 解释器 <em>（大部分机器都有）</em>，那么这个程序就可以自动在这台计算客户端尽可能地多做事情。例如，不必跨网络地发送一张请求表单来检查自己是否填写了错误的日期或者其他参数，客户端计算机就可以快速地标出错误数据。</p>
-<p>这不仅立即就获得了快速的响应能力，而且也降低了网络流量和服务器负载，从而不会使整个网络的速度慢下来。</p>
-<h3 id="Java-对服务端编程的加持"><a href="#Java-对服务端编程的加持" class="headerlink" title="Java 对服务端编程的加持"></a>Java 对服务端编程的加持</h3><p>当提出对服务器的请求之后，会发生什么呢？大部分时间，请求只是要求「给我发送一个文件」，之后浏览器会以某种适当的形式解释这个文件，例如将其作为 HTML 页面、图片、Java applet 或脚本程序等来解释。</p>
-<p>更复杂的对服务器的请求通常涉及数据库，这可能会需要服务器端对请求到的数据进行一定的编排 <em>（例如把数据嵌到一个表格之内）</em> 来最终使其成为一个 HTML 文件发送给客户端 <em>（当然，如果客户端具备更多的只能，你完全可以把原始数据发送给客户端让它自己进行编排工作..）</em>。另一种常见的情形是：你注册账号或者提交订单，这对数据库数据造成了更改，而这些必须通过服务器端的某些代码进行处理，这就是所谓的 <strong>服务端编程</strong>。</p>
-<p>Java 后来编写的被称为 <strong>Servlet</strong> 的程序 <em>（及其衍生物 JSP）</em>，是许多开发网站的公司迁移到 Java 上的主要原因。尤其是因为凭借 Java 跨平台的特性 <strong>消除了处理具有不同能力的浏览器时所遇到的问题</strong>。</p>
-<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>Java 凭借自身强大、安全、跨平台、国际化的特性，加上解决了当时客户端、服务端开发的诸多 “痛点”，成功搭上 Internet 这列 “国际快车”，一跃成为了时下 <em>（<code>20</code> 实际 <code>90</code> 年代中）</em> 最热门的语言之一，并持续火热至今 <em>（这跟 Java 自身不断地成熟有脱不开的关系）</em>。</p>
-<blockquote>
-<p>现如今 Applet 和 Servlet 两个技术已经逐步淡出人们的视野，但在 Java 的历史上，是举足轻重的两个突破点。</p>
-</blockquote>
-<h1 id="Part-3-Hello-Wrold！"><a href="#Part-3-Hello-Wrold！" class="headerlink" title="Part 3. Hello Wrold！"></a>Part 3. Hello Wrold！</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-a49a35bbb3c6e61c.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://medium.com/@thiagonascimento/time-to-first-hello-world-11a4735602f2" target="_blank" rel="noopener">https://medium.com/@thiagonascimento/time-to-first-hello-world-11a4735602f2</a></li>
-</ul>
-<p>当我们集中注意力 <strong>学习一种新的编程语言</strong> 时，教程上的 <strong>第一个案例</strong> 就是如何 <strong>在计算机屏幕上显示短语 <code>Hello，world！</code></strong> 也许这条短语最知名的来源是贝尔实验室的备忘录《C 语言编程——一份教程》。这份材料编写于 <code>1974</code> 年。不过在编写于 <code>1972</code> 年的 B 语言教程中，我们同样看到了这条短语的身影。</p>
-<p><code>Hello, World!</code> 是一种伟大的教学方法。这是一项能够轻松完成的小任务，同时也代表着一种标准，体现出不同编程语言之间的重要差异。此外，这也是高级程序员在安装新环境测试一切是否正常的快速简便方法。<em>（有时候，程序员们也会使用「hello world」运行时间来比较不同语言与环境的速度水平。）</em> 也许更重要的是，<code>Hello, world！</code> 具有一种温暖而柔和的力量，对编程新人有着一种莫名的亲和力。</p>
-<p><em>「代码拥有无穷威力，而新的世界已经向你张开怀抱。」 ———— Chris Noessel，IBM 公司 AI 设计负责人</em></p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Main</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>以上就是Java 语言版本 <code>Hello World</code> 程序。<em>（现在看不懂也没关系，可以进 <a href="https://c.runoob.com/compile/10" target="_blank" rel="noopener">https://c.runoob.com/compile/10</a> 这个网站在线运行测试一下看看效果…）</em></p>
-<p><strong>至此，欢迎你进入 Java 的世界。</strong></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li>《Thinking in Java》 第四版；</li>
-<li>《Java 核心技术 卷 I》 第 11 版；</li>
-<li>The complete History of Java Programming Language - <a href="https://www.geeksforgeeks.org/the-complete-history-of-java-programming-language/" target="_blank" rel="noopener">https://www.geeksforgeeks.org/the-complete-history-of-java-programming-language/</a></li>
-<li>Java 发展简史：初生遇低谷，崛起于互联网 - <a href="https://www.chainnews.com/articles/628715645859.htm" target="_blank" rel="noopener">https://www.chainnews.com/articles/628715645859.htm</a></li>
-<li>永别了，Java的“小苹果”! - <a href="https://zhuanlan.51cto.com/art/201911/606791.htm" target="_blank" rel="noopener">https://zhuanlan.51cto.com/art/201911/606791.htm</a></li>
-<li>改变世界的代码行 - <a href="https://www.infoq.cn/article/5CaYH8NbS6BmptWKRgkX" target="_blank" rel="noopener">https://www.infoq.cn/article/5CaYH8NbS6BmptWKRgkX</a></li>
-</ol>
-<h1 id="往期精彩"><a href="#往期精彩" class="headerlink" title="往期精彩"></a>往期精彩</h1><ol>
-<li><a href="https://www.wmyskxz.com/2020/04/02/morethanjava-dang-da-xue-xuan-ze-liao-ji-suan-ji-zhi-hou-ying-gai-zhi-dao-de/">「MoreThanJava」当大学选择了计算机之后应该知道的</a></li>
-<li><a href="https://www.wmyskxz.com/2020/04/07/morethanjava-ji-suan-ji-fa-zhan-shi-cong-zhi-bu-ji-dao-ibm/">「MoreThanJava」计算机发展史—从织布机到IBM</a></li>
-<li><a href="https://www.wmyskxz.com/2020/06/01/morethanjava-ji-suan-ji-xi-tong-gai-shu/">「MoreThanJava」计算机系统概述</a></li>
-<li><a href="https://www.wmyskxz.com/2020/06/02/morethanjava-yi-wen-liao-jie-er-jin-zhi-he-cpu-gong-zuo-yuan-li/">「MoreThanJava」一文了解二进制和CPU工作原理</a></li>
-<li><a href="https://www.wmyskxz.com/2020/06/04/morethanjava-ji-qi-zhi-ling-dao-hui-bian-zai-dao-gao-ji-bian-cheng-yu-yan/">「MoreThanJava」机器指令到汇编再到高级编程语言</a></li>
-</ol>
-<blockquote>
-<ul>
-<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
-<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DJava-%E5%8F%91%E5%B1%95%E5%8F%B2%E5%8F%8A%E8%B5%B7%E8%88%AA%E6%96%B0%E4%B8%96%E7%95%8C/7896890-afea5f6b290400fb.png" alt=""></p>
-<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
-<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -5223,7 +5387,7 @@ HelloWorld.java:6: 错误: 需要class, interface或enum
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

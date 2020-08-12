@@ -435,6 +435,261 @@
         
           
   <h2 class="title">
+    <a href="/2018/03/21/chu-xue-java-web-3-di-yi-ge-servlet/">
+      初学Java Web(3)——第一个Servlet
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年3月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-0189f15458034df3.png" alt=""></p>
+<blockquote>
+<p>这学期 Java Web 课程的第一节课就简短复习了一下 Java 的一些基础知识，所以觉得 Java 的基础知识还是很重要的，但当我想要去写一篇 Java 回顾的文章的时候发现很难，因为坑实在太多了（一个头，两个大），只能另外找一些时间去写顺便巩固巩固自己的基础。</p>
+</blockquote>
+<h2 id="——【1-什么是-Servlet-】——"><a href="#——【1-什么是-Servlet-】——" class="headerlink" title="——【1. 什么是 Servlet 】——"></a>——【1. 什么是 Servlet 】——</h2><p>学习一个东西就要先去了解它是什么东西。</p>
+<p>Servlet 取自两个单词：Server、Applet （很符合 sun 公司的命名特点）， Java Servlet 的简称，<strong>其实质就是运行在 Web 应用服务器上的 Java 程序，</strong>与普通 Java 程序不同，它是位于 Web 服务器内部的服务器端的 Java 应用程序，可以对 Web 浏览器或其他 HTTP 客户端程序发送的请求进行处理。</p>
+<p>狭义的Servlet是指Java语言实现的一个接口，广义的Servlet是指任何实现了这个Servlet接口的类，一般情况下，人们将Servlet理解为后者。Servlet运行于支持Java的应用服务器中。从原理上讲，Servlet可以响应任何类型的请求，但绝大多数情况下Servlet只用来扩展基于HTTP协议的Web服务器。</p>
+<blockquote>
+<p>实际上，Servlet 就像是一个规范，想象一下我们的 USB 接口，它不仅约束了U盘的大小和形状，同样也约束了电脑的插槽，Servlet 也是如此，它不仅约束了服务器端如何实现规范，也约束着 Java Web 项目的结构，为什么这样说，我们下面再来讲，<strong>编写一个 Servlet 其实就是按照 Servlet 规范编写一个 Java 类。</strong></p>
+</blockquote>
+<h2 id="——【2-Servlet-与-Servlet-容器-】——"><a href="#——【2-Servlet-与-Servlet-容器-】——" class="headerlink" title="——【2. Servlet 与 Servlet 容器 】——"></a>——【2. Servlet 与 Servlet 容器 】——</h2><p>Servlet 对象与普通的 Java 对象不同，它可以处理 Web 浏览器或其他 HTTP 客户端程序发送的 HTTP 请求，但前提是把 Servlet 对象布置到 Servlet 容器中，也就是说，其运行需要 Servlet 容器的支持。</p>
+<p>Servlet 容器也叫做 Servlet 引擎，是 Web 服务器或应用程序服务器的一部分，用于在发送的请求和响应之上提供网络服务，解码基于 MIME 的请求，格式化基于 MIME 的响应。Servlet 没有 main 方法，不能独立运行，它必须被部署到 Servlet 容器中，由容器来实例化和调用 Servlet 的方法（如 doGet() 和 doPost() 方法），Servlet 容器在 Servlet 的生命周期内包容和管理 Servlet 。在 JSP 技术 推出后，管理和运行 Servlet / JSP 的容器也称为 Web 容器。</p>
+<p>有了 Servlet 之后，用户通过单击某个链接或者直接在浏览器的地址栏中输入 URL 来访问 Servlet ，Web 服务器接收到该请求后，并不是将请求直接交给 Servlet ，而是交给 Servlet 容器。Servlet 容器实例化 Servlet ，调用 Servlet 的一个特定方法对请求进行处理， 并产生一个响应。这个响应由 Servlet 容器返回给 Web 服务器，Web 服务器包装这个响应，以 HTTP 响应的形式发送给 Web 浏览器。</p>
+<h4 id="Servlet-容器能提供什么？"><a href="#Servlet-容器能提供什么？" class="headerlink" title="Servlet 容器能提供什么？"></a>Servlet 容器能提供什么？</h4><p>上面我们知道了需要由 Servlet 容器来管理和运行 Servlet ，但是为什么要这样做呢？使用 Servlet 容器的原因有：</p>
+<ol>
+<li><strong>通信支持：</strong>利用容器提供的方法，你能轻松的让 Servlet 与 web 服务器对话，而不用自己建立 serversocket 、监听某个端口、创建流等。容器知道自己与 web 服务器之间的协议，所以你的 Servlet 不用担心 web 服务器（如Apache）和你自己的 web 代码之间的 API ，只需要考虑如何在 Servlet 中实现业务逻辑（如处理一个订单）。 </li>
+<li><strong>生命周期管理：</strong> Servlet 容器控制着 Servlet 的生与死，它负责加载类、实例化和初始化 Servlet ，调用 Servlet 方法，以及使 Servlet 实例被垃圾回收，有了 Servlet 容器，你不需要太多的考虑资源管理。 </li>
+<li><strong>多线程支持：</strong>容器会自动为它所接收的每个 Servlet 请求创建一个新的 java 线程。针对用户的请求，如果 Servlet  已经运行完相应的http服务方法，这个线程就会结束。这并不是说你不需要考虑线程安全性，其实你还会遇到同步问题，不过这样能使你少做很多工作。 </li>
+<li><strong>声明方式实现安全：</strong>利用 Servlet 容器，你可以使用 xml 部署描述文件来配置和修改安全性，而不必将其硬编码写到 Servlet 类代码中。 </li>
+<li><strong>JSP支持：</strong> Servlet容器负责将 jsp 代码翻译为真正的 java 代码。</li>
+</ol>
+<h4 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h4><p>通常情况下，Servlet 容器也就是指 Web 容器，如 Tomcat、Jboss、Resin、Weblogic 等，它们对 Servlet 进行控制。当一个客户端发送 HTTP 请求时，由容器加载 Servlet 对其进行处理并做出响应。在 Web 容器中，Servlet 主要经历 4 个阶段，如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-a26b3e8c2114d5f0.png" alt="Servlet 与容器"></p>
+<p>Servlet 与 Web 容器的关系是非常密切的，在 Web 容器中 Servlet 主要经历了 4 个阶段，这 4 个阶段实质是 Servlet 的生命周期，由容器进行管理。</p>
+<p>（1）在 Web 容器启动或者客户机第一次请求服务时，容器将加载 Servlet 类并将其放入到 Servlet 实例池。</p>
+<p>（2）当 Servlet 实例化后，容器将调用 Servlet 对象的 init() 方法完成 Servlet 的初始化操作，主要是为了让 Servlet 在处理请求之前做一些初始化工作。</p>
+<p>（3）容器通过 Servlet 的 service() 方法处理客户端请求。在 Service() 方法中，Servlet 实例根据不同的 HTTP 请求类型作出不同处理，并在处理之后作出相应的响应。</p>
+<p>（4）在 Web 容器关闭时，容器调用 Servlet 对象的 destroy() 方法对资源进行释放。在调用此方法后，Servlet 对象将被垃圾回收器回收。</p>
+<h2 id="——【3-第一个-Servlet-】——"><a href="#——【3-第一个-Servlet-】——" class="headerlink" title="——【3. 第一个 Servlet 】——"></a>——【3. 第一个 Servlet 】——</h2><h4 id="①-搭建-Java-Web-项目"><a href="#①-搭建-Java-Web-项目" class="headerlink" title="① 搭建 Java Web 项目"></a>① 搭建 Java Web 项目</h4><ol>
+<li><p>创建 一个 Java 项目，并命名为 HelloServlet； <strong>（注意：这是普通的 Java 项目而不是动态 Web 项目）</strong></p>
+</li>
+<li><p>在项目的根目录下创建一个文件夹 webapp，表示 Web 项目的根；</p>
+</li>
+<li><p>在 webapp 中创建 WEB-INF 文件夹；</p>
+</li>
+<li><p>在 WEB-INF 文件夹中创建文件夹：classes,lib；</p>
+</li>
+<li><p>在 WEB-INF 文件中添加 Tomcat 根目录下 conf 文件夹中的 web.xml 文件；（只保留根元素，就像下面这样）</p>
+<pre><code> &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+   xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
+                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
+   version=&quot;3.1&quot;&gt;
+
+ &lt;/web-app&gt;
+</code></pre></li>
+<li><p>把当前项目的 classpath 路径改成 webapp/WEB-INF 下的 classes 中。</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-9d55e8be6d22fd9d.png" alt=""></p>
+<h4 id="②-编写-Servlet"><a href="#②-编写-Servlet" class="headerlink" title="② 编写 Servlet"></a>② 编写 Servlet</h4><ol>
+<li>为该项目增加Servlet的支持.<br>   1.1. 把Tomcat根/lib中servlet-api.jar文件拷贝到项目下WEB-INF下的lib中<br>   1.2. 在项目中选择servlet-api.jar,鼠标右键,build path–&gt;add to build path</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-ec14aa271cc510e8.png" alt=""></p>
+<ol start="2">
+<li>开发Servlet程序:<br>  2.1:定义一个类HelloServlet,并让该类去实现javax.servlet.Servlet接口;<br>  2.2:实现Servlet接口中的init,service,destory等方法.</li>
+</ol>
+<pre><code>import java.io.IOException;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+public class HelloServlet implements Servlet{
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+    }
+    @Override
+    public ServletConfig getServletConfig() {
+        return null;
+    }
+    @Override
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        System.out.println(&quot;测试一下！&quot;);     // 先在这里写下测试代码
+    }
+    @Override
+    public String getServletInfo() {
+        return null;
+    }
+    @Override
+    public void destroy() {
+    }
+
+}</code></pre><p><strong>注意:若生成方法中的参数是 arg0 或则 arg1 等格式的,原因是还没有关联源代码的问题:</strong> <a href="https://jingyan.baidu.com/article/0202781170ffa61bcc9ce5dd.html" target="_blank" rel="noopener">关联上 tomcat src 文件即可</a></p>
+<h4 id="③-配置-Servlet"><a href="#③-配置-Servlet" class="headerlink" title="③ 配置 Servlet"></a>③ 配置 Servlet</h4><p>上面编写好的 HelloServlet 类仅仅是一个普通的实现类而已，而现在我想要它运行在我自己的 Tomcat 服务器中，所以应该通知 Tomcat 服务器来管理我的 HelloServlet 类，具体的做法如下：</p>
+<ol>
+<li><p>找到项目根下的WEB-INF下的web.xml文件:</p>
+</li>
+<li><p>在根元素web-app中创建一个新的元素节点:servlet</p>
+</li>
+<li><p>在根元素web-app中创建一个新的元素节点:servlet-mapping（Servlet 的映射）</p>
+<pre><code> &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+   xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
+                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
+   version=&quot;3.1&quot;&gt;
+
+</code></pre></li>
+</ol>
+<pre><code>    &lt;servlet&gt;
+        &lt;servlet-name&gt;HelloServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;lt.HelloServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;HelloServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/hello&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;
+```
+&gt; web.xml 提供路径和servlet映射关系，这意思是把/hello这个路径，映射到 HelloServlet 这个类上，需要注意的是：**&lt; servlet&gt; 标签下的 &lt; servlet-name&gt;与 &lt; servlet-mapping&gt; 标签下的 &lt; servlet-name&gt; 必须一样**（因为标签被编辑器识别故&lt;后加了一个空格）</code></pre><ol start="4">
+<li><p>配置 Tomcat 服务器：</p>
+<p> 4.1. 修改默认端口为 80 端口：</p>
+<pre><code> 首先进入到 Tomcat 服务器的根路径下找到 conf 文件夹下的 server.xml 文件，默认是在第 70 行，找到 Connector 元素的 port 属性，修改为 80 ，重启 Tomcat 即可。
+ ![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web（3）——第一个Servlet/7896890-7812541ce51b78e5.png)</code></pre><blockquote>
+<p>Tomcat 的默认端口为8080，而 HTTP 协议的默认端口是 80，配置 80 端口的好处在于，我们平时输入的类似于 <a href="http://baidu.com" target="_blank" rel="noopener">http://baidu.com</a> 其实是默认省略了写 80端口的，它其实等价于：<a href="http://baidu.com:80/" target="_blank" rel="noopener">http://baidu.com:80/</a> ，所以以后我们就不用再写冒号直接输入 locahost 就能进入到 Tomcat 的配置页面了。</p>
+</blockquote>
+<p>  4.2 部署 Java 项目（告诉 Tomcat 服务器来管理我们的项目）：</p>
+<pre><code> 这里直接引用 how2j.cn 的教程啦：
+ ![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web（3）——第一个Servlet/7896890-9b8a876c38379a5a.png)</code></pre></li>
+</ol>
+<p>所以加上<code>&lt;Context path=&quot;&quot; docBase=&quot;F:\\Projects\\JavaProject\\HelloServlet\\webapp&quot; /&gt;</code>这一句重启 Tomcat 服务器</p>
+<p>在浏览器中输入 localhost/hello，回车，即可在 Tomcat 服务器上看到相关信息，至此第一个 Servlet 就编写成功了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-d0df0d5429c132d3.png" alt=""></p>
+<h2 id="——【4-Servlet-请求过程】——"><a href="#——【4-Servlet-请求过程】——" class="headerlink" title="——【4. Servlet 请求过程】——"></a>——【4. Servlet 请求过程】——</h2><p>学习 Servlet 技术，就需要有一个 Servlet 运行环境，也就是需要有一个 Servlet 容器，如这里使用的<strong>【Tomcat】</strong>。</p>
+<p>Tomcat 服务器接受客户请求并做出响应的过程如下（以上面搭建的项目为例）：</p>
+<p>① 打开浏览器发起请求：<a href="http://localhost:80/hello/index.html" target="_blank" rel="noopener">http://localhost:80/hello/index.html</a> （假设有一个 index.html 文件）</p>
+<p>② 服务器接收到请求后处理请求：</p>
+<blockquote>
+<p>htpp：所使用的协议<br>localhost：ip地址，确定访问的主机<br>80：端口号<br>hello：上下文路径，确定访问项目的根路径<br>index.html：确定访问项目中的具体哪一个资源</p>
+</blockquote>
+<p>③ 根据 hello 去 tomcat/conf/server.xml 文件中找到相关配置文件，根据上下文路径找到项目的根路径：<br><code>&lt;Context path=&quot;&quot; docBase=&quot;F:\\Projects\\JavaProject\\HelloServlet\\webapp&quot; /&gt;</code><br>如果找不到根路径（因为这里默认上下文路径为空），返回 404</p>
+<p>④ 根据资源名称去项目中的 web.xml 文件中找到相关的配置，找到配置中的<code>&lt;url-pattern&gt;</code><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-bc647a56c9f6423f.png" alt=""></p>
+<p>如果找不到 hello 的资源名称，则返回 404</p>
+<p>⑤ 根据资源名称找到 Servlet 的全限定名，如果找不到则在启动服务器的时候报错<br><code>java.lang.IllegalArgumentException: Servlet mapping specifies an unknown servlet name HelloServlet</code></p>
+<p>⑥ 根据找到的全限定名创建对象，在创建对象之前需要判断是否是第一次请求，使用 Tomcat 中使用 Servlet 实例缓存池来实现，若是第一次则调用对象的 init 方法。</p>
+<p>⑦ 创建 req,resp 对象，执行 service 方法；</p>
+<p>⑧ 使用 resp 对象给浏览器响应信息。</p>
+<blockquote>
+<p>发现一边学一边写起来太麻烦了，一方面是因为自己的水平，另一方面是觉得这样太费时间了，也要开始找实习了，所以时间有些宝贵，可能这不会作为一个连续的系列，反而是一些学习的分享和感悟，emmm….事实上，Servlet也还有好多东西，包括最新支持注解方式配置等….<br>参考资料：<br>《Java Web程序设计 慕课版——明日科技》<br>how2j.cn<br><a href="http://blog.csdn.net/lz233333/article/details/68065749" target="_blank" rel="noopener">理解Servlet和Servlet容器、Web服务器等概念</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/03/14/chu-xue-java-web-2-da-jian-java-web-kai-fa-huan-jing/">
       初学Java Web(2)——搭建Java Web开发环境
     </a>
@@ -3764,164 +4019,6 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/11/06/fan-yi-xian-cheng-he-jin-cheng-ji-chu/">
-      【翻译】线程和进程基础
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>多线程</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年11月6日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>所有的内容均来自：<a href="http://www.qnx.com/developers/docs/6.4.1/neutrino/getting_started/s1_procs.html" target="_blank" rel="noopener">http://www.qnx.com/developers/docs/6.4.1/neutrino/getting_started/s1_procs.html</a><br>这是一篇很棒的介绍进程和线程的文章，本文属于自己感兴趣翻译过来的文章，有兴趣的读者也可以去拜读一下原文。</p>
-</blockquote>
-<h2 id="进程和线程基础"><a href="#进程和线程基础" class="headerlink" title="进程和线程基础"></a>进程和线程基础</h2><p>在我们开始讨论线程，进程，时间片以及各种神奇的“调度机制”之前，先来建立一个类比。</p>
-<p>我首先要做的就是说明线程和进程是如何工作的。我能想到的最好的方式（不涉及实时系统的设计）就是把线程和进程想象成一些实际的情形。</p>
-<h3 id="进程就像是一个房子"><a href="#进程就像是一个房子" class="headerlink" title="进程就像是一个房子"></a>进程就像是一个房子</h3><p>让我们用一个常规的、日常的物品来模拟进程和线程——房子。</p>
-<p>房子实际上是一个容器，具有一定的属性（例如楼面面积，房间数目等等）。</p>
-<p>如果你能这样看待，那么你就会发现房子不会自己主动去做任何事——它只是一个被动的物体。这就是进程实际上所担任的角色。我们待会儿会讨论到。</p>
-<h3 id="线程就像居住者"><a href="#线程就像居住者" class="headerlink" title="线程就像居住者"></a>线程就像居住者</h3><p>住在房子里的人们是活跃的对象——他们使用不同的房间，看电视，做饭，洗澡等等。我们很快就会发现这就是线程的行为模式。</p>
-<h3 id="单线程"><a href="#单线程" class="headerlink" title="单线程"></a>单线程</h3><p>如果你曾经一个人生活过，那么你就会知道这是一种什么感觉——你知道，你可以在任何时候在家里做任何你想做的事，因为房子里没有其他人。如果你想打开立体声音响，使用洗手间，吃晚餐，随便你，你只要继续做就行了。</p>
-<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>当你把另一个人加入房子时，事情会发生戏剧性的变化。假设你结婚了，所以现在你的配偶也住在那里。你不能在任何一个特定的时间进入洗手间，你需要先检查一下，确保你的配偶不在里面！</p>
-<p>如果你有两个负责任的成年人住在一所房子里，一般来说，你可能会对“安全”相当松懈-因为你知道另一个大人会尊重你的空间，不会试图放火烧厨房(故意！)等等。</p>
-<p>现在，把几个孩子扔到一起，突然之间事情变得有趣多了。</p>
-<h3 id="回到进程和线程"><a href="#回到进程和线程" class="headerlink" title="回到进程和线程"></a>回到进程和线程</h3><p>就像房子占据了房地产的一部分一样，进程也会占据一定的内存。就像房子的住户可以自由进入任何他们想要的房间一样，一个进程的线程都可以访问这个内存。如果一个线程分配了一些东西(妈妈出去买了一个游戏)，所有其他的线程都能立即访问它(因为它存在于公共地址空间-它在房子里)。同样，如果进程分配内存，那么这个新内存也可以用于所有线程。这里的技巧是，确认内存是否应该对进程中的所有线程都可用。如果是，那么您需要让所有线程同步它们对它的访问。如果不是，那么我们假设它是特定于特定线程的。在这种情况下，因为只有该线程才能访问它，所以我们可以假定不需要同步-线程不会自行启动！</p>
-<p>正如我们从日常生活中所知道的，事情并不那么简单。现在我们已经了解了基本特性<strong>(要点：所有内容都是共享的)</strong>，让我们来看看事情变得更有趣的地方，以及为什么。</p>
-<p>下图显示了我们将代表线程和进程的方式。进程是圆，表示“容器”概念(地址空间)，三个squigley lines（不知道是什么）是线程。你会在书中看到这样的图表。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E7%BA%BF%E7%A8%8B%E5%92%8C%E8%BF%9B%E7%A8%8B%E5%9F%BA%E7%A1%80%E2%80%94%E2%80%94%E7%BF%BB%E8%AF%91%E6%96%87/7896890-c4419fabb9eb4d83.png" alt="进程作为线程的容器"></p>
-<h3 id="相互排斥"><a href="#相互排斥" class="headerlink" title="相互排斥"></a>相互排斥</h3><p>如果你想洗个澡，而且有人已经在用浴室，你就得等着。线程是如何处理这个的？</p>
-<p>它用的是一种叫做互斥的操作。它几乎意味着你所想的-当涉及到特定的资源时，许多线程是互斥的。</p>
-<p>如果你正在洗澡，你想要独占浴室。要做到这一点，你通常会进入浴室并把门从里面锁起来。任何想使用浴室的人都会被锁上的。当你完成任务时，你会打开门，让其他人进入。</p>
-<p>这就是线程所做的。线程使用一个名为互斥的对象(相互排斥的缩写)。这个对象就像门上的锁-一旦线程拥有互斥锁，没有其他线程可以获得互斥锁，直到拥有的线程释放(解锁)它。就像门锁一样，等待获得互斥锁的线程将被禁止。</p>
-<p>互斥锁和门锁的另一个有趣的相同点是互斥锁实际上是一个“咨询”锁。如果一个线程不符合使用互斥锁的约定，那么保护就没有用了。在我们的房子比喻中，这就像有人通过墙壁闯进厕所，无视了门和锁的约定。</p>
-<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>如果浴室现在锁着，有许多人在等着使用它，那该怎么做？显然，所有的人都坐在外面，等着在浴室里的人出去。真正的问题是，“当门打开时会发生什么？谁能下一个进入？“</p>
-<p>你会认为，让等了最长的时间得那个成为下一个是“公平的”。或者，让最年长的人成为下一个是“公平”的。或者最高的。或者最重要的。有许多方法可以确定什么是“公平”。 </p>
-<p>我们通过线程的两个因素来解决这个问题：优先级和等待长度。 </p>
-<p>假设两个人同时出现在(上锁的)卫生间的门前。其中一人有一个紧迫的事情(他们开会已经很晚了)，而另一个却没有。让那个时间紧迫的人下一次进去，是不是很有道理呢？当然会了。唯一的问题是你如何决定谁更“重要”。这可以通过分配优先级来完成(让我们使用一个像中微子（Neutrino）这样的数字，是最低的可用优先级，255是这个版本中的最高值)。房子里有紧迫事情的人将被给予更高的优先权，而那些不被优先考虑的人将被给予较低的优先权。 </p>
-<p>和线程一样。线程继承其父线程的调度算法，但可以调用pthread_setschedparam()来更改其调度策略和优先级(如果它有权限这样做)。</p>
-<p>如果有多个线程等待，并且互斥锁被解锁，我们将把互斥锁给予等待线程中最高优先级的那个。但是，假设两个人都具有相同的优先级。现在你要做什么？好吧，在这种情况下，让等待最长的人下一个或许是“公平的”。这不仅是“公平的”，而且也是在内核所做的。在一堆线程等待的情况下，我们首先是按优先级等级来决定，其次是等待长度。 </p>
-<p>互斥量肯定不是我们将遇到的唯一的同步对象。让我们看看其他的。</p>
-<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p>让我们从浴室搬到厨房，因为这是一个在社会上可以接受同时容纳一个人以上的地点。在厨房里，你可能不想让每个人都在里面。事实上，你可能想要限制你的厨房里所能容纳的人数(太多的厨师，等等)。</p>
-<p>假设你不想同时拥有两个以上的人。你能用互斥体来实现吗？这不是我们定义的。为什么不呢？这实际上是一个非常有趣的问题。让我们把它分成几个步骤。</p>
-<h3 id="数量为1的信号量"><a href="#数量为1的信号量" class="headerlink" title="数量为1的信号量"></a>数量为1的信号量</h3><p>浴室可以有两种情况中的一种，两种状态相互联系（with two states that go hand-in-hand with each other）：</p>
-<ul>
-<li>门没有锁，房间里没有人</li>
-<li>门是锁着的，房间里有一个人</li>
-</ul>
-<p>没有其他的组合是可能的-当房间里没人的时候不能上锁(不然我们怎么解锁？)，而且当有人在房间里时不能解锁(他们怎么保证他们的隐私？)。这是一个信号量的示例，其计数为1-最多只能有一个人在该房间，或者一个线程使用信号量。</p>
-<p>这里的关键（key）(请原谅双关语)是我们描述锁的方式。在典型的浴室锁中，你可以锁定和解锁它只有从内部-没有外部可访问的钥匙。实际上，这意味着互斥对象的所有权是一个原子操作-在获取互斥锁的过程中，没有可能有其他线程得到它，结果是你一直拥有互斥锁。在我们的房子比喻中，这是不太明显的，因为人类比计算机聪明太多（smarter than ones and zeros）。</p>
-<h3 id="数量大于1的信号量"><a href="#数量大于1的信号量" class="headerlink" title="数量大于1的信号量"></a>数量大于1的信号量</h3><p>假设我们在厨房安装了传统的钥匙锁。这个锁的工作方式是，如果你有一个钥匙，你可以打开门并进入。任何使用这个锁的人都同意，当他们进去时，他们会立即把门从里面锁起来，这样外面的人总是需要钥匙。</p>
-<p>现在，控制我们想要多少人在厨房里-把两个钥匙挂在门外，这就变成了一件简单的事情！厨房总是锁着的。当有人想走进厨房时，他们会发现门外有一把钥匙。如果是的话，他们就带着它，打开厨房的门，进去，用钥匙锁上门。</p>
-<p>因为进入厨房的人在厨房的时候一定要带钥匙，所以我们可以通过限制门上的钥匙的数量来直接控制进入厨房的人数。</p>
-<p>对于线程，这就需要通过信号量来完成了。“普通”信号量就像一个互斥体一样工作-你要么拥有互斥量，在这种情况下，你可以访问资源，或者你没有，在这种情况下，你没有访问权限。我们刚才在厨房描述的信号量是一个计数信号，它保持计数的记录(线程所允许的keys数量)。</p>
-<h3 id="互斥的信号量"><a href="#互斥的信号量" class="headerlink" title="互斥的信号量"></a>互斥的信号量</h3><p>我们只是问了一个问题“你能用一个互斥量来做吗？”关于用计数实现一个锁，答案是否定的，反过来呢？我们能用信号量作为互斥量吗？</p>
-<p>是的。事实上，在某些操作系统中，这正是他们所做的-他们没有互斥锁，只有信号量！那么，为什么要麻烦互斥锁呢？</p>
-<p>要回答这个问题，看看你的洗手间。你的房子的建造者是如何实现“互斥”的？我猜你没有挂在墙上的钥匙！</p>
-<p>互斥锁（Mutexes）是一个“特殊用途”信号量。如果您希望一个线程在特定的代码段中运行，那么互斥锁是迄今为止最有效的实现。</p>
-<h2 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h2><blockquote>
-<p>这篇文章真的可谓是生动有趣，把线程和进程用了生活中的比喻来描述，很是深刻。原文中的描述虽然简单，但有些单词还是有些拿不准，我都打出来了，甚至有一些描述有些生硬，如有错误，请指出。</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -4157,7 +4254,7 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

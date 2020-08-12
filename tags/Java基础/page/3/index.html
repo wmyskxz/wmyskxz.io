@@ -436,6 +436,318 @@
         
           
   <h2 class="title">
+    <a href="/2017/11/20/java-7-de-xin-te-xing/">
+      Java 7的新特性
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2017年11月20日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>看大佬推荐的书单买了一本《Java 8实战》，总觉得在了解Java 8之前，是不是也应该去了解了解一下Java 7的一些特性？所以就自己百度了一些资料来学习。</p>
+</blockquote>
+<hr>
+<h2 id="当然还是要先看看官方文档啦"><a href="#当然还是要先看看官方文档啦" class="headerlink" title="当然还是要先看看官方文档啦"></a>当然还是要先看看官方文档啦</h2><blockquote>
+<p>这里是详细介绍（缺点是全英文的，貌似还不是官方的，不过很详细）：<a href="https://www.oreilly.com/learning/java7-features" target="_blank" rel="noopener">https://www.oreilly.com/learning/java7-features</a><br>下面大部分内容均来自这一篇文章，翻译一下而已。</p>
+</blockquote>
+<p>戳进去看看，大概还是能看懂的，看到有博客说Java 7大部分的特性都是语法糖。</p>
+<hr>
+<h2 id="1-Diamond-Operator"><a href="#1-Diamond-Operator" class="headerlink" title="1.Diamond Operator"></a>1.Diamond Operator</h2><p>类型判断是一个人特殊的烦恼，入下面的代码：</p>
+<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">>></span> anagrams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span>String<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">>></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>通过类型推断后变成：</p>
+<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">>></span> anagrams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>注：这个&lt;&gt;被叫做diamond(钻石)运算符，Java 7后这个运算符从引用的声明中推断类型。</strong></p>
+<hr>
+<h2 id="2-在switch语句中使用字符串"><a href="#2-在switch语句中使用字符串" class="headerlink" title="2.在switch语句中使用字符串"></a>2.在switch语句中使用字符串</h2><p>switch语句可以使用原始类型或枚举类型。Java引入了另一种类型，我们可以在switch语句中使用：字符串类型。</p>
+<p>说我们有一个根据其地位来处理贸易的要求。直到现在，我们使用if-其他语句来完成这个任务。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token function">voidprocessTrade</span><span class="token punctuation">(</span>Trade t<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            String status <span class="token operator">=</span> t<span class="token punctuation">.</span><span class="token function">getStatus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>NEW<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                  <span class="token function">newTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>EXECUTE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                  <span class="token function">executeTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>PENDING<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                  <span class="token function">pendingTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这种处理字符串的方法是粗糙的。在Java中，我们可以使用增强的switch语句来改进程序，该语句以String类型作为参数。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidprocessTrade</span><span class="token punctuation">(</span>Trade t<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String status <span class="token operator">=</span> t<span class="token punctuation">.</span><span class="token function">getStatus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        caseNEW<span class="token operator">:</span>
+            <span class="token function">newTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        caseEXECUTE<span class="token operator">:</span>
+            <span class="token function">executeTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+        casePENDING<span class="token operator">:</span>
+            <span class="token function">pendingTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+         <span class="token keyword">default</span><span class="token operator">:</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>在上面的程序中，状态字段总是通过使用 <strong>String.equals()</strong> 与案例标签来进行比较。</p>
+<hr>
+<h2 id="3-自动资源管理"><a href="#3-自动资源管理" class="headerlink" title="3.自动资源管理"></a>3.自动资源管理</h2><p>Java中有一些资源需要手动关闭，例如<strong>Connections，Files，Input/OutStreams</strong>等。通常我们使用 <strong>try-finally</strong> 来关闭资源：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidoldTry</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">try</span><span class="token punctuation">{</span>
+                  fos<span class="token operator">=</span> <span class="token function">newFileOutputStream</span><span class="token punctuation">(</span><span class="token string">"movies.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  dos<span class="token operator">=</span> <span class="token function">newDataOutputStream</span><span class="token punctuation">(</span>fos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  dos<span class="token punctuation">.</span><span class="token function">writeUTF</span><span class="token punctuation">(</span><span class="token string">"Java 7 Block Buster"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                  e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">finally</span><span class="token punctuation">{</span>
+                  <span class="token keyword">try</span><span class="token punctuation">{</span>
+                        fos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                        dos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                        <span class="token comment" spellcheck="true">// log the exception</span>
+                  <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span></code></pre>
+<p>然而，在Java 7中引入了另一个很酷的特性，可以自动管理资源。它的操作也很简单，我们所要做的就是在 <strong>try</strong> 块中申明资源如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">try</span><span class="token punctuation">(</span>resources_to_be_cleant<span class="token punctuation">)</span><span class="token punctuation">{</span>
+
+   <span class="token comment" spellcheck="true">// your code</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>以上方法与旧的 <strong>try-finally</strong> 能最终写成下面的代码：</p>
+<pre class=" language-java"><code class="language-java">      <span class="token keyword">public</span> <span class="token function">voidnewTry</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+
+
+            <span class="token keyword">try</span><span class="token punctuation">(</span>FileOutputStream fos <span class="token operator">=</span> <span class="token function">newFileOutputStream</span><span class="token punctuation">(</span><span class="token string">"movies.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                        DataOutputStream dos <span class="token operator">=</span> <span class="token function">newDataOutputStream</span><span class="token punctuation">(</span>fos<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  dos<span class="token punctuation">.</span><span class="token function">writeUTF</span><span class="token punctuation">(</span><span class="token string">"Java 7 Block Buster"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log the exception</span>
+
+            <span class="token punctuation">}</span>
+
+      <span class="token punctuation">}</span></code></pre>
+<p>上面的代码也代表了这个特性的另一个方面：处理多个资源。<strong>FileOutputStream</strong> 和 <strong>DataOutputStream</strong> 在try语句中一个接一个地含在语句中，每一个都用分号(;)分隔符分隔开。我们不必手动取消或关闭流，因为当空间存在try块时，它们将自动关闭。</p>
+<p>在后台，应该自动关闭的资源必须试验 <strong>java.lang.AutoCloseable</strong> 接口。</p>
+<p>任何实现 <strong>AutoCloseable</strong> 接口的资源都可以作为自动资源管理的候选。<strong>AutoCloseable</strong> 是 <strong>java.io.Closeable</strong> 接口的父类，JVM会在程序退出<strong>try</strong>块后调用一个方法 <strong>close()</strong>。</p>
+<hr>
+<h2 id="4-带下划线的数字文本"><a href="#4-带下划线的数字文本" class="headerlink" title="4.带下划线的数字文本"></a>4.带下划线的数字文本</h2><p>数字文字绝对是对眼睛的一种考验。我相信，如果你给了一个数字，比如说，十个零，你就会像我一样数零。如果不计算从右到左的位置，识别一个文字的话，就很容易出错，而且很麻烦。Not anymore。Java在识别位置时引入了下划线。例如，您可以声明1000，如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> thousand <span class="token operator">=</span>  1_000<span class="token punctuation">;</span></code></pre>
+<p>或1000000(一百万)如下:</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> million  <span class="token operator">=</span>  1_000_000</code></pre>
+<p><strong>请注意，这个版本中也引入了二进制文字-例如“0b1”-因此开发人员不必再将它们转换为十六进制。</strong></p>
+<hr>
+<h2 id="5-改进的异常处理"><a href="#5-改进的异常处理" class="headerlink" title="5.改进的异常处理"></a>5.改进的异常处理</h2><p>在异常处理区域有几处改进。Java引入了多个catch功能，以使用单个抓到块捕获多个异常类型。</p>
+<p>假设您有一个方法，它抛出三个异常。在当前状态下，您将分别处理它们，如下所示：</p>
+<pre class=" language-java"><code class="language-java">   <span class="token keyword">public</span> <span class="token function">voidoldMultiCatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token keyword">try</span><span class="token punctuation">{</span>
+
+                  <span class="token function">methodThatThrowsThreeExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionOne e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log and deal with ExceptionOne</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionTwo e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log and deal with ExceptionTwo</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionThree e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log and deal with ExceptionThree</span>
+
+            <span class="token punctuation">}</span>
+
+      <span class="token punctuation">}</span></code></pre>
+<p>在一个catch块中逐个捕获一个连续的异常，看起来很混乱。我还看到了捕获十几个异常的代码。这是非常低效和容易出错的。Java为解决这只丑小鸭带来了新的语言变化。请参阅下面的方法oldMultiCatch方法的改进版本：</p>
+<pre class=" language-java"><code class="language-java">      <span class="token keyword">public</span> <span class="token function">voidnewMultiCatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token keyword">try</span><span class="token punctuation">{</span>
+
+                  <span class="token function">methodThatThrowsThreeExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionOne <span class="token operator">|</span> ExceptionTwo <span class="token operator">|</span> ExceptionThree e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log and deal with all Exceptions</span>
+
+            <span class="token punctuation">}</span>
+
+      <span class="token punctuation">}</span></code></pre>
+<p>多个异常通过使用 <strong>“|”</strong>操作符在一个catch块中捕获。这样，您不必编写数十个异常捕获。但是，如果您有许多属于不同类型的异常，那么您也可以使用“多个catch块”块。下面的代码片段说明了这一点：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidnewMultiMultiCatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            <span class="token keyword">try</span><span class="token punctuation">{</span>
+
+                  <span class="token function">methodThatThrowsThreeExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionOne e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log and deal with ExceptionOne</span>
+
+
+
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionTwo <span class="token operator">|</span> ExceptionThree e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+                  <span class="token comment" spellcheck="true">// log and deal with ExceptionTwo and ExceptionThree</span>
+
+            <span class="token punctuation">}</span>
+
+
+
+      <span class="token punctuation">}</span></code></pre>
+<p>在上面的例子中，在和ExceptionThree属于不同的层次结构，因此您希望以不同的方式处理它们，但使用一个抓到块。</p>
+<hr>
+<h2 id="6-New-file-system-API-NIO-2-0"><a href="#6-New-file-system-API-NIO-2-0" class="headerlink" title="6.New file system API(NIO 2.0)"></a>6.New file system API(NIO 2.0)</h2><p>那些使用Java的人可能还记得框架引起的头痛。在操作系统或多文件系统之间无缝地工作从来都不是一件容易的事情.。有些方法，例如删除或重命名，在大多数情况下都是出乎意料的。使用符号链接是另一个问题。实质上API需要大修。</p>
+<p>为了解决上述问题，Java引入了一个新的API，并在许多情况下引入了新的api。</p>
+<p>在NIO2.0提出了许多增强功能。在处理多个文件系统时，它还引入了新的类来简化开发人员的生活。</p>
+<h3 id="Working-With-Path（使用路径）"><a href="#Working-With-Path（使用路径）" class="headerlink" title="Working With Path（使用路径）"></a>Working With Path（使用路径）</h3><p>新的 <strong>java.nio.file</strong> 由包和接口组成例如：<strong>Path,Paths,FileSystem,FileSystems</strong>等等。</p>
+<p>路径只是对文件路径的简单引用。它与java.io.File等价(并具有更多的特性)。下面的代码段显示了如何获取对“临时”文件夹的路径引用：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidpathInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            Path path<span class="token operator">=</span> Paths<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"c:\Temp\temp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Number of Nodes:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getNameCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"File Name:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getFileName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"File Root:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getRoot</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"File Parent:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token punctuation">}</span></code></pre>
+<p>最终控制台的输出将是:</p>
+<pre class=" language-java"><code class="language-java">Number of Nodes<span class="token operator">:</span><span class="token number">2</span>
+
+File Name<span class="token operator">:</span>temp<span class="token punctuation">.</span>txt
+
+File Root<span class="token operator">:</span>c<span class="token operator">:</span>
+
+File Parent<span class="token operator">:</span>c<span class="token operator">:</span>Temp</code></pre>
+<p>删除文件或目录就像在文件中调用delete方法(注意复数)一样简单。在类公开两个删除方法，一个抛出NoSuchFileException，另一个不抛。</p>
+<p>下面的delete方法调用抛出NoSuchFileException，因此您必须处理它：</p>
+<pre class=" language-java"><code class="language-java">Files<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>Where as Files.deleteIfExists(path) does not throw exception (as expected) if the file/directory does not exist.</p>
+<blockquote>
+<p>使用 <strong>Files.deteleIfExists(path)</strong> 则不会抛出异常。</p>
+</blockquote>
+<p>您可以使用其他实用程序方法，例如Files.copy(.)和Files.move(.)来有效地对文件系统执行操作。类似地，使用 <strong>createSymbolicLink(..)</strong> 方法使用代码创建符号链接。</p>
+<h3 id="文件更改通知"><a href="#文件更改通知" class="headerlink" title="文件更改通知"></a>文件更改通知</h3><p>JDK 7中最好的改善算是File change notifications（文件更改通知）了。这是一个长期等待的特性，它最终被刻在NIO 2.0中。<strong>WatchService</strong> API 允许您在对主题(目录或文件)进行更改时接收通知事件。</p>
+<blockquote>
+<p>具体的创建步骤就不给了，总之它的功能就跟它的名字一般，当文件发生更改的时候，能及时作出反馈。</p>
+</blockquote>
+<hr>
+<h2 id="7-Fork-and-Join（Fork-Join框架）"><a href="#7-Fork-and-Join（Fork-Join框架）" class="headerlink" title="7.Fork and Join（Fork/Join框架）"></a>7.Fork and Join（Fork/Join框架）</h2><p>在一个java程序中有效地使用并行内核一直是一个挑战。很少有国内开发的框架将工作分配到多个核心，然后加入它们来返回结果集。Java已经将这个特性作为Fork/Join框架结合了起来。</p>
+<p>基本上，在把手头的任务变成了小任务，直到小任务简单到可以不进一步分手的情况下解决。这就像一个分而治之的算法.。在这个框架中需要注意的一个重要概念是，理想情况下，没有工作线程是空闲的。他们实现了一个 work-stealing 算法，在空闲的工人“偷”工作从那些工人谁是忙。</p>
+<p>支持Fork-Join机制的核心类是ForkJoinPool和ForkJoinTask。</p>
+<blockquote>
+<p>这里是Java 7的新特性一览表：<a href="http://www.oschina.net/news/20119/new-features-of-java-7" target="_blank" rel="noopener">http://www.oschina.net/news/20119/new-features-of-java-7</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2017/10/31/java-xue-xi-bi-ji-4-bing-fa-ji-chu/">
       Java学习笔记(4)——并发基础
     </a>
@@ -1715,7 +2027,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(13)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
