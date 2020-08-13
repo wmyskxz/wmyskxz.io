@@ -436,6 +436,193 @@
         
           
   <h2 class="title">
+    <a href="/2019/11/18/tan-yi-tan-yi-lai-dao-zhi-yuan-ze/">
+      谈一谈依赖倒置原则
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2019年11月18日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>为获得良好的阅读体验，请访问原文：<a href="https://www.wmyskxz.com/2019/11/18/tan-yi-tan-yi-lai-dao-zhi-yuan-ze/">传送门</a></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E8%B0%88%E4%B8%80%E8%B0%88%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/7896890-992a571faa26088f.png" alt=""></p>
+<h1 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h1><hr>
+<p><strong>依赖倒置原则（Dependence Inversion Principle，DIP）是指设计代码结构时，高层模块不应该依赖低层模块，二者都应该依赖其抽象。</strong></p>
+<p>抽象不应该依赖细节，细节应该依赖抽象。通过依赖倒置，可以减少类与类之间的耦合性，提高系统的稳定性，提高代码的可读性和可维护性，并且能够降低修改程序所造成的风险。</p>
+<h1 id="二、为什么"><a href="#二、为什么" class="headerlink" title="二、为什么"></a>二、为什么</h1><hr>
+<h2 id="先来看一个例子"><a href="#先来看一个例子" class="headerlink" title="先来看一个例子"></a>先来看一个例子</h2><p>可是依赖倒置原则是怎么做到的呢？我们先来看一个例子：一个爱学习的「我没有三颗心脏」同学现在正在学习「设计模式」和「Java」的课程，伪代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Wmyskxz</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">studyJavaCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「Java」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">studyDesignPatternCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「设计模式」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>我们来模拟上层调用一下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Wmyskxz wmyskxz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Wmyskxz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    wmyskxz<span class="token punctuation">.</span><span class="token function">studyJavaCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    wmyskxz<span class="token punctuation">.</span><span class="token function">studyDesignPatternCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="原因一：有效控制影响范围"><a href="#原因一：有效控制影响范围" class="headerlink" title="原因一：有效控制影响范围"></a>原因一：有效控制影响范围</h2><p>由于「我没有三颗心脏」同学热爱学习，随着学习兴趣的 “暴增”，可能会继续学习 AI（人工智能）的课程。这个时候，<strong>因为「业务的扩展」，要从底层实现到高层调用依次地修改代码。</strong></p>
+<p>我们需要在 Wmyskxz 类中新增 <code>studyAICourse()</code> 方法，也需要在高层调用中增加调用，这样一来，系统发布后，其实是非常不稳定的。显然在这个简单的例子中，我们还可以自信地认为，我们能 Hold 住这一次的修改带来的影响，因为<strong>都是新增的代码</strong>，我们回归的时候也可以很好地 cover 住，但实际的情况和实际的软件环境要复杂得多。</p>
+<p><strong>最理想的情况就是，我们已经编写好的代码可以 “万年不变”</strong>，这就意味着已经覆盖的单元测试可以不用修改，已经存在的行为可以保证保持不变，这就意味着「稳定」。<strong>任何代码上的修改带来的影响都是有未知风险的，不论看上去多么简单。</strong></p>
+<h2 id="原因二：增强代码可读性和可维护性"><a href="#原因二：增强代码可读性和可维护性" class="headerlink" title="原因二：增强代码可读性和可维护性"></a>原因二：增强代码可读性和可维护性</h2><p>另外一点，你有没有发现其实加上新增的 AI 课程的学习，他们三节课本质上行为都是一样的，如果我们任由这样行为近乎一样的代码在我们的类里面肆意扩展的话，很快我们的类就会变得臃肿不堪，等到我们意识到不得不重构这个类以缓解这样的情况的时候，或许成本已经变得高得可怕了。</p>
+<h2 id="原因三：降低耦合"><a href="#原因三：降低耦合" class="headerlink" title="原因三：降低耦合"></a>原因三：降低耦合</h2><p>《资本论》中有这样一段描述：</p>
+<blockquote>
+<p>在商品经济的萌芽时期，出现了物物交换。假设你要买一个 iPhone，卖 iPhone 的老板让你拿一头猪跟他换，可是你并没有养猪，你只会编程。所以你找到一位养猪户，说给他做一个养猪的 APP 来换他一头猪，他说换猪可以，但是得用一条金项链来换…</p>
+</blockquote>
+<p>所以这里就出现了一连串的对象依赖，从而造成了严重的耦合灾难。解决这个问题的最好的办法就是，买卖双发都依赖于抽象——也就是货币——来进行交换，这样一来耦合度就大为降低了。</p>
+<h1 id="三、怎么做"><a href="#三、怎么做" class="headerlink" title="三、怎么做"></a>三、怎么做</h1><hr>
+<p>我们现在的代码是上层直接依赖低层实现，现在我们需要定义一个抽象的 ICourse 接口，来对这种强依赖进行解耦（就像上面《资本论》中的例子那样）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E8%B0%88%E4%B8%80%E8%B0%88%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/7896890-39fbf69d60dc4111.png" alt=""></p>
+<p>接下来我们可以参考一下伪代码，先定一个课程的抽象 ICourse 接口：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ICourse</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后编写分别为 <code>JavaCourse</code> 和 <code>DesignPatternCourse</code> 编写一个类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JavaCourse</span> <span class="token keyword">implements</span> <span class="token class-name">ICourse</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「Java」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DesignPatternCourse</span> <span class="token keyword">implements</span> <span class="token class-name">ICourse</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「设计模式」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后把 Wmyskxz 类改造成如下的样子：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Wmyskxz</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span>ICourse course<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        course<span class="token punctuation">.</span><span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>再来是我们的调用：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Wmyskxz wmyskxz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Wmyskxz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    wmyskxz<span class="token punctuation">.</span><span class="token function">study</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">JavaCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    wmyskxz<span class="token punctuation">.</span><span class="token function">study</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">DesignPatternCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这时候我们再来看代码，无论「我没有三颗心脏」的兴趣怎么暴涨，对于新的课程，都只需要新建一个类，通过参数传递的方式告诉它，<strong>而不需要修改底层的代码。</strong>实际上这有点像大家熟悉的<strong>依赖注入</strong>的方式了。</p>
+<p>总之，切记：<strong>以抽象为基准比以细节为基准搭建起来的架构要稳定得多</strong>，因此在拿到需求后，要面相接口编程，先顶层设计再细节地设计代码结构。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
+<ol>
+<li><a href="https://www.cnblogs.com/aoyeyuyan/p/5495219.html" target="_blank" rel="noopener">https://www.cnblogs.com/aoyeyuyan/p/5495219.html</a> - 那些年搞不懂的高深术语——依赖倒置•控制反转•依赖注入•面向接口编程</li>
+<li>《Spring 5 核心原理 与 30 个类手写实战》 - 谭勇德 著</li>
+</ol>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693<br>钱</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2019/11/14/fen-si-tu-po-1600-wo-gan-dao-yi-si-kui-jiu/">
       粉丝突破1600，我感到一丝愧疚
     </a>
@@ -2080,240 +2267,6 @@ Optional<span class="token operator">&lt;</span>Integer<span class="token operat
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/07/30/java-ji-shi-xin-zi-shi/">
-      Java计时新姿势√
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb进阶</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年7月30日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>为获得更好的阅读体验，请访问原文：<a href="https://www.wmyskxz.com/2019/07/30/java-ji-shi-xin-zi-shi/">传送门</a><br><strong>前言：</strong> 最近公司来了个大佬，从他那里学到不少东西，其中一个就是计时<br>的新姿势<strong>「StopWatch」</strong>，赶紧来一起了解了解吧!</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E8%AE%A1%E6%97%B6%E6%96%B0%E5%A7%BF%E5%8A%BF/7896890-23fd1a857664b9fd.png" alt=""></p>
-<h1 id="一、最简单的计时"><a href="#一、最简单的计时" class="headerlink" title="一、最简单的计时"></a>一、最简单的计时</h1><hr>
-<p>在我们的程序中不免需要对某一个运算或者方法进行计时，以便我们来观察该运算或方法是否符合我们的预期，所以在我们刚开始接触 Java 的时候都能写出类似下面这样的代码来计时：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    Long startTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token function">doSomeThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    Long endTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Long elapsedTime <span class="token operator">=</span> <span class="token punctuation">(</span>endTime <span class="token operator">-</span> startTime<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">1000</span><span class="token punctuation">;</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"总共耗时："</span> <span class="token operator">+</span> elapsedTime <span class="token operator">+</span> <span class="token string">"s"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token comment" spellcheck="true">// 用于模拟一些操作</span>
-<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">doSomeThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token punctuation">{</span>
-    <span class="token keyword">try</span> <span class="token punctuation">{</span>
-        Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>事实上这样也并没有什么问题，并且也能够运行的很好，但是有一点不太好的就是，自己关注了太多输出的信息，下面我们来认识一种<strong>更优雅</strong>的一种计时方式；</p>
-<h1 id="二、StopWatch-类"><a href="#二、StopWatch-类" class="headerlink" title="二、StopWatch 类"></a>二、StopWatch 类</h1><hr>
-<p>想要使用它，首先你需要在你的 Maven 中引入 Spring 核心包，当然 Spring MVC 和 Spring Boot 都已经自动引入了该包：</p>
-<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- spring核心包 --></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>${spring.version}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
-<p>现在我们计时的姿势或许就会变成以下这样：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    StopWatch clock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StopWatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    clock<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token string">"开始任务一"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">doSomeThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    clock<span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    clock<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token string">"开始任务二"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">doSomeThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    clock<span class="token punctuation">.</span><span class="token function">stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>clock<span class="token punctuation">.</span><span class="token function">prettyPrint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment" spellcheck="true">// 用于模拟一些操作</span>
-<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">doSomeThing</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">try</span> <span class="token punctuation">{</span>
-        Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>在最后我们使用 <code>StopWatch</code> 类自带的 <code>prettyPrint()</code> 方法类格式化我们的输出，运行程序你会发现你的程序输出了这样的东西：</p>
-<pre class=" language-shell"><code class="language-shell">StopWatch '': running time (millis) = 2009
------------------------------------------
-ms     %     Task name
------------------------------------------
-01005  050%  开始任务一
-01004  050%  开始任务二</code></pre>
-<p>不仅有总用时，还有每个任务分别的占用时间和占用时间的百分比，这或许就会比我们自己输出要优雅那么一些；</p>
-<p><strong>StopWatch 类是怎么实现的呢？</strong></p>
-<p>当你戳开 <code>StopWatch</code> 的源码，你会在总共不到 200 行的代码里看到熟悉的东西：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span>String taskName<span class="token punctuation">)</span> <span class="token keyword">throws</span> IllegalStateException <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>currentTaskName <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"Can't start StopWatch: it's already running"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>currentTaskName <span class="token operator">=</span> taskName<span class="token punctuation">;</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>startTimeMillis <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IllegalStateException <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>currentTaskName <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"Can't stop StopWatch: it's not running"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            <span class="token keyword">long</span> lastTime <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token keyword">this</span><span class="token punctuation">.</span>startTimeMillis<span class="token punctuation">;</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>totalTimeMillis <span class="token operator">+=</span> lastTime<span class="token punctuation">;</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>lastTaskInfo <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StopWatch<span class="token punctuation">.</span>TaskInfo</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>currentTaskName<span class="token punctuation">,</span> lastTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>keepTaskList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token keyword">this</span><span class="token punctuation">.</span>taskList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>lastTaskInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-
-            <span class="token operator">++</span><span class="token keyword">this</span><span class="token punctuation">.</span>taskCount<span class="token punctuation">;</span>
-            <span class="token keyword">this</span><span class="token punctuation">.</span>currentTaskName <span class="token operator">=</span> null<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span></code></pre>
-<p>你会发现该类使用 <code>LinkedList</code> 实现了一个叫做 <code>taskList</code> 的队列，然后每一次开始同样也是使用 <code>System.currentTimeMillis()</code> 方法来获取时间，每次除了计算耗时也会构建一个描述当前任务的 <code>TaskInfo</code> 对象，并把它放入 <code>taskList</code> 队列中。</p>
-<p>当执行 <code>prettyPrint()</code> 方法的时候，就从 <code>taskList</code> 队列中依次取出任务，然后做些格式化的操作：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> String <span class="token function">shortSummary</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token string">"StopWatch '"</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"': running time (millis) = "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getTotalTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> String <span class="token function">prettyPrint</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        StringBuilder sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">shortSummary</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">this</span><span class="token punctuation">.</span>keepTaskList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"No task info kept"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"-----------------------------------------\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"ms     %     Task name\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"-----------------------------------------\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            NumberFormat nf <span class="token operator">=</span> NumberFormat<span class="token punctuation">.</span><span class="token function">getNumberInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            nf<span class="token punctuation">.</span><span class="token function">setMinimumIntegerDigits</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            nf<span class="token punctuation">.</span><span class="token function">setGroupingUsed</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            NumberFormat pf <span class="token operator">=</span> NumberFormat<span class="token punctuation">.</span><span class="token function">getPercentInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            pf<span class="token punctuation">.</span><span class="token function">setMinimumIntegerDigits</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            pf<span class="token punctuation">.</span><span class="token function">setGroupingUsed</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            StopWatch<span class="token punctuation">.</span>TaskInfo<span class="token punctuation">[</span><span class="token punctuation">]</span> var4 <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getTaskInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">int</span> var5 <span class="token operator">=</span> var4<span class="token punctuation">.</span>length<span class="token punctuation">;</span>
-
-            <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> var6 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> var6 <span class="token operator">&lt;</span> var5<span class="token punctuation">;</span> <span class="token operator">++</span>var6<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                StopWatch<span class="token punctuation">.</span>TaskInfo task <span class="token operator">=</span> var4<span class="token punctuation">[</span>var6<span class="token punctuation">]</span><span class="token punctuation">;</span>
-                sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>nf<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>task<span class="token punctuation">.</span><span class="token function">getTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"  "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>pf<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>task<span class="token punctuation">.</span><span class="token function">getTimeSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getTotalTimeSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"  "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>task<span class="token punctuation">.</span><span class="token function">getTaskName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token keyword">return</span> sb<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<p><strong>摁，新姿势 get √。</strong></p>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2551,7 +2504,7 @@ ms     %     Task name
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

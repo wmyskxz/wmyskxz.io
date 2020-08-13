@@ -435,6 +435,441 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/12/spring-xue-xi-4-mian-xiang-qie-mian-bian-cheng-aop-mo-kuai/">
+      Spring学习(4)——面向切面编程(AOP模块)
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java-Web/Spring/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java Web/Spring</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月12日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B%EF%BC%88AOP%E6%A8%A1%E5%9D%97%EF%BC%89/7896890-34e6864b15c793ec.png" alt=""></p>
+<h2 id="Spring-AOP-简介"><a href="#Spring-AOP-简介" class="headerlink" title="Spring AOP 简介"></a>Spring AOP 简介</h2><p>如果说 IoC 是 Spring 的核心，那么面向切面编程就是 Spring 最为重要的功能之一了，在数据库事务中切面编程被广泛使用。 </p>
+<h4 id="AOP-即-Aspect-Oriented-Program-面向切面编程"><a href="#AOP-即-Aspect-Oriented-Program-面向切面编程" class="headerlink" title="AOP 即 Aspect Oriented Program 面向切面编程"></a>AOP 即 Aspect Oriented Program 面向切面编程</h4><p>首先，在面向切面编程的思想里面，把功能分为核心业务功能，和周边功能。 </p>
+<ul>
+<li><strong>所谓的核心业务</strong>，比如登陆，增加数据，删除数据都叫核心业务 </li>
+<li><strong>所谓的周边功能</strong>，比如性能统计，日志，事务管理等等 </li>
+</ul>
+<p>周边功能在 Spring 的面向切面编程AOP思想里，即被定义为切面 </p>
+<p>在面向切面编程AOP的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 “编织” 在一起，这就叫AOP</p>
+<h4 id="AOP-的目的"><a href="#AOP-的目的" class="headerlink" title="AOP 的目的"></a>AOP 的目的</h4><p>AOP能够将那些与业务无关，<strong>却为业务模块所共同调用的逻辑或责任（例如事务处理、日志管理、权限控制等）封装起来</strong>，便于<strong>减少系统的重复代码</strong>，<strong>降低模块间的耦合度</strong>，并<strong>有利于未来的可拓展性和可维护性</strong>。</p>
+<h4 id="AOP-当中的概念："><a href="#AOP-当中的概念：" class="headerlink" title="AOP 当中的概念："></a>AOP 当中的概念：</h4><ul>
+<li>切入点（Pointcut）<br>在哪些类，哪些方法上切入（<strong>where</strong>）</li>
+<li>通知（Advice）<br>在方法执行的什么实际（<strong>when:</strong>方法前/方法后/方法前后）做什么（<strong>what:</strong>增强的功能）</li>
+<li>切面（Aspect）<br>切面 = 切入点 + 通知，通俗点就是：<strong>在什么时机，什么地方，做什么增强！</strong></li>
+<li>织入（Weaving）<br>把切面加入到对象，并创建出代理对象的过程。（由 Spring 来完成）</li>
+</ul>
+<h4 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h4><p>为了更好的说明 AOP 的概念，我们来举一个实际中的例子来说明：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B%EF%BC%88AOP%E6%A8%A1%E5%9D%97%EF%BC%89/7896890-8225b1537175bd8b.png" alt=""></p>
+<p>在上面的例子中，包租婆的核心业务就是签合同，收房租，那么这就够了，灰色框起来的部分都是重复且边缘的事，交给中介商就好了，这就是 <strong>AOP 的一个思想：让关注点代码与业务代码分离！</strong></p>
+<h4 id="实际的代码"><a href="#实际的代码" class="headerlink" title="实际的代码"></a>实际的代码</h4><p>我们来实际的用代码感受一下</p>
+<p>1.在 Package【pojo】下新建一个【Landlord】类（我百度翻译的包租婆的英文）：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> pojo<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Component<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Component</span><span class="token punctuation">(</span><span class="token string">"landlord"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Landlord</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 仅仅只是实现了核心的业务功能</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"签合同"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收房租"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>2.在 Package【aspect】下新建一个中介商【Broker】类（我还是用的翻译…）：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> aspect<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>After<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Aspect<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Before<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Component<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@Aspect</span>
+<span class="token keyword">class</span> <span class="token class-name">Broker</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"execution(* pojo.Landlord.service())"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"带租客看房"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"谈价格"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@After</span><span class="token punctuation">(</span><span class="token string">"execution(* pojo.Landlord.service())"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">after</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"交钥匙"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>3.在 applicationContext.xml 中配置自动注入，并告诉 Spring IoC 容器去哪里扫描这两个 Bean：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="UTF-8"?></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>beans</span> <span class="token attr-name">xmlns</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xmlns:</span>xsi</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.w3.org/2001/XMLSchema-instance<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xmlns:</span>context</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/context<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xmlns:</span>aop</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/aop<span class="token punctuation">"</span></span>
+       <span class="token attr-name"><span class="token namespace">xsi:</span>schemaLocation</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">context:</span>component-scan</span> <span class="token attr-name">base-package</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>aspect<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">context:</span>component-scan</span> <span class="token attr-name">base-package</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pojo<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">aop:</span>aspectj-autoproxy</span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>beans</span><span class="token punctuation">></span></span></code></pre>
+<p>4.在 Package【test】下编写测试代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> test<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>ApplicationContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>context<span class="token punctuation">.</span>support<span class="token punctuation">.</span>ClassPathXmlApplicationContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> pojo<span class="token punctuation">.</span>Landlord<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestSpring</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+        ApplicationContext context <span class="token operator">=</span>
+                <span class="token keyword">new</span> <span class="token class-name">ClassPathXmlApplicationContext</span><span class="token punctuation">(</span><span class="token string">"applicationContext.xml"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Landlord landlord <span class="token operator">=</span> <span class="token punctuation">(</span>Landlord<span class="token punctuation">)</span> context<span class="token punctuation">.</span><span class="token function">getBean</span><span class="token punctuation">(</span><span class="token string">"landlord"</span><span class="token punctuation">,</span> Landlord<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        landlord<span class="token punctuation">.</span><span class="token function">service</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>5.执行看到效果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B%EF%BC%88AOP%E6%A8%A1%E5%9D%97%EF%BC%89/7896890-a7dc802dcfd2f1a2.png" alt=""></p>
+<p>这个例子使用了一些注解，现在看不懂没有关系，但我们可以从上面可以看到，我们在 Landlord 的 service() 方法中仅仅实现了核心的业务代码，其余的关注点功能是根据我们设置的切面<strong>自动补全</strong>的。</p>
+<hr>
+<h2 id="使用注解来开发-Spring-AOP"><a href="#使用注解来开发-Spring-AOP" class="headerlink" title="使用注解来开发 Spring AOP"></a>使用注解来开发 Spring AOP</h2><p>使用注解的方式已经逐渐成为了主流，所以我们利用上面的例子来说明如何用注解来开发 Spring AOP</p>
+<h4 id="第一步：选择连接点"><a href="#第一步：选择连接点" class="headerlink" title="第一步：选择连接点"></a>第一步：选择连接点</h4><p>Spring 是方法级别的 AOP 框架，我们主要也是以某个类额某个方法作为连接点，另一种说法就是：<strong>选择哪一个类的哪一方法用以增强功能。</strong></p>
+<pre class=" language-java"><code class="language-java">    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 仅仅只是实现了核心的业务功能</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"签合同"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"收房租"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre>
+<p>我们在这里就选择上述 Landlord 类中的 service() 方法作为连接点。</p>
+<h4 id="第二步：创建切面"><a href="#第二步：创建切面" class="headerlink" title="第二步：创建切面"></a>第二步：创建切面</h4><p>选择好了连接点就可以创建切面了，我们可以把切面理解为一个拦截器，当程序运行到连接点的时候，被拦截下来，在开头加入了初始化的方法，在结尾也加入了销毁的方法而已，在 Spring 中只要使用 <code>@Aspect</code> 注解一个类，那么 Spring IoC 容器就会认为这是一个切面了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> aspect<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>After<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Aspect<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Before<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Component<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@Aspect</span>
+<span class="token keyword">class</span> <span class="token class-name">Broker</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"execution(* pojo.Landlord.service())"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"带租客看房"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"谈价格"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@After</span><span class="token punctuation">(</span><span class="token string">"execution(* pojo.Landlord.service())"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">after</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"交钥匙"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li><strong>注意：</strong> 被定义为切面的类仍然是一个 Bean ，需要 <code>@Component</code> 注解标注</li>
+</ul>
+<p>代码部分中在方法上面的注解看名字也能猜出个大概，下面来列举一下 Spring 中的 AspectJ 注解：</p>
+<table>
+<thead>
+<tr>
+<th align="left">注解</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>@Before</code></td>
+<td align="left">前置通知，在连接点方法前调用</td>
+</tr>
+<tr>
+<td align="left"><code>@Around</code></td>
+<td align="left">环绕通知，它将覆盖原有方法，但是允许你通过反射调用原有方法，后面会讲</td>
+</tr>
+<tr>
+<td align="left"><code>@After</code></td>
+<td align="left">后置通知，在连接点方法后调用</td>
+</tr>
+<tr>
+<td align="left"><code>@AfterReturning</code></td>
+<td align="left">返回通知，在连接点方法执行并正常返回后调用，要求连接点方法在执行过程中没有发生异常</td>
+</tr>
+<tr>
+<td align="left"><code>@AfterThrowing</code></td>
+<td align="left">异常通知，当连接点方法异常时调用</td>
+</tr>
+</tbody></table>
+<p>有了上表，我们就知道 before() 方法是连接点方法调用前调用的方法，而 after() 方法则相反，这些注解中间使用了定义切点的正则式，也就是告诉 Spring AOP 需要拦截什么对象的什么方法，下面讲到。</p>
+<h4 id="第三步：定义切点"><a href="#第三步：定义切点" class="headerlink" title="第三步：定义切点"></a>第三步：定义切点</h4><p>在上面的注解中定义了 execution 的正则表达式，Spring 通过这个正则表达式判断具体要拦截的是哪一个类的哪一个方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token function">execution</span><span class="token punctuation">(</span><span class="token operator">*</span> pojo<span class="token punctuation">.</span>Landlord<span class="token punctuation">.</span><span class="token function">service</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<p>依次对这个表达式作出分析：</p>
+<ul>
+<li>execution：代表执行方法的时候会触发</li>
+<li><code>*</code> ：代表任意返回类型的方法</li>
+<li>pojo.Landlord：代表类的全限定名</li>
+<li>service()：被拦截的方法名称</li>
+</ul>
+<p>通过上面的表达式，Spring 就会知道应该拦截 pojo.Lnadlord 类下的 service() 方法。上面的演示类还好，如果多出都需要写这样的表达式难免会有些复杂，我们可以通过使用 <code>@Pointcut</code> 注解来定义一个切点来避免这样的麻烦：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> aspect<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>After<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Aspect<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Before<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Pointcut<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Component<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@Aspect</span>
+<span class="token keyword">class</span> <span class="token class-name">Broker</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"execution(* pojo.Landlord.service())"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">lService</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"lService()"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"带租客看房"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"谈价格"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@After</span><span class="token punctuation">(</span><span class="token string">"lService()"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">after</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"交钥匙"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第四步：测试-AOP"><a href="#第四步：测试-AOP" class="headerlink" title="第四步：测试 AOP"></a>第四步：测试 AOP</h4><p>编写测试代码，但是我这里因为 JDK 版本不兼容出现了 BUG….（尴尬…）</p>
+<p>这就告诉我们：环境配置很重要…不然莫名其妙的 BUG 让你崩溃…</p>
+<h4 id="环绕通知"><a href="#环绕通知" class="headerlink" title="环绕通知"></a>环绕通知</h4><p>我们来探讨一下环绕通知，这是 Spring AOP 中最强大的通知，因为它集成了前置通知和后置通知，它保留了连接点原有的方法的功能，所以它及强大又灵活，让我们来看看：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> aspect<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>ProceedingJoinPoint<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Around<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>aspectj<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Aspect<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Component<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@Aspect</span>
+<span class="token keyword">class</span> <span class="token class-name">Broker</span> <span class="token punctuation">{</span>
+
+<span class="token comment" spellcheck="true">//  注释掉之前的 @Before 和 @After 注解以及对应的方法</span>
+<span class="token comment" spellcheck="true">//    @Before("execution(* pojo.Landlord.service())")</span>
+<span class="token comment" spellcheck="true">//    public void before() {</span>
+<span class="token comment" spellcheck="true">//        System.out.println("带租客看房");</span>
+<span class="token comment" spellcheck="true">//        System.out.println("谈价格");</span>
+<span class="token comment" spellcheck="true">//    }</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">//    @After("execution(* pojo.Landlord.service())")</span>
+<span class="token comment" spellcheck="true">//    public void after() {</span>
+<span class="token comment" spellcheck="true">//        System.out.println("交钥匙");</span>
+<span class="token comment" spellcheck="true">//    }</span>
+
+    <span class="token comment" spellcheck="true">//  使用 @Around 注解来同时完成前置和后置通知</span>
+    <span class="token annotation punctuation">@Around</span><span class="token punctuation">(</span><span class="token string">"execution(* pojo.Landlord.service())"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">around</span><span class="token punctuation">(</span>ProceedingJoinPoint joinPoint<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"带租客看房"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"谈价格"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            joinPoint<span class="token punctuation">.</span><span class="token function">proceed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> throwable<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            throwable<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"交钥匙"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>运行测试代码，结果仍然正确：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B%EF%BC%88AOP%E6%A8%A1%E5%9D%97%EF%BC%89/7896890-176d8956fd7ee8fa.png" alt=""></p>
+<hr>
+<h2 id="使用-XML-配置开发-Spring-AOP"><a href="#使用-XML-配置开发-Spring-AOP" class="headerlink" title="使用 XML 配置开发 Spring AOP"></a>使用 XML 配置开发 Spring AOP</h2><p>注解是很强大的东西，但基于 XML 的开发我们仍然需要了解，我们先来了解一下 AOP 中可以配置的元素：</p>
+<table>
+<thead>
+<tr>
+<th align="left">AOP 配置元素</th>
+<th align="left">用途</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>aop:advisor</code></td>
+<td align="left">定义 AOP 的通知其</td>
+<td align="left">一种很古老的方式，很少使用</td>
+</tr>
+<tr>
+<td align="left"><code>aop:aspect</code></td>
+<td align="left">定义一个切面</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:before</code></td>
+<td align="left">定义前置通知</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:after</code></td>
+<td align="left">定义后置通知</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:around</code></td>
+<td align="left">定义环绕通知</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:after-returning</code></td>
+<td align="left">定义返回通知</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:after-throwing</code></td>
+<td align="left">定义异常通知</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:config</code></td>
+<td align="left">顶层的 AOP 配置元素</td>
+<td align="left">AOP 的配置是以它为开始的</td>
+</tr>
+<tr>
+<td align="left"><code>aop:declare-parents</code></td>
+<td align="left">给通知引入新的额外接口，增强功能</td>
+<td align="left">——</td>
+</tr>
+<tr>
+<td align="left"><code>aop:pointcut</code></td>
+<td align="left">定义切点</td>
+<td align="left">——</td>
+</tr>
+</tbody></table>
+<p>有了之前通过注解来编写的经验，并且有了上面的表，我们将上面的例子改写成 XML 配置很容易（去掉所有的注解）：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- 装配 Bean--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>landlord<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>pojo.Landlord<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>broker<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>aspect.Broker<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 配置AOP --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">aop:</span>config</span><span class="token punctuation">></span></span>
+    <span class="token comment" spellcheck="true">&lt;!-- where：在哪些地方（包.类.方法）做增加 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">aop:</span>pointcut</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>landlordPoint<span class="token punctuation">"</span></span>
+                  <span class="token attr-name">expression</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>execution(* pojo.Landlord.service())<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+    <span class="token comment" spellcheck="true">&lt;!-- what:做什么增强 --></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">aop:</span>aspect</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>logAspect<span class="token punctuation">"</span></span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>broker<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token comment" spellcheck="true">&lt;!-- when:在什么时机（方法前/后/前后） --></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token namespace">aop:</span>around</span> <span class="token attr-name">pointcut-ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>landlordPoint<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>around<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">aop:</span>aspect</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token namespace">aop:</span>config</span><span class="token punctuation">></span></span></code></pre>
+<p>运行测试程序，看到正确结果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E9%9D%A2%E5%90%91%E5%88%87%E9%9D%A2%E7%BC%96%E7%A8%8B%EF%BC%88AOP%E6%A8%A1%E5%9D%97%EF%BC%89/7896890-176d8956fd7ee8fa.png" alt=""></p>
+<blockquote>
+<p>扩展阅读：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483954&idx=1&sn=b34e385ed716edf6f58998ec329f9867&chksm=ebd74333dca0ca257a77c02ab458300ef982adff3cf37eb6d8d2f985f11df5cc07ef17f659d4#rd" target="_blank" rel="noopener">Spring【AOP模块】就这么简单</a> 、 <a href="https://zhuanlan.zhihu.com/p/25522841" target="_blank" rel="noopener">关于 Spring AOP(AspectJ)你该知晓的一切（慎独读，有些深度…）</a></p>
+</blockquote>
+<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><ul>
+<li>《Java EE 互联网轻量级框架整合开发》</li>
+<li>《Java 实战（第四版）》</li>
+<li>万能的百度 and 万能的大脑</li>
+</ul>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/12/spring-xue-xi-3-zhuang-pei-spring-bean-xiang-jie/">
       Spring学习(3)——装配Spring Bean详解
     </a>
@@ -4578,305 +5013,6 @@ scope=&quot;&lt;string&gt;&quot;/&gt;</code></pre></li>
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/06/chu-xue-java-web-4-servlet-xue-xi-zong-jie/">
-      初学Java Web(4)——Servlet学习总结
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月6日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-65cb65e46c091671.png" alt=""></p>
-<blockquote>
-<p>经过一段时间的学习，对于Servlet有了新的不一样的见解，在这里做一下总结，将近来学习到的知识总结一下。</p>
-</blockquote>
-<hr>
-<h3 id="Servlet-的请求流程"><a href="#Servlet-的请求流程" class="headerlink" title="Servlet 的请求流程"></a>Servlet 的请求流程</h3><ol>
-<li><p><strong>浏览器发出请求：</strong><a href="http://localhost:80/xxx1/xxx2" target="_blank" rel="noopener">http://localhost:80/xxx1/xxx2</a> （80端口可以默认不写，因为这是http协议默认的端口，平时我们访问<a href="https://www.baidu.com/" target="_blank" rel="noopener">https://www.baidu.com/</a> 时其实访问的是<a href="https://www.baidu.com:80/）" target="_blank" rel="noopener">https://www.baidu.com:80/）</a></p>
-</li>
-<li><p><strong>服务器解析请求信息：</strong></p>
-<ul>
-<li><strong>http:</strong>协议名称</li>
-<li><strong>localhost:</strong>访问的是互联网中的<strong>哪一台计算机</strong></li>
-<li><strong>80:</strong>从主机当中找到<strong>对应 80 端口的程序 **（</strong>这里即为 Tomcat 服务器**）</li>
-<li><strong>/xxx1:</strong>当前项目的<strong>上下文路径</strong> （即在 server.xml 中配置主机时配置的 <strong>path属性</strong>）</li>
-<li><strong>/xxx2:</strong>当前<strong>请求的资源名</strong></li>
-</ul>
-</li>
-<li><p><strong>解析</strong> Tomcat 服务器根目录下的 <strong>/config/server.xml</strong> 文件：<br><code>&lt;Context docBase=&quot;D:\javaPros\test\webapp&quot; path=&quot;xxx1&quot; /&gt;</code><br>判断哪一个<code>&lt;Context /&gt;```元素的 **path属性** 属性为 ```xxx1</code></p>
-<ul>
-<li>若找不到，则返回 <strong>404错误</strong></li>
-<li>若找到了，则解析该<code>&lt;Context /&gt;</code>元素，得到<code>docBase</code>属性，获取当前访问 Web 项目的跟的绝对路径：<code>D:\javaPros\test\webapp</code></li>
-</ul>
-</li>
-<li><p>从<code>D:\javaPros\test\webapp</code>下的 <strong>WEB-INF</strong> 下找到 <strong>web.xml</strong> 文件<br>判断 <strong>web.xml</strong> 文件中是否有 <code>&lt;url-pattern&gt;</code> 的文本内容为 <strong>/xxx2</strong></p>
-<ul>
-<li>若找不到，则返回 <strong>404错误</strong></li>
-<li>若找到了，则继续<strong>获取该资源对应 Servlet 类的全限名称：</strong> xxx.xxx</li>
-</ul>
-</li>
-<li><p>判断 <strong>Servlet 实例缓存池</strong> 中是否有 xxx.xxx 的对象</p>
-</li>
-</ol>
-<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>Servlet<span class="token operator">></span> cache <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">(</span>Tomcat提供的<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    key<span class="token operator">:</span>存Servlet类的全限定名称
-    value<span class="token operator">:</span>该Servlet类的对象<span class="token punctuation">.</span>
-Servlet obj <span class="token operator">=</span> cache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"xxx.xxx"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>obj<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">//Servlet实例缓存中没有该类的对象,第一次.</span>
-        GOTO <span class="token number">6</span><span class="token operator">:</span>
-    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">//有对象,非第一次.</span>
-        GOTO <span class="token number">8</span><span class="token operator">:</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<ol start="6">
-<li><strong>使用反射</strong>调用构造器，<strong>创建对应的对象</strong></li>
-</ol>
-<p><code>obj = Class.forName(&quot;xxx.xxx&quot;).newInstance();</code></p>
-<p>把当前创建的 <strong>Servlet 对象</strong>，存放在缓存之中，<strong>供给下一次的使用.</strong></p>
-<p><code>cache.put(&quot;xxx.xxx&quot;,obj);</code></p>
-<ol start="7">
-<li>创建 <strong>ServletConfig 对象</strong>，并调用 <strong>init()</strong> 方法</li>
-</ol>
-<p><code>obj.init(config);</code></p>
-<ol start="8">
-<li>创建 <strong>ServletRequest 对象和 ServletResponse 对象</strong>，并调用 <strong>service()</strong>方法</li>
-</ol>
-<p><code>obj.service(req,resp);</code></p>
-<ol start="9">
-<li>在 <strong>service()</strong> 方法中对浏览器作出响应操作。</li>
-</ol>
-<hr>
-<h3 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h3><p>在 Web 容器中，Servlet 主要经历 4 个阶段，如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-2599bf65a828350d.png" alt="Servlet 生命周期"></p>
-<ol>
-<li><strong>加载 Servlet：</strong>当 Tomcat <strong>第一次访问 Servlet</strong> 的时候，Tomcat 会负责<strong>创建 Servlet 的实例。</strong></li>
-<li><strong>初始化 Servlet：</strong>当 Servlet 被实例化之后，Tomcat 会调用 <strong>init()</strong> 方法来初始化这个对象。</li>
-<li><strong>处理服务：</strong>当浏览器<strong>访问 Servlet</strong> 的时候，Servlet 会调用 <strong>service()</strong> 方法处理请求。</li>
-<li><strong>销毁：</strong>当 <strong>Tomcat 关闭</strong>或者<strong>检测到 Servlet 要从 Tomcat 删除</strong>的时候，会自动调用 <strong>destroy()</strong> 方法，让该实例所占用的资源释放掉。一个 Servlet 如果长时间不被使用的话，也会被 Tomcat 自动销毁。</li>
-</ol>
-<ul>
-<li><strong>简单总结：</strong>只要访问 Servlet ，就会调用其对应的 <strong>service()</strong> 方法，<strong>init()</strong> 方法只会在第一次访问 Serlvet 的时候才会被调用。</li>
-</ul>
-<blockquote>
-<p>这一部分参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483680&idx=3&sn=d5380ff58c5077271ac9c43d2d96f6c1&chksm=ebd74021dca0c93733255324df8c1e522dbe36ccaf8c2c4bcca4765113a120eb9851ca0e2442#rd" target="_blank" rel="noopener">这里是链接</a></p>
-</blockquote>
-<hr>
-<h3 id="Servlet-提供处理请求的方法"><a href="#Servlet-提供处理请求的方法" class="headerlink" title="Servlet 提供处理请求的方法"></a>Servlet 提供处理请求的方法</h3><p><a href="https://www.jianshu.com/p/bbdc459b9187" target="_blank" rel="noopener">前面的文章</a>里面提到过，广义上，<strong>Servlet</strong> 即实现了 <strong>Servlet 接口</strong> 的类，当我们创建一个自定义类，实现 <strong>Servlet 接口</strong> 的时候，会发现有 5 个方法需要重写，有init【初始化】，destroy【销毁】,service【服务】,ServletConfig【Servlet配置】,getServletInfo【Serlvet信息】。</p>
-<p>这样做的话，我们每次都需要实现 5 个方法，太麻烦了！</p>
-<p>我们可以直接<strong>继承 HttpServlet</strong> 类，该类已经默认实现了 Servlet 接口中的所有方法，在编写 Servlet 的时候，你只需要<strong>重写你需要的方法</strong>就好了，并且该类还在原有 Servlet 接口上添加了一些与 HTTP 协议处理相关的方法，比 Servlet 接口的功能<strong>更强大。</strong></p>
-<ul>
-<li>Servlet 处理请求的方法一共有三种：<br>① 实现 <strong>service()</strong> 方法。<br>② 重写 <strong>doGet()</strong> 和 <strong>doPost()</strong> 方法，并在 <strong>doGet()</strong> 中添加一句<code>this.doPost(req, resp);</code>（因为无论是get或post请求提交的数据，处理方式都基本相同，下同）<br>③ 重写 <strong>doGet()</strong> 和 <strong>doPost()</strong> 方法，并在 <strong>doPost()</strong> 中添加一句<code>this.doGet()(req, resp);</code></li>
-<li><strong>推荐方式①。</strong></li>
-</ul>
-<hr>
-<h3 id="Servlet-是单例的"><a href="#Servlet-是单例的" class="headerlink" title="Servlet 是单例的"></a>Servlet 是单例的</h3><h4 id="为什么Servlet是单例的"><a href="#为什么Servlet是单例的" class="headerlink" title="为什么Servlet是单例的"></a>为什么Servlet是单例的</h4><p><strong>浏览器多次对Servlet的请求，</strong>一般情况下，<strong>服务器只创建一个Servlet对象，</strong>也就是说，Servlet对象<strong>一旦创建了，</strong>就会<strong>驻留在内存中，为后续的请求做服务，直到服务器关闭。</strong></p>
-<h4 id="每次访问请求对象和响应对象都是新的"><a href="#每次访问请求对象和响应对象都是新的" class="headerlink" title="每次访问请求对象和响应对象都是新的"></a>每次访问请求对象和响应对象都是新的</h4><p>对于<strong>每次访问请求，</strong>Servlet引擎都会<strong>创建一个新的HttpServletRequest请求对象和一个新的HttpServletResponse响应对象，</strong>然后将这<strong>两个对象作为参数传递给它调用的Servlet的service()方法，</strong>service方法再根据请求方式分别调用doXXX方法。</p>
-<h4 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h4><p>当多个用户访问Servlet的时候，<strong>服务器会为每个用户创建一个线程。</strong>当多个用户并发访问Servlet共享资源的时候就会出现线程安全问题。</p>
-<p><strong>原则：</strong><br>    1. 如果一个变量<strong>需要多个用户共享</strong>，则应当在访问该变量的时候，<strong>加同步机制synchronized (对象){}</strong><br>    2. 如果一个变量<strong>不需要共享，</strong>则<strong>直接在 doGet() 或者 doPost()定义</strong>.这样不会存在线程安全问题</p>
-<blockquote>
-<p>这一部分参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483680&idx=4&sn=2fdf4d0075d093389c03697ebdb9f47d&chksm=ebd74021dca0c937a240f47578b9c5f40093a307f6537d79d5a2fd12721c5311a9d89d5c5583#rd" target="_blank" rel="noopener">这里是链接</a></p>
-</blockquote>
-<hr>
-<h3 id="HttpServletRequest-和-HttpServletResponse-对象"><a href="#HttpServletRequest-和-HttpServletResponse-对象" class="headerlink" title="HttpServletRequest 和 HttpServletResponse 对象"></a>HttpServletRequest 和 HttpServletResponse 对象</h3><p>对于<strong>每次访问</strong>请求，<strong>Servlet引擎</strong>都会创建一个<strong>新的HttpServletRequest请求对象</strong>和一个<strong>新的HttpServletResponse响应对象</strong>，即 request 和 response 对象。</p>
-<p>既然 request 对象代表 http 请求，那么我们<strong>获取浏览器提交过来的数据，就找 request 对象</strong> 即可。response 对象代表 http 响应，那么我们<strong>向浏览器输出数据，找 response 对象</strong>即可。</p>
-<h3 id="HttpServletRequest-常用方法"><a href="#HttpServletRequest-常用方法" class="headerlink" title="HttpServletRequest 常用方法"></a>HttpServletRequest 常用方法</h3><ul>
-<li><strong>String getContextPath():</strong><br>获取上下文路径,&lt;Context path=”上下文” ../&gt;</li>
-<li><strong>String getHeader(String headName):</strong><br>根据指定的请求头获取对应的请求头的值.</li>
-<li><strong>String getRequestURI():</strong><br>返回当期请求的资源名称.  上下文路径/资源名</li>
-<li><strong>StringBuffer getRequestURL():</strong><br>返回浏览器地址栏的内容</li>
-<li><strong>String getRemoteAddr():</strong><br>返回请求服务器的客户端的IP</li>
-</ul>
-<h4 id="获取请求参数的方法："><a href="#获取请求参数的方法：" class="headerlink" title="获取请求参数的方法："></a>获取请求参数的方法：</h4><ul>
-<li><strong>String getParameter(String name):</strong><br>根据参数名称,获取对应参数的值.</li>
-<li><strong>String[] getParameterValues(String name):</strong><br>根据参数名称,获取该参数的多个值.</li>
-<li><strong>Enumeration<String> getParameterNames():</strong><br>获取所有请求参数的名字</li>
-<li><strong>Map&lt;String,String[]&gt; getParameterMap():</strong><br>返回请求参数组成的Map集合.</li>
-</ul>
-<p><strong>key:</strong>参数名称<br><strong>value:</strong>参数值,封装在String数组中.</p>
-<h3 id="HttpServletResponse-常用方法"><a href="#HttpServletResponse-常用方法" class="headerlink" title="HttpServletResponse 常用方法"></a>HttpServletResponse 常用方法</h3><ul>
-<li><strong>OutputStream getOutputStream():</strong><br>获取字节输出流:<strong>文件下载</strong></li>
-<li><strong>Writer getWriter():</strong><br>获取字符输出流:<strong>输出内容</strong><br>设置文件输出的编码格式和内容类型：<code>resp.setContentType(&quot;text/html;charset=utf-8&quot;);</code></li>
-</ul>
-<hr>
-<h3 id="GET-和-POST-的区别"><a href="#GET-和-POST-的区别" class="headerlink" title="GET 和 POST 的区别"></a>GET 和 POST 的区别</h3><p>要知道，GET 和 POST 都是请求方式</p>
-<ul>
-<li><strong>GET：</strong><br>浏览器器地址栏：<code>http://localhost/test.html</code><strong>?name=wmyskxz&amp;sex=male</strong><br>这里提交了两个参数，一个是<code>name</code>属性值为<code>wmyskxz</code>，另一个是<code>sex</code>属性值为<code>male</code>，这是一种直接的请求方式，在请求资源后面跟上 <strong>?</strong> 符号与参数连接，其他的参数使用 <strong>&amp;</strong> 符号连接。</li>
-<li><strong>缺点：</strong></li>
-</ul>
-<p>1.暴露请求信息，<strong>不安全</strong><br>2.请求信息不能超过<strong>1kb</strong>，可传输的信息有限，不能上传图片</p>
-<ul>
-<li><strong>POST：</strong><br>浏览器地址栏：<code>http://localhost/test.html#</code></li>
-<li><strong>优点：</strong></li>
-</ul>
-<p>1.隐藏了请求信息，<strong>较安全</strong>（但仍可以通过相关工具访问到数据）<br>2.POST 方式<strong>没有限制</strong>请求的数据大小，可以做图片的上传</p>
-<blockquote>
-<p>但并不是所有的数据都需要使用 POST 请求来完成，事实上，GET 请求方式会比 POST 请求更快，当数据小并且安全性要求不是那么高的时候，GET 仍然是很好的选择.(并且 GET 相较 POST 简单)</p>
-</blockquote>
-<hr>
-<h3 id="请求中文乱码的处理"><a href="#请求中文乱码的处理" class="headerlink" title="请求中文乱码的处理"></a>请求中文乱码的处理</h3><p>在 <strong>Tomcat 服务器</strong>中，接受请求的时候，<strong>默认的编码方式为 ISO-8859-1</strong>，而该编码方式只占一个字节，不支持中文（两个字节），所以当我们做请求的时候，会出现乱码的问题</p>
-<ul>
-<li><strong>解决方案：</strong></li>
-</ul>
-<p>1.对乱码使用 <strong>ISO-8859-1</strong> 解码，转换成<strong>byte数组</strong>，恢复为二进制<br><code>byte[] data = name.getBytes(&quot;ISO-8859-1&quot;);</code><br>2.对byte数组重新进行 UTF-8 编码：<br><code>name = new String(data,&quot;UTF-8&quot;);</code><br>但是这样会出现一个问题，那就是当表单数据太多的时候，这样反复解码-编码，会很繁琐。</p>
-<ul>
-<li><strong>终极解决方案：</strong></li>
-</ul>
-<p><strong>1.对于 POST 请求：</strong><br>设置请求的编码方式：<code>request.setCharacterEncoding(&quot;UTF-8&quot;);</code><br><strong>注意：</strong>必须在获取<strong>第一个参数之前设置</strong>，并且该方式<strong>只对 POST 方式有效。</strong><br><strong>2.对于 GET 请求：</strong><br>重新设置 Tomcat 的编码方式，修改 Tomcat 的配置文件:<br><code>Tomcat根目录/conf/server.xml(修改端口的那一行)</code><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-cd366b295c8ed531.png" alt=""></p>
-<hr>
-<h3 id="Servlet-细节"><a href="#Servlet-细节" class="headerlink" title="Servlet 细节"></a>Servlet 细节</h3><ul>
-<li>1.一个 Servlet 可以有<strong>多个</strong> <code>&lt;url-pattern&gt;</code> ，可以使用多个资源名称找到当前的 Servlet</li>
-<li>2.配置 Servlet 可以使用<strong>通配符</strong>（<em>）<br><code>*</code>表示任意字符<br><code>/*</code>：可以使用<strong>任意的字符</strong>访问当前的 Servlet<br>`</em>.xxx`：如 wmyskxz.wudi</li>
-<li>3.<strong>自定义的 Servlet 的 <code>&lt;servlet-name&gt;</code> 不能够为 default ，</strong>使用它会造成项目下面的静态资源找不到，在 <code>Tomcat/conf/web.xml</code> 文件中配置一个名字为default的Servlet,该Servlet在负责访问项目下的静态资源<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-23070ab172726a2e.png" alt="web.xml 中配置的默认项"></li>
-<li>4.关于 <strong>Servlet 的初始化操作，</strong>如果初始化操作非常的耗时，那么第一个请求的用户的用户体验就非常差</li>
-</ul>
-<p><strong>解决思路：</strong>将初始化操作<strong>向前移,</strong>在服务器启动的时候执行 Servlet 的初始化<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-afae824b9279c9ff.png" alt=""></p>
-<hr>
-<h3 id="通过注解配置-Servlet"><a href="#通过注解配置-Servlet" class="headerlink" title="通过注解配置 Servlet"></a>通过注解配置 Servlet</h3><p>这是 Servlet 3.0 提出的新特性，支持注解配置，这大大简化了我们的工作。</p>
-<p>在之前的开发工作中，我们总是去 <code>web.xml</code> 文件中进行配置，至少会出现8行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-1e9520edba4da3bc.png" alt="web.xml 中配置 Servlet"></p>
-<p>而当一个项目中存在<strong>很多 Servlet **，那么配置文件就会变得</strong>非常臃肿，不便于后期的维护，<strong>在 Servlet 3.0 推出之后，我们可以使用</strong>注解来配置 Servlet，**上面 8 行的配置可以简化为下面的简单的注解：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-9bb5cb4ed2098464.png" alt=""></p>
-<p>或者也可以使用属性 <code>value</code> 定义访问的 URL，<strong>只有 URL 这个属性是必要的，</strong><code>name</code> 是可以缺省的值，而默认的 <code>value</code> 也可以省略不写，所以可以简写成：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/foreServlet"</span><span class="token punctuation">)</span></code></pre>
-<hr>
-<h3 id="Web-组件之间的跳转方式"><a href="#Web-组件之间的跳转方式" class="headerlink" title="Web 组件之间的跳转方式"></a>Web 组件之间的跳转方式</h3><h4 id="1-请求转发（forward）"><a href="#1-请求转发（forward）" class="headerlink" title="1.请求转发（forward）"></a><strong>1.请求转发（forward）</strong></h4><p>又叫做<strong>直接转发方式，</strong>客户端和浏览器<strong>只发出一次请求，</strong>Servlet、HTML、JSP或其它信息资源，由<strong>第二个信息资源响应该请求，</strong>在请求对象request中，保存的对象对于<strong>每个信息资源是共享的。</strong></p>
-<p>比如：从 AServlet 请求转发到 BServlet</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-881fc9bb05d46ac8.png" alt=""></p>
-<ul>
-<li><strong>语法：</strong></li>
-</ul>
-<pre class=" language-java"><code class="language-java">request<span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p><em>参数：</em><code>path</code>，要跳转到的资源路径：<strong>上下文路径 / 资源路径</strong></p>
-<ul>
-<li><strong>特点：</strong></li>
-</ul>
-<p><strong>1.地址栏中的地址【不会】改变</strong><br>通常看作是服务端的跳转<br><strong>2.只有一个请求</strong><br><strong>3.资源是共享的，</strong>也就是说在两个 Servlet 中可以共享请求的资源<br>可以通过<code>request.setAttribute(String var1,Object var2)</code><strong>设置要共享的数据资源</strong>，并通过<code>request.getAttribute(String var1);</code>来<strong>获取传递的资源</strong><br><strong>4.【可以】访问 WEB-INF 中的资源</strong><br><strong>WEB-INF</strong> 文件夹是 Java Web 应用的<strong>默认安全目录，</strong>即客户端无法直接访问，只有服务端可以访问的目录。<br>如果想在页面中<strong>直接访问</strong>其中的文件，<strong>必须通过web.xml文件</strong>对要访问的文件进行<strong>相应映射</strong>才能访问。<br><strong>注意：</strong>在实际的开发中，可以把不希望用户直接访问到（通过浏览器输入地址栏）的网页放在文件夹中<strong>通过此方式访问。</strong><br><strong>5.请求转发【不能】跨域访问</strong><br>所谓的同域，是指<strong>域名，协议，端口均相同</strong></p>
-<h4 id="2-URl-重定向（redirect）"><a href="#2-URl-重定向（redirect）" class="headerlink" title="2.URl 重定向（redirect）"></a>2.URl 重定向（redirect）</h4><p>又叫做<strong>间接转发方式（Redirect）</strong>实际是<strong>两次HTTP请求，</strong>服务器端在响应第一次请求的时候，让浏览器再向另外一个URL发出请求，从而达到转发的目的。</p>
-<p>比如:从AServlet重定向到BServlet</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-c49539085575bc26.png" alt=""></p>
-<ul>
-<li><strong>语法：</strong></li>
-</ul>
-<pre class=" language-java"><code class="language-java">response<span class="token punctuation">.</span><span class="token function">sendRedirect</span><span class="token punctuation">(</span>String location<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p><em>参数：</em><code>location</code>，转发到的资源路径</p>
-<ul>
-<li><strong>特点：</strong></li>
-</ul>
-<p><strong>1.地址栏中的地址【会】发生改变</strong><br>通常看作是客户端跳转<br><strong>2.有两个请求</strong><br><strong>3.在两个 Servlet 中不可以共享请求中的数据</strong><br><strong>4.最终的响应由 BServlet 来决定，和 AServlet 没有关系</strong><br><strong>5.【不可以】访问 WEB-INF 中的资源</strong><br><strong>6.请求转发【能】跨域访问</strong><br>就像是在网页中点开了新的链接一样</p>
-<ul>
-<li><strong>总结：</strong>URL 重定向相当于是将重定向的资源路径，重新复制到浏览器地址栏中按下回车一样，<strong>重新发送一次新的请求。</strong></li>
-</ul>
-<h4 id="3-请求包含（include）"><a href="#3-请求包含（include）" class="headerlink" title="3.请求包含（include）"></a>3.请求包含（include）</h4><hr>
-<h3 id="MVC-模式"><a href="#MVC-模式" class="headerlink" title="MVC 模式"></a>MVC 模式</h3><p>MVC 是一种分层的设计模式 。</p>
-<ul>
-<li><strong>M 代表 模型（Model）</strong><br>模型是什么呢？ 模型就是<strong>数据，</strong>就是dao,bean</li>
-<li><strong>V 代表 视图（View）</strong><br>视图是什么呢？ 就是网页, JSP，用来<strong>展示模型中的数据</strong></li>
-<li><strong>C 代表 控制器（controller)</strong><br>控制器是什么？ <strong>控制器的作用就是把不同的数据(Model)，显示在不同的视图(View)上。</strong></li>
-</ul>
-<p>这部分可以参考一下<a href="http://how2j.cn/k/mvc/mvc-tutorials/561.html" target="_blank" rel="noopener">这里</a></p>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -5112,7 +5248,7 @@ Servlet obj <span class="token operator">=</span> cache<span class="token punctu
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

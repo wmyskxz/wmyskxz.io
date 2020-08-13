@@ -436,6 +436,227 @@
         
           
   <h2 class="title">
+    <a href="/2017/12/27/java-8-lambda-biao-da-shi/">
+      Java 8——Lambda表达式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2017年12月27日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文内容大部分来自《Java 8实战》一书</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇文章中，我们了解了利用行为参数化来传递代码有助于应对不断变化的需求，它允许你定义一个代码块来表示一个行为，然后传递它。一般来说，利用这个概念，你就可以编写更为灵活且可重复使用的代码了。</p>
+<p>但是你同时也看到，使用匿名类来表示不同的行为并不令人满意：代码十分啰嗦，这会影响程序员在时间中使用行为参数化的积极性。Lambda表达式很好的解决了这个问题，它可以让你很简洁地表示一个行为或传递代码。<em>现在你可以把Lambda表达式看作匿名功能，它基本上就是没有声明名称的方法，但和匿名类一样，它也可以作为参数传递给一个方法。</em></p>
+<h2 id="Lambda管中窥豹"><a href="#Lambda管中窥豹" class="headerlink" title="Lambda管中窥豹"></a>Lambda管中窥豹</h2><p>可以把Lambda表达式理解为简洁地表示可传递的匿名函数的一种方式：它没有名称，但它由参数列表、函数主体、返回类型，可能还有一个抛出的异常列表。</p>
+<p>Lambda表达式鼓励你采用上一篇文章中提到的行为参数化风格，最终结果就是你的额代码变得更加清晰、更加灵活。比如，利用Lambda表达式，你可以更为简洁地自定义一个Comparator对象：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d3f5c5e9f12542c8.png" alt=""></p>
+<p>不得不承认，代码看起来更清晰了。要是现在觉得Lambda表达式看起来一头雾水的话也没关系，很快就会一点点的解释清楚的。现在，请注意你基本上只传递了比较两个苹果重量所需要的代码。看起来就像只传递了compare方法的主体。你很快就会学到，你甚至还可以进一步简化代码。</p>
+<p>为了进一步说明，下面给出了Java 8五个有效的Lambda表达式的例子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-bb79f4b577fd7e90.png" alt=""></p>
+<p>Java语言设计者选择这样的语法，是因为C#和Scala等语言中的类似功能广受欢迎。Lambda的基本语法是：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> expression</code></pre>
+<p>或<strong>（请注意语句的花括号）</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span> statements<span class="token punctuation">;</span> <span class="token punctuation">}</span></code></pre>
+<p>你可以看到，Lambda表达式的语法很简单，我们下来来测试一下你对这个模式的了解程度：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-06b3f2c0e4b6db8d.png" alt=""></p>
+<h2 id="在哪里以及如何使用Lambda"><a href="#在哪里以及如何使用Lambda" class="headerlink" title="在哪里以及如何使用Lambda"></a>在哪里以及如何使用Lambda</h2><p>现在你可能在想，在哪里可以使用Lambda表达式。直接公布答案：你可以在函数式接口上使用Lambda表达式。</p>
+<h4 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h4><p>还记得上一篇文章中，为了参数化filter方法的行为而创建的Predicate<T>接口吗？它就是一个函数式接口！为什么呢？<strong>因为Predicate仅仅定义了一个抽象方法：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Predicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>T t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>一言以蔽之，<strong>函数式接口就是之定义一个抽象方法的接口。</strong>你已经知道了Java API中的一些其他函数式接口，如Comparator和Runnable</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>T o1<span class="token punctuation">,</span> T o2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Runnable</span><span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>接口现在还可以拥有<strong>默认方法（即在类没有对方法进行是现实时，其主体为方法提供默认实现的方法，如List的sort方法）。</strong>哪怕有很多默认方法，只要接口只定义了一个<strong>抽象方法</strong>，它就仍然是一个函数式接口。</p>
+</blockquote>
+<p>为了检测是否掌握了函数式接口的概念，我们来看一个小测试：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-f6f5aac41c69a941.png" alt=""></p>
+<p>用函数式接口可以干什么呢？Lambda表达式允许你直接以内联的形式为函数式接口的抽象方法提供实现，并把整个表达式作为函数式接口的实例。这听上去可能有些绕口，但是联想到上一篇文章中的Lambda表达式改造的语句，或许就会清晰许多，它不同于使用匿名内部类来完成时的笨拙，而是更加清晰直接：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-87c3fe03f78c82c7.png" alt=""></p>
+<p>你可能会想：“为什么只有在需要函数式接口的时候才可以传递Lambda呢？”语言的设计者也考虑过其他方法，例如给Java添加函数类型，但最终他们选择了现在这种方式，因为这种方式自然且能避免语言变得更加复杂。此外，大多数Java程序员都已经熟悉了具有一个抽象方法的接口的理念（例如事件处理）。</p>
+<h2 id="把Lambda付诸实践：环绕执行模式"><a href="#把Lambda付诸实践：环绕执行模式" class="headerlink" title="把Lambda付诸实践：环绕执行模式"></a>把Lambda付诸实践：环绕执行模式</h2><p>让我们通过一个例子，看看在实践中如何利用Lambda和行为参数化来让代码更为灵活，更为简洁。资源处理（例如处理文件或数据库）时一个常见的模式就是打开一个资源，做一些处理，然后关闭资源。这个设置和清理阶段总是很相似，并且会围绕着执行处理的那些重要代码。这就是所谓的环绕执行（execute around）模式：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d84c98d38f06f440.png" alt=""></p>
+<h4 id="第一步：记得行为参数化"><a href="#第一步：记得行为参数化" class="headerlink" title="第一步：记得行为参数化"></a>第一步：记得行为参数化</h4><p>现在这段代码时有局限的。你只能读文件的第一行。如果你想要返回头两行，甚至返回使用最频繁的词，该怎么办呢？在理想的情况下，你要重用执行设置和清理的代码，并告诉processFile方法对文件执行不同的操作。这听起来是不是很耳熟？是的，你需要把processFile的行为参数化。你需要一种方法把行为传递给processFile，以便它可以利用BufferedReader执行不同的行为。</p>
+<p>传递行为正是Lambda的拿手好戏。那要是想一次读两行，这个新的processFile方法看起来又该是什么样的呢？基本上，你需要一个接受BufferedReader并返回String的Lambda。例如，下面就是从BufferedReader中打印两行的写法：</p>
+<pre class=" language-java"><code class="language-java">String result <span class="token operator">=</span> <span class="token function">processFile</span><span class="token punctuation">(</span><span class="token punctuation">(</span>BufferedReader br<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> 
+                                            br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第二步：使用函数式接口来传递行为"><a href="#第二步：使用函数式接口来传递行为" class="headerlink" title="第二步：使用函数式接口来传递行为"></a>第二步：使用函数式接口来传递行为</h4><p>前面已经解释过了，Lambda仅可用于上下文是函数式接口的情况。你需要创建一个能匹配BufferedReader -&gt; String，还可以抛出IOException异常的接口。让我们把这一接口叫做BufferedReaderProcessor吧。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@FunctionalInterface</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BufferedReaderProcessor</span><span class="token punctuation">{</span>
+    String <span class="token function">process</span><span class="token punctuation">(</span>BufferedReader b<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>@FunctionalInterface 标注表示该接口会设计成一个函数式接口。如果你用此标注定义了一个接口，而它却不是函数式接口的话，编译器将返回一个提示原因的错误。</p>
+</blockquote>
+<p>现在你就可以把这个接口作为新的processFile方法的参数了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">processFile</span><span class="token punctuation">(</span>BufferedReaderProcessor p<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第三步：执行一个行为"><a href="#第三步：执行一个行为" class="headerlink" title="第三步：执行一个行为"></a>第三步：执行一个行为</h4><p>任何BufferedRader -&gt; String形式的Lambda都可以作为参数来传递，因为它们符合BufferedReaderProcessor接口中定义的process方法的签名。现在你只需要一种方法在processFile主体内执行Lambda所代表的代码。<strong>请记住，Lambda表达式允许你直接内联，为函数式接口的抽象方法提供实现，并且将整个表达式作为函数式接口的一个实例。</strong>因此，你可以在processFile主体内，对得到的BufferedReaderProcessor对象调用process方法执行处理：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">processFile</span><span class="token punctuation">(</span>BufferedReaderProcesssor p<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
+    <span class="token keyword">try</span><span class="token punctuation">(</span>BufferedReader br <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileReader</span><span class="token punctuation">(</span><span class="token string">"data.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> p<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>br<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第四步：传递Lambda"><a href="#第四步：传递Lambda" class="headerlink" title="第四步：传递Lambda"></a>第四步：传递Lambda</h4><p>现在你就可以通过传递不同的Lambda重用processFile方法，并以不同的方式处理文件了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-05575cb8fe8ec81d.png" alt=""></p>
+<p>下面的图片总结了所采取的使processFile方法更加灵活的四个步骤：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-3dd5fb3566051fab.png" alt=""></p>
+<h2 id="使用函数式接口"><a href="#使用函数式接口" class="headerlink" title="使用函数式接口"></a>使用函数式接口</h2><p>如你所见的，函数式接口很有用，因为抽象方法的签名可以描述Lambda表达式的签名。Java 8的库设计师帮你在java.util.function包中引入了几个新的函数式接口。</p>
+<h4 id="Predicate"><a href="#Predicate" class="headerlink" title="Predicate"></a>Predicate</h4><p>java.util.function.Predicate<T>接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。在你需要一个涉及类型T的布尔表达式时，就可以使用这个接口：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d66c0b5eca69e0fa.png" alt=""></p>
+<h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><p>java.util.function.Consumer<T>定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。你如果需要访问类型T的对象，并对其执行某些操作，就可以使用这个接口：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-b82ecf93c4a48e75.png" alt=""></p>
+<h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p>java.util.function.Function&lt;T,R&gt;接口定义了一个叫做apply的方法，它接受一个泛型T的对象，并返回一个泛型R的对象。如果你需要定义一个Lambda，将输入对象的信息映射到输出，就可以使用这个接口（比如提取苹果的重量，或把字符串映射为它的长度）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-94bc9527054fe819.png" alt=""></p>
+<blockquote>
+<p>还有更为丰富的一些函数式接口，这里列举了三个比较有代表性的。</p>
+</blockquote>
+<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>方法引用让你可以重复使用现有的方法定义，并像Lambda一样传递它们。在一些情况下，比起使用Lambda表达式，它们似乎更易读，感觉也更自然。下面就是借助Java 8API，用方法引用写的一个排序的例子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-93999b52611588fe.png" alt=""></p>
+<p>是不是更酷了？念起来就是“给库存排序，比较苹果的重量”，这样的代码读起来简直就像是在描述问题本身，太酷了。</p>
+<p>为什么要关心方法引用呢？<strong>方法引用可以被看作调用特定方法的Lambda的一种快捷写法。</strong>它的基本思想是，如果一个Lambda代表的知识“直接调用这个方法”，拿最好还是用名称来调用它，而不是去描述如何调用它。</p>
+<p>事实上，方法引用就是让你根据已有的方法实现来创建Lambda表达式，但是，显式地指明方法的名称，你的代码可读性会更好。</p>
+<p>它是如何工作的呢？当你需要使用方法引用时，目标引用放在分隔符** :: **前，方法的名称放在后面。例如，Apple::getWeight就是引用了Apple类中定义的方法getWeight。请记住，不需要括号，因为你没有实际调用这个方法，方法引用就是Lambda表达式(Apple a) -&gt; a.getWeight()的快捷写法。</p>
+<p>下面给出一些在Java 8中方法引用的例子来让你更加了解：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-c3ab872955c9ad67.png" alt=""></p>
+<p>你可以把方法引用看作针对仅仅涉及单一方法的Lambda的语法糖，因为你表达同样的事情时写的代码更少了。</p>
+<h2 id="Lambda-和方法引用实战"><a href="#Lambda-和方法引用实战" class="headerlink" title="Lambda 和方法引用实战"></a>Lambda 和方法引用实战</h2><p>我们继续来研究开始的那个问题——用不同的排序策略给一个Apple列表排序，并展示如何把一个原始粗暴的解决方案转变得更为简明：<code>inventory.sort(comparing(Apple::getWeight));</code></p>
+<h4 id="第一步：传递代码"><a href="#第一步：传递代码" class="headerlink" title="第一步：传递代码"></a>第一步：传递代码</h4><p>很幸运，Java 8的API已经为你提供了一个List可用的sort方法，你不用自己去实现它。那么最困难的部分已经搞定了！但是，如何把排序的策略传递给sort方法呢？你看，sort方法的签名是这样的：</p>
+<p><code>void sort(Comparator&lt;? super E&gt; c)</code></p>
+<p>它需要一个Comparator对象来比较两个Apple！这就是在Java中传递策略的方式：<strong>它们必须包裹在一个对象里。</strong>我们说sort的行为被参数化了：传递给它的排序策略不同，其行为也会不同。</p>
+<p>你的第一个解决方案看上去是这样的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppleComparator</span> <span class="token keyword">implements</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>Apple<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Apple a1<span class="token punctuation">,</span> Apple a2<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> a1<span class="token punctuation">.</span><span class="token function">getWeigh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AppleComparator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第二步：使用匿名类"><a href="#第二步：使用匿名类" class="headerlink" title="第二步：使用匿名类"></a>第二步：使用匿名类</h4><p>你可以使用<em>匿名类</em>来改进解决方案，而不是实现一个Comparator却只实例化一次：</p>
+<pre class=" language-java"><code class="language-java">inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>Apple<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Apple a1<span class="token punctuation">,</span> Apple a2<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> a1<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第三步：使用Lambda表达式"><a href="#第三步：使用Lambda表达式" class="headerlink" title="第三步：使用Lambda表达式"></a>第三步：使用Lambda表达式</h4><p>但你的解决方案仍然挺啰嗦的。使用Java 8引入的Lambda改进后的代码如下：</p>
+<pre class=" language-java"><code class="language-java">inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a1<span class="token punctuation">,</span> a2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a1<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>你的代码还能变得更易读一点吗？Comparator具有一个叫做comparing的静态辅助方法，它可以接受一个Function来提取Comparable键值，并生成一个Comparator对象。它可以像下面这样用：</p>
+<p><code>Comparator&lt;Apple&gt; c = Comparator.comparing((Apple a1) -&gt; a.getWeight());</code></p>
+<p>现在你可以把代码再改得紧凑一点了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Comparator<span class="token punctuation">.</span>comparing<span class="token punctuation">;</span>
+inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token function">comparing</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第四步：使用方法引用"><a href="#第四步：使用方法引用" class="headerlink" title="第四步：使用方法引用"></a>第四步：使用方法引用</h4><p>前面解释过，方法引用就是替代那些转发参数的Lambda表达式的语法糖。你可以用方法引用让你的代码更加简洁（假设你已经静态导入了java.util.Comparator.comparing）：</p>
+<p><code>inventory.sort(comparing(Apple::getWeight));</code></p>
+<p>恭喜你，这就是你的最终解决方案！这笔Java 8之前的代码好在哪儿呢？它比较短；它的意思也很明显，并且代码读起来和问题描述差不多：“对库存进行排序，比较苹果的重量。”</p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2017/12/26/java-8-xing-wei-can-shu-hua/">
       Java 8——行为参数化
     </a>
@@ -3091,232 +3312,6 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/10/31/java-xue-xi-bi-ji-4-bing-fa-ji-chu/">
-      Java学习笔记(4)——并发基础
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年10月31日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>当我们使用计算机时，可以同时做许多事情，例如一边打游戏一边听音乐。这是因为操作系统支持并发任务，从而使得这些工作得以同时进行。</p>
-<blockquote>
-<p><strong>那么提出一个问题：</strong>如果我们要实现一个程序能一边听音乐一边玩游戏怎么实现呢？<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-b6c28e4f108ec11d.png" alt="提出的问题"><br>我们使用了循环来模拟过程，因为播放音乐和打游戏都是连续的，但是结果却不尽人意，因为函数体总是要执行完之后才能返回。那么到底怎么解决这个问题？下面来说。</p>
-</blockquote>
-<h2 id="并行与并发"><a href="#并行与并发" class="headerlink" title="并行与并发"></a>并行与并发</h2><p>并行性和并发性是既相似又有区别的两个概念。</p>
-<p><strong>并行性是指两个或多个事件在同一时刻发生。而并发性是指连个或多个事件在同一时间间隔内发生。</strong>在多道程序环境下，并发性是指在一段时间内宏观上有多个程序在同时运行，但在单处理机环境下（一个处理器），每一时刻却仅能有一道程序执行，故微观上这些程序只能是分时地交替执行。例如，在1秒钟时间内，0-15ms程序A运行；15-30ms程序B运行；30-45ms程序C运行；45-60ms程序D运行，<strong>因此可以说，在1秒钟时间间隔内，宏观上有四道程序在同时运行，但微观上，程序A、B、C、D是分时地交替执行的。</strong></p>
-<p>如果在计算机系统中有多个处理机，这些可以并发执行的程序就可以被分配到多个处理机上，实现并发执行，即利用每个处理机爱处理一个可并发执行的程序。这样，多个程序便可以同时执行。<strong>以此就能提高系统中的资源利用率，增加系统的吞吐量。</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-1fce0d8c98910442.png" alt="并发和并行"></p>
-<h2 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h2><p><strong>进程是指一个内存中运行的应用程序。</strong>一个应用程序可以同时启动多个进程，那么上面的问题就有了解决的思路：<strong>我们启动两个进程，一个用来打游戏，一个用来播放音乐。</strong>这当然是一种解决方案，但是想象一下，如果一个应用程序需要执行的任务非常多，<em>例如LOL游戏吧，光是需要播放的音乐就有非常多，人物本身的语音，技能的音效，游戏的背景音乐，塔攻击的声音等等等，还不用说游戏本身，就光播放音乐就需要创建许多许多的进程，</em>而进程本身是一种非常消耗资源的东西，这样的设计显然是不合理的。更何况大多数的操作系统都不需要一个进程访问其他进程的内存空间，<strong>也就是说，进程之间的通信很不方便，此时我们就得引入“线程”这门技术，来解决这个问题。</strong></p>
-<p><strong>线程是指进程中的一个执行任务（控制单元），一个进程可以同时并发运行多个线程。</strong>打开我们的任务管理器，在【查看】里面点击【选择列】，有一个线程数的勾选项，找到并勾选，可以看到：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-072d37a7ca6863d9.png" alt="任务管理器"></p>
-<h2 id="进程和线程的区别："><a href="#进程和线程的区别：" class="headerlink" title="进程和线程的区别："></a>进程和线程的区别：</h2><p><strong>进程：</strong>有独立的内存空间，进程中的数据存放空间（堆空间和栈空间）是独立的，至少有一个线程。</p>
-<p><strong>线程：</strong>堆空间是共享的，栈空间是独立的，线程消耗的资源也比进程小，相互之间可以影响的，又称为轻型进程或进程元。</p>
-<p>因为一个进程中的多个线程是并发运行的，那么从微观角度上考虑也是有先后顺序的，那么<strong>哪个线程执行完全取决于CPU调度器(JVM来调度)</strong>，程序员是控制不了的。我们可以把多线程并发性看作是多个线程在瞬间抢CPU资源，谁抢到资源谁就运行，这也造就了<strong>多线程的随机性。</strong>下面我们将看到更生动的例子。</p>
-<p><strong>Java程序的进程(Java的一个程序运行在系统中)里至少包含主线程和垃圾回收线程(后台线程)：</strong></p>
-<blockquote>
-<p>你可以简单的这样认为，但实际上有四个线程（了解就好）：<br>[1] main——main线程，用户程序入口<br>[2] Reference Handler——清除Reference的线程<br>[3] Finalizer——调用对象finalize方法的线程<br>[4] Signal Dispatcher——分发处理发送给JVM信号的线程     </p>
-</blockquote>
-<h2 id="多线程的优势："><a href="#多线程的优势：" class="headerlink" title="多线程的优势："></a>多线程的优势：</h2><p>尽管面临很多挑战，多线程有一些优点使得它一直被使用。这些优点是：</p>
-<ul>
-<li><strong>资源利用率更好</strong></li>
-<li><strong>程序设计在某些情况下更简单</strong></li>
-<li><strong>程序响应更快</strong></li>
-</ul>
-<h3 id="（1）资源利用率更好"><a href="#（1）资源利用率更好" class="headerlink" title="（1）资源利用率更好"></a>（1）资源利用率更好</h3><p>想象一下，一个应用程序需要从本地文件系统中读取和处理文件的情景。比方说，从磁盘读取一个文件需要5秒，处理一个文件需要2秒。处理两个文件则需要：</p>
-<pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token operator">|</span> <span class="token number">5</span>秒读取文件A
-<span class="token number">2</span><span class="token operator">|</span> <span class="token number">2</span>秒处理文件A
-<span class="token number">3</span><span class="token operator">|</span> <span class="token number">5</span>秒读取文件B
-<span class="token number">4</span><span class="token operator">|</span> <span class="token number">2</span>秒处理文件B
-<span class="token number">5</span><span class="token operator">|</span> <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
-<span class="token number">6</span><span class="token operator">|</span> 总共需要<span class="token number">14</span>秒</code></pre>
-<p>从磁盘中读取文件的时候，大部分的CPU时间用于等待磁盘去读取数据。在这段时间里，CPU非常的空闲。它可以做一些别的事情。通过改变操作的顺序，就能够更好的使用CPU资源。看下面的顺序：</p>
-<pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token operator">|</span> <span class="token number">5</span>秒读取文件A
-<span class="token number">2</span><span class="token operator">|</span> <span class="token number">5</span>秒读取文件B <span class="token operator">+</span> <span class="token number">2</span>秒处理文件A
-<span class="token number">3</span><span class="token operator">|</span> <span class="token number">2</span>秒处理文件B
-<span class="token number">4</span><span class="token operator">|</span> <span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
-<span class="token number">5</span><span class="token operator">|</span> 总共需要<span class="token number">12</span>秒</code></pre>
-<p>CPU等待第一个文件被读取完。然后开始读取第二个文件。当第二文件在被读取的时候，CPU会去处理第一个文件。记住，在等待磁盘读取文件的时候，CPU大部分时间是空闲的。</p>
-<p><strong>总的说来，CPU能够在等待IO的时候做一些其他的事情。</strong>这个不一定就是磁盘IO。它也可以是网络的IO，或者用户输入。通常情况下，网络和磁盘的IO比CPU和内存的IO慢的多。</p>
-<p>###（2）程序设计更简单</p>
-<p>在单线程应用程序中，如果你想编写程序手动处理上面所提到的读取和处理的顺序，你必须记录每个文件读取和处理的状态。相反，你可以启动两个线程，每个线程处理一个文件的读取和操作。线程会在等待磁盘读取文件的过程中被阻塞。在等待的时候，其他的线程能够使用CPU去处理已经读取完的文件。其结果就是，磁盘总是在繁忙地读取不同的文件到内存中。这会带来磁盘和CPU利用率的提升。而且每个线程只需要记录一个文件，因此这种方式也很容易编程实现。</p>
-<h3 id="（3）程序响应更快"><a href="#（3）程序响应更快" class="headerlink" title="（3）程序响应更快"></a>（3）程序响应更快</h3><p>有时我们会编写一些较为复杂的代码（这里的复杂不是说复杂的算法，而是复杂的业务逻辑），例如，一笔订单的创建，它包括插入订单数据、生成订单赶快找、发送邮件通知卖家和记录货品销售数量等。用户从单击“订购”按钮开始，就要等待这些操作全部完成才能看到订购成功的结果。但是这么多业务操作，如何能够让其更快地完成呢？</p>
-<p>在上面的场景中，可以使用多线程技术，即将数据一致性不强的操作派发给其他线程处理（也可以使用消息队列），如生成订单快照、发送邮件等。<strong>这样做的好处是响应用户请求的线程能够尽可能快地处理完成，缩短了响应时间，提升了用户体验。</strong></p>
-<p>####多线程的还有一些优势也显而易见：</p>
-<blockquote>
-<ul>
-<li>①  进程之前不能共享内存，而线程之间共享内存(堆内存)则很简单。</li>
-<li>② 系统创建进程时需要为该进程重新分配系统资源,创建线程则代价小很多,因此实现多任务并发时,多线程效率更高.</li>
-<li>③ Java语言本身内置多线程功能的支持,而不是单纯第作为底层系统的调度方式,从而简化了多线程编程.</li>
-</ul>
-</blockquote>
-<h2 id="上下文切换"><a href="#上下文切换" class="headerlink" title="上下文切换"></a>上下文切换</h2><p>即使是单核处理器也支持多线程执行代码，CPU通过给每个线程分配CPU时间片来实现这个机制。时间片是CPU分配给各个线程的时间，因为时间片非常短，所以CPU通过不停地切换线程执行，让我们感觉多个线程是同时执行的，时间片一般是几十毫秒（ms）。</p>
-<p>CPU通过时间片分配算法来循环执行任务，当前任务执行一个时间片后会切换到下一个任务。但是，在切换前会保存上一个任务的状态，以便下次切换回这个任务的时候，可以再加载这个任务的状态。<strong>所以任务从保存到再加载的过程就是一次上下文切换。</strong></p>
-<blockquote>
-<p>这就像我们同时读两本书，当我们在读一本英文的技术书时，发现某个单词不认识，于是打开中英文字典，但是在放下英文技术书之前，大脑必须先记住这本书独到了多少页的多少行，等查完单词之后，能够继续读这本书。这样的切换是会影响读书效率的，同样上下文切换也会影响多线程的执行速度。</p>
-</blockquote>
-<h2 id="创建线程的两种方式"><a href="#创建线程的两种方式" class="headerlink" title="创建线程的两种方式"></a>创建线程的两种方式</h2><h3 id="继承Thead类："><a href="#继承Thead类：" class="headerlink" title="继承Thead类："></a>继承Thead类：</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-a8667d8f1d94e5b8.png" alt="继承Thread类"></p>
-<p>运行结果发现打游戏和播放音乐交替出现，说明已经成功了。</p>
-<h3 id="实现Runnable接口："><a href="#实现Runnable接口：" class="headerlink" title="实现Runnable接口："></a>实现Runnable接口：</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-66383da0574a934f.png" alt="实现Runnable接口"><br>也能完成效果。</p>
-<p>以上就是传统的两种创建线程的方式，事实上还有第三种，我们后边再讲。</p>
-<h2 id="多线程一定快吗？"><a href="#多线程一定快吗？" class="headerlink" title="多线程一定快吗？"></a>多线程一定快吗？</h2><p>先来一段代码，通过并行和串行来分别执行累加操作，分析：下面的代码并发执行一定比串行执行快吗？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-5e780c2fde5128e2.png" alt="多线程一定快吗？"></p>
-<p>以下是我测试的结果，可以看出，当不超过1百万的时候，并行是明显比串行要慢的，为什么并发执行的速度会比串行慢呢？这是因为线程有创建和上下文切换的开销。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-833820aebe7e9445.png" alt="测试结果"></p>
-<h2 id="继承Thread类还是实现Runnable接口？"><a href="#继承Thread类还是实现Runnable接口？" class="headerlink" title="继承Thread类还是实现Runnable接口？"></a>继承Thread类还是实现Runnable接口？</h2><h3 id="吃苹果比赛"><a href="#吃苹果比赛" class="headerlink" title="吃苹果比赛"></a>吃苹果比赛</h3><p>想象一个这样的例子：给出一共50个苹果，让三个同学一起来吃，并且给苹果编上号码，让他们吃的时候顺便要说出苹果的编号：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-1bec6d919415871c.png" alt="吃苹果比赛"></p>
-<p>运行结果可以看到，使用继承方式实现，每一个线程都吃了50个苹果。<strong>这样的结果显而易见：是因为显式地创建了三个不同的Person对象，而每个对象在堆空间中有独立的区域来保存定义好的50个苹果。</strong></p>
-<p>而使用实现方式则满足要求，<strong>这是因为三个线程共享了同一个Apple对象，而对象中的num数量是一定的。</strong></p>
-<blockquote>
-<p>所以可以简单总结出继承方式和实现方式的区别：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-f0793fe663aa2754.png" alt="两种方式的区别"></p>
-</blockquote>
-<p>对于这两种方式哪种好并没有一个确定的答案，它们都能满足要求。就我个人意见，我更倾向于实现Runnable接口这种方法。因为线程池可以有效的管理实现了Runnable接口的线程，如果线程池满了，新的线程就会排队等候执行，直到线程池空闲出来为止。而如果线程是通过实现Thread子类实现的，这将会复杂一些。</p>
-<p>有时我们要同时融合实现Runnable接口和Thread子类两种方式。<strong>例如，实现了Thread子类的实例可以执行多个实现了Runnable接口的线程。一个典型的应用就是线程池。</strong></p>
-<h3 id="常见的错误：调用run-方法而非start-方法"><a href="#常见的错误：调用run-方法而非start-方法" class="headerlink" title="常见的错误：调用run()方法而非start()方法"></a>常见的错误：调用run()方法而非start()方法</h3><p>创建并运行一个线程所犯的常见错误是调用线程的run()方法而非start()方法，如下所示：</p>
-<pre class=" language-java"><code class="language-java"><span class="token number">1</span><span class="token operator">|</span> Thread newThread <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token function">MyRunnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token number">2</span><span class="token operator">|</span> newThread<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">//should be start();</span></code></pre>
-<p>起初你并不会感觉到有什么不妥，因为run()方法的确如你所愿的被调用了。但是，事实上,<strong>run()方法并非是由刚创建的新线程所执行的，而是被创建新线程的当前线程所执行了。</strong>也就是被执行上面两行代码的线程所执行的。想要让创建的新线程执行run()方法，必须调用新线程的start方法。</p>
-<h2 id="吃苹果比赛的问题：线程不安全问题"><a href="#吃苹果比赛的问题：线程不安全问题" class="headerlink" title="吃苹果比赛的问题：线程不安全问题"></a>吃苹果比赛的问题：线程不安全问题</h2><p>尽管，Java并不保证线程的顺序执行，具有随机性，但吃苹果比赛的案例运行多次也并没有发现什么太大的问题。这并不是因为程序没有问题，而只是问题出现的不够明显，为了让问题更加明显，我们使用Thread.sleep()方法（经常用来模拟网络延迟）来让线程休息10ms，让其他线程去抢资源。<strong>（注意：在程序中并不是使用Thread.sleep(10)之后,程序才出现问题,而是使用之后,问题更明显.）</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-36d8665713e7af89.png" alt="吃苹果比赛中的问题"></p>
-<p><strong>为什么会出现这样的错误呢？</strong></p>
-<p>先来分析第一种错误：为什么会吃重复的苹果呢？就拿B和C都吃了编号为47的苹果为例吧：</p>
-<blockquote>
-<ul>
-<li>① A线程拿到了编号为48的苹果，打印输出然后让num减1，睡眠10ms，此时num为47。</li>
-<li>② 这时B和C同时都拿到了编号为47的苹果，打印输出，在其中一个线程作出了减一操作的时候，A线程从睡眠中醒过来，拿到了编号为46的苹果，然后输出。在这期间并没有任何操作不允许B和C线程不能拿到同一个编号的苹果，之前没有明显的错误仅仅可能只是因为运行速度太快了。</li>
-</ul>
-</blockquote>
-<p>再来分析第二种错误：照理来说只应该存在1-50编号的苹果，可是0和-1是怎么出现的呢？</p>
-<blockquote>
-<ul>
-<li>① 当num=1的时候，A，B，C三个线程同时进入了try语句进行睡眠。</li>
-<li>② C线程先醒过来，输出了编号为1的苹果，然后让num减一，当C线程醒过来的时候发现num为0了。</li>
-<li>③ A线程醒过来一看，0都没有了，只有-1了。</li>
-</ul>
-</blockquote>
-<p><strong>归根结底是因为没有任何操作来限制线程来获取相同的资源并对他们进行操作，这就造成了线程安全性问题。</strong></p>
-<blockquote>
-<p>如果我们把打印和减一的操作分成两个步骤，会更加明显：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-70ac6aba006c7adf.png" alt="拆成两个步骤"><br>ABC三个线程同时打印了50的苹果，然后同时做出减一操作。</p>
-</blockquote>
-<p><strong>像这样的原子操作，是不允许分步骤进行的，必须保证同步进行，不然可能会引发不可设想的后果。</strong></p>
-<p>要解决上述多线程并发访问一个资源的安全性问题，就需要<strong>引入线程同步</strong>的概念。</p>
-<h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><p>多个执行线程共享一个资源的情景，是最常见的并发编程情景之一。为了解决访问共享资源错误或数据不一致的问题，人们引入了临界区的概念：<strong>用以访问共享资源的代码块，这个代码块在同一时间内只允许一个线程执行。</strong></p>
-<p>为了帮助编程人员实现这个临界区，Java（以及大多数编程语言）提供了同步机制，当一个线程试图访问一个临界区时，它将使用一种同步机制来查看是不是已经有其他线程进入临界区。如果没有其他线程进入临界区，他就可以进入临界区。如果已经有线程进入了临界区，它就被同步机制挂起，直到进入的线程离开这个临界区。如果在等待进入临界区的线程不止一个，JVM会选择其中的一个，其余的将继续等待。</p>
-<h3 id="synchronized关键字"><a href="#synchronized关键字" class="headerlink" title="synchronized关键字"></a>synchronized关键字</h3><p>如果一个对象已用synchronized关键字声明，那么只有一个执行线程被允许访问它。使用<strong>synchronized</strong>的好处显而易见：保证了多线程并发访问时的同步操作，避免线程的安全性问题。但是坏处是：<strong>使用synchronized的方法/代码块的性能比不用要低一些。所以好的做法是：尽量减小synchronized的作用域。</strong></p>
-<blockquote>
-<p>我们还是先来解决吃苹果的问题，考虑一下synchronized关键字应该加在哪里呢？<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-35c4ba08104cd881.png" alt="synchronized应放在哪里？"><br>发现如果还再把synchronized关键字加在if里面的话，0和-1又会出来了。这其实是因为当ABC同是进入到if语句中，等待临界区释放的时，拿到1编号的线程已经又把num减一操作了，而此时最后一个等待临界区的进程拿到的就会是-1了。</p>
-</blockquote>
-<h3 id="同步锁（Lock）"><a href="#同步锁（Lock）" class="headerlink" title="同步锁（Lock）"></a>同步锁（Lock）</h3><p>Lock机制提供了比synchronized代码块和synchronized方法更广泛的锁定操作,同步代码块/同步方法具有的功能Lock都有,除此之外更强大,更体现面向对象。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E5%B9%B6%E5%8F%91%E5%9F%BA%E7%A1%80/7896890-09f6539ee1859746.png" alt="摘自JDK1.6中文版说明的代码"></p>
-<blockquote>
-<p>参考资料：</p>
-<ul>
-<li><a href="http://study.163.com/course/courseMain.htm?courseId=1003108028" target="_blank" rel="noopener">http://study.163.com/course/courseMain.htm?courseId=1003108028</a> 《Java零基础入门教程》</li>
-<li>《Java并发编程的艺术》</li>
-<li>《Java 7并发编程实战手册》</li>
-</ul>
-</blockquote>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3554,7 +3549,7 @@ i <span class="token operator">=</span> <span class="token number">100</span><sp
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

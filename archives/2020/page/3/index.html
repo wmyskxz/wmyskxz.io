@@ -434,6 +434,435 @@
         
           
   <h2 class="title">
+    <a href="/2020/06/02/morethanjava-yi-wen-liao-jie-er-jin-zhi-he-cpu-gong-zuo-yuan-li/">
+      「MoreThanJava」一文了解二进制和CPU工作原理
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/MoreThanJava/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>MoreThanJava</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年6月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-8dfb481bc47e9a8a.png" alt=""></p>
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="Part-1-原来，我们是这样记数的"><a href="#Part-1-原来，我们是这样记数的" class="headerlink" title="Part 1. 原来，我们是这样记数的"></a>Part 1. 原来，我们是这样记数的</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-9c0d647650be0bd5.png" alt=""></p>
+<blockquote>
+<p>本节内容节选自下方 <a href="https://www.jianshu.com/p/58844323e4fb" target="_blank" rel="noopener">参考资料 1</a></p>
+</blockquote>
+<p>在讨论「二进制」和「CPU 如何工作」之前，我们先来讨论一下我们生活中最稀疏平常的 <strong>数字</strong>，我们与之频繁地打交道：一个约定的时间、一件商品的价格、一个人的身高….却很少有人细细想过，这些数字是如何表达出来的？为什么你理所当然地把 <code>1024</code> 理解为「一千零二十四」而不是别的含义？</p>
+<p>也许你从未想过，在这简单的记数中，沉淀着人类的大智慧。</p>
+<h2 id="一进制计数法"><a href="#一进制计数法" class="headerlink" title="一进制计数法"></a>一进制计数法</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-37eb3ad5f5ceb2bc.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://www.goethe.de/ins/cn/cn/kul/mag/20629923.html" target="_blank" rel="noopener">https://www.goethe.de/ins/cn/cn/kul/mag/20629923.html</a></li>
+</ul>
+<p>早在数字的概念产生之前，人类就学会了使用树枝、石子、贝壳等自然界随处可见的小物件表示猎物的、果实的、部落人口的数量。比如在某个角落堆上一堆石子，每打到 1 只猎物，就扔 1 颗石子进去，每吃掉 2 只猎物，就从中取走 2 颗石子。他们并不在意石子的总数，只是时不时地瞅一眼，心底大致有数。</p>
+<p>其实这是一种最朴素的记数方式，数学家称之为 <strong>一进制记数法</strong>（unary numeral system）。我们把它符号化一下，比如用斜杠 <code>/</code> 来表示：</p>
+<ul>
+<li><code>1</code> 就是 <code>/</code>；</li>
+<li><code>2</code> 就是 <code>//</code>；</li>
+<li><code>4</code> 就是 <code>////</code>；</li>
+</ul>
+<p>好像没毛病，我们平时掰手指用的就是这种记数法，但数字一大，场面就要失控了。</p>
+<h2 id="符值相加记数法"><a href="#符值相加记数法" class="headerlink" title="符值相加记数法"></a>符值相加记数法</h2><p>为了解决记录大数的问题，于是我们得发明一些其他符号来表示更大的数值，比如用横杠 <code>-</code> 表示 <code>10</code>，用十字 <code>+</code> 表示 <code>100</code>。那么：</p>
+<ul>
+<li><code>16</code> 就是 <code>-//////</code>;</li>
+<li><code>32</code> 就是 <code>---//</code>;</li>
+<li><code>128</code> 就是 <code>+--////////</code>;</li>
+</ul>
+<p>漂亮….这种靠符号类型和符号数量表示数字的方法被称为 <strong>符值相加记数法</strong>（sign-value notation），古埃及和古罗马用的都是它，只不过符号各不相同。</p>
+<p>古埃及的记数符号：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">10</th>
+<th align="left">100</th>
+<th align="left">1000</th>
+<th align="left">10000</th>
+<th align="left">100000</th>
+<th align="left">1000000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><img src="https://upload-images.jianshu.io/upload_images/7896890-d2bfaae365873d0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></td>
+<td align="left"><img src="https://upload-images.jianshu.io/upload_images/7896890-7db2e56461b8924e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></td>
+<td align="left"><img src="https://upload-images.jianshu.io/upload_images/7896890-c5fae91ba1ce71ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></td>
+<td align="left"><img src="https://upload-images.jianshu.io/upload_images/7896890-f8681a482a77520a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></td>
+<td align="left"><img src="https://upload-images.jianshu.io/upload_images/7896890-c757d42165bcdc28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></td>
+<td align="left"><img src="https://upload-images.jianshu.io/upload_images/7896890-7912e7e489139b01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></td>
+<td align="left"><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-4f50da2d5ab50e09.png" alt=""></td>
+</tr>
+</tbody></table>
+<p><code>1024</code> 在古埃及就写作：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-71394410027b72cf.png" alt=""></p>
+<p><strong>你会发现，符值相加记数法的一大优点是，符号的顺序可以任意打乱，数字含义不受影响</strong>。我国藏族曾用石子表示 <code>1</code>、木棍表示 <code>10</code>、果核表示 <code>100</code>、蚕豆表示 <code>1000</code>、瓦片表示 <code>10000</code>，那么，当你把 <code>1</code> 颗蚕豆、<code>2</code> 根木棍和 <code>4</code> 颗石子胡乱地攥在手里，别人依然知道它们是 <code>1024</code>。</p>
+<p>古罗马的做法略有不同，他们对五进制情有独钟：</p>
+<table>
+<thead>
+<tr>
+<th align="left">1</th>
+<th align="left">5</th>
+<th align="left">10</th>
+<th align="left">50</th>
+<th align="left">100</th>
+<th align="left">500</th>
+<th align="left">1000</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">I</td>
+<td align="left">V</td>
+<td align="left">X</td>
+<td align="left">L</td>
+<td align="left">C</td>
+<td align="left">D</td>
+<td align="left">M</td>
+</tr>
+</tbody></table>
+<p>这些符号沿用至今，想必大家（至少对前 <code>3</code> 个）都比较熟悉，许多钟表仍保留着使用罗马数字的习惯，<code>1~12</code> 分别表示为：<code>I</code>、<code>II</code>、<code>III</code>、<code>IV</code>、<code>V</code>、<code>VI</code>、<code>VII</code>、<code>VIII</code>、<code>IX</code>、<code>X</code>、<code>XI</code>、<code>XII</code>。你会发现，罗马记数法是符值相加记数法的变种，因为它不光「相加」，还「相减」。这种方式就不允许符号乱序了，<code>IV</code> 和 <code>VI</code> 表示的是不同的数字。</p>
+<p>那罗马人何苦要使用这种更复杂的记数法呢？无非是为了读写方便。同样表示 <code>9</code>，<code>IX</code> 比 <code>VIIII</code> 更简洁。</p>
+<p>其实有一种更好使的方法——用另外一些列符号来表示符号的数量。比如用 <code>A</code> 表示 <code>1</code> 个符号，用 <code>B</code> 表示 <code>2</code> 个符号，以此类推，用 <code>I</code> 表示 <code>9</code> 个符号。</p>
+<p>如此，上文表示 <code>256</code> 的 <code>++-----//////</code> 就可以写作 <code>B+E-F/</code>。你一定感觉莫名其妙，这种写法哪里方便了。其实中文的数字表示就是这种形式，只不过我们用得太习惯了，以至于没有发现。</p>
+<p>在中文中，<code>个</code>、<code>十</code>、<code>百</code> 代替了 <code>/</code>、<code>-</code>、<code>+</code>，而 <code>一</code>、<code>二</code>、<code>三</code> 代替了 <code>A</code>、<code>B</code>、<code>C</code>。<code>256</code> 就写作 <code>二百五十六个</code>，<code>个</code> 比较累赘，我们通常把它省略了。</p>
+<p>其实像日语、英语用的也同样是这种记数法，简洁、优雅。</p>
+<p>美中不足的是，这种形式虽便于读写，却不便于计算。中国古人为算筹和算盘这类经典算具搭建起广阔的舞台，却没给笔算留出一席之地。想象一下，如果让你把这些汉字写在草稿纸上，列个竖式，你的内心一定非常别扭。</p>
+<h2 id="位值制记数法"><a href="#位值制记数法" class="headerlink" title="位值制记数法"></a>位值制记数法</h2><p>公元5世纪，印度数学家阿耶波多（Aryabhata 476–550）创立了现在广泛使用的 <strong>位值制记数法</strong>（positional notation/place-value notation），该记数法使用的主要符号，是同为印度人发明的阿拉伯数字：<code>0</code>、<code>1</code>、<code>2</code>、<code>3</code>、<code>4</code>、<code>5</code>、<code>6</code>、<code>7</code>、<code>8</code>、<code>9</code>。</p>
+<p>与符值相加记数法类比，位值制中的 <code>1</code>、<code>2</code>、<code>3</code> 代替的是 <code>A</code>、<code>B</code>、<code>C</code>，那 <code>/</code>、<code>-</code>、<code>+</code> 呢？是 <strong>靠阿拉伯数字的位置来表示的</strong>。众所周知，最右位相当于 <code>/</code>，次右位相当于 <code>-</code>。<strong>靠每个位置上的数值来表示数字，故名位值制。</strong></p>
+<p>严谨的数学家用一种多项式高度概括了位值制记数法的本质，在十进制中，这个多项式是这样的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-dfcce5601d9697db.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-963f0c31560dddc4.png" alt=""></p>
+<p>这是一个 <code>n</code> 位十进制数，a<sub>i</sub> 就是第 i 位上的数值。为便于直观理解，举个 <code>1024</code> 的例子吧：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-efaba514c3963401.png" alt=""></p>
+<p>由于我们熟悉了十进制，这样费心费力的展开可能会让你觉得好笑，但当我们把它推广到其他进制时，这个多项式的价值就体现了出来。<strong>n 位 b 进制数的位值制表示：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-8be4e9f989860c24.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-c9b2417647078572.png" alt=""></p>
+<p><code>1024</code> 用二进制怎么表示？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-dc93b38b42e51e50.png" alt=""></p>
+<p>因此，<code>1024</code> 的二进制写作 <code>10000000000</code>。</p>
+<p>除了最普遍的十进制和计算机中的二进制，常见的还有七进制（如 <code>1</code> 周 <code>7</code> 天）、十二进制（如 <code>1</code> 年 <code>12</code> 个月）、十六进制（如古代 <code>1</code> 斤 <code>16</code> 两）、六十进制（如六十甲子）等等，只要有意义，任何进制都可以为你所用。</p>
+<h2 id="非标准位值制"><a href="#非标准位值制" class="headerlink" title="非标准位值制"></a>非标准位值制</h2><p>在上述的多项式中，如果 a<sub>i</sub> 或 b 的取值奇葩一点，就形成了 <strong>非标准位值制</strong>（non-standard positional numeral systems），这类记数法往往应用于专业领域，很难在日常生活中见到。比如标准位值制中的三进制 a<sub>i</sub> 的取值为 <code>0</code>、<code>1</code>、<code>2</code>，但在一种名为平衡三进制（balanced ternary）的非标准位值制中，a<sub>i</sub> 取 <code>-1</code>、<code>0</code>、<code>1</code>，苏联曾使用这种进制研发电子计算机。</p>
+<h1 id="Part-2-二进制简介"><a href="#Part-2-二进制简介" class="headerlink" title="Part 2. 二进制简介"></a>Part 2. 二进制简介</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-27cff50f594a44fa.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://zhuanlan.zhihu.com/p/26743163" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26743163</a></li>
+</ul>
+<p>至此，你对「二进制」应该会感觉亲切了些，它只是一种数制而已，本质上与我们熟悉的十进制没有很大的差别，我们这一 Part 来稍微理解一下二进制。（至于电脑为什么使用二进制我们在下一 Part 中介绍）</p>
+<h2 id="二进制的基本运算"><a href="#二进制的基本运算" class="headerlink" title="二进制的基本运算"></a>二进制的基本运算</h2><p>十进制中的那些基本运算原则，二进制中同样适用，只不过需要稍加变幻而已，下面我们分别就加、减、乘、除四则运算来介绍。</p>
+<h3 id="二级制加法"><a href="#二级制加法" class="headerlink" title="二级制加法"></a>二级制加法</h3><p>根据「逢二进一」规则，二进制数加法的法则为：</p>
+<pre class=" language-text"><code class="language-text">0＋0＝0
+0＋1＝1＋0＝1
+1＋1＝0　（进位为1） 
+1＋1＋1＝1 （进位为1）</code></pre>
+<p>例如：<code>1101</code> 和 <code>1011</code> 相加过程如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-933f183b9a4acbf8.png" alt=""></p>
+<h3 id="二进制数的减法"><a href="#二进制数的减法" class="headerlink" title="二进制数的减法"></a>二进制数的减法</h3><p>根据「借一有二」的规则，二进制数减法的法则为：</p>
+<pre class=" language-text"><code class="language-text">0－0＝0
+1－1＝0
+1－0＝1
+0－1＝1 （借位为1）</code></pre>
+<p>例如：<code>1101</code> 减去 <code>1011</code> 的过程如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-a6fede2d315e2a21.png" alt=""></p>
+<h3 id="二进制的乘法"><a href="#二进制的乘法" class="headerlink" title="二进制的乘法"></a>二进制的乘法</h3><p>二进制数乘法过程可仿照十进制数乘法进行。但由于二进制数只有 <code>0</code> 或 <code>1</code> 两种可能的乘数位，导致二进制乘法更为简单。二进制数乘法的法则为：</p>
+<pre class=" language-text"><code class="language-text">0×0＝0
+0×1＝1×0＝0
+1×1＝1</code></pre>
+<p>例如：<code>1001</code> 和 <code>1010</code> 相乘的过程如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-dca5a2f6f8860787.png" alt=""></p>
+<h3 id="二进制的除法"><a href="#二进制的除法" class="headerlink" title="二进制的除法"></a>二进制的除法</h3><p>二进制数除法与十进制数除法很类似。</p>
+<p>例如：<code>100110</code> ÷ <code>110</code> 的过程如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-375b3b027c046f7a.png" alt=""></p>
+<h2 id="二进制为什么能表示所有的数据"><a href="#二进制为什么能表示所有的数据" class="headerlink" title="二进制为什么能表示所有的数据"></a>二进制为什么能表示所有的数据</h2><p><strong>因为编码规定。</strong></p>
+<p>之前我们有说到，所有保存的程序和数据在计算机中都被描述为 <strong>文件</strong>，也就是说我们能够知道当前的数据集合被期望的用途是什么，也就能够找到对应的 <strong>处理器</strong> 来正确处理当前的数据。</p>
+<h3 id="例如保存文字"><a href="#例如保存文字" class="headerlink" title="例如保存文字"></a>例如保存文字</h3><p>拿文字举例，为了让一串 <code>0</code>、<code>1</code> 能够代表特定的文字，人们规定使用一个字节中的七位来表达特定的文字， 这就是大名鼎鼎 <strong>ASCII</strong> <em>(American Standard Code for Information Interchange)</em> 码，ASCll 码能够表达 <strong>2<sup>7</sup>=128</strong> 种字符(编码从 <code>0~127</code>)，对于 <code>26</code> 个英文字母和一些常用的可打印字符，这完全足够了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-df89cd6ae2e84d8a.png" alt=""></p>
+<p>可是，世界文化是多元的，面对类似汉字这样的象形文字，ASCll码表用起来自然是捉襟见肘。</p>
+<p>穷则思变，一个字节不行，那就两个字节，这就是大名鼎鼎的 <strong>Unicode</strong> 码，不难看出，Unicode 码有 <strong>2<sup>16</sup>=65536</strong> 种表示方式，这样就足以表达一些常用的字符了，值得一提的是，Unicode 码算是在 ASCll 码上的一种扩充,其第 <code>0~127</code> 个编码字符与 ASCll 码表一模一样。</p>
+<h3 id="再比如图片"><a href="#再比如图片" class="headerlink" title="再比如图片"></a>再比如图片</h3><p>这里涉及一点点物理知识，话说很久以前，牛顿通过三棱镜把白色的光分解成七种不同颜色的光，后来又通过各种实验发现红、绿、蓝三种颜色的光是无法被分解的，因此我们就称为红蓝绿为光的三原色。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-8d9230810da43450.png" alt=""></p>
+<p>至此人类已经知道了：<strong>可以通过组合不同比例的红、绿、蓝三种颜色来获得各种各样的颜色</strong>，那么我们就可以在计算机上模拟了。现在的计算机，一般使用 <code>32</code> 位来表示颜色，<code>32</code> 位平分给四个分量，也就是每个分量 <code>8</code> 位。</p>
+<p><strong>为啥是四个颜色分量?</strong></p>
+<p>因为颜色模型中有一个 alpha 值，用来表示透明度，这一点我们先不考虑。总之三种颜色，每个使用 <code>8</code> 位来表示的话，我们就能够表示 <code>256 * 256 * 256 = 16777216</code> 种颜色了，已经足够基础的使用了。</p>
+<p>先来看一张图片：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-70225ac6658d4f8f.png" alt=""></p>
+<p>这张图像的尺寸是 <code>600px * 664px</code>（px 是一种图片单位，中文名称为像素，你可以暂时理解为一个点）。我们把它放大一下，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-a103e42d30efff7d.png" alt=""></p>
+<p>看见了吗？实际上，大部分图像（你拍摄的照片、你扫描的图片、你使用 iPad 画的图片等等…）都是位图文件，位图就是由像素点构成的，它就像是一个网格一样，每个格子里面填一个颜色。（除了位图外，还有一种图是矢量图，它描述的是形状而非网格）</p>
+<p>OK，我想你已经能理解图像是由像素点组成的了（事实上我们的显示器也是），我们只需要在编码中附带上一些额外的信息，例如图像有多大的尺寸、时间、作者、颜色深度、是否支持透明度之类的就能够对图像进行正确表示了。（视频可以简单理解成一张张连续不断的图片）</p>
+<p>要让显示器正确显示图片或者视频，只需要让显示器上每个像素显示特定的颜色就好了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-5f5e7ffa6fc68d6b.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://www.bbc.co.uk/bitesize/topics/zf2f9j6/articles/z2tgr82" target="_blank" rel="noopener">https://www.bbc.co.uk/bitesize/topics/zf2f9j6/articles/z2tgr82</a></li>
+</ul>
+<h1 id="Part-3-为什么是二进制？"><a href="#Part-3-为什么是二进制？" class="headerlink" title="Part 3. 为什么是二进制？"></a>Part 3. 为什么是二进制？</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-e00888bf0a3f657b.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://zhuanlan.zhihu.com/p/33439000" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33439000</a></li>
+</ul>
+<p>可为什么一定是二进制呢？使用人类习惯的十进制不好吗？</p>
+<h2 id="理由一：物理上易于实现"><a href="#理由一：物理上易于实现" class="headerlink" title="理由一：物理上易于实现"></a>理由一：物理上易于实现</h2><p>计算机依靠电力工作，这也就意味着需要将数字信号映射到电信号，实现这种映射最简单的方法是：</p>
+<ul>
+<li>0 - 没有电（0 V）</li>
+<li>1 - 有点（5 V）</li>
+</ul>
+<p>二进制在技术上最容易实现。这是因为具有两种 <strong>稳定状态</strong> 的物理器件很多，如门电路的导通与截止、电压的高与低等，而它们恰好可以对应表示 “1” 和 “0” 这两个数码。假如采用十进制，那么就要制造具有 <code>10</code> 种 <strong>稳定状态</strong> 的物理电路，而这是非常困难的。</p>
+<h2 id="理由二：机器可靠性高"><a href="#理由二：机器可靠性高" class="headerlink" title="理由二：机器可靠性高"></a>理由二：机器可靠性高</h2><p>为什么使用更复杂的数字系统是一个问题？</p>
+<p>假设我们使用三元（3 位数字）数字系统涉及计算机，如果我们具有从 <code>0 V</code> 到 <code>5 V</code> 的电压，那么我们可以进行以下的映射：</p>
+<ul>
+<li>0 - 0 V;</li>
+<li>1 - 2.5 V;</li>
+<li>2 - 5 V;</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-977dc494363f41b4.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://pmihaylov.com/intro-binary-numbers/" target="_blank" rel="noopener">https://pmihaylov.com/intro-binary-numbers/</a></li>
+</ul>
+<p>看起来合理吧？但是，想象一下，我以 <code>2.5 V</code> 的电压发送了一个数字。但是由于电路中的一些噪声，我在输出端得到 <code>2.3 V</code> 的电压，因此将其视为 <code>0</code>。结果是？</p>
+<p>有人给我发送了 <code>1</code>，但我将其视为 <code>0</code>。数据丢失可是一个非常严重的问题。</p>
+<p>使用二进制则可靠得多，由于电压的高和低、电流的有和无等都是一种 <strong>质的变化</strong>，两种物理状态稳定、分明，因此，二进制码传输的抗干扰能力强，鉴别信息的可靠性高。</p>
+<h3 id="为什么计算机系统必须有时钟"><a href="#为什么计算机系统必须有时钟" class="headerlink" title="为什么计算机系统必须有时钟"></a>为什么计算机系统必须有时钟</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-c08828d17e50d517.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="http://programmedlessons.org/Java9/chap02/ch02_11.html" target="_blank" rel="noopener">http://programmedlessons.org/Java9/chap02/ch02_11.html</a></li>
+</ul>
+<p>建立数字系统的目的是 <strong>仅在某些时间点测试开/关（二进制）值</strong>，这使电线（或其他设备）有时间更换。<strong>这就是计算机系统有时钟的原因。</strong></p>
+<p>时钟会周期性地进行信号的测量，图中所示的 T1 和 T2 就是可以测量信号的时间点。</p>
+<p>时钟利用所有这些时间点来保持同步。更快的时钟意味着每秒可以对电线进行更多次测试，并且整个系统运行得更快。<code>2 GHz</code> 处理器每秒检查二进制值 <code>20</code> 亿次。在这些时间之间，允许值改变并稳定下来。处理器芯片速度越快，每秒可以测试的次数就越多，每秒可以做出的决策就越多。</p>
+<h2 id="理由三：运算规则简单"><a href="#理由三：运算规则简单" class="headerlink" title="理由三：运算规则简单"></a>理由三：运算规则简单</h2><p>数学推导已经证明，对 <code>N</code> 进制数进行算术求和或求积运算，其运算规则各有 <code>N(N+1)/2</code> 种。如采用十进制，则 <code>N=10</code>，就有 <code>55</code> 种求和或求积的运算规则；而采用二进制，则 <code>N=2</code>，仅有 <code>3</code> 种求和或求积的运算规则，以上面提到的加法为例：</p>
+<pre class=" language-text"><code class="language-text">0+0=0，0+1=1 (1+0=1)，1+1=10</code></pre>
+<p>因而可以大大简化运算器等物理器件的设计。</p>
+<h2 id="理由四：逻辑判断方便"><a href="#理由四：逻辑判断方便" class="headerlink" title="理由四：逻辑判断方便"></a>理由四：逻辑判断方便</h2><p>采用二进制后，仅有的两个符号 “1” 和 “0” 正好可以与逻辑命题的两个值 “真” 和 “假” 相对应，能够方便地使用逻辑代数这一有力工具来分析和设计计算机的逻辑电路。</p>
+<p>虽然在 1950 年代就造出了更加高效的三元计算机，但在效率和复杂度的取舍上，始终抵不过二进制。二进制仍然在当今世界中长期存在。</p>
+<h1 id="Part-4-CPU-的实际工作方式"><a href="#Part-4-CPU-的实际工作方式" class="headerlink" title="Part 4. CPU 的实际工作方式"></a>Part 4. CPU 的实际工作方式</h1><p>上面我们了解到计算机以二进制的形式运行，它们只有两种状态：开（1）和关（0），为了执行二进制计算，我们需要采用一种特殊的电子元器件，称为 <strong>「晶体管」</strong>。暂时我们把它理解为一种开关吧，通电就打开，没电流通过就关闭。</p>
+<h2 id="利用”开关”搭建逻辑电路"><a href="#利用”开关”搭建逻辑电路" class="headerlink" title="利用”开关”搭建逻辑电路"></a>利用”开关”搭建逻辑电路</h2><p>我们知道，给电灯通上电，它就会亮：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-4c57ef7067df1a32.png" alt=""></p>
+<p>于是，结合上开关，我们就能搭建出最基础的 <strong>与门</strong> 和 <strong>或门</strong>。</p>
+<h4 id="与门"><a href="#与门" class="headerlink" title="与门"></a>与门</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-c8a7c22d1504ec72.png" alt=""></p>
+<p>该电路的逻辑是：<strong>只有当 A 和 B 同时开启时，LED 灯才会亮</strong>，也就是认为输出 1，我们可以利用电信号来简单模拟一下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">A</th>
+<th align="left">B</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left"><strong>1</strong></td>
+<td align="left"><strong>1</strong></td>
+<td align="left"><strong>1</strong></td>
+</tr>
+</tbody></table>
+<h4 id="或门"><a href="#或门" class="headerlink" title="或门"></a>或门</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-a24d55abcb73e973.png" alt=""></p>
+<p>该电路的逻辑是：<strong>当 A 或者 B 开启时，LED 灯就会亮</strong>，也就是认为输出 1，我们可以利用电信号来简单模拟一下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">A</th>
+<th align="left">B</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">0</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left"><strong>1</strong></td>
+</tr>
+<tr>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left"><strong>1</strong></td>
+</tr>
+<tr>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left"><strong>1</strong></td>
+</tr>
+</tbody></table>
+<h4 id="其他门"><a href="#其他门" class="headerlink" title="其他门"></a>其他门</h4><p>类似地，我们可以借助更多的电子元器件来创造出基础的 <code>7</code> 种逻辑门电路：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-af9398c82d989eb9.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://www.zhihu.com/question/348237008/answer/843382847" target="_blank" rel="noopener">https://www.zhihu.com/question/348237008/answer/843382847</a> | @Zign</li>
+</ul>
+<p>这里需要特别提一下 <strong>异或门</strong>，我们需要先知道有一种电子元器件可以利用电气特性对 <strong>输入取反</strong>，也就是说输入 <code>1</code> 则输出 <code>0</code>，输入 <code>0</code> 则输出 <code>1</code>，那么我们就可以 <strong>简单模拟</strong> 出异或门逻辑电路（实际会更复杂些，这里仅展示出异或的意思）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-5a9ab9bf3e964ac4.png" alt=""></p>
+<p><code>A&#39;</code> 和 <code>B&#39;</code> 分别表示 <code>A</code> 和 <code>B</code> 开关的反值，从图中我们很容易知道只有当 <code>A</code>、<code>B</code> 只存在一个输入 <code>1</code> 时，整个电路才会输出 <code>1</code>。</p>
+<h2 id="利用逻辑门简单计算加法"><a href="#利用逻辑门简单计算加法" class="headerlink" title="利用逻辑门简单计算加法"></a>利用逻辑门简单计算加法</h2><p>OK，上面我们了解到我们能够利用 “开关” 来模拟逻辑的运算，我们接下来试着还原一个简单的加法运算器是如何实现的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-c86406337d2101c0.png" alt=""></p>
+<p>仅需两个门，就可以完成基本的二进制加法运算。上图是利用 <code>logic.ly</code> 创建的半加法器，<code>A</code>、<code>B</code> 相当于使我们计算的两个数，最后一块相当于是我们的数显芯片，它的功能是根据输入显示数字，从上到下的引脚（也就是图中输入的地方，通常我们这样称呼）分别对应了 <strong>2<sup>0</sup>=1</strong>、<strong>2<sup>1</sup>=2</strong>、<strong>2<sup>2</sup>=4</strong>、<strong>2<sup>3</sup>=8</strong> 的输入，没有任何输入时显示为 <code>0</code>，如果 <code>引脚 1</code>（对应 <strong>2<sup>0</sup>=1</strong>）像上图一样有输入，则显示 <code>0 + 1 = 1</code>。</p>
+<p>我们来理解一下上方的电路：</p>
+<ul>
+<li>如果仅打开一个输入，但不同时打开两个输入，则此处的 XOR 门（异或门）将打开，此时对应输入 <code>引脚 1</code>，显示 <code>数字 1</code>（类似于 <code>1 + 0 和 0 + 1</code>)；</li>
+<li>如果两个输入均打开，则 AND 门(与门)将打开，此时对应输入 <code>引脚 2</code>，显示 <code>数字 2</code>（类似于 <code>1 + 1</code>）；</li>
+<li>如果没有输入，则 AND 门和 XOR 门都保持关闭，此时显示 <code>数字 0</code>（类似于 <code>0 + 0</code>）；</li>
+</ul>
+<p>因此，如果两个都打开，则 XOR 保持关闭，并且 AND 门打开，得出正确的答案为 <code>2</code>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-faba821169fea5f9.png" alt=""></p>
+<p>但这只是最基础的半加法运算器，不是太有用，因为它只能解决最简单的数学问题之一。但如果我们把它们两个与另一个输入连接，就会得到一个完整的加法器：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-6dca746d15cf3470.png" alt=""></p>
+<p>仔细思考几遍，你就会得知这个三个输入的加法器已经可以计算 <code>3</code> 个二进制数字的加法运算了，我们如法炮制，可以通过连接更多的”进位”来使这个加法器能够运算更多的数，这当然也意味着这个计算链条更长。 </p>
+<p>大多数其他数学运算都可以加法完成。乘法只是重复加法，减法可以通过一些奇特的位反转来完成，而除法只是重复减法。并且，尽管所有现代计算机都具有基于硬件的解决方案以加快更复杂的操作，但从技术上讲，您可以使用完整的加法器来完成全部操作。</p>
+<h2 id="总线和内存"><a href="#总线和内存" class="headerlink" title="总线和内存"></a>总线和内存</h2><p>现在，我们的计算机只不过是一个计算器，它记不住任何内容也对输出没有任何操作，上述电路只是接了一个显示单元而已。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-956374844ba7ede9.png" alt=""></p>
+<p>上面展示的是一个存储单元。它使用了大量的 NAND 门，并且在实际生产中，根据存储技术的不同，它们可能会大不相同，但其功能是相同的。</p>
+<p>您给它一些输入，并打开“写”位（<code>Write</code> 输入 <code>1</code>），它将把输入存储在单元内。这不仅是一个存储单元，因为我们还需要一种从中读取信息的方法。这是通过一个使能器完成的，该使能器是「存储器」中每个位的“与”门的集合，所有位都与另一个输入（即“读取”位）绑定在一起。写入和读取位通常也称为“设置”(<code>set</code>)和“启用”(<code>enable</code>)。</p>
+<p>上面整个存储单元都包裹在所谓的寄存器中。这些寄存器连接到 <strong>总线</strong>，总线是围绕整个系统运行的一束电线，并连接到每个组件。即使现代计算机也具有总线，尽管它们可能具有多个总线以提高多任务处理性能。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-3bce2841c2943d7d.png" alt=""></p>
+<p>每个寄存器仍有一个读写位，但是在这种设置下，输入和输出是一样的。这实际上很好。例如：如果要将 R1 的内容复制到 R2，则应打开 R1 的读取位，这会将 R1 的内容压入总线。当读取位打开时，您将打开 R2 的写入位，这会将总线内容复制到 R2 中。</p>
+<p>寄存器也用于制作 RAM。RAM 通常布置在网格中，并且导线有两个方向：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-6304075655ebd668.png" alt=""></p>
+<p>解码器采用二进制输入并打开相应的编号线。例如，<code>11</code> 在二进制数中是 <code>3</code>，即最高的 <code>2</code> 位数字，因此解码器将打开最高的线路。每个路口都有一个寄存器。所有这些都连接到中央总线以及中央写入和读取输入。只有跨寄存器的两条导线也都打开时，读和写输入才会打开，从而有效地允许您选择要从中进行读写的寄存器。同样，现代 RAM 要复杂得多，但是此设置仍然有效。</p>
+<h2 id="时钟，步进器和解码器"><a href="#时钟，步进器和解码器" class="headerlink" title="时钟，步进器和解码器"></a>时钟，步进器和解码器</h2><p>寄存器无处不在，是在 CPU 中移动数据并将信息存储在 CPU 中的基本工具。那么，是什么告诉他们移动数据的呢？</p>
+<p>时钟是 CPU 核心中的第一个组件，它将按设置的时间间隔（以赫兹或每秒周期为单位）关闭和打开。这就是您看到的最直观的 CPU 速度指标。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-9328e2e8da259a45.png" alt=""></p>
+<p>时钟具有三种不同的状态：基本时钟，使能时钟和设置时钟。基本时钟将打开半个周期，另一半关闭。使能时钟用于打开寄存器，并且需要更长的时间才能确保数据被使能。设置时钟必须始终与使能时钟同时打开，否则可能会写入错误的数据。</p>
+<p>时钟连接到步进器，步进器将从 <code>1</code> 到最大步数进行计数，并在完成后将自身重置为 <code>1</code>。时钟还连接到 CPU 可以写入的每个寄存器的 AND 门：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-adb69d888b76aa4a.png" alt=""></p>
+<p>这些 “与” 门还连接到另一个组件的输出，即指令解码器。指令解码器接受 <code>SET R2 TO R1</code> 之类的指令，并将其解码为 CPU 可以理解的内容。它有自己的内部寄存器，称为“指令寄存器”，该寄存器存储了当前操作。它的精确程度取决于您正在运行的系统，但是一旦解码，它将打开正确的设置并启用正确寄存器的位，这些寄存器将根据时钟触发。</p>
+<p>程序指令存储在 RAM（或现代系统中的 L1 高速缓存，更靠近 CPU）中。由于程序数据与其他所有变量一样都存储在寄存器中，因此可以随时对其进行操作以在程序中跳转。这就是程序通过循环和 <code>if</code> 语句获取结构的方式。跳转指令将指令解码器正在读取的存储器中的当前位置设置到其他位置。</p>
+<h2 id="一切如何配合"><a href="#一切如何配合" class="headerlink" title="一切如何配合"></a>一切如何配合</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-df60ac37b74140ff.png" alt=""></p>
+<p>现在，我们对 CPU 工作原理的有了一些基本的了解。主总线跨越整个系统，并连接到所有寄存器。完整的加法器以及其他一系列运算都打包在算术逻辑单元或 ALU 中。该 ALU 将与总线建立连接，并且还将具有自己的寄存器来存储正在操作的第二个数字。</p>
+<p>为了执行计算，将程序数据从系统 RAM 加载到控制部分。控制部分从 RAM 中读取两个数字，将第一个数字加载到 ALU 的指令寄存器中，然后将第二个数字加载到总线上。同时，它向 ALU 发送指令代码，告知其操作方法。然后，ALU 执行所有计算，并将结果存储在另一个寄存器中，CPU 可以从该寄存器中读取该值，然后继续该过程。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>原来，我们是这样记数的 - <a href="https://www.jianshu.com/p/58844323e4fb" target="_blank" rel="noopener">https://www.jianshu.com/p/58844323e4fb</a></li>
+<li>二进制数的运算方法 - <a href="https://www.jianshu.com/p/560aba49c9a4" target="_blank" rel="noopener">https://www.jianshu.com/p/560aba49c9a4</a></li>
+<li>文字,图片,视频,音频的二进制表示 - <a href="https://blog.csdn.net/c46550/article/details/91040925" target="_blank" rel="noopener">https://blog.csdn.net/c46550/article/details/91040925</a></li>
+<li>知乎 - 计算机只认识0和1但是怎么表示图像和影视等等众多应用的？ | @kross - <a href="https://www.zhihu.com/question/36269548" target="_blank" rel="noopener">https://www.zhihu.com/question/36269548</a></li>
+<li>Introduction to binary numbers - <a href="https://pmihaylov.com/intro-binary-numbers/" target="_blank" rel="noopener">https://pmihaylov.com/intro-binary-numbers/</a></li>
+<li>What is Binary, and Why Do Computers Use It? - <a href="https://www.howtogeek.com/367621/what-is-binary-and-why-do-computers-use-it/" target="_blank" rel="noopener">https://www.howtogeek.com/367621/what-is-binary-and-why-do-computers-use-it/</a></li>
+<li>CPU 是怎样认识代码的？ | 知乎 - <a href="https://www.zhihu.com/question/348237008/answer/843382847" target="_blank" rel="noopener">https://www.zhihu.com/question/348237008/answer/843382847</a> | @Zign</li>
+<li>HTG Explains: How Does a CPU Actually Work? - <a href="https://www.howtogeek.com/367931/htg-explains-how-does-a-cpu-actually-work/" target="_blank" rel="noopener">https://www.howtogeek.com/367931/htg-explains-how-does-a-cpu-actually-work/</a></li>
+</ol>
+<h1 id="往期推荐"><a href="#往期推荐" class="headerlink" title="往期推荐"></a>往期推荐</h1><ol>
+<li><a href="https://www.wmyskxz.com/2020/04/02/morethanjava-dang-da-xue-xuan-ze-liao-ji-suan-ji-zhi-hou-ying-gai-zhi-dao-de/">「MoreThanJava」当大学选择了计算机之后应该知道的</a></li>
+<li><a href="https://www.wmyskxz.com/2020/04/07/morethanjava-ji-suan-ji-fa-zhan-shi-cong-zhi-bu-ji-dao-ibm/">「MoreThanJava」计算机发展史—从织布机到IBM</a></li>
+<li><a href="https://www.wmyskxz.com/2020/06/01/morethanjava-ji-suan-ji-xi-tong-gai-shu/">「MoreThanJava」计算机系统概述</a></li>
+<li><a href="https://www.wmyskxz.com/2020/03/25/dong-yi-dian-python-xi-lie-kuai-su-ru-men-1/">妈妈再也不担心我面试被Redis问得脸都绿了</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8CCPU%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86/7896890-9cbc4c6fcde7e558.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/06/01/morethanjava-ji-suan-ji-xi-tong-gai-shu/">
       「MoreThanJava」计算机系统概述
     </a>
@@ -2600,622 +3029,6 @@ ssize_t <span class="token function">read</span><span class="token punctuation">
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/03/23/dong-yi-dian-python-xi-lie-kuai-su-ru-men/">
-      懂一点Python系列——快速入门
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Python/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Python/懂一点系列</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年3月23日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-71e6f0dcd9d841a5.png" alt=""></p>
-<blockquote>
-<p>本文面相有 <strong>一定编程基础</strong> 的朋友学习，所以略过了 <em>环境安装<em>、</em>IDE 搭建</em> 等一系列简单繁琐的事情。</p>
-</blockquote>
-<h1 id="一、Python-简介"><a href="#一、Python-简介" class="headerlink" title="一、Python 简介"></a>一、Python 简介</h1><p><strong>Python</strong> 英文原意为 <strong>“蟒蛇”</strong>，直到 <code>1989</code> 年荷兰人 <strong>Guido van Rossum</strong> （简称 Guido）发明了一种 <strong>面向对象</strong> 的 <strong>解释型</strong> 编程语言，并将其命名为  Python，才赋予了它表示一门编程语言的含义。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-8cc9b31907c8afca.png" alt=""></p>
-<blockquote>
-<p>说到 Python 的诞生，极具戏剧色彩，据 Guido 的自述记载，Python 语言是他在圣诞节期间为了打发时间开发出来的，之所以会选择 Python 作为该编程语言的名字，是因为他是一个叫 Monty Python 戏剧团体的忠实粉丝。</p>
-</blockquote>
-<h2 id="解释型-vs-编译型"><a href="#解释型-vs-编译型" class="headerlink" title="解释型 vs 编译型"></a>解释型 vs 编译型</h2><p>作为电子元器件的 <strong>计算机</strong>，实际上 <strong>只能</strong> 识别某些 <strong>特定的二进制指令</strong> <em>(特殊的 <code>01</code> 组合)</em>，但由于 <strong>人类阅读</strong> 这些 <strong>指令</strong> 非常难以阅读，加上使用这些指令编写程序的 <strong>耗时</strong> 太过于 <strong>冗长</strong>，所以，人们在此基础上再次制定了一套规范，采用特定的 <strong>人类可阅读</strong> 的代码编写，待到要执行时再 <strong>翻译</strong> 回特定二进制指令，这样就帮助了人们更加轻松地理解和阅读程序逻辑了。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-4b5f50ce1ddc7077.png" alt=""></p>
-<p>这也就是所谓现在的 <strong>“高级编程语言”</strong> 了。</p>
-<p>上述 <strong>翻译</strong> 这个过程 <em>(其实相当复杂，涉及语法分析、语义分析、性能优化等等..)</em> 其实也是由一个特定程序来执行的，那 <strong>什么时候将源代码翻译成二进制指令呢？</strong>，不同的编程语言有不同的规定：</p>
-<ul>
-<li><strong>编译型语言</strong>：必须 <strong>提前</strong> 将所有源代码 <strong>一次性</strong> 转换成二进制指令，生成一个可执行文件 <em>(例如 Windows 下的 <code>.exe</code>)</em> 比如：C 语言、C++、Golang、汇编等。使用的转换工具我们称为 <strong>编译器</strong>。</li>
-<li><strong>解释型语言</strong>：允许程序 <strong>一边执行一边转换</strong>，并且不会生成可执行程序，比如 Python、JavaScript、PHP 等。使用的转换工具我们称为 <strong>解释器</strong>。</li>
-</ul>
-<blockquote>
-<p><strong>Java</strong> 和 <strong>C#</strong> 是一种比较奇葩的存在，它们是 <strong>半编译半解释型</strong> 的语言，源码需要先转换成一种中间文件 <em>(字节码文件)</em>，然后再把中间文件拿到 <strong>虚拟机</strong> 中执行。Java 引领了这种风潮，它的初衷是在跨平台的同时兼顾执行效率。</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-e0d8266f6398eb03.png" alt=""></p>
-<p><em>上图</em> 就展示了两种不同类型语言的执行流程的不同，两种方式对比起来总结如下：</p>
-<ul>
-<li><strong>编译型语言一般不能跨平台</strong>：对于不同的 CPU 来说，它们的指令集是有差异的，这就导致了 <strong>可执行文件</strong> <em>(翻译后的指令)</em> 不能跨平台，另外不同的系统之间的命令也会存在差异，例如 Linux 中睡眠是 <code>sleep()</code> 参数是毫秒，而 Windows 中是 <code>Sleep()</code> <em>(首字母大写)</em> 参数是秒，这就导致了 <strong>源代码也不能跨平台</strong>；</li>
-<li><strong>解释型语言可跨平台</strong>：这一切都归功于 <strong>解释器</strong>，它本身就是一个可执行文件，官方只要针对不同的平台开发不同的解释器，那么解释器就能够根据相同的语法解析出同样功能的指令；</li>
-<li><strong>编译型一般比解释型效率高</strong>：由于解释型是采取一边执行一边翻译的做法，所以会慢上一些，再加上我们强大的 <strong>编译器</strong> 会帮我们做许多代码优化的工作。</li>
-</ul>
-<h4 id="关于-Python"><a href="#关于-Python" class="headerlink" title="关于 Python"></a>关于 Python</h4><p><strong>Python</strong> 属于典型的解释型语言，所以运行 Python 程序需要解释器的支持，只要你在不同的平台安装了不同的解释器，你的代码就可以随时运行，不用担心任何兼容性问题，真正的 <strong>“一次编写，到处运行”</strong>。</p>
-<p><strong>Python</strong> 几乎支持所有常见的平台，比如 Linux、Windows、Mac OS、Android、FreeBSD、Solaris、PocketPC 等，你所写的 Python 代码无需修改就能在这些平台上正确运行。也就是说，Python 的 <strong>可移植性</strong> 是很强的。</p>
-<h2 id="面向对象-vs-面向过程"><a href="#面向对象-vs-面向过程" class="headerlink" title="面向对象 vs 面向过程"></a>面向对象 vs 面向过程</h2><p><strong>面向对象</strong> 和 <strong>面向过程</strong> 是我们使用计算机编程解决问题的两种不同方式的方案。</p>
-<p><strong>面向过程</strong> 可以说是一种 <strong>基于事件 or 过程</strong> 来描述的编码方式，譬如「把大象放进冰箱」就可以描述成那经典的三个步骤，「把牛放进冰箱」又是另一个相似的经典三步，只是这样单独的事件 or 过程多了之后，随着项目复杂度的增加，项目会变得非常难以维护。</p>
-<blockquote>
-<p>软件危机最典型的例子莫过于 IBM 的 <code>System/360</code> 的操作系统开发。佛瑞德·布鲁克斯（Frederick P. Brooks, Jr.）作为项目主管，率领 <code>2000</code> 多个程序员夜以继日的工作，共计花费了 <code>5000</code> 人一年的工作量，写出将近 <code>100</code> 万行的源码，总共投入 <code>5</code> 亿美元，是美国的 “曼哈顿” 原子弹计划投入的 <code>1/4</code>。尽管投入如此巨大，但项目进度却一再延迟，软件质量也得不到保障。布鲁克斯后来基于这个项目经验而总结的《人月神话》一书，成了史上最畅销的软件工程书籍。</p>
-<ul>
-<li>引用自：<a href="http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110880" target="_blank" rel="noopener">http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110880</a></li>
-</ul>
-</blockquote>
-<p>尽管 <strong>结构化的程序设计</strong> <em>(将一个大问题逐步划分成一个一个的小问题)</em> 能够帮助我们解决一部分问题，但 <strong>面向过程</strong> 仍然有一些不符合人类惯有的思考方式，譬如说：我今天想去存钱，我不会说「请拿走我的银行卡和钱，然后在我卡上充值上相应的数目，最后把银行卡还给我谢谢」，而我只会说「存钱，谢谢」，因为人大部分时间都是基于 <strong>对象</strong> <em>(或者可以说角色)</em> 来思考的。</p>
-<p>对于 <strong>面向过程</strong> 最好的总结可能是：<strong>「程序 = 算法 + 数据结构」</strong>，而对于 <strong>面向对象</strong> 来说则可以更改为：<strong>「程序 = 对象 + 交互」</strong>。</p>
-<h2 id="Why-Python？"><a href="#Why-Python？" class="headerlink" title="Why Python？"></a>Why Python？</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-8f4e79f34df177e6.png" alt=""></p>
-<p>上面的 <em>漫画</em> 很好地说明了 Python 快速构建工具的能力，这也是 <code>Why Python</code> 的一大理由。下面根据惯例列举一些让我们足以选择 Python 的原因。</p>
-<h4 id="初学者友善-容易明白且功能强大"><a href="#初学者友善-容易明白且功能强大" class="headerlink" title="初学者友善 | 容易明白且功能强大"></a>初学者友善 | 容易明白且功能强大</h4><p>Python 的设计足够简单和易于使用，这样使得初学者能够从中不断得获取到乐趣以继续 Python 之旅。</p>
-<p>另外作为一种非常高级的语言，Python 读起来像英语，这减轻了编码初学者的许多语法学习压力。Python 为您处理了很多复杂性，因此它非常适合初学者，因为它使初学者可以专注于学习编程概念，而不必担心过多的细节。</p>
-<p>Python 还一度被爆纳入高考，收编到小学课本。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-451180aa92102c5b.png" alt=""></p>
-<h4 id="非常灵活"><a href="#非常灵活" class="headerlink" title="非常灵活"></a>非常灵活</h4><p>作为一种 <strong>动态类型</strong> 的语言，Python 确实非常灵活。这意味着没有关于如何构建特征的硬性规则，并且使用不同的方法来解决问题将具有更大的灵活性 <em>（尽管 Python 哲学鼓励使用明显的方法来解决问题）</em>。此外，Python 也更宽容错误，因此您仍然可以编译并运行程序，直到遇到问题为止。</p>
-<h4 id="越来越火爆"><a href="#越来越火爆" class="headerlink" title="越来越火爆"></a>越来越火爆</h4><p>Python 在诞生之初，因为其功能不好，运转功率低，不支持多核，根本没有并发性可言，在计算功能不那么好的年代，一直没有火爆起来，甚至很多人根本不知道有这门语言。</p>
-<p>随着时代的发展，物理硬件功能不断提高，而软件的复杂性也不断增大，开发效率越来越被企业重视。因此就有了不一样的声音，在软件开发的初始阶段，性能并没有开发效率重要，没必然为了节省不到 <code>1ms</code> 的时间却让开发量增加好几倍，这样划不过来。也就是开发效率比机器效率更为重要，那么 Python 就逐渐得到越来越多开发者的亲睐了。</p>
-<p>在 <code>12-14</code> 年，云计算升温，大量创业公司和互联网巨头挤进云计算领域，而最著名的云核算开源渠道 OpenStack 就是基于 Python 开发的。</p>
-<p>随后几年的备受关注的人工智能，机器学习首选开发语言也是 Python。</p>
-<p>至此，Python 已经成为互联网开发的焦点。在 <em>「Top 10 的编程语言走势图」</em> 可以看到，Python 已经跃居第三位，而且在 <code>2017</code> 年还成为了最受欢迎的语言。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-e92d013f1190a7ca.png" alt=""></p>
-<h4 id="工作机会-薪资待遇高"><a href="#工作机会-薪资待遇高" class="headerlink" title="工作机会 | 薪资待遇高"></a>工作机会 | 薪资待遇高</h4><ul>
-<li>来自 <a href="gooroo.io">gooroo.io</a> 的薪资信息：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-501633340f69b855.png" alt=""></p>
-<p>在天使榜上，Python 是需求第二高的技能，也是提供最高平均薪水的技能。</p>
-<p>随着大数据的兴起，Python 开发人员需要作为数据科学家，尤其是因为 Python 可以轻松集成到 Web 应用程序中以执行需要机器学习的任务。</p>
-<h2 id="快速体验-No-Hello-World"><a href="#快速体验-No-Hello-World" class="headerlink" title="快速体验 | No Hello World !"></a>快速体验 | No Hello World !</h2><p><code>Hello World</code> 似乎是学习编程绕不过去的东西，但使用 <strong>Python</strong>，我们来换点儿别的，Emmm.. 比如，一个 <strong>查询天气</strong> 的小程序 <em>(效果如下图)</em>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-627c3e77b32f2db0.gif" alt=""></p>
-<h4 id="源码-amp-解释"><a href="#源码-amp-解释" class="headerlink" title="源码 &amp; 解释"></a>源码 &amp; 解释</h4><p><code>http://wthrcdn.etouch.cn/weather_mini?city=xxx</code> 这个网址可以返回任意城市昨日以及 5 天内的天气预报，包括气温、指数、空气质量、风力等，你可以用浏览器试着访问一下，你会得到一个 <code>weather_mini</code> 的文件，里面就包含了我们想要的一些数据。</p>
-<p>不过这里由于我们发起了网络请求用到了第三方库 <code>requests</code>，所以在运行之前还需要使用 <code>pip install requests</code> 命令把该库下载到 Python 的安装目录下。</p>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding: utf-8 -*-</span>
-<span class="token keyword">import</span> requests
-
-<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
-    city <span class="token operator">=</span> input<span class="token punctuation">(</span><span class="token string">'请输入城市,回车退出:\n'</span><span class="token punctuation">)</span>
-    <span class="token keyword">if</span> <span class="token operator">not</span> city<span class="token punctuation">:</span>
-        <span class="token keyword">break</span>
-    req <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'http://wthrcdn.etouch.cn/weather_mini?city=%s'</span> <span class="token operator">%</span> city<span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
-</code></pre>
-<h4 id="运行你的代码"><a href="#运行你的代码" class="headerlink" title="运行你的代码"></a>运行你的代码</h4><p>你可以在 <strong>当前文件夹</strong> 下执行命令： <code>python hello_python.py</code>，或是使用 <code>python &lt;源文件路径&gt;</code> 运行也行，例如，如果我是 Windows 用户并且将上述源文件保存在了 <code>D</code> 盘下面，那就可以执行 <code>python D:\hello_python.py</code>，然后你就可以看到上面的效果了。当然如果使用 IDE 将更加方便。</p>
-<h2 id="Python-vs-Java"><a href="#Python-vs-Java" class="headerlink" title="Python vs Java"></a>Python vs Java</h2><p>引入一张比较著名的图吧，可以很明显地感受到 Python 在写法上要简洁一些吧：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-60e9032d6e669f4c.png" alt=""></p>
-<h1 id="二、Python-基本语法简介"><a href="#二、Python-基本语法简介" class="headerlink" title="二、Python 基本语法简介"></a>二、Python 基本语法简介</h1><p>Python 与其他语言最大的区别就是，Python 的代码块不使用大括号 <code>{}</code> 来控制类，函数以及其他逻辑判断。Python 最具特色的就是用 <strong>缩进</strong> 来写模块。</p>
-<h2 id="2-0-注释"><a href="#2-0-注释" class="headerlink" title="2.0 注释"></a>2.0 注释</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 第一个注释</span>
-<span class="token comment" spellcheck="true"># 第二个注释</span>
-
-<span class="token triple-quoted-string string">'''
-第三注释
-第四注释
-'''</span>
-
-<span class="token triple-quoted-string string">"""
-第五注释
-第六注释
-"""</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Hello, Python!"</span><span class="token punctuation">)</span></code></pre>
-<h2 id="2-1-数据类型"><a href="#2-1-数据类型" class="headerlink" title="2.1 数据类型"></a>2.1 数据类型</h2><p>Python 中的变量赋值不需要类型声明。Python 有五个标准的数据类型：</p>
-<ol>
-<li><strong>Numbers（数字）</strong>：Python3 中有四种数字类型 <em>(没有 Python2 中的 Long)</em>，分别是 <code>int</code> 长整型、<code>bool</code> 布尔、<code>float</code> 浮点数、<code>complex</code> 复数 <em>(1 + 2j)</em>；</li>
-<li><strong>String（字符串）</strong>：Python 中字符串不能改变，并且没有单独的字符类型，一个字符就是长度为 1 的字符串；</li>
-<li><strong>Tuple（元组）</strong>：类似于 List，但不能二次赋值，相当于只读列表。eg：<code>(&#39;test1&#39;, &#39;test2&#39;)</code></li>
-<li><strong>List（列表）</strong>：类似 Java 中的 Array 类型。eg:<code>[1, 2, ,3]</code></li>
-<li><strong>Dictionary（字典）</strong>：类似于 Java 的 Map 类型。eg:<code>{a: 1, b: 2}</code></li>
-</ol>
-<blockquote>
-<p><code>set</code> 集合也属于数据结构，它是一个 <strong>无序</strong> 且 <strong>不重复</strong> 的元素序列。可以使用大括号 <code>{ }</code> 或者 <code>set()</code> 函数创建集合，注意：创建一个空集合必须用 <code>set()</code> 而不是 <code>{ }</code>，因为 <code>{ }</code> 是用来创建一个空字典。</p>
-</blockquote>
-<pre class=" language-python"><code class="language-python">str <span class="token operator">=</span> <span class="token string">'Hello World!'</span>
-<span class="token keyword">print</span> str<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>      <span class="token comment" spellcheck="true"># 输出字符串中第三个至第五个之间的字符串</span>
-
-list <span class="token operator">=</span> <span class="token punctuation">[</span> <span class="token string">'runoob'</span><span class="token punctuation">,</span> <span class="token number">786</span> <span class="token punctuation">,</span> <span class="token number">2.23</span><span class="token punctuation">,</span> <span class="token string">'john'</span><span class="token punctuation">,</span> <span class="token number">70.2</span> <span class="token punctuation">]</span>
-<span class="token keyword">print</span> list<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>          <span class="token comment" spellcheck="true"># 输出第二个至第三个元素</span>
-
-tuple <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token string">'runoob'</span><span class="token punctuation">,</span> <span class="token number">786</span> <span class="token punctuation">,</span> <span class="token number">2.23</span><span class="token punctuation">,</span> <span class="token string">'john'</span><span class="token punctuation">,</span> <span class="token number">70.2</span> <span class="token punctuation">)</span>
-<span class="token keyword">print</span> tuple<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>          <span class="token comment" spellcheck="true"># 输出第二个至第三个的元素</span>
-
-tinydict <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'john'</span><span class="token punctuation">,</span><span class="token string">'code'</span><span class="token punctuation">:</span><span class="token number">6734</span><span class="token punctuation">,</span> <span class="token string">'dept'</span><span class="token punctuation">:</span> <span class="token string">'sales'</span><span class="token punctuation">}</span>
-<span class="token keyword">print</span> tinydict<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span>              <span class="token comment" spellcheck="true"># 输出键为 2 的值</span></code></pre>
-<h2 id="2-2-条件语句"><a href="#2-2-条件语句" class="headerlink" title="2.2 条件语句"></a>2.2 条件语句</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 当判断条件为 1 个值时</span>
-flag <span class="token operator">=</span> <span class="token boolean">False</span>
-name <span class="token operator">=</span> <span class="token string">'luren'</span>
-<span class="token keyword">if</span> name <span class="token operator">==</span> <span class="token string">'python'</span><span class="token punctuation">:</span>      <span class="token comment" spellcheck="true"># 判断变量否为'python'</span>
-    flag <span class="token operator">=</span> <span class="token boolean">True</span>           <span class="token comment" spellcheck="true"># 条件成立时设置标志为真</span>
-    <span class="token keyword">print</span> <span class="token string">'welcome boss'</span>  <span class="token comment" spellcheck="true"># 并输出欢迎信息</span>
-<span class="token keyword">else</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span> name            <span class="token comment" spellcheck="true"># 条件不成立时输出变量名称</span>
-
-<span class="token comment" spellcheck="true"># 当判断条件为多个值时</span>
-num <span class="token operator">=</span> <span class="token number">5</span>     
-<span class="token keyword">if</span> num <span class="token operator">==</span> <span class="token number">3</span><span class="token punctuation">:</span>              <span class="token comment" spellcheck="true"># 判断num的值</span>
-    <span class="token keyword">print</span> <span class="token string">'boss'</span>        
-<span class="token keyword">elif</span> num <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span> <span class="token string">'user'</span>
-<span class="token keyword">else</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span> <span class="token string">'roadman'</span>       <span class="token comment" spellcheck="true"># 条件均不成立时输出</span></code></pre>
-<h2 id="2-3-循环"><a href="#2-3-循环" class="headerlink" title="2.3 循环"></a>2.3 循环</h2><h4 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h4><p>在 Python 中没有 <code>do..while</code> 的循环</p>
-<pre class=" language-python"><code class="language-python">count <span class="token operator">=</span> <span class="token number">0</span>
-<span class="token keyword">while</span> count <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">:</span>
-   <span class="token keyword">print</span> <span class="token punctuation">(</span>count<span class="token punctuation">,</span> <span class="token string">" 小于 5"</span><span class="token punctuation">)</span>
-   count <span class="token operator">=</span> count <span class="token operator">+</span> <span class="token number">1</span>
-<span class="token keyword">else</span><span class="token punctuation">:</span>
-   <span class="token keyword">print</span> <span class="token punctuation">(</span>count<span class="token punctuation">,</span> <span class="token string">" 大于或等于 5"</span><span class="token punctuation">)</span></code></pre>
-<h4 id="for-in-循环"><a href="#for-in-循环" class="headerlink" title="for..in 循环"></a>for..in 循环</h4><p><code>for..in</code> 适用于 <code>list/ dict/ set</code> 数据类型，如果需要遍历数字序列，我们也可以借助 <code>range(min, max, step)</code> 函数来生成数列。</p>
-<pre class=" language-python"><code class="language-python">sites <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"Baidu"</span><span class="token punctuation">,</span> <span class="token string">"Google"</span><span class="token punctuation">,</span><span class="token string">"Runoob"</span><span class="token punctuation">,</span><span class="token string">"Taobao"</span><span class="token punctuation">]</span>
-<span class="token keyword">for</span> site <span class="token keyword">in</span> sites<span class="token punctuation">:</span>
-    <span class="token keyword">if</span> site <span class="token operator">==</span> <span class="token string">"Runoob"</span><span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"菜鸟教程!"</span><span class="token punctuation">)</span>
-        <span class="token keyword">break</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"循环数据 "</span> <span class="token operator">+</span> site<span class="token punctuation">)</span>
-<span class="token keyword">else</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"没有循环数据!"</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"完成循环!"</span><span class="token punctuation">)</span>
-
-
-<span class="token comment" spellcheck="true"># 输出 0/ 3/ 6/ 9</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
-<span class="token comment" spellcheck="true"># 替换成 range(5) 则输出 0/ 1/ 2/ 3/ 4</span>
-<span class="token comment" spellcheck="true"># 替换成 range(5,9) 则输出 5/ 6/ 7/ 8</span></code></pre>
-<h2 id="2-4-函数"><a href="#2-4-函数" class="headerlink" title="2.4 函数"></a>2.4 函数</h2><h4 id="函数基本定义和使用"><a href="#函数基本定义和使用" class="headerlink" title="函数基本定义和使用"></a>函数基本定义和使用</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 计算面积函数</span>
-<span class="token keyword">def</span> <span class="token function">area</span><span class="token punctuation">(</span>width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">return</span> width <span class="token operator">*</span> height
-
-<span class="token keyword">def</span> <span class="token function">print_welcome</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Welcome"</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
-
-print_welcome<span class="token punctuation">(</span><span class="token string">"Runoob"</span><span class="token punctuation">)</span>
-w <span class="token operator">=</span> <span class="token number">4</span>
-h <span class="token operator">=</span> <span class="token number">5</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"width ="</span><span class="token punctuation">,</span> w<span class="token punctuation">,</span> <span class="token string">" height ="</span><span class="token punctuation">,</span> h<span class="token punctuation">,</span> <span class="token string">" area ="</span><span class="token punctuation">,</span> area<span class="token punctuation">(</span>w<span class="token punctuation">,</span> h<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
-<h4 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h4><p>在 Python 中，类型属于对象，变量是没有类型的，例如 <code>name = &quot;wmyskxz&quot;</code>，则 <code>&quot;wmyskxz&quot;</code> 是 String 类型，而变量 <code>name</code> 仅仅是一个对象的引用。</p>
-<p>Python 中一切都是对象，严格意义我们 <strong>不能说值传递还是引用传递</strong>，我们应该说传 <strong>不可变对象</strong> <em>(string、tuples、number 不可变)</em> 和 <strong>传可变对象</strong> <em>(list、dict 可变)</em>。</p>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">############################################</span>
-<span class="token comment" spellcheck="true"># 传递不可变对象</span>
-<span class="token keyword">def</span> <span class="token function">ChangeInt</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    a <span class="token operator">=</span> <span class="token number">10</span>
-
-b <span class="token operator">=</span> <span class="token number">2</span>
-ChangeInt<span class="token punctuation">(</span>b<span class="token punctuation">)</span>
-<span class="token keyword">print</span> b <span class="token comment" spellcheck="true"># 结果是 2</span>
-
-<span class="token comment" spellcheck="true">############################################</span>
-<span class="token comment" spellcheck="true"># 传递可变对象</span>
-<span class="token keyword">def</span> <span class="token function">changeme</span><span class="token punctuation">(</span> mylist <span class="token punctuation">)</span><span class="token punctuation">:</span>
-   <span class="token string">"修改传入的列表"</span>
-   mylist<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-   <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"函数内取值: "</span><span class="token punctuation">,</span> mylist<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># [10, 20, 30, [1, 2, 3, 4]]</span>
-   <span class="token keyword">return</span>
-
-<span class="token comment" spellcheck="true"># 调用changeme函数</span>
-mylist <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">]</span>
-changeme<span class="token punctuation">(</span> mylist <span class="token punctuation">)</span>
-<span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"函数外取值: "</span><span class="token punctuation">,</span> mylist<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># [10, 20, 30, [1, 2, 3, 4]]</span>
-<span class="token comment" spellcheck="true"># 函数内外值一致，因为都同属于同一个引用</span></code></pre>
-<h2 id="2-5-class-类"><a href="#2-5-class-类" class="headerlink" title="2.5 class 类"></a>2.5 class 类</h2><h4 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h4><pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">people</span><span class="token punctuation">:</span>
-    <span class="token comment" spellcheck="true">#定义基本属性</span>
-    name <span class="token operator">=</span> <span class="token string">''</span>
-    age <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token comment" spellcheck="true">#定义私有属性,私有属性在类外部无法直接进行访问</span>
-    __weight <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token comment" spellcheck="true">#定义构造方法</span>
-    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>n<span class="token punctuation">,</span>a<span class="token punctuation">,</span>w<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        self<span class="token punctuation">.</span>name <span class="token operator">=</span> n
-        self<span class="token punctuation">.</span>age <span class="token operator">=</span> a
-        self<span class="token punctuation">.</span>__weight <span class="token operator">=</span> w
-    <span class="token keyword">def</span> <span class="token function">speak</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"%s 说: 我 %d 岁。"</span> <span class="token operator">%</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>name<span class="token punctuation">,</span>self<span class="token punctuation">.</span>age<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-<span class="token comment" spellcheck="true"># 实例化类</span>
-p <span class="token operator">=</span> people<span class="token punctuation">(</span><span class="token string">'wmyskxz'</span><span class="token punctuation">,</span> <span class="token number">24</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">)</span>
-p<span class="token punctuation">.</span>speak<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># wmyskxz 说: 我 10 岁。</span></code></pre>
-<h4 id="继承-amp-多继承-amp-方法重写"><a href="#继承-amp-多继承-amp-方法重写" class="headerlink" title="继承 &amp; 多继承 &amp; 方法重写"></a>继承 &amp; 多继承 &amp; 方法重写</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 单继承</span>
-<span class="token keyword">class</span> <span class="token class-name">DerivedClassName</span><span class="token punctuation">(</span>BaseClassName1<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token operator">&lt;</span>statement<span class="token number">-1</span><span class="token operator">></span>
-    <span class="token punctuation">.</span>
-    <span class="token operator">&lt;</span>statement<span class="token operator">-</span>N<span class="token operator">></span>
-
-<span class="token comment" spellcheck="true"># 多继承</span>
-<span class="token keyword">class</span> <span class="token class-name">DerivedClassName</span><span class="token punctuation">(</span>Base1<span class="token punctuation">,</span> Base2<span class="token punctuation">,</span> Base3<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token operator">&lt;</span>statement<span class="token number">-1</span><span class="token operator">></span>
-    <span class="token punctuation">.</span>
-    <span class="token punctuation">.</span>
-    <span class="token punctuation">.</span>
-    <span class="token operator">&lt;</span>statement<span class="token operator">-</span>N<span class="token operator">></span>
-
-<span class="token comment" spellcheck="true"># 方法重写演示</span>
-<span class="token keyword">class</span> <span class="token class-name">Parent</span><span class="token punctuation">:</span>        <span class="token comment" spellcheck="true"># 定义父类</span>
-   <span class="token keyword">def</span> <span class="token function">myMethod</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-      <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">'调用父类方法'</span><span class="token punctuation">)</span>
-
-<span class="token keyword">class</span> <span class="token class-name">Child</span><span class="token punctuation">(</span>Parent<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true"># 定义子类</span>
-   <span class="token keyword">def</span> <span class="token function">myMethod</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
-      <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">'调用子类方法'</span><span class="token punctuation">)</span>
-
-c <span class="token operator">=</span> Child<span class="token punctuation">(</span><span class="token punctuation">)</span>          <span class="token comment" spellcheck="true"># 子类实例</span>
-c<span class="token punctuation">.</span>myMethod<span class="token punctuation">(</span><span class="token punctuation">)</span>         <span class="token comment" spellcheck="true"># 子类调用重写方法</span>
-super<span class="token punctuation">(</span>Child<span class="token punctuation">,</span>c<span class="token punctuation">)</span><span class="token punctuation">.</span>myMethod<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#用子类对象调用父类已被覆盖的方法</span>
-<span class="token comment" spellcheck="true"># 先输出 "调用子类方法" 再输出 "调用父类方法"</span></code></pre>
-<h2 id="2-6-module-模块"><a href="#2-6-module-模块" class="headerlink" title="2.6 module 模块"></a>2.6 module 模块</h2><p>一个 <code>.py</code> 文件就是一个模块，想要使用其他 <code>.py</code> 文件中的方法就需要引入进来。</p>
-<ol>
-<li><code>import [module]</code></li>
-</ol>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 导入整个random模块，可以是内置/当前路径</span>
-<span class="token keyword">import</span> random
-<span class="token comment" spellcheck="true"># 使用 `random` 模块下的 `randint` 方法</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
-<ol start="2">
-<li><code>from [module] import [name1, name2, ...]</code></li>
-</ol>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 从 `random` 模块里导入其中一个方法 `randint`</span>
-<span class="token keyword">from</span> random <span class="token keyword">import</span> randint
-<span class="token comment" spellcheck="true"># 不一样的是，使用 `randint` 的就不需要先写 `random` 了</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
-<ol start="3">
-<li><code>import [module] as [new_name]</code></li>
-</ol>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 但这个名字可能跟其他地方有冲突，因此改名成 `rd`</span>
-<span class="token keyword">import</span> random <span class="token keyword">as</span> rd
-<span class="token comment" spellcheck="true"># 使用 `rd` 这个名称取代原本的 `random`</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>rd<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
-<ol start="4">
-<li><code>from [module] import *</code></li>
-</ol>
-<p><strong>不推荐</strong>，容易造成名称冲突，降低可读性和可维护性。</p>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Import 所有 `random` module 底下的东西</span>
-<span class="token keyword">from</span> random <span class="token keyword">import</span> <span class="token operator">*</span>
-<span class="token comment" spellcheck="true"># 使用 `randint` 的时候也不需要先写 `random`</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
-<h4 id="module-搜索路径"><a href="#module-搜索路径" class="headerlink" title="module 搜索路径"></a>module 搜索路径</h4><p>当你导入一个模块，Python 解析器对模块位置的搜索顺序是：</p>
-<ol>
-<li>当前目录</li>
-<li>如果不在当前目录，Python 则搜索在 shell 变量 <code>PYTHONPATH</code> 下的每个目录。</li>
-<li>如果都找不到，Python 会察看默认路径。UNIX 下，默认路径一般为 <code>/usr/local/lib/python/</code>。</li>
-</ol>
-<h2 id="2-7-package-包"><a href="#2-7-package-包" class="headerlink" title="2.7 package 包"></a>2.7 package 包</h2><p>把两个 module 放在一个新的目录 <code>sample_package</code>，再新增 <code>_init__.py</code> <em>(可以是空，但不能没有)</em>，宣称自己是一个 package :</p>
-<pre><code>sample_package
-  |-- __init__.py
-  |-- 1.py
-  |-- 2.py</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># package_runoob 同级目录下创建 test.py 来调用 package_runoob 包</span>
-<span class="token comment" spellcheck="true"># 导入包</span>
-<span class="token keyword">from</span> package_runoob<span class="token punctuation">.</span>runoob1 <span class="token keyword">import</span> runoob1
-<span class="token keyword">from</span> package_runoob<span class="token punctuation">.</span>runoob2 <span class="token keyword">import</span> runoob2
-
-runoob1<span class="token punctuation">(</span><span class="token punctuation">)</span>
-runoob2<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<blockquote>
-<p>单个py文件就是一个 module，而当多个 <code>.py</code> 文件 + <code>__init__.py</code> 文件时，就等于 package。</p>
-</blockquote>
-<h1 id="三、基本代码规范"><a href="#三、基本代码规范" class="headerlink" title="三、基本代码规范"></a>三、基本代码规范</h1><p><strong>代码规范</strong> 再怎么强调也不为过：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-6467610c0eb161a8.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://codingpy.com/article/programmers-daily-what-idiot-wrote-this-crappy-code/" target="_blank" rel="noopener">https://codingpy.com/article/programmers-daily-what-idiot-wrote-this-crappy-code/</a></li>
-</ul>
-<h2 id="3-1-命名规范"><a href="#3-1-命名规范" class="headerlink" title="3.1 命名规范"></a>3.1 命名规范</h2><h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><ul>
-<li>模块尽量使用 <strong>小写命名</strong>，首字母保持小写，尽量不要用下划线(除非多个单词，且数量不多的情况)</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 正确的模块名</span>
-<span class="token keyword">import</span> decoder
-<span class="token keyword">import</span> html_parser
-
-<span class="token comment" spellcheck="true"># 不推荐的模块名</span>
-<span class="token keyword">import</span> Decoder</code></pre>
-<h4 id="类名"><a href="#类名" class="headerlink" title="类名"></a>类名</h4><ul>
-<li>类名使用 <strong>驼峰</strong> (CamelCase)命名风格，首字母大写，私有类可用一个下划线开头</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Farm</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">pass</span>
-
-<span class="token keyword">class</span> <span class="token class-name">AnimalFarm</span><span class="token punctuation">(</span>Farm<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">pass</span>
-
-<span class="token keyword">class</span> <span class="token class-name">_PrivateFarm</span><span class="token punctuation">(</span>Farm<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">pass</span></code></pre>
-<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><ul>
-<li>函数名 <strong>一律小写</strong>，如有多个单词，用下划线隔开</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">pass</span>
-
-<span class="token keyword">def</span> <span class="token function">run_with_env</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">pass</span> </code></pre>
-<ul>
-<li>私有函数在函数前加一个下划线 <code>_</code></li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-
-    <span class="token keyword">def</span> <span class="token function">_private_func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">pass</span></code></pre>
-<h4 id="变量名"><a href="#变量名" class="headerlink" title="变量名"></a>变量名</h4><ul>
-<li>变量名尽量 <strong>小写</strong>, 如有多个单词，用下划线隔开</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    count <span class="token operator">=</span> <span class="token number">0</span>
-    school_name <span class="token operator">=</span> <span class="token string">''</span></code></pre>
-<ul>
-<li>常量使用以下划线分隔的 <strong>大写</strong> 命名</li>
-</ul>
-<pre class=" language-python"><code class="language-python">MAX_CLIENT <span class="token operator">=</span> <span class="token number">100</span>
-MAX_CONNECTION <span class="token operator">=</span> <span class="token number">1000</span>
-CONNECTION_TIMEOUT <span class="token operator">=</span> <span class="token number">600</span></code></pre>
-<h2 id="3-2-基本编码规范"><a href="#3-2-基本编码规范" class="headerlink" title="3.2 基本编码规范"></a>3.2 基本编码规范</h2><h4 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h4><ul>
-<li>统一使用 4 个空格进行缩进</li>
-</ul>
-<h4 id="行宽"><a href="#行宽" class="headerlink" title="行宽"></a>行宽</h4><p>每行代码尽量不超过 <code>80</code> 个字符(在特殊情况下可以略微超过 <code>80</code> ，但最长不得超过 <code>120</code>)</p>
-<p>理由：</p>
-<ul>
-<li>这在查看 <code>side-by-side</code> 的 <code>diff</code> 时很有帮助</li>
-<li>方便在控制台下查看代码</li>
-<li>太长可能是设计有缺陷</li>
-</ul>
-<h4 id="引号"><a href="#引号" class="headerlink" title="引号"></a>引号</h4><p>简单说，自然语言使用双引号，机器标示使用单引号，因此 <strong>代码里</strong> 多数应该使用 <strong>单引号</strong></p>
-<ul>
-<li><strong>自然语言</strong> 使用双引号 <code>&quot;...&quot;</code>，例如错误信息；很多情况还是 unicode，使用u”你好世界”</li>
-<li><strong>机器标识</strong> 使用单引号 ‘<code>...&#39;</code>，例如 dict 里的 key</li>
-<li><strong>正则表达式</strong> 使用原生的双引号 <code>r&quot;...&quot;</code></li>
-<li><strong>文档字符串</strong> (docstring) 使用三个双引号 <code>&quot;&quot;&quot;......&quot;&quot;&quot;</code></li>
-</ul>
-<h4 id="import-语句"><a href="#import-语句" class="headerlink" title="import 语句"></a>import 语句</h4><ul>
-<li>import 语句应该分行书写</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 正确的写法</span>
-<span class="token keyword">import</span> os
-<span class="token keyword">import</span> sys
-
-<span class="token comment" spellcheck="true"># 不推荐的写法</span>
-<span class="token keyword">import</span> sys<span class="token punctuation">,</span>os
-
-<span class="token comment" spellcheck="true"># 正确的写法</span>
-<span class="token keyword">from</span> subprocess <span class="token keyword">import</span> Popen<span class="token punctuation">,</span> PIPE</code></pre>
-<ul>
-<li>import 语句应该使用 absolute import</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 正确的写法</span>
-<span class="token keyword">from</span> foo<span class="token punctuation">.</span>bar <span class="token keyword">import</span> Bar
-
-<span class="token comment" spellcheck="true"># 不推荐的写法</span>
-<span class="token keyword">from</span> <span class="token punctuation">.</span><span class="token punctuation">.</span>bar <span class="token keyword">import</span> Bar</code></pre>
-<ul>
-<li>import 语句应该放在文件头部，置于模块说明及 <code>DocString</code> 之后，于全局变量之前；</li>
-<li>import 语句应该按照顺序排列，每组之间用一个空行分隔</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> os
-<span class="token keyword">import</span> sys
-
-<span class="token keyword">import</span> msgpack
-<span class="token keyword">import</span> zmq
-
-<span class="token keyword">import</span> foo</code></pre>
-<ul>
-<li>导入其他模块的类定义时，可以使用相对导入</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> myclass <span class="token keyword">import</span> MyClass</code></pre>
-<ul>
-<li>如果发生命名冲突，则可使用命名空间</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> bar
-<span class="token keyword">import</span> foo<span class="token punctuation">.</span>bar
-
-bar<span class="token punctuation">.</span>Bar<span class="token punctuation">(</span><span class="token punctuation">)</span>
-foo<span class="token punctuation">.</span>bar<span class="token punctuation">.</span>Bar<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<h4 id="DocString"><a href="#DocString" class="headerlink" title="DocString"></a>DocString</h4><p>DocString 的规范中最其本的两点：</p>
-<ol>
-<li>所有的公共模块、函数、类、方法，都应该写 DocString 。私有方法不一定需要，但应该在 <code>def</code> 后提供一个块注释来说明。</li>
-<li>DocString 的结束”””应该独占一行，除非此 DocString 只有一行。</li>
-</ol>
-<pre class=" language-python"><code class="language-python"><span class="token triple-quoted-string string">"""Return a foobar
-Optional plotz says to frobnicate the bizbaz first.
-"""</span>
-
-<span class="token triple-quoted-string string">"""Oneline docstring"""</span></code></pre>
-<h2 id="3-3-注释规范"><a href="#3-3-注释规范" class="headerlink" title="3.3 注释规范"></a>3.3 注释规范</h2><h4 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h4><ul>
-<li>在代码的 <strong>关键部分</strong>(或比较复杂的地方), 能写注释的要尽量写注释</li>
-<li>比较重要的注释段, 使用多个等号隔开, 可以更加醒目, <strong>突出</strong> 重要性</li>
-</ul>
-<pre class=" language-python"><code class="language-python">app <span class="token operator">=</span> create_app<span class="token punctuation">(</span>name<span class="token punctuation">,</span> options<span class="token punctuation">)</span>
-
-
-<span class="token comment" spellcheck="true"># =====================================</span>
-<span class="token comment" spellcheck="true"># 请勿在此处添加 get post等app路由行为 !!!</span>
-<span class="token comment" spellcheck="true"># =====================================</span>
-
-
-<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<h4 id="文档注释（DocString）"><a href="#文档注释（DocString）" class="headerlink" title="文档注释（DocString）"></a>文档注释（DocString）</h4><ul>
-<li>文档注释以 “”” 开头和结尾, 首行不换行, 如有多行, 末行必需换行, 以下是Google的docstring风格示例</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding: utf-8 -*-</span>
-<span class="token triple-quoted-string string">"""Example docstrings.
-
-This module demonstrates documentation as specified by the `Google Python
-Style Guide`_. Docstrings may extend over multiple lines. Sections are created
-with a section header and a colon followed by a block of indented text.
-
-Example:
-    Examples can be given using either the ``Example`` or ``Examples``
-    sections. Sections support any reStructuredText formatting, including
-    literal blocks::
-
-        $ python example_google.py
-
-Section breaks are created by resuming unindented text. Section breaks
-are also implicitly created anytime a new section starts.
-"""</span></code></pre>
-<ul>
-<li>不要在文档注释复制函数定义原型, 而是具体描述其具体内容, 解释具体参数和返回值等</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#  不推荐的写法(不要写函数原型等废话)</span>
-<span class="token keyword">def</span> <span class="token function">function</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""function(a, b) -> list"""</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
-
-<span class="token comment" spellcheck="true">#  正确的写法</span>
-<span class="token keyword">def</span> <span class="token function">function</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""计算并返回a到b范围内数据的平均值"""</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre>
-<ul>
-<li>对函数参数、返回值等的说明采用 <code>numpy</code> 标准, 如下所示</li>
-</ul>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token triple-quoted-string string">"""在这里写函数的一句话总结(如: 计算平均值).
-
-    这里是具体描述.
-
-    参数
-    ----------
-    arg1 : int
-        arg1的具体描述
-    arg2 : int
-        arg2的具体描述
-
-    返回值
-    -------
-    int
-        返回值的具体描述
-
-    参看
-    --------
-    otherfunc : 其它关联函数等...
-
-    示例
-    --------
-    示例使用doctest格式, 在`>>>`后的代码可以被文档测试工具作为测试用例自动运行
-
-    >>> a=[1,2,3]
-    >>> print [x + 3 for x in a]
-    [4, 5, 6]
-    """</span></code></pre>
-<blockquote>
-<p>更多细致详细的规范可以参考：</p>
-<ol>
-<li><strong>Google 开源项目指南</strong> - <a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/" target="_blank" rel="noopener">https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/</a></li>
-<li><strong>官方 PEP 8 代码规范</strong> - <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="noopener">https://www.python.org/dev/peps/pep-0008/</a></li>
-</ol>
-</blockquote>
-<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ol>
-<li>Redis(9)——史上最强【集群】入门实践教程 - <a href="https://juejin.im/post/5e7429a16fb9a07ccc460fe7" target="_blank" rel="noopener">https://juejin.im/post/5e7429a16fb9a07ccc460fe7</a></li>
-<li>React入门学习 - <a href="https://juejin.im/post/5da5e9e8e51d4525292d2ed7" target="_blank" rel="noopener">https://juejin.im/post/5da5e9e8e51d4525292d2ed7</a></li>
-</ol>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li>WhyStudyPython.md | TwoWater - <a href="https://github.com/TwoWater/Python/blob/master/Article/PythonBasis/python0/WhyStudyPython.md" target="_blank" rel="noopener">https://github.com/TwoWater/Python/blob/master/Article/PythonBasis/python0/WhyStudyPython.md</a></li>
-<li>C 语言中文网 | Python 系列教程 - <a href="http://c.biancheng.net/python/" target="_blank" rel="noopener">http://c.biancheng.net/python/</a></li>
-<li>Crossin的编程教室 - <a href="https://python666.cn/" target="_blank" rel="noopener">https://python666.cn/</a></li>
-<li>计算机和编程语言的发展历史 - <a href="https://blog.csdn.net/abc6368765/article/details/83990756" target="_blank" rel="noopener">https://blog.csdn.net/abc6368765/article/details/83990756</a></li>
-<li>面向对象葵花宝典 - <a href="http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110879" target="_blank" rel="noopener">http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110879</a></li>
-<li>RUNOOB | Python3 系列教程 - <a href="ttps://www.runoob.com/python3">ttps://www.runoob.com/python3</a></li>
-<li>Python 基础语法 | springleo’sblog - <a href="https://lq782655835.github.io/blogs/tools/python-grammar.html#_1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">https://lq782655835.github.io/blogs/tools/python-grammar.html#_1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B</a></li>
-</ol>
-<blockquote>
-<ul>
-<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
-<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-fca34cfd601e7449.png" alt=""></p>
-<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
-<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3452,7 +3265,7 @@ are also implicitly created anytime a new section starts.
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

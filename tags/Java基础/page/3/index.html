@@ -436,6 +436,261 @@
         
           
   <h2 class="title">
+    <a href="/2017/12/26/java-8-xing-wei-can-shu-hua/">
+      Java 8——行为参数化
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2017年12月26日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>《Java8实战》不得不说是一本好书，捧起来看起来就兴奋得不想放下，其中介绍的函数式编程实在是太令人兴奋了，不仅仅大大提高了代码的可读性，而且提高了代码的重用性，并且语法简单。</p>
+<p><strong>Java 8中新增的功能是自Java 1.0发布以来18年以来，发生变化最大的一次。</strong>我本身没有太大的体会，但新增的这些功能，每一个都让我兴奋，这里就书中的内容简单的介绍一下Java 8的这些新特性，我相信很快，你也会有跟我一样的感受。</p>
+<h2 id="（1）用行为参数化把代码传递给方法"><a href="#（1）用行为参数化把代码传递给方法" class="headerlink" title="（1）用行为参数化把代码传递给方法"></a>（1）用行为参数化把代码传递给方法</h2><p><em>Java 8中增加了通过API来传递代码的能力，</em>但这实在听起来太绕了，这到底在说什么！打个比方或许要容易理解一些，你想要写两个只有几行代码不同的方法，那现在你只需要把不同的那部分代码作为参数传递进去就可以了。</p>
+<p>在Java 8中，这样做起来（不止于匿名类）<strong>远远比你想象的要来得更加清晰、简洁。</strong>行为参数化</p>
+<p>我们现在来考虑这样一个例子：有个应用程序是帮助农民了解自己的库存的，这位农民可能想有一个查找库存中所有绿色苹果的功能。但到了第二天，他可能会告诉你：“其实我还想找出所有重量超过150克的苹果”。又过了两天，他可能会继续补充道：“要是我可以找出所有既是绿色，重量也超过150克的苹果，那就太棒了。”</p>
+<p>想一下你应该如何应对这样不断变化的需求呢？理想的状态下，你应该把你的工作量降到最小，此外类似的新功能实现起来还应该很简单，而且易于长期维护。</p>
+<h4 id="第一次尝试：筛选绿苹果"><a href="#第一次尝试：筛选绿苹果" class="headerlink" title="第一次尝试：筛选绿苹果"></a>第一次尝试：筛选绿苹果</h4><p>第一个解决方案可能是下面这样的:</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> <span class="token function">filterGreenApples</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> inventory<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>Apple apple<span class="token operator">:</span> inventory<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span> “green”<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end for</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这样的代码看起来似乎也没什么问题，也很容易看懂，但是现在农民改主意了，他还想要筛选红苹果，又该怎么做呢？简单的方法就是复制这个方法，然后把函数名称和if判断的条件来分别匹配到红苹果上就可以了。然而，要是农民想要筛选出多种颜色：浅绿色，暗红色、黄色等，这种方法就应付不了了。<strong>一个良好的原则是在编写类似的代码之后，尝试将其抽象化。</strong></p>
+<h4 id="第二次尝试：把颜色作为参数"><a href="#第二次尝试：把颜色作为参数" class="headerlink" title="第二次尝试：把颜色作为参数"></a>第二次尝试：把颜色作为参数</h4><p>一种做法是给方法加一个参数，把颜色变成参数，这样就灵活地适应了变化：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> <span class="token function">filterApplesByColor</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> inventory<span class="token punctuation">,</span>String color<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>Apple apple<span class="token operator">:</span> inventory<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end for</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>现在，只要像下面这样调用方法，农民朋友就会满意了：</p>
+<pre><code>List&lt;Apple&gt; greenApples = filterApplesByColor(inventory,&quot;green&quot;);
+List&lt;Apple&gt; greenApples = filterApplesByColor(inventory,&quot;red&quot;);
+....</code></pre><p>太简单了对吧？让我们把案例变得复杂一点。这位农民又跑回来和你说：“要是能区分轻的苹果和重的苹果就太好了。重的苹果一般大于150克。”</p>
+<p>作为软件工程师，你早就想好了农民可能会要改变重量，于是你写了下面的方法，用另一个参数来应对不同的重量：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> <span class="token function">filterApplesByColor</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> inventory<span class="token punctuation">,</span><span class="token keyword">int</span> weight<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>Apple apple<span class="token operator">:</span> inventory<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> weight<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end for</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>解决方案不错，但是请注意，你赋值了大部分的代码来实现遍历库存，并对每个苹果应用筛选条件。这有点儿令人失望，<strong>因为它打破了DRY（Don’t Repeat Yourself,不要重复你自己）的软件工程原则。</strong></p>
+<p>如果你想要改变筛选遍历方式来提升性能呢？那就得修改所有方法的实现，而不是只改变一个。从工程工作量的角度来看，这代价太大了。</p>
+<p>你可以将颜色和重量结合为一个方法，称为filter。不过就算这样，你还是需要一种方式来区分想要筛选哪个属性。你可以加上一个标志位来区分对颜色和重量的查询<strong>（但绝不要这样做！很快你就会明白为什么）。</strong></p>
+<h4 id="第三次尝试：对你想到的每个属性做筛选"><a href="#第三次尝试：对你想到的每个属性做筛选" class="headerlink" title="第三次尝试：对你想到的每个属性做筛选"></a>第三次尝试：对你想到的每个属性做筛选</h4><p>一种把所有属性结合起来的笨拙尝试如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> <span class="token function">filterApples</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> inventory<span class="token punctuation">,</span> String color<span class="token punctuation">,</span> <span class="token keyword">int</span> weight<span class="token punctuation">,</span> <span class="token keyword">boolean</span> flag<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>Apple apple<span class="token operator">:</span> inventory<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token punctuation">(</span>flag <span class="token operator">&amp;&amp;</span> apple<span class="token punctuation">.</span>getColor<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+            <span class="token punctuation">(</span><span class="token operator">!</span>flag <span class="token operator">&amp;&amp;</span> apple<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> weight<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end for</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>你可以这么用（但真的很笨拙）:</p>
+<pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> greenApples <span class="token operator">=</span> <span class="token function">filterApples</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token string">"green"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> ture<span class="token punctuation">)</span><span class="token punctuation">;</span>
+List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> heavyApples <span class="token operator">=</span> <span class="token function">filterApples</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">,</span> <span class="token number">150</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>这样的解决方案再差不过了。</p>
+<p>首先，客户端代码看上去糟糕透了，ture和false是什么意思？此外，这个解决方案还是不能很好的应对变化的需求。如果这位农要求你对苹果的不同属性做筛选，比如大小、形状、产地等，又怎么办？而且，如果农民要求你组合属性，做更复杂的查询，比如绿色的种苹果，又改怎么办？你会有好多个重复的filter方法，或者一个巨大的非常复杂的方法。</p>
+<p>到目前为止，你已经给filterApples方法加上了值（如String、Integer或boolean）的参数。这对于某些确定性问题可能还不错，但如今这种情况下，你需要一种更好的方式，来把苹果的选择标准告诉你的filterApples方法。</p>
+<blockquote>
+<p>这就是需要行为参数化登场发挥作用的地方了。让我们后退一步来看看更高层次的抽象。一种可能的解决方案是对你的选择标准建模：你考虑的是苹果，需要根据Apple的某些属性（比如它是绿色的吗？重量超过150克吗？）来返回一个boolean值，我们把它称为谓词（即一个返回boolean值得函数）。</p>
+</blockquote>
+<h4 id="第四次尝试：根据抽象条件筛选"><a href="#第四次尝试：根据抽象条件筛选" class="headerlink" title="第四次尝试：根据抽象条件筛选"></a>第四次尝试：根据抽象条件筛选</h4><p>让我们先来定义一个接口对选择标准建模：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ApplePredicate</span><span class="token punctuation">{</span>
+    <span class="token keyword">boolean</span> <span class="token function">test</span> <span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>现在你可以使用ApplePredicate的多个实现代表 不同的选择标准了，比如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-6b3b61b9e067c9c8.png" alt=""></p>
+<p>你可以把这些标准看作filter方法的不同行为。你刚做的这些和“策略设计模式”相关，它让你定义一族算法，把它们封装起来（称为“策略”），然后在运行时选择一个算法。在这里算法簇就是ApplePredicate，不同的策略就是AppleHeavyWeightPredicate和AppleGreenColorPredicate。</p>
+<p>但是，该怎么利用ApplePredicate的不同实现呢？你需要filterApples方法接受ApplePredicate对象，对Apple做条件测试。<strong>这就是行为参数化：让方法接受多种行为（或战略）作为参数，并在内部使用，完成不同的行为。</strong></p>
+<p>利用ApplePredicate改过之后，filter方法看起来就是这样的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> <span class="token function">filterApples</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> inventory<span class="token punctuation">,</span> ApplePredicate p<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>Apple apple<span class="token operator">:</span>inventory<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>apple<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>apple<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end if</span>
+    <span class="token punctuation">}</span>    <span class="token comment" spellcheck="true">// end for</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>这里值得暂停下来小小地庆祝一下。这段代码比我们第一次尝试的时候灵活多了，读起来、用起来也更容易！现在你可以创建不同的ApplePredicate对象，并将它们传递给filterApples方法。免费的灵活性！比如，如果农民让你找出所有重量超过150克的红苹果，你只需要创建一个类来实现ApplePredicacte对象就可以了，你的代码现在足够灵活，可以应对任何涉及苹果属性的需求变更了。</p>
+</blockquote>
+<p>你已经做成了一件很酷的事：filterApples方法的行为取决于你通过ApplePredicate对象传递的代码，换句话说，你把filterApples方法的行为参数化了！</p>
+<h4 id="第五次尝试：使用匿名类"><a href="#第五次尝试：使用匿名类" class="headerlink" title="第五次尝试：使用匿名类"></a>第五次尝试：使用匿名类</h4><p>这样做起来已经很棒了，还有什么问题呢？</p>
+<p>我们都知道，人们都不愿意用那些很麻烦的功能或者概念，目前，当要把新的行为传递给filterApples方法的时候，你不得不声明好几个实现ApplePredicate接口的类，然后实例化好几个只会提到一次的ApplePredicate对象。下面这段程序总结了你目前看到的一切，这真的很啰嗦而且费时间：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-6757199f3264a67c.png" alt=""></p>
+<p>费这么大劲儿，真的没什么必要。能不能做得更好呢？Java有一个机制称为<em>匿名类</em>，它可以让你同时声明和实例化一个类，它可以帮助你进一步改善代码，让它变得更简洁：</p>
+<pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> redApples <span class="token operator">=</span> <span class="token function">filterApples</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Applepredicate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"red"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>GUI应用程序中经常使用匿名类来创建事件处理器对象（下面的例子使用的是JavaFX API,一种现代的Java UI平台）：</p>
+<pre class=" language-java"><code class="language-java">button<span class="token punctuation">.</span><span class="token function">setOnAction</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">EventHandler</span><span class="token operator">&lt;</span>ActionEvent<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handle</span><span class="token punctuation">(</span>ActionEvent event<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Woooo a click!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>但是匿名类仍然不够好。</p>
+<p>第一，它往往很笨重，因为它占用了很多空间，还拿前面的例子来说：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-ade67d8d57a7c16b.png" alt=""></p>
+<p>第二，很多程序员觉得它用起来很让人费解，比如这里有一道经典的Java谜题，它让大多数程序员都措手不及，来试试看：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-8930c2b3599523d5.png" alt=""></p>
+<blockquote>
+<p>答案是5，因为this指的是包含它的Runnable，而不是外面的类MeaningOfThis。</p>
+</blockquote>
+<p>整体来说，啰嗦就不好。它让人不愿意使用语言的某种功能，因为编写和维护啰嗦的代码需要很长时间，而且代码也不易读。好的代码应该一目了然。</p>
+<p>即使匿名类处理在某种程度上改善了为一个接口声明好几个实体类的啰嗦问题，但它仍然不能让人满意。在只需要传递一段简单的代码时（例如表示选择标准的boolean表达式），你还是要创建一个对象，明确地实现一个方法来定义一个新的行为（例如Predicate中的test方法或者是EventHandler中的handler方法）。</p>
+<p>在理想的情况下，我们想鼓励程序员使用行为参数化模式，因为正如你在前面看到的，它让代码更能适应需求的变化，但也同样的，啰嗦不可避免。这也正是Java 8的语言设计者引入Lambda表达式的原因——他让传递代码的方式变得更加简洁、干净。</p>
+<h4 id="第六次尝试：使用Lambda表达式"><a href="#第六次尝试：使用Lambda表达式" class="headerlink" title="第六次尝试：使用Lambda表达式"></a>第六次尝试：使用Lambda表达式</h4><p>上面的代码在Java 8里可以用Lambda表达式重写为下面的样子：</p>
+<pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> result <span class="token operator">=</span> 
+    <span class="token function">filterApples</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"red"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>不得不承认这代码看上去比先前干净很多，这很好，因为它看起来更像问题陈述本身了。我们现在已经解决了啰嗦的问题，下图总结了到目前为止的工作：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E8%A1%8C%E4%B8%BA%E5%8F%82%E6%95%B0%E5%8C%96/7896890-b553d0d19c39c0aa.png" alt=""></p>
+<h4 id="第七次尝试：将List类型抽象化"><a href="#第七次尝试：将List类型抽象化" class="headerlink" title="第七次尝试：将List类型抽象化"></a>第七次尝试：将List类型抽象化</h4><p>在通往抽象的道路上，我们还可以更近一步。目前filterApples方法还只适用于Apple。你还可以将List类型抽象画，从而超越你眼前要处理的问题：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Predicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>T t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>T<span class="token operator">></span> List<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">filter</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>T<span class="token operator">></span> list<span class="token punctuation">,</span> Predicate<span class="token operator">&lt;</span>T<span class="token operator">></span> p<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>T<span class="token operator">></span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span><span class="token punctuation">(</span>T e<span class="token operator">:</span>list<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            result<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end if</span>
+    <span class="token punctuation">}</span>  <span class="token comment" spellcheck="true">// end for</span>
+    <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>现在你可以把filter方法用在香蕉、桔子、Integer或者是String的列表上了。这里有一些使用Lambda表达式的例子：</p>
+<pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>Apple<span class="token operator">></span> redApples <span class="token operator">=</span> 
+    <span class="token function">filter</span><span class="token punctuation">(</span>inventory<span class="token punctuation">,</span> <span class="token punctuation">(</span>Apple apple<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"red"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>apple<span class="token punctuation">.</span><span class="token function">getColor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> evenNumbers <span class="token operator">=</span> 
+    <span class="token function">filter</span><span class="token punctuation">(</span>numbers<span class="token punctuation">,</span> <span class="token punctuation">(</span>Integer i<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>酷不酷？你现在在灵活性和简洁性之间找到了最佳平衡点，这在Java 8之前是不可能做到的！</p>
+<h4 id="应用行为参数化的典型例子"><a href="#应用行为参数化的典型例子" class="headerlink" title="应用行为参数化的典型例子"></a>应用行为参数化的典型例子</h4><blockquote>
+<p>一个是用Runnable执行代码块，用Lambda表达式的话，看起来就是这个样子的：</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java">Thread t <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello world"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<blockquote>
+<p>另一个就是GUI事件处理：</p>
+</blockquote>
+<pre class=" language-java"><code class="language-java">button<span class="token punctuation">.</span><span class="token function">setOnAction</span><span class="token punctuation">(</span><span class="token punctuation">(</span>ActionEvent event<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> label<span class="token punctuation">.</span><span class="token function">setText</span><span class="token punctuation">(</span><span class="token string">"Sent!!"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>看起来酷极了吧？不过想要熟练地运用，就要足够了解Lambda表达式，这将在下一节中再来说。</p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2017/11/20/java-7-de-xin-te-xing/">
       Java 7的新特性
     </a>
@@ -1651,151 +1906,6 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/09/17/java-xue-xi-bi-ji-0-liao-jie-java/">
-      Java学习笔记(0)——了解Java
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年9月17日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%880%EF%BC%89%E2%80%94%E2%80%94%E4%BA%86%E8%A7%A3Java/7896890-96efb4ed8490f736.jpg" alt="文 / 我没有三颗心脏"></p>
-<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><blockquote>
-<p>这里是一些关于写文的原因，目的和其他的有的没的，跟Java没有一点关系，如果是想要学习干货的童鞋可以直接跳过。</p>
-</blockquote>
-<p>系列文章最开始的名字是：从零开始学习Java，一来是觉得太长了（改了之后也不短），另外一个一觉醒来觉得好像这个名字不能准确反映自己写文的目的，并且我发现要把一些概念解释得特别清楚给没有编程基础的人看，对我来说是很有难度的一件事情，所以决定把名字改了，笔记是可以改的，就像今天突然想起这一篇有些东西还需要添加就来改了，这也是我喜欢的并乐意做的事情，share。——17.9.18更新</p>
-<h4 id="写文的几个原因："><a href="#写文的几个原因：" class="headerlink" title="写文的几个原因："></a>写文的几个原因：</h4><p>这学期笔者也开了Java的课，上的第一节课老师说：教材，你们花两个星期大概看一下就可以扔了。有些同学当笑话听了，有些同学不以为然，而我当真了，我真的把郑莉著的教材《Java语言程序设计》（第2版）“看了一遍”，还不到两个星期，当然其中有一些问题没有去深究，比如数据库还有线程的东西，因为老师说的后面一句话我也认真听了：可以申请不来上课。所以就着笔者c++微薄的基础拉完了一遍教材，很是粗糙，想要重新学习一下，这是一个原因。</p>
-<p>昨晚看到简书上的一位博主：<a href="http://www.jianshu.com/u/8dc5811b228f" target="_blank" rel="noopener">CleverFan</a>。他写下的重新认识Java系列，很是受用，本来保持得很好的生物钟，也因为看到他的文章，硬是看到了接近2点，（在此推荐一下）也由此也产生了写文的冲动，这也是一个原因。</p>
-<p>今天去看了一下关于Java方面比较权威的两本儿书，一本《Thinking in Java》、《Java核心技术 卷Ⅰ》，觉得写得特别棒，也产生了一些自己的想法，想要分享。</p>
-<h4 id="写文的目的："><a href="#写文的目的：" class="headerlink" title="写文的目的："></a>写文的目的：</h4><p>首先需要说的是笔者是一名学渣渣。我也是正在学习，<strong>写文更多的目的是在于交流想法，分享学习成果，也是给自己增加一些积累。</strong>还有就是觉得有些教材讲得太生涩难懂，这一点也是我看CleverFan的博文想到的，希望自己能通过一些更加好玩的方式写出来。也希望文章有什么问题能够及时反馈给我。</p>
-<h4 id="关于更新："><a href="#关于更新：" class="headerlink" title="关于更新："></a>关于更新：</h4><p>因为个人性格的原因，我总是希望能把一件事情做得很好，所以如果有很久没有更新的情况，那就当我正在努力想怎么写文吧…hhh</p>
-<p>我会尽可能快的更新文章，也尽可能用通俗易懂的方式说明，会把读者大大们当成是第一次接触Java去细致的讲解，也希望读者大大们能支持我的文章，关于后期维权的东西还没有去想，所以希望如果有转载的请注明一下原文出处谢谢。</p>
-<h1 id="正式开始之前"><a href="#正式开始之前" class="headerlink" title="正式开始之前"></a>正式开始之前</h1><p>先问自己一个问题：Java是什么？如果你的答案仅仅是停留在：是一门编程语言的话，希望看完这篇文章的你，对Java有一个更加全面深入的了解。至少在学习一门语言之前，了解一下自己要学的是什么，对吧？</p>
-<h4 id="Java的简单描述"><a href="#Java的简单描述" class="headerlink" title="Java的简单描述"></a>Java的简单描述</h4><blockquote>
-<p>以下大内容部分提炼自Java核心技术 卷Ⅰ 。</p>
-</blockquote>
-<h4 id="Java最初的设计初衷是："><a href="#Java最初的设计初衷是：" class="headerlink" title="Java最初的设计初衷是："></a>Java最初的设计初衷是：</h4><p><strong>能够用于像有线电视转换盒一类处理能力和内存都很有限，并且CPU厂商各不相同的一些消费设备上。</strong><br>然而时至今日在Java的开发者编写的白皮书中（这是Java设计者用来解释设计的初衷以及完成的情况的简短摘要），对Java的描述却是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%880%EF%BC%89%E2%80%94%E2%80%94%E4%BA%86%E8%A7%A3Java/7896890-bfdc2ad65f565eda.png" alt="来自官方网站"></p>
-<p>你不必全部都读一遍，笔者读来大体的感觉是：为使用者创造了一个更加容易，甚至是dead simple的面向对象的语言，并同时具有移植性好，安全，开发周期短等一系列优点，也为你在烦恼c/c++的复杂性的时候提供了一个新的选择。<strong>白皮书的描述更偏向于讲述这是一个更加简单友好的工具，Sun对Java的设计目标就是：微程序员减少复杂性。用他们的话说就是：我们关心的是，减少开发健壮代码所需的时间以及困难。</strong></p>
-<p>事实上，Java的成功也源于其类库能够让人们轻松地完成原本有一定难度的事情。例如：联网和多线程。尽管Java对于解决传统的单机程序设计问题非常有用，但同样重要的是，它解决了在万维网（WWW）上的程序设计问题（把超文本页面转换到屏幕上的浏览器）。在白皮书的最后提到了HotJava TM Browser，这是Java开发者使用Java开发的一款用来炫耀Java的强大之处的浏览器，<strong>HotJava浏览器具有的在执行网页中内嵌代码的能力在1995年的SunWorld大会上，引发了人们延续至今的对Java的狂热追逐。</strong></p>
-<p>Java的成功源自语言本身的一些特性，以及Sun公司的进一步研发和推广。白皮书中对于Java的11个关键术语进行了组织：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%880%EF%BC%89%E2%80%94%E2%80%94%E4%BA%86%E8%A7%A3Java/7896890-40c93739a353706f.png" alt="11个关键术语"></p>
-<p>关于这一段的描述，《Java核心技术 卷Ⅰ》有有趣简单的描述，感兴趣的可以去百度一下。然而笔者认为，事实上，这些特性现在浏览一遍，心里面知道就行了，没必要去深入，也没有什么用。事实上这一篇文章都是。</p>
-<h4 id="Java与其他语言的区别"><a href="#Java与其他语言的区别" class="headerlink" title="Java与其他语言的区别"></a>Java与其他语言的区别</h4><ul>
-<li>Java是由c++发展而来的，因为最初开发Java的是Sun公司那一批拥有UNIX应用背景的人，Java更像是C++语法的一个“纯净”版本。这里没有头文件、指针运算（甚至指针语法，但并不代表取消了指针机制，这在后面会讲到）、结构、联合、操作符重载、虚基类等。然而，设计者并没有试图清除C++中所有不适当的特性。例如，switch语法的语法在Java中就没有改变。事实上，Java还有许多奇怪的语法，后面也会提到。</li>
-<li>JavaScript和Java除了语法类似，名字类似 ，其他再无什么关系。JavaScript是一种在网页中使用的脚本语言，而Java则是一种强大的面向对象的语言，重点在对象和对象的接口上，而并非所使用的工具上。</li>
-</ul>
-<blockquote>
-<p>面向对象设计是一种程序设计技术。用木匠打一个比方，一个“面向对象的”木匠始终关注的是所制作的椅子，第二位才是使用的工具；一个“非面向对象的”木匠首先考虑的是自己的工具。</p>
-</blockquote>
-<h4 id="关于Java-applet"><a href="#关于Java-applet" class="headerlink" title="关于Java applet"></a>关于Java applet</h4><p>其实很简单，网页中运行的Java程序就是applet，只不过需要一些特别的语法来说明。网页中的嵌入的applet程序就如同在网页中嵌入了一副图片，不同的是，这幅图片能够对于用户的操作作出响应，改变外观、传递数据等。关于这方面可以做一些相关的了解，但笔者并不打算深入研究这方面的东西。</p>
-<h4 id="了解面向对象"><a href="#了解面向对象" class="headerlink" title="了解面向对象"></a>了解面向对象</h4><p>所有的编程语言都提供抽象的机制。就像汇编语言是对于底层机器的轻微抽象。接着出现了所谓的“命令式”语言（如FORTRAN、BASIC、C等）都是对汇编语言的抽象。这些语言在汇编语言的基础上有了大幅的改进，但是它们所作的主要抽象仍要求在解决问题的时候要基于计算机的结构，而不是基于所要解决问题的结构来考虑。程序员必须建立起在机器模型和实际待解问题之间的模型的联系。而建立这种映射是费力的，这不是属于编程语言的固有的功能，这使得程序难以编写，并且维护代价高昂。</p>
-<p>面向对象的方式通过向程序员提供表示问题空间中的元素的工具而更进一步。那么什么是面向对象呢？<strong>所谓对象，其实就是抽象化的数据本身。</strong>万物皆是对象，一只狗，一个人，一栋建筑，而这些对象拥有他们自己的一些行为，比如狗要吃饭，要跑，把这些称为属于狗的方法，然后把用一个叫做“类”的东西来打包（封装）好狗这个对象还有属于它的方法，也就是数据和功能。这就是面向对象，<strong>它的本质就是：程序可以通过添加新类型的对象使自身适用于某个特定的问题。</strong>仅此而已。</p>
-<blockquote>
-<p>写在文章的最后：整篇文章读了好几遍，最开始本来是打算把整一段《Java核心技术 卷Ⅰ》关于Java简史的东西贴出来的，但发现好像用处并不会很大，只有增加篇幅的作用。文章的大部分内容来自于上文提到的两部经典教材，第一次写文，希望喜欢的多多支持，有什么不足也能及时提出，谢谢。</p>
-</blockquote>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -1810,8 +1920,14 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           </a>
         
         <p class="current">
-          3 / 3
+          3 / 4
         </p>
+        
+          <a class="next" rel="next" href="/tags/Java%E5%9F%BA%E7%A1%80/page/4/">
+            <section class="post next white-box shadow">
+              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </section>
+          </a>
         
       </div>
     
@@ -2027,7 +2143,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

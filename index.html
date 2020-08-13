@@ -682,9 +682,600 @@
         
           
         
+          
+        
       
     
     
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/08/13/morethanjava-day-7-jie-kou-xiang-jie/">
+      「MoreThanJava」Day 7：接口详解
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/MoreThanJava/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>MoreThanJava</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月13日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E3%80%8CMoreThanJava%E3%80%8DDay7%EF%BC%9A%E6%8E%A5%E5%8F%A3/image-20200813144940633.png" alt=""></p>
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="Part-1-接口概述"><a href="#Part-1-接口概述" class="headerlink" title="Part 1. 接口概述"></a>Part 1. 接口概述</h1><p>Java 是单继承的。这意味着子类仅从一个父类继承。通常，这就是你需要的。有时候多继承会提供方便，但也会造成混乱，例如，当继承的两个父类具有不同版本的签名相同的两个方法时该调用哪一个呢？</p>
+<p><strong>接口为 Java 提供了多继承的一些优点，而没有缺点。</strong></p>
+<h2 id="接口的概念"><a href="#接口的概念" class="headerlink" title="接口的概念"></a>接口的概念</h2><p>在 Java 程序设计语言中，接口不是类，<strong>而是对希望符合这个接口的类的一组需求。</strong></p>
+<p>我们 <a href="https://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/">之前</a> 接触的 <strong>抽象类</strong>，性格偏内向，描述的是一组相对具体的特征，比如某品牌特定型号的汽车，底盘架构、控制电路、刹车系统等是抽象出来的共同特征，但根据动感型、舒适型、豪华型的区分，内饰、车头灯、显示屏等都可以存放不同版本的具体实现。</p>
+<p>而 <strong>接口</strong> 是开放的，性格偏外向，它就像一份合同，定义了方法名、参数列表、返回值，甚至是抛出异常的类型。谁都可以实现它，但如果想实现它的类就必须遵守这份接口约定的合同。</p>
+<blockquote>
+<p>想一想比较熟悉的 USB 接口：它不仅仅约束了 U 盘 <em>(实现类)</em> 的大小和形状，同样也约束了电脑插槽 <em>(使用类)</em>。在编程中，接口类似。</p>
+</blockquote>
+<h2 id="接口的定义"><a href="#接口的定义" class="headerlink" title="接口的定义"></a>接口的定义</h2><p>在 Java 中使用 <code>interface</code> 关键字来定义接口。接口是顶级的 “类”，虽然关键字是 <code>interface</code>，但编译之后的字节码扩展名还是 <code>.class</code>。一个典型接口的结构如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">InterfaceName</span> <span class="token punctuation">{</span>
+      constant definitions
+    method <span class="token function">headers</span> <span class="token punctuation">(</span>without implementations<span class="token punctuation">)</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<p>比如，我们在 <a href="https://www.wmyskxz.com/2020/08/07/morethanjava-day-5-mian-xiang-dui-xiang-jin-jie-ji-cheng-xiang-jie/">前面文章</a> 讨论「为什么不推荐使用继承？」中举的鸟类的例子，任何能飞的鸟都必须实现如下接口：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Flyable</span> <span class="token punctuation">{</span>
+      <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>接口中的所有方法都自动是 <code>public</code>。因此，在接口中声明方法时，不必提供关键字 <code>public</code>。<em>(在 Java 9 中允许了接口定义声明为 <code>private</code> 的方法，在这之前都是不允许的..)</em></p>
+<blockquote>
+<p>想一想接口就像是合同一样，所以任何不清晰的细节都是不允许的。因此，接口中只允许明确的方法定义和常量出现。<em>(下方的例子中演示了一个不被允许的接口定义 —— 因为 <code>y</code> 变量没有确定的值)</em></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">ErrorInterfaceDefine</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">int</span> x <span class="token operator">=</span> <span class="token number">32</span><span class="token punctuation">;</span>
+  <span class="token keyword">public</span> <span class="token keyword">double</span> y<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">// No variables allowed</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">addup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+</blockquote>
+<p>这看起来有点儿像类的定义，但没有任何对象能够构建一个接口 <em>(<code>new</code>一个接口.. 因为接口是绝对抽象的，不允许实现..)*，但你可以定义一个类实现 *(关键字 <code>impelents</code>)</em> 接口，一旦你这么做了，你就可以构造这个 <em>(实现接口的)</em> 类的对象。</p>
+<p>例如麻雀既能飞、也能叫、还能下蛋：<em>(实现多个接口使用 <code>,</code> 分隔)</em></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Sparrow</span> impelents Flayable<span class="token punctuation">,</span> Tweetable<span class="token punctuation">,</span> EggLayable <span class="token punctuation">{</span><span class="token comment" spellcheck="true">//麻雀</span>
+  <span class="token comment" spellcheck="true">//... 省略其他属性和方法...</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">fly</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">tweet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">layEgg</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//... }</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="接口的属性"><a href="#接口的属性" class="headerlink" title="接口的属性"></a>接口的属性</h2><p><strong>❶</strong> 接口不是类，不能使用 <code>new</code> 运算符实例化一个接口，但却可以用来引用实现了这个接口的类对象：</p>
+<pre class=" language-java"><code class="language-java">Comparable x <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Employee</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// OK provided Emloyee implements Comparable</span></code></pre>
+<p><strong>❷</strong> 与建立类的继承层次一样，也可以扩展接口！比如，假设这里有一个名为 <code>Moveable</code> 的接口：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Moveable</span> <span class="token punctuation">{</span>
+      <span class="token keyword">void</span> <span class="token function">move</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后，可以假设一个名为 <code>Powered</code> 的接口扩展了以上的 <code>Moveable</code> 接口：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Powered</span> <span class="token keyword">extends</span> <span class="token class-name">Moveable</span> <span class="token punctuation">{</span>
+      <span class="token keyword">double</span> <span class="token function">milesPerGallon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>❸</strong> 虽然在接口中不能包含实例字段，但是可以包含常量。比如：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Powered</span> <span class="token keyword">extends</span> <span class="token class-name">Moveable</span> <span class="token punctuation">{</span>
+      <span class="token keyword">double</span> SPEED_LIMIT <span class="token operator">=</span> <span class="token number">95</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// a public static final constant</span>
+      <span class="token keyword">double</span> <span class="token function">milesPerGallon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>❹</strong> 另外有一些接口之定义了常量，而没有定义方法。例如，标准库中的 <code>SwingConstants</code> 就是这样一个接口，其中只包含了 <code>NORTH</code>、<code>SOUTH</code> 和 <code>HORIZONTAL</code> 等常量。任何实现 <code>SwingConstants</code> 接口的类都自动地继承了这些常量，并可以在方法中引用它们，而不必采用 <code>SwingConstants.NORTH</code> 这样繁琐的书写形式。不过，这样使用接口更像是退化，所以建议最好不要这样使用…</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E3%80%8CMoreThanJava%E3%80%8DDay7%EF%BC%9A%E6%8E%A5%E5%8F%A3/image-20200812072319833.png" alt="SwingConstants 源码部分截图"></p>
+<p>➡️ <strong>一个类只能有一个父类，但可以实现很多个接口</strong>。这就为定义类的行为提供了极大的灵活性。<em>(我们之前也讨论过——在讨论继承的章节——这里不再赘述)</em></p>
+<h2 id="静态和私有方法"><a href="#静态和私有方法" class="headerlink" title="静态和私有方法"></a>静态和私有方法</h2><p>➡️ 在 <strong>Java 8</strong> 中，允许在接口中增加静态方法 <em>(允许不构建对象而直接使用的具体方法)</em>。理论上讲，没有任何理由认为这是不合法的，<strong>只是这有违将接口作为抽象规范的初衷</strong>。</p>
+<p>目前为止，通常的做法都是将静态方法放在 <strong>伴随类</strong> <em>(可以理解为操作继承接口的实用工具类)</em> 中。在标准库中，你可以看到成对出现的接口和实用工具类，如 <code>Collection/ Collections</code> 或 <code>Path/ Paths</code>。</p>
+<p>在 <strong>Java 11</strong> 中，<code>Path</code> 接口就提供了一个与之工具类 <code>Paths.get()</code> 等价的方法 <em>(该方法用于将一个 URI 或者字符串序列构造成一个文件或目录的路径)</em>： </p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Path</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Path <span class="token function">of</span><span class="token punctuation">(</span>String first<span class="token punctuation">,</span> String<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> more<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Path <span class="token function">of</span><span class="token punctuation">(</span>URI uri<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这样一来，<code>Paths</code> 类就不再是必要的了。类似地，如果实现你自己的接口时，没有理由再额外提供一个带有实用方法的工具类。</p>
+<p>➡️ 另外，在 <strong>Java 9</strong> 中，接口中的方法可以是 <code>private</code>。<code>private</code> 方法可以是静态方法或实例方法。由于私有方法只能在接口本身的方法中使用，所以它们的用法很有限，只能作为接口中其他方法的辅助方法。</p>
+<h2 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h2><p>在 <strong>Java 8</strong> 中，允许为接口方法提供一个默认的实现。必须用 <code>default</code> 修饰符标记这样一个方法，例如 JDK 中的 <code>Iterator</code> 接口：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Iterator</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
+      <span class="token keyword">boolean</span> <span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      E <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">UnsupportedOperationExceition</span><span class="token punctuation">(</span><span class="token string">"remove"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这将非常有用！如果你要实现一个迭代器，就需要提供 <code>hasNext()</code> 和 <code>next()</code> 方法。这些方法没有默认实现——它们依赖于你要遍历访问的数据结构。不过，如果你的迭代器是 <strong>只读</strong> 的，那么就不用操心实现 <code>remove()</code> 方法。</p>
+<p>默认方法也可以调用其他方法，例如，我们可以改造 <code>Collection</code> 接口，定义一个方便的 <code>isEmpty()</code> 方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Collection</span> <span class="token punctuation">{</span>
+      <span class="token keyword">int</span> <span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// an abstract method</span>
+      <span class="token keyword">default</span> <span class="token keyword">boolean</span> <span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">return</span> <span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这样，实现 <code>Collection</code> 的程序员就不用再操心实现 <code>isEmpty()</code> 方法了。</p>
+<p><em>(事实上这也是 <code>AbstractCollection</code> 抽象类的定义——所有的集合具体实现几乎都继承了 <code>AbstractCollection</code>抽象类——但为什么顶层的 <code>Collection</code> 接口不做这样的修改呢？我起初是怀疑有一些特殊的集合为空的定义有特殊性，但我没有找到..几乎所有的集合为空判定都为自身的元素等于 <code>0</code>。所以答案是什么呢？是解决默认方法冲突的 “类优先” 原则！👇)</em></p>
+<h3 id="解决默认方法冲突"><a href="#解决默认方法冲突" class="headerlink" title="解决默认方法冲突"></a>解决默认方法冲突</h3><p>如果先在一个接口中将一个方法定义为默认方法，然后又在类或另一个接口中定义同样的方法，会发生什么？</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 测试接口 1</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">TestInterface1</span> <span class="token punctuation">{</span>
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Invoke TestInterface1 method！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 测试接口 2</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">TestInterface2</span> <span class="token punctuation">{</span>
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Invoke TestInterface2 method！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 继承两个接口的测试类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TestObject</span> <span class="token keyword">implements</span> <span class="token class-name">TestInterface1</span><span class="token punctuation">,</span> TestInterface2 <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token comment" spellcheck="true">// 这里也可以选择两个接口中的一个默认实现</span>
+          <span class="token comment" spellcheck="true">// 如： TestInterface1.super.sameMethod();</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Invoke Object method！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 测试类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        TestObject testObject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TestObject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        testObject<span class="token punctuation">.</span><span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>测试输出：</strong></p>
+<pre class=" language-text"><code class="language-text">Invoke Object method！</code></pre>
+<p>➡️ 对于 <code>Scale</code> 或者 <code>C++</code> 这些语言来说，解决这种具有 <strong>二义性</strong> 的情况规则会很复杂，<code>Java</code> 的规则则简单得多：</p>
+<ol>
+<li><strong>类优先</strong>。如果本类中提供了一个具体方法符合签名，则同名且具有相同参数列表的接口中的默认方法会被忽略；</li>
+<li><strong>接口冲突</strong>。如果一个接口提供了一个默认方法，另一个接口提供了一个同名且参数列表相同的方法 <em>(顺序和类型都相同)</em> ，则必须覆盖这个方法来解决冲突 <em>(就是👆代码的情况，不覆盖编译器不会编译..)</em>；</li>
+</ol>
+<p>Java 设计者更强调一致性，让程序员自己来解决这样的二义性似乎也显得很合理。如果至少有一个接口提供了一个实现，编译器就会报告错误，程序员就必须解决这个二义性。<em>(如果两个接口都没有为共享方法提供默认实现，则不存在冲突，要么实现，要么不实现..)</em></p>
+<p>➡️ 我们只讨论了两个接口的命名冲突。现在来考虑另一种情况，一个类继承自一个类，同时实现了一个接口，从父类继承的方法和接口拥有同样的方法签名，又将怎么办呢？</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 测试接口</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">TestInterface</span> <span class="token punctuation">{</span>
+    <span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Invoke TestInterface Method！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Father</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Invoke Father Method！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 子类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Son</span> <span class="token keyword">extends</span> <span class="token class-name">Father</span> <span class="token keyword">implements</span> <span class="token class-name">TestInterface</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Invoke Son Method！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 测试类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token keyword">new</span> <span class="token class-name">Son</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sameMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>程序输出：</strong></p>
+<pre class=" language-text"><code class="language-text">Invoke Son Method！</code></pre>
+<p>还记得我们说过的方法调用的过程吗 <em>(先找本类的方法找不到再从父类找)</em>？加上这里提到的 “类优先” 原则 <em>(本类中有方法则直接调用)</em>，这很容易理解！</p>
+<blockquote>
+<p>千万不要让一个默认方法重新定义 <code>Object</code> 类中的某个方法。例如，不能为 <code>toString()</code> 或 <code>equals()</code> 定义默认方法，尽管对于 List 之类的接口这可能很有吸引力，但由于 <strong>类优先原则</strong>，这样的方法绝对无法超越 <code>Object.toString()</code> 或者 <code>Object.equals()</code>。</p>
+<p><em>(这里就对应上方思考为什么不在 <code>Collection</code> 中定义默认的 <code>isEmpty()</code> 方法的答案)</em></p>
+</blockquote>
+<h1 id="Part-2-接口与工厂模式"><a href="#Part-2-接口与工厂模式" class="headerlink" title="Part 2. 接口与工厂模式"></a>Part 2. 接口与工厂模式</h1><blockquote>
+<p>这一部分节选自 <strong>极客时间 | 设计模式之美</strong>：<a href="https://time.geekbang.org/column/article/197254" target="_blank" rel="noopener">https://time.geekbang.org/column/article/197254</a></p>
+<p>原作者：王争</p>
+</blockquote>
+<p>接口是实现多重继承的途径，而生成遵循某个接口的对象的典型方式就是 <strong>工厂方法设计模式</strong>。这与直接调用构造器构造对象不同，我们在工厂对象上调用的是创建方法，而该工厂对象将生成接口的某个实现对象。</p>
+<p>理论上，通过这种方式，<strong>我们的代码将完全与接口的实现分离</strong>，这就使得我们可以透明地将某个实现替换为另一个实现。下面我们来举例演示一下。</p>
+<h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><p>假设我们现在需要根据文件的后缀名 <em>(json、xml、yaml)</em> 来选择不同的解析器 <em>(JsonRuleConfigParser、XmlRuleConfigParser)</em>，将存储在文件中的配置解析成内存对象 RuleConfig：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigSource</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> RuleConfig <span class="token function">load</span><span class="token punctuation">(</span>String ruleConfigFilePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String ruleConfigFileExtension <span class="token operator">=</span> <span class="token function">getFileExtension</span><span class="token punctuation">(</span>ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    IRuleConfigParser parser <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"json"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"xml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"yaml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InvalidRuleConfigException</span><span class="token punctuation">(</span>
+             <span class="token string">"Rule config file format is not supported: "</span> <span class="token operator">+</span> ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    String configText <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//从ruleConfigFilePath文件中读取配置文本到configText中</span>
+    RuleConfig ruleConfig <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>configText<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> ruleConfig<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> String <span class="token function">getFileExtension</span><span class="token punctuation">(</span>String filePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//...解析文件名获取扩展名，比如rule.json，返回json</span>
+    <span class="token keyword">return</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>➡️ 为了让代码逻辑更加清晰，可读性更好，我们要善于 <strong>将功能独立的代码块封装成函数</strong>。按照这个设计思路，我们可以将代码中涉及 <code>parser</code> 创建的部分逻辑剥离出来，抽象成 <code>createParser()</code> 函数。重构之后的代码如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> RuleConfig <span class="token function">load</span><span class="token punctuation">(</span>String ruleConfigFilePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String ruleConfigFileExtension <span class="token operator">=</span> <span class="token function">getFileExtension</span><span class="token punctuation">(</span>ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    IRuleConfigParser parser <span class="token operator">=</span> <span class="token function">createParser</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>parser <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InvalidRuleConfigException</span><span class="token punctuation">(</span>
+              <span class="token string">"Rule config file format is not supported: "</span> <span class="token operator">+</span> ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    String configText <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//从ruleConfigFilePath文件中读取配置文本到configText中</span>
+    RuleConfig ruleConfig <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>configText<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> ruleConfig<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> String <span class="token function">getFileExtension</span><span class="token punctuation">(</span>String filePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//...解析文件名获取扩展名，比如rule.json，返回json</span>
+    <span class="token keyword">return</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span>String configFormat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    IRuleConfigParser parser <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"json"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"xml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"yaml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> parser<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>➡️ 为了让类的职责更加单一、代码更加清晰，我们还可以进一步将 <code>createParser()</code> 函数剥离到一个单独的类中，让这个类只负责对象的创建。而这个类就是我们现在要将的 <strong>简单工厂</strong> 模式类。具体的代码如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigSource</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> RuleConfig <span class="token function">load</span><span class="token punctuation">(</span>String ruleConfigFilePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String ruleConfigFileExtension <span class="token operator">=</span> <span class="token function">getFileExtension</span><span class="token punctuation">(</span>ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    IRuleConfigParser parser <span class="token operator">=</span> RuleConfigParserFactory<span class="token punctuation">.</span><span class="token function">createParser</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>parser <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InvalidRuleConfigException</span><span class="token punctuation">(</span>
+              <span class="token string">"Rule config file format is not supported: "</span> <span class="token operator">+</span> ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    String configText <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//从ruleConfigFilePath文件中读取配置文本到configText中</span>
+    RuleConfig ruleConfig <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>configText<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> ruleConfig<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> String <span class="token function">getFileExtension</span><span class="token punctuation">(</span>String filePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//...解析文件名获取扩展名，比如rule.json，返回json</span>
+    <span class="token keyword">return</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span>String configFormat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    IRuleConfigParser parser <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"json"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"xml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"yaml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parser <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> parser<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><em>(这样的 Factory 代码暂称为第一种实现)</em></p>
+<p>在类的命名中体现设计模式是非常好的方式 <em>(例如这里的 <code>RuleConfigParserFactory</code>)</em>。大部分工厂类都是以 <code>“Factory”</code> 这个单词结尾的，但也不是必须的，比如 Java 中的 <code>DateFormat</code>、<code>Calender</code>。</p>
+<p>除此之外，工厂类中创建对象的方法一般都是 <code>create</code> 开头，比如代码中的 <code>createParser()</code>，但有的也命名为 <code>getInstance()</code>、<code>createInstance()</code>、<code>newInstance()</code>，有的甚至命名为 <code>valueOf()</code> <em>（比如 Java String 类的 <code>valueOf()</code> 函数）</em> 等等，这个我们根据具体的场景和习惯来命名就好。</p>
+<p>➡️ 在上面的代码实现中，我们每次调用 RuleConfigParserFactory 的 <code>createParser()</code> 的时候，都要创建一个新的 <code>parser</code>。实际上，如果 <code>parser</code> 可以复用，为了节省内存和对象创建的时间，我们可以将 <code>parser</code> 事先创建好缓存起来。当调用 <code>createParser()</code> 函数的时候，我们从缓存中取出 <code>parser</code> 对象直接使用：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> RuleConfigParser<span class="token operator">></span> cachedParsers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">static</span> <span class="token punctuation">{</span>
+    cachedParsers<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"json"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cachedParsers<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"xml"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cachedParsers<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"yaml"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span>String configFormat<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>configFormat <span class="token operator">==</span> null <span class="token operator">||</span> configFormat<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> null<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//返回null还是IllegalArgumentException全凭你自己说了算</span>
+    <span class="token punctuation">}</span>
+    IRuleConfigParser parser <span class="token operator">=</span> cachedParsers<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>configFormat<span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> parser<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><em>(这样的 Factory 代码暂称为第二种实现)</em></p>
+<p>这有点类似于单例模式和简单工厂模式的结合。</p>
+<p>但上面两种实现的简单工厂，都有违背 <strong>开闭原则</strong> <em>(对扩展开放，对修改关闭)</em>。想象一下现在我们如果要新增一种 <code>parser</code>，那么势必会修改 <code>RuleCOnfigParserFactory</code> 里面的代码！但好在就日常的使用来说，如果不是需要频繁地添加新的 <code>parser</code>，只是偶尔修改一下 RuleConfigParserFactory 代码，稍微不符合开闭原则，也是完全可以接受的。</p>
+<h2 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h2><p>回看👆我们上方的第一种实现，如果可能的话，我们的 <code>if-else</code> 代码会随着文件种类的增加列得越来越长，最终不仅可读性很差，也变得更加难以维护 <em>(复杂度增加)</em>，而且也不怎么优雅。</p>
+<p>如果我们非得去掉 <code>if-else</code> 分支逻辑的话，应该怎么办呢？比较经典处理方法就是利用多态。按照多态的实现思路，对上面的代码进行重构。重构之后的代码如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IRuleConfigParserFactory</span> <span class="token punctuation">{</span>
+  IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JsonRuleConfigParserFactory</span> <span class="token keyword">implements</span> <span class="token class-name">IRuleConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">XmlRuleConfigParserFactory</span> <span class="token keyword">implements</span> <span class="token class-name">IRuleConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">YamlRuleConfigParserFactory</span> <span class="token keyword">implements</span> <span class="token class-name">IRuleConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> IRuleConfigParser <span class="token function">createParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>实际上，这就是工厂方法模式的典型代码实现。这样当我们新增一种 parser 的时候，只需要新增一个实现了 IRuleConfigParserFactory 接口的 Factory 类即可。所以，<strong>工厂方法模式比起简单工厂模式更加符合开闭原则。</strong></p>
+<p>从上面的工厂方法的实现来看，一切都很完美，但是实际上存在挺大的问题。问题存在于这些工厂类的使用上。接下来，我们看一下，如何用这些工厂类来实现 RuleConfigSource 的 <code>load()</code> 函数。具体的代码如下所示：</p>
+<pre class=" language-java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigSource</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> RuleConfig <span class="token function">load</span><span class="token punctuation">(</span>String ruleConfigFilePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String ruleConfigFileExtension <span class="token operator">=</span> <span class="token function">getFileExtension</span><span class="token punctuation">(</span>ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    IRuleConfigParserFactory parserFactory <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"json"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parserFactory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParserFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"xml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parserFactory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParserFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"yaml"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      parserFactory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParserFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InvalidRuleConfigException</span><span class="token punctuation">(</span><span class="token string">"Rule config file format is not supported: "</span> <span class="token operator">+</span> ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    IRuleConfigParser parser <span class="token operator">=</span> parserFactory<span class="token punctuation">.</span><span class="token function">createParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    String configText <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//从ruleConfigFilePath文件中读取配置文本到configText中</span>
+    RuleConfig ruleConfig <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>configText<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> ruleConfig<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> String <span class="token function">getFileExtension</span><span class="token punctuation">(</span>String filePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//...解析文件名获取扩展名，比如rule.json，返回json</span>
+    <span class="token keyword">return</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>从上面的代码实现来看，工厂类对象的创建逻辑又耦合进了 <code>load()</code> 函数中，跟我们最初的代码版本非常相似，引入工厂方法非但没有解决问题，反倒让设计变得更加复杂了。那怎么来解决这个问题呢？</p>
+<p>我们可以为工厂类再创建一个简单工厂，也就是 <strong>工厂的工厂</strong>，用来创建工厂类对象。这段话听起来有点绕，我把代码实现出来了，你一看就能明白了。其中，RuleConfigParserFactoryMap 类是创建工厂对象的工厂类，<code>getParserFactory()</code> 返回的是缓存好的单例工厂对象。</p>
+<pre class=" language-java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigSource</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> RuleConfig <span class="token function">load</span><span class="token punctuation">(</span>String ruleConfigFilePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    String ruleConfigFileExtension <span class="token operator">=</span> <span class="token function">getFileExtension</span><span class="token punctuation">(</span>ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    IRuleConfigParserFactory parserFactory <span class="token operator">=</span> RuleConfigParserFactoryMap<span class="token punctuation">.</span><span class="token function">getParserFactory</span><span class="token punctuation">(</span>ruleConfigFileExtension<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>parserFactory <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InvalidRuleConfigException</span><span class="token punctuation">(</span><span class="token string">"Rule config file format is not supported: "</span> <span class="token operator">+</span> ruleConfigFilePath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    IRuleConfigParser parser <span class="token operator">=</span> parserFactory<span class="token punctuation">.</span><span class="token function">createParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    String configText <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//从ruleConfigFilePath文件中读取配置文本到configText中</span>
+    RuleConfig ruleConfig <span class="token operator">=</span> parser<span class="token punctuation">.</span><span class="token function">parse</span><span class="token punctuation">(</span>configText<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> ruleConfig<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">private</span> String <span class="token function">getFileExtension</span><span class="token punctuation">(</span>String filePath<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//...解析文件名获取扩展名，比如rule.json，返回json</span>
+    <span class="token keyword">return</span> <span class="token string">"json"</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">//因为工厂类只包含方法，不包含成员变量，完全可以复用，</span>
+<span class="token comment" spellcheck="true">//不需要每次都创建新的工厂类对象，所以，简单工厂模式的第二种实现思路更加合适。</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuleConfigParserFactoryMap</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">//工厂的工厂</span>
+  <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> IRuleConfigParserFactory<span class="token operator">></span> cachedFactories <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">static</span> <span class="token punctuation">{</span>
+    cachedFactories<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"json"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParserFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cachedFactories<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"xml"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParserFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    cachedFactories<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"yaml"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">YamlRuleConfigParserFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token keyword">static</span> IRuleConfigParserFactory <span class="token function">getParserFactory</span><span class="token punctuation">(</span>String type<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>type <span class="token operator">==</span> null <span class="token operator">||</span> type<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    IRuleConfigParserFactory parserFactory <span class="token operator">=</span> cachedFactories<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>type<span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> parserFactory<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>当我们需要添加新的规则配置解析器的时候，我们只需要创建新的 <code>parser</code> 类和 <code>parser factory</code> 类，并且在 RuleConfigParserFactoryMap 类中，将新的 <code>parser factory</code> 对象添加到 <code>cachedFactories</code> 中即可。代码的改动非常少，基本上符合开闭原则。</p>
+<p>实际上，对于规则配置文件解析这个应用场景来说，工厂模式需要额外创建诸多 Factory 类，也会增加代码的复杂性，而且，每个 Factory 类只是做简单的 <code>new</code> 操作，功能非常单薄 <em>（只有一行代码）</em>，也没必要设计成独立的类，所以，在这个应用场景下，简单工厂模式简单好用，比工厂方法模式更加合适。</p>
+<h3 id="什么时候该用工厂方法模式呢？"><a href="#什么时候该用工厂方法模式呢？" class="headerlink" title="什么时候该用工厂方法模式呢？"></a>什么时候该用工厂方法模式呢？</h3><p>我们前面提到，之所以将某个代码块剥离出来，独立为函数或者类，原因是这个代码块的逻辑过于复杂，剥离之后能让代码更加清晰，更加可读、可维护。但是，如果代码块本身并不复杂，就几行代码而已，我们完全没必要将它拆分成单独的函数或者类。</p>
+<p>所以让我们有足够理由使用工厂方法模式的情况大概有以下两点：</p>
+<ul>
+<li>当对象的创建逻辑比较复杂，不只是简单的 <code>new</code> 一下就可以，而是要组合其他类对象，做各种初始化操作的时候；</li>
+<li>避免烦人的 <code>if-else</code> 分支逻辑时；</li>
+</ul>
+<h2 id="抽象工厂-Abstract-Factory"><a href="#抽象工厂-Abstract-Factory" class="headerlink" title="抽象工厂(Abstract Factory)"></a>抽象工厂(Abstract Factory)</h2><p>在简单工厂和工厂方法中，类只有一种分类方式。比如，在规则配置解析那个例子中，解析器类只会根据配置文件格式 <em>(Json、Xml、Yaml……)</em> 来分类。但是，如果类有两种分类方式，比如，我们既可以按照配置文件格式来分类，也可以按照解析的对象 <em>(Rule 规则配置还是 System 系统配置)</em> 来分类，那就会对应下面这 <code>6</code> 个 <code>parser</code> 类。</p>
+<pre class=" language-text"><code class="language-text">针对规则配置的解析器：基于接口IRuleConfigParser
+JsonRuleConfigParser
+XmlRuleConfigParser
+YamlRuleConfigParser
+
+针对系统配置的解析器：基于接口ISystemConfigParser
+JsonSystemConfigParser
+XmlSystemConfigParser
+YamlSystemConfigParser</code></pre>
+<p>针对这种特殊的场景，如果还是继续用工厂方法来实现的话，我们要针对每个 parser 都编写一个工厂类，也就是要编写 <code>6</code> 个工厂类。如果我们未来还需要增加针对业务配置的解析器 <em>(比如 IBizConfigParser)</em>，那就要再对应地增加 <code>4</code> 个工厂类。而我们知道，过多的类也会让系统难维护。这个问题该怎么解决呢？</p>
+<p>抽象工厂就是针对这种非常特殊的场景而诞生的。我们可以让一个工厂负责创建多个不同类型的对象 <em>(IRuleConfigParser、ISystemConfigParser 等)</em>，而不是只创建一种 <code>parser</code> 对象。这样就可以有效地减少工厂类的个数。具体的代码实现如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IConfigParserFactory</span> <span class="token punctuation">{</span>
+  IRuleConfigParser <span class="token function">createRuleParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  ISystemConfigParser <span class="token function">createSystemParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">//此处可以扩展新的parser类型，比如IBizConfigParser</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JsonConfigParserFactory</span> <span class="token keyword">implements</span> <span class="token class-name">IConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> IRuleConfigParser <span class="token function">createRuleParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">JsonRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> ISystemConfigParser <span class="token function">createSystemParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">JsonSystemConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">XmlConfigParserFactory</span> <span class="token keyword">implements</span> <span class="token class-name">IConfigParserFactory</span> <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> IRuleConfigParser <span class="token function">createRuleParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">XmlRuleConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> ISystemConfigParser <span class="token function">createSystemParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">XmlSystemConfigParser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 省略YamlConfigParserFactory代码</span></code></pre>
+<h1 id="重点回顾"><a href="#重点回顾" class="headerlink" title="重点回顾"></a>重点回顾</h1><ol>
+<li>接口的概念 / 接口的定义 / 接口的实现 / 接口的属性；</li>
+<li>接口的静态和私有方法 / 如何解决默认方法的冲突；</li>
+<li>接口和工厂模式；</li>
+</ol>
+<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h2 id="练习-1：实现一个图形绘制工具"><a href="#练习-1：实现一个图形绘制工具" class="headerlink" title="练习 1：实现一个图形绘制工具"></a>练习 1：实现一个图形绘制工具</h2><blockquote>
+<p>创建一个可以绘制不同形状的绘图工具，可以绘制圆形、矩形、三角形，每个图形都会有一个 <code>draw()</code> 方法用于绘图，而绘图工具也有一个 <code>draw()</code> 方法，根据传入类型的不同调用不同的方法。</p>
+</blockquote>
+<p><strong>创建 IShape 接口：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">IShape</span> <span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>继承 IShape 接口创建圆形、矩形、三角形：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 圆形</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Circle</span> <span class="token keyword">implements</span> <span class="token class-name">IShape</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Draw Circle..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 矩形</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Rectangle</span> <span class="token keyword">implements</span> <span class="token class-name">IShape</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Draw Rectangle..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 三角形</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Triangle</span> <span class="token keyword">implements</span> <span class="token class-name">IShape</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Draw Triangle..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>图形绘制工具：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Paint</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">draw</span><span class="token punctuation">(</span>IShape shape<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        shape<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>测试类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Paint<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Circle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Paint<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Rectangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Paint<span class="token punctuation">.</span><span class="token function">draw</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Triangle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>程序输出：</strong></p>
+<pre class=" language-text"><code class="language-text">Draw Circle...
+Draw Rectangle...
+Draw Triangle...</code></pre>
+<p><em>(ps：说实话这一篇文章虽然写了两天.. 但感觉总体质量挺差的.. 原因有许多，一来是发现存在很多知识点交叉的情况——也就是说知识是互相联系的，想要说清楚不容易——而且常常组织起来非常庞大。二来是发现光说清楚一个知识点也挺不容易的..所以在考虑新的组织形式.. 最近有接触到一些双向链接的工具.. 探索探索..)</em></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《Java 核心技术 卷 I》</li>
+<li>《Java 编程思想》</li>
+<li>Introduction to Computer Science using Java - <a href="http://programmedlessons.org/Java9/index.html" target="_blank" rel="noopener">http://programmedlessons.org/Java9/index.html</a></li>
+<li>极客时间 | 设计模式之美 - <a href="https://time.geekbang.org/column/article/177110" target="_blank" rel="noopener">https://time.geekbang.org/column/article/177110</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/common/qrcode.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+<p><em>(另外这些基础的知识体系我打算自己偷偷慢慢在博客搭建啦.. 等有确实的成果之后再分享吧.. 公众号还是希望分享更多能对小伙伴们有用的实际的东西.. Respect~)</em></p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
       
         
           <div class='post-wrapper'>
@@ -4631,533 +5222,6 @@ Value of b is : 20</code></pre>
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/07/03/morethanjava-day-1-huan-jing-da-jian-he-cheng-xu-ji-ben-jie-gou-yuan-su/">
-      「MoreThanJava」Day 1：环境搭建和程序基本结构元素
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/MoreThanJava/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>MoreThanJava</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年7月3日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-0dd789fcd2baf619.png" alt=""></p>
-<ul>
-<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
-<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
-</ul>
-<h1 id="Part-0-搭建好开发环境"><a href="#Part-0-搭建好开发环境" class="headerlink" title="Part 0. 搭建好开发环境"></a>Part 0. 搭建好开发环境</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-e9a5a6f947615f7c.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://developer.51cto.com/art/201907/599480.htm" target="_blank" rel="noopener">https://developer.51cto.com/art/201907/599480.htm</a></li>
-</ul>
-<p>在一切开始之前，我们需要先搭建好我们的 <strong>开发环境</strong> <em>(从前文得知 Java 程序的运行需要 JVM，编写 Java 代码需要 IDE)*，或者在您完全准备好之前可以 *暂时使用</em> 在线版本的 Java 环境来运行前面一些内容涉及的简单代码：<a href="https://c.runoob.com/compile/10" target="_blank" rel="noopener">https://c.runoob.com/compile/10</a></p>
-<h2 id="安装-JDK-并配置环境"><a href="#安装-JDK-并配置环境" class="headerlink" title="安装 JDK 并配置环境"></a>安装 JDK 并配置环境</h2><h3 id="JVM、JRE-和-JDK-有什么关系？"><a href="#JVM、JRE-和-JDK-有什么关系？" class="headerlink" title="JVM、JRE 和 JDK 有什么关系？"></a>JVM、JRE 和 JDK 有什么关系？</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-95f30305f714a5f5.png" alt=""></p>
-<ul>
-<li><strong>JVM（Java Virtual Machine，Java 虚拟机）</strong>：是整个 Java 实现跨平台的最核心的部分，能够运行以 Java 语言写作的软件程序。</li>
-<li><strong>JRE（Java Runtime Environment，Java 运行环境）</strong>：是运行 JAVA 程序所必须的环境的集合，包含 JVM 标准实现及 Java 核心类库。</li>
-<li><strong>JDK（Java Development Kid，Java 开发开源工具包）</strong>：是针对 Java 开发人员的产品，是整个 Java 的核心，包括了 Java 运行环境 JRE、Java 工具和 Java 基础类库。</li>
-</ul>
-<p>这三者的关系是一层层的嵌套关系：JDK &gt; JRE &gt; JVM</p>
-<blockquote>
-<p>JDK 包含了 Java 的编译器、调试器等一系列开发工具，所以作为开发人员我们需要安装 JDK，而某一些只需要运行编译好的 Java 程序的服务器则可以只安装 JRE 即可 <em>（极少数情况，通常还是安装 JDK）</em>。</p>
-</blockquote>
-<h3 id="下载安装-JDK"><a href="#下载安装-JDK" class="headerlink" title="下载安装 JDK"></a>下载安装 JDK</h3><p>Java 程序必须运行在 JVM 之上，所以我们第一件事情就是安装 JDK。我们选择最新的 <strong>JDK 14</strong> 进行安装：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-2b5df06ee6149221.png" alt="官网地址：https://www.oracle.com/java/technologies/javase-downloads.html"></p>
-<p>选择合适自己电脑平台的 JDK 进行下载安装即可：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-14c7c595ca9423ae.png" alt=""></p>
-<h3 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h3><h4 id="Windows-平台"><a href="#Windows-平台" class="headerlink" title="Windows 平台"></a>Windows 平台</h4><blockquote>
-<p><strong>第一步</strong></p>
-<p>在 Windows 安装之后需要额外 <strong>配置环境变量</strong>，首先【右键我的电脑】 → 选择【属性(R)】 → 打开【高级系统设置】：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-c580fdcccef973ea.png" alt=""></p>
-<ul>
-<li>图片引用自：<a href="https://www.jikeyuan.cn/index.php/a/174.html" target="_blank" rel="noopener">https://www.jikeyuan.cn/index.php/a/174.html</a></li>
-</ul>
-</blockquote>
-<blockquote>
-<p><strong>第二步</strong></p>
-<p>在【高级】标签下选择【环境变量】，并对环境变量【path】进行编辑操作：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-5b5674eeae2eddae.png" alt=""></p>
-<ul>
-<li>图片引用自：<a href="https://www.jikeyuan.cn/index.php/a/174.html" target="_blank" rel="noopener">https://www.jikeyuan.cn/index.php/a/174.html</a></li>
-</ul>
-</blockquote>
-<blockquote>
-<p><strong>第三步</strong></p>
-<p>新建环境变量，然后把刚才安装 jdk 的安装路径复制进去，路径截止到 <code>bin</code> 目录：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-e58f8d3850928b14.png" alt=""></p>
-<ul>
-<li>图片引用自：<a href="https://www.jikeyuan.cn/index.php/a/174.html" target="_blank" rel="noopener">https://www.jikeyuan.cn/index.php/a/174.html</a></li>
-</ul>
-</blockquote>
-<blockquote>
-<p><strong>第四步</strong></p>
-<p>快捷键【Win + R】输入【cmd】调出 dos 窗口，输入【java -version】进行验证：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-5f94ba290509cc6d.png" alt=""></p>
-<ul>
-<li>图片引用自：<a href="https://www.jikeyuan.cn/index.php/a/174.html" target="_blank" rel="noopener">https://www.jikeyuan.cn/index.php/a/174.html</a></li>
-</ul>
-</blockquote>
-<h4 id="Mac-平台"><a href="#Mac-平台" class="headerlink" title="Mac 平台"></a>Mac 平台</h4><blockquote>
-<p><strong>第一步</strong></p>
-<p>打开苹果 dos 窗口，<strong>先确认自己使用的 <code>shell</code> 是 <code>zsh</code> 还是 <code>bash</code></strong>，在命令行中输入 <code>echo $SHELL</code>：</p>
-<ul>
-<li>如果输出 <code>/bin/bash</code> 则为 <code>bash</code>;</li>
-<li>如果输出结果为 <code>/bin/zsh</code> 则为 <code>zsh</code>。</li>
-</ul>
-</blockquote>
-<blockquote>
-<p><strong>第二步</strong></p>
-<p>根据上面不同的结果 <strong>修改 <code>shell</code> 配置文件</strong>，若为 <code>bash</code>，则打开 <code>~/.bash_profile</code>，若为 <code>zsh</code> 则打开 <code>~/.zshrc</code>，在响应的文件末尾添加以下内容，并保存：</p>
-<p><code>export JAVA_HOME=$(/usr/libexec/java_home)</code></p>
-</blockquote>
-<blockquote>
-<p><strong>第三步</strong></p>
-<p>在 <code>~/</code> 目录，命令行执行 <code>source</code> 命令：同样如果是 <code>bash</code>，则执行 <code>source .bash_profile</code>，而如果是 <code>zsh</code>，则执行 <code>source .zshrc</code>，<strong>让刚才的修改生效</strong>。</p>
-</blockquote>
-<blockquote>
-<p><strong>第四步</strong></p>
-<p>命令行执行 <code>java -version</code> 检查是否配置成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-d60df3378fe56229.png" alt=""></p>
-</blockquote>
-<h3 id="Java-的不同版本"><a href="#Java-的不同版本" class="headerlink" title="Java 的不同版本"></a>Java 的不同版本</h3><p>随着 Java 的发展，SUN 公司给 Java 分出了三个不同版本：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-06e3ef6c78219819.png" alt=""></p>
-<ul>
-<li><strong>Java SE(Standard Edition)</strong>：标准版，包含标准的 JVM 和标准库；</li>
-<li><strong>Java EE(Enterprise Edition)</strong>：企业版，在 SE 的基础上加了大量的 API 和库，以方便开发 Web 应用、数据库、消息服务等；</li>
-<li><strong>Java ME(Micro Edition)</strong>：是针对嵌入式设备 “瘦身” 之后的 Java SE；</li>
-</ul>
-<blockquote>
-<p>毫无疑问，Java SE 是 Java 平台的核心，而 Java EE 是进一步学习 Web 应用所必须的。</p>
-</blockquote>
-<h2 id="安装-IDEA-开发工具"><a href="#安装-IDEA-开发工具" class="headerlink" title="安装 IDEA 开发工具"></a>安装 IDEA 开发工具</h2><h3 id="体验记事本编写运行-Java-程序"><a href="#体验记事本编写运行-Java-程序" class="headerlink" title="体验记事本编写运行 Java 程序"></a>体验记事本编写运行 Java 程序</h3><p><strong>Java 源代码本质上其实就是普通的文本文件</strong>，所以理论上来说任何可以编辑文本文件的编辑器都可以作为我们的 Java 代码编辑工具。比如：<strong>Windows</strong> 记事本、<strong>Mac OS X</strong> 下的文本编辑、<strong>Linux</strong> 下的 vi 等。</p>
-<p>但是这些简单工具没有「语法的高亮提示」、「自动完成」等功能，这些功能的缺失会 <strong>大大降低代码的编写效率</strong>。</p>
-<h4 id="第一步：新建一个-HelloWorld-java-文件"><a href="#第一步：新建一个-HelloWorld-java-文件" class="headerlink" title="第一步：新建一个 HelloWorld.java 文件"></a>第一步：新建一个 HelloWorld.java 文件</h4><p>然后输入以下内容并保存：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloWorld</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<ul>
-<li><strong>注意</strong>： <code>HelloWorld.java</code> 文件名不允许出现空格，以及要保证和第一行 <code>class</code> 后跟着的字符串 <code>HelloWorld</code> 保持一致；</li>
-</ul>
-<h4 id="第二步：编译和运行"><a href="#第二步：编译和运行" class="headerlink" title="第二步：编译和运行"></a>第二步：编译和运行</h4><p><strong>将 Java 源程序编写并保存到文件之后，还需要进行编译才能运行</strong>。编译 Java 源程序使用的是 JDK 中的 <code>javac</code> 命令，例如编译上节的 HelloWorld.java，完整命令如下：</p>
-<pre class=" language-console"><code class="language-console">javac HelloWorld.java</code></pre>
-<p>该命令会让 Java 编译器读取 JavaWorld.java 文件的源代码，并把它编译成符合 Java 虚拟机规范的字节码文件 <em>(<code>.class</code> 文件)</em>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-21b7ada2b4e81ec9.png" alt="HelloWorld 源代码和字节码文件"></p>
-<p>想要运行字节码文件也需要使用 JDK 中的 <code>java</code> 命令，例如运行上面生成的 <code>.class</code> 文件，完整命令如下：</p>
-<pre class=" language-console"><code class="language-console">java HelloWorld</code></pre>
-<p>具体效果如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-599fe814f0b38630.png" alt=""></p>
-<h3 id="更加智能的-IDEA"><a href="#更加智能的-IDEA" class="headerlink" title="更加智能的 IDEA"></a>更加智能的 IDEA</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-5fddfd82f522b86c.png" alt="官网：https://www.jetbrains.com/idea/"></p>
-<p>尽管能够使用文本编辑器来编写我们的 Java 程序，但效率着实不敢恭维，所以我们一般使用更加先进的 <strong>集成开发工具</strong> <em>（俗称 IDE，Integrated Development Environment）</em>。</p>
-<p>不仅仅包含更加智能的代码编辑器、编译器、调试器，还有友好的用户界面以及各式各样帮助我们提升效率的插件。</p>
-<p>对于效率这方面，下面我们就几个方面简单感受一下。</p>
-<h4 id="更友好的代码提示功能"><a href="#更友好的代码提示功能" class="headerlink" title="更友好的代码提示功能"></a>更友好的代码提示功能</h4><p>不仅仅是基础的关键字的提醒，IDEA 会基于当前的上下文 <em>(也就是基于位于当前代码上下的代码进行分析)</em>，更加智能的进行过滤和提醒：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-bf239fa19fde26dc.png" alt=""></p>
-<h4 id="强大的纠错能力"><a href="#强大的纠错能力" class="headerlink" title="强大的纠错能力"></a>强大的纠错能力</h4><p>我们总是会犯一些低级错误，比如一不留神打错一个字母，可能找了好久都找不到错误所在，IDEA 的纠错能力也许可以帮到你，看一个例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-421f62a54191642f.png" alt="简单演示，实际 IDEA 更加强大"></p>
-<h4 id="智能提示重构代码"><a href="#智能提示重构代码" class="headerlink" title="智能提示重构代码"></a>智能提示重构代码</h4><p>如果你写的代码过于复杂，或者有更好的方式来替代你写的代码，那么 IDEA 会给你一个提示，告诉你还可以有更好的方式。如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-fd6347492519a51e.gif" alt="IDEA 提示我有更好的遍历数组的方法"></p>
-<h4 id="一些酷炫的操作"><a href="#一些酷炫的操作" class="headerlink" title="一些酷炫的操作"></a>一些酷炫的操作</h4><p>比如你看我从头写一个 <code>HelloWorld</code> 程序：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-7c3d02cd79ca4060.gif" alt=""></p>
-<p>这应该比一个一个字符敲快多了吧…<em>(小声bb：文章末尾有教程哦)</em></p>
-<h4 id="And-More…"><a href="#And-More…" class="headerlink" title="And More…"></a>And More…</h4><p>来一个总结：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-1ade5f93ca9070d0.png" alt=""></p>
-<h2 id="验证环境是否安装成功"><a href="#验证环境是否安装成功" class="headerlink" title="验证环境是否安装成功"></a>验证环境是否安装成功</h2><p>打开【IDEA】新建一个空白的 Java 项目：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-1d0f6be48b85be30.png" alt="一路 Next 就好了"></p>
-<p>右键在【scr】目录新建一个空白的【HelloIDEA】的 Java Class 文件：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-d81d259fcec495a3.png" alt=""></p>
-<p>然后接下来像我这样操作，来编写一个【HelloIDEA】的 Java 程序：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-72c2d7feebad0ddc.gif" alt="IDEA 弹出的提示没录到..."></p>
-<ul>
-<li><code>psvm</code>：是 <code>public static void main</code> 的缩写；</li>
-<li><code>sout</code>：是 <code>System.out</code> 的缩写；</li>
-<li>您在 IDEA 中键入以上单词时会由 IDEA 提示智能快速地完成输入，以此来提升效率；</li>
-</ul>
-<p>怕有些同学迷惑，点击左边的绿三角会弹出如下的信息，点击第一个选项就能够运行啦：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-43db205a295c3a66.png" alt=""></p>
-<h1 id="Part-1-标识符和保留字"><a href="#Part-1-标识符和保留字" class="headerlink" title="Part 1. 标识符和保留字"></a>Part 1. 标识符和保留字</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-38ce5b7ba8c785f0.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://medium.com/@thiagonascimento/time-to-first-hello-world-11a4735602f2" target="_blank" rel="noopener">https://medium.com/@thiagonascimento/time-to-first-hello-world-11a4735602f2</a></li>
-</ul>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloWorld</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>我们来看看刚才我们写的 <code>Hello World</code> 程序。</p>
-<p>第一行：<code>public class HelloWorld {</code></p>
-<ul>
-<li><strong>关键字 <code>public</code></strong>：称为 <strong>访问修饰符</strong> <em>(access modifier)</em>，用来控制程序的其他部分对这一段代码的访问级别 <em>(这里暂时理解为公用的，之后会更加详细地介绍)</em>；</li>
-<li><strong>关键字 <code>class</code></strong>：表明 Java 程序中的全部内容都包含在类中 <em>(之后会花很多功夫来说明类，这里可以仅仅把类理解为程序逻辑的一个容器，程序逻辑定义了应用软件的行为)</em>。</li>
-<li><strong><code>HelloWorld</code></strong>：关键字 <code>class</code> 后面紧跟的是类名，它除了必须跟文件名保持一致外，还应该遵循 <strong>Java 类名的命名规范 —— 类名以大写字母开头。如果名字由多个单词组成，每个单词的第一个字母需要大写</strong>。<ul>
-<li>例如：FirstSample 就遵循了 Java 类的命名规范的原则；</li>
-<li>这样的 <strong>命名方式</strong> 被称为 <strong>驼峰命名法</strong> <em>(camel case)<em>，首字母是大写的则称为 *</em>大驼峰命名法<strong>，首字母小写的则称为 **小驼峰命名法</strong> *(如：firstSample，后续文章会提到的变量就采用这种方式)</em></li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p><strong>类名命名规范：</strong></p>
-<ul>
-<li><strong>Bad</strong>：<code>hello</code>、<code>Good123</code>、<code>Note_Book</code>、<code>_World</code></li>
-<li><strong>Good</strong>：<code>Hello</code>、<code>Tester</code>、<code>NoteBook</code></li>
-</ul>
-</blockquote>
-<h2 id="标识符"><a href="#标识符" class="headerlink" title="标识符"></a>标识符</h2><p>在编程中，某个东西的名称就被称为 <strong>标识符</strong>，例如上述的类名 <code>HelloWorld</code>。在 Java 中定义标识符存在以下几种规则：</p>
-<ol>
-<li>只能由数字、字母、下划线(_)和美元符号($)组成；</li>
-<li>第一个字符不能是数字；</li>
-<li>标识符内不允许有空格；</li>
-<li><strong>不能使用 Java 保留字</strong> <em>(下方有列出 Java 中存在的保留字)</em>；</li>
-</ol>
-<blockquote>
-<p><strong>标识符命名示范：</strong></p>
-<ul>
-<li><strong>Bad</strong>：<code>Lady Luck</code> <em>(坏：标识符内不允许有空格)<em>、<code>x/y</code> *(错误：标识符中不允许使用斜杠)</em>、<code>1stPrize</code> <em>(错误：以数字开头)</em>、<code>abc</code> <em>(坏：没有任何意义)</em>、<code>_name</code> *(坏：不要以 <code>_</code> 或 <code>$</code> 开头)</em></li>
-<li><strong>Good</strong>：<code>userName</code>、<code>StudentManager</code>、<code>NoteBook</code></li>
-</ul>
-</blockquote>
-<h2 id="保留字"><a href="#保留字" class="headerlink" title="保留字"></a>保留字</h2><p>保留字就是像 <code>class</code> 这样有特殊含义的标识符，您只能将保留字用于其设定的专属用途 <em>(如 <code>class</code> 除了定义类，您将不能用作其他任何目的)</em>。</p>
-<p>在 Java 中存在以下的保留字：<em>(无需记忆，它们中的大部分都或多或少地出现在之后您的编码中.. IDEA 也会有智能的提示)</em></p>
-<pre class=" language-text"><code class="language-text">abstract class    extends implements null      strictfp     true
-assert   const    false   import     package   super        try
-boolean  continue final   instanceof private   switch       void
-break    default  finally int        protected synchronized volatile
-byte     do       float   interface  public    this         while
-case     double   for     long       return    throw
-catch    else     goto    native     short     throws
-char     enum     if      new        static    transient</code></pre>
-<h1 id="Part-2-程序的基本结构和方法简述"><a href="#Part-2-程序的基本结构和方法简述" class="headerlink" title="Part 2. 程序的基本结构和方法简述"></a>Part 2. 程序的基本结构和方法简述</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-eb8bdbfeeb02e1ae.png" alt=""></p>
-<h2 id="程序基本结构"><a href="#程序基本结构" class="headerlink" title="程序基本结构"></a>程序基本结构</h2><p>在类的第一个大括号和最后一个大括号之间描述了程序所做的一切：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ClassName</span> <span class="token punctuation">{</span>
-<span class="token punctuation">}</span></code></pre>
-<p>首先，每个源代码文件必须有一个主类 <em>(名字同文件名)</em>，在之后的文章中我们会看到一个源代码文件可能会同时存在几个类的情况发生，暂时不考虑。</p>
-<p>在上文程序的第三行：<code>public static void main ( String[] args )</code>，展示了程序在何处开始运行，Java 虚拟机总是从指定类的 <code>main</code> 方法的代码开始执行，因此为了代码能够执行，在类的原文件中必须包含一个 <code>main</code> 方法。</p>
-<p>对这一行稍微做一下解释：</p>
-<ul>
-<li><code>public</code>：访问修饰符，用来描述该方法的访问权限级别，这里为所有人都能访问；</li>
-<li><code>static</code>：保留字，用来定义该方法是一个静态方法；</li>
-<li><code>void</code>：用来描述该方法没有任何的返回值；</li>
-<li><code>main</code>：方法名；</li>
-<li><code>(String[] args)</code>：描述了该方法所接收的参数；</li>
-</ul>
-<p>所以刚开始接触的程序结构大概看起来像是下面这样：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ClassName</span> <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>由于 <strong>Java 是大小写敏感</strong> 的，所以 <code>main</code> 这个单词不允许任何的修改。<em>(Java 语言规范中规定 main 方法必须声明为 public)</em></p>
-<blockquote>
-<p>大括号的使用风格曾经引发过许多无意义的争论，以下两种风格，哪一种更好呢？：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ClassName</span> <span class="token punctuation">{</span>
-<span class="token punctuation">}</span></code></pre>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ClassName</span> 
-<span class="token punctuation">{</span>
-<span class="token punctuation">}</span></code></pre>
-<p>没有答案，虽然对于 Java 编译器来说空白符会被省略，这两种并无差别，但作为开发者的我们，选择 Java 惯用的风格 <em>(第一种)</em> 就好了…</p>
-</blockquote>
-<h2 id="println"><a href="#println" class="headerlink" title="println()"></a>println()</h2><p>考虑下面这一段代码，实际上就是上面的 <code>HelloWorld</code> 程序 <code>main</code> 方法中的语句：</p>
-<pre class=" language-java"><code class="language-java"><span class="token punctuation">{</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>一对大括号表示 <strong>方法体</strong> 的开始与结束，在这个方法中只包含一条语句。跟大多数程序设计语言一样，可以把 Java 中的语句看成是语言中的一个句子。</p>
-<p><strong>在 Java 中，每个句子必须用分号结束</strong> <em>(英文分号)</em>。</p>
-<p><strong>特别需要说明，回车并不是语句的结束标志</strong>，因此，如果需要可以将一条语句写在多行上。</p>
-<p>在这里，我们使用了 <code>System.out</code> 这个对象并调用了它的 <code>println</code> 方法 <em>(点号 <code>.</code> 用于调用方法)</em>。它的作用是在屏幕上输出指定的信息。例如，我们想要输出 <code>我没有三颗心脏</code> 则可以这样调用：</p>
-<pre class=" language-java"><code class="language-java">System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"我没有三颗心脏"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Java 使用方法的通用语法是：</p>
-<pre class=" language-java"><code class="language-java">object<span class="token punctuation">.</span><span class="token function">method</span><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span></code></pre>
-<p>这一条语句的作用是在屏幕上输出 <code>Hello World!</code>，这一部分由字符组成的序列 <em>(其中不应该包含引号)</em> 被称为 <strong>字符串</strong>。它可以包含任何有效字符，包括空格和标点符号。</p>
-<h2 id="方法简述"><a href="#方法简述" class="headerlink" title="方法简述"></a>方法简述</h2><p><strong>方法</strong> 是根据语句构建的。程序通常包含许多方法。 我们的示例程序仅包含一种方法 <em>(main 方法)</em>。当然我们还调用了系统帮我们写好的 <code>System.out.println()</code> 方法。</p>
-<h3 id="尝试定义自己的方法"><a href="#尝试定义自己的方法" class="headerlink" title="尝试定义自己的方法"></a>尝试定义自己的方法</h3><p>我们可以试着仿照 <code>main</code> 方法来写一个自己的方法，假设我们想要输出一段心理学三大巨头之一阿德勒的一段话：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printAdlerOneQuote</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>
-        <span class="token string">"太在意别人的视线和评价，才会不断寻求别人的认可。"</span>
-        <span class="token operator">+</span> <span class="token string">"对认可的追求，才扼杀了自由。"</span>
-        <span class="token operator">+</span> <span class="token string">"由于不想被任何人讨厌，才选择了不自由的生活方式。"</span>
-        <span class="token operator">+</span> <span class="token string">"换言之，自由就是不再寻求认可。"</span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>有几点需要说明：</p>
-<ul>
-<li><strong>方法名采用小驼峰命名法，且尽量保证有意义的命名</strong>：如果这里把方法名修改成 <code>abc</code> 似乎就有点儿不知所云了；</li>
-<li><strong>一行代码量不要超过可视距离</strong>：如果全部冗余在一行，不仅看这一段代码会花额外的精力去翻看和理解，也会给其他阅读代码的人造成困扰；</li>
-<li><strong>建议：一个方法只做一件事情</strong>。您可以看到这个方法除了像方法名描述的那样打印一句阿德勒的名言之外，没有做其他任何的操作，这样做能大大增加代码的可阅读性；</li>
-</ul>
-<h3 id="在-main-方法中调用"><a href="#在-main-方法中调用" class="headerlink" title="在 main 方法中调用"></a>在 main 方法中调用</h3><p>正常的方法调用需要像上面提到的那样：<code>object.method(parameters)</code>，但由于身处同一个类中，<code>this.printAdlerOneQuote();</code> 就可以简写成：<code>printAdlerOneQuote();</code>。</p>
-<p>完整的程序代码如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloWorld</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">printAdlerOneQuote</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printAdlerOneQuote</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>
-            <span class="token string">"太在意别人的视线和评价，才会不断寻求别人的认可。"</span>
-                <span class="token operator">+</span> <span class="token string">"对认可的追求，才扼杀了自由。"</span>
-                <span class="token operator">+</span> <span class="token string">"由于不想被任何人讨厌，才选择了不自由的生活方式。"</span>
-                <span class="token operator">+</span> <span class="token string">"换言之，自由就是不再寻求认可。"</span>
-        <span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h3 id="练习：尝试输出自己喜欢的一段话在屏幕中"><a href="#练习：尝试输出自己喜欢的一段话在屏幕中" class="headerlink" title="练习：尝试输出自己喜欢的一段话在屏幕中"></a>练习：尝试输出自己喜欢的一段话在屏幕中</h3><p>参考答案：<em>(上面的完整代码演示)</em></p>
-<h1 id="Part-3-语法错误和-Bug"><a href="#Part-3-语法错误和-Bug" class="headerlink" title="Part 3. 语法错误和 Bug"></a>Part 3. 语法错误和 Bug</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-8041a0db2c46df2d.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="https://blog.csdn.net/csdnnews/article/details/86684475" target="_blank" rel="noopener">https://blog.csdn.net/csdnnews/article/details/86684475</a></li>
-</ul>
-<h2 id="简述语法错误"><a href="#简述语法错误" class="headerlink" title="简述语法错误"></a>简述语法错误</h2><p>在源文件中，字符串文字必须仅在一行上。以下内容不合法，将无法编译：</p>
-<pre class=" language-java"><code class="language-java">System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello "</span>
-    <span class="token string">"World！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>您编写的代码不符合 Java 的语法规定，就会发生 <strong>语法错误</strong>。</p>
-<p>在 Java 编译器将源代码文件编译成 <code>.class</code> 文件之前，会默认帮你做许多工作，检查语法就是其中一项。</p>
-<p>例如，我们在桌面上试着创建一个【HelloWorld.java】文件然后输入一段存在错误的代码 <em>(您可以试着检查一下哪里出现了一处错误)</em>：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> Class <span class="token class-name">HelloWorld</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>然后再当前目录执行 <code>javac HelloWorld.java</code> 尝试编译这个存在错误的 Java 源文件：</p>
-<pre class=" language-console"><code class="language-console">→ javac HelloWorld.java
-HelloWorld.java:1: 错误: 需要class, interface或enum
-public Class HelloWorld {
-       ^
-HelloWorld.java:3: 错误: 需要class, interface或enum
-    public static void main(String[] args) {
-                  ^
-HelloWorld.java:6: 错误: 需要class, interface或enum
-    }
-    ^
-3 个错误</code></pre>
-<p>Java 编译器提示我们有三处错误，实际上我们也确实粗心地把 <code>class</code> 错误的写成了 <code>Class</code>。</p>
-<p>编译器也未创建新的字节码文件 <em>(<code>.class</code>)</em>，因为在遇到错误时它将停止翻译。</p>
-<h2 id="Bug-简述"><a href="#Bug-简述" class="headerlink" title="Bug 简述"></a>Bug 简述</h2><p><strong>仅仅因为程序通过编译并且成功运行并不意味着它是正确的。</strong></p>
-<p>例如，您的任务是创建一个在屏幕上输出 <code>Hello Wrold!</code>，但是您却错误地写成了 <code>Hello Bug!</code>，<strong>运行时没有按照预期执行，则就称该程序存在 Bug！</strong></p>
-<h3 id="Bug-起源"><a href="#Bug-起源" class="headerlink" title="Bug 起源"></a>Bug 起源</h3><p><strong>Bug 一词的原意是 “臭虫” 或 “虫子”。</strong></p>
-<p>第一个有记载的 Bug 是美国海军编程员、编译器的发明者格蕾斯·哈珀 <em>（GraceHopper）</em> 发现的。</p>
-<p><code>1945</code> 年 <code>9</code> 月 <code>9</code> 日，下午三点。哈珀中尉正领着她的小组构造一个称为“马克二型”的计算机。这还不是一个真正的电子计算机，它使用了大量的继电器，一种电子机械装置。第二次世界大战还没有结束。哈珀的小组日以继夜地工作。机房是一间第一次世界大战时建造的老建筑。那是一个炎热的夏天，房间没有空调，所有窗户都敞开散热。</p>
-<p>突然，马克二型死机了。技术人员试了很多办法，最后定位到第 <code>70</code> 号继电器出错。哈珀观察这个出错的继电器，发现一只飞蛾躺在中间，已经被继电器打死。她小心地用摄子将蛾子夹出来，用透明胶布帖到「事件记录本」中，并注明「第一个发现虫子的实例」。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-2dd79ad175dbf819.png" alt=""></p>
-<p><strong>从此以后，人们将计算机错误称为 Bug，与之相对应，人们将发现 Bug 并加以纠正的过程叫做 “Debug”，意即「捉虫子」或「杀虫子」。</strong></p>
-<blockquote>
-<ul>
-<li>以上内容引用自：<a href="http://www.cxyym.com/2014/11/999/" target="_blank" rel="noopener">http://www.cxyym.com/2014/11/999/</a></li>
-</ul>
-</blockquote>
-<h3 id="Bug-是怎么产生的？"><a href="#Bug-是怎么产生的？" class="headerlink" title="Bug 是怎么产生的？"></a>Bug 是怎么产生的？</h3><p>来几个清奇的段子吧。</p>
-<h4 id="段子一：庞博脱口秀大会解释-Bug"><a href="#段子一：庞博脱口秀大会解释-Bug" class="headerlink" title="段子一：庞博脱口秀大会解释 Bug"></a>段子一：庞博脱口秀大会解释 Bug</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-0cba9f1b6e1f97ec.png" alt=""></p>
-<p>B 站自取：<a href="https://www.bilibili.com/video/BV1oJ411S7o4?from=search&seid=7940414495637079568" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1oJ411S7o4?from=search&amp;seid=7940414495637079568</a></p>
-<h4 id="段子二：测试工程师们来到一家酒吧"><a href="#段子二：测试工程师们来到一家酒吧" class="headerlink" title="段子二：测试工程师们来到一家酒吧"></a>段子二：测试工程师们来到一家酒吧</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-2322959d1521e474.png" alt=""></p>
-<blockquote>
-<p>引用自知乎<code>@第七地区</code>的答案：<a href="https://www.zhihu.com/question/365343579/answer/967299388" target="_blank" rel="noopener">https://www.zhihu.com/question/365343579/answer/967299388</a></p>
-</blockquote>
-<h4 id="段子三：领导让我修房子"><a href="#段子三：领导让我修房子" class="headerlink" title="段子三：领导让我修房子"></a>段子三：领导让我修房子</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-4fc0360d493e5d78.png" alt=""></p>
-<blockquote>
-<p>引用自知乎<code>@哒柏</code>的答案：<a href="https://www.zhihu.com/question/365343579/answer/967299388" target="_blank" rel="noopener">https://www.zhihu.com/question/365343579/answer/967299388</a></p>
-</blockquote>
-<h3 id="地球人和程序员眼中改-Bug-的不同"><a href="#地球人和程序员眼中改-Bug-的不同" class="headerlink" title="地球人和程序员眼中改 Bug 的不同"></a>地球人和程序员眼中改 Bug 的不同</h3><p>修改程序中的 Bug，要经过三个步骤：</p>
-<ol>
-<li>找到它；</li>
-<li>想办法解决它；</li>
-<li>确认它已经被解决 <em>（并且没有引入其它问题）</em>；</li>
-</ol>
-<p>说起来比较简单，在地球人 <em>（程序员等同于外星人）</em> 看起来，过程是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-a4447b7eb30f9433.png" alt=""></p>
-<p>但是，对于程序员来说，找一个 Bug 往往是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-8fa542652a3461a3.png" alt=""></p>
-<p>找到之后呢，解决这个 Bug 又是一个难题：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-16362a572cf8ee66.png" alt=""></p>
-<p>换个柱子什么的比较简单，还有更崩溃的！</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-408522c57e745438.png" alt=""></p>
-<blockquote>
-<ul>
-<li>以上内容引用自：<a href="http://www.accessoft.com/blog/article-show.asp?userid=11&amp;Id=17629" target="_blank" rel="noopener">http://www.accessoft.com/blog/article-show.asp?userid=11&amp;Id=17629</a></li>
-</ul>
-</blockquote>
-<h1 id="Part-4-注释"><a href="#Part-4-注释" class="headerlink" title="Part 4. 注释"></a>Part 4. 注释</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-fb5087ff1f29aed0.png" alt=""></p>
-<ul>
-<li>图片来源：<a href="http://www.cocoachina.com/articles/20146" target="_blank" rel="noopener">http://www.cocoachina.com/articles/20146</a></li>
-</ul>
-<p><strong>注释</strong> 是写程序的人留下的阅读笔记。</p>
-<p>通常注释以两个字符 <code>//</code> 开头。Java 编译器将忽略那些字符以及在该行之后的所有字符。例如：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloWorld</span> <span class="token punctuation">{</span>
-
-    <span class="token comment" spellcheck="true">// 程序入口</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 输出 Hello World!</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>这一段代码跟我们最开始的 <code>HelloWrold</code> 程序完全相同。大多数的程序编辑器 <em>(例如 IDEA)</em> 都足够聪明，可以识别注释并将其显示为无关紧要的一些颜色：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-5c6c7c651f794565.png" alt=""></p>
-<p>与大多数程序设计语言一样，Java 中的注释也不会出现在可执行程序中。因此，可以在源程序中根据需要添加任意多的注释，而不必担心可执行代码会膨胀。 </p>
-<h2 id="三种注释的方式"><a href="#三种注释的方式" class="headerlink" title="三种注释的方式"></a>三种注释的方式</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
- * 文档注释
- * 可以注释多条内容
- */</span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 这是单行注释</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"演示三种注释方式"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">/*  
-    这是多行注释
-     */</span>
-<span class="token punctuation">}</span></code></pre>
-<ul>
-<li><strong>单行注释</strong>：以 <code>//</code> 标识，只能注释一行内容；</li>
-<li><strong>多行注释</strong>：包含在 <code>/*</code> 和 <code>*/</code> 之间，能注释多行内容，为了提高可阅读性，一般首行和尾行不写注释信息；</li>
-<li><strong>文档注释</strong>：包含在 <code>/**</code> <em>(两个 <code>*</code>)</em> 和 <code>*/</code> 之间，也能注释多行内容，一般用在类、方法和变量上面，用来描述其作用 <em>(这是 Java 的一种规范，之后会更多的见识到)</em>；</li>
-</ul>
-<h2 id="几点建议"><a href="#几点建议" class="headerlink" title="几点建议"></a>几点建议</h2><blockquote>
-<p><strong>注释的目的是：</strong> 尽量帮助读者了解得和作者一样多。 —— 《编写可读代码的艺术》</p>
-</blockquote>
-<p>以下节选自《阿里巴巴 Java 开发手册》对于注释的几点要求：</p>
-<ol>
-<li><strong>【强制】</strong> 类、雷属性、类方法的注释必须使用 Javadoc 规范，使用 <code>/**内容*/</code> 格式，不得使用 <code>//</code> 方式 <em>(上面的演示程序中就不符合规范，需要注意)</em>；</li>
-<li><strong>【强制】</strong> 方法内部的单行注释，在被注释语句上方另起一行，使用 <code>//</code> 注释。方法内部的多行注释，使用 <code>/*  */</code> 并注意与代码对齐；</li>
-<li><strong>【推荐】</strong> 与其用「半吊子」英文来注释，不如用中文注释把问题说清楚。专有名词与关键字保持英文原文即可；</li>
-<li><strong>【推荐】</strong> 在修改代码的同时，要对注释进行相应的修改；</li>
-<li><strong>【参考】</strong> 对于注释的要求：<ol>
-<li>能够准确反映设计思想和代码逻辑；</li>
-<li>能够描述业务含义，使其他程序员能够迅速了解代码背后的信息。完全没有注释的大段代码对于阅读者如同天书；注释是给自己看的，应做到即使间隔很长时间，也能清晰理解当时的思路；注释也是给继任者看得，使其能够快速接替自己的工作；</li>
-</ol>
-</li>
-<li><strong>【参考】</strong> 好的命名、代码结构是自解释的，注释力求精简准确、表达到位。避免出现注释的一个极端：过多过滥的注释。因为代码的逻辑一旦修改，修改注释也是相当大的负担；</li>
-</ol>
-<p>对于以上的一些建议，我相信在您之后的编程之路上会越发地体会深刻。</p>
-<h1 id="要点回顾"><a href="#要点回顾" class="headerlink" title="要点回顾"></a>要点回顾</h1><ol>
-<li>JVM、JRE、JDK 的说明和联系；</li>
-<li>Java 开发环境的搭建方法；</li>
-<li>标识符和保留字的定义以及标识符的命名规范；</li>
-<li>程序的基本结构和方法定义和调用的简单方法；</li>
-<li>语法错误和 Bug <em>(起源、怎么产生的)</em>；</li>
-<li>注释的定义、三种注释的方式、注释的规范；</li>
-</ol>
-<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h2 id="练习-1：尝试输出自己喜欢的一段话在屏幕中"><a href="#练习-1：尝试输出自己喜欢的一段话在屏幕中" class="headerlink" title="练习 1：尝试输出自己喜欢的一段话在屏幕中"></a>练习 1：尝试输出自己喜欢的一段话在屏幕中</h2><p>参考答案：<em>(上面有完整代码演示)</em></p>
-<h2 id="练习-2：尝试把上方输出的内容单独实现为自己的方法并在-main-方法中调用运行"><a href="#练习-2：尝试把上方输出的内容单独实现为自己的方法并在-main-方法中调用运行" class="headerlink" title="练习 2：尝试把上方输出的内容单独实现为自己的方法并在 main 方法中调用运行"></a>练习 2：尝试把上方输出的内容单独实现为自己的方法并在 main 方法中调用运行</h2><p>参考答案：<em>(上面有完整代码演示)</em></p>
-<h2 id="练习-3：给自己的代码添加上注释并让朋友阅读询问是否清晰必要"><a href="#练习-3：给自己的代码添加上注释并让朋友阅读询问是否清晰必要" class="headerlink" title="练习 3：给自己的代码添加上注释并让朋友阅读询问是否清晰必要"></a>练习 3：给自己的代码添加上注释并让朋友阅读询问是否清晰必要</h2><p>参考答案：<em>(上面有完整代码演示)</em></p>
-<h1 id="自取资料"><a href="#自取资料" class="headerlink" title="自取资料"></a>自取资料</h1><h2 id="相关扩展阅读资料"><a href="#相关扩展阅读资料" class="headerlink" title="相关扩展阅读资料"></a>相关扩展阅读资料</h2><ol>
-<li>Java 教程 | 廖雪峰官方网站 - <a href="https://www.liaoxuefeng.com/wiki/1252599548343744" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/1252599548343744</a></li>
-<li>史上最简单的 Intellij IDEA 教程 - <a href="https://github.com/judasn/IntelliJ-IDEA-Tutorial" target="_blank" rel="noopener">https://github.com/judasn/IntelliJ-IDEA-Tutorial</a></li>
-<li>计算机发展史上十大著名软件缺陷 - <a href="https://zhuanlan.zhihu.com/p/31167236" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/31167236</a></li>
-</ol>
-<h2 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h2><h4 id="Java-核心技术·卷-I-原书第-11-版"><a href="#Java-核心技术·卷-I-原书第-11-版" class="headerlink" title="Java 核心技术·卷 I(原书第 11 版)"></a>Java 核心技术·卷 I(原书第 11 版)</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-f68fde8f5007994e.png" alt=""></p>
-<p><strong>推荐理由：</strong> 这本书在知识体系完整充实的同时，又比《Thinking in Java》暴风式的知识洗礼来得轻松，新人入门书籍强烈推荐！</p>
-<h4 id="可读代码的艺术"><a href="#可读代码的艺术" class="headerlink" title="可读代码的艺术"></a>可读代码的艺术</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-6e10ba276f69d89c.png" alt=""></p>
-<p><strong>推荐理由：</strong> 编写可阅读的代码是程序员从始至终需要提升的能力，这本书完整呈体系的结构，和朴实充实的实例，让读者通过阅读就能在实践中真实地运用起来，推荐！</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li>《Thinking in Java》第四版</li>
-<li>《Java 核心技术 卷 I》第11版</li>
-<li>廖雪峰系列 Java 教程 - <a href="https://www.liaoxuefeng.com/wiki/1252599548343744" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/1252599548343744</a></li>
-<li>历史上的第一个计算机Bug - <a href="http://www.cxyym.com/2014/11/999/" target="_blank" rel="noopener">http://www.cxyym.com/2014/11/999/</a></li>
-</ol>
-<blockquote>
-<ul>
-<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
-<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8DDay-1%EF%BC%9A%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E7%A8%8B%E5%BA%8F%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%85%83%E7%B4%A0/7896890-2a008f5eb4d852a4.png" alt=""></p>
-<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
-<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -5387,7 +5451,7 @@ HelloWorld.java:6: 错误: 需要class, interface或enum
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

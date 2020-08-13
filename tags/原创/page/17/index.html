@@ -436,6 +436,1000 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/07/chu-xue-java-web-6-jsp-xue-xi-zong-jie/">
+      初学Java Web(6)——JSP学习总结
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月7日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94JSP%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-d8538c85f415d63e.png" alt=""></p>
+<h2 id="为什么要学习-JSP"><a href="#为什么要学习-JSP" class="headerlink" title="为什么要学习 JSP"></a>为什么要学习 JSP</h2><h4 id="Servlet-的短板："><a href="#Servlet-的短板：" class="headerlink" title="Servlet 的短板："></a>Servlet 的短板：</h4><p>Servlet 的出现，是为了<strong>解决动态输出网页的问题。</strong></p>
+<p>虽然这样做目的能达到，但是存在一些<strong>缺陷：</strong></p>
+<ul>
+<li>在 Servlet 输出网页片段非常恶心<strong>（可读性差，维护起来也很麻烦）</strong> </li>
+<li>没有体现<strong>责任分离</strong>的原则（做自己擅长做的事）</li>
+</ul>
+<h4 id="责任分离"><a href="#责任分离" class="headerlink" title="责任分离"></a>责任分离</h4><ul>
+<li><strong>Servlet</strong> 能够很好地<strong>组织业务逻辑代码，</strong>但是在 Java 源文件中通过字符串拼接的方式生成动态 HTML 内容会导致<strong>代码维护困难、可读性差</strong></li>
+<li><strong>JSP</strong> 虽然规避了 Servlet 在生成 HTML 内容方面的劣势，但是在 HTML 中混入大量、复杂的业务逻辑同样也是不可取的</li>
+<li><em>参考：<a href="https://www.zhihu.com/question/37962386" target="_blank" rel="noopener">知乎@David</a></em></li>
+<li><strong>注意：JSP实质上就是一个Servlet</strong></li>
+</ul>
+<h4 id="MVC-模式"><a href="#MVC-模式" class="headerlink" title="MVC 模式"></a>MVC 模式</h4><p>既然 Servlet 和 JSP 都有各自的优势和短板，那么为什么不结合起来扬长避短呢？答案是肯定的——MVC(Model-View-Controller)模式非常适合解决这一问题。</p>
+<p>MVC模式（Model-View-Controller）是<a href="https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/%25E8%25BD%25AF%25E4%25BB%25B6%25E5%25B7%25A5%25E7%25A8%258B">软件工程</a>中的一种<a href="https://link.zhihu.com/?target=https%3A//zh.wikipedia.org/wiki/%25E8%25BD%25AF%25E4%25BB%25B6%25E6%259E%25B6%25E6%259E%2584">软件架构</a>模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）：</p>
+<ul>
+<li>Controller——负责转发请求，对请求进行处理</li>
+<li>View——负责界面显示</li>
+<li>Model——业务功能编写（例如算法实现）、数据库设计以及数据存取操作实现</li>
+</ul>
+<p>在JSP/Servlet开发的软件系统中，这三个部分的描述如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94JSP%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-1471c8cf3ca17fc7.jpg" alt=""></p>
+<p>1.Web浏览器发送HTTP请求到服务端，被Controller(Servlet)获取并进行处理（例如参数解析、请求转发）<br>2.Controller(Servlet)调用核心业务逻辑——Model部分，获得结果<br>3.Controller(Servlet)将逻辑处理结果交给View（JSP），动态输出HTML内容<br>4.动态生成的HTML内容返回到浏览器显示</p>
+<p>MVC模式在Web开发中的好处是非常明显，它规避了JSP与Servlet各自的短板，Servlet只负责业务逻辑而不会通过out.append()动态生成HTML代码；JSP中也不会充斥着大量的业务代码。这大大提高了代码的可读性和可维护性。</p>
+<ul>
+<li><em>参考：<a href="https://www.zhihu.com/question/37962386" target="_blank" rel="noopener">知乎@David</a></em></li>
+</ul>
+<hr>
+<h2 id="JSP-的执行原理"><a href="#JSP-的执行原理" class="headerlink" title="JSP 的执行原理"></a>JSP 的执行原理</h2><ul>
+<li><strong>总结：</strong><br>当访问一个 JSP 页面时，该页面请求将会讲给服务器中的 <strong>JSP 引擎</strong>去处理，它<strong>负责解释和执行 JSP 页面，</strong>每个 JSP 页面在<strong>第一次被访问时</strong>，JSP 引擎就会将它翻译成一个继承自 <code>org.apache.jasper.runtime.HttpJspBase</code>类的 <strong>Servlet 源程序，接着再编译成 class 类文件</strong>，再由 Web 容器<strong>像调用普通 Servlet 程序一样</strong>的方式来装载和解释执行这个由 JSP 页面翻译成的 Servlet 程序。</li>
+</ul>
+<p><a href="https://blog.csdn.net/oncealong/article/details/51393266" target="_blank" rel="noopener">详细资料在这里，感兴趣的戳我</a></p>
+<hr>
+<h2 id="JSP-的语法"><a href="#JSP-的语法" class="headerlink" title="JSP 的语法"></a>JSP 的语法</h2><p>像这样冗杂繁复的知识点，直接给两个好一点的链接记下就好了：<br><a href="https://www.w3cschool.cn/jsp/jsp-jstl.html" target="_blank" rel="noopener">1.W3Cschool</a><br><a href="http://www.runoob.com/jsp/jsp-tutorial.html" target="_blank" rel="noopener">2.菜鸟教程</a></p>
+<hr>
+<h2 id="JSP-三大指令"><a href="#JSP-三大指令" class="headerlink" title="JSP 三大指令"></a>JSP 三大指令</h2><ul>
+<li><strong>特点：</strong><br>并<strong>不向客户端产生任何输出</strong>，指令在 JSP <strong>整个文件范围内有效</strong>，并且为<strong>翻译阶段提供了全局信息</strong></li>
+<li><strong>指令的语法格式：</strong></li>
+</ul>
+<p><strong>&lt;%@ 指令名称   属性名=属性值   属性名=属性值%&gt;</strong></p>
+<h4 id="——【page指令】——"><a href="#——【page指令】——" class="headerlink" title="——【page指令】——"></a>——【page指令】——</h4><ul>
+<li><strong>作用：</strong><br>定义 JSP 页面的各种属性</li>
+<li><strong>属性：</strong></li>
+</ul>
+<p>1.language：指示JSP页面中使用脚本语言。默认值java，目前只支持java。<br>2.extends：指示 JSP 对应的 Servlet 类的父类。<strong>不要修改。</strong><br>3.<code>*</code>import：导入JSP中的Java脚本使用到的类或包。（如同Java中的import语句）<br>JSP 引擎自动导入以下包中的类：<br><code>javax.servlet.*</code><br><code>javax.servlet.http.*</code><br><code>javax.servlet.jsp.*</code><br><strong>注意：一个import属性可以导入多个包，用逗号分隔。</strong><br>4.<code>*</code>sessioin：指示JSP页面是否创建 HttpSession 对象。<strong>默认值是true，创建</strong><br>5.<code>*</code>buffer：指示 JSP 用的输出流的缓存大小.<strong>默认值是8Kb。</strong><br>6.autoFlush：自动刷新输出流的缓存。<br>7.isThreadSafe：指示页面是否是线程安全的（过时的）。<strong>默认是true。</strong><br>true：不安全的。<br>false：安全的。指示 JSP 对应的 Servlet 实现 SingleThreadModel 接口。<br>8.<code>*</code>errorPage:<strong>指示当前页面出错后转向（转发）的页面。</strong></p>
+<pre><code>&gt; 配置全局错误提示页面：
+&gt; web.xml 文件中添加：
+&lt;error-page&gt;
+    &lt;exception-type&gt;java.lang.Exception&lt;/exception-type&gt;
+    &lt;location&gt;/error.jsp&lt;/location&gt;
+&lt;/error-page&gt;
+&lt;error-page&gt;
+    &lt;error-code&gt;404&lt;/error-code&gt;
+    &lt;location&gt;/404.jsp&lt;/location&gt;
+&lt;/error-page&gt;</code></pre><p>9.<code>*</code>isErrorPage:指示当前页面是否产生 Exception 对象。<br>10.<code>*</code>contentType：指定当前页面的 MIME 类型。作用与 Servlet 中的<code>response.setContentType()</code> 作用完全一致<br>11.<code>*</code>pageEncoding：<strong>通知引擎读取 JSP 时采用的编码（因为要翻译）</strong><br>12.<code>*</code>isELIgnored：是否忽略EL表达式。${1+1}。<strong>默认值是false。</strong></p>
+<ul>
+<li><strong>page 指令最简单的使用方式：</strong><pre><code>&lt;%@ page pageEncoding=&quot;UTF-8&quot;%&gt;</code></pre></li>
+</ul>
+<h4 id="——【include】——"><a href="#——【include】——" class="headerlink" title="——【include】——"></a>——【include】——</h4><ul>
+<li><strong>作用：</strong><br>包含其他的组件</li>
+<li><strong>语法：</strong><br><code>&lt;%@include file=&quot;&quot;%&gt;</code><br>file 指定要包含的目标组件。路径如果以 <strong>“/“</strong>（当前应用）就是绝对路径。</li>
+<li><strong>原理：</strong><br>把目标组件的内容加到源组件中，输出结果。</li>
+</ul>
+<h4 id="静态包含和动态包含的区别："><a href="#静态包含和动态包含的区别：" class="headerlink" title="静态包含和动态包含的区别："></a>静态包含和动态包含的区别：</h4><ul>
+<li><strong>静态包含：</strong><br><code>&lt;%@include file=&quot;被包含的页面的路径&quot;%&gt;</code></li>
+</ul>
+<p><strong>包含的时机：</strong>在 JSP 文件被<strong>翻译</strong>的时候<strong>合并在一起</strong><br>最终会被翻译成<strong>一个 class 文件</strong></p>
+<ul>
+<li><strong>动态包含：</strong><br><code>&lt;jsp:include page=&quot;被包含页面的路径&quot;&gt;&lt;/jsp:include&gt;</code></li>
+</ul>
+<p><strong>包含的时机：</strong>在<strong>运行阶段合并代码</strong><br>最终将得到<strong>两个 class 文件</strong></p>
+<ul>
+<li><strong>总结：在实际开发中，能用静的就别用动的</strong></li>
+</ul>
+<h4 id="——【taglib】——"><a href="#——【taglib】——" class="headerlink" title="——【taglib】——"></a>——【taglib】——</h4><ul>
+<li><strong>作用：</strong><br>引入外部的标签</li>
+<li><strong>语法：</strong><br><code>&lt;%@taglib uri=&quot;标签名称空间&quot; prefix=&quot;前缀&quot;%&gt;</code><br>例如：<code>&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot;%&gt;</code></li>
+</ul>
+<hr>
+<h2 id="JSP-九大内置对象"><a href="#JSP-九大内置对象" class="headerlink" title="JSP 九大内置对象"></a>JSP 九大内置对象</h2><p><strong>内置对象：</strong>JSP 中事<strong>先创建好的对象</strong>，可以<strong>直接拿来使用</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">pageContext</td>
+<td align="center">PageContext</td>
+<td align="center">表示当前的JSP对象</td>
+</tr>
+<tr>
+<td align="center">request</td>
+<td align="center">HttpServletRequest</td>
+<td align="center">表示一次请求对象</td>
+</tr>
+<tr>
+<td align="center">session</td>
+<td align="center">HttpSession</td>
+<td align="center">表示一次会话对象,<strong>session=”true”</strong></td>
+</tr>
+<tr>
+<td align="center">application</td>
+<td align="center">ServletContext</td>
+<td align="center">表示当前应用对象</td>
+</tr>
+<tr>
+<td align="center">response</td>
+<td align="center">HttpServletResponse</td>
+<td align="center">表示一次响应对象</td>
+</tr>
+<tr>
+<td align="center">exception</td>
+<td align="center">Throwable</td>
+<td align="center">表示异常对象,isErrorPage=”true”</td>
+</tr>
+<tr>
+<td align="center">config</td>
+<td align="center">ServletConfig</td>
+<td align="center">表示当前JSP的配置对象</td>
+</tr>
+<tr>
+<td align="center">out</td>
+<td align="center">JspWriter</td>
+<td align="center">表示一个输出流对象</td>
+</tr>
+<tr>
+<td align="center">page</td>
+<td align="center">Object</td>
+<td align="center">表示当前页面</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="JSP-四大作用域"><a href="#JSP-四大作用域" class="headerlink" title="JSP 四大作用域"></a>JSP 四大作用域</h2><table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">类型</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">pageContext</td>
+<td align="center">PageContext</td>
+<td align="center">表示当前的JSP对象</td>
+</tr>
+<tr>
+<td align="center">request</td>
+<td align="center">HttpServletRequest</td>
+<td align="center">表示一次请求对象</td>
+</tr>
+<tr>
+<td align="center">session</td>
+<td align="center">HttpSession</td>
+<td align="center">表示一次会话对象,<strong>session=”true”</strong></td>
+</tr>
+<tr>
+<td align="center">application</td>
+<td align="center">ServletContext</td>
+<td align="center">表示当前应用对象</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="EL（表达式语言）"><a href="#EL（表达式语言）" class="headerlink" title="EL（表达式语言）"></a>EL（表达式语言）</h2><ul>
+<li><strong>需求：从作用域中获取共享数据,如果没有对应的数据,返回空字符串</strong><br>在PageContext中提供了下面的方法:<code>abstract  Object findAttribute(String name)</code>来获取共享数据，从<strong>page，request，session，application</strong>作用域中<strong>按顺序搜索,</strong>如果找到立即返回,反之,返回null</li>
+</ul>
+<p>所以我们可以这样来完成要求：<br><code>&lt;%=pageContext.findAttribute(&quot;msg&quot;)==null?&quot;&quot;:pageContext.findAttribute(&quot;msg&quot;) %&gt;</code><br>这样的代码虽然能够完成需求，但是总的来说：<strong>太麻烦！</strong></p>
+<ul>
+<li><p>如果我们使用 EL 表达式，该如何实现呢？<br><code>${msg}</code>等价于<code>&lt;%=pageContext.findAttribute(&quot;msg&quot;)==null?&quot;&quot;:pageContext.findAttribute(&quot;msg&quot;) %&gt;</code><br>这样看起来就<strong>简单</strong>多了！</p>
+</li>
+<li><p><strong>EL的特点：</strong></p>
+</li>
+</ul>
+<p>1.从作用域中获取共享数据<br>2.从page,request,session,application作用域中<strong>按顺序搜索</strong><br>3.<strong>如果共享数据为null,就输出空字符串</strong>（这是EL最重要的特点）</p>
+<h4 id="使用EL表达式从指定的作用域中获取共享数据"><a href="#使用EL表达式从指定的作用域中获取共享数据" class="headerlink" title="使用EL表达式从指定的作用域中获取共享数据:"></a>使用EL表达式从指定的作用域中获取共享数据:</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94JSP%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-fb4b68a07268b5a9.png" alt=""></p>
+<ul>
+<li><strong>使用EL表达式访问对象的属性的两种方式：</strong></li>
+</ul>
+<p>1.<strong>${对象.属性名}       :</strong>通常使用这种方式,<strong>属性名比较规范</strong><br>2.<strong>${对象[“属性名”]} :</strong>当<strong>属性名不规范</strong>的时候使用这种方式,比如:name-age</p>
+<ul>
+<li><strong>使用El表达式获取应用的上下文路径：</strong><br>在EL表达式中有一个<strong>隐含的对象pageContext</strong><br>而在pageContext中有一个request属性,在request对象中有一个contextPath属性,那么获取contextPage的方法:<br><code>${pageContext.request.contextPath}</code><br>在 Tomcat 7 以后,EL表达式不仅支持属性的访问,而且还支持访问方法<br><code>${pageContext.getRequest().getContextPath()}</code></li>
+<li><strong>empty 运算符：</strong><br>empty 运算符主要用来判断值是否为空<strong>（NULL,空字符串，空集合），返回 true / false</strong></li>
+</ul>
+<hr>
+<h2 id="JSTL"><a href="#JSTL" class="headerlink" title="JSTL"></a>JSTL</h2><ul>
+<li><strong>作用：消除 JSP 中的 Java 代码</strong></li>
+<li>在 JSP 中使用 JSTL 的步骤：</li>
+</ul>
+<p>1.<strong>引入入jar包：</strong>在 Tomcat 中的实例项目 examples 中找到对应的两个jar包<br>standard-1.1.2.jar ，jstl-1.1.2.jar<br>2.在对应的 JSP 页面中引入要使用的标签库,比如引入核心标签库<br><code>&lt;%@taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot;%&gt;</code></p>
+<blockquote>
+<p>下面列出 JSTL 主要提供的 5 大类标签库（搬自<a href="http://www.runoob.com/jsp/jsp-jstl.html" target="_blank" rel="noopener">菜鸟教程</a>），先对这些标签初步有一个印象，然后下面给一些常用的标签的一些用法。</p>
+</blockquote>
+<h4 id="JSTL-核心标签"><a href="#JSTL-核心标签" class="headerlink" title="JSTL 核心标签"></a>JSTL 核心标签</h4><p> 核心标签是最常用的JSTL标签。引用核心标签库的语法如下：</p>
+<pre><code>&lt;%@ taglib prefix=&quot;c&quot; 
+           uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;</code></pre><table>
+<thead>
+<tr>
+<th align="left">标签</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-out-tag.html" target="_blank" rel="noopener">&lt;c:out&gt;</a></td>
+<td align="left">用于在JSP中显示数据，就像&lt;%= … &gt;</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-set-tag.html" target="_blank" rel="noopener">&lt;c:set&gt;</a></td>
+<td align="left">用于保存数据</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-remove-tag.html" target="_blank" rel="noopener">&lt;c:remove&gt;</a></td>
+<td align="left">用于删除数据</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-catch-tag.html" target="_blank" rel="noopener">&lt;c:catch&gt;</a></td>
+<td align="left">用来处理产生错误的异常状况，并且将错误信息储存起来</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-if-tag.html" target="_blank" rel="noopener">&lt;c:if&gt;</a></td>
+<td align="left">与我们在一般程序中用的if一样</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-choose-tag.html" target="_blank" rel="noopener">&lt;c:choose&gt;</a></td>
+<td align="left">本身只当做&lt;c:when&gt;和&lt;c:otherwise&gt;的父标签</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-choose-tag.html" target="_blank" rel="noopener">&lt;c:when&gt;</a></td>
+<td align="left">&lt;c:choose&gt;的子标签，用来判断条件是否成立</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-choose-tag.html" target="_blank" rel="noopener">&lt;c:otherwise&gt;</a></td>
+<td align="left">&lt;c:choose&gt;的子标签，接在&lt;c:when&gt;标签后，当&lt;c:when&gt;标签判断为false时被执行</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-import-tag.html" target="_blank" rel="noopener">&lt;c:import&gt;</a></td>
+<td align="left">检索一个绝对或相对 URL，然后将其内容暴露给页面</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-foreach-tag.html" target="_blank" rel="noopener">&lt;c:forEach&gt;</a></td>
+<td align="left">基础迭代标签，接受多种集合类型</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-foreach-tag.html" target="_blank" rel="noopener">&lt;c:forTokens&gt;</a></td>
+<td align="left">根据指定的分隔符来分隔内容并迭代输出</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-param-tag.html" target="_blank" rel="noopener">&lt;c:param&gt;</a></td>
+<td align="left">用来给包含或重定向的页面传递参数</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-redirect-tag.html" target="_blank" rel="noopener">&lt;c:redirect&gt;</a></td>
+<td align="left">重定向至一个新的URL.</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-core-url-tag.html" target="_blank" rel="noopener">&lt;c:url&gt;</a></td>
+<td align="left">使用可选的查询参数来创造一个URL</td>
+</tr>
+<tr>
+<td align="left">#### 格式化标签</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">JSTL格式化标签用来格式化并输出文本、日期、时间、数字。引用格式化标签库的语法如下：</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">```</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&lt;%@ taglib prefix=”fmt”</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">uri=”<a href="http://java.sun.com/jsp/jstl/fmt&quot;" target="_blank" rel="noopener">http://java.sun.com/jsp/jstl/fmt&quot;</a> %&gt;</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">```</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">标签</td>
+<td align="left">描述</td>
+</tr>
+<tr>
+<td align="left">:-</td>
+<td align="left">:-</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-formatnumber-tag.html" target="_blank" rel="noopener"><a href="fmt:formatNumber">fmt:formatNumber</a></a></td>
+<td align="left">使用指定的格式或精度格式化数字</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-parsenumber-tag.html" target="_blank" rel="noopener"><a href="fmt:parseNumber">fmt:parseNumber</a></a></td>
+<td align="left">解析一个代表着数字，货币或百分比的字符串</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-formatdate-tag.html" target="_blank" rel="noopener"><a href="fmt:formatDate">fmt:formatDate</a></a></td>
+<td align="left">使用指定的风格或模式格式化日期和时间</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-parsedate-tag.html" target="_blank" rel="noopener"><a href="fmt:parseDate">fmt:parseDate</a></a></td>
+<td align="left">解析一个代表着日期或时间的字符串</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-bundle-tag.html" target="_blank" rel="noopener"><a href="fmt:bundle">fmt:bundle</a></a></td>
+<td align="left">绑定资源</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-setlocale-tag.html" target="_blank" rel="noopener"><a href="fmt:setLocale">fmt:setLocale</a></a></td>
+<td align="left">指定地区</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-setbundle-tag.html" target="_blank" rel="noopener"><a href="fmt:setBundle">fmt:setBundle</a></a></td>
+<td align="left">绑定资源</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-timezone-tag.html" target="_blank" rel="noopener"><a href="fmt:timeZone">fmt:timeZone</a></a></td>
+<td align="left">指定时区</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-settimezone-tag.html" target="_blank" rel="noopener"><a href="fmt:setTimeZone">fmt:setTimeZone</a></a></td>
+<td align="left">指定时区</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-message-tag.html" target="_blank" rel="noopener"><a href="fmt:message">fmt:message</a></a></td>
+<td align="left">显示资源配置文件信息</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-format-requestencoding-tag.html" target="_blank" rel="noopener"><a href="fmt:requestEncoding">fmt:requestEncoding</a></a></td>
+<td align="left">设置request的字符编码</td>
+</tr>
+</tbody></table>
+<h4 id="SQL标签"><a href="#SQL标签" class="headerlink" title="SQL标签"></a>SQL标签</h4><p>JSTL SQL标签库提供了与关系型数据库（Oracle，MySQL，SQL Server等等）进行交互的标签。引用SQL标签库的语法如下：</p>
+<pre><code>&lt;%@ taglib prefix=&quot;sql&quot; 
+           uri=&quot;http://java.sun.com/jsp/jstl/sql&quot; %&gt;</code></pre><table>
+<thead>
+<tr>
+<th align="left">标签</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-sql-setdatasource-tag.html" target="_blank" rel="noopener"><a href="sql:setDataSource">sql:setDataSource</a></a></td>
+<td align="left">指定数据源</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-sql-query-tag.html" target="_blank" rel="noopener"><a href="sql:query">sql:query</a></a></td>
+<td align="left">运行SQL查询语句</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-sql-update-tag.html" target="_blank" rel="noopener"><a href="sql:update">sql:update</a></a></td>
+<td align="left">运行SQL更新语句</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-sql-param-tag.html" target="_blank" rel="noopener"><a href="sql:param">sql:param</a></a></td>
+<td align="left">将SQL语句中的参数设为指定值</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-sql-dateparam-tag.html" target="_blank" rel="noopener"><a href="sql:dateParam">sql:dateParam</a></a></td>
+<td align="left">将SQL语句中的日期参数设为指定的java.util.Date 对象值</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-sql-transaction-tag.html" target="_blank" rel="noopener"><a href="sql:transaction">sql:transaction</a></a></td>
+<td align="left">在共享数据库连接中提供嵌套的数据库行为元素，将所有语句以一个事务的形式来运行</td>
+</tr>
+</tbody></table>
+<h2 id="XML-标签"><a href="#XML-标签" class="headerlink" title="XML 标签"></a>XML 标签</h2><p>JSTL XML标签库提供了创建和操作XML文档的标签。引用XML标签库的语法如下：</p>
+<pre><code>&lt;%@ taglib prefix=&quot;x&quot; 
+           uri=&quot;http://java.sun.com/jsp/jstl/xml&quot; %&gt;</code></pre><p>在使用xml标签前，你必须将XML 和 XPath 的相关包拷贝至你的&lt;Tomcat 安装目录&gt;\lib下:</p>
+<ul>
+<li><p><strong>XercesImpl.jar</strong></p>
+<p>下载地址： <a href="http://www.apache.org/dist/xerces/j/" target="_blank" rel="noopener">http://www.apache.org/dist/xerces/j/</a></p>
+</li>
+<li><p><strong>xalan.jar</strong></p>
+<p>下载地址： <a href="http://xml.apache.org/xalan-j/index.html" target="_blank" rel="noopener">http://xml.apache.org/xalan-j/index.html</a></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">标签</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-out-tag.html" target="_blank" rel="noopener">&lt;x:out&gt;</a></td>
+<td align="left">与&lt;%= … &gt;,类似，不过只用于XPath表达式</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-parse-tag.html" target="_blank" rel="noopener">&lt;x:parse&gt;</a></td>
+<td align="left">解析 XML 数据</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-set-tag.html" target="_blank" rel="noopener">&lt;x:set&gt;</a></td>
+<td align="left">设置XPath表达式</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-if-tag.html" target="_blank" rel="noopener">&lt;x:if&gt;</a></td>
+<td align="left">判断XPath表达式，若为真，则执行本体中的内容，否则跳过本体</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-foreach-tag.html" target="_blank" rel="noopener">&lt;x:forEach&gt;</a></td>
+<td align="left">迭代XML文档中的节点</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-choose-tag.html" target="_blank" rel="noopener">&lt;x:choose&gt;</a></td>
+<td align="left">&lt;x:when&gt;和&lt;x:otherwise&gt;的父标签</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-choose-tag.html" target="_blank" rel="noopener">&lt;x:when&gt;</a></td>
+<td align="left">&lt;x:choose&gt;的子标签，用来进行条件判断</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-choose-tag.html" target="_blank" rel="noopener">&lt;x:otherwise&gt;</a></td>
+<td align="left">&lt;x:choose&gt;的子标签，当&lt;x:when&gt;判断为false时被执行</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-transform-tag.html" target="_blank" rel="noopener">&lt;x:transform&gt;</a></td>
+<td align="left">将XSL转换应用在XML文档中</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-xml-param-tag.html" target="_blank" rel="noopener">&lt;x:param&gt;</a></td>
+<td align="left">与&lt;x:transform&gt;共同使用，用于设置XSL样式表</td>
+</tr>
+</tbody></table>
+<h4 id="JSTL函数"><a href="#JSTL函数" class="headerlink" title="JSTL函数"></a>JSTL函数</h4><p>JSTL包含一系列标准函数，大部分是通用的字符串处理函数。引用JSTL函数库的语法如下：</p>
+<pre><code>&lt;%@ taglib prefix=&quot;fn&quot; 
+           uri=&quot;http://java.sun.com/jsp/jstl/functions&quot; %&gt;</code></pre><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-contains.html" target="_blank" rel="noopener">fn:contains()</a></td>
+<td align="left">测试输入的字符串是否包含指定的子串</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-containsignoreCase.html" target="_blank" rel="noopener">fn:containsIgnoreCase()</a></td>
+<td align="left">测试输入的字符串是否包含指定的子串，大小写不敏感</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-endswith.html" target="_blank" rel="noopener">fn:endsWith()</a></td>
+<td align="left">测试输入的字符串是否以指定的后缀结尾</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-escapexml.html" target="_blank" rel="noopener">fn:escapeXml()</a></td>
+<td align="left">跳过可以作为XML标记的字符</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-indexof.html" target="_blank" rel="noopener">fn:indexOf()</a></td>
+<td align="left">返回指定字符串在输入字符串中出现的位置</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-join.html" target="_blank" rel="noopener">fn:join()</a></td>
+<td align="left">将数组中的元素合成一个字符串然后输出</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-length.html" target="_blank" rel="noopener">fn:length()</a></td>
+<td align="left">返回字符串长度</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-replace.html" target="_blank" rel="noopener">fn:replace()</a></td>
+<td align="left">将输入字符串中指定的位置替换为指定的字符串然后返回</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-split.html" target="_blank" rel="noopener">fn:split()</a></td>
+<td align="left">将字符串用指定的分隔符分隔然后组成一个子字符串数组并返回</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-startswith.html" target="_blank" rel="noopener">fn:startsWith()</a></td>
+<td align="left">测试输入字符串是否以指定的前缀开始</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-substring.html" target="_blank" rel="noopener">fn:substring()</a></td>
+<td align="left">返回字符串的子集</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-substringafter.html" target="_blank" rel="noopener">fn:substringAfter()</a></td>
+<td align="left">返回字符串在指定子串之后的子集</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-substringbefore.html" target="_blank" rel="noopener">fn:substringBefore()</a></td>
+<td align="left">返回字符串在指定子串之前的子集</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-tolowercase.html" target="_blank" rel="noopener">fn:toLowerCase()</a></td>
+<td align="left">将字符串中的字符转为小写</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-touppercase.html" target="_blank" rel="noopener">fn:toUpperCase()</a></td>
+<td align="left">将字符串中的字符转为大写</td>
+</tr>
+<tr>
+<td align="left"><a href="http://www.runoob.com/jsp/jstl-function-trim.html" target="_blank" rel="noopener">fn:trim()</a></td>
+<td align="left">移除首位的空白符</td>
+</tr>
+</tbody></table>
+<h4 id="JSTL-中常用的标签"><a href="#JSTL-中常用的标签" class="headerlink" title="JSTL 中常用的标签"></a>JSTL 中常用的标签</h4><p><strong>1.逻辑判断标签(if,choose-when-otherwise)</strong></p>
+<ul>
+<li><strong>&lt;c:if&gt; 标签</strong></li>
+<li>语法格式<pre><code>&lt;c:if test=&quot;&lt;boolean&gt;&quot; var=&quot;&lt;string&gt;&quot; scope=&quot;&lt;string&gt;&quot;&gt;
+ ...
+&lt;/c:if&gt;</code></pre></li>
+<li>属性<br>&lt;c:if&gt;标签有如下属性：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">描述</th>
+<th align="left">是否必要</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">test</td>
+<td align="left">条件</td>
+<td align="left">是</td>
+<td align="left">无</td>
+</tr>
+<tr>
+<td align="left">var</td>
+<td align="left">用于存储条件结果的变量</td>
+<td align="left">否</td>
+<td align="left">无</td>
+</tr>
+<tr>
+<td align="left">scope</td>
+<td align="left">var属性的作用域</td>
+<td align="left">否</td>
+<td align="left">page</td>
+</tr>
+<tr>
+<td align="left">- <strong>演示实例：</strong></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">```</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&lt;%@ page language=”java” contentType=”text/html; charset=UTF-8”</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">pageEncoding=”UTF-8”%&gt;</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&lt;%@ taglib uri=”<a href="http://java.sun.com/jsp/jstl/core&quot;" target="_blank" rel="noopener">http://java.sun.com/jsp/jstl/core&quot;</a> prefix=”c” %&gt;</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><html></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><head></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><title>c:if 标签实例</title></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><body></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&lt;c:set var=”salary” scope=”session” value=”${2000*2}”/&gt;</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">&lt;c:if test=”${salary &gt; 2000}”&gt;</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><p>我的工资为: &lt;c:out value=”${salary}”/&gt;<p></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></c:if></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></body></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"></html></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">```</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">运行结果如下：</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">```</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">我的工资为: 4000</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">```</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>&lt;c:choose&gt;, &lt;c:when&gt;, &lt;c:otherwise&gt; 标签</strong><br><code>&lt;c:choose&gt;</code>标签与 Java switch 语句的功能一样，用于在众多选项中做出选择。<br>switch 语句中有 case ，而<code>&lt;c:choose&gt;</code>标签中对应有 <code>&lt;c:when&gt;</code>，switch语句中有 default，而<code>&lt;c:choose&gt;</code>标签中有<code>&lt;c:otherwise&gt;</code>。</li>
+<li>语法格式<pre><code>&lt;c:choose&gt;
+  &lt;c:when test=&quot;&lt;boolean&gt;&quot;&gt;
+      ...
+  &lt;/c:when&gt;
+  &lt;c:when test=&quot;&lt;boolean&gt;&quot;&gt;
+      ...
+  &lt;/c:when&gt;
+  ...
+  ...
+  &lt;c:otherwise&gt;
+      ...
+  &lt;/c:otherwise&gt;
+&lt;/c:choose&gt;</code></pre></li>
+<li>属性<br><code>&lt;c:choose&gt;</code>标签没有属性。<br><code>&lt;c:when&gt;</code>标签只有一个属性，在下表中有给出。<br><code>&lt;c:otherwise&gt;</code>标签没有属性。<br><code>&lt;c:when&gt;</code>标签的属性如下：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">描述</th>
+<th align="left">是否必要</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">test</td>
+<td align="left">条件</td>
+<td align="left">是</td>
+<td align="left">无</td>
+</tr>
+</tbody></table>
+<ul>
+<li>实例演示<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+  pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;c:choose 标签实例&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;c:set var=&quot;salary&quot; scope=&quot;session&quot; value=&quot;${2000*2}&quot;/&gt;
+&lt;p&gt;你的工资为 : &lt;c:out value=&quot;${salary}&quot;/&gt;&lt;/p&gt;
+&lt;c:choose&gt;
+  &lt;c:when test=&quot;${salary &lt;= 0}&quot;&gt;
+     太惨了。
+  &lt;/c:when&gt;
+  &lt;c:when test=&quot;${salary &gt; 1000}&quot;&gt;
+     不错的薪水，还能生活。
+  &lt;/c:when&gt;
+  &lt;c:otherwise&gt;
+      什么都没有。
+  &lt;/c:otherwise&gt;
+&lt;/c:choose&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>运行结果如下：<pre><code>你的工资为 : 4000
+</code></pre></li>
+</ul>
+<p>不错的薪水，还能生活。</p>
+<pre><code>
+**2.循环遍历标签(foreach)**
+- **&lt;c:forEach&gt;标签**
+- 语法格式</code></pre><p>&lt;c:forEach<br>    items=”<object>“<br>    begin=”<int>“<br>    end=”<int>“<br>    step=”<int>“<br>    var=”<string>“<br>    varStatus=”<string>“&gt;</p>
+<pre><code>...</code></pre><pre><code>-  属性
+`&lt;c:forEach&gt;`标签有如下属性：
+
+属性 |    描述     |    是否必要|         默认值
+:- |    :- |    :- |    :- |    
+items     |    要被循环的信息     |    否     |    无
+begin     |    开始的元素（0=第一个元素，1=第二个元素）|         否     |    0
+end     |    最后一个元素（0=第一个元素，1=第二个元素）|         否     |    Last element
+step |        每一次迭代的步长|         否     |    1
+var     |    代表当前条目的变量名称     |    否     |    无
+varStatus |        代表循环状态的变量名称     |    否     |    无
+
+- 实例演示</code></pre><p>&lt;%@ page language=”java” contentType=”text/html; charset=UTF-8”<br>    pageEncoding=”UTF-8”%&gt;<br>&lt;%@ taglib uri=”<a href="http://java.sun.com/jsp/jstl/core&quot;" target="_blank" rel="noopener">http://java.sun.com/jsp/jstl/core&quot;</a> prefix=”c” %&gt;</p>
+<html>
+<head>
+<title>c:forEach 标签实例</title>
+</head>
+<body>
+<c:forEach var="i" begin="1" end="5">
+   Item <c:out value="${i}"/><p>
+</c:forEach>
+</body>
+</html>
+```
+运行结果如下：
+```
+Item 1
+Item 2
+Item 3
+Item 4
+Item 5
+```
+
+<p><strong>3.在 JSP 中实现日期的格式化:</strong></p>
+<ul>
+<li><strong><a href="fmt:formatDate">fmt:formatDate</a> 标签</strong></li>
+<li>语法格式<pre><code>&lt;fmt:formatDate
+value=&quot;&lt;string&gt;&quot;
+type=&quot;&lt;string&gt;&quot;
+dateStyle=&quot;&lt;string&gt;&quot;
+timeStyle=&quot;&lt;string&gt;&quot;
+pattern=&quot;&lt;string&gt;&quot;
+timeZone=&quot;&lt;string&gt;&quot;
+var=&quot;&lt;string&gt;&quot;
+scope=&quot;&lt;string&gt;&quot;/&gt;</code></pre></li>
+<li>属性<br><code>&lt;fmt:formatDate&gt;</code>标签有如下属性：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">属性</th>
+<th align="left">描述</th>
+<th align="left">是否必要</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">value</td>
+<td align="left">要显示的日期</td>
+<td align="left">是</td>
+<td align="left">无</td>
+</tr>
+<tr>
+<td align="left">type</td>
+<td align="left">DATE, TIME, 或 BOTH</td>
+<td align="left">否</td>
+<td align="left">date</td>
+</tr>
+<tr>
+<td align="left">dateStyle</td>
+<td align="left">FULL, LONG, MEDIUM, SHORT, 或 DEFAULT</td>
+<td align="left">否</td>
+<td align="left">default</td>
+</tr>
+<tr>
+<td align="left">timeStyle</td>
+<td align="left">FULL, LONG, MEDIUM, SHORT, 或 DEFAULT</td>
+<td align="left">否</td>
+<td align="left">default</td>
+</tr>
+<tr>
+<td align="left">pattern</td>
+<td align="left">自定义格式模式</td>
+<td align="left">否</td>
+<td align="left">无</td>
+</tr>
+<tr>
+<td align="left">timeZone</td>
+<td align="left">显示日期的时区</td>
+<td align="left">否</td>
+<td align="left">默认时区</td>
+</tr>
+<tr>
+<td align="left">var</td>
+<td align="left">存储格式化日期的变量名</td>
+<td align="left">否</td>
+<td align="left">显示在页面</td>
+</tr>
+<tr>
+<td align="left">scope</td>
+<td align="left">存储格式化日志变量的范围</td>
+<td align="left">否</td>
+<td align="left">页面</td>
+</tr>
+</tbody></table>
+<ul>
+<li>实例演示<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+  pageEncoding=&quot;UTF-8&quot;%&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
+&lt;%@ taglib prefix=&quot;fmt&quot; uri=&quot;http://java.sun.com/jsp/jstl/fmt&quot; %&gt;
+</code></pre></li>
+</ul>
+<html>
+<head>
+  <title>JSTL fmt:dateNumber 标签</title>
+</head>
+<body>
+<h3>日期格式化:</h3>
+<c:set var="now" value="<%=new java.util.Date()%>" />
+
+<p>日期格式化 (1): <fmt:formatDate type="time" 
+            value="${now}" /></p>
+<p>日期格式化 (2): <fmt:formatDate type="date" 
+            value="${now}" /></p>
+<p>日期格式化 (3): <fmt:formatDate type="both" 
+            value="${now}" /></p>
+<p>日期格式化 (4): <fmt:formatDate type="both" 
+            dateStyle="short" timeStyle="short" 
+            value="${now}" /></p>
+<p>日期格式化 (5): <fmt:formatDate type="both" 
+            dateStyle="medium" timeStyle="medium" 
+            value="${now}" /></p>
+<p>日期格式化 (6): <fmt:formatDate type="both" 
+            dateStyle="long" timeStyle="long" 
+            value="${now}" /></p>
+<p>日期格式化 (7): <fmt:formatDate pattern="yyyy-MM-dd" 
+            value="${now}" /></p>
+
+</body>
+</html>
+```
+以上实例运行结果：
+```
+日期格式化:
+
+<p>日期格式化 (1): 11:19:43</p>
+<p>日期格式化 (2): 2016-6-26</p>
+<p>日期格式化 (3): 2016-6-26 11:19:43</p>
+<p>日期格式化 (4): 16-6-26 上午11:19</p>
+<p>日期格式化 (5): 2016-6-26 11:19:43</p>
+<p>日期格式化 (6): 2016年6月26日 上午11时19分43秒</p>
+<p>日期格式化 (7): 2016-06-26</p>
+<pre><code>
+---
+
+&gt; 欢迎转载，转载请注明出处！   
+&gt; 简书ID：[@我没有三颗心脏](https://www.jianshu.com/u/a40d61a49221)  
+&gt; github：[wmyskxz](https://github.com/wmyskxz/)  
+&gt; 欢迎关注公众微信号：wmyskxz
+&gt; 分享自己的学习 &amp; 学习资料 &amp; 生活
+&gt; 想要交流的朋友也可以加qq群：3382693</code></pre>
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/07/chu-xue-java-web-5-cookie-session-xue-xi/">
       初学Java Web(5)——Cookie-Session学习
     </a>
@@ -1680,227 +2674,6 @@ Java EE 环境部署成功！
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/12/27/java-8-lambda-biao-da-shi/">
-      Java 8——Lambda表达式
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年12月27日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本文内容大部分来自《Java 8实战》一书</p>
-</blockquote>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇文章中，我们了解了利用行为参数化来传递代码有助于应对不断变化的需求，它允许你定义一个代码块来表示一个行为，然后传递它。一般来说，利用这个概念，你就可以编写更为灵活且可重复使用的代码了。</p>
-<p>但是你同时也看到，使用匿名类来表示不同的行为并不令人满意：代码十分啰嗦，这会影响程序员在时间中使用行为参数化的积极性。Lambda表达式很好的解决了这个问题，它可以让你很简洁地表示一个行为或传递代码。<em>现在你可以把Lambda表达式看作匿名功能，它基本上就是没有声明名称的方法，但和匿名类一样，它也可以作为参数传递给一个方法。</em></p>
-<h2 id="Lambda管中窥豹"><a href="#Lambda管中窥豹" class="headerlink" title="Lambda管中窥豹"></a>Lambda管中窥豹</h2><p>可以把Lambda表达式理解为简洁地表示可传递的匿名函数的一种方式：它没有名称，但它由参数列表、函数主体、返回类型，可能还有一个抛出的异常列表。</p>
-<p>Lambda表达式鼓励你采用上一篇文章中提到的行为参数化风格，最终结果就是你的额代码变得更加清晰、更加灵活。比如，利用Lambda表达式，你可以更为简洁地自定义一个Comparator对象：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d3f5c5e9f12542c8.png" alt=""></p>
-<p>不得不承认，代码看起来更清晰了。要是现在觉得Lambda表达式看起来一头雾水的话也没关系，很快就会一点点的解释清楚的。现在，请注意你基本上只传递了比较两个苹果重量所需要的代码。看起来就像只传递了compare方法的主体。你很快就会学到，你甚至还可以进一步简化代码。</p>
-<p>为了进一步说明，下面给出了Java 8五个有效的Lambda表达式的例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-bb79f4b577fd7e90.png" alt=""></p>
-<p>Java语言设计者选择这样的语法，是因为C#和Scala等语言中的类似功能广受欢迎。Lambda的基本语法是：</p>
-<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> expression</code></pre>
-<p>或<strong>（请注意语句的花括号）</strong></p>
-<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span> statements<span class="token punctuation">;</span> <span class="token punctuation">}</span></code></pre>
-<p>你可以看到，Lambda表达式的语法很简单，我们下来来测试一下你对这个模式的了解程度：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-06b3f2c0e4b6db8d.png" alt=""></p>
-<h2 id="在哪里以及如何使用Lambda"><a href="#在哪里以及如何使用Lambda" class="headerlink" title="在哪里以及如何使用Lambda"></a>在哪里以及如何使用Lambda</h2><p>现在你可能在想，在哪里可以使用Lambda表达式。直接公布答案：你可以在函数式接口上使用Lambda表达式。</p>
-<h4 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h4><p>还记得上一篇文章中，为了参数化filter方法的行为而创建的Predicate<T>接口吗？它就是一个函数式接口！为什么呢？<strong>因为Predicate仅仅定义了一个抽象方法：</strong></p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Predicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
-    <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>T t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>一言以蔽之，<strong>函数式接口就是之定义一个抽象方法的接口。</strong>你已经知道了Java API中的一些其他函数式接口，如Comparator和Runnable</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
-    <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>T o1<span class="token punctuation">,</span> T o2<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Runnable</span><span class="token punctuation">{</span>
-    <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<blockquote>
-<p>接口现在还可以拥有<strong>默认方法（即在类没有对方法进行是现实时，其主体为方法提供默认实现的方法，如List的sort方法）。</strong>哪怕有很多默认方法，只要接口只定义了一个<strong>抽象方法</strong>，它就仍然是一个函数式接口。</p>
-</blockquote>
-<p>为了检测是否掌握了函数式接口的概念，我们来看一个小测试：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-f6f5aac41c69a941.png" alt=""></p>
-<p>用函数式接口可以干什么呢？Lambda表达式允许你直接以内联的形式为函数式接口的抽象方法提供实现，并把整个表达式作为函数式接口的实例。这听上去可能有些绕口，但是联想到上一篇文章中的Lambda表达式改造的语句，或许就会清晰许多，它不同于使用匿名内部类来完成时的笨拙，而是更加清晰直接：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-87c3fe03f78c82c7.png" alt=""></p>
-<p>你可能会想：“为什么只有在需要函数式接口的时候才可以传递Lambda呢？”语言的设计者也考虑过其他方法，例如给Java添加函数类型，但最终他们选择了现在这种方式，因为这种方式自然且能避免语言变得更加复杂。此外，大多数Java程序员都已经熟悉了具有一个抽象方法的接口的理念（例如事件处理）。</p>
-<h2 id="把Lambda付诸实践：环绕执行模式"><a href="#把Lambda付诸实践：环绕执行模式" class="headerlink" title="把Lambda付诸实践：环绕执行模式"></a>把Lambda付诸实践：环绕执行模式</h2><p>让我们通过一个例子，看看在实践中如何利用Lambda和行为参数化来让代码更为灵活，更为简洁。资源处理（例如处理文件或数据库）时一个常见的模式就是打开一个资源，做一些处理，然后关闭资源。这个设置和清理阶段总是很相似，并且会围绕着执行处理的那些重要代码。这就是所谓的环绕执行（execute around）模式：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d84c98d38f06f440.png" alt=""></p>
-<h4 id="第一步：记得行为参数化"><a href="#第一步：记得行为参数化" class="headerlink" title="第一步：记得行为参数化"></a>第一步：记得行为参数化</h4><p>现在这段代码时有局限的。你只能读文件的第一行。如果你想要返回头两行，甚至返回使用最频繁的词，该怎么办呢？在理想的情况下，你要重用执行设置和清理的代码，并告诉processFile方法对文件执行不同的操作。这听起来是不是很耳熟？是的，你需要把processFile的行为参数化。你需要一种方法把行为传递给processFile，以便它可以利用BufferedReader执行不同的行为。</p>
-<p>传递行为正是Lambda的拿手好戏。那要是想一次读两行，这个新的processFile方法看起来又该是什么样的呢？基本上，你需要一个接受BufferedReader并返回String的Lambda。例如，下面就是从BufferedReader中打印两行的写法：</p>
-<pre class=" language-java"><code class="language-java">String result <span class="token operator">=</span> <span class="token function">processFile</span><span class="token punctuation">(</span><span class="token punctuation">(</span>BufferedReader br<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> 
-                                            br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h4 id="第二步：使用函数式接口来传递行为"><a href="#第二步：使用函数式接口来传递行为" class="headerlink" title="第二步：使用函数式接口来传递行为"></a>第二步：使用函数式接口来传递行为</h4><p>前面已经解释过了，Lambda仅可用于上下文是函数式接口的情况。你需要创建一个能匹配BufferedReader -&gt; String，还可以抛出IOException异常的接口。让我们把这一接口叫做BufferedReaderProcessor吧。</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@FunctionalInterface</span>
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BufferedReaderProcessor</span><span class="token punctuation">{</span>
-    String <span class="token function">process</span><span class="token punctuation">(</span>BufferedReader b<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<blockquote>
-<p>@FunctionalInterface 标注表示该接口会设计成一个函数式接口。如果你用此标注定义了一个接口，而它却不是函数式接口的话，编译器将返回一个提示原因的错误。</p>
-</blockquote>
-<p>现在你就可以把这个接口作为新的processFile方法的参数了：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">processFile</span><span class="token punctuation">(</span>BufferedReaderProcessor p<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第三步：执行一个行为"><a href="#第三步：执行一个行为" class="headerlink" title="第三步：执行一个行为"></a>第三步：执行一个行为</h4><p>任何BufferedRader -&gt; String形式的Lambda都可以作为参数来传递，因为它们符合BufferedReaderProcessor接口中定义的process方法的签名。现在你只需要一种方法在processFile主体内执行Lambda所代表的代码。<strong>请记住，Lambda表达式允许你直接内联，为函数式接口的抽象方法提供实现，并且将整个表达式作为函数式接口的一个实例。</strong>因此，你可以在processFile主体内，对得到的BufferedReaderProcessor对象调用process方法执行处理：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">processFile</span><span class="token punctuation">(</span>BufferedReaderProcesssor p<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
-    <span class="token keyword">try</span><span class="token punctuation">(</span>BufferedReader br <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileReader</span><span class="token punctuation">(</span><span class="token string">"data.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">return</span> p<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>br<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第四步：传递Lambda"><a href="#第四步：传递Lambda" class="headerlink" title="第四步：传递Lambda"></a>第四步：传递Lambda</h4><p>现在你就可以通过传递不同的Lambda重用processFile方法，并以不同的方式处理文件了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-05575cb8fe8ec81d.png" alt=""></p>
-<p>下面的图片总结了所采取的使processFile方法更加灵活的四个步骤：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-3dd5fb3566051fab.png" alt=""></p>
-<h2 id="使用函数式接口"><a href="#使用函数式接口" class="headerlink" title="使用函数式接口"></a>使用函数式接口</h2><p>如你所见的，函数式接口很有用，因为抽象方法的签名可以描述Lambda表达式的签名。Java 8的库设计师帮你在java.util.function包中引入了几个新的函数式接口。</p>
-<h4 id="Predicate"><a href="#Predicate" class="headerlink" title="Predicate"></a>Predicate</h4><p>java.util.function.Predicate<T>接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。在你需要一个涉及类型T的布尔表达式时，就可以使用这个接口：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d66c0b5eca69e0fa.png" alt=""></p>
-<h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><p>java.util.function.Consumer<T>定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。你如果需要访问类型T的对象，并对其执行某些操作，就可以使用这个接口：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-b82ecf93c4a48e75.png" alt=""></p>
-<h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p>java.util.function.Function&lt;T,R&gt;接口定义了一个叫做apply的方法，它接受一个泛型T的对象，并返回一个泛型R的对象。如果你需要定义一个Lambda，将输入对象的信息映射到输出，就可以使用这个接口（比如提取苹果的重量，或把字符串映射为它的长度）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-94bc9527054fe819.png" alt=""></p>
-<blockquote>
-<p>还有更为丰富的一些函数式接口，这里列举了三个比较有代表性的。</p>
-</blockquote>
-<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>方法引用让你可以重复使用现有的方法定义，并像Lambda一样传递它们。在一些情况下，比起使用Lambda表达式，它们似乎更易读，感觉也更自然。下面就是借助Java 8API，用方法引用写的一个排序的例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-93999b52611588fe.png" alt=""></p>
-<p>是不是更酷了？念起来就是“给库存排序，比较苹果的重量”，这样的代码读起来简直就像是在描述问题本身，太酷了。</p>
-<p>为什么要关心方法引用呢？<strong>方法引用可以被看作调用特定方法的Lambda的一种快捷写法。</strong>它的基本思想是，如果一个Lambda代表的知识“直接调用这个方法”，拿最好还是用名称来调用它，而不是去描述如何调用它。</p>
-<p>事实上，方法引用就是让你根据已有的方法实现来创建Lambda表达式，但是，显式地指明方法的名称，你的代码可读性会更好。</p>
-<p>它是如何工作的呢？当你需要使用方法引用时，目标引用放在分隔符** :: **前，方法的名称放在后面。例如，Apple::getWeight就是引用了Apple类中定义的方法getWeight。请记住，不需要括号，因为你没有实际调用这个方法，方法引用就是Lambda表达式(Apple a) -&gt; a.getWeight()的快捷写法。</p>
-<p>下面给出一些在Java 8中方法引用的例子来让你更加了解：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-c3ab872955c9ad67.png" alt=""></p>
-<p>你可以把方法引用看作针对仅仅涉及单一方法的Lambda的语法糖，因为你表达同样的事情时写的代码更少了。</p>
-<h2 id="Lambda-和方法引用实战"><a href="#Lambda-和方法引用实战" class="headerlink" title="Lambda 和方法引用实战"></a>Lambda 和方法引用实战</h2><p>我们继续来研究开始的那个问题——用不同的排序策略给一个Apple列表排序，并展示如何把一个原始粗暴的解决方案转变得更为简明：<code>inventory.sort(comparing(Apple::getWeight));</code></p>
-<h4 id="第一步：传递代码"><a href="#第一步：传递代码" class="headerlink" title="第一步：传递代码"></a>第一步：传递代码</h4><p>很幸运，Java 8的API已经为你提供了一个List可用的sort方法，你不用自己去实现它。那么最困难的部分已经搞定了！但是，如何把排序的策略传递给sort方法呢？你看，sort方法的签名是这样的：</p>
-<p><code>void sort(Comparator&lt;? super E&gt; c)</code></p>
-<p>它需要一个Comparator对象来比较两个Apple！这就是在Java中传递策略的方式：<strong>它们必须包裹在一个对象里。</strong>我们说sort的行为被参数化了：传递给它的排序策略不同，其行为也会不同。</p>
-<p>你的第一个解决方案看上去是这样的：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppleComparator</span> <span class="token keyword">implements</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>Apple<span class="token operator">></span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Apple a1<span class="token punctuation">,</span> Apple a2<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">return</span> a1<span class="token punctuation">.</span><span class="token function">getWeigh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AppleComparator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h4 id="第二步：使用匿名类"><a href="#第二步：使用匿名类" class="headerlink" title="第二步：使用匿名类"></a>第二步：使用匿名类</h4><p>你可以使用<em>匿名类</em>来改进解决方案，而不是实现一个Comparator却只实例化一次：</p>
-<pre class=" language-java"><code class="language-java">inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>Apple<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Apple a1<span class="token punctuation">,</span> Apple a2<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">return</span> a1<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h4 id="第三步：使用Lambda表达式"><a href="#第三步：使用Lambda表达式" class="headerlink" title="第三步：使用Lambda表达式"></a>第三步：使用Lambda表达式</h4><p>但你的解决方案仍然挺啰嗦的。使用Java 8引入的Lambda改进后的代码如下：</p>
-<pre class=" language-java"><code class="language-java">inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a1<span class="token punctuation">,</span> a2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a1<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>你的代码还能变得更易读一点吗？Comparator具有一个叫做comparing的静态辅助方法，它可以接受一个Function来提取Comparable键值，并生成一个Comparator对象。它可以像下面这样用：</p>
-<p><code>Comparator&lt;Apple&gt; c = Comparator.comparing((Apple a1) -&gt; a.getWeight());</code></p>
-<p>现在你可以把代码再改得紧凑一点了：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Comparator<span class="token punctuation">.</span>comparing<span class="token punctuation">;</span>
-inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token function">comparing</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h4 id="第四步：使用方法引用"><a href="#第四步：使用方法引用" class="headerlink" title="第四步：使用方法引用"></a>第四步：使用方法引用</h4><p>前面解释过，方法引用就是替代那些转发参数的Lambda表达式的语法糖。你可以用方法引用让你的代码更加简洁（假设你已经静态导入了java.util.Comparator.comparing）：</p>
-<p><code>inventory.sort(comparing(Apple::getWeight));</code></p>
-<p>恭喜你，这就是你的最终解决方案！这笔Java 8之前的代码好在哪儿呢？它比较短；它的意思也很明显，并且代码读起来和问题描述差不多：“对库存进行排序，比较苹果的重量。”</p>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2138,7 +2911,7 @@ inventory<span class="token punctuation">.</span><span class="token function">so
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

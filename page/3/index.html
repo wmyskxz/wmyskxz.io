@@ -435,6 +435,622 @@
         
           
   <h2 class="title">
+    <a href="/2020/03/23/dong-yi-dian-python-xi-lie-kuai-su-ru-men/">
+      懂一点Python系列——快速入门
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Python/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Python/懂一点系列</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年3月23日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-71e6f0dcd9d841a5.png" alt=""></p>
+<blockquote>
+<p>本文面相有 <strong>一定编程基础</strong> 的朋友学习，所以略过了 <em>环境安装<em>、</em>IDE 搭建</em> 等一系列简单繁琐的事情。</p>
+</blockquote>
+<h1 id="一、Python-简介"><a href="#一、Python-简介" class="headerlink" title="一、Python 简介"></a>一、Python 简介</h1><p><strong>Python</strong> 英文原意为 <strong>“蟒蛇”</strong>，直到 <code>1989</code> 年荷兰人 <strong>Guido van Rossum</strong> （简称 Guido）发明了一种 <strong>面向对象</strong> 的 <strong>解释型</strong> 编程语言，并将其命名为  Python，才赋予了它表示一门编程语言的含义。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-8cc9b31907c8afca.png" alt=""></p>
+<blockquote>
+<p>说到 Python 的诞生，极具戏剧色彩，据 Guido 的自述记载，Python 语言是他在圣诞节期间为了打发时间开发出来的，之所以会选择 Python 作为该编程语言的名字，是因为他是一个叫 Monty Python 戏剧团体的忠实粉丝。</p>
+</blockquote>
+<h2 id="解释型-vs-编译型"><a href="#解释型-vs-编译型" class="headerlink" title="解释型 vs 编译型"></a>解释型 vs 编译型</h2><p>作为电子元器件的 <strong>计算机</strong>，实际上 <strong>只能</strong> 识别某些 <strong>特定的二进制指令</strong> <em>(特殊的 <code>01</code> 组合)</em>，但由于 <strong>人类阅读</strong> 这些 <strong>指令</strong> 非常难以阅读，加上使用这些指令编写程序的 <strong>耗时</strong> 太过于 <strong>冗长</strong>，所以，人们在此基础上再次制定了一套规范，采用特定的 <strong>人类可阅读</strong> 的代码编写，待到要执行时再 <strong>翻译</strong> 回特定二进制指令，这样就帮助了人们更加轻松地理解和阅读程序逻辑了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-4b5f50ce1ddc7077.png" alt=""></p>
+<p>这也就是所谓现在的 <strong>“高级编程语言”</strong> 了。</p>
+<p>上述 <strong>翻译</strong> 这个过程 <em>(其实相当复杂，涉及语法分析、语义分析、性能优化等等..)</em> 其实也是由一个特定程序来执行的，那 <strong>什么时候将源代码翻译成二进制指令呢？</strong>，不同的编程语言有不同的规定：</p>
+<ul>
+<li><strong>编译型语言</strong>：必须 <strong>提前</strong> 将所有源代码 <strong>一次性</strong> 转换成二进制指令，生成一个可执行文件 <em>(例如 Windows 下的 <code>.exe</code>)</em> 比如：C 语言、C++、Golang、汇编等。使用的转换工具我们称为 <strong>编译器</strong>。</li>
+<li><strong>解释型语言</strong>：允许程序 <strong>一边执行一边转换</strong>，并且不会生成可执行程序，比如 Python、JavaScript、PHP 等。使用的转换工具我们称为 <strong>解释器</strong>。</li>
+</ul>
+<blockquote>
+<p><strong>Java</strong> 和 <strong>C#</strong> 是一种比较奇葩的存在，它们是 <strong>半编译半解释型</strong> 的语言，源码需要先转换成一种中间文件 <em>(字节码文件)</em>，然后再把中间文件拿到 <strong>虚拟机</strong> 中执行。Java 引领了这种风潮，它的初衷是在跨平台的同时兼顾执行效率。</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-e0d8266f6398eb03.png" alt=""></p>
+<p><em>上图</em> 就展示了两种不同类型语言的执行流程的不同，两种方式对比起来总结如下：</p>
+<ul>
+<li><strong>编译型语言一般不能跨平台</strong>：对于不同的 CPU 来说，它们的指令集是有差异的，这就导致了 <strong>可执行文件</strong> <em>(翻译后的指令)</em> 不能跨平台，另外不同的系统之间的命令也会存在差异，例如 Linux 中睡眠是 <code>sleep()</code> 参数是毫秒，而 Windows 中是 <code>Sleep()</code> <em>(首字母大写)</em> 参数是秒，这就导致了 <strong>源代码也不能跨平台</strong>；</li>
+<li><strong>解释型语言可跨平台</strong>：这一切都归功于 <strong>解释器</strong>，它本身就是一个可执行文件，官方只要针对不同的平台开发不同的解释器，那么解释器就能够根据相同的语法解析出同样功能的指令；</li>
+<li><strong>编译型一般比解释型效率高</strong>：由于解释型是采取一边执行一边翻译的做法，所以会慢上一些，再加上我们强大的 <strong>编译器</strong> 会帮我们做许多代码优化的工作。</li>
+</ul>
+<h4 id="关于-Python"><a href="#关于-Python" class="headerlink" title="关于 Python"></a>关于 Python</h4><p><strong>Python</strong> 属于典型的解释型语言，所以运行 Python 程序需要解释器的支持，只要你在不同的平台安装了不同的解释器，你的代码就可以随时运行，不用担心任何兼容性问题，真正的 <strong>“一次编写，到处运行”</strong>。</p>
+<p><strong>Python</strong> 几乎支持所有常见的平台，比如 Linux、Windows、Mac OS、Android、FreeBSD、Solaris、PocketPC 等，你所写的 Python 代码无需修改就能在这些平台上正确运行。也就是说，Python 的 <strong>可移植性</strong> 是很强的。</p>
+<h2 id="面向对象-vs-面向过程"><a href="#面向对象-vs-面向过程" class="headerlink" title="面向对象 vs 面向过程"></a>面向对象 vs 面向过程</h2><p><strong>面向对象</strong> 和 <strong>面向过程</strong> 是我们使用计算机编程解决问题的两种不同方式的方案。</p>
+<p><strong>面向过程</strong> 可以说是一种 <strong>基于事件 or 过程</strong> 来描述的编码方式，譬如「把大象放进冰箱」就可以描述成那经典的三个步骤，「把牛放进冰箱」又是另一个相似的经典三步，只是这样单独的事件 or 过程多了之后，随着项目复杂度的增加，项目会变得非常难以维护。</p>
+<blockquote>
+<p>软件危机最典型的例子莫过于 IBM 的 <code>System/360</code> 的操作系统开发。佛瑞德·布鲁克斯（Frederick P. Brooks, Jr.）作为项目主管，率领 <code>2000</code> 多个程序员夜以继日的工作，共计花费了 <code>5000</code> 人一年的工作量，写出将近 <code>100</code> 万行的源码，总共投入 <code>5</code> 亿美元，是美国的 “曼哈顿” 原子弹计划投入的 <code>1/4</code>。尽管投入如此巨大，但项目进度却一再延迟，软件质量也得不到保障。布鲁克斯后来基于这个项目经验而总结的《人月神话》一书，成了史上最畅销的软件工程书籍。</p>
+<ul>
+<li>引用自：<a href="http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110880" target="_blank" rel="noopener">http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110880</a></li>
+</ul>
+</blockquote>
+<p>尽管 <strong>结构化的程序设计</strong> <em>(将一个大问题逐步划分成一个一个的小问题)</em> 能够帮助我们解决一部分问题，但 <strong>面向过程</strong> 仍然有一些不符合人类惯有的思考方式，譬如说：我今天想去存钱，我不会说「请拿走我的银行卡和钱，然后在我卡上充值上相应的数目，最后把银行卡还给我谢谢」，而我只会说「存钱，谢谢」，因为人大部分时间都是基于 <strong>对象</strong> <em>(或者可以说角色)</em> 来思考的。</p>
+<p>对于 <strong>面向过程</strong> 最好的总结可能是：<strong>「程序 = 算法 + 数据结构」</strong>，而对于 <strong>面向对象</strong> 来说则可以更改为：<strong>「程序 = 对象 + 交互」</strong>。</p>
+<h2 id="Why-Python？"><a href="#Why-Python？" class="headerlink" title="Why Python？"></a>Why Python？</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-8f4e79f34df177e6.png" alt=""></p>
+<p>上面的 <em>漫画</em> 很好地说明了 Python 快速构建工具的能力，这也是 <code>Why Python</code> 的一大理由。下面根据惯例列举一些让我们足以选择 Python 的原因。</p>
+<h4 id="初学者友善-容易明白且功能强大"><a href="#初学者友善-容易明白且功能强大" class="headerlink" title="初学者友善 | 容易明白且功能强大"></a>初学者友善 | 容易明白且功能强大</h4><p>Python 的设计足够简单和易于使用，这样使得初学者能够从中不断得获取到乐趣以继续 Python 之旅。</p>
+<p>另外作为一种非常高级的语言，Python 读起来像英语，这减轻了编码初学者的许多语法学习压力。Python 为您处理了很多复杂性，因此它非常适合初学者，因为它使初学者可以专注于学习编程概念，而不必担心过多的细节。</p>
+<p>Python 还一度被爆纳入高考，收编到小学课本。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-451180aa92102c5b.png" alt=""></p>
+<h4 id="非常灵活"><a href="#非常灵活" class="headerlink" title="非常灵活"></a>非常灵活</h4><p>作为一种 <strong>动态类型</strong> 的语言，Python 确实非常灵活。这意味着没有关于如何构建特征的硬性规则，并且使用不同的方法来解决问题将具有更大的灵活性 <em>（尽管 Python 哲学鼓励使用明显的方法来解决问题）</em>。此外，Python 也更宽容错误，因此您仍然可以编译并运行程序，直到遇到问题为止。</p>
+<h4 id="越来越火爆"><a href="#越来越火爆" class="headerlink" title="越来越火爆"></a>越来越火爆</h4><p>Python 在诞生之初，因为其功能不好，运转功率低，不支持多核，根本没有并发性可言，在计算功能不那么好的年代，一直没有火爆起来，甚至很多人根本不知道有这门语言。</p>
+<p>随着时代的发展，物理硬件功能不断提高，而软件的复杂性也不断增大，开发效率越来越被企业重视。因此就有了不一样的声音，在软件开发的初始阶段，性能并没有开发效率重要，没必然为了节省不到 <code>1ms</code> 的时间却让开发量增加好几倍，这样划不过来。也就是开发效率比机器效率更为重要，那么 Python 就逐渐得到越来越多开发者的亲睐了。</p>
+<p>在 <code>12-14</code> 年，云计算升温，大量创业公司和互联网巨头挤进云计算领域，而最著名的云核算开源渠道 OpenStack 就是基于 Python 开发的。</p>
+<p>随后几年的备受关注的人工智能，机器学习首选开发语言也是 Python。</p>
+<p>至此，Python 已经成为互联网开发的焦点。在 <em>「Top 10 的编程语言走势图」</em> 可以看到，Python 已经跃居第三位，而且在 <code>2017</code> 年还成为了最受欢迎的语言。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-e92d013f1190a7ca.png" alt=""></p>
+<h4 id="工作机会-薪资待遇高"><a href="#工作机会-薪资待遇高" class="headerlink" title="工作机会 | 薪资待遇高"></a>工作机会 | 薪资待遇高</h4><ul>
+<li>来自 <a href="gooroo.io">gooroo.io</a> 的薪资信息：</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-501633340f69b855.png" alt=""></p>
+<p>在天使榜上，Python 是需求第二高的技能，也是提供最高平均薪水的技能。</p>
+<p>随着大数据的兴起，Python 开发人员需要作为数据科学家，尤其是因为 Python 可以轻松集成到 Web 应用程序中以执行需要机器学习的任务。</p>
+<h2 id="快速体验-No-Hello-World"><a href="#快速体验-No-Hello-World" class="headerlink" title="快速体验 | No Hello World !"></a>快速体验 | No Hello World !</h2><p><code>Hello World</code> 似乎是学习编程绕不过去的东西，但使用 <strong>Python</strong>，我们来换点儿别的，Emmm.. 比如，一个 <strong>查询天气</strong> 的小程序 <em>(效果如下图)</em>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-627c3e77b32f2db0.gif" alt=""></p>
+<h4 id="源码-amp-解释"><a href="#源码-amp-解释" class="headerlink" title="源码 &amp; 解释"></a>源码 &amp; 解释</h4><p><code>http://wthrcdn.etouch.cn/weather_mini?city=xxx</code> 这个网址可以返回任意城市昨日以及 5 天内的天气预报，包括气温、指数、空气质量、风力等，你可以用浏览器试着访问一下，你会得到一个 <code>weather_mini</code> 的文件，里面就包含了我们想要的一些数据。</p>
+<p>不过这里由于我们发起了网络请求用到了第三方库 <code>requests</code>，所以在运行之前还需要使用 <code>pip install requests</code> 命令把该库下载到 Python 的安装目录下。</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding: utf-8 -*-</span>
+<span class="token keyword">import</span> requests
+
+<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+    city <span class="token operator">=</span> input<span class="token punctuation">(</span><span class="token string">'请输入城市,回车退出:\n'</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> city<span class="token punctuation">:</span>
+        <span class="token keyword">break</span>
+    req <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">'http://wthrcdn.etouch.cn/weather_mini?city=%s'</span> <span class="token operator">%</span> city<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+</code></pre>
+<h4 id="运行你的代码"><a href="#运行你的代码" class="headerlink" title="运行你的代码"></a>运行你的代码</h4><p>你可以在 <strong>当前文件夹</strong> 下执行命令： <code>python hello_python.py</code>，或是使用 <code>python &lt;源文件路径&gt;</code> 运行也行，例如，如果我是 Windows 用户并且将上述源文件保存在了 <code>D</code> 盘下面，那就可以执行 <code>python D:\hello_python.py</code>，然后你就可以看到上面的效果了。当然如果使用 IDE 将更加方便。</p>
+<h2 id="Python-vs-Java"><a href="#Python-vs-Java" class="headerlink" title="Python vs Java"></a>Python vs Java</h2><p>引入一张比较著名的图吧，可以很明显地感受到 Python 在写法上要简洁一些吧：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-60e9032d6e669f4c.png" alt=""></p>
+<h1 id="二、Python-基本语法简介"><a href="#二、Python-基本语法简介" class="headerlink" title="二、Python 基本语法简介"></a>二、Python 基本语法简介</h1><p>Python 与其他语言最大的区别就是，Python 的代码块不使用大括号 <code>{}</code> 来控制类，函数以及其他逻辑判断。Python 最具特色的就是用 <strong>缩进</strong> 来写模块。</p>
+<h2 id="2-0-注释"><a href="#2-0-注释" class="headerlink" title="2.0 注释"></a>2.0 注释</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 第一个注释</span>
+<span class="token comment" spellcheck="true"># 第二个注释</span>
+
+<span class="token triple-quoted-string string">'''
+第三注释
+第四注释
+'''</span>
+
+<span class="token triple-quoted-string string">"""
+第五注释
+第六注释
+"""</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Hello, Python!"</span><span class="token punctuation">)</span></code></pre>
+<h2 id="2-1-数据类型"><a href="#2-1-数据类型" class="headerlink" title="2.1 数据类型"></a>2.1 数据类型</h2><p>Python 中的变量赋值不需要类型声明。Python 有五个标准的数据类型：</p>
+<ol>
+<li><strong>Numbers（数字）</strong>：Python3 中有四种数字类型 <em>(没有 Python2 中的 Long)</em>，分别是 <code>int</code> 长整型、<code>bool</code> 布尔、<code>float</code> 浮点数、<code>complex</code> 复数 <em>(1 + 2j)</em>；</li>
+<li><strong>String（字符串）</strong>：Python 中字符串不能改变，并且没有单独的字符类型，一个字符就是长度为 1 的字符串；</li>
+<li><strong>Tuple（元组）</strong>：类似于 List，但不能二次赋值，相当于只读列表。eg：<code>(&#39;test1&#39;, &#39;test2&#39;)</code></li>
+<li><strong>List（列表）</strong>：类似 Java 中的 Array 类型。eg:<code>[1, 2, ,3]</code></li>
+<li><strong>Dictionary（字典）</strong>：类似于 Java 的 Map 类型。eg:<code>{a: 1, b: 2}</code></li>
+</ol>
+<blockquote>
+<p><code>set</code> 集合也属于数据结构，它是一个 <strong>无序</strong> 且 <strong>不重复</strong> 的元素序列。可以使用大括号 <code>{ }</code> 或者 <code>set()</code> 函数创建集合，注意：创建一个空集合必须用 <code>set()</code> 而不是 <code>{ }</code>，因为 <code>{ }</code> 是用来创建一个空字典。</p>
+</blockquote>
+<pre class=" language-python"><code class="language-python">str <span class="token operator">=</span> <span class="token string">'Hello World!'</span>
+<span class="token keyword">print</span> str<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token number">5</span><span class="token punctuation">]</span>      <span class="token comment" spellcheck="true"># 输出字符串中第三个至第五个之间的字符串</span>
+
+list <span class="token operator">=</span> <span class="token punctuation">[</span> <span class="token string">'runoob'</span><span class="token punctuation">,</span> <span class="token number">786</span> <span class="token punctuation">,</span> <span class="token number">2.23</span><span class="token punctuation">,</span> <span class="token string">'john'</span><span class="token punctuation">,</span> <span class="token number">70.2</span> <span class="token punctuation">]</span>
+<span class="token keyword">print</span> list<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>          <span class="token comment" spellcheck="true"># 输出第二个至第三个元素</span>
+
+tuple <span class="token operator">=</span> <span class="token punctuation">(</span> <span class="token string">'runoob'</span><span class="token punctuation">,</span> <span class="token number">786</span> <span class="token punctuation">,</span> <span class="token number">2.23</span><span class="token punctuation">,</span> <span class="token string">'john'</span><span class="token punctuation">,</span> <span class="token number">70.2</span> <span class="token punctuation">)</span>
+<span class="token keyword">print</span> tuple<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">:</span><span class="token number">3</span><span class="token punctuation">]</span>          <span class="token comment" spellcheck="true"># 输出第二个至第三个的元素</span>
+
+tinydict <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">'john'</span><span class="token punctuation">,</span><span class="token string">'code'</span><span class="token punctuation">:</span><span class="token number">6734</span><span class="token punctuation">,</span> <span class="token string">'dept'</span><span class="token punctuation">:</span> <span class="token string">'sales'</span><span class="token punctuation">}</span>
+<span class="token keyword">print</span> tinydict<span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">]</span>              <span class="token comment" spellcheck="true"># 输出键为 2 的值</span></code></pre>
+<h2 id="2-2-条件语句"><a href="#2-2-条件语句" class="headerlink" title="2.2 条件语句"></a>2.2 条件语句</h2><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 当判断条件为 1 个值时</span>
+flag <span class="token operator">=</span> <span class="token boolean">False</span>
+name <span class="token operator">=</span> <span class="token string">'luren'</span>
+<span class="token keyword">if</span> name <span class="token operator">==</span> <span class="token string">'python'</span><span class="token punctuation">:</span>      <span class="token comment" spellcheck="true"># 判断变量否为'python'</span>
+    flag <span class="token operator">=</span> <span class="token boolean">True</span>           <span class="token comment" spellcheck="true"># 条件成立时设置标志为真</span>
+    <span class="token keyword">print</span> <span class="token string">'welcome boss'</span>  <span class="token comment" spellcheck="true"># 并输出欢迎信息</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span> name            <span class="token comment" spellcheck="true"># 条件不成立时输出变量名称</span>
+
+<span class="token comment" spellcheck="true"># 当判断条件为多个值时</span>
+num <span class="token operator">=</span> <span class="token number">5</span>     
+<span class="token keyword">if</span> num <span class="token operator">==</span> <span class="token number">3</span><span class="token punctuation">:</span>              <span class="token comment" spellcheck="true"># 判断num的值</span>
+    <span class="token keyword">print</span> <span class="token string">'boss'</span>        
+<span class="token keyword">elif</span> num <span class="token operator">==</span> <span class="token number">2</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span> <span class="token string">'user'</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span> <span class="token string">'roadman'</span>       <span class="token comment" spellcheck="true"># 条件均不成立时输出</span></code></pre>
+<h2 id="2-3-循环"><a href="#2-3-循环" class="headerlink" title="2.3 循环"></a>2.3 循环</h2><h4 id="while-循环"><a href="#while-循环" class="headerlink" title="while 循环"></a>while 循环</h4><p>在 Python 中没有 <code>do..while</code> 的循环</p>
+<pre class=" language-python"><code class="language-python">count <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">while</span> count <span class="token operator">&lt;</span> <span class="token number">5</span><span class="token punctuation">:</span>
+   <span class="token keyword">print</span> <span class="token punctuation">(</span>count<span class="token punctuation">,</span> <span class="token string">" 小于 5"</span><span class="token punctuation">)</span>
+   count <span class="token operator">=</span> count <span class="token operator">+</span> <span class="token number">1</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+   <span class="token keyword">print</span> <span class="token punctuation">(</span>count<span class="token punctuation">,</span> <span class="token string">" 大于或等于 5"</span><span class="token punctuation">)</span></code></pre>
+<h4 id="for-in-循环"><a href="#for-in-循环" class="headerlink" title="for..in 循环"></a>for..in 循环</h4><p><code>for..in</code> 适用于 <code>list/ dict/ set</code> 数据类型，如果需要遍历数字序列，我们也可以借助 <code>range(min, max, step)</code> 函数来生成数列。</p>
+<pre class=" language-python"><code class="language-python">sites <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">"Baidu"</span><span class="token punctuation">,</span> <span class="token string">"Google"</span><span class="token punctuation">,</span><span class="token string">"Runoob"</span><span class="token punctuation">,</span><span class="token string">"Taobao"</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> site <span class="token keyword">in</span> sites<span class="token punctuation">:</span>
+    <span class="token keyword">if</span> site <span class="token operator">==</span> <span class="token string">"Runoob"</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"菜鸟教程!"</span><span class="token punctuation">)</span>
+        <span class="token keyword">break</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"循环数据 "</span> <span class="token operator">+</span> site<span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"没有循环数据!"</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"完成循环!"</span><span class="token punctuation">)</span>
+
+
+<span class="token comment" spellcheck="true"># 输出 0/ 3/ 6/ 9</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true"># 替换成 range(5) 则输出 0/ 1/ 2/ 3/ 4</span>
+<span class="token comment" spellcheck="true"># 替换成 range(5,9) 则输出 5/ 6/ 7/ 8</span></code></pre>
+<h2 id="2-4-函数"><a href="#2-4-函数" class="headerlink" title="2.4 函数"></a>2.4 函数</h2><h4 id="函数基本定义和使用"><a href="#函数基本定义和使用" class="headerlink" title="函数基本定义和使用"></a>函数基本定义和使用</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 计算面积函数</span>
+<span class="token keyword">def</span> <span class="token function">area</span><span class="token punctuation">(</span>width<span class="token punctuation">,</span> height<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> width <span class="token operator">*</span> height
+
+<span class="token keyword">def</span> <span class="token function">print_welcome</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Welcome"</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span>
+
+print_welcome<span class="token punctuation">(</span><span class="token string">"Runoob"</span><span class="token punctuation">)</span>
+w <span class="token operator">=</span> <span class="token number">4</span>
+h <span class="token operator">=</span> <span class="token number">5</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"width ="</span><span class="token punctuation">,</span> w<span class="token punctuation">,</span> <span class="token string">" height ="</span><span class="token punctuation">,</span> h<span class="token punctuation">,</span> <span class="token string">" area ="</span><span class="token punctuation">,</span> area<span class="token punctuation">(</span>w<span class="token punctuation">,</span> h<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<h4 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h4><p>在 Python 中，类型属于对象，变量是没有类型的，例如 <code>name = &quot;wmyskxz&quot;</code>，则 <code>&quot;wmyskxz&quot;</code> 是 String 类型，而变量 <code>name</code> 仅仅是一个对象的引用。</p>
+<p>Python 中一切都是对象，严格意义我们 <strong>不能说值传递还是引用传递</strong>，我们应该说传 <strong>不可变对象</strong> <em>(string、tuples、number 不可变)</em> 和 <strong>传可变对象</strong> <em>(list、dict 可变)</em>。</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">############################################</span>
+<span class="token comment" spellcheck="true"># 传递不可变对象</span>
+<span class="token keyword">def</span> <span class="token function">ChangeInt</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    a <span class="token operator">=</span> <span class="token number">10</span>
+
+b <span class="token operator">=</span> <span class="token number">2</span>
+ChangeInt<span class="token punctuation">(</span>b<span class="token punctuation">)</span>
+<span class="token keyword">print</span> b <span class="token comment" spellcheck="true"># 结果是 2</span>
+
+<span class="token comment" spellcheck="true">############################################</span>
+<span class="token comment" spellcheck="true"># 传递可变对象</span>
+<span class="token keyword">def</span> <span class="token function">changeme</span><span class="token punctuation">(</span> mylist <span class="token punctuation">)</span><span class="token punctuation">:</span>
+   <span class="token string">"修改传入的列表"</span>
+   mylist<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+   <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"函数内取值: "</span><span class="token punctuation">,</span> mylist<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># [10, 20, 30, [1, 2, 3, 4]]</span>
+   <span class="token keyword">return</span>
+
+<span class="token comment" spellcheck="true"># 调用changeme函数</span>
+mylist <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">30</span><span class="token punctuation">]</span>
+changeme<span class="token punctuation">(</span> mylist <span class="token punctuation">)</span>
+<span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">"函数外取值: "</span><span class="token punctuation">,</span> mylist<span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># [10, 20, 30, [1, 2, 3, 4]]</span>
+<span class="token comment" spellcheck="true"># 函数内外值一致，因为都同属于同一个引用</span></code></pre>
+<h2 id="2-5-class-类"><a href="#2-5-class-类" class="headerlink" title="2.5 class 类"></a>2.5 class 类</h2><h4 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h4><pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">people</span><span class="token punctuation">:</span>
+    <span class="token comment" spellcheck="true">#定义基本属性</span>
+    name <span class="token operator">=</span> <span class="token string">''</span>
+    age <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token comment" spellcheck="true">#定义私有属性,私有属性在类外部无法直接进行访问</span>
+    __weight <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token comment" spellcheck="true">#定义构造方法</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span>n<span class="token punctuation">,</span>a<span class="token punctuation">,</span>w<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>name <span class="token operator">=</span> n
+        self<span class="token punctuation">.</span>age <span class="token operator">=</span> a
+        self<span class="token punctuation">.</span>__weight <span class="token operator">=</span> w
+    <span class="token keyword">def</span> <span class="token function">speak</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"%s 说: 我 %d 岁。"</span> <span class="token operator">%</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>name<span class="token punctuation">,</span>self<span class="token punctuation">.</span>age<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true"># 实例化类</span>
+p <span class="token operator">=</span> people<span class="token punctuation">(</span><span class="token string">'wmyskxz'</span><span class="token punctuation">,</span> <span class="token number">24</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>speak<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true"># wmyskxz 说: 我 10 岁。</span></code></pre>
+<h4 id="继承-amp-多继承-amp-方法重写"><a href="#继承-amp-多继承-amp-方法重写" class="headerlink" title="继承 &amp; 多继承 &amp; 方法重写"></a>继承 &amp; 多继承 &amp; 方法重写</h4><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 单继承</span>
+<span class="token keyword">class</span> <span class="token class-name">DerivedClassName</span><span class="token punctuation">(</span>BaseClassName1<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token operator">&lt;</span>statement<span class="token number">-1</span><span class="token operator">></span>
+    <span class="token punctuation">.</span>
+    <span class="token operator">&lt;</span>statement<span class="token operator">-</span>N<span class="token operator">></span>
+
+<span class="token comment" spellcheck="true"># 多继承</span>
+<span class="token keyword">class</span> <span class="token class-name">DerivedClassName</span><span class="token punctuation">(</span>Base1<span class="token punctuation">,</span> Base2<span class="token punctuation">,</span> Base3<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token operator">&lt;</span>statement<span class="token number">-1</span><span class="token operator">></span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+    <span class="token punctuation">.</span>
+    <span class="token operator">&lt;</span>statement<span class="token operator">-</span>N<span class="token operator">></span>
+
+<span class="token comment" spellcheck="true"># 方法重写演示</span>
+<span class="token keyword">class</span> <span class="token class-name">Parent</span><span class="token punctuation">:</span>        <span class="token comment" spellcheck="true"># 定义父类</span>
+   <span class="token keyword">def</span> <span class="token function">myMethod</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">'调用父类方法'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Child</span><span class="token punctuation">(</span>Parent<span class="token punctuation">)</span><span class="token punctuation">:</span> <span class="token comment" spellcheck="true"># 定义子类</span>
+   <span class="token keyword">def</span> <span class="token function">myMethod</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+      <span class="token keyword">print</span> <span class="token punctuation">(</span><span class="token string">'调用子类方法'</span><span class="token punctuation">)</span>
+
+c <span class="token operator">=</span> Child<span class="token punctuation">(</span><span class="token punctuation">)</span>          <span class="token comment" spellcheck="true"># 子类实例</span>
+c<span class="token punctuation">.</span>myMethod<span class="token punctuation">(</span><span class="token punctuation">)</span>         <span class="token comment" spellcheck="true"># 子类调用重写方法</span>
+super<span class="token punctuation">(</span>Child<span class="token punctuation">,</span>c<span class="token punctuation">)</span><span class="token punctuation">.</span>myMethod<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">#用子类对象调用父类已被覆盖的方法</span>
+<span class="token comment" spellcheck="true"># 先输出 "调用子类方法" 再输出 "调用父类方法"</span></code></pre>
+<h2 id="2-6-module-模块"><a href="#2-6-module-模块" class="headerlink" title="2.6 module 模块"></a>2.6 module 模块</h2><p>一个 <code>.py</code> 文件就是一个模块，想要使用其他 <code>.py</code> 文件中的方法就需要引入进来。</p>
+<ol>
+<li><code>import [module]</code></li>
+</ol>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 导入整个random模块，可以是内置/当前路径</span>
+<span class="token keyword">import</span> random
+<span class="token comment" spellcheck="true"># 使用 `random` 模块下的 `randint` 方法</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>random<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<ol start="2">
+<li><code>from [module] import [name1, name2, ...]</code></li>
+</ol>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 从 `random` 模块里导入其中一个方法 `randint`</span>
+<span class="token keyword">from</span> random <span class="token keyword">import</span> randint
+<span class="token comment" spellcheck="true"># 不一样的是，使用 `randint` 的就不需要先写 `random` 了</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<ol start="3">
+<li><code>import [module] as [new_name]</code></li>
+</ol>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 但这个名字可能跟其他地方有冲突，因此改名成 `rd`</span>
+<span class="token keyword">import</span> random <span class="token keyword">as</span> rd
+<span class="token comment" spellcheck="true"># 使用 `rd` 这个名称取代原本的 `random`</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>rd<span class="token punctuation">.</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<ol start="4">
+<li><code>from [module] import *</code></li>
+</ol>
+<p><strong>不推荐</strong>，容易造成名称冲突，降低可读性和可维护性。</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># Import 所有 `random` module 底下的东西</span>
+<span class="token keyword">from</span> random <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token comment" spellcheck="true"># 使用 `randint` 的时候也不需要先写 `random`</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>randint<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<h4 id="module-搜索路径"><a href="#module-搜索路径" class="headerlink" title="module 搜索路径"></a>module 搜索路径</h4><p>当你导入一个模块，Python 解析器对模块位置的搜索顺序是：</p>
+<ol>
+<li>当前目录</li>
+<li>如果不在当前目录，Python 则搜索在 shell 变量 <code>PYTHONPATH</code> 下的每个目录。</li>
+<li>如果都找不到，Python 会察看默认路径。UNIX 下，默认路径一般为 <code>/usr/local/lib/python/</code>。</li>
+</ol>
+<h2 id="2-7-package-包"><a href="#2-7-package-包" class="headerlink" title="2.7 package 包"></a>2.7 package 包</h2><p>把两个 module 放在一个新的目录 <code>sample_package</code>，再新增 <code>_init__.py</code> <em>(可以是空，但不能没有)</em>，宣称自己是一个 package :</p>
+<pre><code>sample_package
+  |-- __init__.py
+  |-- 1.py
+  |-- 2.py</code></pre><pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># package_runoob 同级目录下创建 test.py 来调用 package_runoob 包</span>
+<span class="token comment" spellcheck="true"># 导入包</span>
+<span class="token keyword">from</span> package_runoob<span class="token punctuation">.</span>runoob1 <span class="token keyword">import</span> runoob1
+<span class="token keyword">from</span> package_runoob<span class="token punctuation">.</span>runoob2 <span class="token keyword">import</span> runoob2
+
+runoob1<span class="token punctuation">(</span><span class="token punctuation">)</span>
+runoob2<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<blockquote>
+<p>单个py文件就是一个 module，而当多个 <code>.py</code> 文件 + <code>__init__.py</code> 文件时，就等于 package。</p>
+</blockquote>
+<h1 id="三、基本代码规范"><a href="#三、基本代码规范" class="headerlink" title="三、基本代码规范"></a>三、基本代码规范</h1><p><strong>代码规范</strong> 再怎么强调也不为过：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-6467610c0eb161a8.png" alt=""></p>
+<ul>
+<li>图片来源：<a href="https://codingpy.com/article/programmers-daily-what-idiot-wrote-this-crappy-code/" target="_blank" rel="noopener">https://codingpy.com/article/programmers-daily-what-idiot-wrote-this-crappy-code/</a></li>
+</ul>
+<h2 id="3-1-命名规范"><a href="#3-1-命名规范" class="headerlink" title="3.1 命名规范"></a>3.1 命名规范</h2><h4 id="模块"><a href="#模块" class="headerlink" title="模块"></a>模块</h4><ul>
+<li>模块尽量使用 <strong>小写命名</strong>，首字母保持小写，尽量不要用下划线(除非多个单词，且数量不多的情况)</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 正确的模块名</span>
+<span class="token keyword">import</span> decoder
+<span class="token keyword">import</span> html_parser
+
+<span class="token comment" spellcheck="true"># 不推荐的模块名</span>
+<span class="token keyword">import</span> Decoder</code></pre>
+<h4 id="类名"><a href="#类名" class="headerlink" title="类名"></a>类名</h4><ul>
+<li>类名使用 <strong>驼峰</strong> (CamelCase)命名风格，首字母大写，私有类可用一个下划线开头</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Farm</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span>
+
+<span class="token keyword">class</span> <span class="token class-name">AnimalFarm</span><span class="token punctuation">(</span>Farm<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span>
+
+<span class="token keyword">class</span> <span class="token class-name">_PrivateFarm</span><span class="token punctuation">(</span>Farm<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span></code></pre>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><ul>
+<li>函数名 <strong>一律小写</strong>，如有多个单词，用下划线隔开</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span>
+
+<span class="token keyword">def</span> <span class="token function">run_with_env</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">pass</span> </code></pre>
+<ul>
+<li>私有函数在函数前加一个下划线 <code>_</code></li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+
+    <span class="token keyword">def</span> <span class="token function">_private_func</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">pass</span></code></pre>
+<h4 id="变量名"><a href="#变量名" class="headerlink" title="变量名"></a>变量名</h4><ul>
+<li>变量名尽量 <strong>小写</strong>, 如有多个单词，用下划线隔开</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    count <span class="token operator">=</span> <span class="token number">0</span>
+    school_name <span class="token operator">=</span> <span class="token string">''</span></code></pre>
+<ul>
+<li>常量使用以下划线分隔的 <strong>大写</strong> 命名</li>
+</ul>
+<pre class=" language-python"><code class="language-python">MAX_CLIENT <span class="token operator">=</span> <span class="token number">100</span>
+MAX_CONNECTION <span class="token operator">=</span> <span class="token number">1000</span>
+CONNECTION_TIMEOUT <span class="token operator">=</span> <span class="token number">600</span></code></pre>
+<h2 id="3-2-基本编码规范"><a href="#3-2-基本编码规范" class="headerlink" title="3.2 基本编码规范"></a>3.2 基本编码规范</h2><h4 id="缩进"><a href="#缩进" class="headerlink" title="缩进"></a>缩进</h4><ul>
+<li>统一使用 4 个空格进行缩进</li>
+</ul>
+<h4 id="行宽"><a href="#行宽" class="headerlink" title="行宽"></a>行宽</h4><p>每行代码尽量不超过 <code>80</code> 个字符(在特殊情况下可以略微超过 <code>80</code> ，但最长不得超过 <code>120</code>)</p>
+<p>理由：</p>
+<ul>
+<li>这在查看 <code>side-by-side</code> 的 <code>diff</code> 时很有帮助</li>
+<li>方便在控制台下查看代码</li>
+<li>太长可能是设计有缺陷</li>
+</ul>
+<h4 id="引号"><a href="#引号" class="headerlink" title="引号"></a>引号</h4><p>简单说，自然语言使用双引号，机器标示使用单引号，因此 <strong>代码里</strong> 多数应该使用 <strong>单引号</strong></p>
+<ul>
+<li><strong>自然语言</strong> 使用双引号 <code>&quot;...&quot;</code>，例如错误信息；很多情况还是 unicode，使用u”你好世界”</li>
+<li><strong>机器标识</strong> 使用单引号 ‘<code>...&#39;</code>，例如 dict 里的 key</li>
+<li><strong>正则表达式</strong> 使用原生的双引号 <code>r&quot;...&quot;</code></li>
+<li><strong>文档字符串</strong> (docstring) 使用三个双引号 <code>&quot;&quot;&quot;......&quot;&quot;&quot;</code></li>
+</ul>
+<h4 id="import-语句"><a href="#import-语句" class="headerlink" title="import 语句"></a>import 语句</h4><ul>
+<li>import 语句应该分行书写</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 正确的写法</span>
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> sys
+
+<span class="token comment" spellcheck="true"># 不推荐的写法</span>
+<span class="token keyword">import</span> sys<span class="token punctuation">,</span>os
+
+<span class="token comment" spellcheck="true"># 正确的写法</span>
+<span class="token keyword">from</span> subprocess <span class="token keyword">import</span> Popen<span class="token punctuation">,</span> PIPE</code></pre>
+<ul>
+<li>import 语句应该使用 absolute import</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 正确的写法</span>
+<span class="token keyword">from</span> foo<span class="token punctuation">.</span>bar <span class="token keyword">import</span> Bar
+
+<span class="token comment" spellcheck="true"># 不推荐的写法</span>
+<span class="token keyword">from</span> <span class="token punctuation">.</span><span class="token punctuation">.</span>bar <span class="token keyword">import</span> Bar</code></pre>
+<ul>
+<li>import 语句应该放在文件头部，置于模块说明及 <code>DocString</code> 之后，于全局变量之前；</li>
+<li>import 语句应该按照顺序排列，每组之间用一个空行分隔</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">import</span> sys
+
+<span class="token keyword">import</span> msgpack
+<span class="token keyword">import</span> zmq
+
+<span class="token keyword">import</span> foo</code></pre>
+<ul>
+<li>导入其他模块的类定义时，可以使用相对导入</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> myclass <span class="token keyword">import</span> MyClass</code></pre>
+<ul>
+<li>如果发生命名冲突，则可使用命名空间</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> bar
+<span class="token keyword">import</span> foo<span class="token punctuation">.</span>bar
+
+bar<span class="token punctuation">.</span>Bar<span class="token punctuation">(</span><span class="token punctuation">)</span>
+foo<span class="token punctuation">.</span>bar<span class="token punctuation">.</span>Bar<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<h4 id="DocString"><a href="#DocString" class="headerlink" title="DocString"></a>DocString</h4><p>DocString 的规范中最其本的两点：</p>
+<ol>
+<li>所有的公共模块、函数、类、方法，都应该写 DocString 。私有方法不一定需要，但应该在 <code>def</code> 后提供一个块注释来说明。</li>
+<li>DocString 的结束”””应该独占一行，除非此 DocString 只有一行。</li>
+</ol>
+<pre class=" language-python"><code class="language-python"><span class="token triple-quoted-string string">"""Return a foobar
+Optional plotz says to frobnicate the bizbaz first.
+"""</span>
+
+<span class="token triple-quoted-string string">"""Oneline docstring"""</span></code></pre>
+<h2 id="3-3-注释规范"><a href="#3-3-注释规范" class="headerlink" title="3.3 注释规范"></a>3.3 注释规范</h2><h4 id="建议"><a href="#建议" class="headerlink" title="建议"></a>建议</h4><ul>
+<li>在代码的 <strong>关键部分</strong>(或比较复杂的地方), 能写注释的要尽量写注释</li>
+<li>比较重要的注释段, 使用多个等号隔开, 可以更加醒目, <strong>突出</strong> 重要性</li>
+</ul>
+<pre class=" language-python"><code class="language-python">app <span class="token operator">=</span> create_app<span class="token punctuation">(</span>name<span class="token punctuation">,</span> options<span class="token punctuation">)</span>
+
+
+<span class="token comment" spellcheck="true"># =====================================</span>
+<span class="token comment" spellcheck="true"># 请勿在此处添加 get post等app路由行为 !!!</span>
+<span class="token comment" spellcheck="true"># =====================================</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<h4 id="文档注释（DocString）"><a href="#文档注释（DocString）" class="headerlink" title="文档注释（DocString）"></a>文档注释（DocString）</h4><ul>
+<li>文档注释以 “”” 开头和结尾, 首行不换行, 如有多行, 末行必需换行, 以下是Google的docstring风格示例</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding: utf-8 -*-</span>
+<span class="token triple-quoted-string string">"""Example docstrings.
+
+This module demonstrates documentation as specified by the `Google Python
+Style Guide`_. Docstrings may extend over multiple lines. Sections are created
+with a section header and a colon followed by a block of indented text.
+
+Example:
+    Examples can be given using either the ``Example`` or ``Examples``
+    sections. Sections support any reStructuredText formatting, including
+    literal blocks::
+
+        $ python example_google.py
+
+Section breaks are created by resuming unindented text. Section breaks
+are also implicitly created anytime a new section starts.
+"""</span></code></pre>
+<ul>
+<li>不要在文档注释复制函数定义原型, 而是具体描述其具体内容, 解释具体参数和返回值等</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true">#  不推荐的写法(不要写函数原型等废话)</span>
+<span class="token keyword">def</span> <span class="token function">function</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""function(a, b) -> list"""</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+
+<span class="token comment" spellcheck="true">#  正确的写法</span>
+<span class="token keyword">def</span> <span class="token function">function</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> b<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""计算并返回a到b范围内数据的平均值"""</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre>
+<ul>
+<li>对函数参数、返回值等的说明采用 <code>numpy</code> 标准, 如下所示</li>
+</ul>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""在这里写函数的一句话总结(如: 计算平均值).
+
+    这里是具体描述.
+
+    参数
+    ----------
+    arg1 : int
+        arg1的具体描述
+    arg2 : int
+        arg2的具体描述
+
+    返回值
+    -------
+    int
+        返回值的具体描述
+
+    参看
+    --------
+    otherfunc : 其它关联函数等...
+
+    示例
+    --------
+    示例使用doctest格式, 在`>>>`后的代码可以被文档测试工具作为测试用例自动运行
+
+    >>> a=[1,2,3]
+    >>> print [x + 3 for x in a]
+    [4, 5, 6]
+    """</span></code></pre>
+<blockquote>
+<p>更多细致详细的规范可以参考：</p>
+<ol>
+<li><strong>Google 开源项目指南</strong> - <a href="https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/" target="_blank" rel="noopener">https://zh-google-styleguide.readthedocs.io/en/latest/google-python-styleguide/contents/</a></li>
+<li><strong>官方 PEP 8 代码规范</strong> - <a href="https://www.python.org/dev/peps/pep-0008/" target="_blank" rel="noopener">https://www.python.org/dev/peps/pep-0008/</a></li>
+</ol>
+</blockquote>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ol>
+<li>Redis(9)——史上最强【集群】入门实践教程 - <a href="https://juejin.im/post/5e7429a16fb9a07ccc460fe7" target="_blank" rel="noopener">https://juejin.im/post/5e7429a16fb9a07ccc460fe7</a></li>
+<li>React入门学习 - <a href="https://juejin.im/post/5da5e9e8e51d4525292d2ed7" target="_blank" rel="noopener">https://juejin.im/post/5da5e9e8e51d4525292d2ed7</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>WhyStudyPython.md | TwoWater - <a href="https://github.com/TwoWater/Python/blob/master/Article/PythonBasis/python0/WhyStudyPython.md" target="_blank" rel="noopener">https://github.com/TwoWater/Python/blob/master/Article/PythonBasis/python0/WhyStudyPython.md</a></li>
+<li>C 语言中文网 | Python 系列教程 - <a href="http://c.biancheng.net/python/" target="_blank" rel="noopener">http://c.biancheng.net/python/</a></li>
+<li>Crossin的编程教室 - <a href="https://python666.cn/" target="_blank" rel="noopener">https://python666.cn/</a></li>
+<li>计算机和编程语言的发展历史 - <a href="https://blog.csdn.net/abc6368765/article/details/83990756" target="_blank" rel="noopener">https://blog.csdn.net/abc6368765/article/details/83990756</a></li>
+<li>面向对象葵花宝典 - <a href="http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110879" target="_blank" rel="noopener">http://www.kancloud.cn:8080/yunhua_lee/oobaodian/110879</a></li>
+<li>RUNOOB | Python3 系列教程 - <a href="ttps://www.runoob.com/python3">ttps://www.runoob.com/python3</a></li>
+<li>Python 基础语法 | springleo’sblog - <a href="https://lq782655835.github.io/blogs/tools/python-grammar.html#_1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B" target="_blank" rel="noopener">https://lq782655835.github.io/blogs/tools/python-grammar.html#_1-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9Python%E7%B3%BB%E5%88%97%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/03/17/redis-9-shi-shang-zui-qiang-ji-qun-ru-men-shi-jian-jiao-cheng/">
       Redis(9)——史上最强【集群】入门实践教程
     </a>
@@ -3259,395 +3875,6 @@ OK
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/02/29/redis-2-tiao-yue-biao/">
-      Redis(2)——跳跃表
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb进阶/中间件</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年2月29日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-97a4ce9191464f62.png" alt=""></p>
-<h1 id="一、跳跃表简介"><a href="#一、跳跃表简介" class="headerlink" title="一、跳跃表简介"></a>一、跳跃表简介</h1><p>跳跃表（skiplist）是一种随机化的数据结构，由 <strong>William Pugh</strong> 在论文<a href="https://www.cl.cam.ac.uk/teaching/0506/Algorithms/skiplists.pdf" target="_blank" rel="noopener">《Skip lists: a probabilistic alternative to balanced trees》</a>中提出，是一种可以于平衡树媲美的层次化链表结构——查找、删除、添加等操作都可以在对数期望时间下完成，以下是一个典型的跳跃表例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-65a5b1a2849fb91c.png" alt=""></p>
-<p>我们在上一篇中提到了 Redis 的五种基本结构中，有一个叫做 <strong>有序列表 zset</strong> 的数据结构，它类似于 Java 中的 <strong>SortedSet</strong> 和 <strong>HashMap</strong> 的结合体，一方面它是一个 set 保证了内部 value 的唯一性，另一方面又可以给每个 value 赋予一个排序的权重值 score，来达到 <strong>排序</strong> 的目的。</p>
-<p>它的内部实现就依赖了一种叫做 <strong>「跳跃列表」</strong> 的数据结构。</p>
-<h2 id="为什么使用跳跃表"><a href="#为什么使用跳跃表" class="headerlink" title="为什么使用跳跃表"></a>为什么使用跳跃表</h2><p>首先，因为 zset 要支持随机的插入和删除，所以它 <strong>不宜使用数组来实现</strong>，关于排序问题，我们也很容易就想到 <strong>红黑树/ 平衡树</strong> 这样的树形结构，为什么 Redis 不使用这样一些结构呢？</p>
-<ol>
-<li><strong>性能考虑：</strong> 在高并发的情况下，树形结构需要执行一些类似于 rebalance 这样的可能涉及整棵树的操作，相对来说跳跃表的变化只涉及局部 _(下面详细说)_；</li>
-<li><strong>实现考虑：</strong> 在复杂度与红黑树相同的情况下，跳跃表实现起来更简单，看起来也更加直观；</li>
-</ol>
-<p>基于以上的一些考虑，Redis 基于 <strong>William Pugh</strong> 的论文做出一些改进后采用了 <strong>跳跃表</strong> 这样的结构。</p>
-<h2 id="本质是解决查找问题"><a href="#本质是解决查找问题" class="headerlink" title="本质是解决查找问题"></a>本质是解决查找问题</h2><p>我们先来看一个普通的链表结构：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-11b7eebde1779904.png" alt=""></p>
-<p>我们需要这个链表按照 score 值进行排序，这也就意味着，当我们需要添加新的元素时，我们需要定位到插入点，这样才可以继续保证链表是有序的，通常我们会使用 <strong>二分查找法</strong>，但二分查找是有序数组的，链表没办法进行位置定位，我们除了遍历整个找到第一个比给定数据大的节点为止 <em>（时间复杂度 O(n))</em> 似乎没有更好的办法。</p>
-<p>但假如我们每相邻两个节点之间就增加一个指针，让指针指向下一个节点，如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-8cae2c261c950b32.png" alt=""></p>
-<p>这样所有新增的指针连成了一个新的链表，但它包含的数据却只有原来的一半 _（图中的为 3，11）_。</p>
-<p>现在假设我们想要查找数据时，可以根据这条新的链表查找，如果碰到比待查找数据大的节点时，再回到原来的链表中进行查找，比如，我们想要查找 7，查找的路径则是沿着下图中标注出的红色指针所指向的方向进行的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-9c0262c7a85c120e.png" alt=""></p>
-<p>这是一个略微极端的例子，但我们仍然可以看到，通过新增加的指针查找，我们不再需要与链表上的每一个节点逐一进行比较，这样改进之后需要比较的节点数大概只有原来的一半。</p>
-<p>利用同样的方式，我们可以在新产生的链表上，继续为每两个相邻的节点增加一个指针，从而产生第三层链表：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-22036e274bedaa5a.png" alt=""></p>
-<p>在这个新的三层链表结构中，我们试着 <strong>查找 13</strong>，那么沿着最上层链表首先比较的是 11，发现 11 比 13 小，于是我们就知道只需要到 11 后面继续查找，<strong>从而一下子跳过了 11 前面的所有节点。</strong></p>
-<p>可以想象，当链表足够长，这样的多层链表结构可以帮助我们跳过很多下层节点，从而加快查找的效率。</p>
-<h2 id="更进一步的跳跃表"><a href="#更进一步的跳跃表" class="headerlink" title="更进一步的跳跃表"></a>更进一步的跳跃表</h2><p><strong>跳跃表 skiplist</strong> 就是受到这种多层链表结构的启发而设计出来的。按照上面生成链表的方式，上面每一层链表的节点个数，是下面一层的节点个数的一半，这样查找过程就非常类似于一个二分查找，使得查找的时间复杂度可以降低到 _O(logn)_。</p>
-<p>但是，这种方法在插入数据的时候有很大的问题。新插入一个节点之后，就会打乱上下相邻两层链表上节点个数严格的 2:1 的对应关系。如果要维持这种对应关系，就必须把新插入的节点后面的所有节点 <em>（也包括新插入的节点）</em> 重新进行调整，这会让时间复杂度重新蜕化成 _O(n)_。删除数据也有同样的问题。</p>
-<p><strong>skiplist</strong> 为了避免这一问题，它不要求上下相邻两层链表之间的节点个数有严格的对应关系，而是 <strong>为每个节点随机出一个层数(level)</strong>。比如，一个节点随机出的层数是 3，那么就把它链入到第 1 层到第 3 层这三层链表中。为了表达清楚，下图展示了如何通过一步步的插入操作从而形成一个 skiplist 的过程：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-1e0626c013de095e.png" alt=""></p>
-<p>从上面的创建和插入的过程中可以看出，每一个节点的层数（level）是随机出来的，而且新插入一个节点并不会影响到其他节点的层数，因此，<strong>插入操作只需要修改节点前后的指针，而不需要对多个节点都进行调整</strong>，这就降低了插入操作的复杂度。</p>
-<p>现在我们假设从我们刚才创建的这个结构中查找 23 这个不存在的数，那么查找路径会如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-a8f66d808e8a4d1e.png" alt=""></p>
-<h1 id="二、跳跃表的实现"><a href="#二、跳跃表的实现" class="headerlink" title="二、跳跃表的实现"></a>二、跳跃表的实现</h1><p>Redis 中的跳跃表由 <code>server.h/zskiplistNode</code> 和 <code>server.h/zskiplist</code> 两个结构定义，前者为跳跃表节点，后者则保存了跳跃节点的相关信息，同之前的 <code>集合 list</code> 结构类似，其实只有 <code>zskiplistNode</code> 就可以实现了，但是引入后者是为了更加方便的操作：</p>
-<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* ZSETs use a specialized version of Skiplists */</span>
-<span class="token keyword">typedef</span> <span class="token keyword">struct</span> zskiplistNode <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// value</span>
-    sds ele<span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 分值</span>
-    <span class="token keyword">double</span> score<span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 后退指针</span>
-    <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>backward<span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 层</span>
-    <span class="token keyword">struct</span> zskiplistLevel <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 前进指针</span>
-        <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>forward<span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 跨度</span>
-        <span class="token keyword">unsigned</span> <span class="token keyword">long</span> span<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> level<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span> zskiplistNode<span class="token punctuation">;</span>
-
-<span class="token keyword">typedef</span> <span class="token keyword">struct</span> zskiplist <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 跳跃表头指针</span>
-    <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>header<span class="token punctuation">,</span> <span class="token operator">*</span>tail<span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 表中节点的数量</span>
-    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> length<span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 表中层数最大的节点的层数</span>
-    <span class="token keyword">int</span> level<span class="token punctuation">;</span>
-<span class="token punctuation">}</span> zskiplist<span class="token punctuation">;</span></code></pre>
-<p>正如文章开头画出来的那张标准的跳跃表那样。</p>
-<h2 id="随机层数"><a href="#随机层数" class="headerlink" title="随机层数"></a>随机层数</h2><p>对于每一个新插入的节点，都需要调用一个随机算法给它分配一个合理的层数，源码在 <code>t_zset.c/zslRandomLevel(void)</code> 中被定义：</p>
-<pre class=" language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">zslRandomLevel</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> level <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token number">0xFFFF</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token punctuation">(</span>ZSKIPLIST_P <span class="token operator">*</span> <span class="token number">0xFFFF</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        level <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token punctuation">(</span>level<span class="token operator">&lt;</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">)</span> <span class="token operator">?</span> level <span class="token punctuation">:</span> ZSKIPLIST_MAXLEVEL<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>直观上期望的目标是 50% 的概率被分配到 <code>Level 1</code>，25% 的概率被分配到 <code>Level 2</code>，12.5% 的概率被分配到 <code>Level 3</code>，以此类推…有 2<sup>-63</sup> 的概率被分配到最顶层，因为这里每一层的晋升率都是 50%。</p>
-<p><strong>Redis 跳跃表默认允许最大的层数是 32</strong>，被源码中 <code>ZSKIPLIST_MAXLEVEL</code> 定义，当 <code>Level[0]</code> 有 2<sup>64</sup> 个元素时，才能达到 32 层，所以定义 32 完全够用了。</p>
-<h2 id="创建跳跃表"><a href="#创建跳跃表" class="headerlink" title="创建跳跃表"></a>创建跳跃表</h2><p>这个过程比较简单，在源码中的 <code>t_zset.c/zslCreate</code> 中被定义：</p>
-<pre class=" language-c"><code class="language-c">zskiplist <span class="token operator">*</span><span class="token function">zslCreate</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
-    zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">// 申请内存空间</span>
-    zsl <span class="token operator">=</span> <span class="token function">zmalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token operator">*</span>zsl<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 初始化层数为 1</span>
-    zsl<span class="token operator">-></span>level <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 初始化长度为 0</span>
-    zsl<span class="token operator">-></span>length <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 创建一个层数为 32，分数为 0，没有 value 值的跳跃表头节点</span>
-    zsl<span class="token operator">-></span>header <span class="token operator">=</span> <span class="token function">zslCreateNode</span><span class="token punctuation">(</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">// 跳跃表头节点初始化</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> ZSKIPLIST_MAXLEVEL<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 将跳跃表头节点的所有前进指针 forward 设置为 NULL</span>
-        zsl<span class="token operator">-></span>header<span class="token operator">-></span>level<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 将跳跃表头节点的所有跨度 span 设置为 0</span>
-        zsl<span class="token operator">-></span>header<span class="token operator">-></span>level<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 跳跃表头节点的后退指针 backward 置为 NULL</span>
-    zsl<span class="token operator">-></span>header<span class="token operator">-></span>backward <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 表头指向跳跃表尾节点的指针置为 NULL</span>
-    zsl<span class="token operator">-></span>tail <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> zsl<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p>即执行完之后创建了如下结构的初始化跳跃表：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-551660604afd1041.png" alt=""></p>
-<h2 id="插入节点实现"><a href="#插入节点实现" class="headerlink" title="插入节点实现"></a>插入节点实现</h2><p>这几乎是最重要的一段代码了，但总体思路也比较清晰简单，如果理解了上面所说的跳跃表的原理，那么很容易理清楚插入节点时发生的几个动作 <em>（几乎跟链表类似）</em>：</p>
-<ol>
-<li>找到当前我需要插入的位置 <em>（其中包括相同 score 时的处理）</em>；</li>
-<li>创建新节点，调整前后的指针指向，完成插入；</li>
-</ol>
-<p>为了方便阅读，我把源码 <code>t_zset.c/zslInsert</code> 定义的插入函数拆成了几个部分</p>
-<h3 id="第一部分：声明需要存储的变量"><a href="#第一部分：声明需要存储的变量" class="headerlink" title="第一部分：声明需要存储的变量"></a>第一部分：声明需要存储的变量</h3><pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">// 存储搜索路径</span>
-zskiplistNode <span class="token operator">*</span>update<span class="token punctuation">[</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">*</span>x<span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// 存储经过的节点跨度</span>
-<span class="token keyword">unsigned</span> <span class="token keyword">int</span> rank<span class="token punctuation">[</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> i<span class="token punctuation">,</span> level<span class="token punctuation">;</span></code></pre>
-<h3 id="第二部分：搜索当前节点插入位置"><a href="#第二部分：搜索当前节点插入位置" class="headerlink" title="第二部分：搜索当前节点插入位置"></a>第二部分：搜索当前节点插入位置</h3><pre class=" language-c"><code class="language-c"><span class="token function">serverAssert</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isnan</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-x <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// 逐步降级寻找目标节点，得到 "搜索路径"</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">/* store rank that is crossed to reach the insert position */</span>
-    rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i <span class="token operator">==</span> <span class="token punctuation">(</span>zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span> rank<span class="token punctuation">[</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 如果 score 相等，还需要比较 value 值</span>
-    <span class="token keyword">while</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">&amp;&amp;</span>
-            <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">&lt;</span> score <span class="token operator">||</span>
-                <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">==</span> score <span class="token operator">&amp;&amp;</span>
-                <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-    <span class="token punctuation">{</span>
-        rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span><span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span<span class="token punctuation">;</span>
-        x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 记录 "搜索路径"</span>
-    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> x<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p><strong>讨论：</strong> 有一种极端的情况，就是跳跃表中的所有 score 值都是一样，zset 的查找性能会不会退化为 O(n) 呢？</p>
-<p>从上面的源码中我们可以发现 zset 的排序元素不只是看 score 值，也会比较 value 值 <em>（字符串比较）</em></p>
-<h3 id="第三部分：生成插入节点"><a href="#第三部分：生成插入节点" class="headerlink" title="第三部分：生成插入节点"></a>第三部分：生成插入节点</h3><pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* we assume the element is not already inside, since we allow duplicated
- * scores, reinserting the same element should never happen since the
- * caller of zslInsert() should test in the hash table if the element is
- * already inside or not. */</span>
-level <span class="token operator">=</span> <span class="token function">zslRandomLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment" spellcheck="true">// 如果随机生成的 level 超过了当前最大 level 需要更新跳跃表的信息</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>level <span class="token operator">></span> zsl<span class="token operator">-></span>level<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
-        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> zsl<span class="token operator">-></span>length<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    zsl<span class="token operator">-></span>level <span class="token operator">=</span> level<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-<span class="token comment" spellcheck="true">// 创建新节点</span>
-x <span class="token operator">=</span> <span class="token function">zslCreateNode</span><span class="token punctuation">(</span>level<span class="token punctuation">,</span>score<span class="token punctuation">,</span>ele<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="第四部分：重排前向指针"><a href="#第四部分：重排前向指针" class="headerlink" title="第四部分：重排前向指针"></a>第四部分：重排前向指针</h3><pre class=" language-c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
-    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> x<span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">/* update span covered by update[i] as x is inserted here */</span>
-    x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">-</span> <span class="token punctuation">(</span>rank<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> <span class="token punctuation">(</span>rank<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment" spellcheck="true">/* increment span for untouched levels */</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> level<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> zsl<span class="token operator">-></span>level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span<span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<h3 id="第五部分：重排后向指针并返回"><a href="#第五部分：重排后向指针并返回" class="headerlink" title="第五部分：重排后向指针并返回"></a>第五部分：重排后向指针并返回</h3><pre class=" language-c"><code class="language-c">x<span class="token operator">-></span>backward <span class="token operator">=</span> <span class="token punctuation">(</span>update<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> zsl<span class="token operator">-></span>header<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">NULL</span> <span class="token punctuation">:</span> update<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">)</span>
-    x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>backward <span class="token operator">=</span> x<span class="token punctuation">;</span>
-<span class="token keyword">else</span>
-    zsl<span class="token operator">-></span>tail <span class="token operator">=</span> x<span class="token punctuation">;</span>
-zsl<span class="token operator">-></span>length<span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token keyword">return</span> x<span class="token punctuation">;</span></code></pre>
-<h2 id="节点删除实现"><a href="#节点删除实现" class="headerlink" title="节点删除实现"></a>节点删除实现</h2><p>删除过程由源码中的 <code>t_zset.c/zslDeleteNode</code> 定义，和插入过程类似，都需要先把这个 <strong>“搜索路径”</strong> 找出来，然后对于每个层的相关节点重排一下前向后向指针，同时还要注意更新一下最高层数 <code>maxLevel</code>，直接放源码 <em>(如果理解了插入这里还是很容易理解的)</em>：</p>
-<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Internal function used by zslDelete, zslDeleteByScore and zslDeleteByRank */</span>
-<span class="token keyword">void</span> <span class="token function">zslDeleteNode</span><span class="token punctuation">(</span>zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">,</span> zskiplistNode <span class="token operator">*</span>x<span class="token punctuation">,</span> zskiplistNode <span class="token operator">*</span><span class="token operator">*</span>update<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> zsl<span class="token operator">-></span>level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">==</span> x<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">+</span><span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
-            update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-            update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">-</span><span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>backward <span class="token operator">=</span> x<span class="token operator">-></span>backward<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-        zsl<span class="token operator">-></span>tail <span class="token operator">=</span> x<span class="token operator">-></span>backward<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">while</span><span class="token punctuation">(</span>zsl<span class="token operator">-></span>level <span class="token operator">></span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> zsl<span class="token operator">-></span>header<span class="token operator">-></span>level<span class="token punctuation">[</span>zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span>
-        zsl<span class="token operator">-></span>level<span class="token operator">--</span><span class="token punctuation">;</span>
-    zsl<span class="token operator">-></span>length<span class="token operator">--</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment" spellcheck="true">/* Delete an element with matching score/element from the skiplist.
- * The function returns 1 if the node was found and deleted, otherwise
- * 0 is returned.
- *
- * If 'node' is NULL the deleted node is freed by zslFreeNode(), otherwise
- * it is not freed (but just unlinked) and *node is set to the node pointer,
- * so that it is possible for the caller to reuse the node (including the
- * referenced SDS string at node->ele). */</span>
-<span class="token keyword">int</span> <span class="token function">zslDelete</span><span class="token punctuation">(</span>zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">,</span> <span class="token keyword">double</span> score<span class="token punctuation">,</span> sds ele<span class="token punctuation">,</span> zskiplistNode <span class="token operator">*</span><span class="token operator">*</span>node<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    zskiplistNode <span class="token operator">*</span>update<span class="token punctuation">[</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">*</span>x<span class="token punctuation">;</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-
-    x <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">&amp;&amp;</span>
-                <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">&lt;</span> score <span class="token operator">||</span>
-                    <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">==</span> score <span class="token operator">&amp;&amp;</span>
-                     <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-        <span class="token punctuation">{</span>
-            x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> x<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">/* We may have multiple elements with the same score, what we need
-     * is to find the element with both the right score and object. */</span>
-    x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&amp;&amp;</span> score <span class="token operator">==</span> x<span class="token operator">-></span>score <span class="token operator">&amp;&amp;</span> <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token function">zslDeleteNode</span><span class="token punctuation">(</span>zsl<span class="token punctuation">,</span> x<span class="token punctuation">,</span> update<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>node<span class="token punctuation">)</span>
-            <span class="token function">zslFreeNode</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">else</span>
-            <span class="token operator">*</span>node <span class="token operator">=</span> x<span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* not found */</span>
-<span class="token punctuation">}</span></code></pre>
-<h2 id="节点更新实现"><a href="#节点更新实现" class="headerlink" title="节点更新实现"></a>节点更新实现</h2><p>当我们调用 <code>ZADD</code> 方法时，如果对应的 value 不存在，那就是插入过程，如果这个 value 已经存在，只是调整一下 score 的值，那就需要走一个更新流程。</p>
-<p>假设这个新的 score 值并不会带来排序上的变化，那么就不需要调整位置，直接修改元素的 score 值就可以了，但是如果排序位置改变了，那就需要调整位置，该如何调整呢？</p>
-<p>从源码 <code>t_zset.c/zsetAdd</code> 函数 <code>1350</code> 行左右可以看到，Redis 采用了一个非常简单的策略：</p>
-<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Remove and re-insert when score changed. */</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>score <span class="token operator">!=</span> curscore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    zobj<span class="token operator">-></span>ptr <span class="token operator">=</span> <span class="token function">zzlDelete</span><span class="token punctuation">(</span>zobj<span class="token operator">-></span>ptr<span class="token punctuation">,</span>eptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    zobj<span class="token operator">-></span>ptr <span class="token operator">=</span> <span class="token function">zzlInsert</span><span class="token punctuation">(</span>zobj<span class="token operator">-></span>ptr<span class="token punctuation">,</span>ele<span class="token punctuation">,</span>score<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">*</span>flags <span class="token operator">|</span><span class="token operator">=</span> ZADD_UPDATED<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p><strong>把这个元素删除再插入这个</strong>，需要经过两次路径搜索，从这一点上来看，Redis 的 <code>ZADD</code> 代码似乎还有进一步优化的空间。</p>
-<h2 id="元素排名的实现"><a href="#元素排名的实现" class="headerlink" title="元素排名的实现"></a>元素排名的实现</h2><p>跳跃表本身是有序的，Redis 在 skiplist 的 forward 指针上进行了优化，给每一个 forward 指针都增加了 <code>span</code> 属性，用来 <strong>表示从前一个节点沿着当前层的 forward 指针跳到当前这个节点中间会跳过多少个节点</strong>。在上面的源码中我们也可以看到 Redis 在插入、删除操作时都会小心翼翼地更新 <code>span</code> 值的大小。</p>
-<p>所以，沿着 <strong>“搜索路径”</strong>，把所有经过节点的跨度 <code>span</code> 值进行累加就可以算出当前元素的最终 rank 值了：</p>
-<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Find the rank for an element by both score and key.
- * Returns 0 when the element cannot be found, rank otherwise.
- * Note that the rank is 1-based due to the span of zsl->header to the
- * first element. */</span>
-<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">zslGetRank</span><span class="token punctuation">(</span>zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">,</span> <span class="token keyword">double</span> score<span class="token punctuation">,</span> sds ele<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    zskiplistNode <span class="token operator">*</span>x<span class="token punctuation">;</span>
-    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> rank <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
-
-    x <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">&amp;&amp;</span>
-            <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">&lt;</span> score <span class="token operator">||</span>
-                <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">==</span> score <span class="token operator">&amp;&amp;</span>
-                <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// span 累加</span>
-            rank <span class="token operator">+</span><span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span<span class="token punctuation">;</span>
-            x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-
-        <span class="token comment" spellcheck="true">/* x might be equal to zsl->header, so test if obj is non-NULL */</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>ele <span class="token operator">&amp;&amp;</span> <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> rank<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><ol>
-<li>跳跃表 Skip List 的原理和实现（Java） - <a href="https://blog.csdn.net/DERRANTCM/article/details/79063312" target="_blank" rel="noopener">https://blog.csdn.net/DERRANTCM/article/details/79063312</a></li>
-<li>【算法导论33】跳跃表（Skip list）原理与java实现 - <a href="https://blog.csdn.net/brillianteagle/article/details/52206261" target="_blank" rel="noopener">https://blog.csdn.net/brillianteagle/article/details/52206261</a></li>
-</ol>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li>《Redis 设计与实现》 - <a href="http://redisbook.com/" target="_blank" rel="noopener">http://redisbook.com/</a></li>
-<li>【官方文档】Redis 数据类型介绍 - <a href="http://www.redis.cn/topics/data-types-intro.html" target="_blank" rel="noopener">http://www.redis.cn/topics/data-types-intro.html</a></li>
-<li>《Redis 深度历险》 - <a href="https://book.douban.com/subject/30386804/" target="_blank" rel="noopener">https://book.douban.com/subject/30386804/</a></li>
-<li>Redis 源码 - <a href="https://github.com/antirez/redis" target="_blank" rel="noopener">https://github.com/antirez/redis</a></li>
-<li>Redis 快速入门 - 易百教程 - <a href="https://www.yiibai.com/redis/redis_quick_guide.html" target="_blank" rel="noopener">https://www.yiibai.com/redis/redis_quick_guide.html</a></li>
-<li>Redis【入门】就这一篇! - <a href="https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/">https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/</a></li>
-<li>Redis为什么用跳表而不用平衡树？ - <a href="https://mp.weixin.qq.com/s?__biz=MzA4NTg1MjM0Mg==&mid=2657261425&idx=1&sn=d840079ea35875a8c8e02d9b3e44cf95&scene=21#wechat_redirect" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzA4NTg1MjM0Mg==&amp;mid=2657261425&amp;idx=1&amp;sn=d840079ea35875a8c8e02d9b3e44cf95&amp;scene=21#wechat_redirect</a></li>
-<li>为啥 redis 使用跳表(skiplist)而不是使用 red-black？ - 知乎@于康 - <a href="https://www.zhihu.com/question/20202931" target="_blank" rel="noopener">https://www.zhihu.com/question/20202931</a></li>
-</ol>
-<blockquote>
-<ul>
-<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
-<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-fca34cfd601e7449.png" alt=""></p>
-<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
-<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3883,7 +4110,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"

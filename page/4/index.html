@@ -435,6 +435,395 @@
         
           
   <h2 class="title">
+    <a href="/2020/02/29/redis-2-tiao-yue-biao/">
+      Redis(2)——跳跃表
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/中间件</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年2月29日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-97a4ce9191464f62.png" alt=""></p>
+<h1 id="一、跳跃表简介"><a href="#一、跳跃表简介" class="headerlink" title="一、跳跃表简介"></a>一、跳跃表简介</h1><p>跳跃表（skiplist）是一种随机化的数据结构，由 <strong>William Pugh</strong> 在论文<a href="https://www.cl.cam.ac.uk/teaching/0506/Algorithms/skiplists.pdf" target="_blank" rel="noopener">《Skip lists: a probabilistic alternative to balanced trees》</a>中提出，是一种可以于平衡树媲美的层次化链表结构——查找、删除、添加等操作都可以在对数期望时间下完成，以下是一个典型的跳跃表例子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-65a5b1a2849fb91c.png" alt=""></p>
+<p>我们在上一篇中提到了 Redis 的五种基本结构中，有一个叫做 <strong>有序列表 zset</strong> 的数据结构，它类似于 Java 中的 <strong>SortedSet</strong> 和 <strong>HashMap</strong> 的结合体，一方面它是一个 set 保证了内部 value 的唯一性，另一方面又可以给每个 value 赋予一个排序的权重值 score，来达到 <strong>排序</strong> 的目的。</p>
+<p>它的内部实现就依赖了一种叫做 <strong>「跳跃列表」</strong> 的数据结构。</p>
+<h2 id="为什么使用跳跃表"><a href="#为什么使用跳跃表" class="headerlink" title="为什么使用跳跃表"></a>为什么使用跳跃表</h2><p>首先，因为 zset 要支持随机的插入和删除，所以它 <strong>不宜使用数组来实现</strong>，关于排序问题，我们也很容易就想到 <strong>红黑树/ 平衡树</strong> 这样的树形结构，为什么 Redis 不使用这样一些结构呢？</p>
+<ol>
+<li><strong>性能考虑：</strong> 在高并发的情况下，树形结构需要执行一些类似于 rebalance 这样的可能涉及整棵树的操作，相对来说跳跃表的变化只涉及局部 _(下面详细说)_；</li>
+<li><strong>实现考虑：</strong> 在复杂度与红黑树相同的情况下，跳跃表实现起来更简单，看起来也更加直观；</li>
+</ol>
+<p>基于以上的一些考虑，Redis 基于 <strong>William Pugh</strong> 的论文做出一些改进后采用了 <strong>跳跃表</strong> 这样的结构。</p>
+<h2 id="本质是解决查找问题"><a href="#本质是解决查找问题" class="headerlink" title="本质是解决查找问题"></a>本质是解决查找问题</h2><p>我们先来看一个普通的链表结构：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-11b7eebde1779904.png" alt=""></p>
+<p>我们需要这个链表按照 score 值进行排序，这也就意味着，当我们需要添加新的元素时，我们需要定位到插入点，这样才可以继续保证链表是有序的，通常我们会使用 <strong>二分查找法</strong>，但二分查找是有序数组的，链表没办法进行位置定位，我们除了遍历整个找到第一个比给定数据大的节点为止 <em>（时间复杂度 O(n))</em> 似乎没有更好的办法。</p>
+<p>但假如我们每相邻两个节点之间就增加一个指针，让指针指向下一个节点，如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-8cae2c261c950b32.png" alt=""></p>
+<p>这样所有新增的指针连成了一个新的链表，但它包含的数据却只有原来的一半 _（图中的为 3，11）_。</p>
+<p>现在假设我们想要查找数据时，可以根据这条新的链表查找，如果碰到比待查找数据大的节点时，再回到原来的链表中进行查找，比如，我们想要查找 7，查找的路径则是沿着下图中标注出的红色指针所指向的方向进行的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-9c0262c7a85c120e.png" alt=""></p>
+<p>这是一个略微极端的例子，但我们仍然可以看到，通过新增加的指针查找，我们不再需要与链表上的每一个节点逐一进行比较，这样改进之后需要比较的节点数大概只有原来的一半。</p>
+<p>利用同样的方式，我们可以在新产生的链表上，继续为每两个相邻的节点增加一个指针，从而产生第三层链表：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-22036e274bedaa5a.png" alt=""></p>
+<p>在这个新的三层链表结构中，我们试着 <strong>查找 13</strong>，那么沿着最上层链表首先比较的是 11，发现 11 比 13 小，于是我们就知道只需要到 11 后面继续查找，<strong>从而一下子跳过了 11 前面的所有节点。</strong></p>
+<p>可以想象，当链表足够长，这样的多层链表结构可以帮助我们跳过很多下层节点，从而加快查找的效率。</p>
+<h2 id="更进一步的跳跃表"><a href="#更进一步的跳跃表" class="headerlink" title="更进一步的跳跃表"></a>更进一步的跳跃表</h2><p><strong>跳跃表 skiplist</strong> 就是受到这种多层链表结构的启发而设计出来的。按照上面生成链表的方式，上面每一层链表的节点个数，是下面一层的节点个数的一半，这样查找过程就非常类似于一个二分查找，使得查找的时间复杂度可以降低到 _O(logn)_。</p>
+<p>但是，这种方法在插入数据的时候有很大的问题。新插入一个节点之后，就会打乱上下相邻两层链表上节点个数严格的 2:1 的对应关系。如果要维持这种对应关系，就必须把新插入的节点后面的所有节点 <em>（也包括新插入的节点）</em> 重新进行调整，这会让时间复杂度重新蜕化成 _O(n)_。删除数据也有同样的问题。</p>
+<p><strong>skiplist</strong> 为了避免这一问题，它不要求上下相邻两层链表之间的节点个数有严格的对应关系，而是 <strong>为每个节点随机出一个层数(level)</strong>。比如，一个节点随机出的层数是 3，那么就把它链入到第 1 层到第 3 层这三层链表中。为了表达清楚，下图展示了如何通过一步步的插入操作从而形成一个 skiplist 的过程：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-1e0626c013de095e.png" alt=""></p>
+<p>从上面的创建和插入的过程中可以看出，每一个节点的层数（level）是随机出来的，而且新插入一个节点并不会影响到其他节点的层数，因此，<strong>插入操作只需要修改节点前后的指针，而不需要对多个节点都进行调整</strong>，这就降低了插入操作的复杂度。</p>
+<p>现在我们假设从我们刚才创建的这个结构中查找 23 这个不存在的数，那么查找路径会如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-a8f66d808e8a4d1e.png" alt=""></p>
+<h1 id="二、跳跃表的实现"><a href="#二、跳跃表的实现" class="headerlink" title="二、跳跃表的实现"></a>二、跳跃表的实现</h1><p>Redis 中的跳跃表由 <code>server.h/zskiplistNode</code> 和 <code>server.h/zskiplist</code> 两个结构定义，前者为跳跃表节点，后者则保存了跳跃节点的相关信息，同之前的 <code>集合 list</code> 结构类似，其实只有 <code>zskiplistNode</code> 就可以实现了，但是引入后者是为了更加方便的操作：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* ZSETs use a specialized version of Skiplists */</span>
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> zskiplistNode <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// value</span>
+    sds ele<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 分值</span>
+    <span class="token keyword">double</span> score<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 后退指针</span>
+    <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>backward<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 层</span>
+    <span class="token keyword">struct</span> zskiplistLevel <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 前进指针</span>
+        <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>forward<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 跨度</span>
+        <span class="token keyword">unsigned</span> <span class="token keyword">long</span> span<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> level<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span> zskiplistNode<span class="token punctuation">;</span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> zskiplist <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 跳跃表头指针</span>
+    <span class="token keyword">struct</span> zskiplistNode <span class="token operator">*</span>header<span class="token punctuation">,</span> <span class="token operator">*</span>tail<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 表中节点的数量</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> length<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 表中层数最大的节点的层数</span>
+    <span class="token keyword">int</span> level<span class="token punctuation">;</span>
+<span class="token punctuation">}</span> zskiplist<span class="token punctuation">;</span></code></pre>
+<p>正如文章开头画出来的那张标准的跳跃表那样。</p>
+<h2 id="随机层数"><a href="#随机层数" class="headerlink" title="随机层数"></a>随机层数</h2><p>对于每一个新插入的节点，都需要调用一个随机算法给它分配一个合理的层数，源码在 <code>t_zset.c/zslRandomLevel(void)</code> 中被定义：</p>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">zslRandomLevel</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> level <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token number">0xFFFF</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token punctuation">(</span>ZSKIPLIST_P <span class="token operator">*</span> <span class="token number">0xFFFF</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        level <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span>level<span class="token operator">&lt;</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">)</span> <span class="token operator">?</span> level <span class="token punctuation">:</span> ZSKIPLIST_MAXLEVEL<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>直观上期望的目标是 50% 的概率被分配到 <code>Level 1</code>，25% 的概率被分配到 <code>Level 2</code>，12.5% 的概率被分配到 <code>Level 3</code>，以此类推…有 2<sup>-63</sup> 的概率被分配到最顶层，因为这里每一层的晋升率都是 50%。</p>
+<p><strong>Redis 跳跃表默认允许最大的层数是 32</strong>，被源码中 <code>ZSKIPLIST_MAXLEVEL</code> 定义，当 <code>Level[0]</code> 有 2<sup>64</sup> 个元素时，才能达到 32 层，所以定义 32 完全够用了。</p>
+<h2 id="创建跳跃表"><a href="#创建跳跃表" class="headerlink" title="创建跳跃表"></a>创建跳跃表</h2><p>这个过程比较简单，在源码中的 <code>t_zset.c/zslCreate</code> 中被定义：</p>
+<pre class=" language-c"><code class="language-c">zskiplist <span class="token operator">*</span><span class="token function">zslCreate</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> j<span class="token punctuation">;</span>
+    zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 申请内存空间</span>
+    zsl <span class="token operator">=</span> <span class="token function">zmalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token operator">*</span>zsl<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 初始化层数为 1</span>
+    zsl<span class="token operator">-></span>level <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 初始化长度为 0</span>
+    zsl<span class="token operator">-></span>length <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 创建一个层数为 32，分数为 0，没有 value 值的跳跃表头节点</span>
+    zsl<span class="token operator">-></span>header <span class="token operator">=</span> <span class="token function">zslCreateNode</span><span class="token punctuation">(</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 跳跃表头节点初始化</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> j <span class="token operator">&lt;</span> ZSKIPLIST_MAXLEVEL<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 将跳跃表头节点的所有前进指针 forward 设置为 NULL</span>
+        zsl<span class="token operator">-></span>header<span class="token operator">-></span>level<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 将跳跃表头节点的所有跨度 span 设置为 0</span>
+        zsl<span class="token operator">-></span>header<span class="token operator">-></span>level<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 跳跃表头节点的后退指针 backward 置为 NULL</span>
+    zsl<span class="token operator">-></span>header<span class="token operator">-></span>backward <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 表头指向跳跃表尾节点的指针置为 NULL</span>
+    zsl<span class="token operator">-></span>tail <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> zsl<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>即执行完之后创建了如下结构的初始化跳跃表：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-551660604afd1041.png" alt=""></p>
+<h2 id="插入节点实现"><a href="#插入节点实现" class="headerlink" title="插入节点实现"></a>插入节点实现</h2><p>这几乎是最重要的一段代码了，但总体思路也比较清晰简单，如果理解了上面所说的跳跃表的原理，那么很容易理清楚插入节点时发生的几个动作 <em>（几乎跟链表类似）</em>：</p>
+<ol>
+<li>找到当前我需要插入的位置 <em>（其中包括相同 score 时的处理）</em>；</li>
+<li>创建新节点，调整前后的指针指向，完成插入；</li>
+</ol>
+<p>为了方便阅读，我把源码 <code>t_zset.c/zslInsert</code> 定义的插入函数拆成了几个部分</p>
+<h3 id="第一部分：声明需要存储的变量"><a href="#第一部分：声明需要存储的变量" class="headerlink" title="第一部分：声明需要存储的变量"></a>第一部分：声明需要存储的变量</h3><pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">// 存储搜索路径</span>
+zskiplistNode <span class="token operator">*</span>update<span class="token punctuation">[</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">*</span>x<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 存储经过的节点跨度</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">int</span> rank<span class="token punctuation">[</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> i<span class="token punctuation">,</span> level<span class="token punctuation">;</span></code></pre>
+<h3 id="第二部分：搜索当前节点插入位置"><a href="#第二部分：搜索当前节点插入位置" class="headerlink" title="第二部分：搜索当前节点插入位置"></a>第二部分：搜索当前节点插入位置</h3><pre class=" language-c"><code class="language-c"><span class="token function">serverAssert</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isnan</span><span class="token punctuation">(</span>score<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+x <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 逐步降级寻找目标节点，得到 "搜索路径"</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/* store rank that is crossed to reach the insert position */</span>
+    rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> i <span class="token operator">==</span> <span class="token punctuation">(</span>zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token punctuation">:</span> rank<span class="token punctuation">[</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 如果 score 相等，还需要比较 value 值</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">&amp;&amp;</span>
+            <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">&lt;</span> score <span class="token operator">||</span>
+                <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">==</span> score <span class="token operator">&amp;&amp;</span>
+                <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span><span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span<span class="token punctuation">;</span>
+        x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 记录 "搜索路径"</span>
+    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> x<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>讨论：</strong> 有一种极端的情况，就是跳跃表中的所有 score 值都是一样，zset 的查找性能会不会退化为 O(n) 呢？</p>
+<p>从上面的源码中我们可以发现 zset 的排序元素不只是看 score 值，也会比较 value 值 <em>（字符串比较）</em></p>
+<h3 id="第三部分：生成插入节点"><a href="#第三部分：生成插入节点" class="headerlink" title="第三部分：生成插入节点"></a>第三部分：生成插入节点</h3><pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* we assume the element is not already inside, since we allow duplicated
+ * scores, reinserting the same element should never happen since the
+ * caller of zslInsert() should test in the hash table if the element is
+ * already inside or not. */</span>
+level <span class="token operator">=</span> <span class="token function">zslRandomLevel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 如果随机生成的 level 超过了当前最大 level 需要更新跳跃表的信息</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>level <span class="token operator">></span> zsl<span class="token operator">-></span>level<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
+        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> zsl<span class="token operator">-></span>length<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    zsl<span class="token operator">-></span>level <span class="token operator">=</span> level<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 创建新节点</span>
+x <span class="token operator">=</span> <span class="token function">zslCreateNode</span><span class="token punctuation">(</span>level<span class="token punctuation">,</span>score<span class="token punctuation">,</span>ele<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h3 id="第四部分：重排前向指针"><a href="#第四部分：重排前向指针" class="headerlink" title="第四部分：重排前向指针"></a>第四部分：重排前向指针</h3><pre class=" language-c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
+    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> x<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/* update span covered by update[i] as x is inserted here */</span>
+    x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">-</span> <span class="token punctuation">(</span>rank<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">=</span> <span class="token punctuation">(</span>rank<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">-</span> rank<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">/* increment span for untouched levels */</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> level<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> zsl<span class="token operator">-></span>level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="第五部分：重排后向指针并返回"><a href="#第五部分：重排后向指针并返回" class="headerlink" title="第五部分：重排后向指针并返回"></a>第五部分：重排后向指针并返回</h3><pre class=" language-c"><code class="language-c">x<span class="token operator">-></span>backward <span class="token operator">=</span> <span class="token punctuation">(</span>update<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> zsl<span class="token operator">-></span>header<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token constant">NULL</span> <span class="token punctuation">:</span> update<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">)</span>
+    x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>backward <span class="token operator">=</span> x<span class="token punctuation">;</span>
+<span class="token keyword">else</span>
+    zsl<span class="token operator">-></span>tail <span class="token operator">=</span> x<span class="token punctuation">;</span>
+zsl<span class="token operator">-></span>length<span class="token operator">++</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> x<span class="token punctuation">;</span></code></pre>
+<h2 id="节点删除实现"><a href="#节点删除实现" class="headerlink" title="节点删除实现"></a>节点删除实现</h2><p>删除过程由源码中的 <code>t_zset.c/zslDeleteNode</code> 定义，和插入过程类似，都需要先把这个 <strong>“搜索路径”</strong> 找出来，然后对于每个层的相关节点重排一下前向后向指针，同时还要注意更新一下最高层数 <code>maxLevel</code>，直接放源码 <em>(如果理解了插入这里还是很容易理解的)</em>：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Internal function used by zslDelete, zslDeleteByScore and zslDeleteByRank */</span>
+<span class="token keyword">void</span> <span class="token function">zslDeleteNode</span><span class="token punctuation">(</span>zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">,</span> zskiplistNode <span class="token operator">*</span>x<span class="token punctuation">,</span> zskiplistNode <span class="token operator">*</span><span class="token operator">*</span>update<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> zsl<span class="token operator">-></span>level<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">==</span> x<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">+</span><span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+            update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            update<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span <span class="token operator">-</span><span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>backward <span class="token operator">=</span> x<span class="token operator">-></span>backward<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        zsl<span class="token operator">-></span>tail <span class="token operator">=</span> x<span class="token operator">-></span>backward<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>zsl<span class="token operator">-></span>level <span class="token operator">></span> <span class="token number">1</span> <span class="token operator">&amp;&amp;</span> zsl<span class="token operator">-></span>header<span class="token operator">-></span>level<span class="token punctuation">[</span>zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span>
+        zsl<span class="token operator">-></span>level<span class="token operator">--</span><span class="token punctuation">;</span>
+    zsl<span class="token operator">-></span>length<span class="token operator">--</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">/* Delete an element with matching score/element from the skiplist.
+ * The function returns 1 if the node was found and deleted, otherwise
+ * 0 is returned.
+ *
+ * If 'node' is NULL the deleted node is freed by zslFreeNode(), otherwise
+ * it is not freed (but just unlinked) and *node is set to the node pointer,
+ * so that it is possible for the caller to reuse the node (including the
+ * referenced SDS string at node->ele). */</span>
+<span class="token keyword">int</span> <span class="token function">zslDelete</span><span class="token punctuation">(</span>zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">,</span> <span class="token keyword">double</span> score<span class="token punctuation">,</span> sds ele<span class="token punctuation">,</span> zskiplistNode <span class="token operator">*</span><span class="token operator">*</span>node<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    zskiplistNode <span class="token operator">*</span>update<span class="token punctuation">[</span>ZSKIPLIST_MAXLEVEL<span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token operator">*</span>x<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+
+    x <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">&amp;&amp;</span>
+                <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">&lt;</span> score <span class="token operator">||</span>
+                    <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">==</span> score <span class="token operator">&amp;&amp;</span>
+                     <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        update<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> x<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">/* We may have multiple elements with the same score, what we need
+     * is to find the element with both the right score and object. */</span>
+    x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">&amp;&amp;</span> score <span class="token operator">==</span> x<span class="token operator">-></span>score <span class="token operator">&amp;&amp;</span> <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">zslDeleteNode</span><span class="token punctuation">(</span>zsl<span class="token punctuation">,</span> x<span class="token punctuation">,</span> update<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>node<span class="token punctuation">)</span>
+            <span class="token function">zslFreeNode</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            <span class="token operator">*</span>node <span class="token operator">=</span> x<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* not found */</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="节点更新实现"><a href="#节点更新实现" class="headerlink" title="节点更新实现"></a>节点更新实现</h2><p>当我们调用 <code>ZADD</code> 方法时，如果对应的 value 不存在，那就是插入过程，如果这个 value 已经存在，只是调整一下 score 的值，那就需要走一个更新流程。</p>
+<p>假设这个新的 score 值并不会带来排序上的变化，那么就不需要调整位置，直接修改元素的 score 值就可以了，但是如果排序位置改变了，那就需要调整位置，该如何调整呢？</p>
+<p>从源码 <code>t_zset.c/zsetAdd</code> 函数 <code>1350</code> 行左右可以看到，Redis 采用了一个非常简单的策略：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Remove and re-insert when score changed. */</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>score <span class="token operator">!=</span> curscore<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    zobj<span class="token operator">-></span>ptr <span class="token operator">=</span> <span class="token function">zzlDelete</span><span class="token punctuation">(</span>zobj<span class="token operator">-></span>ptr<span class="token punctuation">,</span>eptr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    zobj<span class="token operator">-></span>ptr <span class="token operator">=</span> <span class="token function">zzlInsert</span><span class="token punctuation">(</span>zobj<span class="token operator">-></span>ptr<span class="token punctuation">,</span>ele<span class="token punctuation">,</span>score<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span>flags <span class="token operator">|</span><span class="token operator">=</span> ZADD_UPDATED<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>把这个元素删除再插入这个</strong>，需要经过两次路径搜索，从这一点上来看，Redis 的 <code>ZADD</code> 代码似乎还有进一步优化的空间。</p>
+<h2 id="元素排名的实现"><a href="#元素排名的实现" class="headerlink" title="元素排名的实现"></a>元素排名的实现</h2><p>跳跃表本身是有序的，Redis 在 skiplist 的 forward 指针上进行了优化，给每一个 forward 指针都增加了 <code>span</code> 属性，用来 <strong>表示从前一个节点沿着当前层的 forward 指针跳到当前这个节点中间会跳过多少个节点</strong>。在上面的源码中我们也可以看到 Redis 在插入、删除操作时都会小心翼翼地更新 <code>span</code> 值的大小。</p>
+<p>所以，沿着 <strong>“搜索路径”</strong>，把所有经过节点的跨度 <code>span</code> 值进行累加就可以算出当前元素的最终 rank 值了：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">/* Find the rank for an element by both score and key.
+ * Returns 0 when the element cannot be found, rank otherwise.
+ * Note that the rank is 1-based due to the span of zsl->header to the
+ * first element. */</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">long</span> <span class="token function">zslGetRank</span><span class="token punctuation">(</span>zskiplist <span class="token operator">*</span>zsl<span class="token punctuation">,</span> <span class="token keyword">double</span> score<span class="token punctuation">,</span> sds ele<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    zskiplistNode <span class="token operator">*</span>x<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> rank <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">;</span>
+
+    x <span class="token operator">=</span> zsl<span class="token operator">-></span>header<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> zsl<span class="token operator">-></span>level<span class="token number">-1</span><span class="token punctuation">;</span> i <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">;</span> i<span class="token operator">--</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward <span class="token operator">&amp;&amp;</span>
+            <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">&lt;</span> score <span class="token operator">||</span>
+                <span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>score <span class="token operator">==</span> score <span class="token operator">&amp;&amp;</span>
+                <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// span 累加</span>
+            rank <span class="token operator">+</span><span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>span<span class="token punctuation">;</span>
+            x <span class="token operator">=</span> x<span class="token operator">-></span>level<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span>forward<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">/* x might be equal to zsl->header, so test if obj is non-NULL */</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>x<span class="token operator">-></span>ele <span class="token operator">&amp;&amp;</span> <span class="token function">sdscmp</span><span class="token punctuation">(</span>x<span class="token operator">-></span>ele<span class="token punctuation">,</span>ele<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> rank<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><ol>
+<li>跳跃表 Skip List 的原理和实现（Java） - <a href="https://blog.csdn.net/DERRANTCM/article/details/79063312" target="_blank" rel="noopener">https://blog.csdn.net/DERRANTCM/article/details/79063312</a></li>
+<li>【算法导论33】跳跃表（Skip list）原理与java实现 - <a href="https://blog.csdn.net/brillianteagle/article/details/52206261" target="_blank" rel="noopener">https://blog.csdn.net/brillianteagle/article/details/52206261</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《Redis 设计与实现》 - <a href="http://redisbook.com/" target="_blank" rel="noopener">http://redisbook.com/</a></li>
+<li>【官方文档】Redis 数据类型介绍 - <a href="http://www.redis.cn/topics/data-types-intro.html" target="_blank" rel="noopener">http://www.redis.cn/topics/data-types-intro.html</a></li>
+<li>《Redis 深度历险》 - <a href="https://book.douban.com/subject/30386804/" target="_blank" rel="noopener">https://book.douban.com/subject/30386804/</a></li>
+<li>Redis 源码 - <a href="https://github.com/antirez/redis" target="_blank" rel="noopener">https://github.com/antirez/redis</a></li>
+<li>Redis 快速入门 - 易百教程 - <a href="https://www.yiibai.com/redis/redis_quick_guide.html" target="_blank" rel="noopener">https://www.yiibai.com/redis/redis_quick_guide.html</a></li>
+<li>Redis【入门】就这一篇! - <a href="https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/">https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/</a></li>
+<li>Redis为什么用跳表而不用平衡树？ - <a href="https://mp.weixin.qq.com/s?__biz=MzA4NTg1MjM0Mg==&mid=2657261425&idx=1&sn=d840079ea35875a8c8e02d9b3e44cf95&scene=21#wechat_redirect" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzA4NTg1MjM0Mg==&amp;mid=2657261425&amp;idx=1&amp;sn=d840079ea35875a8c8e02d9b3e44cf95&amp;scene=21#wechat_redirect</a></li>
+<li>为啥 redis 使用跳表(skiplist)而不是使用 red-black？ - 知乎@于康 - <a href="https://www.zhihu.com/question/20202931" target="_blank" rel="noopener">https://www.zhihu.com/question/20202931</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">
       Redis(1)——5种基本数据结构
     </a>
@@ -2989,304 +3378,6 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/10/15/react-ru-men-xue-xi/">
-      React入门学习
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E5%89%8D%E7%AB%AF/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>前端</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年10月15日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>为了获得更好的阅读体验，请访问原地址：<a href="https://www.wmyskxz.com/2019/10/15/react-ru-men-xue-xi/">传送门</a></p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/React%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/7896890-464d33efc2d73c51.png" alt=""></p>
-<h1 id="一、React-简介"><a href="#一、React-简介" class="headerlink" title="一、React 简介"></a>一、React 简介</h1><hr>
-<h2 id="React-是什么"><a href="#React-是什么" class="headerlink" title="React 是什么"></a>React 是什么</h2><p>React 是一个起源于 Facebook 的内部项目，因为当时 Facebook 对于市场上所有的 JavaScript MVC 框架都不太满意，所以索性就自己写了一套，用来架设 Instagram。做出来之后，发现这套东西还蛮好用的，于是就在 <strong>2013 年 5 月开源了</strong>。</p>
-<p>在这里我们需要稍微注意一下 <strong>库(Library)</strong> 和 <strong>框架(Framework)</strong> 的区别，<strong>React 本身是一个用于构建用户界面的 JavaScript 库</strong>，而我们平时所说的 React 框架其实是指的是 React/ React-router 和 React-redux 的结合体，库和框架的本质区别体现在于控制权：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/React%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/7896890-7eb245081880e133.png" alt=""></p>
-<ul>
-<li>「库」是一个封装好的特定的集合，提供给开发者使用，而且是特定于某一方面的集合（方法和函数），库没有控制权，控制权完全在于使用者本身；</li>
-<li>「框架」顾名思义是一套架构，会基于自身的特点向用户提供一套比较完整的解决方案，如果使用者选定了一套框架，那么就需要根据框架本身做出一定的适应。</li>
-</ul>
-<h2 id="为什么使用-React？"><a href="#为什么使用-React？" class="headerlink" title="为什么使用 React？"></a>为什么使用 React？</h2><p>这是一个非常有趣的问题，也让我困惑和苦恼。在笔者还在学校的时候尝试用 Vue 搭建了一套简单的博客系统，学习曲线平滑，让只会一些基础 HTML/ CSS 代码的我通过一段时间学习就能够上手了，但是学习 React 以来，进展变得相对缓慢.. 一部分原因是因为 React 创新性的开发模式以及让我感到无所适从的 JSX 语法（菜才是原罪）。</p>
-<p>Vue 作者尤雨溪在知乎上回答「Vue 和 React 的优点分别是什么？」这个问题的时候提到 ：</p>
-<blockquote>
-<p>这里我可以大方地承认，如果多年以后要论历史地位，React 肯定是高于 Vue 的。事实上，我作为一个开发者，也是由衷地佩服 Jordan Walke, Sebastian Markbage 这样的，能从开发模式层面上提出突破性的新方向的人。</p>
-<p>React 从一开始的定位就是提出 UI 开发的新思路。当年 Pete Hunt 最开始推广 React 的时候的一句口号就叫 “Rethinking Best Practices”，这样的定位使得 React 打开了一些全新的思路，吸引了一群喜欢折腾的早期核心用户，并在这个基础上通过社区迭代孵化出了许多今天被 React 开发者当作常识的 pattern。这是 React 伟大的地方，Vue 里面也有很多地方是直接受到了 React 的启发。React 敢做这样的尝试，是因为它是 Facebook。这样的体量的公司，在 infrastructure 层面获得质的提升，收益是巨大的，而且 Facebook 的工程师们足够聪明又要靠工资吃饭，改变他/她们的习惯并不是什么问题。而对外推广，则是一种大公司才有的 “改变业界” 的底气。</p>
-</blockquote>
-<p>相比「为什么使用 React？」的理由，称赞 React 的倒是明显更多一些（React 确实是突破性的开发模式）。</p>
-<p>是因为 React 组件化的思想吗？不是。我觉得这跟多少跟微服务化之类的概念有点儿类似，这是属于一个时代对于计算机工程的思想进步，是对于团队协作提出的新一种成熟的解决方案，也是必然的一种趋势。当前流行的不管是 Angular/ Vue 还是 React，都天然的支持着组件化的概念。</p>
-<p>那是因为 React 性能出众吗？我想也不是。或许 React 刚出世时因为其独特高效的虚拟 DOM 设计，能够在前端江湖中平步青云，但是现在前端技术都主键地趋于成熟（我也不懂，我乱说的..），从很多地方的对比数据中，都能够看得到其实 React 与其他框架的性能差异并不是特别大。并且体现在平时的开发中，这样对比不明显的速度差异，根本没有多大的用处。</p>
-<p>还看到一种观点，说 React 适用于构建大型的项目。从我并不多的了解中，我知道 React 体系中天然有着许多的约束，以及一些不成文的约定，这就好像是 SpringBoot 中默认提供给使用者的一些姿势，天然就有很强的工程性，加上一些约定俗成的代码风格 or 归约，这就使得 Java 很适合一些大型的团队项目。但能不能开发大型的项目从来都是取决于人，而不是采用了哪种框架。</p>
-<p>所以比较令我信服的理由是（我乱猜的）：像 Java 一样，React 体系足够成熟，社区也非常活跃，你遇到的问题很容易在网络上找到答案，并且也有一些成熟的实践 or 轮子用以解决各种各样的问题。而且 React 还有一个比较特别的特性是：你能够比较无痛地使用 React Native 开发原生移动应用。</p>
-<h1 id="二、React-核心概念"><a href="#二、React-核心概念" class="headerlink" title="二、React 核心概念"></a>二、React 核心概念</h1><hr>
-<h2 id="虚拟-DOM（Vitural-Document-Object-Model）"><a href="#虚拟-DOM（Vitural-Document-Object-Model）" class="headerlink" title="虚拟 DOM（Vitural Document Object Model）"></a>虚拟 DOM（Vitural Document Object Model）</h2><p>要理解这个「虚拟 DOM」的概念，首先我们就需要知道什么是「DOM」。我们先暂时忘掉什么网页之类的，我们想象现在我们需要编写程序来对下列的 Markdown 文档进行改变应该怎么做：</p>
-<pre class=" language-markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> Title</span>
-<span class="token title important"><span class="token punctuation">##</span> subtitle - 1</span>
-content - 1
-<span class="token title important"><span class="token punctuation">##</span> subtitle - 2</span>
-content - 2</code></pre>
-<p>比如我现在就想要 <code>content - 2</code> 的内容进行改变，那么我就需要一行一行的不断遍历直到最后遍历到它才能进行操作，对内容改变的操作都差不多，所以如果我想对这个查找的操作进行优化，最简单的想法就是把它树化以减少高度，增加效率。</p>
-<h3 id="DOM-的概念"><a href="#DOM-的概念" class="headerlink" title="DOM 的概念"></a>DOM 的概念</h3><p><strong>DOM</strong> 是英文 Document Object Model 的缩写，即文档对象模型。它是一种跨平台的、独立于编程语言的 API，它把 HTML、XHTML 或 XML 文档都当做一个树结构，而每个节点视为一个对象，这些对象可以被编程语言操作，进而改变文档的结构，映射到文档的显示。DOM 最开始的时候是和 JavaScript 交织在一起的，只是后来它们最终演变成了两个独立的实体。DOM 被设计成与特定编程语言相独立，尽管绝大部分时候我们都是使用 JavaScript 来操作，但其实其他的语言一样可以（如 Python）。</p>
-<p>假如有这么一段 HTML 代码：</p>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>文档标题<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>链接<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>标题<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
-<p>那么它最终就应该会是下面这棵树一样的结构：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/React%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/7896890-4715bed519c5dcad.png" alt=""></p>
-<p>这里不对 DOM 节点的类型啊方法之类的进行讨论，我们只需要对 DOM 有一个大致的概念就好了。</p>
-<h3 id="浏览器渲染-DOM-的流程"><a href="#浏览器渲染-DOM-的流程" class="headerlink" title="浏览器渲染 DOM 的流程"></a>浏览器渲染 DOM 的流程</h3><p><strong>我们可以简单了解一下浏览器渲染 DOM 的流程：</strong></p>
-<ol>
-<li>解析 HTML 建立 DOM 树；</li>
-<li>解析 CSS，并结合 DOM 树形成 Reander 树；</li>
-<li>布局 Render 树（Layout/ reflow），确定各节点的尺寸、位置等信息；</li>
-<li>绘制 Render 树（Paint），绘制页面像素信息；</li>
-<li>浏览器将各层信息发给 GPU，GPU 会将各层合成（Composite），显示在屏幕上；</li>
-</ol>
-<h3 id="操作-DOM-为什么慢"><a href="#操作-DOM-为什么慢" class="headerlink" title="操作 DOM 为什么慢"></a>操作 DOM 为什么慢</h3><p><strong>其实严格来说，单纯的操作 DOM 并不慢，说它慢是带有一定条件的。</strong></p>
-<p>想象在一次事件循环中多次操作 DOM 时，有时希望 JS 代码中能立刻获取最新的 DOM 节点信息，这时浏览器不得不挂起 JS 引擎，转而调用 DOM 引擎，计算渲染出最新的 DOM，以此来获取最新的 DOM 节点信息，接着再重新激活 JS 引擎 继续后续的操作。</p>
-<p>可以预见，上述操作不仅需要多次进行引擎的切换，还需要多次计算布局，重新绘制 DOM。事实上<code>paint</code>是一个耗时的过程，然而<code>layout</code>是一个更耗时的过程，我们无法确定<code>layout</code>一定是自上而下或是自下而上进行的，甚至一次<code>layout</code>会牵涉到整个文档布局的重新计算。</p>
-<p>但是<code>layout</code>是肯定无法避免的，所以我们主要是要最小化<code>layout</code>的次数。</p>
-<p><strong>所以，降低引擎切换频率、减小 DOM 变更规模才是 DOM 性能优化方案的关键！</strong></p>
-<h3 id="Virtual-DOM-算法步骤"><a href="#Virtual-DOM-算法步骤" class="headerlink" title="Virtual DOM 算法步骤"></a>Virtual DOM 算法步骤</h3><p>虚拟 DOM 正是解决了上述问题，<strong>它的本质就是用 JS 对象来模拟出我们真实的 DOM 树</strong>，它的算法大致如下：</p>
-<ol>
-<li>用 JavaScript 对象映射形成 DOM 树的结构，然后用这个树构建一个真正的 DOM 树，插到文档当中；</li>
-<li>当状态变更的时候，重新构造一棵新的对象树，然后用新的树和旧的树进行比较（Diff 算法），记录两棵树差异；</li>
-<li>把第二步中所记录的差异应用到步骤一所构建的真正的 DOM 树上，视图就更新。</li>
-</ol>
-<h3 id="虚拟-DOM-和真实-DOM-的区别"><a href="#虚拟-DOM-和真实-DOM-的区别" class="headerlink" title="虚拟 DOM 和真实 DOM 的区别"></a>虚拟 DOM 和真实 DOM 的区别</h3><p>我们由此可以对比出两者的不同：</p>
-<ol>
-<li>改变多个状态，影响多个节点布局时，只是频繁的修改了内存中的 JS 对象，然后一次性比较并修改真实 DOM 中需要改的部分，最后在真实 DOM 中进行排版与重绘，减少过多 DOM 节点排版与重绘损耗；</li>
-<li>真实 DOM 频繁排版与重绘的效率是相当低的；</li>
-<li>虚拟 DOM 有效降低大面积（真实 DOM 节点）的重绘与排版，因为最终与真实 DOM 比较差异，可以只渲染局部（同2）；</li>
-</ol>
-<p><strong>使用虚拟DOM的损耗计算：</strong></p>
-<p>总损耗 = 虚拟DOM增删改 + （与Diff算法效率有关）真实DOM差异增删改 + （较少的节点）排版与重绘</p>
-<p><strong>直接使用真实DOM的损耗计算：</strong></p>
-<p>总损耗 = 真实DOM完全增删改 + （可能较多的节点）排版与重绘</p>
-<h2 id="Diff-算法"><a href="#Diff-算法" class="headerlink" title="Diff 算法"></a>Diff 算法</h2><p>虚拟 DOM 的核心在于 Diff，它自动帮你计算那些应该调整的，然后只修改应该被调整的区域，省下的不是运行速度这种 “小速度”，而是开发速度/ 维护速度/ 逻辑简练程度等 “总体速度”。</p>
-<p>但虚拟 DOM 快也是在相对条件下的，这里引用 <code>@尤雨溪</code>大大在知乎问题《网上都说操作真实 DOM 慢，但测试结果却比 React 更快，为什么？》上回答的一句话吧：</p>
-<blockquote>
-<p>不要天真地以为 Virtual DOM 就是快，diff 不是免费的，batching 么 MVVM 也能做，而且最终 patch 的时候还不是要用原生 API。在我看来 Virtual DOM 真正的价值从来都不是性能，而是它 1) 为函数式的 UI 编程方式打开了大门；2) 可以渲染到 DOM 以外的 backend，比如 ReactNative。</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/React%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/7896890-269939556c4cc4d3.png" alt=""></p>
-<p>Diff 大致可以分为三种类型：</p>
-<ul>
-<li><strong>Tree Diff：</strong> 新旧两棵 DOM 树，逐层对比的过程，就是 Tree Diff，当整颗DOM逐层对比完毕，则所有需要被按需更新的元素，必然能够找到；</li>
-<li><strong>Component Diff：</strong> 在进行 Tree Diff 的时候，每一层中，组件级别的对比，叫做 Component Diff：<ul>
-<li>如果对比前后，组件的类型相同，则<strong>暂时</strong>认为此组件不需要被更新；</li>
-<li>如果对比前后，组件类型不同，则需要移除旧组件，创建新组件，并追加到页面上；</li>
-</ul>
-</li>
-<li><strong>Element Diff：</strong> 在进行组件对比的时候，如果两个组件类型相同，则需要进行元素级别的对比，这叫做 Element Diff； </li>
-</ul>
-<h1 id="三、Hello-World"><a href="#三、Hello-World" class="headerlink" title="三、Hello World"></a>三、Hello World</h1><hr>
-<ul>
-<li>引用自：<a href="http://www.ruanyifeng.com/blog/2015/03/react.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2015/03/react.html</a> - 阮一峰 - React 入门实例教程</li>
-</ul>
-<p>使用 React 的网页源码，结构大致如下（可以直接运行）：</p>
-<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>Hello React!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://cdn.staticfile.org/react/16.4.0/umd/react.development.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>example<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/babel<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript">
-    ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>
-        <span class="token operator">&lt;</span>h1<span class="token operator">></span>Hello<span class="token punctuation">,</span> world<span class="token operator">!</span><span class="token operator">&lt;</span><span class="token operator">/</span>h1<span class="token operator">></span><span class="token punctuation">,</span>
-        document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'example'</span><span class="token punctuation">)</span>
-    <span class="token punctuation">)</span><span class="token punctuation">;</span>
-</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
-
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
-<p>上面代码有两个地方需要注意。首先，最后一个 <code>&lt;script&gt;</code> 标签的 <code>type</code> 属性为 <code>text/babel</code> 。这是因为 React 独有的 JSX 语法，跟 JavaScript 不兼容。凡是使用 JSX 的地方，都要加上 <code>type=&quot;text/babel&quot;</code> 。</p>
-<p>其次，上面代码一共用了三个库： <code>react.js</code> 、<code>react-dom.js</code> 和 <code>Browser.js</code> ，它们必须首先加载。其中，<code>react.js</code>是 React 的核心库，<code>react-dom.js</code> 是提供与 DOM 相关的功能，<code>Browser.js</code> 的作用是将 JSX 语法转为 JavaScript 语法，这一步很消耗时间，实际上线的时候，应该将它放到服务器完成。</p>
-<pre class=" language-shell"><code class="language-shell">$ babel src --out-dir build</code></pre>
-<p>上面命令可以将 <code>src</code> 子目录的 <code>js</code> 文件进行语法转换，转码后的文件全部放在 <code>build</code> 子目录。</p>
-<h2 id="ReactDOM-render"><a href="#ReactDOM-render" class="headerlink" title="ReactDOM.render()"></a>ReactDOM.render()</h2><p>ReactDOM.render 是 React 的最基本方法，用于将模板转为 HTML 语言，并插入指定的 DOM 节点。</p>
-<pre class=" language-html"><code class="language-html">ReactDOM.render(
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Hello, world!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>,
-  document.getElementById('example')
-);</code></pre>
-<p>上面代码将一个 <code>h1</code> 标题，插入 <code>example</code> 节点，运行结果如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/React%E5%85%A5%E9%97%A8%E5%AD%A6%E4%B9%A0/7896890-d0f048b92dc2bc11.png" alt=""></p>
-<h2 id="JSX-语法"><a href="#JSX-语法" class="headerlink" title="JSX 语法"></a>JSX 语法</h2><ul>
-<li>引用自：<a href="https://www.runoob.com/react/react-jsx.html" target="_blank" rel="noopener">https://www.runoob.com/react/react-jsx.html</a> - RUNOOB.COM - React JSX</li>
-</ul>
-<p>上一节的代码， HTML 语言直接写在 JavaScript 语言之中，不加任何引号，这就是 <a href="http://facebook.github.io/react/docs/displaying-data.html#jsx-syntax" target="_blank" rel="noopener">JSX 的语法</a>，它允许 HTML 与 JavaScript 的混写。我们先来看以下一段代码：</p>
-<pre class=" language-html"><code class="language-html">const element = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>Hello, world!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>;</code></pre>
-<p>与浏览器的 DOM 元素不同，React 当中的元素事实上是普通的对象，React DOM 可以确保 浏览器 DOM 的数据内容与 React 元素保持一致。要将 React 元素渲染到根 DOM 节点中，我们通过把它们都传递给 ReactDOM.render() 的方法来将其渲染到页面上：</p>
-<pre class=" language-html"><code class="language-html">var myDivElement = <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">className</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>foo<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>;
-ReactDOM.render(myDivElement, document.getElementById('example'));</code></pre>
-<p>JSX 看起来类似 HTML ，你也可以在上面代码中嵌套多个 HTML 标签，但是需要使用一个 <code>div</code> 元素包裹它。</p>
-<h3 id="JavaScript-表达式"><a href="#JavaScript-表达式" class="headerlink" title="JavaScript 表达式"></a>JavaScript 表达式</h3><p>我们可以在 JSX 中使用 JavaScript 表达式。表达式写在花括号 <strong>{}</strong> 中。实例如下：</p>
-<pre class=" language-html"><code class="language-html">ReactDOM.render(
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>{1+1}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    ,
-    document.getElementById('example')
-);</code></pre>
-<p>在 JSX 中不能使用 <strong>if else</strong> 语句，但可以使用 <strong>conditional (三元运算)</strong> 表达式来替代。以下实例中如果变量 <strong>i</strong> 等于 <strong>1</strong> 浏览器将输出 <strong>true</strong>, 如果修改 i 的值，则会输出 <strong>false</strong>.</p>
-<pre class=" language-html"><code class="language-html">ReactDOM.render(
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
-      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>{i == 1 ? 'True!' : 'False'}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
-    ,
-    document.getElementById('example')
-);</code></pre>
-<h3 id="样式"><a href="#样式" class="headerlink" title="样式"></a>样式</h3><p>React 推荐使用内联样式。我们可以使用 <strong>camelCase</strong> 语法来设置内联样式. React 会在指定元素数字后自动添加 <strong>px</strong> 。以下实例演示了为 <strong>h1</strong> 元素添加 <strong>myStyle</strong> 内联样式：</p>
-<pre class=" language-html"><code class="language-html">var myStyle = {
-    fontSize: 100,
-    color: '#FF0000'
-};
-ReactDOM.render(
-    &lt;h1 style = {myStyle}>菜鸟教程<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>,
-    document.getElementById('example')
-);</code></pre>
-<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>注释需要写在花括号中，实例如下：</p>
-<pre class=" language-html"><code class="language-html">ReactDOM.render(
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>菜鸟教程<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>
-    {/*注释...*/}
-     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>,
-    document.getElementById('example')
-);</code></pre>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>JSX 允许在模板中插入数组，数组会自动展开所有成员：</p>
-<pre class=" language-html"><code class="language-html">var arr = [
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">></span></span>菜鸟教程<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span>,
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h2</span><span class="token punctuation">></span></span>学的不仅是技术，更是梦想！<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h2</span><span class="token punctuation">></span></span>,
-];
-ReactDOM.render(
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>{arr}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>,
-  document.getElementById('example')
-);</code></pre>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
-<ol>
-<li><a href="http://www.ruanyifeng.com/blog/2015/03/react.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2015/03/react.html</a> - React 入门实例教程 - 阮一峰</li>
-<li><a href="https://www.jianshu.com/p/60100985dd7f" target="_blank" rel="noopener">https://www.jianshu.com/p/60100985dd7f</a> - 前端框架与库的区别 </li>
-<li><a href="https://www.zhihu.com/question/301860721/answer/545031906" target="_blank" rel="noopener">https://www.zhihu.com/question/301860721/answer/545031906</a> - Vue 和 React 的优点分别是什么？</li>
-<li><a href="https://zhuanlan.zhihu.com/p/22184194" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22184194</a> - 你真的理解 DOM 了吗？</li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Document_Object_Model/Introduction" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/API/Document_Object_Model/Introduction</a> - DOM 概述</li>
-<li><a href="https://blog.huteming.site/posts/e0c41c5f/" target="_blank" rel="noopener">https://blog.huteming.site/posts/e0c41c5f/</a> - 为什么说虚拟DOM更快</li>
-</ol>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693<br>钱</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3522,7 +3613,7 @@ ReactDOM.render(
           <li><a class="flat-box"
             title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
             id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
