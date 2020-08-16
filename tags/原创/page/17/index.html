@@ -436,6 +436,410 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/08/chu-xue-java-web-7-wen-jian-de-shang-chuan-he-xia-zai/">
+      初学Java Web(7)——文件的上传和下载
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-326744dd6c79212a.png" alt=""></p>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><h4 id="文件上传前的准备"><a href="#文件上传前的准备" class="headerlink" title="文件上传前的准备"></a>文件上传前的准备</h4><ol>
+<li>在表单中<strong>必须有一个上传的控件</strong><br><code>&lt;input type=&quot;file&quot; name=&quot;testImg&quot;/&gt;</code></li>
+<li>因为 GET 方式有请求大小的限制，所以<strong>表单的提交方式必须是 POST</strong><br><code>&lt;form action=&quot;/upload&quot; method=&quot;post&quot;&gt;</code></li>
+<li>表单默认的编码方式为 <code>application/x-www-form-urlencoded</code> ，应该修改为 <code>multipart/form-data</code> ，<strong>以二进制的形式进行数据的传输</strong><br><code>&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</code></li>
+</ol>
+<ul>
+<li><strong>注意：</strong>此时 Servlet 中就不能再使用 <code>request对象.getParameter(String name)</code> 来获取请求参数<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-9ffa6de1139ff470.png" alt=""></li>
+</ul>
+<h4 id="上传组件"><a href="#上传组件" class="headerlink" title="上传组件"></a>上传组件</h4><p>要<strong>实现文件的上传</strong>，需要基于以下两种组件的一种：</p>
+<ul>
+<li><strong>Apache FileUpload 组件</strong>【操作比较复杂】</li>
+<li><strong>SmartUpload 组件</strong>【操作比较简单，但存在一些问题】</li>
+</ul>
+<hr>
+<h2 id="基于-FileUpload-组件"><a href="#基于-FileUpload-组件" class="headerlink" title="基于 FileUpload 组件"></a>基于 FileUpload 组件</h2><p>使用基于Apache FileUpload上传组件实现文件的上传，步骤：</p>
+<ol>
+<li>将<a href="https://pan.baidu.com/s/1HqCRcoRyVw3JbXApjCcglw" target="_blank" rel="noopener">必要的 jar 包</a>导入到项目中<br>commons-fileupload-1.2.2.jar<br>commons-io-1.4.jar</li>
+<li>简单写好 upload.jsp 上传页面：</li>
+</ol>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%@</span> <span class="token attr-name">page</span> <span class="token attr-name">language</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java<span class="token punctuation">"</span></span> <span class="token attr-name">contentType</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/html; charset<span class="token punctuation">=</span>UTF-8<span class="token punctuation">"</span></span>
+         <span class="token attr-name">pageEncoding</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token attr-name">import</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java.util.*<span class="token punctuation">"</span></span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>文件的上传和下载<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+
+文件上传：
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/upload<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">enctype</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>multipart/form-data<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>testImg<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-4103d55665ab457a.png" alt=""></p>
+<ol start="3">
+<li>编写 UploadServlet 处理相关请求：</li>
+</ol>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>FileItem<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>FileItemFactory<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>disk<span class="token punctuation">.</span>DiskFileItemFactory<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletFileUpload<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>WebServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>File<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/upload"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UploadServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> HttpServletResponse resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头</span>
+        <span class="token keyword">boolean</span> isMultipart <span class="token operator">=</span> ServletFileUpload<span class="token punctuation">.</span><span class="token function">isMultipartContent</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 如果不满足要求就立即结束对该请求的处理</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isMultipart<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// FileItem 是表单中的每一个元素的封装</span>
+            <span class="token comment" spellcheck="true">// 创建一个 FileItem 的工厂类</span>
+            FileItemFactory factory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DiskFileItemFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 创建一个文件上传处理器（装饰设计模式）</span>
+            ServletFileUpload upload <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServletFileUpload</span><span class="token punctuation">(</span>factory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析请求</span>
+            List<span class="token operator">&lt;</span>FileItem<span class="token operator">></span> items <span class="token operator">=</span> upload<span class="token punctuation">.</span><span class="token function">parseRequest</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>FileItem fileItem <span class="token operator">:</span>
+                    items<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 判断空间是否是普通控件</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>fileItem<span class="token punctuation">.</span><span class="token function">isFormField</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// 普通控件</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// 上传控件</span>
+                    <span class="token comment" spellcheck="true">// 将上传的文件保存到服务器</span>
+                    fileItem<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/"</span><span class="token punctuation">,</span> <span class="token string">"testImg.jpg"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="文件上传的细节"><a href="#文件上传的细节" class="headerlink" title="文件上传的细节"></a>文件上传的细节</h4><p>上面已经能实现简单的文件上传功能了，但文件上传有很多需要注意的地方。</p>
+<ul>
+<li><strong>缓存大小和临时目录</strong><br>在上传文件的时候,如果文件过大,而且是将文件放在缓存中,就可能造成内存溢出<br>默认的缓存大小为 <code>10 kb</code>，临时目录的默认值为 <code>tomcat/temp</code></li>
+<li><strong>解决方案：</strong>将操作缓存大小的文件放在服务器的磁盘(临时目录)中,在文件的大小超过设定的缓存大小的时候就会使用到临时目录<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 设置缓存大小 500kb</span>
+factory<span class="token punctuation">.</span><span class="token function">setSizeThreshold</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 设置临时目录</span>
+factory<span class="token punctuation">.</span><span class="token function">setRepository</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li><strong>通常不需要设置</strong></li>
+</ul>
+<p>另一个问题是：如果用户 A 上传了一个文件名叫xxx，用户 B 也上传了一个文件名叫 xxx，那么此时用户 B 的文件会把用户 A 的文件给覆盖掉。</p>
+<ul>
+<li><strong>文件名称的处理</strong><br>相同文件名称的文件，后面的文件会把前面的文件覆盖掉</li>
+<li><strong>解决方案：使用UUID来生成一个随机的而且不重复字符串</strong>作为文件的名称，获取真实文件的后缀名需要用到 <code>FilenameUtils</code> 这个工具类</li>
+<li><strong>语法：</strong></li>
+</ul>
+<pre class=" language-java"><code class="language-java">String fileName <span class="token operator">=</span> UUID<span class="token punctuation">.</span><span class="token function">randomUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"."</span><span class="token operator">+</span>FilenameUtils<span class="token punctuation">.</span><span class="token function">getExtension</span><span class="token punctuation">(</span>fileItem<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="文件类型的约束"><a href="#文件类型的约束" class="headerlink" title="文件类型的约束"></a>文件类型的约束</h4><p>上传文件的类型应该需要做一些约束的，比如在上传头像的时候就只允许上传图片，其他类型的文件都不应该允许上传，并且如果类型不正确的时候，应该给用户一个错误的提示。</p>
+<ul>
+<li><strong>jsp 文件增加显示错误提示信息：</strong></li>
+</ul>
+<p>我们给我们的 jsp 开头增加一个 <code>&lt;span&gt;</code> 来显示错误信息</p>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%@</span> <span class="token attr-name">page</span> <span class="token attr-name">language</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java<span class="token punctuation">"</span></span> <span class="token attr-name">contentType</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/html; charset<span class="token punctuation">=</span>UTF-8<span class="token punctuation">"</span></span>
+         <span class="token attr-name">pageEncoding</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token attr-name">import</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java.util.*<span class="token punctuation">"</span></span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>文件的上传和下载<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+
+文件上传：<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>${errorMsg}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/upload<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">enctype</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>multipart/form-data<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>testImg<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<ul>
+<li><strong>判断上传文件类型：</strong><br>限制文件类型那么就需要对文件类型进行判断</li>
+<li>语法：<code>String contentType = fileItem.getContentType();</code></li>
+<li>Servlet 源码：<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+</code></pre>
+</li>
+</ul>
+<p>import org.apache.commons.fileupload.FileItem;<br>import org.apache.commons.fileupload.FileItemFactory;<br>import org.apache.commons.fileupload.disk.DiskFileItemFactory;<br>import org.apache.commons.fileupload.servlet.ServletFileUpload;<br>import org.apache.commons.io.FilenameUtils;</p>
+<p>import javax.servlet.ServletException;<br>import javax.servlet.annotation.WebServlet;<br>import javax.servlet.http.HttpServlet;<br>import javax.servlet.http.HttpServletRequest;<br>import javax.servlet.http.HttpServletResponse;<br>import java.io.File;<br>import java.io.IOException;<br>import java.util.List;<br>import java.util.UUID;</p>
+<p>@WebServlet(“/upload”)<br>public class UploadServlet extends HttpServlet {</p>
+<pre><code>protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    // 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头
+    boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+    // 如果不满足要求就立即结束对该请求的处理
+    if (!isMultipart) {
+        return;
+    }
+
+    try {
+        // FileItem 是表单中的每一个元素的封装
+        // 创建一个 FileItem 的工厂类
+        FileItemFactory factory = new DiskFileItemFactory();
+        // 创建一个文件上传处理器（装饰设计模式）
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        // 解析请求
+        List&lt;FileItem&gt; items = upload.parseRequest(req);
+        for (FileItem fileItem :
+                items) {
+            // 判断空间是否是普通控件
+            if (fileItem.isFormField()) {
+                // 普通控件
+            } else {
+                // 上传控件
+                String contentType = fileItem.getContentType();
+                if (!contentType.startsWith(&quot;image/&quot;)) {
+                    // 实现简单的错误提示
+                    req.setAttribute(&quot;errorMsg&quot;, &quot;亲，您上传的文件格式不正确，请重新上传！&quot;);
+                    req.getRequestDispatcher(&quot;upload.jsp&quot;).forward(req, resp);
+                    return;  // 如果不是图片类型则不再对请求进行处理
+                }
+                // 随机命名文件名
+                String fileName = UUID.randomUUID().toString() + &quot;.&quot; + FilenameUtils.getExtension(fileItem.getName());
+                // 将上传的文件保存到服务器
+                fileItem.write(new File(&quot;C:/&quot;, fileName));
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}</code></pre><p>}</p>
+<pre><code>
+#### 解决中文乱码问题
+- 解决中文文件名乱码（事实上我在本地测试并没有出现乱码），得到解析器以后，就**直接设置解析器的编码为UTF-8就行了**</code></pre><p> fileUpload.setHeaderEncoding(“UTF-8”);</p>
+<pre><code>- 解决表单数据乱码，在获取表单值的时候，按照UTF-8编码来获取</code></pre><p>String value = fileItem.getString(“UTF-8”);</p>
+<pre><code>
+
+#### 文件大小约束
+
+- 单个文件数据的大小约束
+即整个表单之中只有一个上传控件
+- 语法：`upload.setFileSizeMax(1024 * 500); // 单个文件不能超过500 kb`
+- 一次请求数据的大小约束
+限制整个请求之中的数据大小
+- 语法：`upload.setSizeMax(1024 * 750); // 整个请求文件大小不能超过 750 kb`
+
+
+#### 使用 Map 封装请求信息
+
+上面提到，我们已经无法用 request对象正常获取到参数，那么我们究竟应该怎么办呢？
+
+&gt; - 使用 Map 封装一下就好了，等到要用的时候再从 Map 中取出
+![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web(7)——文件的上传和下载/7896890-4e09be236b365217.png)
+
+
+---
+
+## SmartUpload
+
+上面已经基于 FileUpload 实现了文件的上传，事实上也没有想象中那么复杂，让我们来看看 SmartUpload
+
+要使用SmartUpload组件，就需要导入smartupload.jar开发包
+
+#### 快速入门
+
+``` java
+//实例化组件
+SmartUpload smartUpload = new SmartUpload();
+
+//初始化上传操作
+smartUpload.initialize(this.getServletConfig(), request, response);
+
+try {
+
+    //上传准备
+    smartUpload.upload();
+
+    //对于普通数据，单纯到request对象是无法获取得到提交参数的。也是需要依赖smartUpload
+    String password = smartUpload.getRequest().getParameter(&quot;password&quot;);
+    System.out.println(password);
+
+    //上传到uploadFile文件夹中
+    smartUpload.save(&quot;uploadFile&quot;);
+
+} catch (SmartUploadException e) {
+    e.printStackTrace();    
+}</code></pre><ul>
+<li>摘自：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483727&idx=1&sn=87db212ac7e2590c57749a9857028f14&chksm=ebd7404edca0c9583fb3074d6827952bbfb5335c13e236719cde573e52bfe89e85e133755ab3#rd" target="_blank" rel="noopener">这里</a></li>
+<li>上面链接提到 SmartUpload 组件在解决中文乱码中有一些小问题，我没有测试过，但我觉得自己写一个 FileUpload 工具类已经足够使用了</li>
+</ul>
+<hr>
+<h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><ol>
+<li>写一个简单的 jsp 页面：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-6ace49a2c5c19e7e.png" alt=""></p>
+<ol start="2">
+<li>在 WEB-INF 下创建 download 文件夹，里面放入一个 test.zip</li>
+<li>编写 Servlet 处理相关请求</li>
+</ol>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletOutputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>WebServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>File<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>net<span class="token punctuation">.</span>URLEncoder<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>file<span class="token punctuation">.</span>Files<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>file<span class="token punctuation">.</span>Paths<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/download"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DownloadServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> HttpServletResponse resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+
+        <span class="token comment" spellcheck="true">// 设置响应数据的 MIME 类型</span>
+        resp<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token string">"application/x-msdownload"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 获取文件名称</span>
+        String fileName <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"fileName"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 判断浏览器是否是 IE</span>
+        String userAgent <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getHeader</span><span class="token punctuation">(</span><span class="token string">"User-Agent"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>userAgent<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span><span class="token string">"MSIE"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// IE</span>
+            <span class="token comment" spellcheck="true">// 设置文件的名称</span>
+            resp<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">"Content-Disposition"</span><span class="token punctuation">,</span> <span class="token string">"attachment; fileName="</span>
+                    <span class="token operator">+</span> URLEncoder<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span>fileName<span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 非IE</span>
+            resp<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">"Content-Disposition"</span><span class="token punctuation">,</span> <span class="token string">"attachment; fileName="</span>
+                    <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>fileName<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"ISO-8859-1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">// 获取文件所在的路径</span>
+        String path <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getRealPath</span><span class="token punctuation">(</span><span class="token string">"/WEB-INF/download"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 获取指定的文件对象</span>
+        File f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ServletOutputStream out <span class="token operator">=</span> resp<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 将文件复制到输出流中，响应给浏览器</span>
+        Files<span class="token punctuation">.</span><span class="token function">copy</span><span class="token punctuation">(</span>Paths<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>f<span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> out<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/07/chu-xue-java-web-6-jsp-xue-xi-zong-jie/">
       初学Java Web(6)——JSP学习总结
     </a>
@@ -2518,162 +2922,6 @@ Java EE 环境部署成功！
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/01/01/java-8-han-shu-shi-shu-ju-chu-li-liu/">
-      Java 8——函数式数据处理（流）
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年1月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本篇内容大部分来自《Java 8实战》</p>
-</blockquote>
-<h2 id="流是什么？"><a href="#流是什么？" class="headerlink" title="流是什么？"></a>流是什么？</h2><p>流是<code>Java API</code>的新成员，它允许你以声明性方式处理数据集合（通过查询语句来表达，而不是临时写一个实现）。</p>
-<p>就现在来说，你可以把它们看成遍历数据集合的高级迭代器。此外，流还可以<em>透明地</em>并行处理，你无需写任何多线程代码！</p>
-<p>下面两段代码都是用来返回低热量的菜肴名称的，并按照卡路里排序，一个使用<code>java 7</code>写的，另一个是用<code>java 8</code>的流写的，比较一下，不用太关心java 8的语法：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-b4f78866265cbf3d.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-18563ca684ec7b8c.png" alt=""></p>
-<p>现在，你可以看出，从软件工程师的角度来看，新的方法有几个显而易见的好处。</p>
-<ul>
-<li><p><strong>代码是以声明性方式写的：</strong>说明想要完成什么（筛选热量低的菜肴）而不是说明如何实现一个操作（利用循环和if条件等控制流语句）。这种方法加上行为参数化让你可以轻松应对变化的需求：你很容易创建一个代码版本，利用Lambda表达式来筛选高卡路里的菜肴，而用不着去复制粘贴代码。</p>
-</li>
-<li><p><strong>你可以把几个基础操作链接起来，</strong>来表达复杂的数据处理流水线（在filter后面接上sorted、map和collect操作），同时保持代码清晰可读。</p>
-<blockquote>
-<p>因为filter、sorted、map和coleect等操作是与具体线程模型无关的高层次构件，所以它们的内部实现可以是单线程的，也可能<em>透明地</em>充分利用你的多核架构！在实践中，这意味着你用不着为了让某些数据处理任务并行而去操心线程和锁了，<code>Steam API</code>都替你做好了！<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-8d4b3d728dc7e707.png" alt=""> </p>
-</blockquote>
-</li>
-</ul>
-<p>并且新的<code>Steam APi</code>表达能力非常强，能写出例如下面这样的代码：</p>
-<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>Dish<span class="token punctuation">.</span>Type<span class="token punctuation">,</span> List<span class="token operator">&lt;</span>Dish<span class="token operator">>></span> dishesByType <span class="token operator">=</span> 
-        menu<span class="token punctuation">.</span><span class="token function">steam</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token function">groupingBy</span><span class="token punctuation">(</span>Dish<span class="token operator">:</span><span class="token operator">:</span>getType<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="流简介"><a href="#流简介" class="headerlink" title="流简介"></a>流简介</h2><p>要讨论流，就要先来讨论集合，这是最容易上手的方式了。<code>Java 8</code>中的集合支持一个新的stream方法，它会返回一个流（接口定义在<code>java.util,steam.Steam</code>里）。</p>
-<p>那么，流到底是什么呢？简短的定义就是<strong>“从支持数据处理操作的源，生成的元素序列”</strong>。Oh，听上去就让人头大。让我们一步步来剖析这个定义：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-bc37ab0d7390ffb9.png" alt=""></p>
-<p>让我们来看一段能够体现所有这些概念的代码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-48b16ead1be85bd1.png" alt=""></p>
-<p>在本例中，我们先是对menu调用steam方法，由菜单得到一个流。<em>数据源</em>是菜肴列表（菜单），它给流提供一个<em>元素序列。</em>接下来，对流应用一系列<em>数据处理操作：</em>filter、map、limit和collect。</p>
-<p>除了collect之外，所有这些操作都会返回另一个流，这样它们就可以竭诚一条流水线，于是就可以看作对源的一个查询。最后，collect操作开始处理流水线，并返回结果。下图展示了该流操作的每个操作的简介：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-f8629e20adea9ca6.png" alt=""></p>
-<p>感觉像不像变魔术呢？不过至少看起来，是挺酷的。</p>
-<h2 id="集合与流"><a href="#集合与流" class="headerlink" title="集合与流"></a>集合与流</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-03efb1b41d46c2dc.png" alt=""></p>
-<p>上图很好的说明了在<code>Java 8</code>中的集合与流的关系，集合就像是DVD一样，保存了完整的数据结构和所有的值，而流则像是现在视频网站中的视频那样，不必提前下好完整的视频，只需要提前下载好用户播放位置的那几帧就好了。</p>
-<blockquote>
-<p>请注意：流和迭代器一样，都只能遍历一次。</p>
-</blockquote>
-<h2 id="流操作"><a href="#流操作" class="headerlink" title="流操作"></a>流操作</h2><p><code>java.util.steam.Steam</code>中的<code>Steam</code>接口定义了许多操作。它们可以分为两大类，一类是<code>中间操作</code>，另一类是<code>终端操作</code>。</p>
-<p>为了方便，下面总结了一些<code>Steam API</code>提供的操作：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-ebed4fc34ec3412c.png" alt=""></p>
-<p>流的使用一般包括三件事：</p>
-<ul>
-<li><strong>一个数据源（如集合）来执行一个查询；</strong></li>
-<li><strong>一个中间操作链，形成一条流的流水线；</strong></li>
-<li><strong>一个终端操作，执行流水线，并能生成结果</strong></li>
-</ul>
-<p>流的流水线背后的理念有点类似于构建器模式。</p>
-<blockquote>
-<p>至此，流的基本操作就已经阐述完全了，相信你已经同我一样对<code>Java 8</code>的新特性感到兴奋了吧，不可避免，因为这实在是太酷啦！</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3029,6 +3277,11 @@ Java EE 环境部署成功！
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" href="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/"
+            id="categoriesE79FA5E4B98EE997AEE7AD94"
+            ><div class='name'>知乎问答</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/"
             id="categoriesE7BC96E7A88BE4BABAE7949F"
             ><div class='name'>编程人生</div><div class='badge'>(5)</div></a></li>
@@ -3070,7 +3323,7 @@ Java EE 环境部署成功！
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

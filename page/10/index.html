@@ -435,6 +435,655 @@
         
           
   <h2 class="title">
+    <a href="/2018/05/21/java-mian-shi-zhi-shi-dian-jie-xi-liu-shu-ju-ku-pian/">
+      Java面试知识点解析(六)——数据库篇
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E9%9D%A2%E8%AF%95/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>面试</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年5月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-958b6a30c60032e8.png" alt=""></p>
+<blockquote>
+<ul>
+<li>前言： </li>
+</ul>
+</blockquote>
+<p>在遨游了一番 Java Web 的世界之后，发现了自己的一些缺失，所以就着一篇深度好文：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">知名互联网公司校招 Java 开发岗面试知识点解析</a> ，来好好的对 Java 知识点进行复习和学习一番，大部分内容参照自这一篇文章，有一些自己补充的，也算是重新学习一下 Java 吧。</p>
+<p>前序文章链接：</p>
+<p><a href="https://www.jianshu.com/p/883260941da8" target="_blank" rel="noopener">Java 面试知识点解析(一)——基础知识篇</a></p>
+<p><a href="https://www.jianshu.com/p/7382c0a843ff" target="_blank" rel="noopener">Java 面试知识点解析(二)——高并发编程篇</a></p>
+<p><a href="https://www.jianshu.com/p/bfb876565a1e" target="_blank" rel="noopener">Java 面试知识点解析(三)——JVM篇</a></p>
+<p><a href="https://www.jianshu.com/p/9c50729464b5" target="_blank" rel="noopener">Java 面试知识点解析(四)——版本特性篇</a></p>
+<p><a href="https://www.jianshu.com/p/210f85108c52" target="_blank" rel="noopener">Java 面试知识点解析(五)——网络协议篇</a></p>
+<hr>
+<blockquote>
+<p>前排引用说明及好文推荐：<a href="https://blog.csdn.net/justloveyou_/article/details/78308460" target="_blank" rel="noopener">面试/笔试第三弹 —— 数据库面试问题集锦</a>、<a href="https://segmentfault.com/a/1190000013517914" target="_blank" rel="noopener">数据库常见面试题(开发者篇)</a></p>
+</blockquote>
+<h3 id="1）什么是存储过程？有哪些优缺点？"><a href="#1）什么是存储过程？有哪些优缺点？" class="headerlink" title="1）什么是存储过程？有哪些优缺点？"></a>1）什么是存储过程？有哪些优缺点？</h3><p><strong>存储过程就像是编程语言中的函数一样，封装了我们的代码（PLSQL，T-SQL）</strong></p>
+<p>例如：</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">-------------创建名为GetUserAccount的存储过程----------------</span>
+<span class="token keyword">create</span> <span class="token keyword">Procedure</span> GetUserAccount
+<span class="token keyword">as</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> UserAccount
+go
+
+<span class="token comment" spellcheck="true">-------------执行上面的存储过程----------------</span>
+<span class="token keyword">exec</span> GetUserAccount</code></pre>
+<p>存储过程的优点：</p>
+<ul>
+<li><strong>能够将代码封装起来</strong></li>
+<li><strong>保存在数据库之中</strong></li>
+<li><strong>让编程语言进行调用</strong></li>
+<li><strong>存储过程是一个预编译的代码块，执行效率比较高</strong></li>
+<li><strong>一个存储过程替代大量T_SQL语句 ，可以降低网络通信量，提高通信速率</strong></li>
+</ul>
+<p>存储过程的缺点：</p>
+<ul>
+<li><strong>每个数据库的存储过程语法几乎都不一样，十分难以维护（不通用）</strong></li>
+<li><strong>业务逻辑放在数据库上，难以迭代</strong></li>
+</ul>
+<hr>
+<h3 id="2）三大范式"><a href="#2）三大范式" class="headerlink" title="2）三大范式"></a>2）三大范式</h3><blockquote>
+<ul>
+<li>思考这样的一个例子：</li>
+</ul>
+</blockquote>
+<p>我们现在需要建立一个描述学校教务的数据库，该数据库涉及的对象包括学生的学号（Sno）、所在系（Sdept）、系主任姓名（Mname）、课程号（Cno）和成绩（Grade），假设我们使用单一的关系模式 Student 来表示，那么根据现实世界已知的信息，会描述成以下这个样子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-344feccbb3cb1fad.png" alt=""></p>
+<p>但是，这个关系模式存在以下问题：</p>
+<p><strong>（1） 数据冗余</strong><br>比如，每一个系的系主任姓名重复出现，重复次数与该系所有学生的所有课程成绩出现次数相同，这将浪费大量的存储空间。<br><strong>（2）更新异常（update anomalies）</strong><br>由于数据冗余，当更新数据库中的数据时，系统要付出很大的代价来维护数据库的完整性，否则会面临数据不一致的危险。比如，某系更换系主任后，必须修改与该系学生有关的每一个元组。<br><strong>（3）插入异常（insertion anomalies）</strong><br>如果一个系刚成立，尚无学生，则无法把这个系及其系主任的信息存入数据库。<br><strong>（4）删除异常（deletion anomalies）</strong><br>如果某个系的学生全部毕业了，则在删除该系学生信息的同时，这个系及其系主任的信息也丢失了。</p>
+<ul>
+<li><strong>总结：</strong> 所以，我们在设计数据库的时候，就需要满足一定的规范要求，而满足不同程度要求的就是不同的范式。</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>第一范式：</strong> 列不可分</li>
+</ul>
+</blockquote>
+<p>1NF（第一范式）是对属性具有<strong>原子性</strong>的要求，不可再分，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-7a54e7d5d8fbf659.png" alt=""></p>
+<p>如果认为最后一列还可以再分成出生年，出生月，出生日，则它就不满足第一范式的要求。</p>
+<blockquote>
+<ul>
+<li><strong>第二范式：</strong> 消除非主属性对码的部分函数依赖</li>
+</ul>
+</blockquote>
+<p>2NF（第二范式）是对记录有<strong>唯一性</strong>的要求，即实体的唯一性，不存在部分依赖，每一列与主键都相关，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-a10fdbaf10a7e6b8.png" alt=""></p>
+<p>该表明显说明了两个事物：学生信息和课程信息；正常的依赖应该是：学分依赖课程号，姓名依赖学号，但这里存在非主键字段对码的部分依赖，即与主键不相关，不满足第二范式的要求。</p>
+<p><strong>可能存在的问题：</strong></p>
+<ul>
+<li><strong>数据冗余</strong>：每条记录都含有相同信息；</li>
+<li><strong>删除异常</strong>：删除所有学生成绩，就把课程信息全删除了；</li>
+<li><strong>插入异常</strong>：学生未选课，无法记录进数据库；</li>
+<li><strong>更新异常</strong>：调整课程学分，所有行都调整。</li>
+</ul>
+<p><strong>正确的做法：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-fba36ca283ffd5fc.png" alt=""></p>
+<blockquote>
+<ul>
+<li><strong>第三范式：</strong> 消除非主属性对码的传递函数依赖</li>
+</ul>
+</blockquote>
+<p>3NF（第三范式）对字段有<strong>冗余性</strong>的要求，任何字段不能由其他字段派生出来，它要求字段没有冗余，即不存在依赖传递，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-8d7548eb839bc8db.png" alt=""></p>
+<p>很明显，学院电话是一个冗余字段，因为存在依赖传递：（学号）→（学生）→（学院）→（学院电话）</p>
+<p><strong>可能会存在的问题：</strong></p>
+<ul>
+<li><strong>数据冗余</strong>：有重复值；</li>
+<li><strong>更新异常</strong>：有重复的冗余信息，修改时需要同时修改多条记录，否则会出现数据不一致的情况 。</li>
+</ul>
+<p><strong>正确的做法：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-83c0288ea9150976.png" alt=""></p>
+<hr>
+<h3 id="3）数据库索引"><a href="#3）数据库索引" class="headerlink" title="3）数据库索引"></a>3）数据库索引</h3><blockquote>
+<ul>
+<li>什么是索引？</li>
+</ul>
+</blockquote>
+<p><strong>索引是对数据库表中一个或多个列的值进行排序的数据结构，以协助快速查询、更新数据库表中数据。</strong></p>
+<p>你也可以这样理解：索引就是加快检索表中数据的方法。数据库的索引类似于书籍的索引。在书籍中，索引允许用户不必翻阅完整个书就能迅速地找到所需要的信息。在数据库中，索引也允许数据库程序迅速地找到表中的数据，而不必扫描整个数据库。 </p>
+<blockquote>
+<ul>
+<li>底层数据结构是什么，为什么使用这种数据结构？</li>
+</ul>
+</blockquote>
+<p><strong>（1）底层数据结构是B+树：</strong><br>在数据结构中，我们最为常见的搜索结构就是二叉搜索树和AVL树(高度平衡的二叉搜索树，为了提高二叉搜索树的效率，减少树的平均搜索长度)了。然而，无论二叉搜索树还是AVL树，当数据量比较大时，都会由于树的深度过大而造成I/O读写过于频繁，进而导致查询效率低下，因此对于索引而言，多叉树结构成为不二选择。特别地，B-Tree的各种操作能使B树保持较低的高度，从而保证高效的查找效率。</p>
+<p><strong>（2）使用B+树的原因：</strong><br>查找速度快、效率高，在查找的过程中，每次都能抛弃掉一部分节点，减少遍历个数。（此时，你应该在白纸上画出什么是B+树）</p>
+<blockquote>
+<ul>
+<li>索引的分类？</li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>唯一索引</strong>：唯一索引不允许两行具有相同的索引值</li>
+<li><strong>主键索引</strong>：为表定义一个主键将自动创建主键索引，主键索引是唯一索引的特殊类型。主键索引要求主键中的每个值是唯一的，并且不能为空</li>
+<li><strong>聚集索引(Clustered)</strong>：表中各行的物理顺序与键值的逻辑（索引）顺序相同，每个表只能有一个</li>
+<li><strong>非聚集索引(Non-clustered)</strong>：非聚集索引指定表的逻辑顺序。数据存储在一个位置，索引存储在另一个位置，索引中包含指向数据存储位置的指针。可以有多个，小于249个</li>
+</ul>
+<blockquote>
+<ul>
+<li>索引的优缺点？</li>
+</ul>
+</blockquote>
+<p><strong>（1）优点：</strong></p>
+<ul>
+<li><strong>大大加快数据的检索速度</strong>，这也是创建索引的最主要的原因；</li>
+<li>加速表和表之间的连接；</li>
+<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间；</li>
+<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性；</li>
+</ul>
+<p><strong>（2）缺点：</strong></p>
+<ul>
+<li>时间方面：创建索引和维护索引要耗费时间，具体地，当对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度；</li>
+<li>空间方面：索引需要占物理空间。</li>
+</ul>
+<blockquote>
+<ul>
+<li>什么样的字段适合创建索引？</li>
+</ul>
+</blockquote>
+<ul>
+<li>经常作查询选择的字段</li>
+<li>经常作表连接的字段</li>
+<li>经常出现在order by, group by, distinct 后面的字段</li>
+</ul>
+<blockquote>
+<ul>
+<li>创建索引时需要注意什么？</li>
+</ul>
+</blockquote>
+<ul>
+<li><p><strong>非空字段</strong>：应该指定列为NOT NULL，除非你想存储NULL。在mysql中，含有空值的列很难进行查询优化，因为它们使得索引、索引的统计信息以及比较运算更加复杂。你应该用0、一个特殊的值或者一个空串代替空值；</p>
+</li>
+<li><p><strong>取值离散大的字段</strong>：（变量各个取值之间的差异程度）的列放到联合索引的前面，可以通过count()函数查看字段的差异值，返回值越大说明字段的唯一值越多字段的离散程度高；</p>
+</li>
+<li><p><strong>索引字段越小越好</strong>：数据库的数据存储以页为单位一页存储的数据越多一次IO操作获取的数据越大效率越高。</p>
+</li>
+</ul>
+<hr>
+<h3 id="4）听说过事务吗？（必考）"><a href="#4）听说过事务吗？（必考）" class="headerlink" title="4）听说过事务吗？（必考）"></a>4）听说过事务吗？（必考）</h3><p><strong>事务简单来说：一个 Session 中所进行所有的操作，要么同时成功，要么同时失败</strong>；作为单个逻辑工作单元执行的一系列操作，满足四大特性：</p>
+<ol>
+<li>原子性（Atomicity）：事务作为一个整体被执行 ，要么全部执行，要么全部不执行</li>
+<li>一致性（Consistency）：保证数据库状态从一个一致状态转变为另一个一致状态</li>
+<li>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行</li>
+<li>持久性（Durability）：一个事务一旦提交，对数据库的修改应该永久保存</li>
+</ol>
+<blockquote>
+<ul>
+<li>实例说明：</li>
+</ul>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/*
+ * 我们来模拟A向B账号转账的场景
+ *   A和B账户都有1000块，现在我让A账户向B账号转500块钱
+ *
+ **/</span>
+<span class="token comment" spellcheck="true">//JDBC默认的情况下是关闭事务的，下面我们看看关闭事务去操作转账操作有什么问题</span>
+
+<span class="token comment" spellcheck="true">//A账户减去500块</span>
+String sql <span class="token operator">=</span> <span class="token string">"UPDATE a SET money=money-500 "</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//B账户多了500块</span>
+String sql2 <span class="token operator">=</span> <span class="token string">"UPDATE b SET money=money+500"</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>从上面看，我们的确可以发现A向B转账，成功了。可是如果A向B转账的过程中出现了问题呢？下面模拟一下</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// A账户减去500块</span>
+String sql <span class="token operator">=</span> <span class="token string">"UPDATE a SET money=money-500 "</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 这里模拟出现问题</span>
+<span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">3</span> <span class="token operator">/</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+String sql2 <span class="token operator">=</span> <span class="token string">"UPDATE b SET money=money+500"</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>显然，上面代码是会抛出异常的，我们再来查询一下数据。A账户少了500块钱，B账户的钱没有增加。这明显是不合理的。</p>
+<p>我们可以通过事务来解决上面出现的问题：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// 开启事务,对数据的操作就不会立即生效。</span>
+    connection<span class="token punctuation">.</span><span class="token function">setAutoCommit</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// A账户减去500块</span>
+    String sql <span class="token operator">=</span> <span class="token string">"UPDATE a SET money=money-500 "</span><span class="token punctuation">;</span>
+    preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 在转账过程中出现问题</span>
+    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">3</span> <span class="token operator">/</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// B账户多500块</span>
+    String sql2 <span class="token operator">=</span> <span class="token string">"UPDATE b SET money=money+500"</span><span class="token punctuation">;</span>
+    preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 如果程序能执行到这里，没有抛出异常，我们就提交数据</span>
+    connection<span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 关闭事务【自动提交】</span>
+    connection<span class="token punctuation">.</span><span class="token function">setAutoCommit</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>SQLException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 如果出现了异常，就会进到这里来，我们就把事务回滚【将数据变成原来那样】</span>
+        connection<span class="token punctuation">.</span><span class="token function">rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 关闭事务【自动提交】</span>
+        connection<span class="token punctuation">.</span><span class="token function">setAutoCommit</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">SQLException</span> e1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        e1<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>上面的程序也一样抛出了异常，A账户钱没有减少，B账户的钱也没有增加。</p>
+<ul>
+<li><strong>注意</strong>：当Connection遇到一个未处理的SQLException时，系统会非正常退出，事务也会自动回滚，但如果程序捕获到了异常，是需要在catch中显式回滚事务的。</li>
+</ul>
+<hr>
+<h3 id="5）事务的并发问题有哪几种？"><a href="#5）事务的并发问题有哪几种？" class="headerlink" title="5）事务的并发问题有哪几种？"></a>5）事务的并发问题有哪几种？</h3><ol>
+<li>丢失更新：一个事务的更新覆盖了另一个事务的更新；</li>
+<li>脏读：一个事务读取了另一个事务未提交的数据；</li>
+<li>不可重复读：不可重复读的重点是修改，同样条件下两次读取结果不同，也就是说，被读取的数据可以被其它事务修改；</li>
+<li>幻读：幻读的重点在于新增或者删除，同样条件下两次读出来的记录数不一样。</li>
+</ol>
+<hr>
+<h3 id="6）事务的隔离级别有哪几种？"><a href="#6）事务的隔离级别有哪几种？" class="headerlink" title="6）事务的隔离级别有哪几种？"></a>6）事务的隔离级别有哪几种？</h3><p>隔离级别决定了一个session中的事务可能对另一个session中的事务的影响。ANSI标准定义了4个隔离级别，MySQL的InnoDB都支持，分别是：</p>
+<ol>
+<li><p>读未提交（READ UNCOMMITTED）：最低级别的隔离，通常又称为dirty read，它允许一个事务读取另一个事务还没 commit 的数据，这样可能会提高性能，但是会导致脏读问题；</p>
+</li>
+<li><p>读已提交（READ COMMITTED）：在一个事务中只允许对其它事务已经 commit 的记录可见，该隔离级别不能避免不可重复读问题；</p>
+</li>
+<li><p>可重复读（REPEATABLE READ）：在一个事务开始后，其他事务对数据库的修改在本事务中不可见，直到本事务 commit 或 rollback。但是，其他事务的 insert/delete 操作对该事务是可见的，也就是说，该隔离级别并不能避免幻读问题。在一个事务中重复 select 的结果一样，除非本事务中 update 数据库。 </p>
+</li>
+<li><p>序列化（SERIALIZABLE）：最高级别的隔离，只允许事务串行执行。</p>
+</li>
+</ol>
+<p><strong>MySQL默认的隔离级别是可重复读（REPEATABLE READ）</strong></p>
+<blockquote>
+<ul>
+<li>MySql 的事务支持</li>
+</ul>
+</blockquote>
+<p>MySQL的事务支持不是绑定在MySQL服务器本身，而是与存储引擎相关：</p>
+<ul>
+<li>MyISAM：不支持事务，用于只读程序提高性能；</li>
+<li>InnoDB：支持ACID事务、行级锁、并发；</li>
+<li>Berkeley DB：支持事务。</li>
+</ul>
+<hr>
+<h3 id="7）什么是视图？以及视图的使用场景有哪些？"><a href="#7）什么是视图？以及视图的使用场景有哪些？" class="headerlink" title="7）什么是视图？以及视图的使用场景有哪些？"></a>7）什么是视图？以及视图的使用场景有哪些？</h3><p>视图是一种虚拟的表，具有和物理表相同的功能。可以对视图进行增，改，查，操作，试图通常是有一个表或者多个表的行或列的子集。对视图的修改不影响基本表。它使得我们获取数据更容易，相比多表查询。</p>
+<p>如下两种场景一般会使用到视图：</p>
+<ol>
+<li>不希望访问者获取整个表的信息，只暴露部分字段给访问者，所以就建一个虚表，就是视图。</li>
+<li>查询的数据来源于不同的表，而查询者希望以统一的方式查询，这样也可以建立一个视图，把多个表查询结果联合起来，查询者只需要直接从视图中获取数据，不必考虑数据来源于不同表所带来的差异。</li>
+</ol>
+<p><strong>注意</strong>：这个视图是在数据库中创建的 而不是用代码创建的。</p>
+<hr>
+<h3 id="8）drop-delete与truncate的区别？"><a href="#8）drop-delete与truncate的区别？" class="headerlink" title="8）drop,delete与truncate的区别？"></a>8）drop,delete与truncate的区别？</h3><p>drop 直接删除表；truncate 删除表中数据，再插入时自增长id又从1开始 ；delete 删除表中数据，可以加where字句。</p>
+<blockquote>
+<ul>
+<li><strong>drop table：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>属于DDL（Data Definition Language，数据库定义语言）</li>
+<li>不可回滚</li>
+<li>不可带 where</li>
+<li>表内容和结构删除</li>
+<li>删除速度快</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>truncate table：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>属于DDL（Data Definition Language，数据库定义语言）</li>
+<li>不可回滚</li>
+<li>不可带 where</li>
+<li>表内容删除</li>
+<li>删除速度快</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>delete from：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>属于DML</li>
+<li>可回滚</li>
+<li>可带where</li>
+<li>表结构在，表内容要看where执行的情况</li>
+<li>删除速度慢,需要逐行删除</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>使用简要说明：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>不再需要一张表的时候，用drop</li>
+<li>想删除部分数据行时候，用delete，并且带上where子句</li>
+<li>保留表而删除所有数据的时候用truncate</li>
+</ul>
+<hr>
+<h3 id="9）触发器的作用？"><a href="#9）触发器的作用？" class="headerlink" title="9）触发器的作用？"></a>9）触发器的作用？</h3><p>触发器是与表相关的数据库对象，在满足定义条件时触发，并执行触发器中定义的语句集合。触发器的这种特性可以协助应用在数据库端确保数据库的完整性。</p>
+<hr>
+<h3 id="10）数据库的乐观锁和悲观锁是什么？"><a href="#10）数据库的乐观锁和悲观锁是什么？" class="headerlink" title="10）数据库的乐观锁和悲观锁是什么？"></a>10）数据库的乐观锁和悲观锁是什么？</h3><p>数据库管理系统（DBMS）中的并发控制的任务是确保在多个事务同时存取数据库中同一数据时不破坏事务的隔离性和统一性以及数据库的统一性。 </p>
+<p>乐观并发控制(乐观锁)和悲观并发控制（悲观锁）是并发控制主要采用的技术手段。</p>
+<blockquote>
+<ul>
+<li>悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作</li>
+</ul>
+</blockquote>
+<p>悲观锁是一种利用数据库内部机制提供的锁的方式，也就是对更新的数据加锁，这样在并发期间一旦有一个事务持有了数据库记录的锁，其他的线程将不能再对数据进行更新了，这就是悲观锁的实现方式。</p>
+<p><strong>MySQL InnoDB中使用悲观锁：</strong></p>
+<p>要使用悲观锁，我们必须关闭mysql数据库的自动提交属性，因为MySQL默认使用autocommit模式，也就是说，当你执行一个更新操作后，MySQL会立刻将结果进行提交。 set autocommit=0; </p>
+<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">//0.开始事务</span>
+<span class="token keyword">begin</span><span class="token punctuation">;</span><span class="token operator">/</span><span class="token keyword">begin</span> <span class="token keyword">work</span><span class="token punctuation">;</span><span class="token operator">/</span><span class="token keyword">start</span> <span class="token keyword">transaction</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>三者选一就可以<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//1.查询出商品信息</span>
+<span class="token keyword">select</span> <span class="token keyword">status</span> <span class="token keyword">from</span> t_goods <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span> <span class="token keyword">for</span> <span class="token keyword">update</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//2.根据商品信息生成订单</span>
+<span class="token keyword">insert</span> <span class="token keyword">into</span> t_orders <span class="token punctuation">(</span>id<span class="token punctuation">,</span>goods_id<span class="token punctuation">)</span> <span class="token keyword">values</span> <span class="token punctuation">(</span><span class="token boolean">null</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//3.修改商品status为2</span>
+<span class="token keyword">update</span> t_goods <span class="token keyword">set</span> <span class="token keyword">status</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//4.提交事务</span>
+<span class="token keyword">commit</span><span class="token punctuation">;</span><span class="token operator">/</span><span class="token keyword">commit</span> <span class="token keyword">work</span><span class="token punctuation">;</span></code></pre>
+<p>上面的查询语句中，我们使用了 <code>select…for update</code> 的方式，这样就通过开启排他锁的方式实现了悲观锁。此时在t_goods表中，id为1的 那条数据就被我们锁定了，其它的事务必须等本次事务提交之后才能执行。这样我们可以保证当前的数据不会被其它事务修改。</p>
+<p>上面我们提到，使用 <code>select…for update</code> 会把数据给锁住，不过我们需要注意一些锁的级别，MySQL InnoDB默认行级锁。行级锁都是基于索引的，如果一条SQL语句用不到索引是不会使用行级锁的，会使用表级锁把整张表锁住，这点需要注意。</p>
+<p><strong>优点与不足：</strong></p>
+<p>悲观并发控制实际上是“先取锁再访问”的保守策略，为数据处理的安全提供了保证。但是在效率方面，处理加锁的机制会让数据库产生额外的开销，还有增加产生死锁的机会；另外，在只读型事务处理中由于不会产生冲突，也没必要使用锁，这样做只能增加系统负载；还有会降低了并行性，一个事务如果锁定了某行数据，其他事务就必须等待该事务处理完才可以处理那行数</p>
+<blockquote>
+<ul>
+<li>乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。</li>
+</ul>
+</blockquote>
+<p>乐观锁是一种不会阻塞其他线程并发的控制，它不会使用数据库的锁进行实现，它的设计里面由于不阻塞其他线程，所以并不会引起线程频繁挂起和恢复，这样便能够提高并发能力，所以也有人把它称为非阻塞锁。一般的实现乐观锁的方式就是记录数据版本。</p>
+<p>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</p>
+<p>实现数据版本有两种方式，第一种是使用版本号，第二种是使用时间戳。</p>
+<p><strong>使用版本号实现乐观锁：</strong></p>
+<p>使用版本号时，可以在数据初始化时指定一个版本号，每次对数据的更新操作都对版本号执行+1操作。并判断当前版本号是不是该数据的最新的版本号。</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token number">1</span><span class="token punctuation">.</span>查询出商品信息
+<span class="token keyword">select</span> <span class="token punctuation">(</span><span class="token keyword">status</span><span class="token punctuation">,</span><span class="token keyword">status</span><span class="token punctuation">,</span>version<span class="token punctuation">)</span> <span class="token keyword">from</span> t_goods <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token comment" spellcheck="true">#{id}</span>
+<span class="token number">2</span><span class="token punctuation">.</span>根据商品信息生成订单
+<span class="token number">3</span><span class="token punctuation">.</span>修改商品<span class="token keyword">status</span>为<span class="token number">2</span>
+<span class="token keyword">update</span> t_goods 
+<span class="token keyword">set</span> <span class="token keyword">status</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span>version<span class="token operator">=</span>version<span class="token operator">+</span><span class="token number">1</span>
+<span class="token keyword">where</span> id<span class="token operator">=</span><span class="token comment" spellcheck="true">#{id} and version=#{version};</span></code></pre>
+<p><strong>优点与不足：</strong></p>
+<p>乐观并发控制相信事务之间的数据竞争(data race)的概率是比较小的，因此尽可能直接做下去，直到提交的时候才去锁定，所以不会产生任何锁和死锁。但如果直接简单这么做，还是有可能会遇到不可预期的结果，例如两个事务都读取了数据库的某一行，经过修改以后写回数据库，这时就遇到了问题。</p>
+<blockquote>
+<p>参考文章：<a href="http://www.open-open.com/lib/view/open1452046967245.html" target="_blank" rel="noopener">深入理解乐观锁与悲观锁</a></p>
+</blockquote>
+<hr>
+<h3 id="11）超键、候选键、主键、外键分别是什么？"><a href="#11）超键、候选键、主键、外键分别是什么？" class="headerlink" title="11）超键、候选键、主键、外键分别是什么？"></a>11）超键、候选键、主键、外键分别是什么？</h3><ul>
+<li><p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。</p>
+</li>
+<li><p>候选键（候选码）：是最小超键，即没有冗余元素的超键。</p>
+</li>
+<li><p>主键（主码）：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。</p>
+</li>
+<li><p>外键：在一个表中存在的另一个表的主键称此表的外键。</p>
+</li>
+</ul>
+<p><strong>候选码和主码：</strong></p>
+<p>例子：邮寄地址（城市名，街道名，邮政编码，单位名，收件人）</p>
+<ul>
+<li><strong>它有两个候选键:{城市名，街道名} 和 {街道名，邮政编码}</strong></li>
+<li><strong>如果我选取{城市名，街道名}作为唯一标识实体的属性，那么{城市名，街道名} 就是主码(主键)</strong></li>
+</ul>
+<hr>
+<h3 id="12）SQL-约束有哪几种？"><a href="#12）SQL-约束有哪几种？" class="headerlink" title="12）SQL 约束有哪几种？"></a>12）SQL 约束有哪几种？</h3><ul>
+<li>NOT NULL: 用于控制字段的内容一定不能为空（NULL）。</li>
+<li>UNIQUE: 控件字段内容不能重复，一个表允许有多个 Unique 约束。</li>
+<li>PRIMARY KEY: 也是用于控件字段内容不能重复，但它在一个表只允许出现一个。</li>
+<li>FOREIGN KEY: 用于预防破坏表之间连接的动作，也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。</li>
+<li>CHECK: 用于控制字段的值范围。</li>
+</ul>
+<hr>
+<h3 id="13）MySQL存储引擎中的MyISAM和InnoDB区别详解"><a href="#13）MySQL存储引擎中的MyISAM和InnoDB区别详解" class="headerlink" title="13）MySQL存储引擎中的MyISAM和InnoDB区别详解"></a>13）MySQL存储引擎中的MyISAM和InnoDB区别详解</h3><p>在MySQL 5.5之前，MyISAM是mysql的默认数据库引擎，其由早期的ISAM（Indexed Sequential Access Method：有索引的顺序访问方法）所改良。虽然MyISAM性能极佳，但却有一个显著的缺点： <strong>不支持事务处理</strong>。不过，MySQL也导入了另一种数据库引擎InnoDB，以强化参考完整性与并发违规处理机制，后来就逐渐取代MyISAM。</p>
+<p>InnoDB是MySQL的数据库引擎之一，其由Innobase oy公司所开发，2006年五月由甲骨文公司并购。与传统的ISAM、MyISAM相比，<strong>InnoDB的最大特色就是支持ACID兼容的事务功能</strong>，类似于PostgreSQL。目前InnoDB采用双轨制授权，一是GPL授权，另一是专有软件授权。具体地，MyISAM与InnoDB作为MySQL的两大存储引擎的差异主要包括：</p>
+<ul>
+<li><p><strong>存储结构</strong>：每个MyISAM在磁盘上存储成三个文件：第一个文件的名字以表的名字开始，扩展名指出文件类型。.frm文件存储表定义，数据文件的扩展名为.MYD (MYData)，索引文件的扩展名是.MYI (MYIndex)。InnoDB所有的表都保存在同一个数据文件中（也可能是多个文件，或者是独立的表空间文件），InnoDB表的大小只受限于操作系统文件的大小，一般为2GB。</p>
+</li>
+<li><p><strong>存储空间</strong>：MyISAM可被压缩，占据的存储空间较小，支持静态表、动态表、压缩表三种不同的存储格式。InnoDB需要更多的内存和存储，它会在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。</p>
+</li>
+<li><p><strong>可移植性、备份及恢复</strong>：MyISAM的数据是以文件的形式存储，所以在跨平台的数据转移中会很方便，同时在备份和恢复时也可单独针对某个表进行操作。InnoDB免费的方案可以是拷贝数据文件、备份 binlog，或者用 mysqldump，在数据量达到几十G的时候就相对痛苦了。</p>
+</li>
+<li><p><strong>事务支持</strong>：MyISAM强调的是性能，每次查询具有原子性，其执行数度比InnoDB类型更快，但是不提供事务支持。InnoDB提供事务、外键等高级数据库功能，具有事务提交、回滚和崩溃修复能力。</p>
+</li>
+<li><p><strong>AUTO_INCREMENT</strong>：在MyISAM中，可以和其他字段一起建立联合索引。引擎的自动增长列必须是索引，如果是组合索引，自动增长可以不是第一列，它可以根据前面几列进行排序后递增。InnoDB中必须包含只有该字段的索引，并且引擎的自动增长列必须是索引，如果是组合索引也必须是组合索引的第一列。</p>
+</li>
+<li><p><strong>表锁差异</strong>：MyISAM只支持表级锁，用户在操作MyISAM表时，select、update、delete和insert语句都会给表自动加锁，如果加锁以后的表满足insert并发的情况下，可以在表的尾部插入新的数据。InnoDB支持事务和行级锁。行锁大幅度提高了多用户并发操作的新能，但是InnoDB的行锁，只是在WHERE的主键是有效的，非主键的WHERE都会锁全表的。</p>
+</li>
+<li><p><strong>全文索引</strong>：MyISAM支持 FULLTEXT类型的全文索引；InnoDB不支持FULLTEXT类型的全文索引，但是innodb可以使用sphinx插件支持全文索引，并且效果更好。</p>
+</li>
+<li><p><strong>表主键</strong>：MyISAM允许没有任何索引和主键的表存在，索引都是保存行的地址。对于InnoDB，如果没有设定主键或者非空唯一索引，就会自动生成一个6字节的主键(用户不可见)，数据是主索引的一部分，附加索引保存的是主索引的值。</p>
+</li>
+<li><p><strong>表的具体行数</strong>：MyISAM保存表的总行数，select count() from table;会直接取出出该值；而InnoDB没有保存表的总行数，如果使用select count() from table；就会遍历整个表，消耗相当大，但是在加了wehre条件后，myisam和innodb处理的方式都一样。</p>
+</li>
+<li><p><strong>CURD操作</strong>：在MyISAM中，如果执行大量的SELECT，MyISAM是更好的选择。对于InnoDB，如果你的数据执行大量的INSERT或UPDATE，出于性能方面的考虑，应该使用InnoDB表。DELETE从性能上InnoDB更优，但DELETE FROM table时，InnoDB不会重新建立表，而是一行一行的删除，在innodb上如果要清空保存有大量数据的表，最好使用truncate table这个命令。</p>
+</li>
+<li><p><strong>外键</strong>：MyISAM不支持外键，而InnoDB支持外键。</p>
+</li>
+</ul>
+<p>通过上述的分析，基本上可以考虑使用InnoDB来替代MyISAM引擎了，原因是InnoDB自身很多良好的特点，比如事务支持、存储过程、视图、行级锁、外键等等。尤其在并发很多的情况下，相信InnoDB的表现肯定要比MyISAM强很多。另外，必须需要注意的是，任何一种表都不是万能的，合适的才是最好的，才能最大的发挥MySQL的性能优势。如果是不复杂的、非关键的Web应用，还是可以继续考虑MyISAM的，这个具体情况具体考虑。</p>
+<hr>
+<h3 id="14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？"><a href="#14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？" class="headerlink" title="14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？"></a>14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？</h3><p>答案:都是B+树!</p>
+<p>MyIASM引擎，B+树的数据结构中存储的内容实际上是实际数据的地址值。也就是说它的索引和实际数据是分开的，<strong>只不过使用索引指向了实际数据。这种索引的模式被称为非聚集索引。</strong></p>
+<p>Innodb引擎的索引的数据结构也是B+树，<strong>只不过数据结构中存储的都是实际的数据，这种索引有被称为聚集索引。</strong></p>
+<hr>
+<h3 id="15）varchar和char的区别"><a href="#15）varchar和char的区别" class="headerlink" title="15）varchar和char的区别"></a>15）varchar和char的区别</h3><p>char是一种固定长度的类型，varchar是一种可变长度的类型，例如：</p>
+<p>定义一个char[10]和varchar[10]，如果存进去的是 ‘test’，那么char所占的长度依然为10，除了字符 ‘test’ 外，后面跟六个空格，varchar就立马把长度变为4了，取数据的时候，char类型的要用trim()去掉多余的空格，而varchar是不需要的</p>
+<p>char的存取速度还是要比varchar要快得多，因为其长度固定，方便程序的存储于查找</p>
+<p>char也为此付出的是空间的代价，因为其长度固定，所以难免会有多余的空格占位符占据空间，可谓是以空间换取时间效率。</p>
+<p>varchar是以空间效率为首位。</p>
+<p>char的存储方式是：对英文字符（ASCII）占用1个字节，对一个汉字占用两个字节。</p>
+<p>varchar的存储方式是：对每个英文字符占用2个字节，汉字也占用2个字节。<br>两者的存储数据都非unicode的字符数据。</p>
+<hr>
+<h3 id="16）主键、自增主键、主键索引与唯一索引概念区别"><a href="#16）主键、自增主键、主键索引与唯一索引概念区别" class="headerlink" title="16）主键、自增主键、主键索引与唯一索引概念区别"></a>16）主键、自增主键、主键索引与唯一索引概念区别</h3><ol>
+<li><p>主键：指字段 <strong>唯一、不为空值</strong> 的列；</p>
+</li>
+<li><p>主键索引：指的就是主键，主键是索引的一种，是唯一索引的特殊类型。创建主键的时候，数据库默认会为主键创建一个唯一索引；</p>
+</li>
+<li><p>自增主键：字段类型为数字、自增、并且是主键；</p>
+</li>
+<li><p>唯一索引：索引列的值必须唯一，但允许有空值。<strong>主键是唯一索引，这样说没错；但反过来说，唯一索引也是主键就错误了，因为唯一索引允许空值，主键不允许有空值，所以不能说唯一索引也是主键。</strong></p>
+</li>
+</ol>
+<hr>
+<h3 id="17）主键就是聚集索引吗？主键和索引有什么区别？"><a href="#17）主键就是聚集索引吗？主键和索引有什么区别？" class="headerlink" title="17）主键就是聚集索引吗？主键和索引有什么区别？"></a>17）主键就是聚集索引吗？主键和索引有什么区别？</h3><p><strong>主键是一种特殊的唯一性索引，其可以是聚集索引，也可以是非聚集索引。</strong>在SQLServer中，主键的创建必须依赖于索引，默认创建的是聚集索引，但也可以显式指定为非聚集索引。InnoDB作为MySQL存储引擎时，默认按照主键进行聚集，如果没有定义主键，InnoDB会试着使用唯一的非空索引来代替。如果没有这种索引，InnoDB就会定义隐藏的主键然后在上面进行聚集。所以，对于聚集索引来说，你创建主键的时候，自动就创建了主键的聚集索引。</p>
+<hr>
+<h3 id="18）实践中如何优化MySQL"><a href="#18）实践中如何优化MySQL" class="headerlink" title="18）实践中如何优化MySQL"></a>18）实践中如何优化MySQL</h3><p>实践中，MySQL的优化主要涉及SQL语句及索引的优化、数据表结构的优化、系统配置的优化和硬件的优化四个方面，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-7a6deca3ebd226e3.png" alt=""></p>
+<h4 id="⑴-SQL语句优化："><a href="#⑴-SQL语句优化：" class="headerlink" title="⑴ SQL语句优化："></a>⑴ SQL语句优化：</h4><p>SQL语句的优化主要包括三个问题，即如何发现有问题的SQL、如何分析SQL的执行计划以及如何优化SQL，下面将逐一解释。</p>
+<p><strong>① 怎么发现有问题的SQL?（通过MySQL慢查询日志对有效率问题的SQL进行监控）</strong></p>
+<p>MySQL的慢查询日志是MySQL提供的一种日志记录，它用来记录在MySQL中响应时间超过阀值的语句，具体指运行时间超过long_query_time值的SQL，则会被记录到慢查询日志中。long_query_time的默认值为10，意思是运行10s以上的语句。慢查询日志的相关参数如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-79123c126bb94a31.png" alt=""></p>
+<p>通过MySQL的慢查询日志，我们可以查询出执行的次数多占用的时间长的SQL、可以通过pt_query_disgest(一种mysql慢日志分析工具)分析Rows examine(MySQL执行器需要检查的行数)项去找出IO大的SQL以及发现未命中索引的SQL，对于这些SQL，都是我们优化的对象。</p>
+<p><strong>② 通过explain查询和分析SQL的执行计划：</strong></p>
+<p>使用 EXPLAIN 关键字可以知道MySQL是如何处理你的SQL语句的，以便分析查询语句或是表结构的性能瓶颈。通过explain命令可以得到表的读取顺序、数据读取操作的操作类型、哪些索引可以使用、哪些索引被实际使用、表之间的引用以及每张表有多少行被优化器查询等问题。当扩展列extra出现Using filesort和Using temporay，则往往表示SQL需要优化了。</p>
+<p><strong>③ SQL语句的优化：</strong></p>
+<p><strong>⒈优化insert语句：一次插入多值；</strong></p>
+<p><strong>⒉应尽量避免在 where 子句中使用!=或&lt;&gt;操作符，否则将引擎放弃使用索引而进行全表扫描；</strong></p>
+<p><strong>⒊应尽量避免在 where 子句中对字段进行null值判断，否则将导致引擎放弃使用索引而进行全表扫描；</strong></p>
+<p><strong>⒋优化嵌套查询：子查询可以被更有效率的连接(Join)替代；</strong></p>
+<p><strong>⒌很多时候用 exists 代替 in 是一个好的选择。</strong></p>
+<p><strong>⒍选择最有效率的表名顺序：数据库的解析器按照从右到左的顺序处理FROM子句中的表名，FROM子句中写在最后的表将被最先处理</strong></p>
+<p>在FROM子句中包含多个表的情况下：</p>
+<ul>
+<li>如果三个表是完全无关系的话，将记录和列名最少的表，写在最后，然后依次类推</li>
+<li>也就是说：选择记录条数最少的表放在最后</li>
+</ul>
+<p>如果有3个以上的表连接查询：</p>
+<ul>
+<li>如果三个表是有关系的话，将引用最多的表，放在最后，然后依次类推。</li>
+<li>也就是说：被其他表所引用的表放在最后</li>
+</ul>
+<p><strong>⒎用IN代替OR：</strong></p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp <span class="token keyword">where</span> sal <span class="token operator">=</span> <span class="token number">1500</span> <span class="token operator">or</span> sal <span class="token operator">=</span> <span class="token number">3000</span> <span class="token operator">or</span> sal <span class="token operator">=</span> <span class="token number">800</span><span class="token punctuation">;</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp <span class="token keyword">where</span> sal <span class="token operator">in</span> <span class="token punctuation">(</span><span class="token number">1500</span><span class="token punctuation">,</span><span class="token number">3000</span><span class="token punctuation">,</span><span class="token number">800</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>⒏SELECT子句中避免使用*号：</strong></p>
+<p>我们最开始接触 SQL 的时候，“<code>*</code>” 号是可以获取表中全部的字段数据的，<strong>但是它要通过查询数据字典完成，这意味着将消耗更多的时间</strong>，而且使用 “<code>*</code>” 号写出来的 SQL 语句也不够直观。</p>
+<hr>
+<h4 id="⑵-索引优化："><a href="#⑵-索引优化：" class="headerlink" title="⑵ 索引优化："></a>⑵ 索引优化：</h4><p>建议在经常作查询选择的字段、经常作表连接的字段以及经常出现在 order by、group by、distinct 后面的字段中建立索引。但必须注意以下几种可能会引起索引失效的情形：</p>
+<ul>
+<li><p>以 “%(表示任意0个或多个字符)” 开头的 LIKE 语句，模糊匹配；</p>
+</li>
+<li><p>OR语句前后没有同时使用索引；</p>
+</li>
+<li><p>数据类型出现隐式转化（如varchar不加单引号的话可能会自动转换为int型）；</p>
+</li>
+<li><p>对于多列索引，必须满足最左匹配原则(eg,多列索引col1、col2和col3，则 索引生效的情形包括col1或col1，col2或col1，col2，col3)。</p>
+</li>
+</ul>
+<hr>
+<h4 id="⑶-数据库表结构的优化："><a href="#⑶-数据库表结构的优化：" class="headerlink" title="⑶ 数据库表结构的优化："></a>⑶ 数据库表结构的优化：</h4><p><strong>① 选择合适数据类型：</strong></p>
+<ul>
+<li>使用较小的数据类型解决问题；</li>
+<li>使用简单的数据类型(mysql处理int要比varchar容易)；</li>
+<li>尽可能的使用not null 定义字段；</li>
+<li>尽量避免使用text类型，非用不可时最好考虑分表；</li>
+</ul>
+<p><strong>② 表的范式的优化：</strong></p>
+<p>一般情况下，表的设计应该遵循三大范式。</p>
+<p><strong>③ 表的垂直拆分：</strong></p>
+<p>把含有多个列的表拆分成多个表，解决表宽度问题，具体包括以下几种拆分手段：</p>
+<ul>
+<li>把不常用的字段单独放在同一个表中；</li>
+<li>把大字段独立放入一个表中；</li>
+<li>把经常使用的字段放在一起； </li>
+</ul>
+<p>这样做的好处是非常明显的，具体包括：拆分后业务清晰，拆分规则明确、系统之间整合或扩展容易、数据维护简单</p>
+<p><strong>④ 表的水平拆分：</strong></p>
+<p>表的水平拆分用于解决数据表中数据过大的问题，水平拆分每一个表的结构都是完全一致的。一般地，将数据平分到N张表中的常用方法包括以下两种：</p>
+<ul>
+<li>对ID进行hash运算，如果要拆分成5个表，mod(id,5)取出0~4个值；</li>
+<li>针对不同的hashID将数据存入不同的表中；</li>
+</ul>
+<p>表的水平拆分会带来一些问题和挑战，包括跨分区表的数据查询、统计及后台报表的操作等问题，但也带来了一些切实的好处：</p>
+<ul>
+<li>表分割后可以降低在查询时需要读的数据和索引的页数，同时也降低了索引的层数，提高查询速度；</li>
+<li>表中的数据本来就有独立性，例如表中分别记录各个地区的数据或不同时期的数据，特别是有些数据常用，而另外一些数据不常用。</li>
+<li>需要把数据存放到多个数据库中，提高系统的总体可用性(分库，鸡蛋不能放在同一个篮子里)。</li>
+</ul>
+<hr>
+<h4 id="⑷-系统配置的优化："><a href="#⑷-系统配置的优化：" class="headerlink" title="⑷ 系统配置的优化："></a>⑷ 系统配置的优化：</h4><ul>
+<li><p>操作系统配置的优化：增加TCP支持的队列数</p>
+</li>
+<li><p>mysql配置文件优化：Innodb缓存池设置(innodb_buffer_pool_size，推荐总内存的75%)和缓存池的个数（innodb_buffer_pool_instances）</p>
+</li>
+</ul>
+<hr>
+<h4 id="⑸-硬件的优化："><a href="#⑸-硬件的优化：" class="headerlink" title="⑸ 硬件的优化："></a>⑸ 硬件的优化：</h4><ul>
+<li>CPU：核心数多并且主频高的</li>
+<li>内存：增大内存</li>
+<li>磁盘配置和选择：磁盘性能</li>
+</ul>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/05/18/java-mian-shi-zhi-shi-dian-jie-xi-wu-wang-luo-xie-yi-pian/">
       Java面试知识点解析(五)——网络协议篇
     </a>
@@ -6137,948 +6786,6 @@ public class ProductImageController {
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/27/mo-fang-tian-mao-shi-zhan-ssm-ban-xiang-mu-qi-bu/">
-      模仿天猫实战【SSM版】——项目起步
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/SSM/项目</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月27日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-3eee3c0023557f8e.png" alt=""></p>
-<blockquote>
-<p><strong>前言：</strong>现在自己的学习似乎遇到了瓶颈，感觉学习了 SSM 之后有一些迷茫，不知道接下来该往哪里去努力了，我觉得这是个很不好的状态，为了度过这段时期，我准备把天猫模仿下来（给自己找点事做）之后开始去巩固 Java 的基础知识，也准备好暑假去找实习。</p>
-</blockquote>
-<h2 id="第一步：需求分析"><a href="#第一步：需求分析" class="headerlink" title="第一步：需求分析"></a>第一步：需求分析</h2><p>首先要确定要实现哪些功能，需要对需求进行完整的分析，才能在编写项目的时候有条不紊，<strong>我们的目的很明确：就是模仿天猫前端 + 自己实现后端。</strong>并且尽最大努力去降低这个项目的复杂度（<em>毕竟高深的东西不懂</em>）。</p>
-<h4 id="前端需求分析"><a href="#前端需求分析" class="headerlink" title="前端需求分析"></a>前端需求分析</h4><p><strong>规定：全天猫没有店铺，就只有唯一一家叫做 Tmall 的商家，卖所有的东西。</strong></p>
-<blockquote>
-<ul>
-<li>1.数据的显示：</li>
-</ul>
-</blockquote>
-<p><strong>首页数据显示分析：</strong></p>
-<p>首先是搜索栏下方的九个商品，需要从数据库中取出销量最高的几个产品，关于标红的关键字，是要满足一定条件的，比如：这一个星期内销量超过多少…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-ee6c3bed893d7229.png" alt=""></p>
-<p>接着是分类导航栏，首先是商品分类右边固定的两个链接【天猫超市】和【天猫国际】，还有紧跟着的八个超链，这个可以设计为一个单表，存储它显示的文字和链接过去的地址，然后是具体的 16 个分类以及轮播：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-e85879cb8e4d5aa8.png" alt=""></p>
-<p>下面的具体产品展示比较复杂，我们可以自己做一下简化，比如就展示几个产品比较多的固定的几个分类就好了，其他的就直接舍弃：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-84ef80bc6a962d35.png" alt=""></p>
-<ul>
-<li><strong>总结：</strong> 总之就是需要显示各种数据库中的数据</li>
-</ul>
-<blockquote>
-<ul>
-<li>2.登录/注册页</li>
-</ul>
-</blockquote>
-<p>需要有一个登录/注册页，能够完成用户的登录和注册功能，并能提供基础的例如判断空值等功能。</p>
-<blockquote>
-<ul>
-<li>3.产品搜索页</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-3740347e272b1ef0.png" alt=""></p>
-<p>左上角的图标我们可以统一简化成 Tmall 的图片，商品图片，我们可以整个大分类使用一张图，主要就是实现排序功能还有搜索功能</p>
-<blockquote>
-<ul>
-<li>4.产品展示页</li>
-</ul>
-</blockquote>
-<p>天猫原生的产品展示页有些复杂，我们可以自己简化一下，就不要选这么多东西，都是一口价，</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-6e04b72b9365b941.png" alt=""></p>
-<p>另外下方规格参数和评价都不能省略：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-67d2078a8f016c95.png" alt=""></p>
-<blockquote>
-<ul>
-<li>5.购物车/购买页面</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="第二步：表结构设计"><a href="#第二步：表结构设计" class="headerlink" title="第二步：表结构设计"></a>第二步：表结构设计</h2><p>根据对于前端的分析，数据库有了一些眉目，为了简化项目的难度，所以我们需要自己想点办法，先来构思一下大概需要一些什么样的表：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-70e86e80be27582b.png" alt=""></p>
-<p>我大概就想出来需要用到这些表，我们一个一个来创建它们：</p>
-<h4 id="表一：分类表"><a href="#表一：分类表" class="headerlink" title="表一：分类表"></a>表一：分类表</h4><p>首先我们需要一个表来存储我们的分类信息，也就是【女装/内衣】、【男装/运动户外】在内的 16 个分类，为了高度一致，这 16 个分类不能多也不能少。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-5ac9b6db283570f1.png" alt=""></p>
-<p>为了简化任务，可以观察出，【热门手机】、【特色手机】分栏下的东西都是【手机/数码/电脑办公】类别里的东西，所以我们直接砍掉，右边的一些图片超链也给直接砍掉，我们规定每一行显示的产品数目就可以了，这样就简单多了。</p>
-<pre><code>CREATE TABLE category (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) NOT NULL COMMENT &#39;分类的名字&#39;,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><h4 id="表二：商品分类右边的超链表"><a href="#表二：商品分类右边的超链表" class="headerlink" title="表二：商品分类右边的超链表"></a>表二：商品分类右边的超链表</h4><p>即在【天猫国际】右边的 8 个超链，我们单独新建一个表来存储超链显示的文字和链接的地址，这样就可以任意的修改其内容：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-4c4dd522d7725685.png" alt=""></p>
-<p>百度翻译【推荐链接】翻译为【Referral links】，那我们也这么给我们的表命名好了：</p>
-<pre><code>CREATE TABLE referal_link (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  text varchar(255) NOT NULL COMMENT &#39;超链显示的文字&#39;,
-  link varchar(255) NOT NULL COMMENT &#39;超链的地址&#39;,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><h4 id="表三：产品表"><a href="#表三：产品表" class="headerlink" title="表三：产品表"></a>表三：产品表</h4><p>每个分类下都要一定的产品，这些产品还有自己的一些属性，所以另外需要属性表，这个表另外创建，我们先来观察一下一个产品表需要一些什么东西：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-1c882a1c5e908c2a.png" alt=""></p>
-<ul>
-<li>用于展示的 5 张<strong>图片</strong></li>
-<li><strong>产品名称</strong></li>
-<li><strong>小标题</strong>（即名称下面一排标红的小字）</li>
-<li><strong>价格</strong>（就一口价，没别的）</li>
-<li><strong>销量</strong>（别月销量了，能简化就简化一下）</li>
-<li><strong>累计评价</strong>（还需要设计一个评价表）</li>
-<li><strong>库存</strong></li>
-<li><strong>属性</strong>（需要关联另外的属性表）</li>
-</ul>
-<pre><code>CREATE TABLE product (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) NOT NULL COMMENT &#39;产品的名称&#39;,
-  sub_title varchar(255) DEFAULT NULL COMMENT &#39;小标题&#39;,
-  price float DEFAULT NULL COMMENT &#39;价格&#39;,
-  sale int(11) DEFAULT NULL COMMENT &#39;销量&#39;,
-  stock int(11) DEFAULT NULL COMMENT &#39;库存&#39;,
-  category_id int(11) DEFAULT NULL COMMENT &#39;对应的分类id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES category (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><ul>
-<li><strong>注意：</strong> 其中产品图片，累计评价，属性都作为单独的表存在并让当前表的 id 作为外键</li>
-</ul>
-<h4 id="表四：属性表"><a href="#表四：属性表" class="headerlink" title="表四：属性表"></a>表四：属性表</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-755570d44559ce1a.png" alt=""></p>
-<p>去掉详细的规格参数划分，其实属性也就是一个名字而已（简化简化简化）。</p>
-<pre><code>CREATE TABLE property (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) DEFAULT NULL COMMENT &#39;属性名称&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应的产品id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_property_product FOREIGN KEY (product_id) REFERENCES product(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre><blockquote>
-<ul>
-<li><strong>突然想到的问题：</strong><br>每一个产品的属性其实是很多的，如果每一个产品都对应很多属性的话，对于天猫这样的数据量来说，应该会让数据库爆炸的吧…</li>
-<li><strong>改进方法：</strong><br>将属性表关联到 category 表上，因为其实每一个分类下的产品的属性差不多！</li>
-</ul>
-</blockquote>
-<h4 id="修改数据库"><a href="#修改数据库" class="headerlink" title="修改数据库"></a>修改数据库</h4><p>根据以上问题，修改一下数据库表之间的关系</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-8dcfd056d47a8b0f.png" alt=""></p>
-<p>并将属性表的外键修改为 category 的主键：</p>
-<pre><code>CREATE TABLE property (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) DEFAULT NULL COMMENT &#39;属性名称&#39;,
-  category_id int(11) NOT NULL COMMENT &#39;对应的分类id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_property_category FOREIGN KEY (category_id) REFERENCES category(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre><h4 id="表五：属性值表"><a href="#表五：属性值表" class="headerlink" title="表五：属性值表"></a>表五：属性值表</h4><p>其中就是保存了对应属性的值，并且应该有两个外键，一个指向 Property 表，而另一个则指向 Product 表</p>
-<pre><code>CREATE TABLE property_value (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应产品id&#39;,
-  properti_id int(11) NOT NULL COMMENT &#39;对应属性id&#39;,
-  value varchar(255) DEFAULT NULL COMMENT &#39;具体的属性值&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_property_value_property FOREIGN KEY (properti_id) REFERENCES property (id),
-  CONSTRAINT fk_property_value_product FOREIGN KEY (product_id) REFERENCES product (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><h4 id="表六：产品图片表"><a href="#表六：产品图片表" class="headerlink" title="表六：产品图片表"></a>表六：产品图片表</h4><p>这个表名义上是保存了产品的图片，其实只是保存了产品图片的位置即图片名称，我们可以规定所有的产品图片都放在一个统一的文件夹下面，然后<strong>通过 id 来获取对应名称的图片</strong>：</p>
-<pre><code>CREATE TABLE product_image (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  product_id int(11) DEFAULT NULL COMMENT &#39;对应的产品id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_product_image_product FOREIGN KEY (product_id) REFERENCES product (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre><ul>
-<li><strong>注意：</strong> 我们通过把产品图片的文件命名为 id.jpg ，然后通过相对路径来获取到产品图片</li>
-</ul>
-<h4 id="表七：用户表"><a href="#表七：用户表" class="headerlink" title="表七：用户表"></a>表七：用户表</h4><p>用户表很简单，也没有权限之类的东西：</p>
-<pre><code>CREATE TABLE user (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) NOT NULL COMMENT &#39;用户名称&#39;,
-  password varchar(255) NOT NULL COMMENT &#39;用户密码&#39;,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre><ul>
-<li>我们或许会在之后把密码弄成 “<strong>*****</strong>” 这种形式的，但是现在一切为了简单！</li>
-</ul>
-<h4 id="表八：评价表"><a href="#表八：评价表" class="headerlink" title="表八：评价表"></a>表八：评价表</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-048235277c4287f2.png" alt=""></p>
-<p>评价表对应了用户和产品两个表，也比较简单，我们为了简单，把上面红色的部分全部砍掉，因为没有商家，所以也不需要回复用户的评价，都砍掉砍掉！</p>
-<pre><code>CREATE TABLE review (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  content varchar(4000) DEFAULT NULL COMMENT &#39;评价内容&#39;,
-  user_id int(11) NOT NULL COMMENT &#39;对应的用户id&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应的产品id&#39;,
-  createDate datetime DEFAULT NULL COMMENT &#39;评价时间&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_review_product FOREIGN KEY (product_id) REFERENCES product (id),
-    CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><h4 id="表九：订单表"><a href="#表九：订单表" class="headerlink" title="表九：订单表"></a>表九：订单表</h4><p>由于 Order 是 MySql 的一个关键字，所以我们在订单表的最后添加一个下划线：</p>
-<pre><code>CREATE TABLE order_ (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  order_code varchar(255) NOT NULL COMMENT &#39;订单号&#39;,
-  address varchar(255) NOT NULL COMMENT &#39;收货地址&#39;,
-  post varchar(255) NOT NULL COMMENT &#39;邮编&#39;,
-  receiver varchar(255) NOT NULL COMMENT &#39;收货人姓名&#39;,
-  mobile varchar(255) NOT NULL COMMENT &#39;手机号码&#39;,
-  user_message varchar(255) NOT NULL COMMENT &#39;用户备注的信息&#39;,
-  create_date datetime NOT NULL COMMENT &#39;订单创建时间&#39;,
-  pay_date datetime DEFAULT NULL COMMENT &#39;订单支付时间&#39;,
-  delivery_date datetime DEFAULT NULL COMMENT &#39;发货日期&#39;,
-  confirm_date datetime DEFAULT NULL COMMENT &#39;确认收货日期&#39;,
-  user_id int(11) DEFAULT NULL COMMENT &#39;对应的用户id&#39;,
-  status varchar(255) NOT NULL COMMENT &#39;订单状态&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_order_user FOREIGN KEY (user_id) REFERENCES user (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><h4 id="表十：订单项表"><a href="#表十：订单项表" class="headerlink" title="表十：订单项表"></a>表十：订单项表</h4><p>一个订单里面可能有多个订单项，一个产品也可能对应多个订单项，所以这个表应该有两个外键：</p>
-<pre><code>CREATE TABLE order_item (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应产品id&#39;,
-  order_id int(11) NOT NULL COMMENT &#39;对应订单id&#39;,
-  number int(11) DEFAULT NULL COMMENT &#39;对应产品购买的数量&#39;,
-  PRIMARY KEY (id) COMMENT &#39;邮编&#39;,
-  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product (id),
-  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES order_ (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><h4 id="汇总："><a href="#汇总：" class="headerlink" title="汇总："></a>汇总：</h4><p>我们在创建表之前，应该创建一个新的数据库，并命名为【tmall_ssm】</p>
-<pre><code>DROP DATABASE IF EXISTS tmall_ssm;
-CREATE DATABASE tmall_ssm DEFAULT CHARACTER SET utf8;</code></pre><p>将这十个表汇个总就是：</p>
-<pre><code>DROP DATABASE IF EXISTS tmall_ssm;
-CREATE DATABASE tmall_ssm DEFAULT CHARACTER SET utf8;
-
-use tmall_ssm;
-
-CREATE TABLE category (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) NOT NULL COMMENT &#39;分类的名字&#39;,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE referal_link (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  text varchar(255) NOT NULL COMMENT &#39;超链显示的文字&#39;,
-  link varchar(255) NOT NULL COMMENT &#39;超链的地址&#39;,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE product (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) NOT NULL COMMENT &#39;产品的名称&#39;,
-  sub_title varchar(255) DEFAULT NULL COMMENT &#39;小标题&#39;,
-  price float DEFAULT NULL COMMENT &#39;价格&#39;,
-  sale int(11) DEFAULT NULL COMMENT &#39;销量&#39;,
-  stock int(11) DEFAULT NULL COMMENT &#39;库存&#39;,
-  category_id int(11) DEFAULT NULL COMMENT &#39;对应的分类id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_product_category FOREIGN KEY (category_id) REFERENCES category (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE property (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) DEFAULT NULL COMMENT &#39;属性名称&#39;,
-  category_id int(11) NOT NULL COMMENT &#39;对应的分类id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_property_category FOREIGN KEY (category_id) REFERENCES category(id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE property_value (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应产品id&#39;,
-  properti_id int(11) NOT NULL COMMENT &#39;对应属性id&#39;,
-  value varchar(255) DEFAULT NULL COMMENT &#39;具体的属性值&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_property_value_property FOREIGN KEY (properti_id) REFERENCES property (id),
-  CONSTRAINT fk_property_value_product FOREIGN KEY (product_id) REFERENCES product (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE product_image (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  product_id int(11) DEFAULT NULL COMMENT &#39;对应的产品id&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_product_image_product FOREIGN KEY (product_id) REFERENCES product (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE user (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  name varchar(255) NOT NULL COMMENT &#39;用户名称&#39;,
-  password varchar(255) NOT NULL COMMENT &#39;用户密码&#39;,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE review (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  content varchar(4000) DEFAULT NULL COMMENT &#39;评价内容&#39;,
-  user_id int(11) NOT NULL COMMENT &#39;对应的用户id&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应的产品id&#39;,
-  createDate datetime DEFAULT NULL COMMENT &#39;评价时间&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_review_product FOREIGN KEY (product_id) REFERENCES product (id),
-  CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES user (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE order_ (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  order_code varchar(255) NOT NULL COMMENT &#39;订单号&#39;,
-  address varchar(255) NOT NULL COMMENT &#39;收货地址&#39;,
-  post varchar(255) NOT NULL COMMENT &#39;邮编&#39;,
-  receiver varchar(255) NOT NULL COMMENT &#39;收货人姓名&#39;,
-  mobile varchar(255) NOT NULL COMMENT &#39;手机号码&#39;,
-  user_message varchar(255) NOT NULL COMMENT &#39;用户备注的信息&#39;,
-  create_date datetime NOT NULL COMMENT &#39;订单创建时间&#39;,
-  pay_date datetime DEFAULT NULL COMMENT &#39;订单支付时间&#39;,
-  delivery_date datetime DEFAULT NULL COMMENT &#39;发货日期&#39;,
-  confirm_date datetime DEFAULT NULL COMMENT &#39;确认收货日期&#39;,
-  user_id int(11) DEFAULT NULL COMMENT &#39;对应的用户id&#39;,
-  status varchar(255) NOT NULL COMMENT &#39;订单状态&#39;,
-  PRIMARY KEY (id),
-  CONSTRAINT fk_order_user FOREIGN KEY (user_id) REFERENCES user (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
-CREATE TABLE order_item (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-  product_id int(11) NOT NULL COMMENT &#39;对应产品id&#39;,
-  order_id int(11) NOT NULL COMMENT &#39;对应订单id&#39;,
-  number int(11) DEFAULT NULL COMMENT &#39;对应产品购买的数量&#39;,
-  PRIMARY KEY (id) COMMENT &#39;邮编&#39;,
-  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product (id),
-  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES order_ (id)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;</code></pre><p>直接复制进 MySql 中执行，就能看到我们创建好的十个数据库：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-559c02b039ba4d57.png" alt=""></p>
-<hr>
-<h2 id="第三步：创建-SSM-开发环境"><a href="#第三步：创建-SSM-开发环境" class="headerlink" title="第三步：创建 SSM 开发环境"></a>第三步：创建 SSM 开发环境</h2><p>根据之前我写过的博文：<a href="https://www.jianshu.com/p/3098050b0d14" target="_blank" rel="noopener">IDEA 整合 SSM</a> 搭建好 SSM 开发环境，这里给出完整的项目结构和 pom.xml 文件：</p>
-<ul>
-<li>完整的项目结构：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-7371e706e33bf2f4.png" alt=""></p>
-<ul>
-<li>pom.xml 文件：</li>
-</ul>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
-
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-    &lt;packaging&gt;war&lt;/packaging&gt;
-
-    &lt;name&gt;wmyskxz&lt;/name&gt;
-    &lt;groupId&gt;cn.wmyskxz&lt;/groupId&gt;
-    &lt;artifactId&gt;wmyskxz&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;
-                &lt;artifactId&gt;maven-jetty-plugin&lt;/artifactId&gt;
-                &lt;version&gt;6.1.7&lt;/version&gt;
-                &lt;configuration&gt;
-                    &lt;connectors&gt;
-                        &lt;connector implementation=&quot;org.mortbay.jetty.nio.SelectChannelConnector&quot;&gt;
-                            &lt;port&gt;8888&lt;/port&gt;
-                            &lt;maxIdleTime&gt;30000&lt;/maxIdleTime&gt;
-                        &lt;/connector&gt;
-                    &lt;/connectors&gt;
-                    &lt;webAppSourceDirectory&gt;${project.build.directory}/${pom.artifactId}-${pom.version}
-                    &lt;/webAppSourceDirectory&gt;
-                    &lt;contextPath&gt;/&lt;/contextPath&gt;
-                &lt;/configuration&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-
-    &lt;properties&gt;
-        &lt;!-- 设置项目编码编码 --&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
-        &lt;!-- spring版本号 --&gt;
-        &lt;spring.version&gt;4.3.5.RELEASE&lt;/spring.version&gt;
-        &lt;!-- mybatis版本号 --&gt;
-        &lt;mybatis.version&gt;3.4.1&lt;/mybatis.version&gt;
-    &lt;/properties&gt;
-
-    &lt;dependencies&gt;
-
-        &lt;!-- pageHelper --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
-            &lt;artifactId&gt;pagehelper&lt;/artifactId&gt;
-            &lt;version&gt;5.1.2-beta&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!--jsqlparser--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.github.jsqlparser&lt;/groupId&gt;
-            &lt;artifactId&gt;jsqlparser&lt;/artifactId&gt;
-            &lt;version&gt;1.0&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- jstl标签 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-            &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-            &lt;version&gt;1.2&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.apache.taglibs&lt;/groupId&gt;
-            &lt;artifactId&gt;taglibs-standard-impl&lt;/artifactId&gt;
-            &lt;version&gt;1.2.5&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- java ee --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax&lt;/groupId&gt;
-            &lt;artifactId&gt;javaee-api&lt;/artifactId&gt;
-            &lt;version&gt;7.0&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- 单元测试 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;junit&lt;/groupId&gt;
-            &lt;artifactId&gt;junit&lt;/artifactId&gt;
-            &lt;version&gt;4.12&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- 实现slf4j接口并整合 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
-            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
-            &lt;version&gt;1.2.2&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- JSON --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
-            &lt;version&gt;2.8.7&lt;/version&gt;
-        &lt;/dependency&gt;
-
-
-        &lt;!-- 数据库 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;mysql&lt;/groupId&gt;
-            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-            &lt;version&gt;5.1.41&lt;/version&gt;
-            &lt;scope&gt;runtime&lt;/scope&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- 数据库连接池 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.mchange&lt;/groupId&gt;
-            &lt;artifactId&gt;c3p0&lt;/artifactId&gt;
-            &lt;version&gt;0.9.5.2&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- MyBatis --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-            &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
-            &lt;version&gt;${mybatis.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- mybatis/spring整合包 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-            &lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;
-            &lt;version&gt;1.3.1&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!-- Spring --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
-            &lt;version&gt;${spring.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-
-    &lt;/dependencies&gt;
-
-&lt;/project&gt;</code></pre><hr>
-<h2 id="MyBatis-逆向工程"><a href="#MyBatis-逆向工程" class="headerlink" title="MyBatis 逆向工程"></a>MyBatis 逆向工程</h2><p>按照正常的流程，我们应该去创建数据库对应的 POJO 和 DAO 类还有对应的 mapper 映射文件，按照上面的分析我们一共有十张表，想象一下为这十张表做这些无技术含量的机械化的繁杂的工作是多么头疼的一件事，我们希望的是：<strong>有人帮我自动创建好这些！</strong></p>
-<ul>
-<li><strong>MyBatis 官方提供了一种名为 “逆向工程” 的机制</strong>，其可以针对数据库中的单表自动生成 MyBatis 执行所需要的代码</li>
-<li>包括：</li>
-</ul>
-<p><strong>Java 实体类、Mapper映射配置、Mapper代理接口</strong></p>
-<h4 id="第一步：添加必要的-jar-包"><a href="#第一步：添加必要的-jar-包" class="headerlink" title="第一步：添加必要的 jar 包"></a>第一步：添加必要的 jar 包</h4><p>我们使用逆向工程，需要先导入 Mybatis Generator 的官方包，由于我们使用的是 Maven 搭建的 SSM 项目，所有我们可以去 Maven 的官网去查询需要的相关包：<a href="http://mvnrepository.com/" target="_blank" rel="noopener">http://mvnrepository.com/</a></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-048c0f3c81ce740d.png" alt=""></p>
-<p>戳进去点击最新的包：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-8b63aa02666d95ed.png" alt=""></p>
-<p>就可以在下方找到 Maven 依赖添加的语句：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-6242885479edbf79.png" alt=""></p>
-<p>直接粘进 pom.xml 就可以了，这里就不演示了。</p>
-<h4 id="第二步：generatorConfig-xml"><a href="#第二步：generatorConfig-xml" class="headerlink" title="第二步：generatorConfig.xml"></a>第二步：generatorConfig.xml</h4><p>在【resources】下创建 generatorConfig.xml 配置文件，该配置文件说明了一些逆向工程的细节：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE generatorConfiguration
-        PUBLIC &quot;-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd&quot;&gt;
-&lt;generatorConfiguration&gt;
-
-    &lt;context id=&quot;DB2Tables&quot; targetRuntime=&quot;MyBatis3&quot;&gt;
-
-        &lt;!-- 是否去除自动生成的代码中的注释 true：是 false：否--&gt;
-        &lt;commentGenerator&gt;
-            &lt;property name=&quot;suppressDate&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;suppressAllComments&quot; value=&quot;true&quot;/&gt;
-        &lt;/commentGenerator&gt;
-
-        &lt;!-- 数据库连接信息：驱动类、连接地址、用户名、密码 --&gt;
-        &lt;jdbcConnection driverClass=&quot;com.mysql.jdbc.Driver&quot; connectionURL=&quot;jdbc:mysql://localhost/tmall_ssm&quot;
-                        userId=&quot;root&quot; password=&quot;root&quot;&gt;
-        &lt;/jdbcConnection&gt;
-
-        &lt;!-- 默认 false，把 JDBC DECIMAL 和 NUMERIC 类型解析为 Integer
-             为 true 时解析为 java.math.BigDecimal --&gt;
-        &lt;javaTypeResolver&gt;
-            &lt;property name=&quot;forceBigDecimals&quot; value=&quot;false&quot;/&gt;
-        &lt;/javaTypeResolver&gt;
-
-        &lt;!-- targetProject：生成 POJO 类的位置 --&gt;
-        &lt;javaModelGenerator targetPackage=&quot;cn.wmyskxz.pojo&quot; targetProject=&quot;src/main/java&quot;&gt;
-            &lt;!-- enableSubPackages：是否让 schema 作为包的后缀--&gt;
-            &lt;property name=&quot;enableSubPackages&quot; value=&quot;false&quot;/&gt;
-            &lt;!-- trimStrings：从数据库返回的值被清理前后的空格 --&gt;
-            &lt;property name=&quot;trimStrings&quot; value=&quot;true&quot;/&gt;
-        &lt;/javaModelGenerator&gt;
-
-        &lt;!-- targetProject：生成xml映射文件存放位置 --&gt;
-        &lt;sqlMapGenerator targetPackage=&quot;mapper&quot; targetProject=&quot;src/main/resources&quot;&gt;
-            &lt;!-- enableSubPackages：是否让 schema 作为包的后缀--&gt;
-            &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot;/&gt;
-        &lt;/sqlMapGenerator&gt;
-
-        &lt;!-- targetProject：生成mapper类存放位置 --&gt;
-        &lt;javaClientGenerator type=&quot;XMLMAPPER&quot; targetPackage=&quot;cn.wmyskxz.mapper&quot; targetProject=&quot;src/main/java&quot;&gt;
-            &lt;!-- enableSubPackages：是否让 schema 作为包的后缀--&gt;
-            &lt;property name=&quot;enableSubPackages&quot; value=&quot;true&quot;/&gt;
-        &lt;/javaClientGenerator&gt;
-
-        &lt;!--生成对应表及类名
-            tableName:要生成的表名
-            domainObjectName:生成后的实例名
-            enableCountByExample:Count语句中加入where条件查询，默认为true开启
-            enableUpdateByExample:Update语句中加入where条件查询，默认为true开启
-            enableDeleteByExample:Delete语句中加入where条件查询，默认为true开启
-            enableSelectByExample:Select多条语句中加入where条件查询，默认为true开启
-            selectByExampleQueryId:Select单个对象语句中加入where条件查询，默认为true开启
-        --&gt;
-        &lt;table tableName=&quot;category&quot; domainObjectName=&quot;Category&quot; enableCountByExample=&quot;false&quot;
-               enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot;
-               selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;!-- 使用数据库中实际的字段名作为生成的实体类的属性 --&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;!-- 使用自增长键 --&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;property&quot; domainObjectName=&quot;Property&quot; enableCountByExample=&quot;false&quot;
-               enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot;
-               selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;product&quot; domainObjectName=&quot;Product&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot;
-               enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot; selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;product_image&quot; domainObjectName=&quot;ProductImage&quot; enableCountByExample=&quot;false&quot;
-               enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot;
-               selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;order_&quot; domainObjectName=&quot;Order&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot;
-               enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot; selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;property_value&quot; domainObjectName=&quot;PropertyValue&quot; enableCountByExample=&quot;false&quot;
-               enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot;
-               selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;review&quot; domainObjectName=&quot;Review&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot;
-               enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot; selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;user&quot; domainObjectName=&quot;User&quot; enableCountByExample=&quot;false&quot; enableUpdateByExample=&quot;false&quot;
-               enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot; selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;order_item&quot; domainObjectName=&quot;OrderItem&quot; enableCountByExample=&quot;false&quot;
-               enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot;
-               selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-
-        &lt;table tableName=&quot;referal_link&quot; domainObjectName=&quot;ReferalLink&quot; enableCountByExample=&quot;false&quot;
-               enableUpdateByExample=&quot;false&quot; enableDeleteByExample=&quot;false&quot; enableSelectByExample=&quot;true&quot;
-               selectByExampleQueryId=&quot;false&quot;&gt;
-            &lt;property name=&quot;my.isgen.usekeys&quot; value=&quot;true&quot;/&gt;
-            &lt;property name=&quot;useActualColumnNames&quot; value=&quot;true&quot;/&gt;
-            &lt;generatedKey column=&quot;id&quot; sqlStatement=&quot;JDBC&quot;/&gt;
-        &lt;/table&gt;
-    &lt;/context&gt;
-&lt;/generatorConfiguration&gt;</code></pre><p>这样配置文件也就编写好了</p>
-<h4 id="第三步：逆向数据文件生成类"><a href="#第三步：逆向数据文件生成类" class="headerlink" title="第三步：逆向数据文件生成类"></a>第三步：逆向数据文件生成类</h4><p>在编写完配置文件只有，就需要加载该配置文件，利用逆向工程的机制来对数据库的各个表进行一系列文件的生成，我们在【test/java】包下创建【TestMyBatisGenerator】类：</p>
-<pre><code>import org.mybatis.generator.api.MyBatisGenerator;
-import org.mybatis.generator.api.ShellCallback;
-import org.mybatis.generator.config.Configuration;
-import org.mybatis.generator.config.xml.ConfigurationParser;
-import org.mybatis.generator.internal.DefaultShellCallback;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * 逆向工程测试类
- *
- * @author: @我没有三颗心脏
- * @create: 2018-04-27-上午 8:26
- */
-public class TestMybatisGenerator {
-
-    public static void main(String[] args) throws Exception {
-        // warnings 为用于放置生成过程中警告信息的集合对象
-        List&lt;String&gt; warnings = new ArrayList&lt;String&gt;();
-        // 指定是否覆盖重名文件
-        boolean overwrite = true;
-        // 加载配置文件
-        File configFile = new File(MyBatisGenerator.class.getClassLoader().getResource(&quot;generatorConfig.xml&quot;).toURI());
-        // 配置解析类
-        ConfigurationParser cp = new ConfigurationParser(warnings);
-        // 配置解析类解析配置文件并生成 Configuration 配置对象
-        Configuration config = cp.parseConfiguration(configFile);
-        // ShellCallback 负责如何处理重复文件
-        ShellCallback callback = new DefaultShellCallback(overwrite);
-        // 逆向工程对象
-        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
-        // 执行逆向文件生成操作
-        myBatisGenerator.generate(null);
-        // 打印提示信息
-        System.out.println(&quot;MyBatis 逆向工程执行成功，刷新项目查看文件！&quot;);
-    }
-}</code></pre><p>执行该测试类，就能看见自动生成的文件：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-207d1abeb35a84c0.png" alt=""></p>
-<ul>
-<li>Oh！这真的是太爽了！突然开心(*^▽^*)</li>
-</ul>
-<h4 id="看一下自动生成的文件"><a href="#看一下自动生成的文件" class="headerlink" title="看一下自动生成的文件"></a>看一下自动生成的文件</h4><p>以 Category 为例，我们来看一下自动生成的文件：</p>
-<blockquote>
-<ul>
-<li>Category 实体类：</li>
-</ul>
-</blockquote>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>pojo<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Category</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> Integer id<span class="token punctuation">;</span>
-
-    <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> Integer <span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> id<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setId</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> String <span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> name<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setName</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name <span class="token operator">==</span> null <span class="token operator">?</span> null <span class="token operator">:</span> name<span class="token punctuation">.</span><span class="token function">trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<blockquote>
-<ul>
-<li>CategoryMapper 映射类：</li>
-</ul>
-</blockquote>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>mapper<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>pojo<span class="token punctuation">.</span>Category<span class="token punctuation">;</span>
-<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>pojo<span class="token punctuation">.</span>CategoryExample<span class="token punctuation">;</span>
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">CategoryMapper</span> <span class="token punctuation">{</span>
-    <span class="token keyword">int</span> <span class="token function">deleteByPrimaryKey</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">int</span> <span class="token function">insert</span><span class="token punctuation">(</span>Category record<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">int</span> <span class="token function">insertSelective</span><span class="token punctuation">(</span>Category record<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    List<span class="token operator">&lt;</span>Category<span class="token operator">></span> <span class="token function">selectByExample</span><span class="token punctuation">(</span>CategoryExample example<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    Category <span class="token function">selectByPrimaryKey</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">int</span> <span class="token function">updateByPrimaryKeySelective</span><span class="token punctuation">(</span>Category record<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">int</span> <span class="token function">updateByPrimaryKey</span><span class="token punctuation">(</span>Category record<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<blockquote>
-<ul>
-<li>CategoryMapper.xml 映射文件：</li>
-</ul>
-</blockquote>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
-&lt;mapper namespace=&quot;cn.wmyskxz.mapper.CategoryMapper&quot;&gt;
-    &lt;resultMap id=&quot;BaseResultMap&quot; type=&quot;cn.wmyskxz.pojo.Category&quot;&gt;
-        &lt;id column=&quot;id&quot; jdbcType=&quot;INTEGER&quot; property=&quot;id&quot;/&gt;
-        &lt;result column=&quot;name&quot; jdbcType=&quot;VARCHAR&quot; property=&quot;name&quot;/&gt;
-    &lt;/resultMap&gt;
-    &lt;sql id=&quot;Example_Where_Clause&quot;&gt;
-        &lt;where&gt;
-            &lt;foreach collection=&quot;oredCriteria&quot; item=&quot;criteria&quot; separator=&quot;or&quot;&gt;
-                &lt;if test=&quot;criteria.valid&quot;&gt;
-                    &lt;trim prefix=&quot;(&quot; prefixOverrides=&quot;and&quot; suffix=&quot;)&quot;&gt;
-                        &lt;foreach collection=&quot;criteria.criteria&quot; item=&quot;criterion&quot;&gt;
-                            &lt;choose&gt;
-                                &lt;when test=&quot;criterion.noValue&quot;&gt;
-                                    and ${criterion.condition}
-                                &lt;/when&gt;
-                                &lt;when test=&quot;criterion.singleValue&quot;&gt;
-                                    and ${criterion.condition} #{criterion.value}
-                                &lt;/when&gt;
-                                &lt;when test=&quot;criterion.betweenValue&quot;&gt;
-                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                                &lt;/when&gt;
-                                &lt;when test=&quot;criterion.listValue&quot;&gt;
-                                    and ${criterion.condition}
-                                    &lt;foreach close=&quot;)&quot; collection=&quot;criterion.value&quot; item=&quot;listItem&quot; open=&quot;(&quot;
-                                             separator=&quot;,&quot;&gt;
-                                        #{listItem}
-                                    &lt;/foreach&gt;
-                                &lt;/when&gt;
-                            &lt;/choose&gt;
-                        &lt;/foreach&gt;
-                    &lt;/trim&gt;
-                &lt;/if&gt;
-            &lt;/foreach&gt;
-        &lt;/where&gt;
-    &lt;/sql&gt;
-    &lt;sql id=&quot;Base_Column_List&quot;&gt;
-    id, name
-  &lt;/sql&gt;
-    &lt;select id=&quot;selectByExample&quot; parameterType=&quot;cn.wmyskxz.pojo.CategoryExample&quot; resultMap=&quot;BaseResultMap&quot;&gt;
-        select
-        &lt;if test=&quot;distinct&quot;&gt;
-            distinct
-        &lt;/if&gt;
-        &#39;false&#39; as QUERYID,
-        &lt;include refid=&quot;Base_Column_List&quot;/&gt;
-        from category
-        &lt;if test=&quot;_parameter != null&quot;&gt;
-            &lt;include refid=&quot;Example_Where_Clause&quot;/&gt;
-        &lt;/if&gt;
-        &lt;if test=&quot;orderByClause != null&quot;&gt;
-            order by ${orderByClause}
-        &lt;/if&gt;
-    &lt;/select&gt;
-    &lt;select id=&quot;selectByPrimaryKey&quot; parameterType=&quot;java.lang.Integer&quot; resultMap=&quot;BaseResultMap&quot;&gt;
-        select
-        &lt;include refid=&quot;Base_Column_List&quot;/&gt;
-        from category
-        where id = #{id,jdbcType=INTEGER}
-    &lt;/select&gt;
-    &lt;delete id=&quot;deleteByPrimaryKey&quot; parameterType=&quot;java.lang.Integer&quot;&gt;
-    delete from category
-    where id = #{id,jdbcType=INTEGER}
-  &lt;/delete&gt;
-    &lt;insert id=&quot;insert&quot; keyColumn=&quot;id&quot; keyProperty=&quot;id&quot; parameterType=&quot;cn.wmyskxz.pojo.Category&quot;
-            useGeneratedKeys=&quot;true&quot;&gt;
-    insert into category (name)
-    values (#{name,jdbcType=VARCHAR})
-  &lt;/insert&gt;
-    &lt;insert id=&quot;insertSelective&quot; keyColumn=&quot;id&quot; keyProperty=&quot;id&quot; parameterType=&quot;cn.wmyskxz.pojo.Category&quot;
-            useGeneratedKeys=&quot;true&quot;&gt;
-        insert into category
-        &lt;trim prefix=&quot;(&quot; suffix=&quot;)&quot; suffixOverrides=&quot;,&quot;&gt;
-            &lt;if test=&quot;name != null&quot;&gt;
-                name,
-            &lt;/if&gt;
-        &lt;/trim&gt;
-        &lt;trim prefix=&quot;values (&quot; suffix=&quot;)&quot; suffixOverrides=&quot;,&quot;&gt;
-            &lt;if test=&quot;name != null&quot;&gt;
-                #{name,jdbcType=VARCHAR},
-            &lt;/if&gt;
-        &lt;/trim&gt;
-    &lt;/insert&gt;
-    &lt;update id=&quot;updateByPrimaryKeySelective&quot; parameterType=&quot;cn.wmyskxz.pojo.Category&quot;&gt;
-        update category
-        &lt;set&gt;
-            &lt;if test=&quot;name != null&quot;&gt;
-                name = #{name,jdbcType=VARCHAR},
-            &lt;/if&gt;
-        &lt;/set&gt;
-        where id = #{id,jdbcType=INTEGER}
-    &lt;/update&gt;
-    &lt;update id=&quot;updateByPrimaryKey&quot; parameterType=&quot;cn.wmyskxz.pojo.Category&quot;&gt;
-    update category
-    set name = #{name,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
-  &lt;/update&gt;
-&lt;/mapper&gt;</code></pre><p>其中就只有映射文件稍微有些复杂，但细看下来其实跟我们自己写的差不多，甚至自动生成的完成得更好。</p>
-<blockquote>
-<p>xxxExample</p>
-</blockquote>
-<p>MybatisGenerator会生成一个类叫做XXXXExample的。，它的作用是进行排序，条件查询的时候使用。</p>
-<p>这里有详细的说明，了解一下就好了：<a href="https://blog.csdn.net/biandous/article/details/65630783" target="_blank" rel="noopener">戳这里</a></p>
-<h4 id="第四步：测试"><a href="#第四步：测试" class="headerlink" title="第四步：测试"></a>第四步：测试</h4><p>我们这里仅仅就用 CategoryMapper 映射类来进行简单测试了：</p>
-<pre><code>@Autowired
-CategoryMapper categoryMapper;
-
-@Test
-public void test() {
-    Category category = new Category();
-    category.setName(&quot;分类1&quot;);
-    categoryMapper.insert(category);
-}</code></pre><p>由于我们使用了自增长键 id ，所以仅仅只需要提供 name 属性就可以了，执行，可以看到数据库中有正确的数据：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E9%A1%B9%E7%9B%AE%E8%B5%B7%E6%AD%A5/7896890-b1e9cbc59225eb31.png" alt=""></p>
-<hr>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>根据以上的 “折腾” 算是完成了项目的起步工作了吧，我是一边写项目一边写博客的，所以可能有时候想着想着写着写着思绪会有点飘，写得凌乱，这也是没有办法的事，不管写得好还是差我都希望能记录下来，这些都是属于我自己的思路和学习路程。</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -7432,6 +7139,11 @@ public void test() {
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" href="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/"
+            id="categoriesE79FA5E4B98EE997AEE7AD94"
+            ><div class='name'>知乎问答</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/"
             id="categoriesE7BC96E7A88BE4BABAE7949F"
             ><div class='name'>编程人生</div><div class='badge'>(5)</div></a></li>
@@ -7473,7 +7185,7 @@ public void test() {
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

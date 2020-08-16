@@ -436,6 +436,623 @@
         
           
   <h2 class="title">
+    <a href="/2019/01/08/elasticsearch-kuai-su-ru-men/">
+      Elasticsearch【快速入门】
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/中间件</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2019年1月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-c1f8693e77c58900.png" alt=""></p>
+<blockquote>
+<p><strong>前言：</strong>毕设项目还要求加了这个做大数据搜索，正好自己也比较感兴趣，就一起来学习学习吧！</p>
+</blockquote>
+<h1 id="Elasticsearch-简介"><a href="#Elasticsearch-简介" class="headerlink" title="Elasticsearch 简介"></a>Elasticsearch 简介</h1><p><strong>Elasticsearch</strong> 是一个分布式、RESTful 风格的搜索和数据分析引擎，能够解决不断涌现出的各种用例。作为 Elastic Stack 的核心，它集中存储您的数据，帮助您发现意料之中以及意料之外的情况。</p>
+<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><p><strong>保持好奇心。从数据中探寻各种问题的答案。</strong></p>
+<p>通过 Elasticsearch，您能够执行及合并多种类型的搜索（结构化数据、非结构化数据、地理位置、指标），搜索方式随心而变。先从一个简单的问题出发，试试看能够从中发现些什么。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p><strong>大处着眼，全局在握。</strong></p>
+<p>找到与查询最匹配的十个文档是一回事。但如果面对的是十亿行日志，又该如何解读呢？Elasticsearch 聚合让您能够从大处着眼，探索数据的趋势和模式。</p>
+<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-89cbd0089e6bdc72.png" alt=""></p>
+<h2 id="可扩展性"><a href="#可扩展性" class="headerlink" title="可扩展性"></a>可扩展性</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-7c1c8504b968c0f2.png" alt=""></p>
+<h2 id="弹性"><a href="#弹性" class="headerlink" title="弹性"></a>弹性</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d1a94d35b62e72ed.png" alt=""></p>
+<h2 id="灵活性"><a href="#灵活性" class="headerlink" title="灵活性"></a>灵活性</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-0b1559817e3e24c6.png" alt=""></p>
+<h2 id="操作的乐趣"><a href="#操作的乐趣" class="headerlink" title="操作的乐趣"></a>操作的乐趣</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-4a0b85c8858c0411.png" alt=""></p>
+<h2 id="客户端库"><a href="#客户端库" class="headerlink" title="客户端库"></a>客户端库</h2><p><strong>使用您自己的编程语言与 Elasticsearch 进行交互</strong></p>
+<p>Elasticsearch 使用的是标准的 RESTful 风格的 API 和 JSON。此外，我们还构建和维护了很多其他语言的客户端，例如 <a href="https://www.elastic.co/cn/guide/en/elasticsearch/client/index.html" target="_blank" rel="noopener">Java、Python、.NET、SQL 和 PHP</a>。与此同时，我们的<a href="https://www.elastic.co/cn/guide/en/elasticsearch/client/community/current/index.html" target="_blank" rel="noopener">社区也贡献了很多客户端</a>。这些客户端使用起来简单自然，而且就像 Elasticsearch 一样，不会对您的使用方式进行限制。</p>
+<p>Java：</p>
+<pre class=" language-java"><code class="language-java">RestHighLevelClient client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestHighLevelClient</span><span class="token punctuation">(</span>RestClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span>
+                    <span class="token keyword">new</span> <span class="token class-name">HttpHost</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9200</span><span class="token punctuation">,</span> <span class="token string">"http"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+SearchSourceBuilder searchSourceBuilder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchSourceBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+searchSourceBuilder<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>QueryBuilders<span class="token punctuation">.</span><span class="token function">matchAllQuery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>            
+searchSourceBuilder<span class="token punctuation">.</span><span class="token function">aggregation</span><span class="token punctuation">(</span>AggregationBuilders<span class="token punctuation">.</span><span class="token function">terms</span><span class="token punctuation">(</span><span class="token string">"top_10_states"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">field</span><span class="token punctuation">(</span><span class="token string">"state"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+SearchRequest searchRequest <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SearchRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+searchRequest<span class="token punctuation">.</span><span class="token function">indices</span><span class="token punctuation">(</span><span class="token string">"social-*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+searchRequest<span class="token punctuation">.</span><span class="token function">source</span><span class="token punctuation">(</span>searchSourceBuilder<span class="token punctuation">)</span><span class="token punctuation">;</span>
+SearchResponse searchResponse <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">search</span><span class="token punctuation">(</span>searchRequest<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2 id="尽享强大功能"><a href="#尽享强大功能" class="headerlink" title="尽享强大功能"></a>尽享强大功能</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2792fab430412bde.png" alt=""></p>
+<h2 id="HADOOP-和-SPRAK"><a href="#HADOOP-和-SPRAK" class="headerlink" title="HADOOP 和 SPRAK"></a>HADOOP 和 SPRAK</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-9f16e7e04fbf7294.png" alt=""></p>
+<blockquote>
+<p>照例来说应该是去扒官网，结果一搜就惊了，这官网也忒得劲儿了吧，竟然提供中文版本而且还有中文版本的文档，友好友好，我看了好长一会儿才反应过来自己还有博客要写.咳咳，上面的内容<strong>都是摘自官网</strong>顺便附一个官网链接：<a href="https://www.elastic.co/cn/products/elasticsearch" target="_blank" rel="noopener">https://www.elastic.co/cn/products/elasticsearch</a></p>
+</blockquote>
+<p>另外还有一个关于 Elasticsearch 来源很有趣的故事在这里分享一下：</p>
+<blockquote>
+<p><strong>回忆时光</strong></p>
+<p>许多年前，一个刚结婚的名叫 Shay Banon 的失业开发者，跟着他的妻子去了伦敦，他的妻子在那里学习厨师。 在寻找一个赚钱的工作的时候，为了给他的妻子做一个食谱搜索引擎，他开始使用 Lucene 的一个早期版本。</p>
+<p>直接使用 Lucene 是很难的，因此 Shay 开始做一个抽象层，Java 开发者使用它可以很简单的给他们的程序添加搜索功能。 他发布了他的第一个开源项目 Compass。</p>
+<p>后来 Shay 获得了一份工作，主要是高性能，分布式环境下的内存数据网格。这个对于高性能，实时，分布式搜索引擎的需求尤为突出， 他决定重写 Compass，把它变为一个独立的服务并取名 Elasticsearch。</p>
+<p>第一个公开版本在2010年2月发布，从此以后，Elasticsearch 已经成为了 Github 上最活跃的项目之一，他拥有超过300名 contributors(目前736名 contributors )。 一家公司已经开始围绕 Elasticsearch 提供商业服务，并开发新的特性，但是，Elasticsearch 将永远开源并对所有人可用。</p>
+<p>据说，Shay 的妻子还在等着她的食谱搜索引擎…</p>
+</blockquote>
+<h1 id="安装-Elasticsearch"><a href="#安装-Elasticsearch" class="headerlink" title="安装 Elasticsearch"></a>安装 Elasticsearch</h1><p><a href="https://www.elastic.co/downloads/elasticsearch" target="_blank" rel="noopener">官网</a>最新版本 Elasticsearch （6.5.4），但是由于自己的环境使用最新版本的有问题（配合下面的工具 Kibana 有问题..Kibana 启动不了），所以不得不换成更低版本的 6.2.2，下载外链：<a href="http://how2j.cn/frontdownload?bean.id=1694" target="_blank" rel="noopener">戳这里</a>，当然你也可以试一下最新的版本：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-90d671ceb00ff6d0.png" alt=""></p>
+<blockquote>
+<p>顺带一提：在下载之前你应该确保你的 Java 版本保持在 1.8 及以上（就 1.8 吧..），这是 Elasticsearch 的硬性要求，可以自行打开命令行输入 <code>java -version</code> 来查看 Java 的版本</p>
+</blockquote>
+<p>下载完成后，可以看到是一个压缩包，我们直接解压在 D 盘上，然后打开 <code>bin</code> 目录下的 elasticsearch.bat 文件</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-9cf65cd3c606ff8f.png" alt=""></p>
+<p>等待一段时间后，可以看到小黑框输出一行 start ，就说明我们的 Elasticsearch 已经跑起来了，我们访问地址：<code>http://127.0.0.1:9200/</code>，看到返回一串 JSON 格式的代码就说明已经成功了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-ee9e35ee3cba5316.png" alt=""></p>
+<h2 id="安装-Kibana"><a href="#安装-Kibana" class="headerlink" title="安装 Kibana"></a>安装 Kibana</h2><p>这是一个官方推出的把 Elasticsearch 数据可视化的工具，官网在这里：<a href="https://www.elastic.co/cn/products/kibana" target="_blank" rel="noopener">【传送门】</a>，不过我们现在暂时还用不到那些数据分析的东西，不过里面有一个 Dev Tools 的工具可以方便的和 Elasticsearch 服务进行交互，去官网下载了最新版本的 Kibana（6.5.4） 结果不知道为什么总是启动不起来，所以换一了一个低版本的（6.2.2）正常，给个下载外链：<a href="http://how2j.cn/frontdownload?bean.id=1695" target="_blank" rel="noopener">下载点这里</a>，你们也可以去官网试试能不能把最新的跑起来：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-638b0471ffcc8fb8.png" alt=""></p>
+<p>解压到 D 盘（意外的有点慢..），同样打开目录下的<code>bin\kibana.bat</code>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-8525f35d07ee832a.png" alt=""></p>
+<p>等待一段时间后就可以看到提示信息，运行在 5601 端口，我们访问地址 <code>http://localhost:5601/app/kibana#/dev_tools/console?_g=()</code> 可以成功进入到 Dev-tools 界面：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-47fbf65ee62296c2.png" alt=""></p>
+<p>点击 【Get to work】，然后在控制台输入 <code>GET /_cat/health?v</code> 查看服务器状态，可以在右侧返回的结果中看到 <code>green</code> 即表示服务器状态目前是健康的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-b095afd1454e9071.png" alt=""></p>
+<hr>
+<h1 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h1><h2 id="一、基础概念-快速入门"><a href="#一、基础概念-快速入门" class="headerlink" title="一、基础概念-快速入门"></a>一、基础概念-快速入门</h2><h3 id="节点-Node、集群-Cluster-和分片-Shards"><a href="#节点-Node、集群-Cluster-和分片-Shards" class="headerlink" title="节点 Node、集群 Cluster 和分片 Shards"></a>节点 Node、集群 Cluster 和分片 Shards</h3><p>ElasticSearch 是分布式数据库，允许多台服务器协同工作，每台服务器可以运行多个实例。单个实例称为一个节点（node），一组节点构成一个集群（cluster）。分片是底层的工作单元，文档保存在分片内，分片又被分配到集群内的各个节点里，每个分片仅保存全部数据的一部分。</p>
+<h3 id="索引-Index、类型-Type-和文档-Document"><a href="#索引-Index、类型-Type-和文档-Document" class="headerlink" title="索引 Index、类型 Type 和文档 Document"></a>索引 Index、类型 Type 和文档 Document</h3><p>对比我们比较熟悉的 MySQL 数据库：</p>
+<blockquote>
+<p>index   →    db<br>type    →    table<br>document    →    row</p>
+</blockquote>
+<p>如果我们要访问一个文档元数据应该包括囊括 <code>index/type/id</code> 这三种类型，很好理解。</p>
+<h2 id="二、使用-RESTful-API-与-Elasticsearch-进行交互"><a href="#二、使用-RESTful-API-与-Elasticsearch-进行交互" class="headerlink" title="二、使用 RESTful API 与 Elasticsearch 进行交互"></a>二、使用 RESTful API 与 Elasticsearch 进行交互</h2><p>所有其他语言可以使用 RESTful API 通过端口 <em>9200</em> 和 Elasticsearch 进行通信，你可以用你最喜爱的 web 客户端访问 Elasticsearch 。一个 Elasticsearch 请求和任何 HTTP 请求一样由若干相同的部件组成：</p>
+<blockquote>
+<p><code>curl -X&lt;VERB&gt; &#39;&lt;PROTOCOL&gt;://&lt;HOST&gt;:&lt;PORT&gt;/&lt;PATH&gt;?&lt;QUERY_STRING&gt;&#39; -d &#39;&lt;BODY&gt;&#39;</code></p>
+</blockquote>
+<p>被 <code>&lt; &gt;</code> 标记的部件：</p>
+<table>
+<thead>
+<tr>
+<th align="left"><strong>部件名</strong></th>
+<th align="left"><strong>作用</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>VERB</code></td>
+<td align="left">适当的 HTTP 方法 或 谓词 : <code>GET</code>、 <code>POST</code>、 <code>PUT</code>、 <code>HEAD</code> 或者 <code>DELETE</code>。</td>
+</tr>
+<tr>
+<td align="left"><code>PROTOCOL</code></td>
+<td align="left"><code>http</code> 或者 <code>https</code>（如果你在 Elasticsearch 前面有一个 <code>https</code> 代理）</td>
+</tr>
+<tr>
+<td align="left"><code>HOST</code></td>
+<td align="left">Elasticsearch 集群中任意节点的主机名，或者用 <code>localhost</code> 代表本地机器上的节点。</td>
+</tr>
+<tr>
+<td align="left"><code>PORT</code></td>
+<td align="left">运行 Elasticsearch HTTP 服务的端口号，默认是 <code>9200</code> 。</td>
+</tr>
+<tr>
+<td align="left"><code>PATH</code></td>
+<td align="left">API 的终端路径（例如 <code>_count</code> 将返回集群中文档数量）。Path 可能包含多个组件，例如：<code>_cluster/stats</code> 和 <code>_nodes/stats/jvm</code> 。</td>
+</tr>
+<tr>
+<td align="left"><code>QUERY_STRING</code></td>
+<td align="left">任意可选的查询字符串参数 (例如 <code>?pretty</code> 将格式化地输出 JSON 返回值，使其更容易阅读)</td>
+</tr>
+<tr>
+<td align="left"><code>BODY</code></td>
+<td align="left">一个 JSON 格式的请求体 (如果请求需要的话)</td>
+</tr>
+</tbody></table>
+<p>就比如计算集群中文档的数量，我们可以用这个:</p>
+<pre class=" language-crul"><code class="language-crul">curl -XGET 'http://localhost:9200/_count?pretty' -d '
+{
+    "query": {
+        "match_all": {}
+    }
+}
+'</code></pre>
+<p>不过对于安装了 Kibana 的我们，可以直接在 Kibana 的控制台输出以下语句，也是同样的效果：</p>
+<pre class=" language-crul"><code class="language-crul">GET /_count?pretty
+{
+    "query": {
+        "match_all": {}
+    }
+}</code></pre>
+<h3 id="文档管理（CRUD）"><a href="#文档管理（CRUD）" class="headerlink" title="文档管理（CRUD）"></a>文档管理（CRUD）</h3><p>如果对于 RESTful 不太熟悉的童鞋请右转：<a href="https://www.jianshu.com/p/91600da4df95" target="_blank" rel="noopener">【传送门】</a></p>
+<p><strong>增加：</strong></p>
+<pre class=" language-crul"><code class="language-crul">POST /db/user/1
+{
+  "username": "wmyskxz1",
+  "password": "123456",
+  "age": "22"
+}
+POST /db/user/2
+{
+  "username": "wmyskxz2",
+  "password": "123456",
+  "age": "22"
+}</code></pre>
+<p>这一段代码稍微解释一下，这其实就往索引为 <code>db</code> 类型为 <code>user</code> 的数据库中插入一条 <code>id</code> 为 1 的一条数据，这条数据其实就相当于一个拥有 <code>username/password/age</code> 三个属性的一个实体，就是 JSON 数据</p>
+<p>执行命令后，Elasticsearch 返回如下数据：</p>
+<pre class=" language-JSON"><code class="language-JSON"># POST /db/user/1
+{
+  "_index": "db",
+  "_type": "user",
+  "_id": "1",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "_seq_no": 2,
+  "_primary_term": 1
+}
+
+# POST /db/user/2
+{
+  "_index": "db",
+  "_type": "user",
+  "_id": "2",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "_seq_no": 1,
+  "_primary_term": 1
+}</code></pre>
+<p><code>version</code> 是版本号的意思，当我们执行操作会自动加 1</p>
+<p><strong>删除：</strong></p>
+<pre class=" language-crul"><code class="language-crul">DELETE /db/user/1</code></pre>
+<p>Elasticsearch 返回数据如下：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+  "_index": "db",
+  "_type": "user",
+  "_id": "1",
+  "_version": 2,
+  "result": "deleted",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "_seq_no": 1,
+  "_primary_term": 1
+}</code></pre>
+<p>这里就可以看到 <code>version</code> 变成了 2</p>
+<p><strong>修改：</strong></p>
+<pre class=" language-crul"><code class="language-crul">PUT /db/user/2
+{
+  "username": "wmyskxz3",
+  "password": "123456",
+  "age": "22"
+}</code></pre>
+<p>Elasticsearch 返回数据如下：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+  "_index": "db",
+  "_type": "user",
+  "_id": "2",
+  "_version": 2,
+  "result": "updated",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "_seq_no": 2,
+  "_primary_term": 1
+}</code></pre>
+<p><strong>查询：</strong></p>
+<pre class=" language-crul"><code class="language-crul">GET /db/user/2</code></pre>
+<p>返回数据如下：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+  "_index": "db",
+  "_type": "user",
+  "_id": "2",
+  "_version": 2,
+  "found": true,
+  "_source": {
+    "username": "wmyskxz3",
+    "password": "123456",
+    "age": "22"
+  }
+}</code></pre>
+<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p>上面我们已经演示了基本的文档 CRUD 功能，然而 Elasticsearch 的核心功能是搜索，所以在学习之前，为更好的演示这个功能，我们先往 Elasticsearch 中插入一些数据：</p>
+<pre class=" language-crul"><code class="language-crul">PUT /movies/movie/1
+{
+  "title": "The Godfather",
+  "director": "Francis Ford Coppola",
+  "year": 1972,
+  "genres": [
+    "Crime",
+    "Drama"
+  ]
+}
+
+PUT /movies/movie/2
+{
+  "title": "Lawrence of Arabia",
+  "director": "David Lean",
+  "year": 1962,
+  "genres": [
+    "Adventure",
+    "Biography",
+    "Drama"
+  ]
+}
+
+PUT /movies/movie/3
+{
+  "title": "To Kill a Mockingbird",
+  "director": "Robert Mulligan",
+  "year": 1962,
+  "genres": [
+    "Crime",
+    "Drama",
+    "Mystery"
+  ]
+}
+
+PUT /movies/movie/4
+{
+  "title": "Apocalypse Now",
+  "director": "Francis Ford Coppola",
+  "year": 1979,
+  "genres": [
+    "Drama",
+    "War"
+  ]
+}
+
+PUT /movies/movie/5
+{
+  "title": "Kill Bill: Vol. 1",
+  "director": "Quentin Tarantino",
+  "year": 2003,
+  "genres": [
+    "Action",
+    "Crime",
+    "Thriller"
+  ]
+}
+
+PUT /movies/movie/6
+{
+  "title": "The Assassination of Jesse James by the Coward Robert Ford",
+  "director": "Andrew Dominik",
+  "year": 2007,
+  "genres": [
+    "Biography",
+    "Crime",
+    "Drama"
+  ]
+}</code></pre>
+<p><strong>_search端点</strong></p>
+<p>现在已经把一些电影信息放入了索引，可以通过搜索看看是否可找到它们。 为了使用 ElasticSearch 进行搜索，我们使用 <code>_search</code> 端点，可选择使用索引和类型。也就是说，按照以下模式向URL发出请求：<code>&lt;index&gt;/&lt;type&gt;/_search</code>。其中，<code>index</code> 和 <code>type</code> 都是可选的。</p>
+<p>换句话说，为了搜索电影，可以对以下任一URL进行POST请求：</p>
+<ul>
+<li><a href="http://localhost:9200/_search" target="_blank" rel="noopener">http://localhost:9200/_search</a> - 搜索所有索引和所有类型。</li>
+<li><a href="http://localhost:9200/movies/_search" target="_blank" rel="noopener">http://localhost:9200/movies/_search</a> - 在电影索引中搜索所有类型</li>
+<li><a href="http://localhost:9200/movies/movie/_search" target="_blank" rel="noopener">http://localhost:9200/movies/movie/_search</a> - 在电影索引中显式搜索电影类型的文档。</li>
+</ul>
+<p><strong>搜索请求正文和ElasticSearch查询DSL</strong></p>
+<p>如果只是发送一个请求到上面的URL，我们会得到所有的电影信息。为了创建更有用的搜索请求，还需要向请求正文中提供查询。 请求正文是一个JSON对象，除了其它属性以外，它还要包含一个名称为 <code>“query”</code> 的属性，这就可使用ElasticSearch的查询DSL。</p>
+<pre class=" language-crul"><code class="language-crul">{
+    "query": {
+        //Query DSL here
+    }
+}</code></pre>
+<p>你可能想知道查询DSL是什么。它是ElasticSearch自己基于JSON的域特定语言，可以在其中表达查询和过滤器。你可以把它简单同SQL对应起来，就相当于是条件语句吧。</p>
+<p><strong>基本自由文本搜索：</strong></p>
+<p>查询DSL具有一长列不同类型的查询可以使用。 对于“普通”自由文本搜索，最有可能想使用一个名称为“查询字符串查询”。</p>
+<p><a href="http://www.elasticsearch.org/guide/reference/query-dsl/query-string-query/" target="_blank" rel="noopener" title="查询字符串查询">查询字符串查询</a>是一个高级查询，有很多不同的选项，ElasticSearch将解析和转换为更简单的查询树。如果忽略了所有的可选参数，并且只需要给它一个字符串用于搜索，它可以很容易使用。</p>
+<p>现在尝试在两部电影的标题中搜索有“kill”这个词的电影信息：</p>
+<pre class=" language-crul"><code class="language-crul">GET /_search
+{
+  "query": {
+    "query_string": {
+      "query": "kill"
+    }
+  }
+}</code></pre>
+<p>执行上面的请求并查看结果，如下所示 -</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-457ed6bbcde38dff.png" alt=""></p>
+<p>正如预期的，得到两个命中结果，每个电影的标题中都带有“kill”单词。再看看另一种情况，在特定字段中搜索。</p>
+<p><strong>指定搜索的字段</strong></p>
+<p>在前面的例子中，使用了一个非常简单的查询，一个只有一个属性 <code>“query”</code> 的查询字符串查询。 如前所述，查询字符串查询有一些可以指定设置，如果不使用，它将会使用默认的设置值。</p>
+<p>这样的设置称为“fields”，可用于指定要搜索的字段列表。如果不使用“fields”字段，ElasticSearch查询将默认自动生成的名为 <code>“_all”</code> 的特殊字段，来基于所有文档中的各个字段匹配搜索。</p>
+<p>为了做到这一点，修改以前的搜索请求正文，以便查询字符串查询有一个 <code>fields</code> 属性用来要搜索的字段数组：</p>
+<pre class=" language-crul"><code class="language-crul">GET /_search
+{
+  "query": {
+    "query_string": {
+      "query": "ford",
+      "fields": [
+        "title"
+      ]
+    }
+  }
+}</code></pre>
+<p>执行上面查询它，看看会有什么结果(应该只匹配到 1 行数据)：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-ef866d270e69299b.png" alt=""></p>
+<p>正如预期的得到一个命中，电影的标题中的单词“ford”。现在，从查询中移除fields属性，应该能匹配到 3 行数据：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Elasticsearch%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-e8295f40ff670f4c.png" alt=""></p>
+<h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h3><p>前面已经介绍了几个简单的自由文本搜索查询。现在来看看另一个示例，搜索 <code>“drama”</code>，不明确指定字段，如下查询 -</p>
+<pre class=" language-crul"><code class="language-crul">GET /_search
+{
+  "query": {
+    "query_string": {
+      "query": "drama"
+    }
+  }
+}</code></pre>
+<p>因为在索引中有五部电影在 <code>_all</code> 字段(从类别字段)中包含单词 <code>“drama”</code>，所以得到了上述查询的 <code>5</code> 个命中。 现在，想象一下，如果我们想限制这些命中为只是 <code>1962</code> 年发布的电影。要做到这点，需要应用一个过滤器，要求 <code>“year”</code> 字段等于 <code>1962</code>。要添加过滤器，修改搜索请求正文，以便当前的顶级查询(查询字符串查询)包含在过滤的查询中：</p>
+<pre class=" language-crul"><code class="language-crul">{
+    "query": {
+        "filtered": {
+            "query": {
+                "query_string": {
+                    "query": "drama"
+                }
+            },
+            "filter": {
+                //Filter to apply to the query
+            }
+        }
+    }
+}</code></pre>
+<p>过滤的查询是具有两个属性(<code>query</code>和<code>filter</code>)的查询。执行时，它使用过滤器过滤查询的结果。要完成这样的查询还需要添加一个过滤器，要求<code>year</code>字段的值为<code>1962</code>。</p>
+<p><strong>ElasticSearch</strong>查询DSL有各种各样的过滤器可供选择。对于这个简单的情况，某个字段应该匹配一个特定的值，一个<a href="http://www.elasticsearch.org/guide/reference/query-dsl/term-filter/" target="_blank" rel="noopener" title="条件过滤器">条件过滤器</a>就能很好地完成工作。</p>
+<pre class=" language-crul"><code class="language-crul">"filter": {
+    "term": { "year": 1962 }
+}</code></pre>
+<p>完整的搜索请求如下所示：</p>
+<pre class=" language-crul"><code class="language-crul">GET /_search
+{
+  "query": {
+    "filtered": {
+      "query": {
+        "query_string": {
+          "query": "drama"
+        }
+      },
+      "filter": {
+        "term": {
+          "year": 1962
+        }
+      }
+    }
+  }
+}</code></pre>
+<p>当执行上面请求，只得到两个命中，这个两个命中的数据的 <code>year</code> 字段的值都是等于 <code>1962</code>。</p>
+<p><strong>无需查询即可进行过滤</strong></p>
+<p>在上面的示例中，使用过滤器限制查询字符串查询的结果。如果想要做的是应用一个过滤器呢？ 也就是说，我们希望所有电影符合一定的标准。</p>
+<p>在这种情况下，我们仍然在搜索请求正文中使用 <code>“query”</code> 属性。但是，我们不能只是添加一个过滤器，需要将它包装在某种查询中。</p>
+<p>一个解决方案是修改当前的搜索请求，替换查询字符串 <code>query</code> 过滤查询中的 <code>match_all</code> 查询，这是一个查询，只是匹配一切。类似下面这个：</p>
+<pre class=" language-crul"><code class="language-crul">GET /_search
+{
+  "query": {
+    "filtered": {
+      "query": {
+        "match_all": {}
+      },
+      "filter": {
+        "term": {
+          "year": 1962
+        }
+      }
+    }
+  }
+}</code></pre>
+<p>另一个更简单的方法是使用常数分数查询：</p>
+<pre class=" language-crul"><code class="language-crul">GET /_search
+{
+  "query": {
+    "constant_score": {
+      "filter": {
+        "term": {
+          "year": 1962
+        }
+      }
+    }
+  }
+}</code></pre>
+<blockquote>
+<p>参考文章：<a href="https://www.yiibai.com/elasticsearch/elasticsearch-getting-start.html" target="_blank" rel="noopener">Elasticsearch入门教程</a>、<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/_tutorial_conclusion.html" target="_blank" rel="noopener">Elasticsearch官方文档</a>、 <a href="https://segmentfault.com/a/1190000011661882" target="_blank" rel="noopener">ElasticSearch 快速上手学习入门教程</a></p>
+</blockquote>
+<h2 id="三、集成-SpringBoot-简单示例"><a href="#三、集成-SpringBoot-简单示例" class="headerlink" title="三、集成 SpringBoot 简单示例"></a>三、集成 SpringBoot 简单示例</h2><h3 id="第一步：新建-SpringBoot-项目"><a href="#第一步：新建-SpringBoot-项目" class="headerlink" title="第一步：新建 SpringBoot 项目"></a>第一步：新建 SpringBoot 项目</h3><p><strong>pom包依赖：</strong></p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-web<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token comment" spellcheck="true">&lt;!-- Elasticsearch支持 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-data-elasticsearch<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p><strong>application.properties：</strong></p>
+<pre class=" language-properties"><code class="language-properties"><span class="token attr-name">spring.data.elasticsearch.cluster-nodes</span><span class="token punctuation">=</span><span class="token attr-value">127.0.0.1:9300</span></code></pre>
+<h3 id="第二步：新建实体类"><a href="#第二步：新建实体类" class="headerlink" title="第二步：新建实体类"></a>第二步：新建实体类</h3><p><strong>User类：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Document</span><span class="token punctuation">(</span>indexName <span class="token operator">=</span> <span class="token string">"users"</span><span class="token punctuation">,</span> type <span class="token operator">=</span> <span class="token string">"user"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String username<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String password<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> age<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/** getter and setter */</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="第三步：Dao-层"><a href="#第三步：Dao-层" class="headerlink" title="第三步：Dao 层"></a>第三步：Dao 层</h3><p><strong>UserDao：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>domain<span class="token punctuation">.</span>User<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>elasticsearch<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>ElasticsearchRepository<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">UserDao</span> <span class="token keyword">extends</span> <span class="token class-name">ElasticsearchRepository</span><span class="token operator">&lt;</span>User<span class="token punctuation">,</span> Integer<span class="token operator">></span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="第四步：Controller-层"><a href="#第四步：Controller-层" class="headerlink" title="第四步：Controller 层"></a>第四步：Controller 层</h3><p>这里紧紧是为了演示，所以就省略 service 层，当然 CRUD 不能少：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserController</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    UserDao userDao<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@PostMapping</span><span class="token punctuation">(</span><span class="token string">"/addUser"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">addUser</span><span class="token punctuation">(</span>String username<span class="token punctuation">,</span> String password<span class="token punctuation">,</span> Integer age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        User user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setUsername</span><span class="token punctuation">(</span>username<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setPassword</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setAge</span><span class="token punctuation">(</span>age<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> String<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>userDao<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 返回id做验证</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@DeleteMapping</span><span class="token punctuation">(</span><span class="token string">"/deleteUser"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">deleteUser</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        userDao<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"Success!"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@PutMapping</span><span class="token punctuation">(</span><span class="token string">"/updateUser"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">updateUser</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">,</span> String username<span class="token punctuation">,</span> String password<span class="token punctuation">,</span> Integer age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        User user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setUsername</span><span class="token punctuation">(</span>username<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setPassword</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setAge</span><span class="token punctuation">(</span>age<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> String<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span>userDao<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 返回id做验证</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/getUser"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> User <span class="token function">getUser</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> userDao<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/getAllUsers"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> Iterable<span class="token operator">&lt;</span>User<span class="token operator">></span> <span class="token function">getAllUsers</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> userDao<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h3 id="第五步：测试"><a href="#第五步：测试" class="headerlink" title="第五步：测试"></a>第五步：测试</h3><p>使用 REST 测试工具测试没有问题，过程我就不给了..bingo！</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>其实使用 SpringBoot 来操作 Elasticsearch 的话使用方法有点类似 JPA 了，而且完全可以把 Elasticsearch 当做 SQL 服务器来用，也没有问题…在各种地方看到了各个大大特别是官方，都快把 Elasticsearch 这款工具吹上天了，对于它方便的集成这一点我倒是有感受，关于速度这方面还没有很深的感受，慢慢来吧…</p>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2019/01/07/java-xiao-xi-xi-tong-jian-dan-she-ji-yu-shi-xian/">
       Java消息系统简单设计与实现
     </a>
@@ -3271,114 +3888,6 @@ index - 首页
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/09/27/zhi-xiao-huo-ban-men-shu/">
-      致小伙伴们书
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E7%94%9F%E6%B4%BB/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>生活</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年9月27日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="致小伙伴们："><a href="#致小伙伴们：" class="headerlink" title="致小伙伴们："></a>致小伙伴们：</h2><p>你们好，感谢你们对于我的支持与喜爱，在很大一部分自学的时间里，都是因为你们的相伴你们的支持才使我走得更远看得更多，感谢；</p>
-<p>经过诸多方面的考虑，也经历过提前批和秋招的洗礼，觉得自己有更多想要学习的东西，也有更多想要分享的内容，我决定踏上考研的道路，尽管可能时间不多，但还是想要去努力试试，所以会有很长一段时间不会跟大家见面了，但是请小伙伴们相信我，也请大家继续关注我，我的学习之路还没有停止，而是在准备着踏上一段更长更远的路，在这条路上我仍然希望有你们的支持..</p>
-<p>以上，感恩；</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3734,6 +4243,11 @@ index - 首页
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" href="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/"
+            id="categoriesE79FA5E4B98EE997AEE7AD94"
+            ><div class='name'>知乎问答</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/"
             id="categoriesE7BC96E7A88BE4BABAE7949F"
             ><div class='name'>编程人生</div><div class='badge'>(5)</div></a></li>
@@ -3775,7 +4289,7 @@ index - 首页
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 
