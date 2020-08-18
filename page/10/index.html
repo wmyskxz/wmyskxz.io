@@ -435,6 +435,647 @@
         
           
   <h2 class="title">
+    <a href="/2018/05/22/java-mian-shi-zhi-shi-dian-jie-xi-qi-web-pian/">
+      Java面试知识点解析(七)——Web篇
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E9%9D%A2%E8%AF%95/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>面试</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年5月22日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-958b6a30c60032e8.png" alt=""></p>
+<blockquote>
+<ul>
+<li>前言： </li>
+</ul>
+</blockquote>
+<p>在遨游了一番 Java Web 的世界之后，发现了自己的一些缺失，所以就着一篇深度好文：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">知名互联网公司校招 Java 开发岗面试知识点解析</a> ，来好好的对 Java 知识点进行复习和学习一番，大部分内容参照自这一篇文章，有一些自己补充的，也算是重新学习一下 Java 吧。</p>
+<p>前序文章链接：</p>
+<p><a href="https://www.jianshu.com/p/883260941da8" target="_blank" rel="noopener">Java 面试知识点解析(一)——基础知识篇</a></p>
+<p><a href="https://www.jianshu.com/p/7382c0a843ff" target="_blank" rel="noopener">Java 面试知识点解析(二)——高并发编程篇</a></p>
+<p><a href="https://www.jianshu.com/p/bfb876565a1e" target="_blank" rel="noopener">Java 面试知识点解析(三)——JVM篇</a></p>
+<p><a href="https://www.jianshu.com/p/9c50729464b5" target="_blank" rel="noopener">Java 面试知识点解析(四)——版本特性篇</a></p>
+<p><a href="https://www.jianshu.com/p/210f85108c52" target="_blank" rel="noopener">Java 面试知识点解析(五)——网络协议篇</a></p>
+<p><a href="https://www.jianshu.com/p/71927a377dc6" target="_blank" rel="noopener">Java 面试知识点解析(六)——数据库篇</a></p>
+<hr>
+<h2 id="（一）J2EE-相关知识点"><a href="#（一）J2EE-相关知识点" class="headerlink" title="（一）J2EE 相关知识点"></a>（一）J2EE 相关知识点</h2><blockquote>
+<p>不涉及任何框架，对 J2EE 相关知识点的解析</p>
+</blockquote>
+<h3 id="1）Servlet-的生命周期？"><a href="#1）Servlet-的生命周期？" class="headerlink" title="1）Servlet 的生命周期？"></a>1）Servlet 的生命周期？</h3><p>在 Web 容器中，Servlet 主要经历 4 个阶段，如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-3504a9d7d5d7ddf1.png" alt=""></p>
+<p><strong>1. 加载 Servlet</strong>：当 Tomcat 第一次访问 Servlet 的时候，Tomcat 会负责创建 Servlet 的实例。</p>
+<p><strong>2. 初始化 Servlet</strong>：当 Servlet 被实例化之后，Tomcat 会调用 init() 方法来初始化这个对象。</p>
+<p><strong>3. 处理服务</strong>：当浏览器访问 Servlet 的时候，Servlet 会调用 service() 方法处理请求。</p>
+<p><strong>4. 销毁</strong>：当 Tomcat 关闭或者检测到 Servlet 要从 Tomcat 删除的时候，会自动调用 destroy() 方法，让该实例所占用的资源释放掉。一个 Servlet 如果长时间不被使用的话，也会被 Tomcat 自动销毁。</p>
+<ul>
+<li><strong>简单总结</strong>：只要访问 Servlet ，就会调用其对应的 service() 方法，init() 方法只会在第一次访问 Serlvet 的时候才会被调用。</li>
+</ul>
+<hr>
+<h3 id="2）Servlet-的请求流程？"><a href="#2）Servlet-的请求流程？" class="headerlink" title="2）Servlet 的请求流程？"></a>2）Servlet 的请求流程？</h3><ol>
+<li><p><strong>浏览器发出请求：</strong> <code>http://localhost:80/xxx1/xxx2</code> （80端口可以默认不写，因为这是http协议默认的端口，平时我们访问<code>https://www.baidu.com/</code> 时其实访问的是<code>https://www.baidu.com:80/</code>）</p>
+</li>
+<li><p><strong>服务器解析请求信息：</strong></p>
+<ul>
+<li><strong>http:</strong>协议名称</li>
+<li><strong>localhost:</strong>访问的是互联网中的<strong>哪一台计算机</strong></li>
+<li><strong>80:</strong>从主机当中找到<strong>对应 80 端口的程序 **（</strong>这里即为 Tomcat 服务器**）</li>
+<li><strong>/xxx1:</strong>当前项目的<strong>上下文路径</strong> （即在 server.xml 中配置主机时配置的 <strong>path属性</strong>）</li>
+<li><strong>/xxx2:</strong>当前<strong>请求的资源名</strong></li>
+</ul>
+</li>
+<li><p><strong>解析</strong> Tomcat 服务器根目录下的 <strong>/config/server.xml</strong> 文件：<br><code>&lt;Context docBase=&quot;D:\javaPros\test\webapp&quot; path=&quot;xxx1&quot; /&gt;</code><br>判断哪一个<code>&lt;Context /&gt;</code>元素的 <strong>path属性</strong> 属性为 <code>xxx1</code></p>
+<ul>
+<li>若找不到，则返回 <strong>404错误</strong></li>
+<li>若找到了，则解析该<code>&lt;Context /&gt;</code>元素，得到<code>docBase</code>属性，获取当前访问 Web 项目的跟的绝对路径：<code>D:\javaPros\test\webapp</code></li>
+</ul>
+</li>
+<li><p>从<code>D:\javaPros\test\webapp</code>下的 <strong>WEB-INF</strong> 下找到 <strong>web.xml</strong> 文件<br>判断 <strong>web.xml</strong> 文件中是否有 <code>&lt;url-pattern&gt;</code> 的文本内容为 <strong>/xxx2</strong></p>
+<ul>
+<li>若找不到，则返回 <strong>404错误</strong></li>
+<li>若找到了，则继续<strong>获取该资源对应 Servlet 类的全限名称：</strong> xxx.xxx</li>
+</ul>
+</li>
+<li><p>判断 <strong>Servlet 实例缓存池</strong> 中是否有 xxx.xxx 的对象</p>
+</li>
+</ol>
+<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>Servlet<span class="token operator">></span> cache <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">(</span>Tomcat提供的<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    key<span class="token operator">:</span>存Servlet类的全限定名称
+    value<span class="token operator">:</span>该Servlet类的对象<span class="token punctuation">.</span>
+Servlet obj <span class="token operator">=</span> cache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"xxx.xxx"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>obj<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//Servlet实例缓存中没有该类的对象,第一次.</span>
+        GOTO <span class="token number">6</span><span class="token operator">:</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//有对象,非第一次.</span>
+        GOTO <span class="token number">8</span><span class="token operator">:</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ol start="6">
+<li><p><strong>使用反射</strong>调用构造器，<strong>创建对应的对象</strong><br><code>obj = Class.forName(&quot;xxx.xxx&quot;).newInstance();</code><br>把当前创建的 <strong>Servlet 对象</strong>，存放在缓存之中，<strong>供给下一次的使用.</strong><br><code>cache.put(&quot;xxx.xxx&quot;,obj);</code></p>
+</li>
+<li><p>创建 <strong>ServletConfig 对象</strong>，并调用 <strong>init()</strong> 方法<br><code>obj.init(config);</code></p>
+</li>
+<li><p>创建 <strong>ServletRequest 对象和 ServletResponse 对象</strong>，并调用 <strong>service()</strong>方法<br><code>obj.service(req,resp);</code></p>
+</li>
+<li><p>在 <strong>service()</strong> 方法中对浏览器作出响应操作。</p>
+</li>
+</ol>
+<hr>
+<h3 id="3）Servlet-是单例的吗？为什么？"><a href="#3）Servlet-是单例的吗？为什么？" class="headerlink" title="3）Servlet 是单例的吗？为什么？"></a>3）Servlet 是单例的吗？为什么？</h3><p>Servlet 是单例的，<strong>浏览器多次对Servlet的请求</strong>，一般情况下，<strong>服务器只创建一个Servlet对象</strong>，也就是说，Servlet对象<strong>一旦创建了</strong>，就会驻留在内存中，<strong>为后续的请求做服务，直到服务器关闭。</strong></p>
+<hr>
+<h3 id="4）GET-和-POST-的区别"><a href="#4）GET-和-POST-的区别" class="headerlink" title="4）GET 和 POST 的区别"></a>4）GET 和 POST 的区别</h3><p>要知道，GET 和 POST 都是请求方式</p>
+<h4 id="1-GET："><a href="#1-GET：" class="headerlink" title="1. GET："></a>1. GET：</h4><p>浏览器器地址栏：<code>http://localhost/test.html?name=wmyskxz&amp;sex=male</code></p>
+<p>这里提交了两个参数，一个是<code>name</code>属性值为<code>wmyskxz</code>，另一个是<code>sex</code>属性值为<code>male</code>，这是一种直接的请求方式，在请求资源后面跟上 <strong>?</strong> 符号与参数连接，其他的参数使用 <strong>&amp;</strong> 符号连接。</p>
+<ul>
+<li><strong>缺点：</strong></li>
+</ul>
+<p>1.暴露请求信息，<strong>不安全</strong><br>2.请求信息不能超过<strong>1kb</strong>，可传输的信息有限，不能上传图片</p>
+<h4 id="2-POST："><a href="#2-POST：" class="headerlink" title="2. POST："></a>2. POST：</h4><p>浏览器地址栏：<code>http://localhost/test.html#</code></p>
+<ul>
+<li><strong>优点：</strong></li>
+</ul>
+<p>1.隐藏了请求信息，<strong>较安全</strong>（但仍可以通过相关工具访问到数据）<br>2.POST 方式<strong>没有限制</strong>请求的数据大小，可以做图片的上传</p>
+<hr>
+<h3 id="5）Tomcat-中如何解决中文乱码问题？"><a href="#5）Tomcat-中如何解决中文乱码问题？" class="headerlink" title="5）Tomcat 中如何解决中文乱码问题？"></a>5）Tomcat 中如何解决中文乱码问题？</h3><p>在 <strong>Tomcat 服务器</strong>中，接受请求的时候，<strong>默认的编码方式为 ISO-8859-1</strong>，而该编码方式只占一个字节，不支持中文（两个字节），所以当我们做请求的时候，会出现乱码的问题</p>
+<p><strong>解决方案：</strong></p>
+<p>1.对乱码使用 <strong>ISO-8859-1</strong> 解码，转换成<strong>byte数组</strong>，恢复为二进制<br><code>byte[] data = name.getBytes(&quot;ISO-8859-1&quot;);</code></p>
+<p>2.对byte数组重新进行 UTF-8 编码：<br><code>name = new String(data,&quot;UTF-8&quot;);</code><br>但是这样会出现一个问题，那就是当表单数据太多的时候，这样反复解码-编码，会很繁琐。</p>
+<p><strong>终极解决方案：</strong></p>
+<p><strong>1.对于 POST 请求：</strong><br>设置请求的编码方式：<code>request.setCharacterEncoding(&quot;UTF-8&quot;);</code><br><strong>注意：</strong>必须在获取<strong>第一个参数之前设置</strong>，并且该方式<strong>只对 POST 方式有效。</strong></p>
+<p><strong>2.对于 GET 请求：</strong><br>重新设置 Tomcat 的编码方式，修改 Tomcat 的配置文件:<br><code>Tomcat根目录/conf/server.xml(修改端口的那一行)</code></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-cd366b295c8ed531.png" alt=""></p>
+<hr>
+<h3 id="6）forward-与-redirect-的区别"><a href="#6）forward-与-redirect-的区别" class="headerlink" title="6）forward 与 redirect 的区别"></a>6）forward 与 redirect 的区别</h3><h4 id="1-请求转发（forward）"><a href="#1-请求转发（forward）" class="headerlink" title="1.请求转发（forward）"></a>1.请求转发（forward）</h4><p>又叫做<strong>直接转发方式，</strong>客户端和浏览器<strong>只发出一次请求，</strong>Servlet、HTML、JSP或其它信息资源，由<strong>第二个信息资源响应该请求，</strong>在请求对象request中，保存的对象对于<strong>每个信息资源是共享的。</strong></p>
+<p>比如：从 AServlet 请求转发到 BServlet</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-881fc9bb05d46ac8.png" alt=""></p>
+<ul>
+<li><strong>语法：</strong></li>
+</ul>
+<pre class=" language-java"><code class="language-java">request<span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><em>参数：</em> <code>path</code>，要跳转到的资源路径：<strong>上下文路径 / 资源路径</strong></p>
+<p><strong>特点：</strong></p>
+<p><strong>1.地址栏中的地址【不会】改变</strong>，通常看作是服务端的跳转</p>
+<p><strong>2.只有一个请求</strong></p>
+<p><strong>3.资源是共享的</strong></p>
+<p>也就是说在两个 Servlet 中可以共享请求的资源，可以通过<code>request.setAttribute(String var1,Object var2)</code><strong>设置要共享的数据资源</strong>，并通过<code>request.getAttribute(String var1);</code>来<strong>获取传递的资源</strong></p>
+<p><strong>4.【可以】访问 WEB-INF 中的资源</strong></p>
+<p><strong>WEB-INF</strong> 文件夹是 Java Web 应用的<strong>默认安全目录，</strong>即客户端无法直接访问，只有服务端可以访问的目录。如果想在页面中<strong>直接访问</strong>其中的文件，<strong>必须通过web.xml文件</strong>对要访问的文件进行<strong>相应映射</strong>才能访问。</p>
+<p><strong>注意：</strong>在实际的开发中，可以把不希望用户直接访问到（通过浏览器输入地址栏）的网页放在文件夹中<strong>通过此方式访问。</strong></p>
+<p><strong>5.请求转发【不能】跨域访问</strong></p>
+<p>所谓的同域，是指<strong>域名，协议，端口均相同</strong></p>
+<h4 id="2-URl-重定向（redirect）"><a href="#2-URl-重定向（redirect）" class="headerlink" title="2.URl 重定向（redirect）"></a>2.URl 重定向（redirect）</h4><p>又叫做<strong>间接转发方式（Redirect）</strong>实际是<strong>两次HTTP请求，</strong>服务器端在响应第一次请求的时候，让浏览器再向另外一个URL发出请求，从而达到转发的目的。</p>
+<p>比如:从AServlet重定向到BServlet</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-c49539085575bc26.png" alt=""></p>
+<ul>
+<li><strong>语法：</strong></li>
+</ul>
+<pre class=" language-java"><code class="language-java">response<span class="token punctuation">.</span><span class="token function">sendRedirect</span><span class="token punctuation">(</span>String location<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><em>参数：</em><code>location</code>，转发到的资源路径</p>
+<p><strong>特点：</strong></p>
+<p><strong>1.地址栏中的地址【会】发生改变</strong>，通常看作是客户端跳转</p>
+<p><strong>2.有两个请求</strong></p>
+<p><strong>3.在两个 Servlet 中不可以共享请求中的数据</strong></p>
+<p><strong>4.最终的响应由 BServlet 来决定，和 AServlet 没有关系</strong></p>
+<p><strong>5.【不可以】访问 WEB-INF 中的资源</strong></p>
+<p><strong>6.请求转发【能】跨域访问</strong></p>
+<p>就像是在网页中点开了新的链接一样</p>
+<ul>
+<li><strong>总结：</strong>URL 重定向相当于是将重定向的资源路径，重新复制到浏览器地址栏中按下回车一样，<strong>重新发送一次新的请求。</strong></li>
+</ul>
+<hr>
+<h3 id="7）JSP-的执行原理？"><a href="#7）JSP-的执行原理？" class="headerlink" title="7）JSP 的执行原理？"></a>7）JSP 的执行原理？</h3><p>当访问一个 JSP 页面时，该页面请求将会讲给服务器中的 <strong>JSP 引擎</strong>去处理，它<strong>负责解释和执行 JSP 页面，</strong>每个 JSP 页面在<strong>第一次被访问时</strong>，JSP 引擎就会将它翻译成一个继承自 <code>org.apache.jasper.runtime.HttpJspBase</code>类的 <strong>Servlet 源程序，接着再编译成 class 类文件</strong>，再由 Web 容器<strong>像调用普通 Servlet 程序一样</strong>的方式来装载和解释执行这个由 JSP 页面翻译成的 Servlet 程序。</p>
+<hr>
+<h3 id="8）request-getAttribute-和-request-getParameter-有何区别？"><a href="#8）request-getAttribute-和-request-getParameter-有何区别？" class="headerlink" title="8）request.getAttribute() 和 request.getParameter() 有何区别？"></a>8）request.getAttribute() 和 request.getParameter() 有何区别？</h3><ol>
+<li><p>request.getParameter() 通常用来接收接收表单的get或者post提交过来的参数；而request.getAttribute()一般和setAttribute()搭配使用，只有先set之后才能通过get方法获取到Object类型的数据</p>
+</li>
+<li><p>getAttribute 返回的是对象，而getParameter 返回的是字符串</p>
+</li>
+<li><p>getAttribute 和 setAttribute 只是在 web 容器内流转，仅仅是请求处理阶段；而 getParameter 取到的数据是通过容器来获取的。</p>
+</li>
+</ol>
+<hr>
+<h3 id="9）JSP-与-Servlet-的区别？"><a href="#9）JSP-与-Servlet-的区别？" class="headerlink" title="9）JSP 与 Servlet 的区别？"></a>9）JSP 与 Servlet 的区别？</h3><ol>
+<li><strong>JSP 实质上就是一个 Servlet。</strong>可以理解为，JSP 是编译后的 “Servlet 类”；</li>
+<li>JSP 由 HTML 代码和 JSP 标签组成，更擅长页面显示；而 Servlet 更擅长流程控制；</li>
+<li>JSP 感觉像是 HTML 中嵌入 Java 代码，而 Servlet 有些像 Java 中嵌入 HTML 代码的意思。</li>
+</ol>
+<hr>
+<h3 id="10）JSP-静态包含和动态包含的区别？"><a href="#10）JSP-静态包含和动态包含的区别？" class="headerlink" title="10）JSP 静态包含和动态包含的区别？"></a>10）JSP 静态包含和动态包含的区别？</h3><h4 id="（1）静态包含：编译指令包含"><a href="#（1）静态包含：编译指令包含" class="headerlink" title="（1）静态包含：编译指令包含"></a>（1）静态包含：编译指令包含</h4><p><code>&lt;%@include file=&quot;被包含的页面的路径&quot;%&gt;</code></p>
+<p><strong>包含的时机：在 JSP 文件被翻译的时候合并在一起，最终翻译得到一个 class文件</strong></p>
+<h4 id="（2）动态包含：动作指令包含"><a href="#（2）动态包含：动作指令包含" class="headerlink" title="（2）动态包含：动作指令包含"></a>（2）动态包含：动作指令包含</h4><p><code>&lt;jsp:include page=&quot;被包含页面的路径&quot;&gt;&lt;/jsp:include&gt;</code></p>
+<p><strong>包含的时机：在运行阶段合并代码，最终得到两个 class 文件</strong></p>
+<h4 id="（3）动态包含和静态包含的选择"><a href="#（3）动态包含和静态包含的选择" class="headerlink" title="（3）动态包含和静态包含的选择:"></a>（3）动态包含和静态包含的选择:</h4><ul>
+<li>如果被包含的页面如果是静态页面,那么使用静态包含；</li>
+<li>如果被包含的如果是动态页面,那么使用动态包含。</li>
+</ul>
+<hr>
+<h3 id="11）JSP-有哪些内置对象？作用分别是什么？"><a href="#11）JSP-有哪些内置对象？作用分别是什么？" class="headerlink" title="11）JSP 有哪些内置对象？作用分别是什么？"></a>11）JSP 有哪些内置对象？作用分别是什么？</h3><p>JSP 共有以下 9 个内置的对象：</p>
+<ol>
+<li>request：用户端请求，此请求会包含来自 GET/POST 请求的参数；</li>
+<li>response：表示一次响应对象；</li>
+<li>pageContext：表示当前的 JSP 对象；</li>
+<li>session：表示一次会话对象；</li>
+<li>application：表示当前应用对象；</li>
+<li>out：表示一个输出流对象；</li>
+<li>config：表示当前 JSP 的配置对象；</li>
+<li>page：表示当前页面；</li>
+<li>exception：表示异常对象。</li>
+</ol>
+<hr>
+<h3 id="12）JSTL-是什么？优点有哪些？"><a href="#12）JSTL-是什么？优点有哪些？" class="headerlink" title="12）JSTL 是什么？优点有哪些？"></a>12）JSTL 是什么？优点有哪些？</h3><p>JSTL（JSP StandardTagLibrary，JSP标准标签库)是一个不断完善的开放源代码的JSP标签库，由四个定制标记库（core、format、xml和sql）和一对通用标记库验证器（ScriptFreeTLV和PermittedTaglibsTLV）组成。优点有：</p>
+<ol>
+<li><p>在应用程序服务器之间提供了一致的接口，最大程序地提高了WEB应用在各应用服务器之间的移植。</p>
+</li>
+<li><p>简化了JSP和WEB应用程序的开发。</p>
+</li>
+<li><p>以一种统一的方式减少了JSP中的scriptlet代码数量，可以达到没有任何scriptlet代码的程序。在我们公司的项目中是不允许有任何的scriptlet代码出现在JSP中。</p>
+</li>
+<li><p>允许JSP设计工具与WEB应用程序开发的进一步集成。相信不久就会有支持JSTL的IDE开发工具出现。</p>
+</li>
+</ol>
+<hr>
+<h3 id="13）什么是-Cookie？Session-和-Cookie-有什么区别？"><a href="#13）什么是-Cookie？Session-和-Cookie-有什么区别？" class="headerlink" title="13）什么是 Cookie？Session 和 Cookie 有什么区别？"></a>13）什么是 Cookie？Session 和 Cookie 有什么区别？</h3><h4 id="Cookie-技术"><a href="#Cookie-技术" class="headerlink" title="Cookie 技术"></a>Cookie 技术</h4><p>Cookie 是一种会话技术，用于将用户的信息保存在客户端上。Cookie 英文直接翻译过来就是小甜品，Cookie 的作用呢，通俗的说就是当一个用户通过 HTTP 访问一个服务器时，这个服务器会将一些 Key/Value 键值对返回给客户端浏览器，并给这些数据加上一些限制条件，在条件符合时这个用户下次访问这个服务器时，数据又被完整地带回给服务器。</p>
+<p>这个作用就像是你去超市购物时，第一次给你办了一张购物卡，在这个购物卡里存放了一些你的个人信息，下次你再来这个超市的时候，你就只需要带上你的购物卡，直接购物就好了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-4f73ec86ccc9910c.png" alt=""></p>
+<h4 id="Session-技术"><a href="#Session-技术" class="headerlink" title="Session 技术"></a>Session 技术</h4><p>Session：会话，从浏览器打开开始，直到浏览器关闭结束，无论在这个网站中访问了多少页面，点击了多少链接，都属于同一个会话。Session 也可以称为会话 Cookie</p>
+<ul>
+<li>特点：服务端技术，将数据保存在服务器</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-2221c73d7af7149f.png" alt=""></p>
+<h4 id="Cookie-与-Session-的区别"><a href="#Cookie-与-Session-的区别" class="headerlink" title="Cookie 与 Session 的区别"></a>Cookie 与 Session 的区别</h4><ul>
+<li>Cookie 的数据是存放在客户的浏览器上，Session 数据放在服务器上；</li>
+<li>Cookie 不是很安全，别人可以分析存放在本地的 Cookie 并进行 Cookie 欺骗，如果考虑安全问题则应当使用 Session；</li>
+<li>Session 会在一定时间内保存在服务器上，当访问增多，会比较占用服务器的资源，所以如果考虑性能问题，则应当使用 Cookie；</li>
+<li>单个 Cookie 在客户端的限制是 3k ，就是说一个站点在客户端存放的 Cookie 不能超过 3k。</li>
+</ul>
+<p><strong>总结：</strong> 将登录信息等重要信息存放为 Session；其他信息如果需要保留，可以存放在 Cookie 中。</p>
+<hr>
+<h3 id="14）什么是过滤器？"><a href="#14）什么是过滤器？" class="headerlink" title="14）什么是过滤器？"></a>14）什么是过滤器？</h3><p><strong>过滤器就是 Servlet 的高级特性之一，</strong>就是一个具有<strong>拦截/过滤</strong>功能的一个东西，在生活中过滤器可以是香烟滤嘴，滤纸，净水器，空气净化器等，在 Web 中仅仅是一个<strong>实现了 Filter 接口的 Java 类</strong>而已。</p>
+<ul>
+<li><strong>特点：双向，拦截请求，拦截响应</strong></li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-12efda55c17213ff" alt=""></p>
+<ul>
+<li><strong>作用：</strong><br>过滤器可以对<strong>所有的请求或者响应做拦截操作</strong></li>
+</ul>
+<hr>
+<h3 id="15）为什么在-Web-开发中需要用到过滤器？"><a href="#15）为什么在-Web-开发中需要用到过滤器？" class="headerlink" title="15）为什么在 Web 开发中需要用到过滤器？"></a>15）为什么在 Web 开发中需要用到过滤器？</h3><ul>
+<li><strong>问题：</strong>为什么非得使用过滤器，我直接在 Servlet 中作判断不行吗？</li>
+<li><strong>开发遵循的原则：</strong><br><strong>1.DRY原则（Don’t Reeat Yourself，不要重复你自己）</strong>：重复，意味着维护的成本很高。<br><strong>2.责任分离原则：</strong>谁擅长什么功能就做什么功能，Servlet 擅长的是逻辑而不是处理请求</li>
+</ul>
+<p>举一个实际的例子：（处理 POST 请求中文编码的问题）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-c377345013378d2f" alt=""></p>
+<ul>
+<li><strong>Web 中过滤器的作用：</strong><br><strong>1.可以在请求资源之前设置请求的编码</strong><br><strong>2.可以进行登录校验</strong><br><strong>3.可以进行请求参数的内容的过滤</strong><br><strong>4.数据压缩 / 数据加密 / 数据格式的转换</strong><br>5.可以设置浏览器相关的数据</li>
+</ul>
+<hr>
+<h3 id="16）MVC-模式？"><a href="#16）MVC-模式？" class="headerlink" title="16）MVC 模式？"></a>16）MVC 模式？</h3><p>MVC模式（Model-View-Controller）是<a href="https://link.jianshu.com?t=https%3A%2F%2Flink.zhihu.com%2F%3Ftarget%3Dhttps%253A%2F%2Fzh.wikipedia.org%2Fwiki%2F%2525E8%2525BD%2525AF%2525E4%2525BB%2525B6%2525E5%2525B7%2525A5%2525E7%2525A8%25258B" target="_blank" rel="noopener">软件工程</a>中的一种<a href="https://link.jianshu.com?t=https%3A%2F%2Flink.zhihu.com%2F%3Ftarget%3Dhttps%253A%2F%2Fzh.wikipedia.org%2Fwiki%2F%2525E8%2525BD%2525AF%2525E4%2525BB%2525B6%2525E6%25259E%2525B6%2525E6%25259E%252584" target="_blank" rel="noopener">软件架构</a>模式，把软件系统分为三个基本部分：模型（Model）、视图（View）和控制器（Controller）：</p>
+<ul>
+<li>Controller——负责转发请求，对请求进行处理</li>
+<li>View——负责界面显示</li>
+<li>Model——业务功能编写（例如算法实现）、数据库设计以及数据存取操作实现</li>
+</ul>
+<p>在JSP/Servlet开发的软件系统中，这三个部分的描述如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-b88fa9a02ba04083" alt=""></p>
+<p>1.Web浏览器发送HTTP请求到服务端，被Controller(Servlet)获取并进行处理（例如参数解析、请求转发）<br>2.Controller(Servlet)调用核心业务逻辑——Model部分，获得结果<br>3.Controller(Servlet)将逻辑处理结果交给View（JSP），动态输出HTML内容<br>4.动态生成的HTML内容返回到浏览器显示</p>
+<p>MVC模式在Web开发中的好处是非常明显，它规避了JSP与Servlet各自的短板，Servlet只负责业务逻辑而不会通过out.append()动态生成HTML代码；JSP中也不会充斥着大量的业务代码。这大大提高了代码的可读性和可维护性。</p>
+<ul>
+<li><em>参考：<a href="https://link.jianshu.com?t=https%3A%2F%2Fwww.zhihu.com%2Fquestion%2F37962386" target="_blank" rel="noopener">知乎@David</a></em></li>
+</ul>
+<hr>
+<h2 id="（二）框架相关知识"><a href="#（二）框架相关知识" class="headerlink" title="（二）框架相关知识"></a>（二）框架相关知识</h2><blockquote>
+<p>由于我没有接触和学习过 Hibernate 和 Struts 这两个框架，所以细节方面的东西请读者自行收集…</p>
+</blockquote>
+<h3 id="1）什么是框架？"><a href="#1）什么是框架？" class="headerlink" title="1）什么是框架？"></a>1）什么是框架？</h3><p>框架是指完成一定功能的半成品。</p>
+<p>框架能够帮助我们完成的是：项目的整体框架、一些基础功能、规定了类和对象如何创建，如何协作等，当我们开发一个项目时，框架帮助我们完成了一部分功能，我们自己再完成一部分，那这个项目就完成了。</p>
+<hr>
+<h3 id="2）什么是-Spring-？"><a href="#2）什么是-Spring-？" class="headerlink" title="2）什么是 Spring ？"></a>2）什么是 Spring ？</h3><ol>
+<li><p><strong>Spring 是一个轻量级的 DI / IoC 和 AOP 容器的开源框架</strong>，来源于 Rod Johnson 在其著作《Expert one on one J2EE design and development》中阐述的部分理念和原型衍生而来。</p>
+</li>
+<li><p>Spring 提倡以 <strong>“最少侵入”</strong> 的方式来管理应用中的代码，这意味着我们可以随时安装或者卸载 Spring</p>
+</li>
+</ol>
+<ul>
+<li><strong>适用范围：任何 Java 应用</strong></li>
+<li><strong>Spring 的根本使命：简化 Java 开发</strong></li>
+</ul>
+<hr>
+<h3 id="3）什么是非侵入式设计？"><a href="#3）什么是非侵入式设计？" class="headerlink" title="3）什么是非侵入式设计？"></a>3）什么是非侵入式设计？</h3><p>从框架的角度可以理解为：<strong>无需继承框架提供的任何类</strong><br>这样我们在更换框架时，之前写过的代码几乎可以继续使用。</p>
+<hr>
+<h3 id="4）Spring-有什么优势？"><a href="#4）Spring-有什么优势？" class="headerlink" title="4）Spring 有什么优势？"></a>4）Spring 有什么优势？</h3><ul>
+<li>低侵入 / 低耦合 （降低组件之间的耦合度，实现软件各层之间的解耦）</li>
+<li>声明式事务管理（基于切面和惯例）</li>
+<li>方便集成其他框架（如MyBatis、Hibernate）</li>
+<li>降低 Java 开发难度</li>
+<li>Spring 框架中包括了 J2EE 三层的每一层的解决方案（一站式）</li>
+</ul>
+<h4 id="Spring-的框架结构"><a href="#Spring-的框架结构" class="headerlink" title="Spring 的框架结构"></a>Spring 的框架结构</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-3b596912f74b3eb5.png" alt=""></p>
+<ul>
+<li><strong>Data Access/Integration层</strong>包含有JDBC、ORM、OXM、JMS和Transaction模块。</li>
+<li><strong>Web层</strong>包含了Web、Web-Servlet、WebSocket、Web-Porlet模块。</li>
+<li><strong>AOP模块</strong>提供了一个符合AOP联盟标准的面向切面编程的实现。</li>
+<li><strong>Core Container(核心容器)</strong>：包含有Beans、Core、Context和SpEL模块。</li>
+<li><strong>Test模块</strong>支持使用JUnit和TestNG对Spring组件进行测试。</li>
+</ul>
+<hr>
+<h3 id="5）Spring-IoC-和-DI-分别是什么？"><a href="#5）Spring-IoC-和-DI-分别是什么？" class="headerlink" title="5）Spring IoC 和 DI 分别是什么？"></a>5）Spring IoC 和 DI 分别是什么？</h3><h4 id="Spring-IoC"><a href="#Spring-IoC" class="headerlink" title="Spring IoC"></a>Spring IoC</h4><p><strong>IoC：Inverse of Control（控制反转）</strong>，读作 <strong>“反转控制”</strong>，更好理解，不是什么技术，而是一种设计思想，就是将原本在程序中手动创建对象的控制权，交由Spring框架来管理。</p>
+<ul>
+<li><strong>正控</strong>：若要使用某个对象，需要自己去负责对象的创建</li>
+<li><strong>反控</strong>：若要使用某个对象，只需要从 Spring 容器中获取需要使用的对象，不关心对象的创建过程，也就是把创建对象的控制权反转给了Spring框架</li>
+<li><strong>好莱坞法则</strong>：Don’t call me ,I’ll call you</li>
+</ul>
+<p><strong>为了便于理解我们这里举一个鲜明的例子：</strong></p>
+<p>在现实生活中，人们要用到一样东西的时候，第一反应就是去找到这件东西，比如想喝新鲜橙汁，在没有饮品店的日子里，最直观的做法就是：买果汁机、买橙子，然后准备开水。值得注意的是：这些都是你自己“主动”创造的过程，也就是说一杯橙汁需要你自己创造。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-a1376e28fe8d691d.png" alt=""></p>
+<p>然而到了今时今日，由于饮品店的盛行，当我们想喝橙汁时，第一想法就转换成了找到饮品店的联系方式，通过电话等渠道描述你的需要、地址、联系方式等，下订单等待，过一会儿就会有人送来橙汁了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-3d5876834ed93528.png" alt=""></p>
+<p><strong>请注意你并没有“主动”去创造橙汁</strong>，橙汁是由饮品店创造的，而不是你，然而也完全达到了你的要求，甚至比你创造的要好上那么一些。</p>
+<ul>
+<li><strong>总结：</strong> 这就是一种控制反转的理念，上述的例子已经很好的说明了问题，我们再来描述一下控制反转的概念：<strong>控制反转是一种通过描述（在 Java 中可以是 XML 或者注解）并通过第三方（Spring）去产生或获取特定对象的方式。</strong></li>
+<li><strong>好处：</strong> ① 降低对象之间的耦合；② 我们不需要理解一个类的具体实现，只需要知道它有什么用就好了（直接向 IoC 容器拿）</li>
+</ul>
+<h4 id="DI：Dependency-Injection（依赖注入）"><a href="#DI：Dependency-Injection（依赖注入）" class="headerlink" title="DI：Dependency Injection（依赖注入）"></a>DI：Dependency Injection（依赖注入）</h4><p>指 Spring 创建对象的过程中，将对象依赖属性（简单值，集合，对象）通过配置设值给该对象</p>
+<h4 id="两者的区别"><a href="#两者的区别" class="headerlink" title="两者的区别"></a>两者的区别</h4><p>IoC 和 DI 其实是同一个概念的不同角度描述，DI 相对 IoC 而言，<strong>明确描述了 “被注入对象依赖 IoC 容器配置依赖对象”</strong>。</p>
+<p>你也可以简单的理解为：IoC 是目的，是一种思想，而 DI 是手段，是一种设计模式。</p>
+<hr>
+<h3 id="6）BeanFactory-和-ApplicationContext-的区别"><a href="#6）BeanFactory-和-ApplicationContext-的区别" class="headerlink" title="6）BeanFactory 和 ApplicationContext 的区别"></a>6）BeanFactory 和 ApplicationContext 的区别</h3><p><strong>1.BeanFactory：</strong></p>
+<p>是Spring中最底层的接口，只提供了最简单的IoC功能,负责配置，创建和管理bean。在应用中，一般不使用 BeanFactory，而推荐使ApplicationContext（应用上下文），原因如下。</p>
+<p><strong>2.ApplicationContext：</strong></p>
+<p>⑴. 继承了 BeanFactory，拥有了基本的 IoC 功能；<br>⑵. 除此之外，ApplicationContext 还提供了以下功能：<br>① 支持国际化；② 支持消息机制；③ 支持统一的资源加载；④ 支持AOP功能；</p>
+<ul>
+<li><strong>注意：</strong> ApplicationContext 和 BeanFactory 相比，最主要的区别在于 BeanFactory 是延迟加载，举个例子：如果 Bean 没有完全注入，BeanFactory 加载后，会在你第一次调用 getBean 方法才会抛出异常；而 ApplicationContext 会在初始化的时候就加载并且检查，这样的好处是可以及时检查依赖是否完全注入；所以通常我们会选择 ApplicationContext。</li>
+</ul>
+<hr>
+<h3 id="7）IoC-是如何实现的"><a href="#7）IoC-是如何实现的" class="headerlink" title="7）IoC 是如何实现的"></a>7）IoC 是如何实现的</h3><p>最后我们简单说说IoC是如何实现的。想象一下如果我们自己来实现这个依赖注入的功能，我们怎么来做？ 无外乎：</p>
+<ol>
+<li>读取标注或者配置文件，看看JuiceMaker依赖的是哪个Source，拿到类名</li>
+<li>使用反射的API，基于类名实例化对应的对象实例</li>
+<li>将对象实例，通过构造函数或者 setter，传递给 JuiceMaker</li>
+</ol>
+<p>我们发现其实自己来实现也不是很难，Spring实际也就是这么做的。这么看的话其实IoC就是一个工厂模式的升级版！当然要做一个成熟的IoC框架，还是非常多细致的工作要做，Spring不仅提供了一个已经成为业界标准的Java IoC框架，还提供了更多强大的功能，所以大家就别去造轮子啦！希望了解IoC更多实现细节不妨通过学习Spring的源码来加深理解！</p>
+<blockquote>
+<p>引用地址：<a href="https://link.jianshu.com/?t=https%3A%2F%2Fwww.tianmaying.com%2Ftutorial%2Fspring-ioc" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<hr>
+<h3 id="8）Spring-配置-Bean-有几种方式？"><a href="#8）Spring-配置-Bean-有几种方式？" class="headerlink" title="8）Spring 配置 Bean 有几种方式？"></a>8）Spring 配置 Bean 有几种方式？</h3><p>在 Spring 中提供了 3 种方法进行配置：</p>
+<ul>
+<li>在 XML 文件中显式配置</li>
+<li>在 Java 的接口和类中实现配置</li>
+<li>隐式 Bean 的发现机制和自动装配原则</li>
+</ul>
+<h4 id="方式选择的原则"><a href="#方式选择的原则" class="headerlink" title="方式选择的原则"></a>方式选择的原则</h4><p>在现实的工作中，这 3 种方式都会被用到，并且在学习和工作之中常常混合使用，所以这里给出一些关于这 3 种优先级的建议：</p>
+<p><strong>1.最优先：通过隐式 Bean 的发现机制和自动装配的原则。</strong><br>基于约定由于配置的原则，这种方式应该是最优先的</p>
+<ul>
+<li>好处：减少程序开发者的决定权，简单又不失灵活。</li>
+</ul>
+<p><strong>2.其次：Java 接口和类中配置实现配置</strong><br>在没有办法使用自动装配原则的情况下应该优先考虑此类方法</p>
+<ul>
+<li>好处：避免 XML 配置的泛滥，也更为容易。</li>
+<li>典型场景：一个父类有多个子类，比如学生类有两个子类，一个男学生类和女学生类，通过 IoC 容器初始化一个学生类，容器将无法知道使用哪个子类去初始化，这个时候可以使用 Java 的注解配置去指定。</li>
+</ul>
+<p><strong>3.最后：XML 方式配置</strong><br>在上述方法都无法使用的情况下，那么也只能选择 XML 配置的方式。</p>
+<ul>
+<li>好处：简单易懂（当然，特别是对于初学者）</li>
+<li>典型场景：当使用第三方类的时候，有些类并不是我们开发的，我们无法修改里面的代码，这个时候就通过 XML 的方式配置使用了。</li>
+</ul>
+<hr>
+<h3 id="9）介绍一下-Spring-AOP"><a href="#9）介绍一下-Spring-AOP" class="headerlink" title="9）介绍一下 Spring AOP"></a>9）介绍一下 Spring AOP</h3><p><strong>AOP 即 Aspect Oriented Program 面向切面编程</strong></p>
+<p>首先，在面向切面编程的思想里面，把功能分为核心业务功能，和周边功能。</p>
+<ul>
+<li><strong>所谓的核心业务</strong>，比如登陆，增加数据，删除数据都叫核心业务</li>
+<li><strong>所谓的周边功能</strong>，比如性能统计，日志，事务管理等等</li>
+</ul>
+<p>周边功能在 Spring 的面向切面编程AOP思想里，即被定义为切面</p>
+<p>在面向切面编程AOP的思想里面，核心业务功能和切面功能分别独立进行开发，然后把切面功能和核心业务功能 “编织” 在一起，这就叫 AOP</p>
+<p><strong>还是来举一个鲜明的例子：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-090ef711a0d23033.png" alt=""></p>
+<p>在上面的例子中，包租婆的核心业务就是签合同，收房租，那么这就够了，灰色框起来的部分都是重复且边缘的事，交给中介商就好了，这就是 AOP 的一个思想：<strong>让关注点代码与业务代码分离！</strong></p>
+<hr>
+<h3 id="10）Spring-中-Bean-的作用域"><a href="#10）Spring-中-Bean-的作用域" class="headerlink" title="10）Spring 中 Bean 的作用域"></a>10）Spring 中 Bean 的作用域</h3><p><strong>在默认的情况下，Spring IoC 容器只会对一个 Bean 创建一个实例</strong>，但有时候，我们希望能够通过 Spring IoC 容器获取多个实例，我们可以通过 <code>@Scope</code> 注解或者 <code>&lt;bean&gt;</code> 元素中的 <code>scope</code> 属性来设置，例如：</p>
+<pre><code>// XML 中设置作用域
+&lt;bean id=&quot;&quot; class=&quot;&quot; scope=&quot;prototype&quot; /&gt;
+// 使用注解设置作用域
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)</code></pre><p>Spring 提供了 5 种作用域，它会根据情况来决定是否生成新的对象：</p>
+<table>
+<thead>
+<tr>
+<th align="left">作用域类别</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">singleton(单例)</td>
+<td align="left">在Spring IoC容器中仅存在一个Bean实例 （默认的scope）</td>
+</tr>
+<tr>
+<td align="left">prototype(多例)</td>
+<td align="left">每次从容器中调用Bean时，都返回一个新的实例，即每次调用getBean()时 ，相当于执行new XxxBean()：不会在容器启动时创建对象</td>
+</tr>
+<tr>
+<td align="left">request(请求)</td>
+<td align="left">用于web开发，将Bean放入request范围 ，request.setAttribute(“xxx”) ， 在同一个request 获得同一个Bean</td>
+</tr>
+<tr>
+<td align="left">session(会话)</td>
+<td align="left">用于web开发，将Bean 放入Session范围，在同一个Session 获得同一个Bean</td>
+</tr>
+<tr>
+<td align="left">globalSession(全局会话)</td>
+<td align="left">一般用于 Porlet 应用环境 , 分布式系统存在全局 session 概念（单点登录），如果不是 porlet 环境，globalSession 等同于 Session</td>
+</tr>
+</tbody></table>
+<p>在开发中主要使用 <code>scope=&quot;singleton&quot;</code>、<code>scope=&quot;prototype&quot;</code>，<strong>对于MVC中的Action使用prototype类型，其他使用singleton</strong>，Spring容器会管理 Action 对象的创建,此时把 Action 的作用域设置为 prototype.</p>
+<blockquote>
+<p>扩展阅读：<a href="https://blog.csdn.net/u013803262/article/details/62416880" target="_blank" rel="noopener">@Profile 注解</a> 、 <a href="https://blog.csdn.net/tinydolphin/article/details/76253771" target="_blank" rel="noopener">条件化装配 Bean</a></p>
+</blockquote>
+<hr>
+<h3 id="11）Spring-面试问答-Top-25"><a href="#11）Spring-面试问答-Top-25" class="headerlink" title="11）Spring 面试问答 Top 25"></a>11）Spring 面试问答 Top 25</h3><blockquote>
+<p>更多戳这里：<a href="http://www.importnew.com/15851.html#beanfactory_vs_applicationcontext" target="_blank" rel="noopener">Spring面试问答Top 25</a></p>
+</blockquote>
+<hr>
+<h3 id="12）Spring-MVC-的请求流程"><a href="#12）Spring-MVC-的请求流程" class="headerlink" title="12）Spring MVC 的请求流程"></a>12）Spring MVC 的请求流程</h3><p>每当用户在 Web 浏览器中点击链接或者提交表单的时候，请求就开始工作了，像是邮递员一样，从离开浏览器开始到获取响应返回，它会经历很多站点，在每一个站点都会留下一些信息同时也会带上其他信息，下图为 Spring MVC 的请求流程：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-a2efb6ad667d06e0.png" alt=""></p>
+<h4 id="第一站：DispatcherServlet"><a href="#第一站：DispatcherServlet" class="headerlink" title="第一站：DispatcherServlet"></a>第一站：DispatcherServlet</h4><p>从请求离开浏览器以后，第一站到达的就是 DispatcherServlet，看名字这是一个 Servlet，通过 J2EE 的学习，我们知道 Servlet 可以拦截并处理 HTTP 请求，DispatcherServlet 会拦截所有的请求，并且将这些请求发送给 Spring MVC 控制器。</p>
+<pre><code>&lt;servlet&gt;
+    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+&lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+    &lt;!-- 拦截所有的请求 --&gt;
+    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;</code></pre><ul>
+<li><strong>DispatcherServlet 的任务就是拦截请求发送给 Spring MVC 控制器。</strong></li>
+</ul>
+<h4 id="第二站：处理器映射（HandlerMapping）"><a href="#第二站：处理器映射（HandlerMapping）" class="headerlink" title="第二站：处理器映射（HandlerMapping）"></a>第二站：处理器映射（HandlerMapping）</h4><ul>
+<li><strong>问题：</strong>典型的应用程序中可能会有多个控制器，这些请求到底应该发给哪一个控制器呢？</li>
+</ul>
+<p>所以 DispatcherServlet 会查询一个或多个处理器映射来确定请求的下一站在哪里，处理器映射会<strong>根据请求所携带的 URL 信息来进行决策</strong>，例如上面的例子中，我们通过配置 simpleUrlHandlerMapping 来将 /hello 地址交给 helloController 处理：</p>
+<pre><code>&lt;bean id=&quot;simpleUrlHandlerMapping&quot;
+      class=&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;&gt;
+    &lt;property name=&quot;mappings&quot;&gt;
+        &lt;props&gt;
+            &lt;!-- /hello 路径的请求交给 id 为 helloController 的控制器处理--&gt;
+            &lt;prop key=&quot;/hello&quot;&gt;helloController&lt;/prop&gt;
+        &lt;/props&gt;
+    &lt;/property&gt;
+&lt;/bean&gt;
+&lt;bean id=&quot;helloController&quot; class=&quot;controller.HelloController&quot;&gt;&lt;/bean&gt;</code></pre><h4 id="第三站：控制器"><a href="#第三站：控制器" class="headerlink" title="第三站：控制器"></a>第三站：控制器</h4><p>一旦选择了合适的控制器， DispatcherServlet 会将请求发送给选中的控制器，到了控制器，请求会卸下其负载（用户提交的请求）等待控制器处理完这些信息：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 处理逻辑</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第四站：返回-DispatcherServlet"><a href="#第四站：返回-DispatcherServlet" class="headerlink" title="第四站：返回 DispatcherServlet"></a>第四站：返回 DispatcherServlet</h4><p>当控制器在完成逻辑处理后，通常会产生一些信息，这些信息就是需要返回给用户并在浏览器上显示的信息，它们被称为<strong>模型（Model）</strong>。仅仅返回原始的信息时不够的——这些信息需要以用户友好的方式进行格式化，一般会是 HTML，所以，信息需要发送给一个<strong>视图（view）</strong>，通常会是 JSP。</p>
+<p>控制器所做的最后一件事就是将模型数据打包，并且表示出用于渲染输出的视图名<strong>（逻辑视图名）。它接下来会将请求连同模型和视图名发送回 DispatcherServlet。</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 处理逻辑</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token comment" spellcheck="true">// 返回给 DispatcherServlet</span>
+    <span class="token keyword">return</span> mav<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第五站：视图解析器"><a href="#第五站：视图解析器" class="headerlink" title="第五站：视图解析器"></a>第五站：视图解析器</h4><p>这样以来，控制器就不会和特定的视图相耦合，传递给 DispatcherServlet 的视图名并不直接表示某个特定的 JSP。（实际上，它甚至不能确定视图就是 JSP）相反，<strong>它传递的仅仅是一个逻辑名称，这个名称将会用来查找产生结果的真正视图。</strong></p>
+<p>DispatcherServlet 将会使用视图解析器（view resolver）来将逻辑视图名匹配为一个特定的视图实现，它可能是也可能不是 JSP</p>
+<blockquote>
+<p>上面的例子是直接绑定到了 index.jsp 视图</p>
+</blockquote>
+<h4 id="第六站：视图"><a href="#第六站：视图" class="headerlink" title="第六站：视图"></a>第六站：视图</h4><p>既然 DispatcherServlet 已经知道由哪个视图渲染结果了，那请求的任务基本上也就完成了。</p>
+<p>它的最后一站是视图的实现，在这里它交付模型数据，请求的任务也就完成了。视图使用模型数据渲染出结果，这个输出结果会通过响应对象传递给客户端。</p>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+         pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot;%&gt;
+
+&lt;h1&gt;${message}&lt;/h1&gt;</code></pre><blockquote>
+<p>更多 Spring-MVC 内容：<a href="https://www.jianshu.com/p/91a2d0a1e45a" target="_blank" rel="noopener">Spring MVC【入门】就这一篇
+</a></p>
+</blockquote>
+<hr>
+<h3 id="13）什么是-ORM？"><a href="#13）什么是-ORM？" class="headerlink" title="13）什么是 ORM？"></a>13）什么是 ORM？</h3><p>对象关系映射（Object-Relational Mapping，简称ORM）是一种为了解决程序的面向对象模型与数据库的关系模型互不匹配问题的技术；</p>
+<p>简单的说，ORM是通过使用描述对象和数据库之间映射的元数据（在Java中可以用XML或者是注解），将程序中的对象自动持久化到关系数据库中或者将关系数据库表中的行转换成Java对象，其本质上就是将数据从一种形式转换到另外一种形式。</p>
+<hr>
+<h3 id="14）为什么要使用-MyBatis-？"><a href="#14）为什么要使用-MyBatis-？" class="headerlink" title="14）为什么要使用 MyBatis ？"></a>14）为什么要使用 MyBatis ？</h3><p>在我们<strong>传统的 JDBC</strong> 中，我们除了需要自己提供 SQL 外，还必须操作 Connection、Statment、ResultSet，不仅如此，为了访问不同的表，不同字段的数据，我们需要些很多雷同模板化的代码，闲的繁琐又枯燥。</p>
+<p>而我们在使用了 <strong>MyBatis</strong> 之后，<strong>只需要提供 SQL 语句就好了</strong>，其余的诸如：建立连接、操作 Statment、ResultSet，处理 JDBC 相关异常等等都可以交给 MyBatis 去处理，<strong>我们的关注点于是可以就此集中在 SQL 语句上</strong>，关注在增删改查这些操作层面上。</p>
+<p>并且 MyBatis 支持使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录。</p>
+<hr>
+<h3 id="15）MyBatis-中占位符-和-的区别"><a href="#15）MyBatis-中占位符-和-的区别" class="headerlink" title="15）MyBatis 中占位符 # 和 $ 的区别"></a>15）MyBatis 中占位符 <code>#</code> 和 <code>$</code> 的区别</h3><p>区别如下：</p>
+<ol>
+<li><code>#</code>符号将传入的数据都当做一个字符串，会对自动传入的数据加一个双引号</li>
+<li><code>$</code>符号将传入的数据直接显示生成SQL中。</li>
+<li><code>#</code>符号存在预编译的过程，，对问号赋值，防止SQL注入。</li>
+<li><code>$</code>符号是直译的方式，一般用在orderby {列名} 语句中。</li>
+<li>能用<code>#</code>号就不要用<code>$</code>符号</li>
+</ol>
+<hr>
+<h3 id="16）MyBatis-缓存结构"><a href="#16）MyBatis-缓存结构" class="headerlink" title="16）MyBatis 缓存结构"></a>16）MyBatis 缓存结构</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-6160d3feb1200ab1.png" alt=""></p>
+<p>在 Web 系统中，最重要的操作就是查询数据库中的数据。但是有些时候查询数据的频率非常高，这是很耗费数据库资源的，往往会导致数据库查询效率极低，影响客户的操作体验。于是我们可以将一些变动不大且访问频率高的数据，放置在一个缓存容器中，用户下一次查询时就从缓存容器中获取结果。</p>
+<ul>
+<li>MyBatis 拥有自己的缓存结构，可以用来缓解数据库压力，加快查询速度。</li>
+<li>MyBatis 一级缓存是一个 SqlSession 级别，同一个 SqlSession 只能访问自己的一级缓存的数据</li>
+<li>二级缓存是跨sqlSession，是 mapper 级别的缓存，对于 mapper 级别的缓存不同的sqlsession是可以共享的。</li>
+</ul>
+<blockquote>
+<p>更多深入MyBatis的内容戳这里：<a href="https://www.jianshu.com/p/76d35d939539" target="_blank" rel="noopener">MyBatis(2)——MyBatis 深入学习</a></p>
+</blockquote>
+<hr>
+<h3 id="17）MyBatis-与-Spring-整合"><a href="#17）MyBatis-与-Spring-整合" class="headerlink" title="17）MyBatis 与 Spring 整合"></a>17）MyBatis 与 Spring 整合</h3><blockquote>
+<p>戳这里：<a href="https://www.jianshu.com/p/412051d41d73" target="_blank" rel="noopener">MyBatis 与 Spring 整合</a></p>
+</blockquote>
+<hr>
+<h3 id="18）IDEA-整合-SSM-框架学习"><a href="#18）IDEA-整合-SSM-框架学习" class="headerlink" title="18）IDEA 整合 SSM 框架学习"></a>18）IDEA 整合 SSM 框架学习</h3><blockquote>
+<p>戳这里<a href="https://www.jianshu.com/p/3098050b0d14" target="_blank" rel="noopener">IDEA 整合 SSM 框架学习</a></p>
+</blockquote>
+<hr>
+<h3 id="19）MVC-三种模式"><a href="#19）MVC-三种模式" class="headerlink" title="19）MVC 三种模式"></a>19）MVC 三种模式</h3><p>在早期 Java Web 的开发中，统一把显示层、控制层、数据层的操作全部交给 JSP 或者 JavaBean 来进行处理，我们称之为 <strong>Model1：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-7b3f9cd59394b017.png" alt=""></p>
+<ul>
+<li><strong>出现的弊端：</strong></li>
+<li>JSP 和 Java Bean 之间严重耦合，Java 代码和 HTML 代码也耦合在了一起</li>
+<li>要求开发者不仅要掌握 Java ，还要有高超的前端水平</li>
+<li>前端和后端相互依赖，前端需要等待后端完成，后端也依赖前端完成，才能进行有效的测试</li>
+<li>代码难以复用</li>
+</ul>
+<p>正因为上面的种种弊端，所以很快这种方式就被 Servlet + JSP + Java Bean 所替代了，早期的 MVC 模型<strong>（Model2）</strong>就像下图这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-403a273b08fec826.png" alt=""></p>
+<p>首先用户的请求会到达 Servlet，然后根据请求调用相应的 Java Bean，并把所有的显示结果交给 JSP 去完成，这样的模式我们就称为 MVC 模式。</p>
+<ul>
+<li><strong>M 代表 模型（Model）</strong><br>模型是什么呢？ 模型就是数据，就是 dao,bean</li>
+<li><strong>V 代表 视图（View）</strong><br>视图是什么呢？ 就是网页, JSP，用来展示模型中的数据</li>
+<li><strong>C 代表 控制器（controller)</strong><br>控制器是什么？ 控制器的作用就是把不同的数据(Model)，显示在不同的视图(View)上，Servlet 扮演的就是这样的角色。</li>
+</ul>
+<blockquote>
+<p>扩展阅读：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483775&idx=1&sn=c9d7ead744c6e0c3ab2fe55c09bbe61f&chksm=ebd7407edca0c9688f3870d895b760836101271b912899821fb35c5704fe215da2fc5daff2f9#rd" target="_blank" rel="noopener">Web开发模式</a></p>
+</blockquote>
+<h4 id="Spring-MVC-的架构"><a href="#Spring-MVC-的架构" class="headerlink" title="Spring MVC 的架构"></a>Spring MVC 的架构</h4><p>为解决持久层中一直未处理好的数据库事务的编程，又为了迎合 NoSQL 的强势崛起，Spring MVC 给出了方案：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%83%EF%BC%89%E2%80%94%E2%80%94Web%E7%AF%87/7896890-a25782fb05f315de.png" alt=""></p>
+<p><strong>传统的模型层被拆分为了业务层(Service)和数据访问层（DAO,Data Access Object）。</strong>在 Service 下可以通过 Spring 的声明式事务操作数据访问层，而在业务层上还允许我们访问 NoSQL ，这样就能够满足异军突起的 NoSQL 的使用了，它可以大大提高互联网系统的性能。</p>
+<ul>
+<li><strong>特点：</strong><br>结构松散，几乎可以在 Spring MVC 中使用各类视图<br>松耦合，各个模块分离<br>与 Spring 无缝集成</li>
+</ul>
+<hr>
+<h3 id="20）分页？"><a href="#20）分页？" class="headerlink" title="20）分页？"></a>20）分页？</h3><blockquote>
+<p>戳这里：<a href="https://www.jianshu.com/p/d108d0cd9acf" target="_blank" rel="noopener">Java Web -【分页功能】详解</a></p>
+</blockquote>
+<hr>
+<h3 id="21）什么是-Spring-Boot-？"><a href="#21）什么是-Spring-Boot-？" class="headerlink" title="21）什么是 Spring Boot ？"></a>21）什么是 Spring Boot ？</h3><ul>
+<li>它使用 <strong>“习惯优于配置”</strong> （项目中存在大量的配置，此外还内置一个习惯性的配置，让你无须）的理念让你的项目快速运行起来。</li>
+<li>它并不是什么新的框架，而是默认配置了很多框架的使用方式，就像 Maven 整合了所有的 jar 包一样，Spring Boot 整合了所有框架（引自：<a href="https://link.jianshu.com?t=http%3A%2F%2Fwww.ityouknow.com%2Fspringboot%2F2016%2F01%2F06%2Fspringboot%28%25E4%25B8%2580%29-%25E5%2585%25A5%25E9%2597%25A8%25E7%25AF%2587.html" target="_blank" rel="noopener">springboot(一)：入门篇——纯洁的微笑</a>）</li>
+</ul>
+<hr>
+<h3 id="22）使用-Spring-Boot-有什么好处？"><a href="#22）使用-Spring-Boot-有什么好处？" class="headerlink" title="22）使用 Spring Boot 有什么好处？"></a>22）使用 Spring Boot 有什么好处？</h3><p>回顾我们之前的 SSM 项目，搭建过程还是比较繁琐的，需要：</p>
+<ul>
+<li>1）配置 web.xml，加载 spring 和 spring mvc</li>
+<li>2）配置数据库连接、配置日志文件</li>
+<li>3）配置家在配置文件的读取，开启注解</li>
+<li>4）配置mapper文件</li>
+<li>…..</li>
+</ul>
+<p>而使用 Spring Boot 来开发项目则只需要非常少的几个配置就可以搭建起来一个 Web 项目，并且利用 IDEA 可以自动生成生成，这简直是太爽了…</p>
+<ul>
+<li>划重点：简单、快速、方便地搭建项目；对主流开发框架的无配置集成；极大提高了开发、部署效率。</li>
+</ul>
+<blockquote>
+<p>Spring Boot 由于笔者还没有深入学习..所以细节部分请读者自行收集…</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/05/21/java-mian-shi-zhi-shi-dian-jie-xi-liu-shu-ju-ku-pian/">
       Java面试知识点解析(六)——数据库篇
     </a>
@@ -5882,910 +6523,6 @@ public List&lt;OrderItem&gt; listForCart(Integer user_id) {
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/28/mo-fang-tian-mao-shi-zhan-ssm-ban-hou-tai-kai-fa/">
-      模仿天猫实战【SSM版】——后台开发
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/SSM/项目</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月28日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>上一篇文章链接：<a href="https://www.jianshu.com/p/5e44ee046b43" target="_blank" rel="noopener">模仿天猫实战【SSM版】——项目起步</a></p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-3eee3c0023557f8e.png" alt=""></p>
-<h2 id="后台需求分析"><a href="#后台需求分析" class="headerlink" title="后台需求分析"></a>后台需求分析</h2><p>在开始码代码之前，还是需要先清楚自己要做什么事情，后台具体需要实现哪些功能：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-ccc3aa2fdf8e00de.png" alt=""></p>
-<ul>
-<li><strong>注意：</strong> 订单、用户、订单、推荐链接均不提供增删的功能。</li>
-</ul>
-<hr>
-<h2 id="后台界面设计"><a href="#后台界面设计" class="headerlink" title="后台界面设计"></a>后台界面设计</h2><p>不像前端那样有原型直接照搬就可以了，后台的设计还真的有难到我…毕竟我是一个对美有一定要求的人，一方面想尽量的简洁、简单，另一方面又不想要太难看，那怎么办呢？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-c27798bcd2932a19.png" alt=""></p>
-<p>那当然是找模板了，找到一个顺眼的下载下来就开始改，</p>
-<p>这个模板的原地址在这里：<a href="http://www.cssmoban.com/cssthemes/7381.shtml" target="_blank" rel="noopener">戳这里</a></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-f1c023b9fdbb91ff.png" alt=""></p>
-<p>顺便安利一下 FireFox ，真是开发神器，配合着修改，棒棒哒：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-16d9367e5b6b201e.png" alt=""></p>
-<h4 id="经过一番折腾…"><a href="#经过一番折腾…" class="headerlink" title="经过一番折腾…"></a>经过一番折腾…</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-c5f593fb37178a82.png" alt=""></p>
-<p>摁，就这风格了，而且我还发现右上角的【Search】框是下载的模板用 js 实现的…对于管理来说更加方便了….而且居然还实现了分页….</p>
-<p>一个邪恶的想法又诞生了…</p>
-<h4 id="一些规定"><a href="#一些规定" class="headerlink" title="一些规定"></a>一些规定</h4><blockquote>
-<ul>
-<li>为了降低项目的难度，我们做了很多的精简，现在我们作出如下的规定：</li>
-</ul>
-</blockquote>
-<ul>
-<li><strong>全站没有商家，只有一家 Tmall ，后台没有验证，可以直接进入</strong></li>
-<li><strong>前台的路径就是默认路径，后台的路径需要加上 “/admin” 后缀，</strong>如访问后台则为：localhost/admin （<strong>默认为分类管理页</strong>）</li>
-<li><strong>管理路径统一为：admin/listXxxxx</strong>，如分类管理路径为：admin/listCategory，用户管理路径为：admin/listUser，诸如此类</li>
-<li><strong>编辑路径统一为：admin/editXxxxx</strong>，如编辑分类路径为：admin/editCategory，产品编辑页为：admin/editProduct，诸如此类</li>
-<li><strong>删除路径统一为：admin/deleteXxxxx</strong></li>
-<li><strong>更新路径统一为：admin/updateXxxxx</strong></li>
-</ul>
-<blockquote>
-<ul>
-<li>关于页面路径的一些规定：</li>
-</ul>
-</blockquote>
-<ul>
-<li>前端页面统一在【WEB-INF/views】下，后端页面统一在【WEB-INF/views/admin】下</li>
-</ul>
-<hr>
-<h2 id="分类管理"><a href="#分类管理" class="headerlink" title="分类管理"></a>分类管理</h2><p>正式开始编写我们的代码，以 Category 为例。</p>
-<h4 id="编写-Service-层"><a href="#编写-Service-层" class="headerlink" title="编写 Service 层"></a>编写 Service 层</h4><p>我们需要在这一层上考虑需要完成的功能，对应我们上面画的后台功能图，分类管理也就是完成分类的查询还有修改的工作：</p>
-<pre><code>package cn.wmyskxz.service;
-
-import cn.wmyskxz.pojo.Category;
-
-import java.util.List;
-
-public interface CategoryService {
-
-    /**
-     * 返回分类列表
-     * @return
-     */
-    List&lt;Category&gt; list();
-
-    /**
-     * 通过id获取对应的数据
-     * @param id
-     * @return
-     */
-    Category get(Integer id);
-
-    /**
-     * 更新分类
-     * @param category
-     * @return
-     */
-    void update(Category category);
-}</code></pre><ul>
-<li>编写 CategoryServiceImpl ：<br>在同一包下编写实现类</li>
-</ul>
-<pre><code>package cn.wmyskxz.service;
-
-import cn.wmyskxz.mapper.CategoryMapper;
-import cn.wmyskxz.pojo.Category;
-import cn.wmyskxz.pojo.CategoryExample;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-
-/**
- * CategoryService 的实现类
- *
- * @author: @我没有三颗心脏
- * @create: 2018-04-27-下午 16:35
- */
-@Service
-public class CategoryServiceImpl implements CategoryService {
-
-    @Autowired
-    CategoryMapper categoryMapper;
-
-    public List&lt;Category&gt; list() {
-        CategoryExample example = new CategoryExample();
-        List&lt;Category&gt; categories = categoryMapper.selectByExample(example);
-        return categories;
-    }
-
-    public Category get(Integer id) {
-        return categoryMapper.selectByPrimaryKey(id);
-    }
-
-    public void update(Category category) {
-        categoryMapper.updateByPrimaryKey(category);
-    }
-}</code></pre><h4 id="编写-CategoryController"><a href="#编写-CategoryController" class="headerlink" title="编写 CategoryController"></a>编写 CategoryController</h4><p>根据业务需求可以很容易的编写出来：</p>
-<pre><code>package cn.wmyskxz.controller;
-
-import cn.wmyskxz.pojo.Category;
-import cn.wmyskxz.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-
-/**
- * Category 的控制类
- *
- * @author: @我没有三颗心脏
- * @create: 2018-04-27-下午 16:37
- */
-@Controller
-@RequestMapping(&quot;/admin&quot;)
-public class CategoryController {
-
-    @Autowired
-    CategoryService categoryService;
-
-    @RequestMapping(&quot;/listCategory&quot;)
-    public String list(Model model) {
-        List&lt;Category&gt; categories = categoryService.list();
-        model.addAttribute(&quot;categories&quot;, categories);
-        return &quot;admin/listCategory&quot;;
-    }
-
-    @RequestMapping(&quot;/editCategory&quot;)
-    public String edit(Category category,Model model) {
-        model.addAttribute(&quot;category&quot;, category);
-        return &quot;admin/editCategory&quot;;
-    }
-
-    @RequestMapping(&quot;/updateCategory&quot;)
-    public String update(Category category) {
-        categoryService.update(category);
-        return &quot;redirect:listCategory&quot;;
-    }
-}</code></pre><h4 id="JSP-相关文件编写"><a href="#JSP-相关文件编写" class="headerlink" title="JSP 相关文件编写"></a>JSP 相关文件编写</h4><p>自己研究了一会儿这个模板，感觉还是挺好改的，然后就给改成了大概以下这个样子（<em>自己在数据库中加入了 16 条数据</em>）：</p>
-<ul>
-<li>分类管理页</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-4a983d7478357872.png" alt=""></p>
-<ul>
-<li>分类编辑页</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-16014296cfec5ea8.png" alt=""></p>
-<p>模板下载下来之后文件目录是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-971cc1225aa97f5a.png" alt=""></p>
-<p>我们直接整个拷贝【assets】文件夹放在【webapp】目录下，然后根据模板里面的代码就可以开始修改了，修改下来的两个文件源码如下：</p>
-<ul>
-<li>listCategory.jsp</li>
-</ul>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot; %&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;utf-8&quot; /&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
-    &lt;title&gt;模仿天猫-后台&lt;/title&gt;
-    &lt;!-- Bootstrap Styles--&gt;
-    &lt;link href=&quot;../assets/css/bootstrap.css&quot; rel=&quot;stylesheet&quot; /&gt;
-    &lt;!-- FontAwesome Styles--&gt;
-    &lt;link href=&quot;../assets/css/font-awesome.css&quot; rel=&quot;stylesheet&quot; /&gt;
-    &lt;!-- Morris Chart Styles--&gt;
-
-    &lt;!-- Custom Styles--&gt;
-    &lt;link href=&quot;../assets/css/custom-styles.css&quot; rel=&quot;stylesheet&quot; /&gt;
-    &lt;!-- Google Fonts--&gt;
-    &lt;link href=&#39;https://fonts.googleapis.com/css?family=Open+Sans&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39; /&gt;
-    &lt;!-- TABLE STYLES--&gt;
-    &lt;link href=&quot;../assets/js/dataTables/dataTables.bootstrap.css&quot; rel=&quot;stylesheet&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&quot;wrapper&quot;&gt;
-    &lt;nav class=&quot;navbar navbar-default top-navbar&quot; role=&quot;navigation&quot;&gt;
-        &lt;div class=&quot;navbar-header&quot;&gt;
-            &lt;button type=&quot;button&quot; class=&quot;navbar-toggle&quot; data-toggle=&quot;collapse&quot; data-target=&quot;.sidebar-collapse&quot;&gt;
-                &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
-                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;a class=&quot;navbar-brand&quot; href=&quot;listCategory&quot;&gt;Tmall&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
-
-    &lt;!--/. NAV TOP  --&gt;
-    &lt;nav class=&quot;navbar-default navbar-side&quot; role=&quot;navigation&quot;&gt;
-        &lt;div class=&quot;sidebar-collapse&quot;&gt;
-            &lt;ul class=&quot;nav&quot; id=&quot;main-menu&quot;&gt;
-
-                &lt;li&gt;
-                    &lt;a class=&quot;active-menu&quot; href=&quot;listCategory&quot;&gt;&lt;i class=&quot;fa fa-bars&quot;&gt;&lt;/i&gt; 分类管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listUser&quot;&gt;&lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 用户管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listOrder&quot;&gt;&lt;i class=&quot;fa fa-list-alt&quot;&gt;&lt;/i&gt; 订单管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listProduct&quot;&gt;&lt;i class=&quot;fa fa-th-list&quot;&gt;&lt;/i&gt; 产品管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listLink&quot;&gt;&lt;i class=&quot;fa fa-link&quot;&gt;&lt;/i&gt; 推荐链接管理&lt;/a&gt;
-                &lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-
-    &lt;/nav&gt;
-    &lt;!-- /. NAV SIDE  --&gt;
-    &lt;div id=&quot;page-wrapper&quot;&gt;
-        &lt;div id=&quot;page-inner&quot;&gt;
-            &lt;div class=&quot;row&quot;&gt;
-                &lt;div class=&quot;col-md-12&quot;&gt;
-                    &lt;h1 class=&quot;page-header&quot;&gt;
-                        分类管理
-                        &lt;small&gt;&lt;/small&gt;
-                    &lt;/h1&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-
-            &lt;div class=&quot;row&quot;&gt;
-                &lt;div class=&quot;col-md-12&quot;&gt;
-                    &lt;!-- Advanced Tables --&gt;
-                    &lt;div class=&quot;panel panel-default&quot;&gt;
-                        &lt;div class=&quot;panel-heading&quot;&gt;
-                            分类管理表
-                        &lt;/div&gt;
-                        &lt;div class=&quot;panel-body&quot;&gt;
-                            &lt;div class=&quot;table-responsive&quot;&gt;
-                                &lt;table class=&quot;table table-striped table-bordered table-hover&quot; id=&quot;dataTables-example&quot;&gt;
-                                    &lt;thead&gt;
-                                    &lt;tr&gt;
-                                        &lt;th&gt;分类id&lt;/th&gt;
-                                        &lt;th&gt;分类名称&lt;/th&gt;
-
-                                        &lt;th&gt;编辑分类&lt;/th&gt;
-                                        &lt;th&gt;产品管理&lt;/th&gt;
-                                        &lt;th&gt;属性管理&lt;/th&gt;
-                                    &lt;/tr&gt;
-                                    &lt;/thead&gt;
-                                    &lt;tbody&gt;
-                                    &lt;c:forEach items=&quot;${categories}&quot; var=&quot;c&quot;&gt;
-                                        &lt;tr&gt;
-                                            &lt;td&gt;${c.id}&lt;/td&gt;
-                                            &lt;td&gt;${c.name}&lt;/td&gt;
-
-                                            &lt;td&gt;&lt;a href=&quot;editCategory?id=${c.id}&amp;name=${c.name}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-th-list&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
-                                            &lt;td&gt;&lt;a href=&quot;listProduct?category_id=${c.id}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-shopping-cart&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
-                                            &lt;td&gt;&lt;a href=&quot;listProperty?category_id=${c.id}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-edit&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
-                                        &lt;/tr&gt;
-                                    &lt;/c:forEach&gt;
-                                    &lt;/tbody&gt;
-                                &lt;/table&gt;
-                            &lt;/div&gt;
-
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;!--End Advanced Tables --&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;!-- /. PAGE WRAPPER  --&gt;
-&lt;/div&gt;
-&lt;!-- /. WRAPPER  --&gt;
-&lt;!-- JS Scripts--&gt;
-&lt;!-- jQuery Js --&gt;
-&lt;script src=&quot;../assets/js/jquery-1.10.2.js&quot;&gt;&lt;/script&gt;
-&lt;!-- Bootstrap Js --&gt;
-&lt;script src=&quot;../assets/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
-&lt;!-- Metis Menu Js --&gt;
-&lt;script src=&quot;../assets/js/jquery.metisMenu.js&quot;&gt;&lt;/script&gt;
-&lt;!-- DATA TABLE SCRIPTS --&gt;
-&lt;script src=&quot;../assets/js/dataTables/jquery.dataTables.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;../assets/js/dataTables/dataTables.bootstrap.js&quot;&gt;&lt;/script&gt;
-&lt;script&gt;
-    $(document).ready(function () {
-        $(&#39;#dataTables-example&#39;).dataTable();
-    });
-&lt;/script&gt;
-&lt;!-- Custom Js --&gt;
-&lt;script src=&quot;../assets/js/custom-scripts.js&quot;&gt;&lt;/script&gt;
-
-
-&lt;/body&gt;
-&lt;/html&gt;</code></pre><ul>
-<li>editCategory.jsp</li>
-</ul>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot; %&gt;
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;utf-8&quot;/&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/&gt;
-    &lt;title&gt;模仿天猫-后台&lt;/title&gt;
-    &lt;!-- Bootstrap Styles--&gt;
-    &lt;link href=&quot;../assets/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;/&gt;
-    &lt;!-- FontAwesome Styles--&gt;
-    &lt;link href=&quot;../assets/css/font-awesome.css&quot; rel=&quot;stylesheet&quot;/&gt;
-    &lt;!-- Morris Chart Styles--&gt;
-
-    &lt;!-- Custom Styles--&gt;
-    &lt;link href=&quot;../assets/css/custom-styles.css&quot; rel=&quot;stylesheet&quot;/&gt;
-    &lt;!-- Google Fonts--&gt;
-    &lt;link href=&#39;https://fonts.googleapis.com/css?family=Open+Sans&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39;/&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;div id=&quot;wrapper&quot;&gt;
-    &lt;nav class=&quot;navbar navbar-default top-navbar&quot; role=&quot;navigation&quot;&gt;
-        &lt;div class=&quot;navbar-header&quot;&gt;
-            &lt;button type=&quot;button&quot; class=&quot;navbar-toggle&quot; data-toggle=&quot;collapse&quot; data-target=&quot;.sidebar-collapse&quot;&gt;
-                &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
-                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
-            &lt;/button&gt;
-            &lt;a class=&quot;navbar-brand&quot; href=&quot;listCategory&quot;&gt;Tmall&lt;/a&gt;
-        &lt;/div&gt;
-    &lt;/nav&gt;
-
-    &lt;!--/. NAV TOP  --&gt;
-    &lt;nav class=&quot;navbar-default navbar-side&quot; role=&quot;navigation&quot;&gt;
-        &lt;div class=&quot;sidebar-collapse&quot;&gt;
-            &lt;ul class=&quot;nav&quot; id=&quot;main-menu&quot;&gt;
-
-                &lt;li&gt;
-                    &lt;a class=&quot;active-menu&quot; href=&quot;listCategory&quot;&gt;&lt;i class=&quot;fa fa-bars&quot;&gt;&lt;/i&gt; 分类管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listUser&quot;&gt;&lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 用户管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listOrder&quot;&gt;&lt;i class=&quot;fa fa-list-alt&quot;&gt;&lt;/i&gt; 订单管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listProduct&quot;&gt;&lt;i class=&quot;fa fa-th-list&quot;&gt;&lt;/i&gt; 产品管理&lt;/a&gt;
-                &lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;listLink&quot;&gt;&lt;i class=&quot;fa fa-link&quot;&gt;&lt;/i&gt; 推荐链接管理&lt;/a&gt;
-                &lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-
-    &lt;/nav&gt;
-    &lt;!-- /. NAV SIDE  --&gt;
-    &lt;div id=&quot;page-wrapper&quot;&gt;
-        &lt;div id=&quot;page-inner&quot;&gt;
-            &lt;div class=&quot;row&quot;&gt;
-                &lt;div class=&quot;col-md-12&quot;&gt;
-                    &lt;h1 class=&quot;page-header&quot;&gt;
-                        分类管理
-                        &lt;small&gt; - id:${category.id} &lt;/small&gt;
-                    &lt;/h1&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-
-            &lt;div class=&quot;row&quot;&gt;
-                &lt;div class=&quot;col-md-6&quot;&gt;
-                    &lt;!-- Advanced Tables --&gt;
-                    &lt;div class=&quot;panel panel-default&quot;&gt;
-                        &lt;div class=&quot;panel-heading&quot;&gt;
-                            编辑分类
-                        &lt;/div&gt;
-                        &lt;div class=&quot;panel-body&quot;&gt;
-                            &lt;div class=&quot;row col-lg-12&quot;&gt;
-                                &lt;form action=&quot;updateCategory&quot; role=&quot;form&quot;&gt;
-                                    &lt;div class=&quot;form-group&quot;&gt;
-                                        &lt;%-- 隐藏id属性，一并提交 --%&gt;
-                                        &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;${category.id}&quot;&gt;
-                                        &lt;label&gt;分类名称：&lt;/label&gt;
-                                        &lt;input name=&quot;name&quot; class=&quot;form-control&quot; value=&quot;${category.name}&quot;&gt; &lt;br/&gt;
-                                        &lt;div class=&quot;pull-right&quot;&gt;
-                                            &lt;input type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;
-                                        &lt;/div&gt;
-                                    &lt;/div&gt;
-                                &lt;/form&gt;
-                            &lt;/div&gt;
-
-                        &lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;!--End Advanced Tables --&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-
-        &lt;/div&gt;
-    &lt;/div&gt;
-    &lt;!-- /. PAGE WRAPPER  --&gt;
-&lt;/div&gt;
-&lt;!-- /. WRAPPER  --&gt;
-&lt;!-- JS Scripts--&gt;
-&lt;!-- jQuery Js --&gt;
-&lt;script src=&quot;../assets/js/jquery-1.10.2.js&quot;&gt;&lt;/script&gt;
-&lt;!-- Bootstrap Js --&gt;
-&lt;script src=&quot;../assets/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre><h4 id="这样就完成了-Category-的后台管理模块"><a href="#这样就完成了-Category-的后台管理模块" class="headerlink" title="这样就完成了 Category 的后台管理模块"></a>这样就完成了 Category 的后台管理模块</h4><p>其他模块的思路跟 Category 如出一辙，就比较偏向于体力劳动了…</p>
-<ul>
-<li><strong>注意：</strong> 所有本类的 id 属性均为 <code>id</code> ，所有外键的 id 都是 <code>属性名_id</code> 这样的格式，保持统一！</li>
-</ul>
-<hr>
-<h2 id="Example-条件查询"><a href="#Example-条件查询" class="headerlink" title="Example 条件查询"></a>Example 条件查询</h2><p>MyBatis 逆向工程自动生成文件的时候自动生成了 Example 条件查询类，我们到底应该怎么使用它呢，这里简要的说明一下。</p>
-<p>不得不说这个东西还挺神奇，也很方便，比如我们需要查询 category_id 对应下的属性表，我们可以这样写：</p>
-<pre><code>public List&lt;Property&gt; list(Integer category_id) {
-    PropertyExample example = new PropertyExample();
-    example.or().andCategory_idEqualTo(category_id);
-    List&lt;Property&gt; properties = propertyMapper.selectByExample(example);
-    return properties;
-}</code></pre><p>通过方法名其实也很容易看懂这些是什么意思，我们首先创建了一个 PropertyExample 实例对象，然后通过 <code>.or()</code> 方法开启条件查询，<code>.andCategory_idEqualTo()</code> 匹配对应的 category_id ，自动生成的 sql 语句就像这样：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-77a9f0157eba3e78.png" alt=""></p>
-<blockquote>
-<p><a href="https://blog.csdn.net/biandous/article/details/65630783" target="_blank" rel="noopener">更多详情戳这里 - 引用其他博客的详细说明</a></p>
-</blockquote>
-<hr>
-<h2 id="IDEA-快速重构"><a href="#IDEA-快速重构" class="headerlink" title="IDEA 快速重构"></a>IDEA 快速重构</h2><p>当我编写好了 PropertyService 、PropertyServiceImpl、 PropertyController 之后再想要去编写 Product 的这一系列文件的时候，发现其实很多代码都是重复的，只是很少一部分的代码需要改动，暂时不考虑设计模式的话，我们可以使用 IDEA 来完成快速重构：</p>
-<ul>
-<li>直接复制 PropertyController 的代码到 ProductController 中，然后【Ctrl + F】搜索 Property ：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-02324398e7cb52b3.png" alt=""></p>
-<p>我们可以发现所有的 Property 都高亮了，然后我们怎么批量修改呢？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-22868fcd1d7ab8ff.gif" alt=""></p>
-<p>然后继续疯狂码代码…</p>
-<hr>
-<h2 id="开发过程中遇到的一些问题"><a href="#开发过程中遇到的一些问题" class="headerlink" title="开发过程中遇到的一些问题"></a>开发过程中遇到的一些问题</h2><h4 id="PropertyValue-遇到的麻烦"><a href="#PropertyValue-遇到的麻烦" class="headerlink" title="PropertyValue 遇到的麻烦"></a>PropertyValue 遇到的麻烦</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-320fc236c47427d3.png" alt=""></p>
-<p>PropertyValue 属性值表，这个表关联了两个外键，一个指向 Product ，另一个指向 Property ，当我按照之前的设计把 listProduct.jsp 设计成下面这个样子的时候，点击【编辑属性】，Property 的信息应该怎么传递？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-663fe5770f82dc3d.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-c1937d1fb2ff0ad2.png" alt=""></p>
-<ul>
-<li>也就是说，如何处理从 listProduct 跳转到 listPropertyValue 页面时凭空跳出来的 Property 的相关信息？</li>
-</ul>
-<p><strong>解决方案：</strong></p>
-<p>在 PropertyValueServiceImpl 中增加：</p>
-<pre><code>@Autowired
-PropertyService propertyService;</code></pre><p>我们现在有 category_id 和 product_id ，我们可以利用 Property 和 Category 之间的联系，通过 category_id 查询出所有对应的 Property ，然后再筛选出同时匹配 property_id 和 product_id 的 PropertyValue：</p>
-<pre><code>public List&lt;PropertyValue&gt; list(Integer product_id, Integer category_id) {
-    PropertyValueExample example = new PropertyValueExample();
-    List&lt;PropertyValue&gt; propertyValues = new ArrayList&lt;PropertyValue&gt;();
-    List&lt;Property&gt; properties = propertyService.list(category_id);
-    for (Property property : properties) {
-        // 筛选出同时匹配 property_id 和 product_id 的值
-        example.or().andProperti_idEqualTo(property.getId()).andProduct_idEqualTo(product_id);
-        propertyValues.addAll(propertyValueMapper.selectByExample(example));
-    }
-    return propertyValues;
-}</code></pre><p>emmm…这样的思路出来之后，对应的 Controller 就清晰了：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/listPropertyValue"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> String <span class="token function">list</span><span class="token punctuation">(</span>Model model<span class="token punctuation">,</span> Integer product_id<span class="token punctuation">,</span> Integer category_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> propertyValueService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>product_id<span class="token punctuation">,</span> category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"propertyValues"</span><span class="token punctuation">,</span> propertyValues<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Product product <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"product"</span><span class="token punctuation">,</span> product<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token string">"admin/listPropertyValue"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>加入一条数据测试：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-6e15372ceb60a814.png" alt=""></p>
-<ul>
-<li>bingo！</li>
-</ul>
-<p><strong>另一个问题是添加属性值：</strong> </p>
-<p>添加的属性值必须是当前 Category 下有的属性值，所以我们可以在 Controller 上自动注入一个 PropertyService 通过 category_id 查询到当前分类下所有的 Property 然后传递给 listPropertyValue ：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Autowired</span>
-PropertyService propertyService<span class="token punctuation">;</span>
-
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/listPropertyValue"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> String <span class="token function">list</span><span class="token punctuation">(</span>Model model<span class="token punctuation">,</span> Integer product_id<span class="token punctuation">,</span> Integer category_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> propertyValueService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>product_id<span class="token punctuation">,</span> category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"propertyValues"</span><span class="token punctuation">,</span> propertyValues<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    Product product <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"product"</span><span class="token punctuation">,</span> product<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    List<span class="token operator">&lt;</span>Property<span class="token operator">></span> properties <span class="token operator">=</span> propertyService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"properties"</span><span class="token punctuation">,</span> properties<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token string">"admin/listPropertyValue"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<blockquote>
-<p>期间发现一个 BUG，PropertyValue 表里的 property_id 居然写成了 properti_id，吓得我赶紧检查了一下所有表的字段，其他的没问题，重新生成一下逆向工程</p>
-</blockquote>
-<p><strong>然后获取属性名称：</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-913cf5641162aaa8.png" alt=""></p>
-<ul>
-<li>完善之后大概是这样：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-63c0a4d1c28f7633.png" alt=""></p>
-<h4 id="产品图片管理"><a href="#产品图片管理" class="headerlink" title="产品图片管理"></a>产品图片管理</h4><p>产品图片的管理需要涉及到文件的上传操作，我们需要先提供必要的 jar 包依赖：</p>
-<ul>
-<li>commons-fileupload</li>
-<li>commons-io</li>
-</ul>
-<p>同样的搜索 maven 库添加依赖到 pom.xml中：</p>
-<pre><code>&lt;!-- 上传文件fileupload --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;
-    &lt;version&gt;1.3.3&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;commons-io&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
-    &lt;version&gt;2.6&lt;/version&gt;
-&lt;/dependency&gt;</code></pre><p><strong>产品图片如何管理？</strong></p>
-<ul>
-<li><strong>规定一：</strong><br>所有的产品图片均保存在【img/product/】对应的 product_id 目录下，并且默认的文件名为 1，2，3，4，5 ，例如 product_id 为 1 的产品的产品图片 1 保存于：【img/product/1/1.jpg】</li>
-<li><strong>规定二：</strong><br>每一个产品对应五张图片，文件名分别为 1.jpg ，2.jpg 以此类推，不能少也不能多，删除也只是将对应目录下的图片删除，id 并不改变</li>
-<li><strong>规定三：</strong><br>默认产品打开的大图即为该产品图片目录中的 1.jpg</li>
-</ul>
-<blockquote>
-<ul>
-<li>界面大概设计成了这样：</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-77a779e13d7b2d50.png" alt=""></p>
-<blockquote>
-<ul>
-<li>莫名其妙一个 BUG：</li>
-</ul>
-</blockquote>
-<p>我把表单设计成了这样，隐藏了两个属性，一个 product_id，一个 id：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-7ef327a861da75d4.png" alt=""></p>
-<p>为了方便操作，我想要直接申明两个参数用来接收上面的两个属性，大概是这样：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-dc05f02505bc41ac.png" alt=""></p>
-<p>但是上面两种方法都不行，我还查了一些资料在 @RequestParam 注解里设置了 required 属性，仍然获取不到，但是我改成用 ProductImage 来接收就好了..Why?</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-6bf39c8f3fe9ca82.png" alt=""></p>
-<p>后来写着写着，又必须要使用上面两种方法了….</p>
-<blockquote>
-<ul>
-<li>根据我们的规定来完成代码</li>
-</ul>
-</blockquote>
-<p>ProductImageService 层还是跟之前的没有多大的区别，但是值得注意的是，根据我们的规定，我们的删除需要做一些改动（根据 product_id 批量删除）：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>service<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>mapper<span class="token punctuation">.</span>PropertyValueMapper<span class="token punctuation">;</span>
-<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>pojo<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Autowired<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Service<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">;</span>
-<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
-
-<span class="token comment" spellcheck="true">/**
- * cn.wmyskxz.pojo.PropertyValueValueService 实现类
- *
- * @author: @我没有三颗心脏
- * @create: 2018-04-28-上午 7:47
- */</span>
-<span class="token annotation punctuation">@Service</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PropertyValueServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">PropertyValueService</span> <span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    PropertyValueMapper propertyValueMapper<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    PropertyService propertyService<span class="token punctuation">;</span>
-
-    <span class="token annotation punctuation">@Autowired</span>
-    ProductService productService<span class="token punctuation">;</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span>PropertyValue propertyValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        propertyValueMapper<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>propertyValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delete</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        propertyValueMapper<span class="token punctuation">.</span><span class="token function">deleteByPrimaryKey</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">deleteByProductId</span><span class="token punctuation">(</span>Integer product_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 按条件查询出需要删除的列表</span>
-        PropertyValueExample example <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PropertyValueExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        example<span class="token punctuation">.</span><span class="token function">or</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">andProduct_idEqualTo</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        Integer category_id <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getCategory_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> <span class="token function">list</span><span class="token punctuation">(</span>product_id<span class="token punctuation">,</span> category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 循环删除</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> propertyValues<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            propertyValueMapper<span class="token punctuation">.</span><span class="token function">deleteByPrimaryKey</span><span class="token punctuation">(</span>propertyValues<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">update</span><span class="token punctuation">(</span>PropertyValue propertyValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        propertyValueMapper<span class="token punctuation">.</span><span class="token function">updateByPrimaryKey</span><span class="token punctuation">(</span>propertyValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> <span class="token function">list</span><span class="token punctuation">(</span>Integer product_id<span class="token punctuation">,</span> Integer category_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        PropertyValueExample example <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PropertyValueExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        List<span class="token operator">&lt;</span>Property<span class="token operator">></span> properties <span class="token operator">=</span> propertyService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span>Property property <span class="token operator">:</span> properties<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token comment" spellcheck="true">// 筛选出同时匹配 property_id 和 product_id 的值</span>
-            example<span class="token punctuation">.</span><span class="token function">or</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">andProperty_idEqualTo</span><span class="token punctuation">(</span>property<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">andProduct_idEqualTo</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            propertyValues<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>propertyValueMapper<span class="token punctuation">.</span><span class="token function">selectByExample</span><span class="token punctuation">(</span>example<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">return</span> propertyValues<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> PropertyValue <span class="token function">get</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> propertyValueMapper<span class="token punctuation">.</span><span class="token function">selectByPrimaryKey</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<ul>
-<li>首先在 ProductController 中 add 和 delete 方法中增加以下代码：</li>
-</ul>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Autowired</span>
-ProductImageService productImageService<span class="token punctuation">;</span>
-
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/addProduct"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> String <span class="token function">add</span><span class="token punctuation">(</span>Product product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    productService<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>product<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">// 创建新的 Product 时默认创建 5 个对应的 ProductImage 数据</span>
-    ProductImage productImage <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProductImage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    productImage<span class="token punctuation">.</span><span class="token function">setProduct_id</span><span class="token punctuation">(</span>product<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        productImage<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        productImageService<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>productImage<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">return</span> <span class="token string">"redirect:listProduct?category_id="</span> <span class="token operator">+</span> product<span class="token punctuation">.</span><span class="token function">getCategory_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/deleteProduct"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> String <span class="token function">delete</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">,</span> HttpServletRequest request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-    <span class="token comment" spellcheck="true">// 在删除产品的时候将对应的 5 个 ProductImage 数据也删除了</span>
-    productImageService<span class="token punctuation">.</span><span class="token function">deleteByProductId</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 同时删除目录下的相关文件</span>
-    String path <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getRealPath</span><span class="token punctuation">(</span><span class="token string">""</span> <span class="token operator">+</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">deleteDir</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">// 删除外键对应的数据</span>
-    propertyValueService<span class="token punctuation">.</span><span class="token function">deleteByProductId</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">int</span> category_id <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getCategory_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    productService<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">return</span> <span class="token string">"redirect:listProduct?category_id="</span> <span class="token operator">+</span> category_id<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token comment" spellcheck="true">/**
- * 递归删除目录下的所有文件及子目录下所有文件
- *
- * @param dir 将要删除的文件目录
- * @return boolean Returns "true" if all deletions were successful.
- * If a deletion fails, the method stops attempting to
- * delete and returns "false".
- */</span>
-<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">deleteDir</span><span class="token punctuation">(</span>File dir<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>dir<span class="token punctuation">.</span><span class="token function">isDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        String<span class="token punctuation">[</span><span class="token punctuation">]</span> children <span class="token operator">=</span> dir<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">//递归删除目录中的子目录下</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> children<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">boolean</span> success <span class="token operator">=</span> <span class="token function">deleteDir</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span> children<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>success<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 目录此时为空，可以删除</span>
-    <span class="token keyword">return</span> dir<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>然后编写我们的 ProductImageController ：</p>
-<pre><code>package cn.wmyskxz.controller;
-
-import cn.wmyskxz.pojo.Product;
-import cn.wmyskxz.pojo.ProductImage;
-import cn.wmyskxz.service.ProductImageService;
-import cn.wmyskxz.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.List;
-
-/**
- * ProductImage 的控制器
- *
- * @author: @我没有三颗心脏
- * @create: 2018-04-28-下午 14:10
- */
-@Controller
-@RequestMapping(&quot;/admin&quot;)
-public class ProductImageController {
-
-    @Autowired
-    ProductImageService productImageService;
-
-    @Autowired
-    ProductService productService;
-
-    @RequestMapping(&quot;/editProductImage&quot;)
-    public String edit(Model model, Integer product_id) {
-        List&lt;ProductImage&gt; productImages = productImageService.list(product_id);
-        model.addAttribute(&quot;productImages&quot;, productImages);
-        Product product = productService.get(product_id);
-        model.addAttribute(&quot;product&quot;, product);
-        return &quot;admin/editProductImage&quot;;
-    }
-
-    @RequestMapping(value = &quot;/updateProductImage&quot;, method = RequestMethod.POST)
-    public String update(HttpServletRequest request,
-//                         @RequestParam(&quot;productImage&quot;) ProductImage productImage,
-                         Integer product_id, 
-                         Integer id,
-                         @RequestParam(&quot;picture&quot;) MultipartFile picture) {
-
-        // 上传文件到指定位置
-        String filePath = request.getSession().getServletContext()
-                .getRealPath(&quot;img/product/&quot; + product_id);
-        // 因为 id 是自增长键，所以需要 % 5 来作为文件名
-        String fileName = (id % 5 == 0 ? 5 : id % 5) + &quot;.jpg&quot;;
-        File uploadPicture = new File(filePath, fileName);
-        if (!uploadPicture.exists()) {
-            uploadPicture.mkdirs();
-        }
-        // 保存
-        try {
-            picture.transferTo(uploadPicture);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return &quot;redirect:editProductImage?product_id=&quot; + product_id;
-    }
-
-    @RequestMapping(&quot;/deleteProductImage&quot;)
-    public String delete(Integer id, Integer product_id, HttpServletRequest request) {
-        // 不删除表中的数据（在 ProductController 中统一删除），删除对应文件
-        String filePath = request.getSession().getServletContext()
-                .getRealPath(&quot;img/product/&quot; + product_id);
-        String fileName = id + &quot;.jpg&quot;;
-        new File(filePath, fileName).delete();
-
-        return &quot;redirect:editProductImage?product_id=&quot; + product_id;
-    }
-}
-</code></pre><blockquote>
-<ul>
-<li>再优化一下界面的东西，增加没有图片显示的 error 图片，大概就是这个样子：</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-1503d0b3ed63d785.png" alt=""></p>
-<p>这里就只贴一下 table 的代码吧：</p>
-<pre><code>&lt;c:forEach items=&quot;${productImages}&quot; var=&quot;pi&quot;&gt;
-    &lt;tr&gt;
-        &lt;td&gt;${pi.product_id}&lt;/td&gt;
-        &lt;td&gt;${pi.id}&lt;/td&gt;
-        &lt;td&gt;&lt;img class=&quot;col-md-8&quot;
-                 src=&quot;../img/product/${pi.product_id}/${pi.id%5==0?5:pi.id%5}.jpg&quot;
-                 onerror=&quot;this.src=&#39;../img/product/error.png&#39;&quot;&gt;&lt;/td&gt;
-        &lt;td class=&quot;col-md-5&quot;&gt;
-            &lt;form action=&quot;updateProductImage&quot; method=&quot;post&quot;
-                  enctype=&quot;multipart/form-data&quot;&gt;
-                &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;${pi.id}&quot;&gt;
-                &lt;input type=&quot;hidden&quot; name=&quot;product_id&quot;
-                       value=&quot;${pi.product_id}&quot;&gt;
-                &lt;input type=&quot;file&quot; name=&quot;picture&quot; class=&quot;pull-left&quot;&gt;
-                &lt;input type=&quot;submit&quot; class=&quot;btn btn-primary pull-right&quot; value=&quot;上传&quot;&gt;
-            &lt;/form&gt;
-        &lt;/td&gt;
-        &lt;td&gt;
-            &lt;a href=&quot;deleteProductImage?product_id=${pi.product_id}&amp;id=${pi.id}&quot;&gt;&lt;span
-                    class=&quot;glyphicon glyphicon-trash&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/c:forEach&gt;</code></pre><h4 id="在写图片管理的时候又遇到一个坑"><a href="#在写图片管理的时候又遇到一个坑" class="headerlink" title="在写图片管理的时候又遇到一个坑"></a>在写图片管理的时候又遇到一个坑</h4><p><strong>在删除顶层数据库数据的时候，要注意删除其下的有外键关联的数据</strong>，特别是 product_id 这个东西，是很多表的外键，删除 product 之前需要先清空有关联的其他表的数据….</p>
-<p>总之坑是很多啦..不过项目在进展总归是好事…耐心耐心…</p>
-<h4 id="接着码代码…"><a href="#接着码代码…" class="headerlink" title="接着码代码…."></a>接着码代码….</h4><p>还剩下一些体力活的东西，就先结博文啦…（心累.jpg）</p>
-<p>有一些催更的朋友，希望能别催啦…每天都在码啦，而且本身也是很low的东西，写完之后我会上传 github 的。</p>
-<hr>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-dc0bd48aaa532767.jpg" alt=""></p>
-<p>当我给自己埋了一个大坑说要模仿天猫，并且陷进去的时候，一方面痛苦着一方面也察觉了自己很多不足的地方，就觉得还是很值得，现在来做一下简短的总结。</p>
-<ul>
-<li>进度比想象中慢了很多，虽然一步一步按照之前的分析图来编写代码总体是顺畅的，但是有那种写着写着突然发现之前的设计有问题的感觉，中途也改了几次，<strong>发现自己分析问题不够全面。</strong></li>
-<li>项目中有许多类似的代码，并且在 Controller 和 Impl 中不断有其他的东西加入，总觉得是糟糕的代码，但是又不知道应该进一步如何改进。</li>
-<li><strong>方向永远比努力重要，在行动之前思考清楚，</strong>我一直觉得是很重要的一点，我觉得通过对项目的分析，对我项目的进展有一个整体的构思，各个模块该有什么功能都比较清晰，特别在编写 JSP 文件的时候能明显感觉不会很迷茫，这是比较好的一点</li>
-<li><strong>发现自己阅读代码量很少，</strong>这种感觉体现在很多地方，一是写代码时感觉到自己思想的局限性，二是觉得自己写的代码有很多的相似性，虽然这个项目是自己突发奇想的想要去做的，但是有很多细节的地方，是自己没有去注意到的，比如类型要求、边界判断、事务处理等等等…</li>
-</ul>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -7134,6 +6871,11 @@ public class ProductImageController {
             ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
+            id="categoriesE78988E69CACE789B9E680A7"
+            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
             id="categoriesE7949FE6B4BB"
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
@@ -7185,7 +6927,7 @@ public class ProductImageController {
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

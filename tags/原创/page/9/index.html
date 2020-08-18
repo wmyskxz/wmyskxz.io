@@ -436,6 +436,364 @@
         
           
   <h2 class="title">
+    <a href="/2019/04/25/mongodb-kuai-su-ru-men/">
+      MongoDB【快速入门】
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java-Web/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java Web</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2019年4月25日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2572826f53174702.png" alt=""></p>
+<h1 id="1-MongDB-简介"><a href="#1-MongDB-简介" class="headerlink" title="1.MongDB 简介"></a>1.MongDB 简介</h1><p><strong>MongoDB</strong>（来自于英文单词“Humongous”，中文含义为“庞大”）是可以应用于各种规模的企业、各个行业以及各类应用程序的开源数据库。作为一个适用于敏捷开发的数据库，MongoDB 的数据模式可以随着应用程序的发展而灵活地更新。与此同时，它也为开发人员 提供了传统数据库的功能：二级索引，完整的查询系统以及严格一致性等等。 MongoDB 能够使企业更加具有敏捷性和可扩展性，各种规模的企业都可以通过使用 MongoDB 来创建新的应用，提高与客户之间的工作效率，加快产品上市时间，以及降低企业成本。</p>
+<p><strong>MongoDB</strong> 是专为可扩展性，高性能和高可用性而设计的数据库。它可以从单服务器部署扩展到大型、复杂的多数据中心架构。利用内存计算的优势，MongoDB 能够提供高性能的数据读写操作。 MongoDB 的本地复制和自动故障转移功能使您的应用程序具有企业级的可靠性和操作灵活性。</p>
+<blockquote>
+<p>以上内容摘自官网：</p>
+</blockquote>
+<h2 id="1-1-文档型数据库"><a href="#1-1-文档型数据库" class="headerlink" title="1.1 文档型数据库"></a>1.1 文档型数据库</h2><p>简而言之，MongoDB是一个免费开源跨平台的 NoSQL 数据库，与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+    name: "我没有三颗心脏",
+    age: 22,
+}</code></pre>
+<p>文档型的数据存储方式有几个重要好处：</p>
+<ol>
+<li>文档的数据类型可以对应到语言的数据类型，如数组类型（Array）和对象类型（Object）；</li>
+<li>文档可以嵌套，有时关系型数据库涉及几个表的操作，在 MongoDB 中一次就能完成，可以减少昂贵的连接花销；</li>
+<li>文档不对数据结构加以限制，不同的数据结构可以存储在同一张表；</li>
+<li>MongoDB 的文档数据模型和索引系统能有效提升数据库性能；</li>
+<li>复制集功能提供数据冗余，自动化容灾容错，提升数据库可用性；</li>
+<li>分片技术能够分散单服务器的读写压力，提高并发能力，提升数据库的可拓展性；</li>
+<li>MongoDB 高性能，高可用性、可扩展性等特点，使其至 2009 年发布以来，逐渐被认可，并被越来越多的用于生产环境中。AWS、GCP、阿里云等云平台都提供了十分便捷的 MongoDB 云服务。</li>
+</ol>
+<h2 id="1-2-MongoDB-基础概念"><a href="#1-2-MongoDB-基础概念" class="headerlink" title="1.2 MongoDB 基础概念"></a>1.2 MongoDB 基础概念</h2><p>可以使用我们熟悉的 MySQL 数据库来加以对比：</p>
+<table>
+<thead>
+<tr>
+<th align="center">MySQL 基础概念</th>
+<th align="center">MongoDB 对应概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">数据库（database）</td>
+<td align="center">容器（database）</td>
+</tr>
+<tr>
+<td align="center">表（table）</td>
+<td align="center">集合（collection）</td>
+</tr>
+<tr>
+<td align="center">行（row）</td>
+<td align="center">文档（document）</td>
+</tr>
+<tr>
+<td align="center">列（column）</td>
+<td align="center">域（filed）</td>
+</tr>
+<tr>
+<td align="center">索引（index）</td>
+<td align="center">索引（index）</td>
+</tr>
+</tbody></table>
+<p>也借用一下<a href="[http://www.runoob.com/mongodb/mongodb-databases-documents-collections.html](http://www.runoob.com/mongodb/mongodb-databases-documents-collections.html)">菜鸟教程</a>的图来更加形象生动的说明一下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-dee79a699491eb9a.png" alt=""></p>
+<p>这很容易理解，但是问题在于：<strong>我们为什么要引入新的概念呢？</strong>（也就是为什么我们要把“表”替换成“集合”，“行”替换成“文档”，“列”替换成“域”呢？）原因在于，其实在 <strong>MySQL 这样的典型关系型数据</strong>中，我们是在<strong>定义表的时候定义列</strong>的，但是由于上述<strong>文档型数据库</strong>的特点，它允许文档的数据类型可以对应到语言的数据类型，所以我们是在<strong>定义文档的时候才会定义域</strong>的。</p>
+<p>也就是说，集合中的每个文档都可以有独立的域。因此，虽说集合相对于表来说是一个简化了的容器，而文档则包含了比行要多得多的信息。</p>
+<h1 id="2-搭建环境"><a href="#2-搭建环境" class="headerlink" title="2 搭建环境"></a>2 搭建环境</h1><p>怎么样都好，搭建好环境就行，这里以 OS 环境为例，你可以使用 OSX 的 brew 安装 mongodb：</p>
+<pre class=" language-shell"><code class="language-shell">brew install mongodb</code></pre>
+<p>在运行之前我们需要创建一个数据库存储目录 <code>/data/db</code>：</p>
+<pre class=" language-shell"><code class="language-shell">sudo mkdir -p /data/db</code></pre>
+<p>然后启动 mongodb，默认数据库目录即为 <code>/data/db</code>（如果不是，可以使用 <code>--dbpath</code> 指令来指定）：</p>
+<pre class=" language-shell"><code class="language-shell">sudo mongd</code></pre>
+<p>过一会儿你就能看到你的 mongodb 运行起来的提示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d36d3a631ee47120.png" alt=""></p>
+<blockquote>
+<p>具体的搭建过程可以参考菜鸟的教程：<a href="http://www.runoob.com/mongodb/mongodb-window-install.html" target="_blank" rel="noopener">http://www.runoob.com/mongodb/mongodb-window-install.html</a></p>
+</blockquote>
+<h1 id="3-基于-Shell-的-CRUD"><a href="#3-基于-Shell-的-CRUD" class="headerlink" title="3 基于 Shell 的 CRUD"></a>3 基于 Shell 的 CRUD</h1><h2 id="3-1-连接实例"><a href="#3-1-连接实例" class="headerlink" title="3.1 连接实例"></a>3.1 连接实例</h2><p>通过上面的步骤我们在系统里运行了一个 mongodb 实例，接下来通过 <code>mongo</code> 命令来连接它：</p>
+<pre class=" language-shell"><code class="language-shell">mongo [options] [db address] [file names]</code></pre>
+<p>由于上面运行的 mongodb 运行在 27017 端口，并且灭有启动安全模式，所以我们也不需要输入用户名和密码就可以直接连接：</p>
+<pre class=" language-shell"><code class="language-shell">mongo 127.0.0.1:27017</code></pre>
+<p>或者通过 <code>--host</code> 和 <code>--port</code> 选项指定主机和端口。一切顺利的话，就进入了 mongoDB <code>shell</code>，<code>shell</code> 会报出一连串权限警告，不过不用担心，这并不会影响之后的操作。在添加授权用户和开启认证后，这些警告会自动消失。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d95f2f6b1df42f2d.png" alt=""></p>
+<h2 id="3-2-CRUD-操作"><a href="#3-2-CRUD-操作" class="headerlink" title="3.2 CRUD 操作"></a>3.2 CRUD 操作</h2><p>在进行增删改查操作之前，我们需要先了解一下常用的 <code>shell</code> 命令：</p>
+<ul>
+<li><code>db</code> 显示当前所在数据库，默认为 <code>test</code></li>
+<li><code>show dbs</code> 列出可用数据库</li>
+<li><code>show tables</code> <code>show collections</code> 列出数据库中可用集合</li>
+<li><code>use &lt;database&gt;</code> 用于切换数据库</li>
+</ul>
+<p>mongoDB 预设有两个数据库，admin 和 local，admin 用来存放系统数据，local 用来存放该实例数据，在副本集中，一个实例的 local 数据库对于其它实例是不可见的。使用 use 命令切换数据库：</p>
+<pre class=" language-shell"><code class="language-shell">> use admin
+> use local
+> use newDatabase</code></pre>
+<p>可以 use 一个不存在的数据库，当你存入新数据时，mongoDB 会创建这个数据库：</p>
+<pre class=" language-shell"><code class="language-shell">> use newDatabase
+> db.newCollection.insert({x:1})
+WriteResult({ "nInserted" : 1 })</code></pre>
+<p>以上命令向数据库中插入一个文档，返回 1 表示插入成功，mongoDB 自动创建 newCollection 集合和数据库 newDatabase。下面将对增查改删操作进行一个简单的演示。</p>
+<h3 id="3-2-1-创建（Create）"><a href="#3-2-1-创建（Create）" class="headerlink" title="3.2.1 创建（Create）"></a>3.2.1 创建（Create）</h3><p>MongoDB 提供 <strong>insert</strong> 方法创建新文档：</p>
+<ul>
+<li><code>db.collection.inserOne()</code> 插入单个文档<br>WriteResult({ “nInserted” : 1 })</li>
+<li><code>db.collection.inserMany()</code> 插入多个文档</li>
+<li><code>db.collection.insert()</code> 插入单条或多条文档</li>
+</ul>
+<p>我们接着在刚才新创建的 newDatabase 下面新增数据吧：</p>
+<pre class=" language-shell"><code class="language-shell">db.newCollection.insert({name:"wmyskxz",age:22})</code></pre>
+<p>根据以往经验应该会觉得蛮奇怪的，因为之前在这个集合中插入的数据格式是 <code>{x:1}</code> 的，而这里新增的数据格式确是 <code>{name:&quot;wmyskxz&quot;,age:22}</code> 这个样子的。还记得吗，<strong>文档型数据库</strong>的与传统型的<strong>关系型数据</strong>的区别就是在这里！</p>
+<p>并且要注意，<code>age:22</code> 和 <code>age:&quot;22&quot;</code> 是不一样的哦，前者插入的是一个数值，而后者是字符串，我们可以通过 <code>db.newCollection.find()</code> 命令查看到刚刚插入的文档：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find()
+{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }</code></pre>
+<p>这里有一个神奇的返回，那就是多了一个叫做 <code>_id</code> 的东西，这是 MongoDB 为你自动添加的字段，你也可以自己生成。大部分情况下还是会让 MongoDB 为我们生成，而且默认情况下，该字段是被加上了索引的。</p>
+<h3 id="3-2-2-查找（Read）"><a href="#3-2-2-查找（Read）" class="headerlink" title="3.2.2 查找（Read）"></a>3.2.2 查找（Read）</h3><p>MongoDB 提供 <strong>find</strong> 方法查找文档，<strong>第一个参数为查询条件：</strong></p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find() # 查找所有文档
+{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
+> db.newCollection.find({name:"wmyskxz"}) # 查找 name 为 wmyskxz 的文档
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
+> db.newCollection.find({age:{$gt:20}}) # 查找 age 大于 20 的文档
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }</code></pre>
+<p>上述代码中的$gt对应于大于号&gt;的转义。</p>
+<p><strong>第二个参数可以传入投影文档映射数据：</strong></p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find({age:{$gt:20}},{name:1})
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz" }</code></pre>
+<p>上述命令将查找 <code>age</code> 大于 20 的文档，返回 <code>name</code> 字段，排除其他字段。投影文档中字段为 1 或其他真值表示包含，0 或假值表示排除，可以设置多个字段位为 1 或 0，但不能混合使用。</p>
+<p>为了测试，我们为这个集合弄了一些奇奇怪怪的数据：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find()
+{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
+{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30 }</code></pre>
+<p>然后再来测试：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find({age:{$gt:20}},{name:1,x:1}) 
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz" }
+{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "x" : 1 }
+> db.newCollection.find({age:{$gt:20}},{name:0,x:0}) 
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "age" : 22 }
+{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "age" : 22, "y" : 30 }
+> db.newCollection.find({age:{$gt:20}},{name:0,x:1})
+Error: error: {
+    "ok" : 0,
+    "errmsg" : "Projection cannot have a mix of inclusion and exclusion.",
+    "code" : 2,
+    "codeName" : "BadValue"
+}</code></pre>
+<p>从上面的命令我们就可以把我们的一些想法和上面的结论得以验证，perfect！</p>
+<p>除此之外，还可以通过 <code>count</code>、<code>skip</code>、<code>limit</code> 等指针（Cursor）方法，改变文档查询的执行方式：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find().count()
+3
+> db.newCollection.find().skip(1).limit(10).sort({age:1})
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
+{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30 }</code></pre>
+<p>上述查找命令跳过 1 个文档，限制输出 10 个，以 <code>age</code> 子段正序排序（大于 0 为正序，小于 0 位反序）输出结果。最后，可以使用 Cursor 方法中的 pretty 方法，提升查询文档的易读性，特别是在查看嵌套的文档和配置文件的时候：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.find().pretty()
+{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
+{
+    "_id" : ObjectId("5cc102fb33907ae66490e46d"),
+    "name" : "wmyskxz",
+    "age" : 22
+}
+{
+    "_id" : ObjectId("5cc108fb33907ae66490e46e"),
+    "name" : "wmyskxz-test",
+    "age" : 22,
+    "x" : 1,
+    "y" : 30
+}</code></pre>
+<h3 id="3-2-3-更新（Update）"><a href="#3-2-3-更新（Update）" class="headerlink" title="3.2.3 更新（Update）"></a>3.2.3 更新（Update）</h3><p>MongoDB 提供 <strong>update</strong> 方法更新文档：</p>
+<ul>
+<li><code>db.collection.updateOne()</code> 更新最多一个符合条件的文档</li>
+<li><code>db.collection.updateMany()</code> 更新所有符合条件的文档</li>
+<li><code>db.collection.replaceOne()</code> 替代最多一个符合条件的文档</li>
+<li><code>db.collection.update()</code> 默认更新一个文档，可配置 multi 参数，跟新多个文档</li>
+</ul>
+<p>以 <code>update()</code> 方法为例。其格式：</p>
+<pre class=" language-shell"><code class="language-shell">> db.collection.update(
+    <query>,
+    <update>,
+    {
+        upsert: <boolean>,
+        multi: <boolean>
+    }
+)</code></pre>
+<p>各参数意义：</p>
+<ul>
+<li>query 为查询条件</li>
+<li>update 为修改的文档</li>
+<li>upsert 为真，查询为空时插入文档</li>
+<li>multi 为真，更新所有符合条件的文档</li>
+</ul>
+<p>下面我们测试把 <code>name</code> 字段为 <code>wmyskxz</code> 的文档更新一下试试：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({name:"wmyskxz"},{name:"wmyskxz",age:30})
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</code></pre>
+<p>要注意的是，如果更新文档只传入 <code>age</code> 字段，那么文档会被更新为<code>{age: 30}</code>，而不是<code>{name:&quot;wmyskxz&quot;, age:30}</code>。要避免文档被覆盖，需要用到 <code>$set</code> 指令，<code>$set</code> 仅替换或添加指定字段：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({name:"wmyskxz"},{$set:{age:30}})</code></pre>
+<p>如果要在查询的文档不存在的时候插入文档，要把 upsert 参数设置真值：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({name:"wmyskxz11"},{$set:{age:30}},{upsert:true})</code></pre>
+<p>update 方法默认情况只更新一个文档，如果要更新符合条件的所有文档，要把 multi 设为真值，并使用 <code>$set</code> 指令：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({age:{$gt:20}},{$set:{test:"A"}},{multi:true})
+WriteResult({ "nMatched" : 3, "nUpserted" : 0, "nModified" : 3 })
+> db.newCollection.find()
+{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
+{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 30, "test" : "A" }
+{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30, "test" : "A" }
+{ "_id" : ObjectId("5cc110148d0a578f03d43e81"), "name" : "wmyskxz11", "age" : 30, "test" : "A" }</code></pre>
+<h3 id="3-2-4-删除（Delete）"><a href="#3-2-4-删除（Delete）" class="headerlink" title="3.2.4 删除（Delete）"></a>3.2.4 删除（Delete）</h3><p>MongoDB 提供了 <strong>delete</strong> 方法删除文档：</p>
+<ul>
+<li><code>db.collection.deleteOne()</code> 删除最多一个符合条件的文档</li>
+<li><code>db.collection.deleteMany()</code> 删除所有符合条件的文档</li>
+<li><code>db.collection.remove()</code> 删除一个或多个文档</li>
+</ul>
+<p>以 remove 方法为例：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.remove({name:"wmyskxz11"})
+> db.newCollection.remove({age:{$gt:20}},{justOne:true})
+> db.newCollection.find()
+{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
+{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30, "test" : "A" }</code></pre>
+<p>MongoDB 提供了 drop 方法删除集合，返回 true 表面删除集合成功：</p>
+<pre class=" language-shell"><code class="language-shell">> db.newCollection.drop()</code></pre>
+<h3 id="3-2-5-小结"><a href="#3-2-5-小结" class="headerlink" title="3.2.5 小结"></a>3.2.5 小结</h3><p>相比传统关系型数据库，MongoDB 的 CURD 操作更像是编写程序，更符合开发人员的直觉，不过 MongoDB 同样也支持 SQL 语言。MongoDB 的 CURD 引擎配合索引技术、数据聚合技术和 JavaScript 引擎，赋予 MongoDB 用户更强大的操纵数据的能力。</p>
+<blockquote>
+<p>参考文章：<a href="https://segmentfault.com/a/1190000010556670" target="_blank" rel="noopener">简明 MongoDB 入门教程 - https://segmentfault.com/a/1190000010556670</a></p>
+</blockquote>
+<h1 id="4-MongoDB-数据模型的一些讨论"><a href="#4-MongoDB-数据模型的一些讨论" class="headerlink" title="4 MongoDB 数据模型的一些讨论"></a>4 MongoDB 数据模型的一些讨论</h1><blockquote>
+<p>前置申明：这一部分基于以下链接整理 <a href="https://github.com/justinyhuang/the-little-mongodb-book-cn/blob/master/mongodb.md#%E8%AE%B8%E5%8F%AF%E8%AF%81" target="_blank" rel="noopener">https://github.com/justinyhuang/the-little-mongodb-book-cn/blob/master/mongodb.md#%E8%AE%B8%E5%8F%AF%E8%AF%81</a></p>
+</blockquote>
+<p>这是一个抽象的话题，与大多数NoSQL方案相比,在建模方面,面向文档的数据库算是和关系数据库相差最小的。这些差别是很小，但是并不是说不重要。</p>
+<h2 id="4-1-没有连接（Join）"><a href="#4-1-没有连接（Join）" class="headerlink" title="4.1 没有连接（Join）"></a>4.1 没有连接（Join）</h2><p>您要接受的第一个也是最基本的一个差别，就是 <strong>MongoDB 没有连接（join）</strong>。我不知道MongoDB不支持某些类型连接句法的具体原因，但是我知道一般而言人们认为连接是不可扩展的。也就是说，<strong>一旦开始横向分割数据，最终不可避免的就是在客户端（应用程序服务器）使用连接</strong>。且不论MongoDB为什么不支持连接，事实是数据是有关系的，可是MongoDB不支持连接。（译者：这里的关系指的是不同的数据之间是有关联的，对于没有关系的数据，就完全不需要连接。）</p>
+<p>为了在没有连接的MongoDB中生存下去，在没有其他帮助的情况下，我们必须在自己的应用程序中实现连接。</p>
+<p>基本上我们需要<strong>用第二次查询</strong>去找到相关的数据。找到并组织这些数据相当于在关系数据库中声明一个外来的键。现在先别管什么独角兽了，我们来看看我们的员工。首先我们创建一个员工的数据（这次我告诉您具体的_id值，这样我们的例子就是一样的了）：</p>
+<pre class=" language-shell"><code class="language-shell">db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d730"), name: 'Leto'})</code></pre>
+<p>然后我们再加入几个员工并把 <code>Leto</code> 设成他们的老板：</p>
+<pre class=" language-shell"><code class="language-shell">db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d731"), name: 'Duncan', manager: ObjectId("4d85c7039ab0fd70a117d730")});
+db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', manager: ObjectId("4d85c7039ab0fd70a117d730")});</code></pre>
+<p><em>（有必要再强调一下，_id可以是任何的唯一的值。在实际工作中你很可能会用到ObjectId， 所以我们在这里也使用它）</em></p>
+<p>显然，要找到Leto的所有员工，只要执行：</p>
+<pre class=" language-shell"><code class="language-shell">db.employees.find({manager: ObjectId("4d85c7039ab0fd70a117d730")})</code></pre>
+<p>没什么了不起的。在最糟糕的情况下，为弥补连接的缺失需要做的只是再多查询一次而已，该查询很可能是经过索引了的。</p>
+<h3 id="4-1-1-数组和嵌入文档（Embedded-Documents）"><a href="#4-1-1-数组和嵌入文档（Embedded-Documents）" class="headerlink" title="4.1.1 数组和嵌入文档（Embedded Documents）"></a>4.1.1 数组和嵌入文档（Embedded Documents）</h3><p>MongoDB 没有连接并不意味着它没有其他的优势。还记得我们曾说过 MongoDB 支持数组并把它当成文档中的一级对象吗？当处理多对一或是多对多关系的时候，这一特性就显得非常好用了。用一个简单的例子来说明，如果一个员工有两个经理，我们可以把这个关系储存在一个数组当中：</p>
+<pre class=" language-shell"><code class="language-shell">({name: 'Siona', manager: [ObjectId("4d85c7039ab0fd70a117d730"), ObjectId("4d85c7039ab0fd70a117d732")] })</code></pre>
+<p>需要注意的是，在这种情况下，有些文档中的 <code>manager</code> 可能是一个向量，而其他的却是数组。在两种情况下，前面的 <code>find</code> 还是一样可以工作：</p>
+<pre class=" language-shell"><code class="language-shell">db.employees.find({manager: ObjectId("4d85c7039ab0fd70a117d730")})</code></pre>
+<p>很快您就会发现数组中的值比起多对多的连接表（join-table）来说要更容易处理。</p>
+<p>除了数组，MongoDB 还支持嵌入文档。尝试插入含有内嵌文档的文档，像这样：</p>
+<pre class=" language-shell"><code class="language-shell">db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d734"), name: 'Ghanima', family: {mother: 'Chani', father: 'Paul', brother: ObjectId("4d85c7039ab0fd70a117d730")}})</code></pre>
+<p>也许您会这样想，确实也可以这样做：嵌入文档可以用‘.’符号来查询：</p>
+<pre class=" language-shell"><code class="language-shell">db.employees.find({'family.mother': 'Chani'})</code></pre>
+<p>就这样，我们简要地介绍了嵌入文档适用的场合以及您应该怎样使用它。</p>
+<h3 id="4-1-2-DBRef"><a href="#4-1-2-DBRef" class="headerlink" title="4.1.2 DBRef"></a>4.1.2 DBRef</h3><p>MongoDB 支持一个叫做 DBRef 的功能，许多 MongoDB 的驱动都提供对这一功能的支持。当驱动遇到一个 <code>DBRef</code> 时它会把当中引用的文档读取出来。<code>DBRef</code> 包含了所引用的文档的 ID 和所在的集合。它通常专门用于这样的场合：相同集合中的文档需要引用另外一个集合中的不同文档。例如，文档 1 的 <code>DBRef</code> 可能指向 <code>managers</code> 中的文档，而文档 2 中的 <code>DBRef</code> 可能指向 <code>employees</code> 中的文档。</p>
+<h3 id="4-1-3-范规范化（Denormalization）"><a href="#4-1-3-范规范化（Denormalization）" class="headerlink" title="4.1.3 范规范化（Denormalization）"></a>4.1.3 范规范化（Denormalization）</h3><p>代替连接的另一种方法就是反规范化数据。在过去，反规范化是为性能敏感代码所设，或者是需要数据快照（例如审计日志）的时候才应用的。然而，随着NoSQL的日渐普及，有许多这样的数据库并不提供连接操作，于是作为规范建模的一部分，反规范化就越来越常见了。这样说并不是说您就需要为每个文档中的每一条信息创建副本。与此相反，与其在设计的时候被复制数据的担忧牵着走，还不如按照不同的信息应该归属于相应的文档这一思路来对数据建模。</p>
+<p>比如说，假设您在编写一个论坛的应用程序。把一个 <code>user</code> 和一篇 <code>post</code> 关联起来的传统方法是在 <code>posts</code> 中加入一个 <code>userid</code> 的列。这样的模型中，如果要显示 <code>posts</code> 就不得不读取（连接）<code>users</code>。一种简单可行的替代方案就是直接把 <code>name</code> 和 <code>userid</code> 存储在 <code>post</code> 中。您甚至可以用嵌入文档来实现，比如说 <code>user: {id: ObjectId(&#39;Something&#39;), name: &#39;Leto&#39;}</code>。当然，如果允许用户更改他们的用户名，那么每当有用户名修改的时候，您就需要去更新所有的文档了（这需要一个额外的查询）。</p>
+<p>对一些人来说改用这种方法并非易事。甚至在一些情况下根本行不通。不过别不敢去尝试这种方法：有时候它不仅可行，而且就是正确的方法。</p>
+<h3 id="4-1-4-应该选择哪一种？"><a href="#4-1-4-应该选择哪一种？" class="headerlink" title="4.1.4 应该选择哪一种？"></a>4.1.4 应该选择哪一种？</h3><p>当处理一对多或是多对多问题的时候，采用id数组往往都是正确的策略。可以这么说，<code>DBRef</code> 并不是那么常用，虽然您完全可以试着采用这项技术。这使得新手们在面临选择嵌入文档还是手工引用（manual reference）时犹豫不决。</p>
+<p>首先，要知道目前一个单独的文档的大小限制是 4MB，虽然已经比较大了。了解了这个限制可以为如何使用文档提供一些思路。目前看来多数的开发者还是大量地依赖手工引用来维护数据的关系。嵌入文档经常被使用，but mostly for small pieces of data which we want to always pull with the parent document。一个真实的例子，我把 <code>accounts</code> 文档嵌入存储在用户的文档中，就像这样：</p>
+<pre class=" language-shell"><code class="language-shell">db.users.insert({name: 'leto', email: 'leto@dune.gov', account: {allowed_gholas: 5, spice_ration: 10}})</code></pre>
+<p>这不是说您就应该低估嵌入文档的作用，也不是说应该把它当成是鲜少用到的工具并直接忽略。将数据模型直接映射到目标对象上可以使问题变得更加简单，也往往因此而不再需要连接操作。当您知道 MongoDB 允许对嵌入文档的域进行查询并做索引后，这个说法就尤其显得正确了。</p>
+<h2 id="4-2-集合：少一些还是多一些？"><a href="#4-2-集合：少一些还是多一些？" class="headerlink" title="4.2 集合：少一些还是多一些？"></a>4.2 集合：少一些还是多一些？</h2><p>既然集合不强制使用模式，那么就完全有可能用一个单一的集合以及一个不匹配的文档构建一个系统。以我所见过的情况，大部分的 MongoDB 系统都像您在关系数据库中所见到的那样布局。换句话说，如果在关系数据库中会用表，那么很有可能在 MongoDB 中就要用集合（多对多连接表在这里是一个不可忽视的例外）</p>
+<p>当把嵌入文档引进来的时候，讨论就会变得更加有意思了。最常见的例子就是博客系统。是应该分别维护 <code>posts</code> 和 <code>comments</code> 两个集合，还是在每个 <code>post</code> 中嵌入一个 <code>comments</code> 数组？暂且不考虑那个 4MB 的限制（哈姆雷特所有的评论也不超过200KB，谁的博客会比他更受欢迎？），大多数的开发者还是倾向于把数据划分开。因为这样既简洁又明确。</p>
+<p>没有什么硬性的规定（呃，除了 4MB 的限制）。做了不同的尝试之后您就可以凭感觉知道怎样做是对的了。 </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此已经对 MongoDB 有了一个基本的了解和入门，但是要运用在实际的项目中仍然有许多实践需要自己去完成</p>
+<hr>
+<p>按照惯例黏一个尾巴：</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2019/01/08/elasticsearch-kuai-su-ru-men/">
       Elasticsearch【快速入门】
     </a>
@@ -3737,157 +4095,6 @@ index - 首页
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/01/01/2018-nian-zhong-zong-jie/">
-      2018年终总结
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>编程人生</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年1月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-f3a53f76951a829a.png" alt=""></p>
-<h1 id="回顾8102"><a href="#回顾8102" class="headerlink" title="回顾8102"></a>回顾8102</h1><p>说着回顾8102年，我就想要从自己年前写下的日记、博客、发过的票圈里去寻找自己在这一年来的轨迹，发现虽然才短短一年时间，自己的心境却发生了很大的变化，回看那些日记、博客、发过的票圈，那个年前的我竟带着一丝陌生气和些许天真，但好在写的技术博客还是挺好的..（嘻嘻嘻..）不过一年来看，我很感谢年前那个一丝陌生的我，带着自己的天真一直(努力)奋斗到了年尾，今早刚好又看到一句杨绛老先生的话，非常喜欢，分享共勉之的同时，也写一写自己的年终总结：</p>
-<blockquote>
-<p>“我们曾如此渴望命运的波澜，到最后才发现：人生最曼妙的风景，竟是内心的淡定与从容….我们曾如此期盼外界的认定，到最后才知道：世界是自己的，与他人毫无关系！”</p>
-</blockquote>
-<h2 id="00-改变-amp-成长"><a href="#00-改变-amp-成长" class="headerlink" title="00.改变 &amp; 成长"></a>00.改变 &amp; 成长</h2><h3 id="七个星期零2天计划"><a href="#七个星期零2天计划" class="headerlink" title="七个星期零2天计划"></a>七个星期零2天计划</h3><p>开通博客是在去年，初衷也只是想记录记录自己的学习经历，起初也只是三天打鱼两天晒网的零零碎碎的写，后来过完年翻了新学期，可能是感受到了大学的时光不多了吧，可能是看到了与某些大神之间的差距吧，也可能是想明白了自己想要的是什么了吧，whatever，反正我就开始算着日子给自己制定了一个<strong>7个星期零2天计划</strong>，从计划开始到学期结束，正好是这么长的时间。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-849725735c16d933.png" alt="七个星期零2天的计划 &amp; 以及总结"></p>
-<p>现在想来也真是一段疯狂的日子，把自己裹在学校的实验室里，早出晚归，平均每天保持10小时以上的学习时间（当然有偷懒啦..），不管是博客书籍还是视频都不管不顾的汲取里面的东西然后总结成自己的博文，时间很快就过去，在最后的总结中天真的写道：“从七个星期之前，还只是懂一点点Java的小伙子，现在已经是对Java Web还有Java熟悉的技术人员了吧”（当然现在看起来蛮打脸的..），hhh…<strong>果然还是年轻</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-79f3f403dbad9e29.png" alt="实验室的“工作台..”"></p>
-<p>从<a href="https://www.jianshu.com/nb/23242890" target="_blank" rel="noopener">Java Web文集</a>开始写的3-14号一直到计划快结束的时候，我已经不知不觉收获了600+粉丝，收到过工作邀请、写书邀请以及各种粉丝的鼓励加油喜欢，在博客园一篇关于<a href="https://www.cnblogs.com/wmyskxz/p/9010832.html" target="_blank" rel="noopener">SpringBoot的文章</a>也是突破了16W的阅读量..emmm，这些无不让我更加鼓舞更加奋勇，渐渐也觉得自己终于是能看到大神的尾灯了，很安心。</p>
-<h3 id="暑期计划"><a href="#暑期计划" class="headerlink" title="暑期计划"></a>暑期计划</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-563b9454510eab2f.png" alt="暑期计划"></p>
-<p>为了完成自己新年给自己许的“来年变成一只工作狗”的心愿，暑假就待在学校继续学习准备即将来临的秋招了，期间也把自己总结的一些面试的东西都发了博客，还有幸去参与了一次<a href="https://www.jianshu.com/p/a31121d94922" target="_blank" rel="noopener"><strong>封闭式开发</strong></a>（虽然觉得蛮滑水的，但是有钱拿，还混吃混喝，嘻嘻嘻..），也是一次别样的体验吧..</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-0d96985d6d999387.png" alt="参与开发住的酒店"></p>
-<p>也为了更好的在自己简历中加上一些亮眼的东西，自己在深入学习了一些底层知识的同时，也从零开始搭建了自己的个人博客，虽然后来在阿里二面的时候被面试官分分钟找到安全漏洞（后来给修复了..）..但仍然在造轮子的过程中学习了很多。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-3bf823befc5ae698.png" alt="个人博客-首页"></p>
-<p>然后，经历<a href="https://www.jianshu.com/p/5531006468d8" target="_blank" rel="noopener">秋招</a>，见识到了更多大牛们，意识到自己到底还是菜，并且自己还有许多想要继续学习的东西，考虑再三，跟老妈通了一个长电话，决定考研。</p>
-<h3 id="考研计划"><a href="#考研计划" class="headerlink" title="考研计划"></a>考研计划</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-7f2916e78a200ab1.png" alt="考研计划"></p>
-<p>大致跟家里人说了一下之后，然后在博客发了一篇<a href="https://www.jianshu.com/p/a7dbcfd67259" target="_blank" rel="noopener">致小伙伴们书</a>之后，就一头挤进了考研大军之中。说实在的，考研的日子比我想象的要单调得多，三点一线，每一天按部就班，生活没有一点起伏，我并不觉得辛苦，但这样的日子对我来说太折磨了，好在我坚持了下来，并且好消息是：考研还算顺利！不出意外，应该在今年就能当研究生学长啦~</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-084ec310f5245238.png" alt="考研-学习政治中..."></p>
-<p>考完，也没有想象中的狂欢，倒是更想写代码一些，hhhh…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-626300892410a564.png" alt="考完挪列的计划"></p>
-<p><strong>以前总觉得日子是过不完的，未来是完全不一样的。说不上来自己经历过这些有多大的变化，梦想也还像小时候一样遥远，或许唯一不同的是，有一些想法我已经开始着手去实现它。</strong></p>
-<h2 id="01-展望2019"><a href="#01-展望2019" class="headerlink" title="01.展望2019"></a>01.展望2019</h2><p>希望19年仍然是“奋斗”的一年吧！并且<strong>把自己的公众号从wmyskxz_javaweb改为了wmyskxz</strong>（我没有三颗心脏的缩写），希望公众号和博客都<strong>从记录学习变成记录学习和生活吧。</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-3aa3126fc0e6cf16.png" alt=""></p>
-<p>然后希望19年的关键字是：<strong>学习/健身/阅读/记录/独立。</strong></p>
-<h2 id="10-矫情的部分"><a href="#10-矫情的部分" class="headerlink" title="10.矫情的部分"></a>10.矫情的部分</h2><h3 id="关于学习"><a href="#关于学习" class="headerlink" title="关于学习"></a>关于学习</h3><p>18年算是读了一些书，技术类/文学类/考研类…个人觉得学习最重要的还是<strong>保持清醒</strong>吧，清楚自己要学到哪一种程度，自己还欠缺一些什么知识，最好采用什么样的方法去学。特别喜欢并且受用的一句话是：<strong>方向不对，努力白费。</strong>开始行动之前多思考，不要把时间浪费在一些“无所谓”的事情身上。这样的<strong>清醒</strong>还应该延展到生活中，时刻提醒自己想要的是什么，为自己创造需要的环境，至少我是这样粗浅的以为的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-8f8013c13033e688.png" alt="今年看过的一些技术类书籍（部分，两本儿老大哥用来垫屏幕了）"></p>
-<p>还喜欢一个知识边界的理论，比如我们把整个IT知识领域用一个与安全来表示，黑色实体部分就是我们刚开始认知的区域，因为我们刚开始知道的少，了解的少，里面的圆的周长就会小很多，我们感觉到自己需要了解的东西也相对小。（就像我在自己的总结里面写：自己是熟悉Java的编程人员一样）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-62b7e728b48119f0.png" alt=""></p>
-<p>当我们通过不断的学习、扩宽自己知识的边界，就像里面的小圆不断的长大一些，我们感受到的未知也越来越多，认识到自己了解的内容占整个体系只是很小的一部分。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-4da43a2c5b404da4.png" alt=""></p>
-<blockquote>
-<p>另外分享一篇喜欢的文章：<a href="https://blog.csdn.net/haoui123/article/details/72545098" target="_blank" rel="noopener">思维的局限</a></p>
-</blockquote>
-<h3 id="关于朋友-amp-家人"><a href="#关于朋友-amp-家人" class="headerlink" title="关于朋友 &amp; 家人"></a>关于朋友 &amp; 家人</h3><p>18年的节奏一直是在学习、学习、学习，一直圈在学校的一方小天地，习惯了这样奇怪的节奏，对家人和朋友没有过多的关心，考完研了跟朋友聊天发现自己都快搭不上他们的话了，其实有些让我不知所措，但好在他们仍然热气腾腾，仍然让我感到年节的暖，我只敢说谢谢。我知道人生花团锦簇，某一刻终于和自己有关。</p>
-<h3 id="关于自己"><a href="#关于自己" class="headerlink" title="关于自己"></a>关于自己</h3><blockquote>
-<p>“我一向觉得，自身对于他人而言，是一种不可理喻的存在，并且向他人寻求理解，也是一种荒谬不堪的暴力。他人总是超乎想象的难以理解我，但正因为这份不理解，我才得以自由；正因为这份不理解，我才得以活下去。我之所以拥有感受他人可爱之处的能力，也必定出于相同的原因。”</p>
-<p>“说来矫情，总觉得自己生来就带着一中自己也无法完全理解的悲伤，他无时无刻的折磨我，巨大到无法化解，任何感情也都无法慰藉，让我哭笑不得，更不得与之独处。而可喜的是，我同样深信不论最重我是否孑然一身，一定也只有它不会弃我而去，每每想到这儿的时候又让我无比安心。”</p>
-</blockquote>
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/2018%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/7896890-e580cd5d53e8b343.png" alt=""></p>
-<p>感谢您一直看到了最后，分享我一直在用并且很喜欢的一张壁纸吧，Somewhere或许我还不能确定在哪里，但我知道此刻，对于我心中的Somewhere，我一定在路上！共勉！2019！</p>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3902,7 +4109,7 @@ index - 首页
           </a>
         
         <p class="current">
-          9 / 19
+          9 / 20
         </p>
         
           <a class="next" rel="next" href="/tags/%E5%8E%9F%E5%88%9B/page/10/">
@@ -4238,6 +4445,11 @@ index - 首页
             ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
+            id="categoriesE78988E69CACE789B9E680A7"
+            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
             id="categoriesE7949FE6B4BB"
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
@@ -4289,7 +4501,7 @@ index - 首页
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

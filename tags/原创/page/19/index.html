@@ -436,6 +436,915 @@
         
           
   <h2 class="title">
+    <a href="/2017/11/18/bian-xie-gao-zhi-liang-dai-ma-xue-xi-bi-ji-2/">
+      《编写高质量代码》学习笔记(2)
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Java%E8%BF%9B%E9%98%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>学习笔记/Java进阶</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2017年11月18日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>写着写着发现简书提醒我文章接近字数极限，建议我换一篇写了。</p>
+</blockquote>
+<hr>
+<h2 id="建议52：推荐使用String直接量赋值"><a href="#建议52：推荐使用String直接量赋值" class="headerlink" title="建议52：推荐使用String直接量赋值"></a>建议52：推荐使用String直接量赋值</h2><p>一般对象都是通过new关键字生成的，但是String还有第二种生成方式，也就是我们经常使用的直接声明方式，这种方式是极力推荐的，但不建议使用new String（”A”）的方式赋值。为什么呢？我们看如下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client58</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String str1 <span class="token operator">=</span> <span class="token string">"詹姆斯"</span><span class="token punctuation">;</span>
+        String str2 <span class="token operator">=</span> <span class="token string">"詹姆斯"</span><span class="token punctuation">;</span>
+        String str3 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"詹姆斯"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String str4 <span class="token operator">=</span> str3<span class="token punctuation">.</span><span class="token function">intern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 两个直接量是否相等</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str1 <span class="token operator">==</span> str2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 直接量和对象是否相等</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str1 <span class="token operator">==</span> str3<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 经过intern处理后的对象与直接量是否相等</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str1 <span class="token operator">==</span> str4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>注意看上面的程序，我们使用”==”判断的是两个对象的引用地址是否相同，也就是判断是否为同一个对象，打印的结果是true,false,true。即有两个直接量是同一个对象(进过intern处理后的String与直接量是同一个对象)，但直接通过new生成的对象却与之不等，原因何在？</p>
+<p><strong>原因是Java为了避免在一个系统中大量产生String对象(为什么会大量产生，因为String字符串是程序中最经常使用的类型)，于是就设计了一个字符串池</strong>(也叫作字符串常量池，String pool或String Constant Pool或String Literal Pool),在字符串池中容纳的都是String字符串对象，<strong>它的创建机制是这样的：创建一个字符串时，首先检查池中是否有字面值相等的字符串，如果有，则不再创建，直接返回池中该对象的引用，若没有则创建之，然后放到池中，并返回新建对象的引用，这个池和我们平常说的池非常接近。</strong>对于此例子来说，就是创建第一个”詹姆斯”字符串时，先检查字符串池中有没有该对象，发现没有，于是就创建了”詹姆斯”这个字符串并放到池中，待创建str2字符串时，由于池中已经有了该字符串，于是就直接返回了该对象的引用，此时，str1和str2指向的是同一个地址，所以使用”==”来判断那当然是相等的了。</p>
+<p>那为什么使用new String(“詹姆斯”)就不相等了呢？因为直接声明一个String对象是不检查字符串池的，也不会把对象放到字符串池中，那当然”==”为false了。</p>
+<p>那为什么intern方法处理后即又相等了呢？因为intern会检查当前对象在对象池中是否存在字面值相同的引用对象，如果有则返回池中的对象，如果没有则放置到对象池中，并返回当前对象。</p>
+<p>可能有人要问了，放到池中，是不是要考虑垃圾回收问题呀？不用考虑了，虽然Java的每个对象都保存在堆内存中但是字符串非常特殊，它在编译期已经决定了其存在JVM的常量池(Constant Pool),垃圾回收不会对它进行回收的。</p>
+<p>　　通过上面的介绍，我们发现Java在字符串的创建方面确实提供了非常好的机制，利用对象池不仅可以提高效率，同时减少了内存空间的占用，<strong>建议大家在开发中使用直接量赋值方式，除非必要才建立一个String对象。</strong></p>
+<hr>
+<h2 id="建议54：正确使用String、StringBuffer、StringBuilder"><a href="#建议54：正确使用String、StringBuffer、StringBuilder" class="headerlink" title="建议54：正确使用String、StringBuffer、StringBuilder"></a>建议54：正确使用String、StringBuffer、StringBuilder</h2><p>CharSequence接口有三个实现类与字符串有关，String、StringBuffer、StringBuilder，虽然它们都与字符串有关，但其处理机制是不同的。</p>
+<p><strong>String类是不可变的量，也就是创建后就不能再修改了，</strong>比如创建了一个”abc”这样的字符串对象，那么它在内存中永远都会是”abc”这样具有固定表面值的一个对象，不能被修改，即使想通过String提供的方法来尝试修改，也是要么创建一个新的字符串对象，要么返回自己，比如：</p>
+<pre class=" language-java"><code class="language-java">String  str <span class="token operator">=</span> <span class="token string">"abc"</span><span class="token punctuation">;</span>
+String str1 <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>其中str是一个字符串对象，其值是”abc”,通过substring方法又重新生成了一个字符串str1，它的值是”bc”,也就是说str引用的对象一但产生就永远不会变。为什么上面还说有可能不创建对象而返回自己呢？那是因为采用substring(0)就不会创建对象。JVM从字符串池中返回str的引用，也就是自身的引用。</p>
+<p><strong>StringBuffer是一个可变字符串，</strong>它与String一样，在内存中保存的都是一个有序的字符序列(char 类型的数组)，不同点是StringBuffer对象的值是可改变的，例如：</p>
+<pre class=" language-java"><code class="language-java">StringBuffer sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuffer</span><span class="token punctuation">(</span><span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"b"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>从上面的代码可以看出sb的值在改变，初始化的时候是”a” ，经过append方法后，其值变成了”ab”。可能有人会问了，这与String类通过 “+” 连接有什么区别呢？例如：</p>
+<pre class=" language-java"><code class="language-java">String s <span class="token operator">=</span> <span class="token string">"a"</span><span class="token punctuation">;</span>
+s <span class="token operator">=</span> s <span class="token operator">+</span> <span class="token string">"b"</span><span class="token punctuation">;</span></code></pre>
+<p>有区别，字符串变量s初始化时是 “a” 对象的引用，经过加号计算后，s变量就修改为了 “ab” 的引用，但是初始化的 “a” 对象还没有改变，只是变量s指向了新的引用地址，再看看StringBuffer的对象，它的引用地址虽不变，但值在改变。</p>
+<p><strong>StringBuffer和StringBuilder基本相同，都是可变字符序列，不同点是：StringBuffer是线程安全的，StringBuilder是线程不安全的，翻翻两者的源代码，就会发现在StringBuffer的方法前都有关键字syschronized,这也是StringBuffer在性能上远远低于StringBuffer的原因。</strong></p>
+<p>　　在性能方面，由于String类的操作都是产生String的对象，而StringBuilder和StringBuffer只是一个字符数组的再扩容而已，所以String类的操作要远慢于StringBuffer 和 StringBuilder。</p>
+<p>　　弄清楚了三者之间的原理，我们就可以在不同的场景下使用不同的字符序列了：</p>
+<ul>
+<li><strong>使用String类的场景：</strong>在字符串不经常变化的场景中可以使用String类，例如常量的声明、少量的变量运算等；</li>
+<li><strong>使用StringBuffer的场景：</strong>在频繁进行字符串的运算(如拼接、替换、删除等)，并且运行在<strong>多线程</strong>的环境中，则可以考虑使用StringBuffer，例如XML解析、HTTP参数解析和封装等；</li>
+<li><strong>使用StringBuilder的场景：</strong>在频繁进行字符串的运算(如拼接、替换、删除等)，并且运行在<strong>单线程</strong>的环境中，则可以考虑使用StringBuilder，如SQL语句的拼接，JSON封装等。
+　　</li>
+</ul>
+<p>*<em>注意：在适当的场景选用字符串类型 *</em></p>
+<blockquote>
+<p>事实上这个问题被多个地方研究了很多次，我自己也写了一篇专门的文章来介绍String类：<br><a href="http://www.jianshu.com/p/e494552f2cf0" target="_blank" rel="noopener">http://www.jianshu.com/p/e494552f2cf0</a></p>
+</blockquote>
+<hr>
+<h2 id="建议55：注意字符串的位置"><a href="#建议55：注意字符串的位置" class="headerlink" title="建议55：注意字符串的位置"></a>建议55：注意字符串的位置</h2><p>看下面一段程序：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client55</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String str1 <span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span> <span class="token operator">+</span> <span class="token string">"apples"</span><span class="token punctuation">;</span>
+        String str2 <span class="token operator">=</span> <span class="token string">"apples"</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>想想两个字符串输出的结果的苹果数量是否一致，如果一致，会是几呢？</p>
+<p>答案是不一致，<strong>str1的值是”3apples” ,str2的值是“apples12”，</strong>这中间悬殊很大，只是把“apples” 调换了一下位置，为何会发生如此大的变化呢？</p>
+<p>这都源于java对于加号的处理机制：<strong>在使用加号进行计算的表达式中，只要遇到String字符串，则所有的数据都会转换为String类型进行拼接，如果是原始数据，则直接拼接，如是是对象，则调用toString方法的返回值然后拼接，</strong>如：</p>
+<pre class=" language-java"><code class="language-java">str <span class="token operator">=</span>  str <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>上面就是调用ArrayList对象的toString方法返回值进行拼接的。</strong>再回到前面的问题上，对与str1 字符串，Java的执行顺序是从左到右，先执行1+2，也就是算术加法运算，结果等于3，然后再与字符串进行拼接，结果就是 “3 apples”,其它形式类似于如下计算：</p>
+<pre class=" language-java"><code class="language-java">String str1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">+</span> <span class="token number">2</span> <span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"apples"</span> <span class="token punctuation">;</span></code></pre>
+<p>而对于str2字符串，由于第一个参与运算的是String类型，加1后的结果是“apples 1” ，这仍然是一个字符串，然后再与2相加，结果还是一个字符串，也就是“apples12”。这说明如果第一个参数是String，则后续的所有计算都会转变为String类型，谁让字符串是老大呢！</p>
+<p><strong>注意： 在“+” 表达式中，String字符串具有最高优先级。</strong></p>
+<hr>
+<h2 id="建议57：推荐在复杂字符串操作中使用正则表达式"><a href="#建议57：推荐在复杂字符串操作中使用正则表达式" class="headerlink" title="建议57：推荐在复杂字符串操作中使用正则表达式"></a>建议57：推荐在复杂字符串操作中使用正则表达式</h2><blockquote>
+<p>这是一个很自然的选择，因为正则表达式实在是太强大了。</p>
+</blockquote>
+<hr>
+<h2 id="建议58：强烈建议使用UTF编码"><a href="#建议58：强烈建议使用UTF编码" class="headerlink" title="建议58：强烈建议使用UTF编码"></a>建议58：强烈建议使用UTF编码</h2><p>Java的乱码问题由来已久，有经验的开发人员肯定遇到过乱码，有时从Web接收的乱码，有时从数据库中读取的乱码，有时是在外部接口中接收的乱码文件，这些都让我们困惑不已，甚至是痛苦不堪，看如下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client58</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> UnsupportedEncodingException <span class="token punctuation">{</span>
+        String str <span class="token operator">=</span> <span class="token string">"汉字"</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 读取字节</span>
+        <span class="token keyword">byte</span> b<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 重新生成一个新的字符串</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>Java文件是通过IDE工具默认创建的，编码格式是GBK，大家想想看上面的输出结果会是什么？可能是乱码吧？两个编码格式不同。我们暂时不说结果，先解释一下Java中的编码规则。Java程序涉及的编码包括两部分：</p>
+<ul>
+<li><p><strong>(1)、Java文件编码：</strong>如果我们使用记事本创建一个.java后缀的文件，则文件的编码格式就是操作系统默认的格式。如果是使用IDE工具创建的，如Eclipse，则依赖于IDE的设置，Eclipse默认是操作系统编码（Windows一般为GBK）；</p>
+</li>
+<li><p><strong>(2)、Class文件编码：</strong>通过javac命令生成的后缀名为.class的文件是UTF-8编码的UNICODE文件，这在任何操作系统上都是一样的，只要是.class文件就会使UNICODE格式。<strong>需要说明的是，UTF是UNICODE的存储和传输格式，</strong>它是为了解决UNICODE的高位占用冗余空间而产生的，使用UTF编码就意味着字符集使用的是UNICODE.</p>
+</li>
+</ul>
+<p>再回到我们的例子上，getBytes方法会根据指定的字符集取出字节数组(这里按照UNICODE格式来提取)，然后程序又通过new String(byte [] bytes)重新生成一个字符串，来看看String的这个构造函数：通过操作系统默认的字符集解码指定的byte数组，构造一个新的String，结果已经很清楚了，如果操作系统是UTF-8的话，输出就是正确的，如果不是，则会是乱码。由于这里使用的是默认编码GBK，那么输出的结果也就是乱码了。我们再详细分解一下运行步骤：</p>
+<ul>
+<li><p><strong>步骤1：</strong>创建Client58.java文件：该文件的默认编码格式GBK（如果是Eclipse，则可以在属性中查看到）。</p>
+</li>
+<li><p><strong>步骤2：</strong>编写代码(如上)；</p>
+</li>
+<li><p><strong>步骤3：</strong>保存，使用javac编译，注意我们没有使用”javac -encoding GBK Client58.java” 显示声明Java的编码方式，javac会自动按照操作系统的编码(GBK)读取Client58.java文件，然后将其编译成.class文件。</p>
+</li>
+<li><p><strong>步骤4：</strong>生成.class文件。编译结束，生成.class文件，并保存到硬盘上，此时 .class文件使用的UTF-8格式编码的UNICODE字符集，可以通过javap 命令阅读class文件，其中” 汉字”变量也已经由GBK转变成UNICODE格式了。</p>
+</li>
+<li><p><strong>步骤5：</strong>运行main方法，提取”汉字”的字节数组。”汉字” 原本是按照UTF-8格式保存的，要再提取出来当然没有任何问题了。</p>
+</li>
+<li><p><strong>步骤6：</strong>重组字符串，读取操作系统默认的编码GBK，然后重新编码变量b的所有字节。问题就在这里产生了：因为UNICODE的存储格式是两个字节表示一个字符(注意：这里是指UCS-2标准)，虽然GBK也是两个字节表示一个字符，但两者之间没有映射关系，只要做转换只能读取映射表，不能实现自动转换—-于是JVM就按照默认的编码方式(GBK)读取了UNICODE的两个字节。</p>
+</li>
+<li><p><strong>步骤7：</strong>输出乱码，程序运行结束，问题清楚了，解决方案也随之产生，方案有两个。</p>
+</li>
+<li><p><strong>步骤8：</strong>修改代码，明确指定编码即可，代码如下：<br><code>System.out.println(new String(b,&quot;UTF-8&quot;));</code></p>
+</li>
+<li><p><strong>步骤9：</strong>修改操作系统的编码方式，各个操作系统的修改方式不同，不再赘述。</p>
+</li>
+</ul>
+<p>我们可以把字符串读取字节的过程看做是数据传输的需要(比如网络、存储)，而重组字符串则是业务逻辑的需求，这样就可以是乱码重现：通过JDBC读取的字节数组是GBK的，而业务逻辑编码时采用的是UTF-8，于是乱码就产生了。对于此类问题，<strong>最好的解决办法就是使用统一的编码格式，</strong>要么都用GBK，要么都用UTF-8，各个组件、接口、逻辑层、都用UTF-8，<strong>拒绝独树一帜的情况。</strong></p>
+<p>问题清楚了，我们看看以下代码：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client58</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> UnsupportedEncodingException <span class="token punctuation">{</span>
+        String str <span class="token operator">=</span> <span class="token string">"汉字"</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 读取字节</span>
+        <span class="token keyword">byte</span> b<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"GB2312"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 重新生成一个新的字符串</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>仅仅修改了读取字节的编码方式(修改成了GB2312)，结果会怎样呢？又或者将其修改成GB18030，结果又是怎样的呢？结果都是”汉字”，不是乱码。这是因为GB2312是中文字符集的V1.0版本，GBK是V2.0版本，GB18030是V3.0版本，版本是向下兼容的，只是它们包含的汉字数量不同而已，注意UNICODE可不在这个序列之内。</p>
+<p><strong>注意：一个系统使用统一的编码。</strong></p>
+<hr>
+<h2 id="建议60：性能考虑，数组是首选"><a href="#建议60：性能考虑，数组是首选" class="headerlink" title="建议60：性能考虑，数组是首选"></a>建议60：性能考虑，数组是首选</h2><p>数组在实际的系统开发中用的越来越少了，我们通常只有在阅读一些开源项目时才会看到它们的身影，在Java中它确实没有List、Set、Map这些集合类用起来方便，但是在基本类型处理方面，数组还是占优势的，而且集合类的底层也都是通过数组实现的，比如对一数据集求和这样的计算：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//对数组求和</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">sum</span><span class="token punctuation">(</span><span class="token keyword">int</span> datas<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> datas<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            sum <span class="token operator">+=</span> datas<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>对一个int类型 的数组求和，取出所有数组元素并相加，此算法中如果是<strong>基本类型</strong>则使用数组效率是最高的，使用集合则效率次之。再看使用List求和：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 对列表求和计算</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">sum</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> datas<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">int</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> datas<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            sum <span class="token operator">+=</span> datas<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> sum<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>注意看sum += datas.get(i);这行代码，这里其实已经做了一个拆箱动作，Integer对象通过intValue方法自动转换成了一个int基本类型，对于性能濒于临界的系统来说该方案是比较危险的，特别是大数量的时候，首先，在初始化List数组时要进行装箱操作，把一个int类型包装成一个Integer对象，虽然有整型池在，但不在整型池范围内的都会产生一个新的Integer对象，而且众所周知，基本类型是在栈内存中操作的，而对象是堆内存中操作的，栈内存的特点是：速度快，容量小；堆内存的特点是：速度慢，容量大（从性能上讲，基本类型的处理占优势）。其次，在进行求和运算时(或者其它遍历计算)时要做拆箱动作，因此无谓的性能消耗也就产生了。<strong>在实际测试中发现：对基本类型进行求和运算时，数组的效率是集合的10倍。</strong></p>
+<p><strong>注意：性能要求较高的场景中使用数组代替集合。</strong></p>
+<hr>
+<h2 id="建议64：多种最值算法，适时选择"><a href="#建议64：多种最值算法，适时选择" class="headerlink" title="建议64：多种最值算法，适时选择"></a>建议64：多种最值算法，适时选择</h2><p>对一批数据进行排序，然后找出其中的最大值或最小值，这是基本的数据结构知识。在Java中我们可以通过编写算法的方式，也可以通过数组先排序再取值的方式来实现，下面以求最大值为例，解释一下多种算法：</p>
+<p>*<em>(1)、自行实现，快速查找最大值　　*</em><br>先看看用快速查找法取最大值的算法，代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">max</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> max <span class="token operator">=</span> data<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">:</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        max <span class="token operator">=</span> max <span class="token operator">></span> i <span class="token operator">?</span> max <span class="token operator">:</span> i<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> max<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这是我们经常使用的最大值算法，也是速度最快的算法。它不要求排序，只要遍历一遍数组即可找出最大值。</p>
+<p><strong>(2)、先排序，后取值</strong><br>对于求最大值，也可以采用先排序后取值的方式，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">max</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Arrays<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> data<span class="token punctuation">[</span>data<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>从效率上讲，当然是自己写快速查找法更快一些了，只用遍历一遍就可以计算出最大值，但在实际测试中发现，如果数组量少于10000，两个基本上没有区别，但在同一个毫秒级别里，此时就可以不用自己写算法了，直接使用数组先排序后取值的方式。</p>
+<p><strong>如果数组元素超过10000，就需要依据实际情况来考虑：</strong>自己实现，可以提高性能；先排序后取值，简单，通俗易懂。排除性能上的差异，两者都可以选择，甚至后者更方便一些，也更容易想到。</p>
+<p>现在问题来了，在代码中为什么先使用data.clone拷贝再排序呢？那是因为数组也是一个对象，不拷贝就改变了原有的数组元素的顺序吗？除非数组元素的顺序无关紧要。那如果要查找仅次于最大值的元素(也就是老二)，该如何处理呢？要注意，数组的元素时可以重复的，最大值可能是多个，所以单单一个排序然后取倒数第二个元素时解决不了问题的。</p>
+<p>此时，就需要一个特殊的排序算法了，先要剔除重复数据，然后再排序，当然，自己写算法也可以实现，但是集合类已经提供了非常好的方法，要是再使用自己写算法就显得有点重复造轮子了。数组不能剔除重复数据，但Set集合却是可以的，而且Set的子类TreeSet还能自动排序，代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">getSecond</span><span class="token punctuation">(</span>Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//转换为列表</span>
+    List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> dataList <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//转换为TreeSet，剔除重复元素并升序排列</span>
+    TreeSet<span class="token operator">&lt;</span>Integer<span class="token operator">></span> ts <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeSet</span><span class="token operator">&lt;</span>Integer<span class="token operator">></span><span class="token punctuation">(</span>dataList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//取得比最大值小的最大值，也就是老二了</span>
+    <span class="token keyword">return</span> ts<span class="token punctuation">.</span><span class="token function">lower</span><span class="token punctuation">(</span>ts<span class="token punctuation">.</span><span class="token function">last</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>剔除重复元素并升序排列，这都是由TreeSet类实现的，然后可再使用lower方法寻找小于最大值的值，大家看，上面的程序非常简单吧?那如果是我们自己编写代码会怎么样呢？那至少要遍历数组两遍才能计算出老二的值，代码复杂度将大大提升。因此在实际应用中求最值，包括最大值、最小值、倒数第二小值等，使用集合是最简单的方式，当然从性能方面来考虑，数组才是最好的选择。</p>
+<p><strong>注意：最值计算时使用集合最简单，使用数组性能最优。</strong></p>
+<hr>
+<h2 id="建议82：由点及面，集合大家族总结"><a href="#建议82：由点及面，集合大家族总结" class="headerlink" title="建议82：由点及面，集合大家族总结"></a>建议82：由点及面，集合大家族总结</h2><p>Java中的集合类实在是太丰富了，有常用的ArrayList、HashMap,也有不常用的Stack、Queue，有线程安全的Vector、HashTable，也有线程不安全的LinkedList、TreeMap，有阻塞式的ArrayBlockingQueue，也有非阻塞式的PriorityQueue等，整个集合大家族非常庞大，可以划分以下几类：</p>
+<ul>
+<li><p><strong>(1)、List：</strong>实现List接口的集合主要有：<strong>ArrayList、LinkedList、Vector、Stack，</strong>其中ArrayList是一个动态数组，LinkedList是一个双向链表，Vector是一个线程安全的动态数组，Stack是一个对象栈，遵循先进后出的原则。　</p>
+</li>
+<li><p><strong>(2)、Set：</strong>Set是不包含重复元素的集合，其主要实现类有：<strong>EnumSet、HashSet、TreeSet，</strong>其中EnumSet是枚举类型专用Set，所有元素都是枚举类型；HashSet是以哈希码决定其元素位置的Set，其原理与HashMap相似，它提供快速的插入和查找方法；TreeSet是一个自动排序的Set，它实现了SortedSet接口。</p>
+</li>
+<li><p><strong>(3)、Map：</strong>Map是一个大家族，他可以分为排序Map和非排序Map，排序Map主要是TreeMap类，他根据key值进行自动排序；非排序Map主要包括：<strong>HashMap、HashTable、Properties、EnumMap</strong>等，其中Properties是HashTable的子类，它的主要用途是从Property文件中加载数据，并提供方便的操作，EnumMap则是要求其Key必须是某一个枚举类型。<br>Map中还有一个WeakHashMap类需要说明，它是一个采用弱键方式实现的Map类，它的特点是：WeakHashMap对象的存在并不会阻止垃圾回收器对键值对的回收，也就是说使用WeakHashMap装载数据不用担心内存溢出的问题，GC会自动删除不用的键值对，这是好事。但也存在一个严重的问题：GC是静悄悄的回收的(何时回收，God，Knows！)我们的程序无法知晓该动作，存在着重大的隐患。</p>
+</li>
+<li><p><strong>(4)、Queue：</strong>对列，它分为两类，一类是阻塞式队列，队列满了以后再插入元素会抛出异常，主要包括：<strong>ArrayBlockingQueue、PriorityQueue、LinkedBlockingQueue，</strong>其中ArrayBlockingQueue是一个以数组方式实现的有界阻塞队列；另一类是非阻塞队列，无边界的，只要内存允许，都可以持续追加元素，我们经常使用的是PriorityQuene类。<br>还有一种队列，是双端队列，支持在头、尾两端插入和移除元素，它的主要实现类是：<strong>ArrayDeque、LinkedBlockingDeque、LinkedList。</strong></p>
+</li>
+<li><p><strong>(5)、数组：</strong>数组与集合的最大区别就是数组能够容纳基本类型，而集合就不行，更重要的一点就是所有的集合底层存储的都是数组。</p>
+</li>
+<li><p><strong>(6)、工具类：</strong>数组的工具类是<strong>java.util.Arrays</strong>和<strong>java.lang.reflect.Array</strong>，集合的工具类是<strong>java.util.Collections</strong>，有了这两个工具类，操作数组和集合就会易如反掌，得心应手。</p>
+</li>
+<li><p><strong>(7)、扩展类：</strong>集合类当然可以自行扩展了，想写一个自己的List？没问题，但最好的办法还是”拿来主义”，可以使用Apache的common-collections扩展包，也可以使用Google的google-collections扩展包，这些足以应对我们的开发需要。</p>
+</li>
+</ul>
+<hr>
+<h2 id="建议83：推荐使用枚举定义常量"><a href="#建议83：推荐使用枚举定义常量" class="headerlink" title="建议83：推荐使用枚举定义常量"></a>建议83：推荐使用枚举定义常量</h2><p>常量声明是每一个项目都不可或缺的，在Java1.5之前，我们只有两种方式的声明：类常量和接口常量，若在项目中使用的是Java1.5之前的版本，基本上都是如此定义的。不过，在1.5版本以后有了改进，即新增了一种常量声明方式：<strong>枚举声明常量，</strong>看如下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">enum</span> Season <span class="token punctuation">{</span>
+    Spring<span class="token punctuation">,</span> Summer<span class="token punctuation">,</span> Autumn<span class="token punctuation">,</span> Winter<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这是一个简单的枚举常量命名，清晰又简单。顺便提一句，JLS(Java Language  Specification，Java语言规范)<strong>提倡枚举项全部大写，字母之间用下划线分割，</strong>这也是从常量的角度考虑的(当然，使用类似类名的命名方式也是比较友好的)。</p>
+<p>那么枚举常量与我们经常使用的类常量和静态常量相比有什么优势？问得好，枚举的优点主要表现在四个方面：</p>
+<p><strong>1.枚举常量简单：</strong>简不简单，我们来对比一下两者的定义和使用情况就知道了。先把Season枚举翻写成接口常量，代码如下：　　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">Season</span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> SPRING <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> SUMMER <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> AUTUMN <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> WINTER <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>此处定义了春夏秋冬四个季节，类型都是int，这与Season枚举的排序值是相同的。首先对比一下两者的定义，枚举常量只需定义每个枚举项，不需要定义枚举值，而接口常量(或类常量)则必须定义值，否则编译不通过，即使我们不需要关注其值是多少也必须定义；其次，虽然两者被引用的方式相同(都是 “类名 . 属性”，如Season.SPRING),但是枚举表示的是一个枚举项，字面含义是春天，而接口常量确是一个int类型，虽然其字面含义也是春天，但在运算中我们势必要关注其int值。</p>
+<p><strong>2.枚举常量属于稳态型:</strong>例如我们要描述一下春夏秋冬是什么样子，使用接口常量应该是这样写。　　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">describe</span><span class="token punctuation">(</span><span class="token keyword">int</span> s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// s变量不能超越边界，校验条件</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>s <span class="token operator">>=</span> <span class="token number">0</span> <span class="token operator">&amp;&amp;</span> s <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">switch</span> <span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> Season<span class="token punctuation">.</span>SPRING<span class="token operator">:</span>
+                System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"this is spring"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token keyword">case</span> Season<span class="token punctuation">.</span>SUMMER<span class="token operator">:</span>
+                System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"this is summer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>很简单，先使用switch语句判断哪一个是常量，然后输出。<strong>但问题是我们得对输入值进行检查，确定是否越界，如果常量非常庞大，校验输入就成了一件非常麻烦的事情，</strong>但这是一个不可逃避的过程，特别是如果我们的校验条件不严格，虽然编译能照样通过，但是运行期就会产生无法预知的后果。</p>
+<p>我们再来看看枚举常量是否能够避免校验的问题，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">describe</span><span class="token punctuation">(</span>Season s<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">switch</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">case</span> Spring<span class="token operator">:</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"this is "</span><span class="token operator">+</span>Season<span class="token punctuation">.</span>Spring<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> Summer<span class="token operator">:</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"this is summer"</span><span class="token operator">+</span>Season<span class="token punctuation">.</span>Summer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">break</span><span class="token punctuation">;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>不用校验，已经限定了是Season枚举，所以只能是Season类的四个实例，即春夏秋冬4个枚举项，想输入一个int类型或其它类型？门都没有！这是我们最看重枚举的地方：在编译期间限定类型，不允许发生越界的情况。</p>
+<p><strong>3.枚举具有内置方法：</strong>有一个简单的问题：如果要列出所有的季节常量，如何实现呢？接口常量或类常量可以通过反射来实现，这没错，只是虽然能实现，但会非常繁琐，大家可以自己写一个反射类实现此功能(当然，一个一个地动手打印出输出常量，也可以算是列出)。对于此类问题可以非常简单的解决，代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">query</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>Season s <span class="token operator">:</span> Season<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>通过values方法获得所有的枚举项，然后打印出来即可。如此简单，得益于枚举内置的方法，每个枚举都是java.lang.Enum的子类，该基类提供了诸如获得排序值的ordinal方法、compareTo比较方法等，大大简化了常量的访问。</p>
+<p><strong>4.枚举可以自定义的方法：</strong>这一点似乎并不是枚举的优点，类常量也可以有自己的方法呀，但关键是枚举常量不仅可以定义静态方法，还可以定义非静态方法，而且还能够从根本上杜绝常量类被实例化。比如我们要在常量定义中获得最舒服季节的方法，使用常量枚举的代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">enum</span> Season <span class="token punctuation">{</span>
+        Spring<span class="token punctuation">,</span> Summer<span class="token punctuation">,</span> Autumn<span class="token punctuation">,</span> Winter<span class="token punctuation">;</span>
+        <span class="token keyword">public</span> <span class="token keyword">static</span> Season <span class="token function">getComfortableSeason</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> Spring<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>我们知道，每个枚举项都是该枚举的一个实例，对于我们的例子来说，也就表示Spring其实是Season的一个实例，Summer也是其中一个实例，那我们在枚举中定义的静态方法既可以在类(也就是枚举Season)中引用，也可以在实例(也就是枚举项Spring、Summer、Autumn、Winter)中引用，看如下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"The most comfortable season is "</span><span class="token operator">+</span>Season<span class="token punctuation">.</span><span class="token function">getComfortableSeason</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>那如果使用类常量要如何实现呢？代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Season</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> SPRING <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> SUMMER <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> AUTUMN <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> WINTER <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span>  <span class="token keyword">int</span> <span class="token function">getComfortableSeason</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> SPRING<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>想想看，我们怎么才能打印出”The most comfortable season is Spring” 这句话呢？除了使用switch和if判断之外没有其它办法了。</p>
+<p>虽然枚举在很多方面比接口常量和类常量好用，但是有一点它是比不上接口常量和类常量的，那就是继承，枚举类型是不能继承的，也就是说一个枚举常量定义完毕后，除非修改重构，否则无法做扩展，而接口常量和类常量则可以通过继承进行扩展。但是，一般常量在项目构建时就定义完毕了，很少会出现必须通过扩展才能实现业务逻辑的场景。</p>
+<p><strong>注意： 在项目中推荐使用枚举常量代替接口常量或类常量。</strong></p>
+<hr>
+<h2 id="建议88：用枚举实现工厂方法模式更简洁"><a href="#建议88：用枚举实现工厂方法模式更简洁" class="headerlink" title="建议88：用枚举实现工厂方法模式更简洁"></a>建议88：用枚举实现工厂方法模式更简洁</h2><p>工厂方法模式(Factory Method Pattern)是” 创建对象的接口，让子类决定实例化哪一个类，并使一个类的实例化延迟到其它子类”。工厂方法模式在我们的开发中经常会用到。下面以汽车制造为例，看看一般的工厂方法模式是如何实现的，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//抽象产品</span>
+<span class="token keyword">interface</span> <span class="token class-name">Car</span><span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//具体产品类</span>
+<span class="token keyword">class</span> <span class="token class-name">FordCar</span> <span class="token keyword">implements</span> <span class="token class-name">Car</span><span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//具体产品类</span>
+<span class="token keyword">class</span> <span class="token class-name">BuickCar</span> <span class="token keyword">implements</span> <span class="token class-name">Car</span><span class="token punctuation">{</span>
+
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//工厂类</span>
+<span class="token keyword">class</span> <span class="token class-name">CarFactory</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//生产汽车</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Car <span class="token function">createCar</span><span class="token punctuation">(</span>Class<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">Car</span><span class="token operator">></span> c<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> c<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InstantiationException</span> <span class="token operator">|</span> IllegalAccessException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这是最原始的工厂方法模式，有两个产品：福特汽车和别克汽车，然后通过工厂方法模式来生产。有了工厂方法模式，我们就不用关心一辆车具体是怎么生成的了，只要告诉工厂” 给我生产一辆福特汽车 “就可以了，下面是产出一辆福特汽车时客户端的代码：　</p>
+<pre class=" language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//生产车辆</span>
+        Car car <span class="token operator">=</span> CarFactory<span class="token punctuation">.</span><span class="token function">createCar</span><span class="token punctuation">(</span>FordCar<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>这就是我们经常使用的工厂方法模式，但经常使用并不代表就是最优秀、最简洁的。此处再介绍一种通过枚举实现工厂方法模式的方案，谁优谁劣你自行评价。枚举实现工厂方法模式有两种方法：</p>
+<p><strong>(1)、枚举非静态方法实现工厂方法模式</strong></p>
+<p>我们知道每个枚举项都是该枚举的实例对象，那是不是定义一个方法可以生成每个枚举项对应产品来实现此模式呢？代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">enum</span> CarFactory <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 定义生产类能生产汽车的类型</span>
+    FordCar<span class="token punctuation">,</span> BuickCar<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 生产汽车</span>
+    <span class="token keyword">public</span> Car <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">case</span> FordCar<span class="token operator">:</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">FordCar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">case</span> BuickCar<span class="token operator">:</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">BuickCar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">default</span><span class="token operator">:</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">AssertionError</span><span class="token punctuation">(</span><span class="token string">"无效参数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>create是一个非静态方法，也就是只有通过FordCar、BuickCar枚举项才能访问。采用这种方式实现工厂方法模式时，客户端要生产一辆汽车就很简单了，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 生产车辆</span>
+        Car car <span class="token operator">=</span> CarFactory<span class="token punctuation">.</span>BuickCar<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p><strong>(2)、通过抽象方法生成产品</strong></p>
+<p>枚举类型虽然不能继承，但是可以用abstract修饰其方法，此时就表示该枚举是一个抽象枚举，需要每个枚举项自行实现该方法，也就是说枚举项的类型是该枚举的一个子类，我们俩看代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">enum</span> CarFactory <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 定义生产类能生产汽车的类型</span>
+    FordCar<span class="token punctuation">{</span>
+        <span class="token keyword">public</span> Car <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">FordCar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    BuickCar<span class="token punctuation">{</span>
+        <span class="token keyword">public</span> Car <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">BuickCar</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//抽象生产方法</span>
+    <span class="token keyword">public</span> <span class="token keyword">abstract</span> Car <span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>首先定义一个抽象制造方法create，然后每个枚举项自行实现，这种方式编译后会产生CarFactory的匿名子类，因为每个枚举项都要实现create抽象方法。客户端调用与上一个方案相同，不再赘述。</p>
+<p>大家可能会问，为什么要使用枚举类型的工厂方法模式呢？那是因为使用枚举类型的工厂方法模式有以下三个优点：</p>
+<ul>
+<li><p><strong>避免错误调用的发生：</strong>一般工厂方法模式中的生产方法(也就是createCar方法)，可以接收三种类型的参数：类型参数(如我们的例子)、String参数(生产方法中判断String参数是需要生产什么产品)、int参数(根据int值判断需要生产什么类型的的产品)，这三种参数都是宽泛的数据类型，很容易发生错误(比如边界问题、null值问题)，而且出现这类错误编译器还不会报警，例如：</p>
+<pre class=" language-java"><code class="language-java">  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// 生产车辆</span>
+      Car car <span class="token operator">=</span> CarFactory<span class="token punctuation">.</span><span class="token function">createCar</span><span class="token punctuation">(</span>Car<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span></code></pre>
+<p>Car是一个接口，完全合乎createCar的要求，所以它在编译时不会报任何错误，但一运行就会报出InstantiationException异常，而使用枚举类型的工厂方法模式就不存在该问题了，不需要传递任何参数，只需要选择好生产什么类型的产品即可。</p>
+</li>
+<li><p><strong>性能好，使用简洁：</strong>枚举类型的计算时以int类型的计算为基础的，这是最基本的操作，性能当然会快，至于使用便捷，注意看客户端的调用，代码的字面意思就是” 汽车工厂，我要一辆别克汽车，赶快生产”。</p>
+</li>
+<li><p><strong>降低类间耦合：</strong>不管生产方法接收的是Class、String还是int的参数，都会成为客户端类的负担，这些类并不是客户端需要的，而是因为工厂方法的限制必须输入的，例如Class参数，对客户端main方法来说，他需要传递一个FordCar.class参数才能生产一辆福特汽车，除了在create方法中传递参数外，业务类不需要改Car的实现类。这严重违背了迪米特原则(Law of Demeter  简称LoD),也就是最少知识原则：一个对象应该对其它对象有最少的了解。</p>
+</li>
+</ul>
+<p>而枚举类型的工厂方法就没有这种问题了，它只需要依赖工厂类就可以生产一辆符合接口的汽车，完全可以无视具体汽车类的存在。</p>
+<hr>
+<h2 id="建议93：Java的泛型是可以擦除的"><a href="#建议93：Java的泛型是可以擦除的" class="headerlink" title="建议93：Java的泛型是可以擦除的"></a>建议93：Java的泛型是可以擦除的</h2><p>Java泛型(Generic) 的引入加强了参数类型的安全性，减少了类型的转换，它与C++中的模板(Temeplates) 比较类似，但是有一点不同的是：<strong>Java的泛型在编译器有效，在运行期被删除，</strong>也就是说所有的泛型参数类型在编译后会被清除掉，我们来看一个例子，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Foo</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//arrayMethod接收数组参数，并进行重载</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">arrayMethod</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> intArray<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">arrayMethod</span><span class="token punctuation">(</span>Integer<span class="token punctuation">[</span><span class="token punctuation">]</span> intArray<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//listMethod接收泛型List参数，并进行重载</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">listMethod</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>String<span class="token operator">></span> stringList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">listMethod</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> intList<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>程序很简单，编写了4个方法，arrayMethod方法接收String数组和Integer数组，这是一个典型的重载，listMethod接收元素类型为String和Integer的list变量。现在的问题是，这段程序是否能编译？如果不能？问题出在什么地方？</p>
+<p>事实上，这段程序时无法编译的，编译时报错信息如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E7%BC%96%E5%86%99%E9%AB%98%E8%B4%A8%E9%87%8F%E4%BB%A3%E7%A0%81%E3%80%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89/7896890-47feae6351adb49c.png" alt=""></p>
+<p>这段错误的意思：简单的的说就是方法签名重复，其实就是说listMethod(List<Integer> intList)方法在编译时擦除类型后是listMethod(List<E> intList)与另一个方法重复。这就是Java泛型擦除引起的问题：在编译后所有的泛型类型都会做相应的转化。转换规则如下：</p>
+<ul>
+<li>List<String>、List<Integer>、List<T>擦除后的类型为List</li>
+<li>List<String>[] 擦除后的类型为List[].</li>
+<li>List&lt;? extends E&gt; 、List&lt;? super E&gt; 擦除后的类型为List<E>.</li>
+<li>List&lt;T extends Serializable &amp; Cloneable &gt;擦除后的类型为List&lt; Serializable&gt;.</li>
+</ul>
+<p>明白了这些规则，再看如下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        List<span class="token operator">&lt;</span>String<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String str <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>进过编译后的擦除处理，上面的代码和下面的程序时一致的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        List list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"abc"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String str <span class="token operator">=</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span> list<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>Java编译后字节码中已经没有泛型的任何信息了，也就是说一个泛型类和一个普通类在经过编译后都指向了同一字节码，比如Foo<T>类，经过编译后将只有一份Foo.class类，不管是Foo<String>还是Foo<Integer>引用的都是同一字节码。Java之所以如此处理，有两个原因：</p>
+<ul>
+<li><strong>避免JVM的大换血。</strong>C++泛型生命期延续到了运行期，而Java是在编译期擦除掉的，我们想想，如果JVM也把泛型类型延续到运行期，那么JVM就需要进行大量的重构工作了。</li>
+<li><strong>版本兼容：</strong>在编译期擦除可以更好的支持原生类型(Raw Type)，在Java1.5或1.6…平台上，即使声明一个List这样的原生类型也是可以正常编译通过的，只是会产生警告信息而已。</li>
+</ul>
+<p>明白了Java泛型是类型擦除的，我们就可以解释类似如下的问题了：</p>
+<p><strong>1.泛型的class对象是相同的：</strong>每个类都有一个class属性，泛型化不会改变class属性的返回值，例如：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        List<span class="token operator">&lt;</span>String<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> list2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>Integer<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">==</span>list2<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>以上代码返回true，原因很简单，List<String>和List<Integer>擦除后的类型都是List，没有任何区别。</p>
+<p>*<em>2.泛型数组初始化时不能声明泛型，如下代码编译时通不过：　*</em></p>
+<pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span> listArray <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">List</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span></code></pre>
+<p>原因很简单，可以声明一个带有泛型参数的数组，但不能初始化该数组，因为执行了类型擦除操作，List<Object>[]与List<String>[] 就是同一回事了，编译器拒绝如此声明。</p>
+<p><strong>3.instanceof不允许存在泛型参数</strong>:以下代码不能通过编译，原因一样，泛型类型被擦除了：　　　</p>
+<pre class=" language-java"><code class="language-java">List<span class="token operator">&lt;</span>String<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>list <span class="token keyword">instanceof</span> <span class="token class-name">List</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<hr>
+<h2 id="建议98：建议的采用顺序是List中泛型顺序依次为T、-、Object"><a href="#建议98：建议的采用顺序是List中泛型顺序依次为T、-、Object" class="headerlink" title="建议98：建议的采用顺序是List中泛型顺序依次为T、?、Object"></a>建议98：建议的采用顺序是List中泛型顺序依次为T、?、Object</h2><p><strong>List<T>、List<?>、List<Object>这三者都可以容纳所有的对象，但使用的顺序应该是首选List<T>，次之List<?>，最后选择List<Object>，</strong>原因如下：</p>
+<p><strong>(1)、List<T>是确定的某一个类型</strong></p>
+<p>List<T>表示的是List集合中的元素都为T类型，具体类型在运行期决定；List&lt;？&gt;表示的是任意类型，与List<T>类似，而List<Object>则表示List集合中的所有元素为Object类型，因为Object是所有类的父类，所以List<Object>也可以容纳所有的类类型，从这一字面意义上分析，List<T>更符合习惯：编码者知道它是某一个类型，只是在运行期才确定而已。</p>
+<p><strong>(2)List<T>可以进行读写操作</strong></p>
+<p>List<T>可以进行诸如add，remove等操作，因为它的类型是固定的T类型，在编码期不需要进行任何的转型操作。</p>
+<p><strong>List<T>是只读类型的，不能进行增加、修改操作，</strong>因为编译器不知道List中容纳的是什么类型的元素，也就无法校验类型是否安全了，<strong>而且List&lt;?&gt;读取出的元素都是Object类型的，需要主动转型，</strong>所以它经常用于泛型方法的返回值。注意List&lt;？&gt;虽然无法增加，修改元素，但是却可以删除元素，比如执行remove、clear等方法，那是因为它的删除动作与泛型类型无关。</p>
+<p><strong>List<Object> 也可以读写操作，但是它执行写入操作时需要向上转型(Up cast)，在读取数据的时候需要向下转型，</strong>而此时已经失去了泛型存在的意义了。</p>
+<p>打个比方，有一个篮子用来容纳物品，比如西瓜，番茄等.List<?>的意思是说，“嘿，我这里有一个篮子，可以容纳固定类别的东西，比如西瓜，番茄等”。List<?>的意思是说：“嘿，我有一个篮子，我可以容纳任何东西，只要是你想得到的”。而List<Object>就更有意思了，它说” 嘿，我也有一个篮子，我可以容纳所有物质，只要你认为是物质的东西都可以容纳进来 “。</p>
+<p>推而广之，Dao<T>应该比Dao&lt;？&gt;、Dao<Object>更先采用，Desc<Person>则比Desc&lt;？&gt;、Desc<Object>更优先采用。</p>
+<hr>
+<h2 id="建议101：注意Class类的特殊性"><a href="#建议101：注意Class类的特殊性" class="headerlink" title="建议101：注意Class类的特殊性"></a>建议101：注意Class类的特殊性</h2><p>Java语言是先把Java源文件编译成后缀为class的字节码文件，然后再通过ClassLoader机制把这些类文件加载到内存中，最后生成实例执行的，这是Java处理的基本机制，但是加载到内存中的数据的如何描述一个类的呢？比如在Dog.class文件中定义一个Dog类，那它在内存中是如何展现的呢？</p>
+<p>Java使用一个元类(MetaClass)来描述加载到内存中的类数据，这就是Class类，它是一个描述类的类对象，比如Dog.class文件加载到内存中后就会有一个class的实例对象描述之。因为是Class类是“类中类”，也就有预示着它有很多特殊的地方：</p>
+<ul>
+<li><strong>1.无构造函数：</strong>Java中的类一般都有构造函数，用于创建实例对象，但是Class类却没有构造函数，不能实例化，Class对象是在加载类时由Java虚拟机通过调用类加载器中的difineClass方法自动构造的。</li>
+<li><strong>2.可以描述基本类型：</strong>虽然8个基本类型在JVM中并不是一个对象，它们一般存在于栈内存中，但是Class类仍然可以描述它们，例如可以使用int.class表示int类型的类对象。</li>
+<li><strong>3.其对象都是单例模式：</strong>一个Class的实例对象描述一个类，并且只描述一个类，反过来也成立。一个类只有一个Class实例对象，如下代码返回的结果都为true：　<pre class=" language-java"><code class="language-java">      <span class="token comment" spellcheck="true">// 类的属性class所引用的对象与实例对象的getClass返回值相同</span>
+      <span class="token keyword">boolean</span> b1<span class="token operator">=</span>String<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">boolean</span> b2<span class="token operator">=</span><span class="token string">"ABC"</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>String<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment" spellcheck="true">// class实例对象不区分泛型</span>
+      <span class="token keyword">boolean</span> b3<span class="token operator">=</span>ArrayList<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<p>Class类是Java的反射入口，只有在获得了一个类的描述对象后才能动态的加载、调用，一般获得一个Class对象有三种途径：</p>
+<ul>
+<li><strong>类属性方式：</strong>如String.class</li>
+<li><strong>对象的getClass方法，</strong>如new String().getClass()</li>
+<li><strong>forName方法加载：</strong>如Class.forName(“ java.lang.String”)</li>
+</ul>
+<p>获得了Class对象后，就可以通过getAnnotations()获得注解，通过getMethods()获得方法，通过getConstructors()获得构造函数等，这位后续的反射代码铺平了道路。</p>
+<hr>
+<h2 id="建议106：动态代理可以使代理模式更加灵活"><a href="#建议106：动态代理可以使代理模式更加灵活" class="headerlink" title="建议106：动态代理可以使代理模式更加灵活"></a>建议106：动态代理可以使代理模式更加灵活</h2><p>Java的反射框架提供了动态代理(Dynamic Proxy)机制，允许在运行期对目标类生成代理，避免重复开发。我们知道一个静态代理是通过主题角色(Proxy)和具体主题角色(Real Subject)共同实现主题角色(Subject)的逻辑的，只是代理角色把相关的执行逻辑委托给了具体角色而已，一个简单的静态代理如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">Subject</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 定义一个方法</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 具体主题角色</span>
+<span class="token keyword">class</span> <span class="token class-name">RealSubject</span> <span class="token keyword">implements</span> <span class="token class-name">Subject</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 实现方法</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 实现具体业务逻辑</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Proxy</span> <span class="token keyword">implements</span> <span class="token class-name">Subject</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 要代理那个实现类</span>
+    <span class="token keyword">private</span> Subject subject <span class="token operator">=</span> null<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 默认被代理者</span>
+    <span class="token keyword">public</span> <span class="token function">Proxy</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        subject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RealSubject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 通过构造函数传递被代理者</span>
+    <span class="token keyword">public</span> <span class="token function">Proxy</span><span class="token punctuation">(</span>Subject _subject<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        subject <span class="token operator">=</span> _subject<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        subject<span class="token punctuation">.</span><span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">after</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 预处理</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">after</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// doSomething</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 善后处理</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">before</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// doSomething</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这是一个简单的静态代理。Java还提供了java.lang.reflect.Proxy用于实现动态代理：只要提供一个抽象主题角色和具体主题角色，就可以动态实现其逻辑的，其实例代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">Subject</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 定义一个方法</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 具体主题角色</span>
+<span class="token keyword">class</span> <span class="token class-name">RealSubject</span> <span class="token keyword">implements</span> <span class="token class-name">Subject</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 实现方法</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 实现具体业务逻辑</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+
+<span class="token keyword">class</span> <span class="token class-name">SubjectHandler</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 被代理的对象</span>
+    <span class="token keyword">private</span> Subject subject<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">SubjectHandler</span><span class="token punctuation">(</span>Subject _subject<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        subject <span class="token operator">=</span> _subject<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Object <span class="token function">invoke</span><span class="token punctuation">(</span>Object proxy<span class="token punctuation">,</span> Method method<span class="token punctuation">,</span> Object<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
+            <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 预处理</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"预处理..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//直接调用被代理的方法</span>
+        Object obj <span class="token operator">=</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>subject<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 后处理</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"后处理..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> obj<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>注意这里没有代理主题角色，取而代之的是SubjectHandler 作为主要的逻辑委托处理，其中invoke方法是接口InvocationHandler定义必须实现的，它完成了对真实方法的调用。</p>
+<p>我们来详细解释一下InvocationHandler接口，动态代理是根据被代理的接口生成的所有方法的，也就是说给定一个或多个接口，动态代理会宣称“我已经实现该接口下的所有方法了”，那大家想想看，动态代理是怎么才能实现接口中的方法呢？在默认情况下所有方法的返回值都是空的，是的，虽然代理已经实现了它，但是没有任何的逻辑含义，那怎么办？好办，通过InvocationHandler接口的实现类来实现，所有的方法都是由该Handler进行处理的，即所有被代理的方法都由InvocationHandler接管实际的处理任务。</p>
+<p>我们开看看动态代理的场景，代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//具体主题角色，也就是被代理类</span>
+        Subject subject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RealSubject</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//代理实例的处理Handler</span>
+        InvocationHandler handler <span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">SubjectHandler</span><span class="token punctuation">(</span>subject<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//当前加载器</span>
+        ClassLoader cl <span class="token operator">=</span> subject<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//动态代理</span>
+        Subject proxy <span class="token operator">=</span> <span class="token punctuation">(</span>Subject<span class="token punctuation">)</span> Proxy<span class="token punctuation">.</span><span class="token function">newProxyInstance</span><span class="token punctuation">(</span>cl<span class="token punctuation">,</span>subject<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getInterfaces</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//执行具体主题角色方法</span>
+        proxy<span class="token punctuation">.</span><span class="token function">request</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>此时就实现了，不用显式创建代理类即实现代理的功能，例如可以在被代理的角色执行前进行权限判断，或者执行后进行数据校验。</p>
+<p>动态代理很容易实现通用的代理类，只要在InvocationHandler的invoke方法中读取持久化的数据即可实现，而且还能实现动态切入的效果，这也是AOP(Aspect Oriented Programming)变成理念。</p>
+<hr>
+<h2 id="建议110：提倡异常封装"><a href="#建议110：提倡异常封装" class="headerlink" title="建议110：提倡异常封装"></a>建议110：提倡异常封装</h2><p>Java语言的异常处理机制可以去确保程序的健壮性，提高系统的可用率，但是Java API提供的异常都是比较低级的(这里的低级是指 “ 低级别的 “ 异常)，只有开发人员才能看的懂，才明白发生了什么问题。而对于终端用户来说，这些异常基本上就是天书，与业务无关，是纯计算机语言的描述，那该怎么办？这就需要我们对异常进行封装了。异常封装有三方面的优点：</p>
+<h5 id="1-、提高系统的友好性"><a href="#1-、提高系统的友好性" class="headerlink" title="(1)、提高系统的友好性"></a>(1)、提高系统的友好性</h5><p>例如，打开一个文件，如果文件不存在，则回报FileNotFoundException异常，如果该方法的编写者不做任何处理，直接抛到上层，则会降低系统的友好性，代码如下所示：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">doStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> FileNotFoundException <span class="token punctuation">{</span>
+        InputStream is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"无效文件.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/* 文件操作 */</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>此时doStuff的友好性极差，出现异常时(如果文件不存在)，该方法直接把FileNotFoundException异常抛到上层应用中(或者是最终用户)，而上层应用(或用户要么自己处理)，要么接着抛，最终的结果就是让用户面对着” 天书 “ 式的文字发呆，用户不知道这是什么问题，只是知道系统告诉他”  哦，我出错了，什么错误？你自己看着办吧 “。</p>
+<p>解决办法就是封装异常，可以把异常的阅读者分为两类：开发人员和用户。开发人员查找问题，需要打印出堆栈信息，而用户则需要了解具体的业务原因，比如文件太大、不能同时编写文件等，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">doStuff2</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> MyBussinessException<span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            InputStream is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span><span class="token string">"无效文件.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">FileNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//方便开发人员和维护人员而设置的异常信息</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//抛出业务异常</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">MyBussinessException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">/* 文件操作 */</span>
+    <span class="token punctuation">}</span></code></pre>
+<h5 id="2-、提高系统的可维护性"><a href="#2-、提高系统的可维护性" class="headerlink" title="(2)、提高系统的可维护性"></a>(2)、提高系统的可维护性</h5><p>看如下代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">doStuff3</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//doSomething</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>Exception e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span></code></pre>
+<p>这是大家很容易犯的错误，抛出异常是吧?分类处理多麻烦，就写一个catch块来处理所有的异常吧，而且还信誓旦旦的说” JVM会打印出栈中的错误信息 “，虽然这没错，但是该信息只有开发人员自己看的懂，维护人员看到这段异常时基本上无法处理，因为需要到代码逻辑中去分析问题。</p>
+<p>正确的做法是对异常进行分类处理，并进行封装输出，代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span>  <span class="token keyword">void</span> <span class="token function">doStuff4</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//doSomething</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>FileNotFoundException e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"文件未找到，使用默认配置文件...."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>SecurityException e1<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">" 无权访问，可能原因是......"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            e1<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>如此包装后，维护人员看到这样的异常就有了初步的判断，或者检查配置，或者初始化环境，不需要直接到代码层级去分析了。</p>
+<h5 id="3-、解决Java异常机制自身的缺陷"><a href="#3-、解决Java异常机制自身的缺陷" class="headerlink" title="(3)、解决Java异常机制自身的缺陷"></a>(3)、解决Java异常机制自身的缺陷</h5><p>Java中的异常一次只能抛出一个，比如doStuff方法有两个逻辑代码片段，如果在第一个逻辑片段中抛出异常，则第二个逻辑片段就不再执行了，也就无法抛出第二个异常了，现在的问题是：如何才能一次抛出两个(或多个)异常呢？</p>
+<p>其实，使用自行封装的异常可以解决该问题，代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">MyException</span> <span class="token keyword">extends</span> <span class="token class-name">Exception</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 容纳所有的异常</span>
+    <span class="token keyword">private</span> List<span class="token operator">&lt;</span>Throwable<span class="token operator">></span> causes <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>Throwable<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 构造函数，传递一个异常列表</span>
+    <span class="token keyword">public</span> <span class="token function">MyException</span><span class="token punctuation">(</span>List<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">Throwable</span><span class="token operator">></span> _causes<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        causes<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>_causes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 读取所有的异常</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>Throwable<span class="token operator">></span> <span class="token function">getExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> causes<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>MyException异常只是一个异常容器，可以容纳多个异常，但它本身并不代表任何异常含义，它所解决的是一次抛出多个异常的问题，具体调用如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doStuff</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> MyException <span class="token punctuation">{</span>
+        List<span class="token operator">&lt;</span>Throwable<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>Throwable<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 第一个逻辑片段</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// Do Something</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 第二个逻辑片段</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// Do Something</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 检查是否有必要抛出异常</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>list<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">MyException</span><span class="token punctuation">(</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>这样一来，DoStuff方法的调用者就可以一次获得多个异常了，也能够为用户提供完整的例外情况说明。可能有人会问：这种情况会出现吗？怎么回要求一个方法抛出多个异常呢？</p>
+<p>绝对有可能出现，例如Web界面注册时，展现层依次把User对象传递到逻辑层，Register方法需要对各个Field进行校验并注册，例如用户名不能重复，密码必须符合密码策略等，不要出现用户第一次提交时系统显示” 用户名重复 “，在用户修改用户名再次提交后，系统又提示” 密码长度小于6位 “ 的情况，这种操作模式下的用户体验非常糟糕，最好的解决办法就是异常封装，建立异常容器，一次性地对User对象进行校验，然后返回所有的异常。</p>
+<hr>
+<h2 id="建议114：不要在构造函数中抛出异常"><a href="#建议114：不要在构造函数中抛出异常" class="headerlink" title="建议114：不要在构造函数中抛出异常"></a>建议114：不要在构造函数中抛出异常</h2><p>Java异常的机制有三种：</p>
+<ul>
+<li>Error类及其子类表示的是错误，它是不需要程序员处理也不能处理的异常，比如VirtualMachineError虚拟机错误，ThreadDeath线程僵死等。</li>
+<li>RunTimeException类及其子类表示的是非受检异常，是系统可能会抛出的异常，程序员可以去处理，也可以不处理，最经典的就是NullPointException空指针异常和IndexOutOfBoundsException越界异常。</li>
+<li>Exception类及其子类(不包含非受检异常)，表示的是受检异常，这是程序员必须处理的异常，不处理则程序不能通过编译，比如IOException表示的是I/O异常，SQLException表示的数据库访问异常。　　</li>
+</ul>
+<p>我们知道，一个对象的创建过程经过内存分配，静态代码初始化、构造函数执行等过程，对象生成的关键步骤是构造函数，那是不是也允许在构造函数中抛出异常呢？从Java语法上来说，完全可以在构造函数中抛出异常，三类异常都可以，但是从系统设计和开发的角度来分析，则尽量不要在构造函数中抛出异常，我们以三种不同类型的异常来说明之。</p>
+<h5 id="1-、构造函数中抛出错误是程序员无法处理的"><a href="#1-、构造函数中抛出错误是程序员无法处理的" class="headerlink" title="(1)、构造函数中抛出错误是程序员无法处理的"></a>(1)、构造函数中抛出错误是程序员无法处理的</h5><p>在构造函数执行时，若发生了VirtualMachineError虚拟机错误，那就没招了，只能抛出，程序员不能预知此类错误的发生，也就不能捕捉处理。</p>
+<h5 id="2-、构造函数不应该抛出非受检异常"><a href="#2-、构造函数不应该抛出非受检异常" class="headerlink" title="(2)、构造函数不应该抛出非受检异常"></a>(2)、构造函数不应该抛出非受检异常</h5><p>我们来看这样一个例子，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token function">Person</span><span class="token punctuation">(</span><span class="token keyword">int</span> _age<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 不满18岁的用户对象不能建立</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>_age <span class="token operator">&lt;</span> <span class="token number">18</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"年龄必须大于18岁."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"doSomething......"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这段代码的意图很明显，年龄不满18岁的用户不会生成一个Person实例对象，没有对象，类行为doSomething方法就不可执行，想法很好，但这会导致不可预测的结果，比如我们这样引用Person类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Person p <span class="token operator">=</span>  <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token number">17</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        p<span class="token punctuation">.</span><span class="token function">doSomething</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/*其它的业务逻辑*/</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>很显然，p对象不能建立，因为是一个RunTimeException异常，开发人员可以捕捉也可以不捕捉，代码看上去逻辑很正确，没有任何瑕疵，但是事实上，这段程序会抛出异常，无法执行。这段代码给了我们两个警示：</p>
+<ul>
+<li><strong>1.加重了上层代码编写者的负担：</strong>捕捉这个RuntimeException异常吧，那谁来告诉我有这个异常呢？只有通过文档约束了，一旦Person类的构造函数经过重构后再抛出其它非受检异常，那main方法不用修改也是可以测试通过的，但是这里就可能会产生隐藏的缺陷，而写还是很难重现的缺陷。不捕捉这个RuntimeException异常，这个是我们通常的想法，既然已经写成了非受检异常，main方法的编码者完全可以不处理这个异常嘛，大不了不执行Person的方法！这是非常危险的，一旦产生异常，整个线程都不再继续执行，或者链接没有关闭，或者数据没有写入数据库，或者产生内存异常，这些都是会对整个系统产生影响。</li>
+<li><strong>2.后续代码不会执行：</strong>main方法的实现者原本是想把p对象的建立作为其代码逻辑的一部分，执行完doSomething方法后还需要完成其它逻辑，但是因为没有对非受检异常进行捕捉，异常最终会抛出到JVM中，这会导致整个线程执行结束后，后面所有的代码都不会继续执行了，这就对业务逻辑产生了致命的影响。</li>
+</ul>
+<h5 id="3-、构造函数尽可能不要抛出受检异常"><a href="#3-、构造函数尽可能不要抛出受检异常" class="headerlink" title="(3)、构造函数尽可能不要抛出受检异常"></a>(3)、构造函数尽可能不要抛出受检异常</h5><p>我们来看下面的例子，代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//父类</span>
+<span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 父类抛出IOException</span>
+    <span class="token keyword">public</span> <span class="token function">Base</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IOException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//子类</span>
+<span class="token keyword">class</span> <span class="token class-name">Sub</span> <span class="token keyword">extends</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 子类抛出Exception异常</span>
+    <span class="token keyword">public</span> <span class="token function">Sub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>就这么一段简单的代码，展示了在构造函数中抛出受检异常的三个不利方面：</p>
+<ul>
+<li><strong>1.导致子类膨胀：</strong>在我们的例子中子类的无参构造函数不能省略，原因是父类的无参构造函数抛出了IOException异常，子类的无参构造函数默认调用的是父类的构造函数，所以子类无参构造函数也必须抛出IOException或其父类。</li>
+<li><strong>2.违背了里氏替换原则：”里氏替换原则” 是说父类能出现的地方子类就可以出现，而且将父类替换为子类也不会产生任何异常。</strong>那我们回头看看Sub类是否可以替换Base类，比如我们的上层代码是这样写的：<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">try</span> <span class="token punctuation">{</span>
+          Base base <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Base</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>    
+          e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span></code></pre>
+然后，我们期望把new Base()替换成new Sub()，而且代码能够正常编译和运行。非常可惜，编译不通过，原因是Sub的构造函数抛出了Exception异常，它比父类的构造函数抛出更多的异常范围要宽，必须增加新的catch块才能解决。　　</li>
+</ul>
+<p>可能大家要问了，为什么Java的构造函数允许子类的构造函数抛出更广泛的异常类呢？这正好与类方法的异常机制相反，类方法的异常是这样要求的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 父类方法抛出Exception</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">// 子类</span>
+<span class="token keyword">class</span> <span class="token class-name">Sub</span> <span class="token keyword">extends</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 父类方法抛出Exception</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>子类的方法可以抛出多个异常，但都必须是覆写方法的子类型，对我们的例子来说，Sub类的testMethod方法抛出的异常必须是Exception的子类或Exception类，这是Java覆写的要求。构造函数之所以于此相反，是因为构造函数没有覆写的概念，只是构造函数间的引用调用而已，所以在构造函数中抛出受检异常会违背里氏替换原则原则，使我们的程序缺乏灵活性。</p>
+<ul>
+<li><p><strong>3.子类构造函数扩展受限：</strong>子类存在的原因就是期望实现扩展父类的逻辑，但父类构造函数抛出异常却会让子类构造函数的灵活性大大降低，例如我们期望这样的构造函数。</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 父类</span>
+<span class="token keyword">class</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token function">Base</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
+
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 子类</span>
+<span class="token keyword">class</span> <span class="token class-name">Sub</span> <span class="token keyword">extends</span> <span class="token class-name">Base</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token function">Sub</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception<span class="token punctuation">{</span>
+      <span class="token keyword">try</span><span class="token punctuation">{</span>
+          <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+          <span class="token comment" spellcheck="true">//异常处理后再抛出</span>
+          <span class="token keyword">throw</span> e<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token keyword">finally</span><span class="token punctuation">{</span>
+          <span class="token comment" spellcheck="true">//收尾处理</span>
+      <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>很不幸，这段代码编译不通过，原因是构造函数Sub没有把super()放在第一句话中，想把父类的异常重新包装再抛出是不可行的(当然，这里有很多种 “曲线” 的实现手段，比如重新定义一个方法，然后父子类的构造函数都调用该方法，那么子类构造函数就可以自由处理异常了)，这是Java语法机制。</p>
+</li>
+</ul>
+<p>将以上三种异常类型汇总起来，对于构造函数，错误只能抛出，这是程序人员无能为力的事情；非受检异常不要抛出，抛出了 “ 对己对人 “ 都是有害的；受检异常尽量不抛出，能用曲线的方式实现就用曲线方式实现，总之一句话：在构造函数中尽可能不出现异常。</p>
+<p><strong>注意 ：在构造函数中不要抛出异常，尽量曲线实现。</strong></p>
+<hr>
+<h2 id="建议117：多使用异常，把性能问题放一边"><a href="#建议117：多使用异常，把性能问题放一边" class="headerlink" title="建议117：多使用异常，把性能问题放一边"></a>建议117：多使用异常，把性能问题放一边</h2><p>我们知道异常是主逻辑的例外逻辑，举个简单的例子来说，比如我在马路上走(这是主逻辑)，突然开过一辆车，我要避让(这是受检异常，必须处理)，继续走着，突然一架飞机从我头顶飞过(非受检异常)，我们可以选在继续行走(不捕捉)，也可以选择指责其噪音污染(捕捉，主逻辑的补充处理)，再继续走着，突然一颗流星砸下来，这没有选择，属于错误，不能做任何处理。这样具备完整例外场景的逻辑就具备了OO的味道，任何一个事务的处理都可能产生非预期的效果，问题是需要以何种手段来处理，如果不使用异常就需要依靠返回值的不同来进行处理了，这严重失去了面向对象的风格。</p>
+<p>我们在编写用例文档（User case Specification）时，其中有一项叫做 “ 例外事件 “，是用来描述主场景外的例外场景的，例如用户登录的用例，就会在” 例外事件 “中说明” 连续3此登录失败即锁定用户账号 “，这就是登录事件的一个异常处理，具体到我们的程序中就是：　　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//正常登陆</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>InvalidLoginException lie<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//    用户名无效</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>InvalidPasswordException pe<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//密码错误的异常</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>TooMuchLoginException<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//多次登陆失败的异常</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<p>如此设计则可以让我们的login方法更符合实际的处理逻辑，同时使主逻辑(正常登录，try代码块)更加清晰。当然了，使用异常还有很多优点，可以让正常代码和异常代码分离、能快速查找问题(栈信息快照)等，但是异常有一个缺点：性能比较慢。</p>
+<p>Java的异常机制确实比较慢，这个”比较慢”是相对于诸如String、Integer等对象来说的，单单从对象的创建上来说，new一个IOException会比String慢5倍，这从异常的处理机制上也可以解释：因为它要执行fillInStackTrace方法，要记录当前栈的快照，而String类则是直接申请一个内存创建对象，异常类慢一筹也就在所难免了。</p>
+<p>而且，异常类是不能缓存的，期望先建立大量的异常对象以提高异常性能也是不现实的。</p>
+<p>难道异常的性能问题就没有任何可以提高的办法了？确实没有，但是我们不能因为性能问题而放弃使用异常，而且经过测试，在JDK1.6下，一个异常对象的创建时间只需1.4毫秒左右(注意是毫秒，通常一个交易是在100毫秒左右)，难道我们的系统连如此微小的性能消耗都不予许吗？</p>
+<p>**　注意：性能问题不是拒绝异常的借口。**</p>
+<hr>
+<h2 id="建议121：线程优先级只使用三个等级"><a href="#建议121：线程优先级只使用三个等级" class="headerlink" title="建议121：线程优先级只使用三个等级"></a>建议121：线程优先级只使用三个等级</h2><p>线程的优先级(Priority)决定了线程获得CPU运行的机会，优先级越高获得的运行机会越大，优先级越低获得的机会越小。Java的线程有10个级别(准确的说是11个级别，级别为0的线程是JVM的，应用程序不能设置该级别)，那是不是说级别是10的线程肯定比级别是9的线程先运行呢?我们来看如下一个多线程类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">TestThread</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span><span class="token keyword">int</span> _priority<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Thread t <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 设置优先级别</span>
+        t<span class="token punctuation">.</span><span class="token function">setPriority</span><span class="token punctuation">(</span>_priority<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        t<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 消耗CPU的计算</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Math<span class="token punctuation">.</span><span class="token function">hypot</span><span class="token punctuation">(</span><span class="token number">924526789</span><span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token function">cos</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">// 输出线程优先级</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Priority："</span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getPriority</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>该多线程实现了Runnable接口，实现了run方法，注意在run方法中有一个比较占用CPU的计算，该计算毫无意义，</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//启动20个不同优先级的线程</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">20</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">new</span> <span class="token class-name">TestThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span>i <span class="token operator">%</span> <span class="token number">10</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span></code></pre>
+<p> 这里创建了20个线程，每个线程在运行时都耗尽了CPU的资源，因为优先级不同，线程调度应该是先处理优先级高的，然后处理优先级低的，也就是先执行2个优先级为10的线程，然后执行2个优先级为9的线程，2个优先级为8的线程……但是结果却并不是这样的。<br>**　　Priority：5<br>　　Priority：7<br>　　Priority：10<br>　　Priority：6<br>　　Priority：9<br>　　Priority：6<br>　　Priority：5<br>　　Priority：7<br>　　Priority：10<br>　　Priority：3<br>　　Priority：4<br>　　Priority：8<br>　　Priority：8<br>　　Priority：9<br>　　Priority：4<br>　　Priority：1<br>　　Priority：3<br>　　Priority：1<br>　　Priority：2<br>　　Priority：2**</p>
+<p>println方法虽然有输出损耗，可能会影响到输出结果，但是不管运行多少次，你都会发现两个不争的事实：<br><strong>(1)、并不是严格按照线程优先级来执行的</strong><br>比如线程优先级为5的线程比优先级为7的线程先执行，优先级为1的线程比优先级为2的线程先执行，很少出现优先级为2的线程比优先级为10的线程先执行(注意，这里是” 很少 “，是说确实有可能出现，只是几率低，因为优先级只是表示线程获得CPU运行的机会，并不代表强制的排序号)。<br><strong>(2)、优先级差别越大，运行机会差别越明显</strong><br>比如优先级为10的线程通常会比优先级为2的线程先执行，但是优先级为6的线程和优先级为5的线程差别就不太明显了，执行多次，你会发现有不同的顺序。</p>
+<p>这两个现象是线程优先级的一个重要表现，之所以会出现这种情况，是因为线程运行是需要获得CPU资源的，那谁能决定哪个线程先获得哪个线程后获得呢？这是依照操作系统设置的线程优先级来分配的，也就是说，每个线程要运行，需要操作系统分配优先级和CPU资源，对于JAVA来说，JVM调用操作系统的接口设置优先级，比如windows操作系统优先级都相同吗？</p>
+<p>事实上，不同的操作系统线程优先级是不同的，Windows有7个优先级，Linux有140个优先级，Freebsd则由255个(此处指的优先级个数，不同操作系统有不同的分类，如中断级线程，操作系统级等，各个操作系统具体用户可用的线程数量也不相同)。Java是跨平台的系统，需要把这10个优先级映射成不同的操作系统的优先级，于是界定了Java的优先级只是代表抢占CPU的机会大小，优先级越高，抢占CPU的机会越大，被优先执行的可能性越高，优先级相差不大，则抢占CPU的机会差别也不大，这就是导致了优先级为9的线程可能比优先级为10的线程先运行。</p>
+<p>Java的缔造者们也觉察到了线程优先问题，于是Thread类中设置了三个优先级，此意就是告诉开发者，建议使用优先级常量，而不是1到10的随机数字。常量代码如下：　</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Thread</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/**
+     * The minimum priority that a thread can have. 
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> MIN_PRIORITY <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * The default priority that is assigned to a thread. 
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> NORM_PRIORITY <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * The maximum priority that a thread can have. 
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">static</span> <span class="token keyword">int</span> MAX_PRIORITY <span class="token operator">=</span> <span class="token number">10</span><span class="token punctuation">;</span>
+
+
+<span class="token punctuation">}</span></code></pre>
+<p>在编码时直接使用这些优先级常量，可以说在大部分情况下MAX_PRIORITY的线程回比MIN_PRIORITY的线程优先运行，但是不能认为是必然会先运行，不能把这个优先级做为核心业务的必然条件，Java无法保证优先级高肯定会先执行，只能保证高优先级有更多的执行机会。因此，建议在开发时只使用此三类优先级，没有必要使用其他7个数字，这样也可以保证在不同的操作系统上优先级的表现基本相同。</p>
+<p>大家也许会问，如果优先级相同呢？这很好办，也是由操作系统决定的。基本上是按照FIFO原则(先入先出，First Input First Output)，但也是不能完全保证。</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2017/11/15/bian-xie-gao-zhi-liang-dai-ma-xue-xi-bi-ji-1/">
       《编写高质量代码》学习笔记(1)
     </a>
@@ -2290,151 +3199,6 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/09/17/java-xue-xi-bi-ji-0-liao-jie-java/">
-      Java学习笔记(0)——了解Java
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年9月17日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%880%EF%BC%89%E2%80%94%E2%80%94%E4%BA%86%E8%A7%A3Java/7896890-96efb4ed8490f736.jpg" alt="文 / 我没有三颗心脏"></p>
-<h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><blockquote>
-<p>这里是一些关于写文的原因，目的和其他的有的没的，跟Java没有一点关系，如果是想要学习干货的童鞋可以直接跳过。</p>
-</blockquote>
-<p>系列文章最开始的名字是：从零开始学习Java，一来是觉得太长了（改了之后也不短），另外一个一觉醒来觉得好像这个名字不能准确反映自己写文的目的，并且我发现要把一些概念解释得特别清楚给没有编程基础的人看，对我来说是很有难度的一件事情，所以决定把名字改了，笔记是可以改的，就像今天突然想起这一篇有些东西还需要添加就来改了，这也是我喜欢的并乐意做的事情，share。——17.9.18更新</p>
-<h4 id="写文的几个原因："><a href="#写文的几个原因：" class="headerlink" title="写文的几个原因："></a>写文的几个原因：</h4><p>这学期笔者也开了Java的课，上的第一节课老师说：教材，你们花两个星期大概看一下就可以扔了。有些同学当笑话听了，有些同学不以为然，而我当真了，我真的把郑莉著的教材《Java语言程序设计》（第2版）“看了一遍”，还不到两个星期，当然其中有一些问题没有去深究，比如数据库还有线程的东西，因为老师说的后面一句话我也认真听了：可以申请不来上课。所以就着笔者c++微薄的基础拉完了一遍教材，很是粗糙，想要重新学习一下，这是一个原因。</p>
-<p>昨晚看到简书上的一位博主：<a href="http://www.jianshu.com/u/8dc5811b228f" target="_blank" rel="noopener">CleverFan</a>。他写下的重新认识Java系列，很是受用，本来保持得很好的生物钟，也因为看到他的文章，硬是看到了接近2点，（在此推荐一下）也由此也产生了写文的冲动，这也是一个原因。</p>
-<p>今天去看了一下关于Java方面比较权威的两本儿书，一本《Thinking in Java》、《Java核心技术 卷Ⅰ》，觉得写得特别棒，也产生了一些自己的想法，想要分享。</p>
-<h4 id="写文的目的："><a href="#写文的目的：" class="headerlink" title="写文的目的："></a>写文的目的：</h4><p>首先需要说的是笔者是一名学渣渣。我也是正在学习，<strong>写文更多的目的是在于交流想法，分享学习成果，也是给自己增加一些积累。</strong>还有就是觉得有些教材讲得太生涩难懂，这一点也是我看CleverFan的博文想到的，希望自己能通过一些更加好玩的方式写出来。也希望文章有什么问题能够及时反馈给我。</p>
-<h4 id="关于更新："><a href="#关于更新：" class="headerlink" title="关于更新："></a>关于更新：</h4><p>因为个人性格的原因，我总是希望能把一件事情做得很好，所以如果有很久没有更新的情况，那就当我正在努力想怎么写文吧…hhh</p>
-<p>我会尽可能快的更新文章，也尽可能用通俗易懂的方式说明，会把读者大大们当成是第一次接触Java去细致的讲解，也希望读者大大们能支持我的文章，关于后期维权的东西还没有去想，所以希望如果有转载的请注明一下原文出处谢谢。</p>
-<h1 id="正式开始之前"><a href="#正式开始之前" class="headerlink" title="正式开始之前"></a>正式开始之前</h1><p>先问自己一个问题：Java是什么？如果你的答案仅仅是停留在：是一门编程语言的话，希望看完这篇文章的你，对Java有一个更加全面深入的了解。至少在学习一门语言之前，了解一下自己要学的是什么，对吧？</p>
-<h4 id="Java的简单描述"><a href="#Java的简单描述" class="headerlink" title="Java的简单描述"></a>Java的简单描述</h4><blockquote>
-<p>以下大内容部分提炼自Java核心技术 卷Ⅰ 。</p>
-</blockquote>
-<h4 id="Java最初的设计初衷是："><a href="#Java最初的设计初衷是：" class="headerlink" title="Java最初的设计初衷是："></a>Java最初的设计初衷是：</h4><p><strong>能够用于像有线电视转换盒一类处理能力和内存都很有限，并且CPU厂商各不相同的一些消费设备上。</strong><br>然而时至今日在Java的开发者编写的白皮书中（这是Java设计者用来解释设计的初衷以及完成的情况的简短摘要），对Java的描述却是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%880%EF%BC%89%E2%80%94%E2%80%94%E4%BA%86%E8%A7%A3Java/7896890-bfdc2ad65f565eda.png" alt="来自官方网站"></p>
-<p>你不必全部都读一遍，笔者读来大体的感觉是：为使用者创造了一个更加容易，甚至是dead simple的面向对象的语言，并同时具有移植性好，安全，开发周期短等一系列优点，也为你在烦恼c/c++的复杂性的时候提供了一个新的选择。<strong>白皮书的描述更偏向于讲述这是一个更加简单友好的工具，Sun对Java的设计目标就是：微程序员减少复杂性。用他们的话说就是：我们关心的是，减少开发健壮代码所需的时间以及困难。</strong></p>
-<p>事实上，Java的成功也源于其类库能够让人们轻松地完成原本有一定难度的事情。例如：联网和多线程。尽管Java对于解决传统的单机程序设计问题非常有用，但同样重要的是，它解决了在万维网（WWW）上的程序设计问题（把超文本页面转换到屏幕上的浏览器）。在白皮书的最后提到了HotJava TM Browser，这是Java开发者使用Java开发的一款用来炫耀Java的强大之处的浏览器，<strong>HotJava浏览器具有的在执行网页中内嵌代码的能力在1995年的SunWorld大会上，引发了人们延续至今的对Java的狂热追逐。</strong></p>
-<p>Java的成功源自语言本身的一些特性，以及Sun公司的进一步研发和推广。白皮书中对于Java的11个关键术语进行了组织：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%880%EF%BC%89%E2%80%94%E2%80%94%E4%BA%86%E8%A7%A3Java/7896890-40c93739a353706f.png" alt="11个关键术语"></p>
-<p>关于这一段的描述，《Java核心技术 卷Ⅰ》有有趣简单的描述，感兴趣的可以去百度一下。然而笔者认为，事实上，这些特性现在浏览一遍，心里面知道就行了，没必要去深入，也没有什么用。事实上这一篇文章都是。</p>
-<h4 id="Java与其他语言的区别"><a href="#Java与其他语言的区别" class="headerlink" title="Java与其他语言的区别"></a>Java与其他语言的区别</h4><ul>
-<li>Java是由c++发展而来的，因为最初开发Java的是Sun公司那一批拥有UNIX应用背景的人，Java更像是C++语法的一个“纯净”版本。这里没有头文件、指针运算（甚至指针语法，但并不代表取消了指针机制，这在后面会讲到）、结构、联合、操作符重载、虚基类等。然而，设计者并没有试图清除C++中所有不适当的特性。例如，switch语法的语法在Java中就没有改变。事实上，Java还有许多奇怪的语法，后面也会提到。</li>
-<li>JavaScript和Java除了语法类似，名字类似 ，其他再无什么关系。JavaScript是一种在网页中使用的脚本语言，而Java则是一种强大的面向对象的语言，重点在对象和对象的接口上，而并非所使用的工具上。</li>
-</ul>
-<blockquote>
-<p>面向对象设计是一种程序设计技术。用木匠打一个比方，一个“面向对象的”木匠始终关注的是所制作的椅子，第二位才是使用的工具；一个“非面向对象的”木匠首先考虑的是自己的工具。</p>
-</blockquote>
-<h4 id="关于Java-applet"><a href="#关于Java-applet" class="headerlink" title="关于Java applet"></a>关于Java applet</h4><p>其实很简单，网页中运行的Java程序就是applet，只不过需要一些特别的语法来说明。网页中的嵌入的applet程序就如同在网页中嵌入了一副图片，不同的是，这幅图片能够对于用户的操作作出响应，改变外观、传递数据等。关于这方面可以做一些相关的了解，但笔者并不打算深入研究这方面的东西。</p>
-<h4 id="了解面向对象"><a href="#了解面向对象" class="headerlink" title="了解面向对象"></a>了解面向对象</h4><p>所有的编程语言都提供抽象的机制。就像汇编语言是对于底层机器的轻微抽象。接着出现了所谓的“命令式”语言（如FORTRAN、BASIC、C等）都是对汇编语言的抽象。这些语言在汇编语言的基础上有了大幅的改进，但是它们所作的主要抽象仍要求在解决问题的时候要基于计算机的结构，而不是基于所要解决问题的结构来考虑。程序员必须建立起在机器模型和实际待解问题之间的模型的联系。而建立这种映射是费力的，这不是属于编程语言的固有的功能，这使得程序难以编写，并且维护代价高昂。</p>
-<p>面向对象的方式通过向程序员提供表示问题空间中的元素的工具而更进一步。那么什么是面向对象呢？<strong>所谓对象，其实就是抽象化的数据本身。</strong>万物皆是对象，一只狗，一个人，一栋建筑，而这些对象拥有他们自己的一些行为，比如狗要吃饭，要跑，把这些称为属于狗的方法，然后把用一个叫做“类”的东西来打包（封装）好狗这个对象还有属于它的方法，也就是数据和功能。这就是面向对象，<strong>它的本质就是：程序可以通过添加新类型的对象使自身适用于某个特定的问题。</strong>仅此而已。</p>
-<blockquote>
-<p>写在文章的最后：整篇文章读了好几遍，最开始本来是打算把整一段《Java核心技术 卷Ⅰ》关于Java简史的东西贴出来的，但发现好像用处并不会很大，只有增加篇幅的作用。文章的大部分内容来自于上文提到的两部经典教材，第一次写文，希望喜欢的多多支持，有什么不足也能及时提出，谢谢。</p>
-</blockquote>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2449,8 +3213,14 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           </a>
         
         <p class="current">
-          19 / 19
+          19 / 20
         </p>
+        
+          <a class="next" rel="next" href="/tags/%E5%8E%9F%E5%88%9B/page/20/">
+            <section class="post next white-box shadow">
+              &nbsp;下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i>
+            </section>
+          </a>
         
       </div>
     
@@ -2779,6 +3549,11 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
             ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
+            id="categoriesE78988E69CACE789B9E680A7"
+            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
             id="categoriesE7949FE6B4BB"
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
@@ -2830,7 +3605,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

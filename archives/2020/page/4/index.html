@@ -434,6 +434,410 @@
         
           
   <h2 class="title">
+    <a href="/2020/03/30/dong-yi-dian-qian-duan-vue-kuai-su-ru-men/">
+      懂一点前端—Vue快速入门
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E5%89%8D%E7%AB%AF/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>前端/懂一点系列</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年3月30日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-1c02ae35202887d4.png" alt=""></p>
+<h1 id="01-什么是-Vue"><a href="#01-什么是-Vue" class="headerlink" title="01. 什么是 Vue"></a>01. 什么是 Vue</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-028081a4f57de388.png" alt=""></p>
+<p><strong>Vue</strong> <em>(读音 /vjuː/，类似于 view)</em> 是一套用于构建用户界面的渐进式框架，是当下很火的一个 <strong>JavaScript MVVM 库</strong>，是以 <strong>数据驱动和组件化</strong> 的思想构建的。</p>
+<h2 id="MVVM-模式简述"><a href="#MVVM-模式简述" class="headerlink" title="MVVM 模式简述"></a>MVVM 模式简述</h2><p>下图不仅概括了 MVVM 模式 <em>（Model-View-ViewModel）</em>，还描述了在 Vue.js 中 ViewModel 是如何和 View 以及 Model 进行交互的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-ed4735335d7728b5.png" alt=""></p>
+<p><strong>ViewModel 是 Vue.js 的核心</strong>，它是一个 Vue 实例。Vue 实例是作用于某一个 HTML 元素上的，这个元素可以是 HTML 的 <code>body</code> 元素，也可以是指定了 <code>id</code> 的某个元素。</p>
+<p>当创建了 ViewModel 后，双向绑定是如何达成的呢？</p>
+<p>首先，我们将上图中的 <em>DOM Listeners</em> 和 <em>Data Bindings</em> 看作两个工具，它们是实现双向绑定的关键。</p>
+<ul>
+<li>从 View 侧看，ViewModel 中的 DOM Listeners 工具会帮我们监测页面上DOM元素的变化，如果有变化，则更改Model中的数据；</li>
+<li>从 Model 侧看，当我们更新 Model 中的数据时，Data Bindings 工具会帮我们更新页面中的 DOM 元素。</li>
+</ul>
+<h2 id="库和框架的区别"><a href="#库和框架的区别" class="headerlink" title="库和框架的区别"></a>库和框架的区别</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-84681aa96817c873.png" alt=""></p>
+<p>在这里我们需要稍微注意一下前端 <strong>库(Library)</strong> 和 <strong>框架(Framework)</strong> 的区别，它们的本质都是某人编写的，用于解决常见问题的 <strong>可复用代码</strong> 的集合。</p>
+<p>比如，你有一个处理字符串的程序，你为了保持代码的 <strong>DRY</strong> <em>(Don’t Repeat Yourself)</em>，你编写了如下可复用的功能代码：</p>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">getWords</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">const</span> words <span class="token operator">=</span> str<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">return</span> words<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">function</span> <span class="token function">createSentence</span><span class="token punctuation">(</span>words<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">const</span> sentence <span class="token operator">=</span> words<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token keyword">return</span> sentence<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>恭喜你，你创建了一个 JavaScript 库！</p>
+<p>如果我们用 <em>「构建房子」</em> 来类比 <em>「构建应用」</em> 的话，那么 <strong>使用库</strong> 就像是 <strong>去宜家购物</strong> 一样，我已经有了一个家，现在我需要挑选自己喜欢的一些家具，以达到我自己满意的状态，这一切 <strong>都在我的控制范围之内</strong>；而 <strong>使用框架</strong> 就会像是已经有了一个 <strong>清装房</strong>，在已经规划好的蓝图和选择之中，我们的一些想法会显得十分地有限。</p>
+<p><strong>Vue.js 本身只是一个 JavaScript 库</strong>，包括 React 也一样，只不过平时我们所说的 <strong>Vue 框架</strong>，是指包含 Router/ Vuex 等一系列组件之后融合的 <strong>一整套解决方案</strong>。</p>
+<blockquote>
+<p>更加详细的解释如下：</p>
+<ul>
+<li><strong>「库」</strong> 是一个封装好的特定的集合，提供给开发者使用，而且是特定于某一方面的集合（方法和函数），库没有控制权，控制权完全在于使用者本身；</li>
+<li><strong>「框架」</strong> 顾名思义是一套架构，会基于自身的特点向用户提供一套比较完整的解决方案，如果使用者选定了一套框架，那么就需要根据框架本身做出一定的适应。</li>
+</ul>
+</blockquote>
+<h1 id="02-为什么使用-Vue？"><a href="#02-为什么使用-Vue？" class="headerlink" title="02. 为什么使用 Vue？"></a>02. 为什么使用 Vue？</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-fb93d039c156554c.png" alt=""></p>
+<p>说实话，我个人非常喜欢 Vue。在我大学刚尝试学习 HTML + CSS + JavaScript 和 Bootstrap 融合之后，我就接触了 Vue，它对我来说这样的「前端小白」来说，几乎没有什么开发的门槛，很平滑地就得以过渡到 Vue 的使用中去。</p>
+<p>典型的 <code>.vue</code> 文件可以简单成如下的样子：<em>(vue-tutorial/typical-case.html)</em></p>
+<pre class=" language-vue"><code class="language-vue"><template>
+    <!-- HTML 代码 -->
+</template>
+
+<script>
+    // JavaScript 代码
+</script>
+
+<style>
+    /* css 代码 */
+</style></code></pre>
+<p>另外我也非常喜欢尤大大本人，大家可以去看一看 Honeypot 记录的关于 Vue 的 <a href="https://www.youtube.com/watch?v=OrxmtDw4pVI&t=7s" target="_blank" rel="noopener">纪录片</a> <em>(趁着写文的间隙我又看了一遍)</em>，当然如果英文有些吃力也可以围观一下在 B 站上的 <a href="https://www.bilibili.com/video/BV1L7411M7Ut?from=search&seid=11338729656895120592" target="_blank" rel="noopener">带中文字幕的版本</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-7079c8e45951e276.png" alt="B 站翻译版本截图"></p>
+<blockquote>
+<p>Vue 从一开始的定位就是尽可能的降低前端开发的门槛，让更多的人能够更快地上手开发。———— 尤雨溪</p>
+</blockquote>
+<h2 id="理由一：易上手、学习曲线平滑"><a href="#理由一：易上手、学习曲线平滑" class="headerlink" title="理由一：易上手、学习曲线平滑"></a>理由一：易上手、学习曲线平滑</h2><p>就像上面的典型 <code>.vue</code> 文件的展示一样，在 Vue 中，一切都很自然，例如我们使用 Vue 来构建我们的 <strong>Hello World</strong> 程序：<em>(vue-tutorial/hello-vue.html)</em></p>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>en<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>Hello Vue!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>app<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    {{ message }}
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 开发环境版本，包含了有帮助的命令行警告 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://cdn.jsdelivr.net/npm/vue/dist/vue.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script language-javascript"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script language-javascript">
+    <span class="token comment" spellcheck="true">// 创建一个 Vue 实例或者说是 VieModel 实例</span>
+    <span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+        el<span class="token punctuation">:</span> <span class="token string">'#app'</span><span class="token punctuation">,</span>
+        data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+            message<span class="token punctuation">:</span> <span class="token string">'Hello Vue!'</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<p>可以看到几乎没有多余的部分，只是在创建 Vue 实例时，把 <code>id</code> 为 <code>app</code> 的对象 <em>(此处为一个 <code>div</code>)</em> 绑定到了 Vue 实例中而已。</p>
+<h2 id="理由二：文档友好"><a href="#理由二：文档友好" class="headerlink" title="理由二：文档友好"></a>理由二：文档友好</h2><p>由于 Vue 是国人编写的，所以在官网中有完整的中文文档可供开发者参考，并且借由尤大大出色的文笔，非常地清晰易懂，相信看过的朋友会和我有一样的感受：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-0057b8b7a94bccd7.png" alt="官方网站的文档"></p>
+<blockquote>
+<p>官方文档的地址可戳 <a href="https://cn.vuejs.org/v2/guide/index.html" target="_blank" rel="noopener">这里</a></p>
+</blockquote>
+<h2 id="理由三：MVVM-天然的双向绑定"><a href="#理由三：MVVM-天然的双向绑定" class="headerlink" title="理由三：MVVM 天然的双向绑定"></a>理由三：MVVM 天然的双向绑定</h2><p>Vue.js 是一个提供了 MVVM 风格的双向数据绑定的 JavaScript 库，这就让我们能够专注于 View 层的开发，这种轻量级的框架让前端开发更加高效、便捷。</p>
+<p>例如，我们使用 <code>v-model</code> 来简单改造一下我们的 <code>hello-vue.html</code> 文件让它编程一个简单的双向绑定示例：<em>(vue-tutorial/v-model-demo.html)</em></p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>app<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>{{ message }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>message<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<p>将 <code>message</code> 绑定到文本框，当更改文本框的值的时候， <code>&lt;p&gt;&lt;/p&gt;</code> 中的内容也会被更新：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-f0f4cecc0d5b2725.gif" alt=""></p>
+<p>反过来如果我们更改 <code>message</code> 的值的话，文本框的值也会被更新，我们可以在控制台中尝试一下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-5c118b0f35854dbd.gif" alt=""></p>
+<h2 id="千万不要把框架能力看得比你解决问题的能力还重要"><a href="#千万不要把框架能力看得比你解决问题的能力还重要" class="headerlink" title="千万不要把框架能力看得比你解决问题的能力还重要"></a>千万不要把框架能力看得比你解决问题的能力还重要</h2><p>这里是借鉴了 <a href="https://www.zhihu.com/question/294210442" target="_blank" rel="noopener">知乎中的一个讨论</a>，不论是使用 React 还是 Vue，我们最终还是要以 <strong>解决实际的问题</strong> 为出发点。引用一下尤大大在 <a href="https://www.zhihu.com/question/301860721/answer/545031906" target="_blank" rel="noopener">知乎-Vue 和 React 的优点分别是什么？</a> 上的回答部分截取：</p>
+<blockquote>
+<p>说了这么多，无非是希望大家能停下来想想所谓的 ”A 技术比 B 技术牛逼“ 背后到底是在争些什么，我们使用这些技术的初衷又是什么。很多时候你说这方面，他说那方面，鸡同鸭讲，即使说到一起去，也往往缺乏对等的信息量或者基础共识，只是各自表达主观看法，最后变成两个阵营各自抱团取暖… 说到底，就算你证明了 A 比 B 牛逼，也不意味着你或者你的项目就牛逼了… 比起争这个，不如多想想怎么让自己变得更牛逼吧。—————— 尤雨溪</p>
+</blockquote>
+<h1 id="03-Vue-常用指令"><a href="#03-Vue-常用指令" class="headerlink" title="03. Vue 常用指令"></a>03. Vue 常用指令</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-be9c3c7d0f0fcbab.png" alt=""></p>
+<p>上面我们已经实际体验了一个 Vue 的指令 <code>v-model</code> 了，在 Vue 中，指令都带有 <code>v-</code> 前缀，以表示它们是 Vue 提供的特殊的 <code>attribute</code>，它们会在渲染 DOM 时进行特殊的响应式行为。</p>
+<p>Vue 内置了一些常用的指令，接下来我们将依次来介绍：</p>
+<ul>
+<li><code>v-if</code> 和 <code>v-else</code> 条件渲染指令；</li>
+<li><code>v-show</code> 条件展示指令；</li>
+<li><code>v-for</code> 列表渲染指令</li>
+<li><code>v-bind</code> 条件绑定指令；</li>
+<li><code>v-on</code> 事件处理指令；</li>
+</ul>
+<blockquote>
+<p>大部分照搬的官方教程，写得非常具有参考性，感兴趣的朋友可以直接略过下面部分去参考 <a href="https://cn.vuejs.org/v2/guide" target="_blank" rel="noopener">官方文档</a>。</p>
+</blockquote>
+<h2 id="v-if-和-v-else-条件渲染指令"><a href="#v-if-和-v-else-条件渲染指令" class="headerlink" title="v-if 和 v-else 条件渲染指令"></a>v-if 和 v-else 条件渲染指令</h2><h4 id="v-if-指令"><a href="#v-if-指令" class="headerlink" title="v-if 指令"></a>v-if 指令</h4><p><code>v-if</code> 指令用于条件性地渲染一块内容。这块内容只会在指令的表达式返回 <code>truthy</code> 值的时候被渲染。例如：<em>(vue-tutorial/v-if-demo)</em></p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>seen<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>现在你看到我了！<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    el<span class="token punctuation">:</span> <span class="token string">'#app'</span><span class="token punctuation">,</span>
+    data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        seen<span class="token punctuation">:</span> <span class="token boolean">true</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p>页面会正确的显示「现在你看到我了！」这几个字。</p>
+<h4 id="v-else-指令"><a href="#v-else-指令" class="headerlink" title="v-else 指令"></a>v-else 指令</h4><p>你也可以使用 <code>v-else</code> 来添加一个 “else 块” 来表达条件不满足时应该渲染的模块：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>seen<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>现在你看到我了！<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">v-else</span><span class="token punctuation">></span></span>Oh no!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span></code></pre>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    el<span class="token punctuation">:</span> <span class="token string">'#app'</span><span class="token punctuation">,</span>
+    data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        seen<span class="token punctuation">:</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p>此时条件 <code>seen</code> 不满足，页面就会显示「Oh no!」的字样。</p>
+<h4 id="v-else-if-指令"><a href="#v-else-if-指令" class="headerlink" title="v-else-if 指令"></a>v-else-if 指令</h4><p>这是 <code>2.1.0</code> 版本新增的指令，充当 <code>v-if</code> 的 “else-if 块”，可以用来连续判断条件：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">v-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>type <span class="token punctuation">=</span><span class="token punctuation">=</span><span class="token punctuation">=</span> <span class="token punctuation">'</span>A<span class="token punctuation">'</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  A
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">v-else-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>type <span class="token punctuation">=</span><span class="token punctuation">=</span><span class="token punctuation">=</span> <span class="token punctuation">'</span>B<span class="token punctuation">'</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  B
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">v-else-if</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>type <span class="token punctuation">=</span><span class="token punctuation">=</span><span class="token punctuation">=</span> <span class="token punctuation">'</span>C<span class="token punctuation">'</span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  C
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">v-else</span><span class="token punctuation">></span></span>
+  Not A/B/C
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<p>类似于 <code>v-else</code>，<code>v-else-if</code> 也必须紧跟在带 <code>v-if</code> 或者 <code>v-else-if</code> 的元素之后。</p>
+<h2 id="v-show-条件展示指令"><a href="#v-show-条件展示指令" class="headerlink" title="v-show 条件展示指令"></a>v-show 条件展示指令</h2><p>另一个用于根据条件展示元素的选项是 <code>v-show</code> 指令。用法大致一样：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span> <span class="token attr-name">v-show</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>ok<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Hello!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">></span></span></code></pre>
+<p>不同的是带有 <code>v-show</code> 的元素始终会被渲染并保留在 DOM 中。<code>v-show</code> 只是简单地切换元素的 CSS 属性 <code>display</code> <em>(条件不满足则把元素 display 属性设置为 none)</em>，而 <code>v-if</code> 则在条件不满足时直接不渲染出对象。</p>
+<h4 id="v-if-与-v-show"><a href="#v-if-与-v-show" class="headerlink" title="v-if 与 v-show"></a>v-if 与 v-show</h4><p><code>v-if</code> 是“真正”的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建。</p>
+<p><code>v-if</code> 也是 <strong>惰性</strong> 的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。</p>
+<p>相比之下，<code>v-show</code> 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 进行切换。</p>
+<p>一般来说，<code>v-if</code> 有更高的切换开销，而 <code>v-show</code> 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 <code>v-show</code> 较好；如果在运行时条件很少改变，则使用 <code>v-if</code> 较好。</p>
+<h2 id="v-for-列表渲染指令"><a href="#v-for-列表渲染指令" class="headerlink" title="v-for 列表渲染指令"></a>v-for 列表渲染指令</h2><p>我们可以用 <code>v-for</code> 指令基于一个数组来渲染一个列表。<code>v-for</code> 指令需要使用 <code>item in items</code> 形式的特殊语法，其中 <code>items</code> 是源数据数组，而 <code>item</code> 则是被迭代的数组元素的别名。</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>example-1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>item in items<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    {{ item.message }}
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span></code></pre>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> example1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  el<span class="token punctuation">:</span> <span class="token string">'#example-1'</span><span class="token punctuation">,</span>
+  data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    items<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+      <span class="token punctuation">{</span> message<span class="token punctuation">:</span> <span class="token string">'Foo'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+      <span class="token punctuation">{</span> message<span class="token punctuation">:</span> <span class="token string">'Bar'</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p>结果：</p>
+<ul>
+<li>Foo</li>
+<li>Bar</li>
+</ul>
+<blockquote>
+<p><strong>注意：永远不要把 v-if 和 v-for 同时用在同一个元素上。</strong></p>
+<p>因为当 Vue 处理指令时，<code>v-for</code> 比 <code>v-if</code> 拥有更高的优先级，所以会导致错误，详细的技术细节可以 <a href="https://cn.vuejs.org/v2/style-guide/#%E9%81%BF%E5%85%8D-v-if-%E5%92%8C-v-for-%E7%94%A8%E5%9C%A8%E4%B8%80%E8%B5%B7-%E5%BF%85%E8%A6%81" target="_blank" rel="noopener">戳这里</a></p>
+</blockquote>
+<h2 id="v-bind-条件绑定指令"><a href="#v-bind-条件绑定指令" class="headerlink" title="v-bind 条件绑定指令"></a>v-bind 条件绑定指令</h2><p>我们可以传给 <code>v-bind:class</code> 一个对象，以动态地切换 class：<em>(也可以用缩写 <code>:</code> 来替代 <code>v-bind</code> 指令)</em></p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name"><span class="token namespace">v-bind:</span>class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>{ active: isActive }<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<p>上面的语法表示 <code>active</code> 这个 class 存在与否将取决于数据属性 <code>isActive</code> 的 <code>truthiness</code>。</p>
+<p>你可以在对象中传入更多属性来动态切换多个 class。此外，<code>v-bind:class</code> 指令也可以与普通的 class 属性共存。当有如下模板：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span>
+  <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>static<span class="token punctuation">"</span></span>
+  <span class="token attr-name"><span class="token namespace">v-bind:</span>class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>{ active: isActive, <span class="token punctuation">'</span>text-danger<span class="token punctuation">'</span>: hasError }<span class="token punctuation">"</span></span>
+<span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<p>和如下 data：</p>
+<pre class=" language-javascript"><code class="language-javascript">data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+  isActive<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  hasError<span class="token punctuation">:</span> <span class="token boolean">false</span>
+<span class="token punctuation">}</span></code></pre>
+<p>结果渲染为：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>static active<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<p>当 <code>isActive</code> 或者 <code>hasError</code> 变化时，class 列表将相应地更新。例如，如果 <code>hasError</code> 的值为 <code>true</code>，class 列表将变为 <code>&quot;static active text-danger&quot;</code>。</p>
+<h2 id="v-on-事件处理指令"><a href="#v-on-事件处理指令" class="headerlink" title="v-on 事件处理指令"></a>v-on 事件处理指令</h2><p>可以用 <code>v-on</code> 指令监听 DOM 事件，并在触发时运行一些 JavaScript 代码。<em>(也可以用缩写 <code>@</code> 来替代 <code>v-on</code> 指令)</em></p>
+<p>示例：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>example-1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name"><span class="token namespace">v-on:</span>click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>counter +<span class="token punctuation">=</span> 1<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>Add 1<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>The button above has been clicked {{ counter }} times.<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">var</span> example1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  el<span class="token punctuation">:</span> <span class="token string">'#example-1'</span><span class="token punctuation">,</span>
+  data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    counter<span class="token punctuation">:</span> <span class="token number">0</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<p>结果：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-72b4ee1014d5f762.gif" alt=""></p>
+<h4 id="v-on-的事件修饰符"><a href="#v-on-的事件修饰符" class="headerlink" title="v-on 的事件修饰符"></a>v-on 的事件修饰符</h4><p>在事件处理程序中调用 <code>event.preventDefault()</code> 或 <code>event.stopPropagation()</code> 是非常常见的需求。尽管我们可以在方法中轻松实现这点，但更好的方式是：方法只有纯粹的数据逻辑，而不是去处理 DOM 事件细节。</p>
+<p>为了解决这个问题，Vue.js 为 <code>v-on</code> 提供了事件修饰符。之前提过，修饰符是由点开头的指令后缀来表示的。</p>
+<ul>
+<li><code>.stop</code></li>
+<li><code>.prevent</code></li>
+<li><code>.capture</code></li>
+<li><code>.self</code></li>
+<li><code>.once</code></li>
+<li><code>.passive</code></li>
+</ul>
+<pre class=" language-html"><code class="language-html"><span class="token comment" spellcheck="true">&lt;!-- 阻止单击事件继续传播 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name"><span class="token namespace">v-on:</span>click.stop</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>doThis<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 提交事件不再重载页面 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name"><span class="token namespace">v-on:</span>submit.prevent</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>onSubmit<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 修饰符可以串联 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name"><span class="token namespace">v-on:</span>click.stop.prevent</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>doThat<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 只有修饰符 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name"><span class="token namespace">v-on:</span>submit.prevent</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 添加事件监听器时使用事件捕获模式 --></span>
+<span class="token comment" spellcheck="true">&lt;!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name"><span class="token namespace">v-on:</span>click.capture</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>doThis<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- 只当在 event.target 是当前元素自身时触发处理函数 --></span>
+<span class="token comment" spellcheck="true">&lt;!-- 即事件不是从内部元素触发的 --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name"><span class="token namespace">v-on:</span>click.self</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>doThat<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>...<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span></code></pre>
+<blockquote>
+<p>另外事件处理还可以支持 <strong>按键码</strong> <em>(某一个键按下)</em>、<strong>系统修饰符</strong> <em>(键盘鼠标按下)</em>，可以参看 <a href="https://cn.vuejs.org/v2/guide/events.html" target="_blank" rel="noopener">官方教程</a></p>
+</blockquote>
+<h1 id="04-Todo-List-示例"><a href="#04-Todo-List-示例" class="headerlink" title="04. Todo-List 示例"></a>04. Todo-List 示例</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-17bf7a6193c7bf40.png" alt=""></p>
+<p>上面我们了解了一些基本的指令了，接下来我们实际动动手，来搭建一个简单的 <strong>TodoList</strong> demo 小程序。</p>
+<h2 id="第一步：明确需求"><a href="#第一步：明确需求" class="headerlink" title="第一步：明确需求"></a>第一步：明确需求</h2><p>TodoList 想必大家都很熟悉，使用来记录我们接下来要做的一些事情的程序，最基本的功能有增加和删除：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-87f3a4def16405b3.gif" alt=""></p>
+<p>很简单，可以看出我们只需要一个输入框 <em>(用来记录将要保存的数据)<em>，一个按钮 *(用来添加数据)</em>，和一个集合 *(用来保存数据)</em> 就差不多可以了，上手！</p>
+<h2 id="第二步：创建好需要的-data"><a href="#第二步：创建好需要的-data" class="headerlink" title="第二步：创建好需要的 data"></a>第二步：创建好需要的 data</h2><p>先来创建好我们需要的数据 data：</p>
+<pre class=" language-javascript"><code class="language-javascript">data<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    todos<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+            id<span class="token punctuation">:</span> nextTodoId<span class="token operator">++</span><span class="token punctuation">,</span>
+            text<span class="token punctuation">:</span> <span class="token string">'写代码'</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            id<span class="token punctuation">:</span> nextTodoId<span class="token operator">++</span><span class="token punctuation">,</span>
+            text<span class="token punctuation">:</span> <span class="token string">'还是写代码'</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    newTodoText<span class="token punctuation">:</span> <span class="token string">""</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这里多定义了 <code>id</code> 属性是为了方便我们的删除操作。</p>
+<h2 id="第三步：创建好对应的-HTML"><a href="#第三步：创建好对应的-HTML" class="headerlink" title="第三步：创建好对应的 HTML"></a>第三步：创建好对应的 HTML</h2><p>没有任何布局，就直接定义好我们所需要的组件就好了：</p>
+<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">v-model</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>newTodoText<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>addItem<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>添加<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ul</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">v-for</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>item in todos<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>{{ item.text }}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">@click</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>removeItem(item.id)<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>del<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ul</span><span class="token punctuation">></span></span></code></pre>
+<p>没有任何的特别，只是里面包含了两个我们 <code>未定义</code> 的方法：<code>addItem</code> 和 <code>removeItem</code> 而已。</p>
+<h2 id="第三步：定义并实现方法"><a href="#第三步：定义并实现方法" class="headerlink" title="第三步：定义并实现方法"></a>第三步：定义并实现方法</h2><p>Vue 中的方法需要定义在 Vue 实例的 <code>methods</code> 关键字下面：</p>
+<pre class=" language-javascript"><code class="language-javascript">methods<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+    <span class="token function">addItem</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>todos<span class="token punctuation">.</span><span class="token function">push</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+            id<span class="token punctuation">:</span> nextTodoId<span class="token punctuation">,</span>
+            text<span class="token punctuation">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>newTodoText
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>newTodoText <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token function">removeItem</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>todos <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>todos<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>todo <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> todo<span class="token punctuation">.</span>id <span class="token operator">!==</span> id
+        <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这里数组的更新需要用到 <code>push</code>，另外删除时我们使用了一个 lambda 表达式来完成，删除时传入了一个要删除元素的 <code>id</code>，然后从数组中挑选出所有 <strong>不等于</strong> 这个 <code>id</code> 的元素重新赋值给原数组，这样就相当于是删除了元素了。</p>
+<blockquote>
+<p>本文涉及的所有代码都上传到了【More Than Java】项目中。<em>(地址下方)</em></p>
+</blockquote>
+<h2 id="更好的参考"><a href="#更好的参考" class="headerlink" title="更好的参考"></a>更好的参考</h2><p>上面的代码仅仅是简单实现，更好的参考可以查看 Vue 官方实现的一个更加具有参考性的例子：<a href="https://codesandbox.io/s/o29j95wx9" target="_blank" rel="noopener">https://codesandbox.io/s/o29j95wx9</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>Vue【官方文档】 - <a href="https://cn.vuejs.org/v2/guide/" target="_blank" rel="noopener">https://cn.vuejs.org/v2/guide/</a></li>
+<li>【译】框架与库的差异 - <a href="https://juejin.im/post/5c5fe3e751882561dd7b4e9b" target="_blank" rel="noopener">https://juejin.im/post/5c5fe3e751882561dd7b4e9b</a></li>
+<li>Vue.js——60分钟快速入门 - <a href="https://www.cnblogs.com/keepfool/p/5619070.html" target="_blank" rel="noopener">https://www.cnblogs.com/keepfool/p/5619070.html</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%87%82%E4%B8%80%E7%82%B9%E5%89%8D%E7%AB%AF%E2%80%94Vue%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/03/25/dong-yi-dian-python-xi-lie-kuai-su-ru-men-1/">
       妈妈再也不担心我面试被Redis问得脸都绿了
     </a>
@@ -2881,259 +3285,6 @@ key1</code></pre>
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2020/03/12/redis-6-geohash-cha-zhao-fu-jin-de-ren/">
-      Redis(6)——GeoHash查找附近的人
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>中间件/JavaWeb进阶</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2020年3月12日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-8ccb98beab9aff6a.png" alt=""></p>
-<p>像微信 <strong>“附近的人”</strong>，美团 <strong>“附近的餐厅”</strong>，支付宝共享单车 <strong>“附近的车”</strong> 是怎么设计实现的呢？</p>
-<h1 id="一、使用数据库实现查找附近的人"><a href="#一、使用数据库实现查找附近的人" class="headerlink" title="一、使用数据库实现查找附近的人"></a>一、使用数据库实现查找附近的人</h1><p>我们都知道，地球上的任何一个位置都可以使用二维的 <strong>经纬度</strong> 来表示，经度范围 <em>[-180, 180]<em>，纬度范围 *[-90, 90]</em>，纬度正负以赤道为界，北正南负，经度正负以本初子午线 *(英国格林尼治天文台)</em> 为界，东正西负。比如说，北京人民英雄纪念碑的经纬度坐标就是 <em>(39.904610, 116.397724)</em>，都是正数，因为中国位于东北半球。</p>
-<p>所以，当我们使用数据库存储了所有人的 <strong>经纬度</strong> 信息之后，我们就可以基于当前的坐标节点，来划分出一个矩形的范围，来得知附近的人，如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-c5e82d3cab59ad22.png" alt=""></p>
-<p>所以，我们很容易写出下列的伪 SQL 语句：</p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> id <span class="token keyword">FROM</span> positions <span class="token keyword">WHERE</span> x0 <span class="token operator">-</span> r <span class="token operator">&lt;</span> x <span class="token operator">&lt;</span> x0 <span class="token operator">+</span> r <span class="token operator">AND</span> y0 <span class="token operator">-</span> r <span class="token operator">&lt;</span> y <span class="token operator">&lt;</span> y0 <span class="token operator">+</span> r</code></pre>
-<p>如果我们还想进一步地知道与每个坐标元素的距离并排序的话，就需要一定的计算。</p>
-<p>当两个坐标元素的距离不是很远的时候，我们就可以简单利用 <strong>勾股定理</strong> 就能够得出他们之间的 <strong>距离</strong>。不过需要注意的是，地球不是一个标准的球体，<strong>经纬度的密度</strong> 是 <strong>不一样</strong> 的，所以我们使用勾股定理计算平方之后再求和时，需要按照一定的系数 <strong>加权</strong> 再进行求和。当然，如果不准求精确的话，加权也不必了。</p>
-<p>参考下方 <em>参考资料 2</em> 我们能够差不多能写出如下优化之后的 SQL 语句来：<em>(仅供参考)</em></p>
-<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span>
-    <span class="token operator">*</span> 
-<span class="token keyword">FROM</span>
-    users_location 
-<span class="token keyword">WHERE</span>
-    latitude <span class="token operator">></span> <span class="token string">'.$lat.'</span> <span class="token operator">-</span> <span class="token number">1</span> 
-    <span class="token operator">AND</span> latitude <span class="token operator">&lt;</span> <span class="token string">'.$lat.'</span> <span class="token operator">+</span> <span class="token number">1</span> <span class="token operator">AND</span> longitude <span class="token operator">></span> <span class="token string">'.$lon.'</span> <span class="token operator">-</span> <span class="token number">1</span> 
-    <span class="token operator">AND</span> longitude <span class="token operator">&lt;</span> <span class="token string">'.$lon.'</span> <span class="token operator">+</span> <span class="token number">1</span> 
-<span class="token keyword">ORDER</span> <span class="token keyword">BY</span>
-    ACOS<span class="token punctuation">(</span>
-        SIN<span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token string">'.$lat.'</span> <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">*</span> SIN<span class="token punctuation">(</span> <span class="token punctuation">(</span> latitude <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">+</span> COS<span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token string">'.$lat.'</span> <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">*</span> COS<span class="token punctuation">(</span> <span class="token punctuation">(</span> latitude <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> <span class="token operator">*</span> COS<span class="token punctuation">(</span> <span class="token punctuation">(</span> <span class="token string">'.$lon.'</span> <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token operator">-</span> <span class="token punctuation">(</span> longitude <span class="token operator">*</span> <span class="token number">3.1415</span> <span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">180</span> <span class="token punctuation">)</span> 
-    <span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">6380</span> <span class="token keyword">ASC</span> 
-    <span class="token keyword">LIMIT</span> <span class="token number">10</span> '<span class="token punctuation">;</span></code></pre>
-<p>为了满足高性能的矩形区域算法，数据表也需要把经纬度坐标加上 <strong>双向复合索引 (x, y)</strong>，这样可以满足最大优化查询性能。</p>
-<h1 id="二、GeoHash-算法简述"><a href="#二、GeoHash-算法简述" class="headerlink" title="二、GeoHash 算法简述"></a>二、GeoHash 算法简述</h1><p>这是业界比较通用的，用于 <strong>地理位置距离排序</strong> 的一个算法，<strong>Redis</strong> 也采用了这样的算法。GeoHash 算法将 <strong>二维的经纬度</strong> 数据映射到 <strong>一维</strong> 的整数，这样所有的元素都将在挂载到一条线上，距离靠近的二维坐标映射到一维后的点之间距离也会很接近。当我们想要计算 <strong>「附近的人时」</strong>，首先将目标位置映射到这条线上，然后在这个一维的线上获取附近的点就行了。</p>
-<p>它的核心思想就是把整个地球看成是一个 <strong>二维的平面</strong>，然后把这个平面不断地等分成一个一个小的方格，<strong>每一个</strong> 坐标元素都位于其中的 <strong>唯一一个方格</strong> 中，等分之后的 <strong>方格越小</strong>，那么坐标也就 <strong>越精确</strong>，类似下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-6396ae153a485857.png" alt=""></p>
-<p>经过划分的地球，我们需要对其进行编码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-573525c3f1179bbc.png" alt=""></p>
-<p>经过这样顺序的编码之后，如果你仔细观察一会儿，你就会发现一些规律：</p>
-<ul>
-<li>横着的所有编码中，<strong>第 2 位和第 4 位都是一样的</strong>，例如第一排第一个 <code>0101</code> 和第二个 <code>0111</code>，他们的第 2 位和第 4 位都是 <code>1</code>；</li>
-<li>竖着的所有编码中，<strong>第 1 位和第 3 位是递增的</strong>，例如第一排第一个 <code>0101</code>，如果单独把第 1 位和第 3 位拎出来的话，那就是 <code>00</code>，同理看第一排第二个 <code>0111</code>，同样的方法第 1 位和第 3 位拎出来是 <code>01</code>，刚好是 <code>00</code> 递增一个；</li>
-</ul>
-<p>通过这样的规律我们就把每一个小方块儿进行了一定顺序的编码，这样做的 <strong>好处</strong> 是显而易见的：每一个元素坐标既能够被 <strong>唯一标识</strong> 在这张被编码的地图上，也不至于 <strong>暴露特别的具体的位置</strong>，因为区域是共享的，我可以告诉你我就在公园附近，但是在具体的哪个地方你就无从得知了。</p>
-<p>总之，我们通过上面的思想，能够把任意坐标变成一串二进制的编码了，类似于 <code>11010010110001000100</code> 这样 <em>(注意经度和维度是交替出现的哦..)</em>，通过这个整数我们就可以还原出元素的坐标，整数越长，还原出来的坐标值的损失程序就越小。对于 <strong>“附近的人”</strong> 这个功能来说，损失的一点经度可以忽略不计。</p>
-<p>最后就是一个 <code>Base32</code> <em>(0<del>9, a</del>z, 去掉 a/i/l/o 四个字母)</em> 的编码操作，让它变成一个字符串，例如上面那一串儿就变成了 <code>wx4g0ec1</code>。</p>
-<p>在 <strong>Redis</strong> 中，经纬度使用 <code>52</code> 位的整数进行编码，放进了 zset 里面，zset 的 <code>value</code> 是元素的 <code>key</code>，<code>score</code> 是 <strong>GeoHash</strong> 的 <code>52</code> 位整数值。zset 的 <code>score</code> 虽然是浮点数，但是对于 <code>52</code> 位的整数值来说，它可以无损存储。</p>
-<h1 id="三、在-Redis-中使用-Geo"><a href="#三、在-Redis-中使用-Geo" class="headerlink" title="三、在 Redis 中使用 Geo"></a>三、在 Redis 中使用 Geo</h1><blockquote>
-<p>下方内容引自 <em>参考资料 1 - 《Redis 深度历险》</em></p>
-</blockquote>
-<p>在使用 <strong>Redis</strong> 进行 <strong>Geo 查询</strong> 时，我们要时刻想到它的内部结构实际上只是一个 <strong>zset(skiplist)</strong>。通过 zset 的 <code>score</code> 排序就可以得到坐标附近的其他元素 <em>(实际情况要复杂一些，不过这样理解足够了)</em>，通过将 <code>score</code> 还原成坐标值就可以得到元素的原始坐标了。</p>
-<p>Redis 提供的 Geo 指令只有 6 个，很容易就可以掌握。</p>
-<h2 id="增加"><a href="#增加" class="headerlink" title="增加"></a>增加</h2><p><code>geoadd</code> 指令携带集合名称以及多个经纬度名称三元组，注意这里可以加入多个三元组。</p>
-<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geoadd company 116.48105 39.996794 juejin
-<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
-127.0.0.1:6379<span class="token operator">></span> geoadd company 116.514203 39.905409 ireader
-<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
-127.0.0.1:6379<span class="token operator">></span> geoadd company 116.489033 40.007669 meituan
-<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 1
-127.0.0.1:6379<span class="token operator">></span> geoadd company 116.562108 39.787602 jd 116.334255 40.027400 xiaomi
-<span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 2</code></pre>
-<p>不过很奇怪.. Redis 没有直接提供 Geo 的删除指令，但是我们可以通过 zset 相关的指令来操作 Geo 数据，所以元素删除可以使用 <code>zrem</code> 指令即可。</p>
-<h2 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h2><p><code>geodist</code> 指令可以用来计算两个元素之间的距离，携带集合名称、2 个名称和距离单位。</p>
-<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geodist company juejin ireader km
-<span class="token string">"10.5501"</span>
-127.0.0.1:6379<span class="token operator">></span> geodist company juejin meituan km
-<span class="token string">"1.3878"</span>
-127.0.0.1:6379<span class="token operator">></span> geodist company juejin jd km
-<span class="token string">"24.2739"</span>
-127.0.0.1:6379<span class="token operator">></span> geodist company juejin xiaomi km
-<span class="token string">"12.9606"</span>
-127.0.0.1:6379<span class="token operator">></span> geodist company juejin juejin km
-<span class="token string">"0.0000"</span></code></pre>
-<p>我们可以看到掘金离美团最近，因为它们都在望京。距离单位可以是 <code>m</code>、<code>km</code>、<code>ml</code>、<code>ft</code>，分别代表米、千米、英里和尺。</p>
-<h2 id="获取元素位置"><a href="#获取元素位置" class="headerlink" title="获取元素位置"></a>获取元素位置</h2><p><code>geopos</code> 指令可以获取集合中任意元素的经纬度坐标，可以一次获取多个。</p>
-<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geopos company juejin
-1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48104995489120483"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"39.99679348858259686"</span>
-127.0.0.1:6379<span class="token operator">></span> geopos company ireader
-1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.5142020583152771"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"39.90540918662494363"</span>
-127.0.0.1:6379<span class="token operator">></span> geopos company juejin ireader
-1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48104995489120483"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"39.99679348858259686"</span>
-2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.5142020583152771"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"39.90540918662494363"</span></code></pre>
-<p>我们观察到获取的经纬度坐标和 <code>geoadd</code> 进去的坐标有轻微的误差，原因是 <strong>Geohash</strong> 对二维坐标进行的一维映射是有损的，通过映射再还原回来的值会出现较小的差别。对于 <strong>「附近的人」</strong> 这种功能来说，这点误差根本不是事。</p>
-<h2 id="获取元素的-hash-值"><a href="#获取元素的-hash-值" class="headerlink" title="获取元素的 hash 值"></a>获取元素的 hash 值</h2><p><code>geohash</code> 可以获取元素的经纬度编码字符串，上面已经提到，它是 <code>base32</code> 编码。 你可以使用这个编码值去 <code>http://geohash.org/${hash}</code> 中进行直接定位，它是 <strong>Geohash</strong> 的标准编码值。</p>
-<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> geohash company ireader
-1<span class="token punctuation">)</span> <span class="token string">"wx4g52e1ce0"</span>
-127.0.0.1:6379<span class="token operator">></span> geohash company juejin
-1<span class="token punctuation">)</span> <span class="token string">"wx4gd94yjn0"</span></code></pre>
-<p>让我们打开地址 <code>http://geohash.org/wx4g52e1ce0</code>，观察地图指向的位置是否正确：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-b5d4215d6397729c.png" alt=""></p>
-<p>很好，就是这个位置，非常准确。</p>
-<h2 id="附近的公司"><a href="#附近的公司" class="headerlink" title="附近的公司"></a>附近的公司</h2><p><code>georadiusbymember</code> 指令是最为关键的指令，它可以用来查询指定元素附近的其它元素，它的参数非常复杂。</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 范围 20 公里以内最多 3 个元素按距离正排，它不会排除自身</span>
-127.0.0.1:6379<span class="token operator">></span> georadiusbymember company ireader 20 km count 3 asc
-1<span class="token punctuation">)</span> <span class="token string">"ireader"</span>
-2<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
-3<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
-<span class="token comment" spellcheck="true"># 范围 20 公里以内最多 3 个元素按距离倒排</span>
-127.0.0.1:6379<span class="token operator">></span> georadiusbymember company ireader 20 km count 3 desc
-1<span class="token punctuation">)</span> <span class="token string">"jd"</span>
-2<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
-3<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
-<span class="token comment" spellcheck="true"># 三个可选参数 withcoord withdist withhash 用来携带附加参数</span>
-<span class="token comment" spellcheck="true"># withdist 很有用，它可以用来显示距离</span>
-127.0.0.1:6379<span class="token operator">></span> georadiusbymember company ireader 20 km withcoord withdist withhash count 3 asc
-1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"ireader"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"0.0000"</span>
- 3<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4069886008361398
- 4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.5142020583152771"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"39.90540918662494363"</span>
-2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"10.5501"</span>
- 3<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4069887154388167
- 4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48104995489120483"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"39.99679348858259686"</span>
-3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"11.5748"</span>
- 3<span class="token punctuation">)</span> <span class="token punctuation">(</span>integer<span class="token punctuation">)</span> 4069887179083478
- 4<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"116.48903220891952515"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"40.00766997707732031"</span></code></pre>
-<p>除了 <code>georadiusbymember</code> 指令根据元素查询附近的元素，<strong>Redis</strong> 还提供了根据坐标值来查询附近的元素，这个指令更加有用，它可以根据用户的定位来计算「附近的车」，「附近的餐馆」等。它的参数和 <code>georadiusbymember</code> 基本一致，除了将目标元素改成经纬度坐标值：</p>
-<pre class=" language-bash"><code class="language-bash">127.0.0.1:6379<span class="token operator">></span> georadius company 116.514202 39.905409 20 km withdist count 3 asc
-1<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"ireader"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"0.0000"</span>
-2<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"juejin"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"10.5501"</span>
-3<span class="token punctuation">)</span> 1<span class="token punctuation">)</span> <span class="token string">"meituan"</span>
- 2<span class="token punctuation">)</span> <span class="token string">"11.5748"</span></code></pre>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>在一个地图应用中，车的数据、餐馆的数据、人的数据可能会有百万千万条，如果使用 <strong>Redis</strong> 的 <strong>Geo</strong> 数据结构，它们将 <strong>全部放在一个</strong> zset 集合中。在 <strong>Redis</strong> 的集群环境中，集合可能会从一个节点迁移到另一个节点，如果单个 key 的数据过大，会对集群的迁移工作造成较大的影响，在集群环境中单个 key 对应的数据量不宜超过 1M，否则会导致集群迁移出现卡顿现象，影响线上服务的正常运行。</p>
-<p>所以，这里建议 <strong>Geo</strong> 的数据使用 <strong>单独的 Redis 实例部署</strong>，不使用集群环境。</p>
-<p>如果数据量过亿甚至更大，就需要对 <strong>Geo</strong> 数据进行拆分，按国家拆分、按省拆分，按市拆分，在人口特大城市甚至可以按区拆分。这样就可以显著降低单个 zset 集合的大小。</p>
-<h1 id="相关阅读"><a href="#相关阅读" class="headerlink" title="相关阅读"></a>相关阅读</h1><ol>
-<li>Redis(1)——5种基本数据结构 - <a href="https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/</a></li>
-<li>Redis(2)——跳跃表 - <a href="https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/">https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/</a></li>
-<li>Redis(3)——分布式锁深入探究 - <a href="https://www.wmyskxz.com/2020/03/01/redis-3/">https://www.wmyskxz.com/2020/03/01/redis-3/</a></li>
-<li>Reids(4)——神奇的HyperLoglog解决统计问题 - <a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/</a></li>
-<li>Redis(5)——亿级数据过滤和布隆过滤器 - <a href="https://www.wmyskxz.com/2020/03/11/redis-5-yi-ji-shu-ju-guo-lu-he-bu-long-guo-lu-qi/">https://www.wmyskxz.com/2020/03/11/redis-5-yi-ji-shu-ju-guo-lu-he-bu-long-guo-lu-qi/</a></li>
-</ol>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
-<li>《Redis 深度历险》 - 钱文品/ 著 - <a href="https://book.douban.com/subject/30386804/" target="_blank" rel="noopener">https://book.douban.com/subject/30386804/</a></li>
-<li>mysql经纬度查询并且计算2KM范围内附近用户的sql查询性能优化实例教程 - <a href="https://www.cnblogs.com/mgbert/p/4146538.html" target="_blank" rel="noopener">https://www.cnblogs.com/mgbert/p/4146538.html</a></li>
-<li>Geohash算法原理及实现 - <a href="https://www.jianshu.com/p/2fd0cf12e5ba" target="_blank" rel="noopener">https://www.jianshu.com/p/2fd0cf12e5ba</a></li>
-<li>GeoHash算法学习讲解、解析及原理分析 - <a href="https://zhuanlan.zhihu.com/p/35940647" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/35940647</a></li>
-</ol>
-<blockquote>
-<ul>
-<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
-<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%886%EF%BC%89%E2%80%94%E2%80%94GeoHash%E6%9F%A5%E6%89%BE%E9%99%84%E8%BF%91%E7%9A%84%E4%BA%BA/7896890-fca34cfd601e7449.png" alt=""></p>
-<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
-<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3483,6 +3634,11 @@ key1</code></pre>
             ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
+            id="categoriesE78988E69CACE789B9E680A7"
+            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
             id="categoriesE7949FE6B4BB"
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
@@ -3534,7 +3690,7 @@ key1</code></pre>
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

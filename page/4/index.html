@@ -435,6 +435,429 @@
         
           
   <h2 class="title">
+    <a href="/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">
+      Reids(4)——神奇的HyperLoglog解决统计问题
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>中间件/JavaWeb进阶</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年3月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-a408d790b0b4f4b9.png" alt=""></p>
+<h1 id="一、HyperLogLog-简介"><a href="#一、HyperLogLog-简介" class="headerlink" title="一、HyperLogLog 简介"></a>一、HyperLogLog 简介</h1><p><strong>HyperLogLog</strong> 是最早由 <a href="http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf" target="_blank" rel="noopener">Flajolet</a> 及其同事在 2007 年提出的一种 <strong>估算基数的近似最优算法</strong>。但跟原版论文不同的是，好像很多书包括 Redis 作者都把它称为一种 <strong>新的数据结构(new datastruct)</strong> <em>(算法实现确实需要一种特定的数据结构来实现)</em>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/006oOWahly1fpsc3t7fnng30ab05tkjl.gif" alt=""></p>
+<h2 id="关于基数统计"><a href="#关于基数统计" class="headerlink" title="关于基数统计"></a>关于基数统计</h2><p><strong>基数统计(Cardinality Counting)</strong> 通常是用来统计一个集合中不重复的元素个数。</p>
+<p><strong>思考这样的一个场景：</strong> 如果你负责开发维护一个大型的网站，有一天老板找产品经理要网站上每个网页的 <strong>UV(独立访客，每个用户每天只记录一次)</strong>，然后让你来开发这个统计模块，你会如何实现？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-a9dbcf6374d482ba.png" alt=""></p>
+<p>如果统计 <strong>PV(浏览量，用户没点一次记录一次)</strong>，那非常好办，给每个页面配置一个独立的 Redis 计数器就可以了，把这个计数器的 key 后缀加上当天的日期。这样每来一个请求，就执行 <code>INCRBY</code> 指令一次，最终就可以统计出所有的 <strong>PV</strong> 数据了。</p>
+<p>但是 <strong>UV</strong> 不同，它要去重，<strong>同一个用户一天之内的多次访问请求只能计数一次</strong>。这就要求了每一个网页请求都需要带上用户的 ID，无论是登录用户还是未登录的用户，都需要一个唯一 ID 来标识。</p>
+<p>你也许马上就想到了一个 <em>简单的解决方案</em>：那就是 <strong>为每一个页面设置一个独立的 set 集合</strong> 来存储所有当天访问过此页面的用户 ID。但这样的 <strong>问题</strong> 就是：</p>
+<ol>
+<li><strong>存储空间巨大：</strong> 如果网站访问量一大，你需要用来存储的 set 集合就会非常大，如果页面再一多.. 为了一个去重功能耗费的资源就可以直接让你 <strong>老板打死你</strong>；</li>
+<li><strong>统计复杂：</strong> 这么多 set 集合如果要聚合统计一下，又是一个复杂的事情；</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-b8ddfcd39cb46cb5.png" alt=""></p>
+<h2 id="基数统计的常用方法"><a href="#基数统计的常用方法" class="headerlink" title="基数统计的常用方法"></a>基数统计的常用方法</h2><p>对于上述这样需要 <strong>基数统计</strong> 的事情，通常来说有两种比 set 集合更好的解决方案：</p>
+<h3 id="第一种：B-树"><a href="#第一种：B-树" class="headerlink" title="第一种：B 树"></a>第一种：B 树</h3><p><strong>B 树最大的优势就是插入和查找效率很高</strong>，如果用 B 树存储要统计的数据，可以快速判断新来的数据是否存在，并快速将元素插入 B 树。要计算基础值，只需要计算 B 树的节点个数就行了。</p>
+<p>不过将 B 树结构维护到内存中，能够解决统计和计算的问题，但是 <strong>并没有节省内存</strong>。</p>
+<h3 id="第二种：bitmap"><a href="#第二种：bitmap" class="headerlink" title="第二种：bitmap"></a>第二种：bitmap</h3><p><strong>bitmap</strong> 可以理解为通过一个 bit 数组来存储特定数据的一种数据结构，<strong>每一个 bit 位都能独立包含信息</strong>，bit 是数据的最小存储单位，因此能大量节省空间，也可以将整个 bit 数据一次性 load 到内存计算。如果定义一个很大的 bit 数组，基础统计中 <strong>每一个元素对应到 bit 数组中的一位</strong>，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-fb4283ad7dbd89a2.png" alt=""></p>
+<p>bitmap 还有一个明显的优势是 <strong>可以轻松合并多个统计结果</strong>，只需要对多个结果求异或就可以了，也可以大大减少存储内存。可以简单做一个计算，如果要统计 <strong>1 亿</strong> 个数据的基数值，<strong>大约需要的内存</strong>：<code>100_000_000/ 8/ 1024/ 1024 ≈ 12 M</code>，如果用 <strong>32 bit</strong> 的 int 代表 <strong>每一个</strong> 统计的数据，<strong>大约需要内存</strong>：<code>32 * 100_000_000/ 8/ 1024/ 1024 ≈ 381 M</code></p>
+<p>可以看到 bitmap 对于内存的节省显而易见，但仍然不够。统计一个对象的基数值就需要 <code>12 M</code>，如果统计 1 万个对象，就需要接近 <code>120 G</code>，对于大数据的场景仍然不适用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-1ebb3265b4297fa1.png" alt=""></p>
+<h2 id="概率算法"><a href="#概率算法" class="headerlink" title="概率算法"></a>概率算法</h2><p>实际上目前还没有发现更好的在 <strong>大数据场景</strong> 中 <strong>准确计算</strong> 基数的高效算法，因此在不追求绝对精确的情况下，使用概率算法算是一个不错的解决方案。</p>
+<p>概率算法 <strong>不直接存储</strong> 数据集合本身，通过一定的 <strong>概率统计方法预估基数值</strong>，这种方法可以大大节省内存，同时保证误差控制在一定范围内。目前用于基数计数的概率算法包括:</p>
+<ul>
+<li><strong>Linear Counting(LC)</strong>：早期的基数估计算法，LC 在空间复杂度方面并不算优秀，实际上 LC 的空间复杂度与上文中简单 bitmap 方法是一样的（但是有个常数项级别的降低），都是 O(N<sub>max</sub>)</li>
+<li><strong>LogLog Counting(LLC)</strong>：LogLog Counting 相比于 LC 更加节省内存，空间复杂度只有 O(log<sub>2</sub>(log<sub>2</sub>(N<sub>max</sub>)))</li>
+<li><strong>HyperLogLog Counting(HLL)</strong>：HyperLogLog Counting 是基于 LLC 的优化和改进，在同样空间复杂度情况下，能够比 LLC 的基数估计误差更小</li>
+</ul>
+<p>其中，<strong>HyperLogLog</strong> 的表现是惊人的，上面我们简单计算过用 <strong>bitmap</strong> 存储 <strong>1 个亿</strong> 统计数据大概需要 <code>12 M</code> 内存，而在 <strong>HyperLoglog</strong> 中，只需要不到 <strong>1 K</strong> 内存就能够做到！在 Redis 中实现的 <strong>HyperLoglog</strong> 也只需要 <strong>12 K</strong> 内存，在 <strong>标准误差 0.81%</strong> 的前提下，<strong>能够统计 2<sup>64</sup> 个数据</strong>！</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-439fe643e2dc081a.png" alt=""></p>
+<p><strong>这是怎么做到的？！</strong> 下面赶紧来了解一下！</p>
+<h1 id="二、HyperLogLog-原理"><a href="#二、HyperLogLog-原理" class="headerlink" title="二、HyperLogLog 原理"></a>二、HyperLogLog 原理</h1><p>我们来思考一个抛硬币的游戏：你连续掷 n 次硬币，然后说出其中<strong>连续掷为正面的最大次数，我来猜你一共抛了多少次</strong>。</p>
+<p>这很容易理解吧，例如：你说你这一次 <em>最多连续出现了 2 次</em> 正面，那么我就可以知道你这一次投掷的次数并不多，所以 <em>我可能会猜是 5</em> 或者是其他小一些的数字，但如果你说你这一次 <em>最多连续出现了 20 次</em> 正面，虽然我觉得不可能，但我仍然知道你花了特别多的时间，所以 <em>我说 GUN…</em>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-2042926c4383c027.png" alt=""></p>
+<p>这期间我可能会要求你重复实验，然后我得到了更多的数据之后就会估计得更准。<strong>我们来把刚才的游戏换一种说法</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-24e8f48f5e3eb81f.png" alt=""></p>
+<p>这张图的意思是，我们给定一系列的随机整数，<strong>记录下低位连续零位的最大长度 K</strong>，即为图中的 <code>maxbit</code>，<strong>通过这个 K 值我们就可以估算出随机数的数量 N</strong>。</p>
+<h2 id="代码实验"><a href="#代码实验" class="headerlink" title="代码实验"></a>代码实验</h2><p>我们可以简单编写代码做一个实验，来探究一下 <code>K</code> 和 <code>N</code> 之间的关系：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PfTest</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">BitKeeper</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> maxbit<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">long</span> value <span class="token operator">=</span> ThreadLocalRandom<span class="token punctuation">.</span><span class="token function">current</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nextLong</span><span class="token punctuation">(</span>2L <span class="token operator">&lt;&lt;</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> bit <span class="token operator">=</span> <span class="token function">lowZeros</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>bit <span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>maxbit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>maxbit <span class="token operator">=</span> bit<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> <span class="token function">lowZeros</span><span class="token punctuation">(</span><span class="token keyword">long</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">32</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">>></span> i <span class="token operator">&lt;&lt;</span> i <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Experiment</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> n<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> BitKeeper keeper<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">Experiment</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>n <span class="token operator">=</span> n<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>keeper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BitKeeper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>keeper<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">debug</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out
+                <span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d %.2f %d\n"</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>n<span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>n<span class="token punctuation">)</span> <span class="token operator">/</span> Math<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>keeper<span class="token punctuation">.</span>maxbit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100000</span><span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Experiment exp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Experiment</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exp<span class="token punctuation">.</span><span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exp<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>跟上图中的过程是一致的，话说为啥叫 <code>PfTest</code> 呢，包括 Redis 中的命令也一样带有一个 <code>PF</code> 前缀，还记得嘛，因为 <strong>HyperLogLog</strong> 的提出者上文提到过的，叫 <code>Philippe Flajolet</code>。</p>
+<p>截取部分输出查看：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//n   n/log2 maxbit</span>
+<span class="token number">34000</span> <span class="token number">15.05</span> <span class="token number">13</span>
+<span class="token number">35000</span> <span class="token number">15.10</span> <span class="token number">13</span>
+<span class="token number">36000</span> <span class="token number">15.14</span> <span class="token number">16</span>
+<span class="token number">37000</span> <span class="token number">15.18</span> <span class="token number">17</span>
+<span class="token number">38000</span> <span class="token number">15.21</span> <span class="token number">14</span>
+<span class="token number">39000</span> <span class="token number">15.25</span> <span class="token number">16</span>
+<span class="token number">40000</span> <span class="token number">15.29</span> <span class="token number">14</span>
+<span class="token number">41000</span> <span class="token number">15.32</span> <span class="token number">16</span>
+<span class="token number">42000</span> <span class="token number">15.36</span> <span class="token number">18</span></code></pre>
+<p>会发现 <code>K</code> 和 <code>N</code> 的对数之间存在显著的线性相关性：<strong>N 约等于 2<sup>k</sup></strong></p>
+<h2 id="更近一步：分桶平均"><a href="#更近一步：分桶平均" class="headerlink" title="更近一步：分桶平均"></a>更近一步：分桶平均</h2><p><strong>如果 <code>N</code> 介于 2<sup>k</sup> 和 2<sup>k+1</sup> 之间，用这种方式估计的值都等于 2<sup>k</sup>，这明显是不合理的</strong>，所以我们可以使用多个 <code>BitKeeper</code> 进行加权估计，就可以得到一个比较准确的值了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PfTest</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">BitKeeper</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 无变化, 代码省略</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Experiment</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> n<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token keyword">int</span> k<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> BitKeeper<span class="token punctuation">[</span><span class="token punctuation">]</span> keepers<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">Experiment</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token function">Experiment</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">,</span> <span class="token keyword">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>n <span class="token operator">=</span> n<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>k <span class="token operator">=</span> k<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>keepers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BitKeeper</span><span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> k<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>keepers<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BitKeeper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">long</span> m <span class="token operator">=</span> ThreadLocalRandom<span class="token punctuation">.</span><span class="token function">current</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nextLong</span><span class="token punctuation">(</span>1L <span class="token operator">&lt;&lt;</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                BitKeeper keeper <span class="token operator">=</span> keepers<span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>m <span class="token operator">&amp;</span> <span class="token number">0xfff0000</span><span class="token punctuation">)</span> <span class="token operator">>></span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">%</span> keepers<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                keeper<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">estimate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">double</span> sumbitsInverse <span class="token operator">=</span> <span class="token number">0.0</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>BitKeeper keeper <span class="token operator">:</span> keepers<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                sumbitsInverse <span class="token operator">+=</span> <span class="token number">1.0</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span> keeper<span class="token punctuation">.</span>maxbit<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">double</span> avgBits <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span> keepers<span class="token punctuation">.</span>length <span class="token operator">/</span> sumbitsInverse<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">pow</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> avgBits<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token keyword">this</span><span class="token punctuation">.</span>k<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">100000</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">1000000</span><span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">100000</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Experiment exp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Experiment</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exp<span class="token punctuation">.</span><span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">double</span> est <span class="token operator">=</span> exp<span class="token punctuation">.</span><span class="token function">estimate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d %.2f %.2f\n"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> est<span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token function">abs</span><span class="token punctuation">(</span>est <span class="token operator">-</span> i<span class="token punctuation">)</span> <span class="token operator">/</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这个过程有点 <strong>类似于选秀节目里面的打分</strong>，一堆专业评委打分，但是有一些评委因为自己特别喜欢所以给高了，一些评委又打低了，所以一般都要 <strong>屏蔽最高分和最低分</strong>，然后 <strong>再计算平均值</strong>，这样的出来的分数就差不多是公平公正的了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-6c927d25750f20d1.png" alt=""></p>
+<p>上述代码就有 <strong>1024</strong> 个 “评委”，并且在计算平均值的时候，采用了 <strong>调和平均数</strong>，也就是倒数的平均值，它能有效地平滑离群值的影响：</p>
+<pre class=" language-java"><code class="language-java">avg <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">+</span> <span class="token number">4</span> <span class="token operator">+</span> <span class="token number">5</span> <span class="token operator">+</span> <span class="token number">104</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">4</span> <span class="token operator">=</span> <span class="token number">29</span>
+avg <span class="token operator">=</span> <span class="token number">4</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">/</span><span class="token number">3</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">4</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">5</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">104</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">5.044</span></code></pre>
+<p>观察脚本的输出，误差率百分比控制在个位数：</p>
+<pre class=" language-java"><code class="language-java"><span class="token number">100000</span> <span class="token number">94274.94</span> <span class="token number">0.06</span>
+<span class="token number">200000</span> <span class="token number">194092.62</span> <span class="token number">0.03</span>
+<span class="token number">300000</span> <span class="token number">277329.92</span> <span class="token number">0.08</span>
+<span class="token number">400000</span> <span class="token number">373281.66</span> <span class="token number">0.07</span>
+<span class="token number">500000</span> <span class="token number">501551.60</span> <span class="token number">0.00</span>
+<span class="token number">600000</span> <span class="token number">596078.40</span> <span class="token number">0.01</span>
+<span class="token number">700000</span> <span class="token number">687265.72</span> <span class="token number">0.02</span>
+<span class="token number">800000</span> <span class="token number">828778.96</span> <span class="token number">0.04</span>
+<span class="token number">900000</span> <span class="token number">944683.53</span> <span class="token number">0.05</span></code></pre>
+<p>真实的 HyperLogLog 要比上面的示例代码更加复杂一些，也更加精确一些。上面这个算法在随机次数很少的情况下会出现除零错误，因为 <code>maxbit = 0</code> 是不可以求倒数的。</p>
+<h2 id="真实的-HyperLogLog"><a href="#真实的-HyperLogLog" class="headerlink" title="真实的 HyperLogLog"></a>真实的 HyperLogLog</h2><p>有一个神奇的网站，可以动态地让你观察到 HyperLogLog 的算法到底是怎么执行的：<a href="http://content.research.neustar.biz/blog/hll.html" target="_blank" rel="noopener">http://content.research.neustar.biz/blog/hll.html</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-72f00a9983a1395e.png" alt=""></p>
+<p>其中的一些概念这里稍微解释一下，您就可以自行去点击 <code>step</code> 来观察了：</p>
+<ul>
+<li><strong>m 表示分桶个数：</strong> 从图中可以看到，这里分成了 64 个桶；</li>
+<li><strong>蓝色的 bit 表示在桶中的位置：</strong> 例如图中的 <code>101110</code> 实则表示二进制的 <code>46</code>，所以该元素被统计在中间大表格 <code>Register Values</code> 中标红的第 46 个桶之中；</li>
+<li><strong>绿色的 bit 表示第一个 1 出现的位置</strong>： 从图中可以看到标绿的 bit 中，从右往左数，第一位就是 1，所以在 <code>Register Values</code> 第 46 个桶中写入 1；</li>
+<li><strong>红色 bit 表示绿色 bit 的值的累加：</strong> 下一个出现在第 46 个桶的元素值会被累加；</li>
+</ul>
+<h3 id="为什么要统计-Hash-值中第一个-1-出现的位置？"><a href="#为什么要统计-Hash-值中第一个-1-出现的位置？" class="headerlink" title="为什么要统计 Hash 值中第一个 1 出现的位置？"></a>为什么要统计 Hash 值中第一个 1 出现的位置？</h3><p>因为第一个 1 出现的位置可以同我们抛硬币的游戏中第一次抛到正面的抛掷次数对应起来，根据上面掷硬币实验的结论，记录每个数据的第一个出现的位置 <code>K</code>，就可以通过其中最大值 K<sub>max</sub> 来推导出数据集合中的基数：<strong>N = 2<sup>K<sub>max</sub></sup></strong></p>
+<h3 id="PF-的内存占用为什么是-12-KB？"><a href="#PF-的内存占用为什么是-12-KB？" class="headerlink" title="PF 的内存占用为什么是 12 KB？"></a>PF 的内存占用为什么是 12 KB？</h3><p>我们上面的算法中使用了 <strong>1024</strong> 个桶，网站演示也只有 <strong>64</strong> 个桶，不过在 Redis 的 HyperLogLog 实现中，用的是 <strong>16384</strong> 个桶，即：2<sup>14</sup>，也就是说，就像上面网站中间那个 <code>Register Values</code> 大表格有 <strong>16384</strong> 格。</p>
+<p><strong>而Redis 最大能够统计的数据量是 2<sup>64</sup></strong>，即每个桶的 <code>maxbit</code> 需要 <strong>6</strong> 个 bit 来存储，最大可以表示 <code>maxbit = 63</code>，于是总共占用内存就是：<strong>(2<sup>14</sup>) x 6 / 8</strong> <em>(每个桶 6 bit，而这么多桶本身要占用 16384 bit，再除以 8 转换成 KB)</em>,算出来的结果就是 <code>12 KB</code>。</p>
+<h1 id="三、Redis-中的-HyperLogLog-实现"><a href="#三、Redis-中的-HyperLogLog-实现" class="headerlink" title="三、Redis 中的 HyperLogLog 实现"></a>三、Redis 中的 HyperLogLog 实现</h1><p>从上面我们算是对 <strong>HyperLogLog</strong> 的算法和思想有了一定的了解，并且知道了一个 <strong>HyperLogLog</strong> 实际占用的空间大约是 <code>12 KB</code>，但 Redis 对于内存的优化非常变态，当 <strong>计数比较小</strong> 的时候，大多数桶的计数值都是 <strong>零</strong>，这个时候 Redis 就会适当节约空间，转换成另外一种 <strong>稀疏存储方式</strong>，与之相对的，正常的存储模式叫做 <strong>密集存储</strong>，这种方式会恒定地占用 <code>12 KB</code>。</p>
+<h2 id="密集型存储结构"><a href="#密集型存储结构" class="headerlink" title="密集型存储结构"></a>密集型存储结构</h2><p>密集型的存储结构非常简单，就是 <strong>16384 个 6 bit 连续串成</strong> 的字符串位图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-0ba2adb0214afd0c.png" alt=""></p>
+<p>我们都知道，一个字节是由 8 个 bit 组成的，这样 6 bit 排列的结构就会导致，有一些桶会 <strong>跨越字节边界</strong>，我们需要 <strong>对这一个或者两个字节进行适当的移位拼接</strong> 才可以得到具体的计数值。</p>
+<p>假设桶的编号为 <code>index</code>，这个 6 bity 计数值的起始字节偏移用 <code>offset_bytes</code> 表示，它在这个字节的其实比特位置偏移用 <code>offset_bits</code> 表示，于是我们有：</p>
+<pre class=" language-python"><code class="language-python">offset_bytes <span class="token operator">=</span> <span class="token punctuation">(</span>index <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">8</span>
+offset_bits <span class="token operator">=</span> <span class="token punctuation">(</span>index <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">8</span></code></pre>
+<p>前者是商，后者是余数。比如 <code>bucket 2</code> 的字节偏移是 1，也就是第 2 个字节。它的位偏移是 4，也就是第 2 个字节的第 5 个位开始是 bucket 2 的计数值。需要注意的是 <strong>字节位序是左边低位右边高位</strong>，而通常我们使用的字节都是左边高位右边低位。</p>
+<p>这里就涉及到两种情况，<strong>如果 <code>offset_bits</code> 小于等于 2</strong>，说明这 <strong>6 bit 在一个字节的内部</strong>，可以直接使用下面的表达式得到计数值 <code>val</code>：</p>
+<pre class=" language-python"><code class="language-python">val <span class="token operator">=</span> buffer<span class="token punctuation">[</span>offset_bytes<span class="token punctuation">]</span> <span class="token operator">>></span> offset_bits  <span class="token comment" spellcheck="true"># 向右移位</span></code></pre>
+<p><strong>如果 <code>offset_bits</code> 大于 2</strong>，那么就会涉及到 <strong>跨越字节边界</strong>，我们需要拼接两个字节的位片段：</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 低位值</span>
+low_val <span class="token operator">=</span> buffer<span class="token punctuation">[</span>offset_bytes<span class="token punctuation">]</span> <span class="token operator">>></span> offset_bits
+<span class="token comment" spellcheck="true"># 低位个数</span>
+low_bits <span class="token operator">=</span> <span class="token number">8</span> <span class="token operator">-</span> offset_bits
+<span class="token comment" spellcheck="true"># 拼接，保留低6位</span>
+val <span class="token operator">=</span> <span class="token punctuation">(</span>high_val <span class="token operator">&lt;&lt;</span> low_bits <span class="token operator">|</span> low_val<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0b111111</span></code></pre>
+<p>不过下面 Redis 的源码要晦涩一点，看形式它似乎只考虑了跨越字节边界的情况。这是因为如果 6 bit 在单个字节内，上面代码中的 <code>high_val</code> 的值是零，所以这一份代码可以同时照顾单字节和双字节：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">// 获取指定桶的计数值</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> HLL_DENSE_GET_REGISTER(target,p,regnum) do { \
+    uint8_t *_p = (uint8_t*) p; \
+    unsigned long _byte = regnum*HLL_BITS/8; \ </span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> _fb <span class="token operator">=</span> regnum<span class="token operator">*</span>HLL_BITS<span class="token operator">&amp;</span><span class="token number">7</span><span class="token punctuation">;</span> \  # <span class="token operator">%</span><span class="token number">8</span> <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token number">7</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> _fb8 <span class="token operator">=</span> <span class="token number">8</span> <span class="token operator">-</span> _fb<span class="token punctuation">;</span> \
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> b0 <span class="token operator">=</span> _p<span class="token punctuation">[</span>_byte<span class="token punctuation">]</span><span class="token punctuation">;</span> \
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> b1 <span class="token operator">=</span> _p<span class="token punctuation">[</span>_byte<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span> \
+    target <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>b0 <span class="token operator">>></span> _fb<span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>b1 <span class="token operator">&lt;&lt;</span> _fb8<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> HLL_REGISTER_MAX<span class="token punctuation">;</span> \
+<span class="token punctuation">}</span> <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 设置指定桶的计数值</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> HLL_DENSE_SET_REGISTER(p,regnum,val) do { \
+    uint8_t *_p = (uint8_t*) p; \
+    unsigned long _byte = regnum*HLL_BITS/8; \
+    unsigned long _fb = regnum*HLL_BITS&amp;7; \
+    unsigned long _fb8 = 8 - _fb; \
+    unsigned long _v = val; \
+    _p[_byte] &amp;= ~(HLL_REGISTER_MAX &lt;&lt; _fb); \
+    _p[_byte] |= _v &lt;&lt; _fb; \
+    _p[_byte+1] &amp;= ~(HLL_REGISTER_MAX >> _fb8); \
+    _p[_byte+1] |= _v >> _fb8; \
+} while(0)</span></code></pre>
+<h2 id="稀疏存储结构"><a href="#稀疏存储结构" class="headerlink" title="稀疏存储结构"></a>稀疏存储结构</h2><p>稀疏存储适用于很多计数值都是零的情况。下图表示了一般稀疏存储计数值的状态：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-9d5a9018d2eedbd8.png" alt=""></p>
+<p>当 <strong>多个连续桶的计数值都是零</strong> 时，Redis 提供了几种不同的表达形式：</p>
+<ul>
+<li><code>00xxxxxx</code>：前缀两个零表示接下来的 6bit 整数值加 1 就是零值计数器的数量，注意这里要加 1 是因为数量如果为零是没有意义的。比如 <code>00010101</code> 表示连续 <code>22</code> 个零值计数器。</li>
+<li><code>01xxxxxx yyyyyyyy</code>：6bit 最多只能表示连续 <code>64</code> 个零值计数器，这样扩展出的  14bit 可以表示最多连续 <code>16384</code> 个零值计数器。这意味着 HyperLogLog 数据结构中 <code>16384</code> 个桶的初始状态，所有的计数器都是零值，可以直接使用 2 个字节来表示。</li>
+<li><code>1vvvvvxx</code>：中间 5bit 表示计数值，尾部 2bit 表示连续几个桶。它的意思是连续 <code>(xx +1)</code> 个计数值都是 <code>(vvvvv + 1)</code>。比如 <code>10101011</code> 表示连续 <code>4</code> 个计数值都是 <code>11</code>。</li>
+</ul>
+<p>注意 <em>上面第三种方式</em> 的计数值最大只能表示到 <code>32</code>，而 HyperLogLog 的密集存储单个计数值用 6bit 表示，最大可以表示到 <code>63</code>。<strong>当稀疏存储的某个计数值需要调整到大于 <code>32</code> 时，Redis 就会立即转换 HyperLogLog 的存储结构，将稀疏存储转换成密集存储。</strong></p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>HyperLogLog 除了需要存储 16384 个桶的计数值之外，它还有一些附加的字段需要存储，比如总计数缓存、存储类型。所以它使用了一个额外的对象头来表示：</p>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> hllhdr <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> magic<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">/* 魔术字符串"HYLL" */</span>
+    uint8_t encoding<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">/* 存储类型 HLL_DENSE or HLL_SPARSE. */</span>
+    uint8_t notused<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 保留三个字节未来可能会使用 */</span>
+    uint8_t card<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">/* 总计数缓存 */</span>
+    uint8_t registers<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 所有桶的计数器 */</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>所以 <strong>HyperLogLog</strong> 整体的内部结构就是 <strong>HLL 对象头</strong> 加上 <strong>16384</strong> 个桶的计数值位图。它在 Redis 的内部结构表现就是一个字符串位图。你可以把 <strong>HyperLogLog 对象当成普通的字符串来进行处理：</strong></p>
+<pre class=" language-console"><code class="language-console">> PFADD codehole python java golang
+(integer) 1
+> GET codehole
+"HYLL\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80C\x03\x84MK\x80P\xb8\x80^\xf3"</code></pre>
+<p>但是 <strong>不可以</strong> 使用 <strong>HyperLogLog</strong> 指令来 <strong>操纵普通的字符串</strong>，<strong>因为它需要检查对象头魔术字符串是否是 “HYLL”</strong>。</p>
+<h1 id="四、HyperLogLog-的使用"><a href="#四、HyperLogLog-的使用" class="headerlink" title="四、HyperLogLog 的使用"></a>四、HyperLogLog 的使用</h1><p><strong>HyperLogLog</strong> 提供了两个指令 <code>PFADD</code> 和 <code>PFCOUNT</code>，字面意思就是一个是增加，另一个是获取计数。<code>PFADD</code> 和 <code>set</code> 集合的 <code>SADD</code> 的用法是一样的，来一个用户 ID，就将用户 ID 塞进去就是，<code>PFCOUNT</code> 和 <code>SCARD</code> 的用法是一致的，直接获取计数值：</p>
+<pre class=" language-console"><code class="language-console">> PFADD codehole user1
+(interger) 1
+> PFCOUNT codehole
+(integer) 1
+> PFADD codehole user2
+(integer) 1
+> PFCOUNT codehole
+(integer) 2
+> PFADD codehole user3
+(integer) 1
+> PFCOUNT codehole
+(integer) 3
+> PFADD codehole user4 user 5
+(integer) 1
+> PFCOUNT codehole
+(integer) 5</code></pre>
+<p>我们可以用 Java 编写一个脚本来试试 HyperLogLog 的准确性到底有多少：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JedisTest</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      jedis<span class="token punctuation">.</span><span class="token function">pfadd</span><span class="token punctuation">(</span><span class="token string">"codehole"</span><span class="token punctuation">,</span> <span class="token string">"user"</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">long</span> total <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">pfcount</span><span class="token punctuation">(</span><span class="token string">"codehole"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d %d\n"</span><span class="token punctuation">,</span> <span class="token number">100000</span><span class="token punctuation">,</span> total<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    jedis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>结果输出如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token number">100000</span> <span class="token number">99723</span></code></pre>
+<p>发现 <code>10</code> 万条数据只差了 <code>277</code>，按照百分比误差率是 <code>0.277%</code>，对于巨量的 UV 需求来说，这个误差率真的不算高。</p>
+<p>当然，除了上面的 <code>PFADD</code> 和 <code>PFCOUNT</code> 之外，还提供了第三个 <code>PFMEGER</code> 指令，用于将多个计数值累加在一起形成一个新的 <code>pf</code> 值：</p>
+<pre class=" language-console"><code class="language-console">> PFADD  nosql  "Redis"  "MongoDB"  "Memcached"
+(integer) 1
+
+> PFADD  RDBMS  "MySQL" "MSSQL" "PostgreSQL"
+(integer) 1
+
+> PFMERGE  databases  nosql  RDBMS
+OK
+
+> PFCOUNT  databases
+(integer) 6</code></pre>
+<h1 id="相关阅读"><a href="#相关阅读" class="headerlink" title="相关阅读"></a>相关阅读</h1><ol>
+<li>Redis(1)——5种基本数据结构 - <a href="https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/</a></li>
+<li>Redis(2)——跳跃表 - <a href="https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/">https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/</a></li>
+<li>Redis(3)——分布式锁深入探究 - <a href="https://www.wmyskxz.com/2020/03/01/redis-3/">https://www.wmyskxz.com/2020/03/01/redis-3/</a></li>
+</ol>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><ol>
+<li>【算法原文】HyperLogLog: the analysis of a near-optimal<br>cardinality estimation algorithm - <a href="http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf" target="_blank" rel="noopener">http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>【Redis 作者博客】Redis new data structure: the HyperLogLog - <a href="http://antirez.com/news/75" target="_blank" rel="noopener">http://antirez.com/news/75</a></li>
+<li>神奇的HyperLogLog算法 - <a href="http://www.rainybowe.com/blog/2017/07/13/%E7%A5%9E%E5%A5%87%E7%9A%84HyperLogLog%E7%AE%97%E6%B3%95/index.html" target="_blank" rel="noopener">http://www.rainybowe.com/blog/2017/07/13/%E7%A5%9E%E5%A5%87%E7%9A%84HyperLogLog%E7%AE%97%E6%B3%95/index.html</a></li>
+<li>深度探索 Redis HyperLogLog 内部数据结构 - <a href="https://zhuanlan.zhihu.com/p/43426875" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/43426875</a></li>
+<li>《Redis 深度历险》 - 钱文品/ 著</li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/03/01/redis-3/">
       Redis(3)——分布式锁深入探究
     </a>
@@ -3331,193 +3754,6 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/11/18/tan-yi-tan-yi-lai-dao-zhi-yuan-ze/">
-      谈一谈依赖倒置原则
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年11月18日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>为获得良好的阅读体验，请访问原文：<a href="https://www.wmyskxz.com/2019/11/18/tan-yi-tan-yi-lai-dao-zhi-yuan-ze/">传送门</a></p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E8%B0%88%E4%B8%80%E8%B0%88%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/7896890-992a571faa26088f.png" alt=""></p>
-<h1 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h1><hr>
-<p><strong>依赖倒置原则（Dependence Inversion Principle，DIP）是指设计代码结构时，高层模块不应该依赖低层模块，二者都应该依赖其抽象。</strong></p>
-<p>抽象不应该依赖细节，细节应该依赖抽象。通过依赖倒置，可以减少类与类之间的耦合性，提高系统的稳定性，提高代码的可读性和可维护性，并且能够降低修改程序所造成的风险。</p>
-<h1 id="二、为什么"><a href="#二、为什么" class="headerlink" title="二、为什么"></a>二、为什么</h1><hr>
-<h2 id="先来看一个例子"><a href="#先来看一个例子" class="headerlink" title="先来看一个例子"></a>先来看一个例子</h2><p>可是依赖倒置原则是怎么做到的呢？我们先来看一个例子：一个爱学习的「我没有三颗心脏」同学现在正在学习「设计模式」和「Java」的课程，伪代码如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Wmyskxz</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">studyJavaCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「Java」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">studyDesignPatternCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「设计模式」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>我们来模拟上层调用一下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    Wmyskxz wmyskxz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Wmyskxz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    wmyskxz<span class="token punctuation">.</span><span class="token function">studyJavaCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    wmyskxz<span class="token punctuation">.</span><span class="token function">studyDesignPatternCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<h2 id="原因一：有效控制影响范围"><a href="#原因一：有效控制影响范围" class="headerlink" title="原因一：有效控制影响范围"></a>原因一：有效控制影响范围</h2><p>由于「我没有三颗心脏」同学热爱学习，随着学习兴趣的 “暴增”，可能会继续学习 AI（人工智能）的课程。这个时候，<strong>因为「业务的扩展」，要从底层实现到高层调用依次地修改代码。</strong></p>
-<p>我们需要在 Wmyskxz 类中新增 <code>studyAICourse()</code> 方法，也需要在高层调用中增加调用，这样一来，系统发布后，其实是非常不稳定的。显然在这个简单的例子中，我们还可以自信地认为，我们能 Hold 住这一次的修改带来的影响，因为<strong>都是新增的代码</strong>，我们回归的时候也可以很好地 cover 住，但实际的情况和实际的软件环境要复杂得多。</p>
-<p><strong>最理想的情况就是，我们已经编写好的代码可以 “万年不变”</strong>，这就意味着已经覆盖的单元测试可以不用修改，已经存在的行为可以保证保持不变，这就意味着「稳定」。<strong>任何代码上的修改带来的影响都是有未知风险的，不论看上去多么简单。</strong></p>
-<h2 id="原因二：增强代码可读性和可维护性"><a href="#原因二：增强代码可读性和可维护性" class="headerlink" title="原因二：增强代码可读性和可维护性"></a>原因二：增强代码可读性和可维护性</h2><p>另外一点，你有没有发现其实加上新增的 AI 课程的学习，他们三节课本质上行为都是一样的，如果我们任由这样行为近乎一样的代码在我们的类里面肆意扩展的话，很快我们的类就会变得臃肿不堪，等到我们意识到不得不重构这个类以缓解这样的情况的时候，或许成本已经变得高得可怕了。</p>
-<h2 id="原因三：降低耦合"><a href="#原因三：降低耦合" class="headerlink" title="原因三：降低耦合"></a>原因三：降低耦合</h2><p>《资本论》中有这样一段描述：</p>
-<blockquote>
-<p>在商品经济的萌芽时期，出现了物物交换。假设你要买一个 iPhone，卖 iPhone 的老板让你拿一头猪跟他换，可是你并没有养猪，你只会编程。所以你找到一位养猪户，说给他做一个养猪的 APP 来换他一头猪，他说换猪可以，但是得用一条金项链来换…</p>
-</blockquote>
-<p>所以这里就出现了一连串的对象依赖，从而造成了严重的耦合灾难。解决这个问题的最好的办法就是，买卖双发都依赖于抽象——也就是货币——来进行交换，这样一来耦合度就大为降低了。</p>
-<h1 id="三、怎么做"><a href="#三、怎么做" class="headerlink" title="三、怎么做"></a>三、怎么做</h1><hr>
-<p>我们现在的代码是上层直接依赖低层实现，现在我们需要定义一个抽象的 ICourse 接口，来对这种强依赖进行解耦（就像上面《资本论》中的例子那样）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E8%B0%88%E4%B8%80%E8%B0%88%E4%BE%9D%E8%B5%96%E5%80%92%E7%BD%AE%E5%8E%9F%E5%88%99/7896890-39fbf69d60dc4111.png" alt=""></p>
-<p>接下来我们可以参考一下伪代码，先定一个课程的抽象 ICourse 接口：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ICourse</span> <span class="token punctuation">{</span>
-    <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>然后编写分别为 <code>JavaCourse</code> 和 <code>DesignPatternCourse</code> 编写一个类：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JavaCourse</span> <span class="token keyword">implements</span> <span class="token class-name">ICourse</span> <span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「Java」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DesignPatternCourse</span> <span class="token keyword">implements</span> <span class="token class-name">ICourse</span> <span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"「我没有三颗心脏」同学正在学习「设计模式」课程"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>然后把 Wmyskxz 类改造成如下的样子：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Wmyskxz</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">study</span><span class="token punctuation">(</span>ICourse course<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        course<span class="token punctuation">.</span><span class="token function">study</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>再来是我们的调用：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    Wmyskxz wmyskxz <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Wmyskxz</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    wmyskxz<span class="token punctuation">.</span><span class="token function">study</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">JavaCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    wmyskxz<span class="token punctuation">.</span><span class="token function">study</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">DesignPatternCourse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>这时候我们再来看代码，无论「我没有三颗心脏」的兴趣怎么暴涨，对于新的课程，都只需要新建一个类，通过参数传递的方式告诉它，<strong>而不需要修改底层的代码。</strong>实际上这有点像大家熟悉的<strong>依赖注入</strong>的方式了。</p>
-<p>总之，切记：<strong>以抽象为基准比以细节为基准搭建起来的架构要稳定得多</strong>，因此在拿到需求后，要面相接口编程，先顶层设计再细节地设计代码结构。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
-<ol>
-<li><a href="https://www.cnblogs.com/aoyeyuyan/p/5495219.html" target="_blank" rel="noopener">https://www.cnblogs.com/aoyeyuyan/p/5495219.html</a> - 那些年搞不懂的高深术语——依赖倒置•控制反转•依赖注入•面向接口编程</li>
-<li>《Spring 5 核心原理 与 30 个类手写实战》 - 谭勇德 著</li>
-</ol>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693<br>钱</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3866,6 +4102,11 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
             ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
+            title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
+            id="categoriesE78988E69CACE789B9E680A7"
+            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
             id="categoriesE7949FE6B4BB"
             ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
@@ -3917,7 +4158,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 
