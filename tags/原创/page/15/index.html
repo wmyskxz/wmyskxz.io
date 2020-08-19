@@ -436,6 +436,1287 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/24/xue-sheng-guan-li-xi-tong-ssm-jian-yi-ban-zong-jie/">
+      学生管理系统（SSM简易版）总结
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础/SSM/项目</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月24日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>之前用 Servlet + JSP 实现了一个<a href="https://www.jianshu.com/p/553fc76bb8eb" target="_blank" rel="noopener">简易版的学生管理系统</a>，在学习了 SSM 框架之后，我们来对之前写过的项目重构一下！</p>
+</blockquote>
+<h2 id="技术准备"><a href="#技术准备" class="headerlink" title="技术准备"></a>技术准备</h2><p>为了完成这个项目，需要掌握如下技术：</p>
+<ul>
+<li>Java<br>基础知识</li>
+<li>前端：<br>HTML, CSS, JAVASCRIPT, JQUERY</li>
+<li>J2EE：<br>Tomcat, Servlet, JSP, Filter</li>
+<li>框架：<br><a href="https://www.jianshu.com/p/1af66a499f49" target="_blank" rel="noopener">Spring</a>, <a href="https://www.jianshu.com/p/91a2d0a1e45a" target="_blank" rel="noopener">Spring MVC</a>, <a href="https://www.jianshu.com/p/c77e3691867d" target="_blank" rel="noopener">MyBatis</a>, <a href="https://www.jianshu.com/p/412051d41d73" target="_blank" rel="noopener">Spring 与 MyBatis 整合</a>, <a href="https://www.jianshu.com/p/3098050b0d14" target="_blank" rel="noopener">SSM 整合</a></li>
+<li>数据库：<br>MySQL</li>
+<li>开发工具：<br>IDEA, Maven</li>
+</ul>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><p>之前虽然已经使用 <strong>Servlet + JSP</strong> 完成了简单的开发，这次使用 <strong>SSM</strong> 仅仅是重构工作，但我们仍然按照商业项目的开发步骤来一步一步完成，进一步熟悉这个过程，<strong>重复的部分我就直接复制了。</strong></p>
+<h4 id="①-需求分析"><a href="#①-需求分析" class="headerlink" title="① 需求分析"></a>① 需求分析</h4><p>首先要确定要做哪些功能</p>
+<ul>
+<li>使用<strong>数据库</strong>来<strong>保存数据</strong></li>
+<li>能<strong>增删改查</strong>学生的信息<em>（学号，名称，年龄，性别，出生日期）</em></li>
+</ul>
+<h4 id="②-表结构设计"><a href="#②-表结构设计" class="headerlink" title="② 表结构设计"></a>② 表结构设计</h4><p>根据需求，那么只需要一个 student 表就能够完成功能了。</p>
+<ul>
+<li><p><strong>创建数据库：student</strong><br>将数据库编码格式设置为 UTF-8 ，便于存取中文数据</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">DROP</span> <span class="token keyword">DATABASE</span> <span class="token keyword">IF</span> <span class="token keyword">EXISTS</span> student<span class="token punctuation">;</span>
+<span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> student <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARACTER SET</span> utf8<span class="token punctuation">;</span></code></pre>
+</li>
+<li><p><strong>创建学生表：student</strong><br>不用<strong>学生学号(studentID)</strong>作为主键的原因是：不方便操作，例如在更新数据的时候，同时也要更改学号，那这样的操作怎么办呢？<br>所以我们加了一个 <strong>id</strong> 用来唯一表示当前数据。</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> student<span class="token punctuation">(</span>
+id <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">AUTO_INCREMENT</span><span class="token punctuation">,</span>
+student_id <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">UNIQUE</span><span class="token punctuation">,</span>
+name <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+age <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+sex <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+birthday <span class="token keyword">date</span> <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+<span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span>id<span class="token punctuation">)</span>
+<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8<span class="token punctuation">;</span></code></pre>
+</li>
+</ul>
+<blockquote>
+<p>MySQL 在 Windows 下不区分大小写，但在 Linux 下默认区分大小写，因此，<strong>数据库名、表明、字段名都不允许出现任何大写字母</strong>，避免节外生枝。</p>
+</blockquote>
+<h4 id="③-原型设计"><a href="#③-原型设计" class="headerlink" title="③ 原型设计"></a>③ 原型设计</h4><p>就是设计界面，在商业项目中，这是很重要的一步，我们可以<strong>解除界面原型，低成本、高效率</strong>的与客户达成<strong>需求的一致性</strong>。</p>
+<p>这个项目一共就分为两个页面：</p>
+<ul>
+<li><p>主页面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-0169962ea353fcbd.png" alt="首页"></p>
+</li>
+<li><p>学生编辑页面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-2eac73f04dcf3ea4.png" alt="编辑页面"></p>
+</li>
+</ul>
+<h4 id="④-SSM-环境搭建"><a href="#④-SSM-环境搭建" class="headerlink" title="④ SSM 环境搭建"></a>④ SSM 环境搭建</h4><p>在真正开始编写代码之前，我们首先需要先来搭建好我们的 SSM 环境。</p>
+<h4 id="第一步：创建-Maven-webapp-项目"><a href="#第一步：创建-Maven-webapp-项目" class="headerlink" title="第一步：创建 Maven webapp 项目"></a>第一步：创建 Maven webapp 项目</h4><p>首先新建工程，选择 Maven 标签，然后勾选上【Create from archetype】选择 webapp：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-37bca8243a63a411.png" alt=""></p>
+<p>点击下一步，填写上【GroupId】和【ArtifactId】：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-87095d22145798ac.png" alt=""></p>
+<ul>
+<li>GroupId：项目组织唯一的标识符，实际对应 JAVA 的包的结构，也就是 main 目录下 java 的目录结构（包）</li>
+<li>AritifactId：项目的唯一标识符，实际对应项目的名称，就是项目根目录的名称</li>
+<li>实际上你可以乱填上试试，我就不乱填了</li>
+</ul>
+<p>然后是确认项目路径，这一步你可以看到 Maven 配置中的参数，不需要做改动，直接下一步就可以（<em>图中的路径是我配置的本地 Maven 仓库的地址</em>）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-5ff7e5ec2ad03ebc.png" alt=""></p>
+<p>确认项目名称和路径，点击【Finish】即可：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-491970db6a349a5e.png" alt=""></p>
+<p>等待一会儿，控制台就会有创建成功的提示信息，我们把【Enable Auto-Import】点上，这个提示会在每次 pom.xml 有改动时出现，自动导入，省掉麻烦：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-2ebc5e0cd0503ad7.png" alt=""></p>
+<h4 id="第二步：搭建项目目录结构"><a href="#第二步：搭建项目目录结构" class="headerlink" title="第二步：搭建项目目录结构"></a>第二步：搭建项目目录结构</h4><p>下面就是 Maven 风格的 webapp 的默认目录结构：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-4ac356da8a41ee5b.png" alt=""></p>
+<ul>
+<li><strong>注意：</strong> webapp 是默认没有 java 源文件也没有 test 目录的。</li>
+</ul>
+<p>遵循 Maven 的统一项目结构，我们搭建出项目的完整目录结构如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-51e8952802f0ec9c.png" alt=""></p>
+<ul>
+<li>我们并没有使用 Log4j 来输出日志，而是使用 logback </li>
+<li><strong>提示：</strong>我们可以在 IDEA 中右键目录然后选择【Make Directory as】，让 IDEA 识别不同的目录作用</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-6ca8b5c413335048.png" alt=""></p>
+<p>这里的目录建好之后还需要设置一下，让 IDEA 识别目录作用，选择【File】&gt;【Project Structure】：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-640537dba7ff226e.png" alt=""></p>
+<p>设置好之后点击 OK，即完成了项目目录的搭建。</p>
+<h4 id="第三步：配置文件内容"><a href="#第三步：配置文件内容" class="headerlink" title="第三步：配置文件内容"></a>第三步：配置文件内容</h4><p>在【pom.xml】文件中声明依赖的 jar 包 ：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;
+
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;packaging&gt;war&lt;/packaging&gt;
+
+    &lt;name&gt;StudentManagerSSM&lt;/name&gt;
+    &lt;groupId&gt;cn.wmyskxz&lt;/groupId&gt;
+    &lt;artifactId&gt;StudentManagerSSM&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;
+                &lt;artifactId&gt;maven-jetty-plugin&lt;/artifactId&gt;
+                &lt;version&gt;6.1.7&lt;/version&gt;
+                &lt;configuration&gt;
+                    &lt;connectors&gt;
+                        &lt;connector implementation=&quot;org.mortbay.jetty.nio.SelectChannelConnector&quot;&gt;
+                            &lt;port&gt;8888&lt;/port&gt;
+                            &lt;maxIdleTime&gt;30000&lt;/maxIdleTime&gt;
+                        &lt;/connector&gt;
+                    &lt;/connectors&gt;
+                    &lt;webAppSourceDirectory&gt;${project.build.directory}/${pom.artifactId}-${pom.version}
+                    &lt;/webAppSourceDirectory&gt;
+                    &lt;contextPath&gt;/&lt;/contextPath&gt;
+                &lt;/configuration&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+
+    &lt;properties&gt;
+        &lt;!-- 设置项目编码编码 --&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+        &lt;!-- spring版本号 --&gt;
+        &lt;spring.version&gt;4.3.5.RELEASE&lt;/spring.version&gt;
+        &lt;!-- mybatis版本号 --&gt;
+        &lt;mybatis.version&gt;3.4.1&lt;/mybatis.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencies&gt;
+
+        &lt;!-- jstl标签 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
+            &lt;artifactId&gt;jstl&lt;/artifactId&gt;
+            &lt;version&gt;1.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.taglibs&lt;/groupId&gt;
+            &lt;artifactId&gt;taglibs-standard-impl&lt;/artifactId&gt;
+            &lt;version&gt;1.2.5&lt;/version&gt;
+        &lt;/dependency&gt;
+
+
+        &lt;!-- java ee --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;javax&lt;/groupId&gt;
+            &lt;artifactId&gt;javaee-api&lt;/artifactId&gt;
+            &lt;version&gt;7.0&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- 单元测试 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- 实现slf4j接口并整合 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+            &lt;version&gt;1.2.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- JSON --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+            &lt;version&gt;2.8.7&lt;/version&gt;
+        &lt;/dependency&gt;
+
+
+        &lt;!-- 数据库 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;5.1.41&lt;/version&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- 数据库连接池 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.mchange&lt;/groupId&gt;
+            &lt;artifactId&gt;c3p0&lt;/artifactId&gt;
+            &lt;version&gt;0.9.5.2&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- MyBatis --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+            &lt;version&gt;${mybatis.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- mybatis/spring整合包 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;
+            &lt;version&gt;1.3.1&lt;/version&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Spring --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-core&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-beans&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-tx&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-web&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+
+    &lt;/dependencies&gt;
+
+&lt;/project&gt;</code></pre><ul>
+<li><code>&lt;build&gt;</code> 标签是默认生成的</li>
+<li>我们在 <code>&lt;properties&gt;</code> 中声明了编码格式以及使用的 spring 和 mybatis 的版本号，然后在 <code>&lt;dependencies&gt;</code> 中声明了具体的 jar 包 </li>
+</ul>
+<p>在【web.xml】中声明编码过滤器并配置 DispatcherServlet ：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
+         version=&quot;3.1&quot;&gt;
+
+    &lt;!-- 编码过滤器 --&gt;
+    &lt;filter&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;encoding&lt;/param-name&gt;
+            &lt;param-value&gt;UTF-8&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/filter&gt;
+    &lt;filter-mapping&gt;
+        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
+        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+    &lt;/filter-mapping&gt;
+
+    &lt;!-- 配置DispatcherServlet --&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;!-- 配置springMVC需要加载的配置文件--&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;classpath:spring-*.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+        &lt;async-supported&gt;true&lt;/async-supported&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;SpringMVC&lt;/servlet-name&gt;
+        &lt;!-- 匹配所有请求 --&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;</code></pre><p>在【spring-mybatis.xml】中完成 spring 和 mybatis 的配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot; xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
+
+    &lt;!-- 扫描service包下所有使用注解的类型 --&gt;
+    &lt;context:component-scan base-package=&quot;cn.wmyskxz.service&quot;/&gt;
+
+    &lt;!-- 配置数据库相关参数properties的属性：${url} --&gt;
+    &lt;context:property-placeholder location=&quot;classpath:jdbc.properties&quot;/&gt;
+
+    &lt;!-- 数据库连接池 --&gt;
+    &lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
+        &lt;property name=&quot;driverClass&quot; value=&quot;${jdbc.driver}&quot;/&gt;
+        &lt;property name=&quot;jdbcUrl&quot; value=&quot;${jdbc.url}&quot;/&gt;
+        &lt;property name=&quot;user&quot; value=&quot;${jdbc.username}&quot;/&gt;
+        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
+        &lt;property name=&quot;maxPoolSize&quot; value=&quot;${c3p0.maxPoolSize}&quot;/&gt;
+        &lt;property name=&quot;minPoolSize&quot; value=&quot;${c3p0.minPoolSize}&quot;/&gt;
+        &lt;property name=&quot;autoCommitOnClose&quot; value=&quot;${c3p0.autoCommitOnClose}&quot;/&gt;
+        &lt;property name=&quot;checkoutTimeout&quot; value=&quot;${c3p0.checkoutTimeout}&quot;/&gt;
+        &lt;property name=&quot;acquireRetryAttempts&quot; value=&quot;${c3p0.acquireRetryAttempts}&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置SqlSessionFactory对象 --&gt;
+    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
+        &lt;!-- 注入数据库连接池 --&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+        &lt;!-- 扫描entity包 使用别名 --&gt;
+        &lt;property name=&quot;typeAliasesPackage&quot; value=&quot;cn.wmyskxz.entity&quot;/&gt;
+        &lt;!-- 扫描sql配置文件:mapper需要的xml文件 --&gt;
+        &lt;property name=&quot;mapperLocations&quot; value=&quot;classpath:mapper/*.xml&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置扫描Dao接口包，动态实现Dao接口，注入到spring容器中 --&gt;
+    &lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
+        &lt;!-- 注入sqlSessionFactory --&gt;
+        &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;/&gt;
+        &lt;!-- 给出需要扫描Dao接口包 --&gt;
+        &lt;property name=&quot;basePackage&quot; value=&quot;cn.wmyskxz.dao&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置事务管理器 --&gt;
+    &lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
+        &lt;!-- 注入数据库连接池 --&gt;
+        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;!-- 配置基于注解的声明式事务 --&gt;
+    &lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot;/&gt;
+
+&lt;/beans&gt;</code></pre><p>在【spring-mvc.xml】中完成 Spring MVC 的相关配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
+       xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd&quot;&gt;
+
+    &lt;!-- 扫描web相关的bean --&gt;
+    &lt;context:component-scan base-package=&quot;cn.wmyskxz.controller&quot;/&gt;
+
+    &lt;!-- 开启SpringMVC注解模式 --&gt;
+    &lt;mvc:annotation-driven/&gt;
+
+    &lt;!-- 静态资源默认servlet配置 --&gt;
+    &lt;mvc:default-servlet-handler/&gt;
+
+    &lt;!-- 配置jsp 显示ViewResolver --&gt;
+    &lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
+        &lt;property name=&quot;viewClass&quot; value=&quot;org.springframework.web.servlet.view.JstlView&quot;/&gt;
+        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/views/&quot;/&gt;
+        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot;/&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;</code></pre><p>在【jdbc.properties】中配置 c3p0 数据库连接池：</p>
+<pre><code>jdbc.driver=com.mysql.jdbc.Driver
+#数据库地址
+jdbc.url=jdbc:mysql://localhost:3306/student?useUnicode=true&amp;characterEncoding=utf8
+#用户名
+jdbc.username=root
+#密码
+jdbc.password=root
+#最大连接数
+c3p0.maxPoolSize=30
+#最小连接数
+c3p0.minPoolSize=10
+#关闭连接后不自动commit
+c3p0.autoCommitOnClose=false
+#获取连接超时时间
+c3p0.checkoutTimeout=10000
+#当获取连接失败重试次数
+c3p0.acquireRetryAttempts=2</code></pre><p>在【logback.xml】中完成日志输出的相关配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;configuration debug=&quot;true&quot;&gt;
+    &lt;appender name=&quot;STDOUT&quot; class=&quot;ch.qos.logback.core.ConsoleAppender&quot;&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+    &lt;root level=&quot;debug&quot;&gt;
+        &lt;appender-ref ref=&quot;STDOUT&quot;/&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;</code></pre><p>以上就完成了 SSM 框架的基本配置：</p>
+<ul>
+<li>添加进了 SSM 项目所需要的 jar 包</li>
+<li>配置好了 spring/mybatis/spring MVC 的相关配置信息（自动扫描 <code>cn.wmyskxz</code> 包下的带有注解的类）</li>
+<li>通过 xml 配置的方式配置好了日志和数据库</li>
+</ul>
+<h4 id="⑤-实体类设计"><a href="#⑤-实体类设计" class="headerlink" title="⑤ 实体类设计"></a>⑤ 实体类设计</h4><p>实体类仅仅是对数据库中表的一一映射（表中字段名应该和实体类中的名称一一对应），同时可能还需要兼顾对业务能力的支持。</p>
+<ul>
+<li>在 Packge【cn.wmyskxz.entity】下创建 Student 类：<pre><code>package cn.wmyskxz.entity;
+</code></pre></li>
+</ul>
+<p>import java.util.Date;</p>
+<p>/**</p>
+<ul>
+<li><p>Student 实体类</p>
+</li>
+<li></li>
+<li><p>@author: @我没有三颗心脏</p>
+</li>
+<li><p>@create: 2018-04-23-下午 13:34</p>
+</li>
+<li><p>/<br>public class Student {</p>
+<p>  private int id;<br>  private int student_id;<br>  private String name;<br>  private int age;<br>  private String sex;<br>  private Date birthday;</p>
+<p>  /* getter and setter */<br>}</p>
+<pre><code></code></pre></li>
+</ul>
+<h4 id="⑤-DAO-类的设计"><a href="#⑤-DAO-类的设计" class="headerlink" title="⑤ DAO 类的设计"></a>⑤ DAO 类的设计</h4><p>DAO，即 Date Access Object，数据库访问对象，就是对数据库相关操作的封装，让其他地方看不到 JDBC 的代码。</p>
+<p>在【cn.wmyskxz.dao】包下创建【StudentDao】接口：</p>
+<pre><code>package cn.wmyskxz.dao;
+
+import cn.wmyskxz.entity.Student;
+
+import java.util.List;
+
+public interface StudentDao {
+    int getTotal();
+    void addStudent(Student student);
+    void deleteStudent(int id);
+    void updateStudent(Student student);
+    Student getStudent(int id);
+    List&lt;Student&gt; list(int start, int count);
+}</code></pre><p>然后在【resources/mapper】下创建好对应的映射文件【StudengDao.xml】：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+
+&lt;!-- 将namespace的值设置为DAO类对应的路径 --&gt;
+&lt;mapper namespace=&quot;cn.wmyskxz.dao.StudentDao&quot;&gt;
+
+    &lt;!-- 查询数据条目 --&gt;
+    &lt;select id=&quot;getTotal&quot; resultType=&quot;int&quot;&gt;
+        SELECT COUNT(*) FROM student
+    &lt;/select&gt;
+
+    &lt;!-- 增加一条数据 --&gt;
+    &lt;insert id=&quot;addStudent&quot; parameterType=&quot;Student&quot;&gt;
+        INSERT INTO student VALUES(NULL, #{student_id}, #{name}, #{age}, #{sex}, #{birthday})
+    &lt;/insert&gt;
+
+    &lt;!-- 删除一条数据 --&gt;
+    &lt;delete id=&quot;deleteStudent&quot; parameterType=&quot;int&quot;&gt;
+        DELETE FROM student WHERE id = #{id}
+    &lt;/delete&gt;
+
+    &lt;!-- 更新一条数据 --&gt;
+    &lt;update id=&quot;updateStudent&quot; parameterType=&quot;Student&quot;&gt;
+        UPDATE student SET student_id = #{student_id}, name = #{name},
+        age = #{age}, sex = #{sex}, birthday = #{birthday} WHERE id = #{id}
+    &lt;/update&gt;
+
+    &lt;!-- 查询一条数据 --&gt;
+    &lt;select id=&quot;getStudent&quot; resultMap=&quot;student&quot; parameterType=&quot;int&quot;&gt;
+        SELECT * FROM student WHERE id = #{id}
+    &lt;/select&gt;
+
+    &lt;resultMap id=&quot;student&quot; type=&quot;student&quot;&gt;
+        &lt;id column=&quot;id&quot; property=&quot;id&quot;/&gt;
+        &lt;result column=&quot;student_id&quot; property=&quot;student_id&quot;/&gt;
+        &lt;result column=&quot;name&quot; property=&quot;name&quot;/&gt;
+        &lt;result column=&quot;age&quot; property=&quot;age&quot;/&gt;
+        &lt;result column=&quot;sex&quot; property=&quot;sex&quot;/&gt;
+        &lt;result column=&quot;birthday&quot; property=&quot;birthday&quot;/&gt;
+    &lt;/resultMap&gt;
+
+    &lt;!-- 查询从start位置开始的count条数据--&gt;
+    &lt;select id=&quot;list&quot; resultMap=&quot;student&quot;&gt;
+        SELECT * FROM student ORDER BY student_id desc limit #{param1}, #{param2}
+    &lt;/select&gt;
+&lt;/mapper&gt;</code></pre><p>编写好了 Dao 类是需要测试的，这里测试类就不给出了。</p>
+<h4 id="⑦-业务类设计"><a href="#⑦-业务类设计" class="headerlink" title="⑦ 业务类设计"></a>⑦ 业务类设计</h4><ul>
+<li><strong>问题：</strong> 为什么不直接使用 Dao 类而是还要在上面封装一层 Service 层呢？</li>
+<li>回答：<br>基于责任分离的原则，Dao 层就应该专注于对数据库的操作，而在 Service 层我们可以增加一些非 CRUD 的方法去更好的完成本身抽离出来的 service 服务（业务处理）。</li>
+</ul>
+<p>在【cn.wmyskxz.service】包下创建【StudentService】接口：</p>
+<pre><code>package cn.wmyskxz.service;
+
+import cn.wmyskxz.entity.Student;
+
+import java.util.List;
+
+public interface StudentService {
+
+    /**
+     * 获取到 Student 的总数
+     * @return
+     */
+    int getTotal();
+
+    /**
+     * 增加一条数据
+     * @param student
+     */
+    void addStudent(Student student);
+
+    /**
+     * 删除一条数据
+     * @param id
+     */
+    void deleteStudent(int id);
+
+    /**
+     * 更新一条数据
+     * @param student
+     */
+    void updateStudent(Student student);
+
+    /**
+     * 找到一条数据
+     * @param id
+     * @return
+     */
+    Student getStudent(int id);
+
+    /**
+     * 列举出从 start 位置开始的 count 条数据
+     * @param start
+     * @param count
+     * @return
+     */
+    List&lt;Student&gt; list(int start, int count);
+}</code></pre><p>并在相同包名下创建实现类【StudentServiceImpl】：</p>
+<pre><code>package cn.wmyskxz.service;
+
+import cn.wmyskxz.dao.StudentDao;
+import cn.wmyskxz.entity.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * StudentService 的实现类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-23-下午 13:51
+ */
+@Service
+public class StudentServiceImpl implements StudentService {
+
+    @Autowired
+    StudentDao studentDao;
+
+    public int getTotal() {
+        return studentDao.getTotal();
+    }
+
+    public void addStudent(Student student) {
+        studentDao.addStudent(student);
+    }
+
+    public void deleteStudent(int id) {
+        studentDao.deleteStudent(id);
+    }
+
+    public void updateStudent(Student student) {
+        studentDao.updateStudent(student);
+    }
+
+    public Student getStudent(int id) {
+        return studentDao.getStudent(id);
+    }
+
+    public List&lt;Student&gt; list(int start, int count) {
+        return studentDao.list(start, count);
+    }
+}</code></pre><h4 id="⑧-功能开发"><a href="#⑧-功能开发" class="headerlink" title="⑧ 功能开发"></a>⑧ 功能开发</h4><p>在【cn.wmyskxz.controller】包下创建【StudentController】控制器，代码基本上都是复制黏贴之前在 Servlet 中的代码：</p>
+<pre><code>package cn.wmyskxz.controller;
+
+import cn.wmyskxz.entity.Student;
+import cn.wmyskxz.service.StudentService;
+import cn.wmyskxz.util.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Student 控制器
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-23-下午 13:27
+ */
+@Controller
+@RequestMapping(&quot;&quot;)
+public class StudentController {
+
+    @Autowired
+    private StudentService studentService;
+
+    @RequestMapping(&quot;/addStudent&quot;)
+    public String addStudent(HttpServletRequest request, HttpServletResponse response) {
+
+        Student student = new Student();
+
+        int studentID = Integer.parseInt(request.getParameter(&quot;student_id&quot;));
+        String name = request.getParameter(&quot;name&quot;);
+        int age = Integer.parseInt(request.getParameter(&quot;age&quot;));
+        String sex = request.getParameter(&quot;sex&quot;);
+        Date birthday = null;
+        // String 类型按照 yyyy-MM-dd 的格式转换为 java.util.Date 类
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);
+        try {
+            birthday = simpleDateFormat.parse(request.getParameter(&quot;birthday&quot;));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        student.setStudent_id(studentID);
+        student.setName(name);
+        student.setAge(age);
+        student.setSex(sex);
+        student.setBirthday(birthday);
+
+        studentService.addStudent(student);
+
+        return &quot;redirect:listStudent&quot;;
+    }
+
+    @RequestMapping(&quot;/listStudent&quot;)
+    public String listStudent(HttpServletRequest request, HttpServletResponse response) {
+
+        // 获取分页参数
+        int start = 0;
+        int count = 10;
+
+        try {
+            start = Integer.parseInt(request.getParameter(&quot;page.start&quot;));
+            count = Integer.parseInt(request.getParameter(&quot;page.count&quot;));
+        } catch (Exception e) {
+        }
+
+        Page page = new Page(start, count);
+
+        List&lt;Student&gt; students = studentService.list(page.getStart(), page.getCount());
+        int total = studentService.getTotal();
+        page.setTotal(total);
+
+        request.setAttribute(&quot;students&quot;, students);
+        request.setAttribute(&quot;page&quot;, page);
+
+        return &quot;listStudent&quot;;
+    }
+
+    @RequestMapping(&quot;/deleteStudent&quot;)
+    public String deleteStudent(int id) {
+        studentService.deleteStudent(id);
+        return &quot;redirect:listStudent&quot;;
+    }
+
+    @RequestMapping(&quot;/editStudent&quot;)
+    public ModelAndView editStudent(int id) {
+        ModelAndView mav = new ModelAndView(&quot;editStudent&quot;);
+        Student student = studentService.getStudent(id);
+        mav.addObject(&quot;student&quot;, student);
+        return mav;
+    }
+
+    @RequestMapping(&quot;/updateStudent&quot;)
+    public String updateStudent(HttpServletRequest request, HttpServletResponse response) {
+
+        Student student = new Student();
+
+        int id = Integer.parseInt(request.getParameter(&quot;id&quot;));
+        int student_id = Integer.parseInt(request.getParameter(&quot;student_id&quot;));
+        String name = request.getParameter(&quot;name&quot;);
+        int age = Integer.parseInt(request.getParameter(&quot;age&quot;));
+        String sex = request.getParameter(&quot;sex&quot;);
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd&quot;);
+        Date birthday = null;
+        try {
+            birthday = simpleDateFormat.parse(request.getParameter(&quot;birthday&quot;));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        student.setId(id);
+        student.setStudent_id(student_id);
+        student.setName(name);
+        student.setAge(age);
+        student.setSex(sex);
+        student.setBirthday(birthday);
+
+        studentService.updateStudent(student);
+        return &quot;redirect:listStudent&quot;;
+    }
+}
+</code></pre><ul>
+<li><strong>注意：</strong> 所有的学号都用 student_id 表示，为了契合在数据库中的字段名（包括下面的 JSP 文件）</li>
+</ul>
+<p>JSP 文件也直接黏之前的就好了，不过需要<strong>注意所有的 <code>name</code> 属性</strong>：</p>
+<ul>
+<li>【listStudent.jsp】：</li>
+</ul>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot;
+         pageEncoding=&quot;UTF-8&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;%-- 引入JQ和Bootstrap --%&gt;
+    &lt;script src=&quot;js/jquery/2.0.0/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link href=&quot;css/bootstrap/3.3.6/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;script src=&quot;js/bootstrap/3.3.6/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link href=&quot;css/style.css&quot; rel=&quot;stylesheet&quot;&gt;
+
+    &lt;title&gt;学生管理页面 - 首页&lt;/title&gt;
+
+    &lt;script&gt;
+        $(function () {
+            $(&quot;ul.pagination li.disabled a&quot;).click(function () {
+                return false;
+            });
+        });
+    &lt;/script&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;div class=&quot;listDIV&quot;&gt;
+    &lt;table class=&quot;table table-striped table-bordered table-hover table-condensed&quot;&gt;
+
+        &lt;caption&gt;学生列表 - 共${page.total}人&lt;/caption&gt;
+        &lt;thead&gt;
+        &lt;tr class=&quot;success&quot;&gt;
+            &lt;th&gt;学号&lt;/th&gt;
+            &lt;th&gt;姓名&lt;/th&gt;
+            &lt;th&gt;年龄&lt;/th&gt;
+            &lt;th&gt;性别&lt;/th&gt;
+            &lt;th&gt;出生日期&lt;/th&gt;
+
+            &lt;th&gt;编辑&lt;/th&gt;
+            &lt;th&gt;删除&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;/thead&gt;
+
+        &lt;tbody&gt;
+        &lt;c:forEach items=&quot;${students}&quot; var=&quot;s&quot; varStatus=&quot;status&quot;&gt;
+            &lt;tr&gt;
+                &lt;td&gt;${s.student_id}&lt;/td&gt;
+                &lt;td&gt;${s.name}&lt;/td&gt;
+                &lt;td&gt;${s.age}&lt;/td&gt;
+                &lt;td&gt;${s.sex}&lt;/td&gt;
+                &lt;td&gt;${s.birthday}&lt;/td&gt;
+
+                &lt;td&gt;&lt;a href=&quot;/editStudent?id=${s.id}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-edit&quot;&gt;&lt;/span&gt; &lt;/a&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;a href=&quot;/deleteStudent?id=${s.id}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-trash&quot;&gt;&lt;/span&gt; &lt;/a&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/c:forEach&gt;
+
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+
+&lt;nav class=&quot;pageDIV&quot;&gt;
+    &lt;ul class=&quot;pagination&quot;&gt;
+        &lt;li &lt;c:if test=&quot;${!page.hasPreviouse}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=0&quot;&gt;
+                &lt;span&gt;«&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+
+        &lt;li &lt;c:if test=&quot;${!page.hasPreviouse}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=${page.start-page.count}&quot;&gt;
+                &lt;span&gt;‹&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+
+        &lt;c:forEach begin=&quot;0&quot; end=&quot;${page.totalPage-1}&quot; varStatus=&quot;status&quot;&gt;
+
+            &lt;c:if test=&quot;${status.count*page.count-page.start&lt;=30 &amp;&amp; status.count*page.count-page.start&gt;=-10}&quot;&gt;
+                &lt;li &lt;c:if test=&quot;${status.index*page.count==page.start}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+                    &lt;a
+                            href=&quot;?page.start=${status.index*page.count}&quot;
+                            &lt;c:if test=&quot;${status.index*page.count==page.start}&quot;&gt;class=&quot;current&quot;&lt;/c:if&gt;
+                    &gt;${status.count}&lt;/a&gt;
+                &lt;/li&gt;
+            &lt;/c:if&gt;
+        &lt;/c:forEach&gt;
+
+        &lt;li &lt;c:if test=&quot;${!page.hasNext}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=${page.start+page.count}&quot;&gt;
+                &lt;span&gt;›&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li &lt;c:if test=&quot;${!page.hasNext}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=${page.last}&quot;&gt;
+                &lt;span&gt;»&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+
+&lt;div class=&quot;addDIV&quot;&gt;
+
+    &lt;div class=&quot;panel panel-success&quot;&gt;
+        &lt;div class=&quot;panel-heading&quot;&gt;
+            &lt;h3 class=&quot;panel-title&quot;&gt;增加学生&lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;panel-body&quot;&gt;
+
+            &lt;form method=&quot;post&quot; action=&quot;/addStudent&quot; role=&quot;form&quot;&gt;
+                &lt;table class=&quot;addTable&quot;&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;学号：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;student_id&quot; id=&quot;student_id&quot; placeholder=&quot;请在这里输入学号&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;姓名：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;name&quot; id=&quot;name&quot; placeholder=&quot;请在这里输入名字&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;年龄：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;age&quot; id=&quot;age&quot; placeholder=&quot;请在这里输入年龄&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;性别：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;radio&quot; class=&quot;radio radio-inline&quot; name=&quot;sex&quot; value=&quot;男&quot;&gt; 男
+                            &lt;input type=&quot;radio&quot; class=&quot;radio radio-inline&quot; name=&quot;sex&quot; value=&quot;女&quot;&gt; 女
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;出生日期：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;date&quot; name=&quot;birthday&quot; id=&quot;birthday&quot; placeholder=&quot;请在这里输入出生日期&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr class=&quot;submitTR&quot;&gt;
+                        &lt;td colspan=&quot;2&quot; align=&quot;center&quot;&gt;
+                            &lt;button type=&quot;submit&quot; class=&quot;btn btn-success&quot;&gt;提 交&lt;/button&gt;
+                        &lt;/td&gt;
+
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><ul>
+<li>【editStudent.jsp】：</li>
+</ul>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot;
+         pageEncoding=&quot;UTF-8&quot; %&gt;
+&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
+
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;%-- 引入JQ和Bootstrap --%&gt;
+    &lt;script src=&quot;js/jquery/2.0.0/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link href=&quot;css/bootstrap/3.3.6/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+    &lt;script src=&quot;js/bootstrap/3.3.6/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link href=&quot;css/style.css&quot; rel=&quot;stylesheet&quot;&gt;
+
+    &lt;title&gt;学生管理页面 - 编辑页面&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;div class=&quot;editDIV&quot;&gt;
+
+    &lt;div class=&quot;panel panel-success&quot;&gt;
+        &lt;div class=&quot;panel-heading&quot;&gt;
+            &lt;h3 class=&quot;panel-title&quot;&gt;编辑学生&lt;/h3&gt;
+        &lt;/div&gt;
+        &lt;div class=&quot;panel-body&quot;&gt;
+
+            &lt;form method=&quot;post&quot; action=&quot;/updateStudent&quot; role=&quot;form&quot;&gt;
+                &lt;table class=&quot;editTable&quot;&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;学号：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;student_id&quot; id=&quot;student_id&quot; value=&quot;${student.student_id}&quot;
+                                   placeholder=&quot;请在这里输入学号&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;姓名：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;name&quot; id=&quot;name&quot; value=&quot;${student.name}&quot; placeholder=&quot;请在这里输入名字&quot;&gt;
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;年龄：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;text&quot; name=&quot;age&quot; id=&quot;age&quot; value=&quot;${student.age}&quot; placeholder=&quot;请在这里输入年龄&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;性别：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;radio&quot; class=&quot;radio radio-inline&quot; name=&quot;sex&quot; value=&quot;男&quot;&gt; 男
+                            &lt;input type=&quot;radio&quot; class=&quot;radio radio-inline&quot; name=&quot;sex&quot; value=&quot;女&quot;&gt; 女
+                        &lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td&gt;出生日期：&lt;/td&gt;
+                        &lt;td&gt;&lt;input type=&quot;date&quot; name=&quot;birthday&quot; id=&quot;birthday&quot; value=&quot;${student.birthday}&quot;
+                                   placeholder=&quot;请在这里输入出生日期&quot;&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr class=&quot;submitTR&quot;&gt;
+                        &lt;td colspan=&quot;2&quot; align=&quot;center&quot;&gt;
+                            &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;${student.id}&quot;&gt;
+                            &lt;button type=&quot;submit&quot; class=&quot;btn btn-success&quot;&gt;提 交&lt;/button&gt;
+                        &lt;/td&gt;
+
+                    &lt;/tr&gt;
+
+                &lt;/table&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><ul>
+<li>style.css 文件：</li>
+</ul>
+<pre><code>body {
+    padding-top: 60px;
+}
+
+div.listDIV {
+    width: 600px;
+    margin: 0 auto;
+}
+
+div.editDIV {
+    width: 400px;
+    margin: 0 auto;
+}
+
+nav.pageDIV {
+    text-align: center;
+}
+
+div.addDIV {
+    width: 300px;
+    margin: 0 auto;
+}
+
+table.addTable {
+    width: 100%;
+    padding: 5px;
+}
+
+table.addTable td {
+    padding: 5px;
+}
+
+table.editTable {
+    width: 100%;
+    padding: 5px;
+}
+
+table.editTable td {
+    padding: 5px;
+}</code></pre><h4 id="项目的整体结构"><a href="#项目的整体结构" class="headerlink" title="项目的整体结构"></a>项目的整体结构</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-3012fde670b3ff42.png" alt=""></p>
+<h4 id="分页功能"><a href="#分页功能" class="headerlink" title="分页功能"></a>分页功能</h4><ul>
+<li>首先在 Packge【util】包下创建一个 Page 工具类：</li>
+</ul>
+<pre><code>package cn.wmyskxz.util;
+
+public class Page {
+
+    int start;        // 开始数据
+    int count;        // 每一页的数量
+    int total;        // 总共的数据量
+
+    public Page(int start, int count) {
+        super();
+        this.start = start;
+        this.count = count;
+    }
+
+    public boolean isHasPreviouse(){
+        if(start==0)
+            return false;
+        return true;
+
+    }
+    public boolean isHasNext(){
+        if(start==getLast())
+            return false;
+        return true;
+    }
+
+    public int getTotalPage(){
+        int totalPage;
+        // 假设总数是50，是能够被5整除的，那么就有10页
+        if (0 == total % count)
+            totalPage = total /count;
+            // 假设总数是51，不能够被5整除的，那么就有11页
+        else
+            totalPage = total / count + 1;
+
+        if(0==totalPage)
+            totalPage = 1;
+        return totalPage;
+
+    }
+
+    public int getLast(){
+        int last;
+        // 假设总数是50，是能够被5整除的，那么最后一页的开始就是40
+        if (0 == total % count)
+            last = total - count;
+            // 假设总数是51，不能够被5整除的，那么最后一页的开始就是50
+        else
+            last = total - total % count;
+
+        last = last&lt;0?0:last;
+        return last;
+    }
+
+    // 各种 setter 和 getter
+}</code></pre><ul>
+<li>totalPage 是计算得来的数，用来表示页码一共的数量</li>
+</ul>
+<p>在首页显示的 StudentList 用 page 的参数来获取：</p>
+<pre><code>List&lt;Student&gt; students = studentService.list(page.getStart(), page.getCount());</code></pre><p>并且在映射文件中用 <strong>LIMIT</strong> 关键字：</p>
+<pre><code>&lt;!-- 查询从start位置开始的count条数据--&gt;
+&lt;select id=&quot;list&quot; resultMap=&quot;student&quot;&gt;
+    SELECT * FROM student ORDER BY student_id desc limit #{param1}, #{param2}
+&lt;/select&gt;</code></pre><ul>
+<li><p>第一个参数为 start，第二个参数为 count<br>这样就能根据分页的信息来获取到响应的数据</p>
+</li>
+<li><p><strong>编写分页栏：</strong></p>
+</li>
+</ul>
+<p>1.写好头和尾</p>
+<pre><code>&lt;nav class=&quot;pageDIV&quot;&gt;
+    &lt;ul class=&quot;pagination&quot;&gt;
+    .....
+    &lt;/ul&gt;
+&lt;/nav&gt;</code></pre><p>2.写好<code>«</code> <code>‹</code>这两个功能按钮<br>使用 <code>&lt;c:if&gt;</code>标签来增加边界判断，如果没有前面的页码了则设置为disable状态</p>
+<pre><code>        &lt;li &lt;c:if test=&quot;${!page.hasPreviouse}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=0&quot;&gt;
+                &lt;span&gt;«&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+
+        &lt;li &lt;c:if test=&quot;${!page.hasPreviouse}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a href=&quot;?page.start=${page.start-page.count}&quot;&gt;
+                &lt;span&gt;‹&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;</code></pre><p>再通过 JavaScrip 代码来完成禁用功能：</p>
+<pre><code>&lt;script&gt;
+    $(function () {
+        $(&quot;ul.pagination li.disabled a&quot;).click(function () {
+            return false;
+        });
+    });
+&lt;/script&gt;</code></pre><p>3.完成中间页码的编写<br>从 <code>0</code> 循环到 <code>page.totalPage - 1</code> ，<code>varStatus</code> 相当于是循环变量</p>
+<ul>
+<li>status.count 是从1开始遍历</li>
+<li>status.index 是从0开始遍历</li>
+<li><strong>要求：</strong>显示当前页码的前两个和后两个就可，例如当前页码为3的时候，就显示 1 2 3(当前页) 4 5 的页码</li>
+<li><strong>理解测试条件：</strong></li>
+<li>10 &lt;= 当前页*每一页显示的数目 - 当前页开始的数据编号 &lt;= 30</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-1f82d91e47a31c7f.png" alt=""></p>
+<ul>
+<li>只要理解了这个判断条件，其他的就都好理解了</li>
+</ul>
+<pre><code>&lt;c:forEach begin=&quot;0&quot; end=&quot;${page.totalPage-1}&quot; varStatus=&quot;status&quot;&gt;
+
+    &lt;c:if test=&quot;${status.count*page.count-page.start&lt;=30 &amp;&amp; status.count*page.count-page.start&gt;=-10}&quot;&gt;
+        &lt;li &lt;c:if test=&quot;${status.index*page.count==page.start}&quot;&gt;class=&quot;disabled&quot;&lt;/c:if&gt;&gt;
+            &lt;a
+                    href=&quot;?page.start=${status.index*page.count}&quot;
+                    &lt;c:if test=&quot;${status.index*page.count==page.start}&quot;&gt;class=&quot;current&quot;&lt;/c:if&gt;
+            &gt;${status.count}&lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/c:if&gt;
+&lt;/c:forEach&gt;</code></pre><p>4.在控制器中获取参数</p>
+<pre><code>// 获取分页参数
+int start = 0;
+int count = 10;
+
+try {
+    start = Integer.parseInt(request.getParameter(&quot;page.start&quot;));
+    count = Integer.parseInt(request.getParameter(&quot;page.count&quot;));
+} catch (Exception e) {
+}
+
+....
+
+// 共享 page 数据
+request.setAttribute(&quot;page&quot;, page);</code></pre><h4 id="Date-转换的问题"><a href="#Date-转换的问题" class="headerlink" title="Date 转换的问题"></a>Date 转换的问题</h4><p>最开始的时候，我们看到页面上显示的日期是这样的格式：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-6d4120db01b4df30.png" alt=""></p>
+<p>这显然是我们不希望看到的</p>
+<ul>
+<li>解决方案：在映射文件中设置日期显示的类型。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-d70cfa9638709579.png" alt=""></p>
+<p>重新部署文件，然后刷新页面，就能看到我们希望的效果啦：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-f99cbf278ce04c17.png" alt=""></p>
+<h4 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h4><ol>
+<li>由于之前的项目代码都有，所以在<strong>重构的时候，基本上没有花什么时间</strong>就完成了项目的搭建，能够体会到<strong>代码分离的重要性</strong>，这在很大程度上保证了我们的代码复用。</li>
+<li>相较于之前用 Servlet + JSP 来完成，很明显的感觉是<strong>DAO层的编写方便了很多，仅仅需要编写一个 xml 映射文件和一个 Dao 层接口就可以完成功能，</strong>而不用自己再去重复的去在每一个 CRUD 方法中去处理结果集，重复而且繁琐。</li>
+<li><strong>注解真的很方便，</strong>这不仅仅提升了我们自身开发的效率，写起来也很带劲儿。</li>
+<li><strong>开发效率快，而且低耦合，</strong>我们基于 xml 配置了大部分的工作，在基于 SSM 框架开发时，我们<strong>可以把专注点集中在逻辑处理上。</strong></li>
+<li>在 SSM 框架中<strong>能方便的对项目进行修改，</strong>这不仅仅得益于框架的约定，使得代码分离并且可复用，也得益于 Maven 工具对于项目的管理。</li>
+<li>我们能够通过一个 Controller 来完成五个 Servlet 的功能，并且通过注解来完成配置。</li>
+</ol>
+<hr>
+<h2 id="项目改进"><a href="#项目改进" class="headerlink" title="项目改进"></a>项目改进</h2><p>项目很简单，仅仅也只是在数据库增删改查的基础上增加了一个界面，我们来动手改一改。</p>
+<h4 id="改进一：增加删除提示"><a href="#改进一：增加删除提示" class="headerlink" title="改进一：增加删除提示"></a>改进一：增加删除提示</h4><p>第一个想到的就是删除提示，没有删除提示是很要命的一件事情，如果手滑了一下那可能就悲剧了….</p>
+<p>首先我们在顶部的 <code>&lt;head&gt;</code> 标签中的 <code>&lt;script&gt;</code> 中增加一段代码：</p>
+<pre><code>function del() {
+    var msg = &quot;您真的确定要删除吗？\n\n请确认！&quot;;
+    if (confirm(msg) == true) {
+        return true;
+    } else {
+        return false;
+    }
+}</code></pre><p>然后在删除 a 标签页中增加 onclick 属性：</p>
+<pre><code>onclick=&quot;javascript:return del();&quot;
+....就像下面这样....
+td&gt;&lt;a href=&quot;/deleteStudent?id=${s.id}&quot; onclick=&quot;javascript:return del();&quot;&gt;&lt;span
+        class=&quot;glyphicon glyphicon-trash&quot;&gt;&lt;/span&gt; &lt;/a&gt;&lt;/td&gt;</code></pre><p>当我们刷新页面后，点击删除就会弹出提示信息：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-944caee345a8b0a4.png" alt=""></p>
+<h4 id="改进二：编辑页面自动勾选上性别"><a href="#改进二：编辑页面自动勾选上性别" class="headerlink" title="改进二：编辑页面自动勾选上性别"></a>改进二：编辑页面自动勾选上性别</h4><p>在当前的项目中，如果点击编辑按钮进入到编辑页面后，性别这个选项是空选的状态，这就很low：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-4e3152100e76f6f6.png" alt=""></p>
+<p>这个也很简单，在 editStudent 页面增加一些判断就好了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-90029a61673b0b1e.png" alt=""></p>
+<p>用 <code>&lt;c:if&gt;</code> 标签来判断 sex 的值，然后根据对应的属性增加 checked 属性，这样就可以自动勾选上所对应的属性：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-814b777087dd85d0.png" alt=""></p>
+<h4 id="改进三：空值判断"><a href="#改进三：空值判断" class="headerlink" title="改进三：空值判断"></a>改进三：空值判断</h4><p>我们允许设置为 null 的值仅仅为出生日期，其他的值均不允许出现空值，所以我们需要加入空值判断：</p>
+<pre><code>function checkEmpty(id, name) {
+    var value = $(&quot;#&quot; + id).val();
+    if (value.length == 0) {
+        alert(name + &quot;不能为空&quot;);
+        $(&quot;#&quot; + id).focus();
+        return false;
+    }
+    return true;
+}</code></pre><p>然后再为 form 创建一个 id 属性值为 “addForm” 并添加进判断空值的方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-3a2a1bf8b9030c40.png" alt=""></p>
+<ul>
+<li><strong>注意：</strong> 这里需要写在 $(function(){}) 里面，等待文档加载完毕才能生效。</li>
+<li>这里并没有为 sex 属性判断空值，我们采用一个简单的<strong>为 sex 添加一个默认勾选项</strong>来省略空值的判断。</li>
+</ul>
+<p>同样的，我们也在编辑页面，采用同样的方法进行空值判断：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%88SSM%E7%AE%80%E6%98%93%E7%89%88%EF%BC%89%E6%80%BB%E7%BB%93/7896890-f51f469bcaef903d.png" alt=""></p>
+<ul>
+<li>当进入编辑页面的时候已经有默认的勾选项了，所以 sex 值仍然不需要判空</li>
+<li>最后给出项目地址：<a href="https://github.com/wmyskxz/StudentManager-SSM" target="_blank" rel="noopener">https://github.com/wmyskxz/StudentManager-SSM</a></li>
+</ul>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/23/idea-zheng-he-ssm-kuang-jia-xue-xi/">
       IDEA整合SSM框架学习
     </a>
@@ -3041,582 +4322,6 @@ INSERT INTO student VALUES(3,3,&#39;我没有三颗心脏&#39;);</code></pre><h4
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/14/spring-mvc-ru-men-jiu-zhe-yi-pian/">
-      Spring MVC【入门】就这一篇！
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring-MVC/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/Spring MVC</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月14日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-34e6864b15c793ec.png" alt=""></p>
-<h2 id="MVC-设计概述"><a href="#MVC-设计概述" class="headerlink" title="MVC 设计概述"></a>MVC 设计概述</h2><p>在早期 Java Web 的开发中，统一把显示层、控制层、数据层的操作全部交给 JSP 或者 JavaBean 来进行处理，我们称之为 <strong>Model1：</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-7b3f9cd59394b017.png" alt=""></p>
-<ul>
-<li><strong>出现的弊端：</strong></li>
-<li>JSP 和 Java Bean 之间严重耦合，Java 代码和 HTML 代码也耦合在了一起</li>
-<li>要求开发者不仅要掌握 Java ，还要有高超的前端水平</li>
-<li>前端和后端相互依赖，前端需要等待后端完成，后端也依赖前端完成，才能进行有效的测试</li>
-<li>代码难以复用</li>
-</ul>
-<p>正因为上面的种种弊端，所以很快这种方式就被 Servlet + JSP + Java Bean 所替代了，早期的 MVC 模型<strong>（Model2）</strong>就像下图这样：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-403a273b08fec826.png" alt=""></p>
-<p>首先用户的请求会到达 Servlet，然后根据请求调用相应的 Java Bean，并把所有的显示结果交给 JSP 去完成，这样的模式我们就称为 MVC 模式。</p>
-<ul>
-<li><strong>M 代表 模型（Model）</strong><br>模型是什么呢？ 模型就是数据，就是 dao,bean</li>
-<li><strong>V 代表 视图（View）</strong><br>视图是什么呢？ 就是网页, JSP，用来展示模型中的数据</li>
-<li><strong>C 代表 控制器（controller)</strong><br>控制器是什么？ 控制器的作用就是把不同的数据(Model)，显示在不同的视图(View)上，Servlet 扮演的就是这样的角色。</li>
-</ul>
-<blockquote>
-<p>扩展阅读：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483775&idx=1&sn=c9d7ead744c6e0c3ab2fe55c09bbe61f&chksm=ebd7407edca0c9688f3870d895b760836101271b912899821fb35c5704fe215da2fc5daff2f9#rd" target="_blank" rel="noopener">Web开发模式</a></p>
-</blockquote>
-<h4 id="Spring-MVC-的架构"><a href="#Spring-MVC-的架构" class="headerlink" title="Spring MVC 的架构"></a>Spring MVC 的架构</h4><p>为解决持久层中一直未处理好的数据库事务的编程，又为了迎合 NoSQL 的强势崛起，Spring MVC 给出了方案：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-a25782fb05f315de.png" alt=""></p>
-<p><strong>传统的模型层被拆分为了业务层(Service)和数据访问层（DAO,Data Access Object）。</strong> 在 Service 下可以通过 Spring 的声明式事务操作数据访问层，而在业务层上还允许我们访问 NoSQL ，这样就能够满足异军突起的 NoSQL 的使用了，它可以大大提高互联网系统的性能。</p>
-<ul>
-<li><strong>特点：</strong><br>结构松散，几乎可以在 Spring MVC 中使用各类视图<br>松耦合，各个模块分离<br>与 Spring 无缝集成</li>
-</ul>
-<hr>
-<h2 id="Hello-Spring-MVC"><a href="#Hello-Spring-MVC" class="headerlink" title="Hello Spring MVC"></a>Hello Spring MVC</h2><p>让我们来写一下我们的第一个 Spring MVC 程序：</p>
-<h4 id="第一步：在-IDEA-中新建-Spring-MVC-项目"><a href="#第一步：在-IDEA-中新建-Spring-MVC-项目" class="headerlink" title="第一步：在 IDEA 中新建 Spring MVC 项目"></a>第一步：在 IDEA 中新建 Spring MVC 项目</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-74ea4c339e8f35f8.png" alt=""></p>
-<p>并且取名为 【HelloSpringMVC】，点击【Finish】：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-cc6cb7d01573ceee.png" alt=""></p>
-<p>IDEA 会自动帮我们下载好必要的 jar 包，并且为我们创建好一些默认的目录和文件，创建好以后项目结构如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-f6fd3173da6e4939.png" alt=""></p>
-<h4 id="第二步：修改-web-xml"><a href="#第二步：修改-web-xml" class="headerlink" title="第二步：修改 web.xml"></a>第二步：修改 web.xml</h4><p>我们打开 web.xml ，按照下图完成修改：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-2d8a3a7b48dbe59a.png" alt=""></p>
-<p>把<code>&lt;url-pattern&gt;</code>元素的值改为 / ，表示要拦截所有的请求，并交由Spring MVC的后台控制器来处理，改完之后：</p>
-<pre><code>&lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;</code></pre><h4 id="第三步：编辑-dispatcher-servlet-xml"><a href="#第三步：编辑-dispatcher-servlet-xml" class="headerlink" title="第三步：编辑 dispatcher-servlet.xml"></a>第三步：编辑 dispatcher-servlet.xml</h4><p>这个文件名的开头 dispatcher 与上面 web.xml 中的 <code>&lt;servlet-name&gt;</code> 元素配置的 dispatcher 对应，这是 Spring MVC 的映射配置文件（xxx-servlet.xml），我们编辑如下：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;bean id=&quot;simpleUrlHandlerMapping&quot;
-          class=&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;&gt;
-        &lt;property name=&quot;mappings&quot;&gt;
-            &lt;props&gt;
-                &lt;!-- /hello 路径的请求交给 id 为 helloController 的控制器处理--&gt;
-                &lt;prop key=&quot;/hello&quot;&gt;helloController&lt;/prop&gt;
-            &lt;/props&gt;
-        &lt;/property&gt;
-    &lt;/bean&gt;
-    &lt;bean id=&quot;helloController&quot; class=&quot;controller.HelloController&quot;&gt;&lt;/bean&gt;
-&lt;/beans&gt;</code></pre><h4 id="第四步：编写-HelloController"><a href="#第四步：编写-HelloController" class="headerlink" title="第四步：编写 HelloController"></a>第四步：编写 HelloController</h4><p>在 Package【controller】下创建 【HelloController】类，并实现 org.springframework.web.servlet.mvc.Controller 接口：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> controller<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ModelAndView<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>mvc<span class="token punctuation">.</span>Controller<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloController</span> <span class="token keyword">implements</span> <span class="token class-name">Controller</span><span class="token punctuation">{</span>
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<ul>
-<li><strong>出现了问题：</strong> javax.servlet 包找不到</li>
-<li><strong>解决：</strong> 将本地 Tomcat 服务器的目录下【lib】文件夹下的 servlet-api.jar 包拷贝到工程【lib】文件夹下，添加依赖</li>
-</ul>
-<p>Spring MVC 通过 ModelAndView 对象把模型和视图结合在一起</p>
-<pre class=" language-java"><code class="language-java">ModelAndView mav <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"index.jsp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-mav<span class="token punctuation">.</span><span class="token function">addObject</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">,</span> <span class="token string">"Hello Spring MVC"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>这里表示视图的是index.jsp<br>模型数据的是 message，内容是 “Hello Spring MVC” </p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> controller<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ModelAndView<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>mvc<span class="token punctuation">.</span>Controller<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloController</span> <span class="token keyword">implements</span> <span class="token class-name">Controller</span> <span class="token punctuation">{</span>
-
-    <span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-        ModelAndView mav <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"index.jsp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        mav<span class="token punctuation">.</span><span class="token function">addObject</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">,</span> <span class="token string">"Hello Spring MVC"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> mav<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第五步：准备-index-jsp"><a href="#第五步：准备-index-jsp" class="headerlink" title="第五步：准备 index.jsp"></a>第五步：准备 index.jsp</h4><p>将 index.jsp 的内容修改为：</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-    pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot;%&gt;
-
-&lt;h1&gt;${message}&lt;/h1&gt;</code></pre><p>内容很简单，用El表达式显示 message 的内容。</p>
-<h4 id="第六步：部署-Tomcat-及相关环境"><a href="#第六步：部署-Tomcat-及相关环境" class="headerlink" title="第六步：部署 Tomcat 及相关环境"></a>第六步：部署 Tomcat 及相关环境</h4><p>在【Run】菜单项下找到【Edit Configurations】</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-bcca5f5a7c097d6b.png" alt=""></p>
-<p>配置 Tomcat 环境：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-0600768275c85966.png" alt=""></p>
-<p>选择好本地的 Tomcat 服务器，并改好名字：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-5f033d1463f08d7b.png" alt=""></p>
-<p>在 Deployment 标签页下完成如下操作：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-02aa0ac9a6707685.png" alt=""></p>
-<p>点击 OK 就好了，我们点击右上角的三角形将 Tomcat 服务器运行起来。</p>
-<ul>
-<li><strong>出现的问题：</strong> Tomcat 服务器无法正常启动</li>
-<li><strong>原因：</strong> Tomcat 服务器找不到相关的 jar 包</li>
-<li><strong>解决方法：</strong> 将【lib】文件夹整个剪贴到【WEB-INF】下，并重新建立依赖：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-b8fcf3da677299cf.png" alt=""></p>
-<h4 id="第七步：重启服务器"><a href="#第七步：重启服务器" class="headerlink" title="第七步：重启服务器"></a>第七步：重启服务器</h4><p>重启服务器，输入地址：localhost/hello</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-390fb571e9f6ff03.png" alt=""></p>
-<blockquote>
-<p>参考资料：<a href="http://how2j.cn/k/springmvc/springmvc-springmvc/615.html#step1891" target="_blank" rel="noopener">Spring MVC 教程(how2j.cn)</a></p>
-</blockquote>
-<hr>
-<h2 id="跟踪-Spring-MVC-的请求"><a href="#跟踪-Spring-MVC-的请求" class="headerlink" title="跟踪 Spring MVC 的请求"></a>跟踪 Spring MVC 的请求</h2><p>每当用户在 Web 浏览器中点击链接或者提交表单的时候，请求就开始工作了，像是邮递员一样，从离开浏览器开始到获取响应返回，它会经历很多站点，在每一个站点都会留下一些信息同时也会带上其他信息，下图为 Spring MVC 的请求流程：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-65ef874ad7da59a2.png" alt=""></p>
-<h4 id="第一站：DispatcherServlet"><a href="#第一站：DispatcherServlet" class="headerlink" title="第一站：DispatcherServlet"></a>第一站：DispatcherServlet</h4><p>从请求离开浏览器以后，第一站到达的就是 DispatcherServlet，看名字这是一个 Servlet，通过 J2EE 的学习，我们知道 Servlet 可以拦截并处理 HTTP 请求，DispatcherServlet 会拦截所有的请求，并且将这些请求发送给 Spring MVC 控制器。</p>
-<pre><code>&lt;servlet&gt;
-    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-&lt;/servlet&gt;
-&lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
-    &lt;!-- 拦截所有的请求 --&gt;
-    &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-&lt;/servlet-mapping&gt;</code></pre><ul>
-<li><strong>DispatcherServlet 的任务就是拦截请求发送给 Spring MVC 控制器。</strong></li>
-</ul>
-<h4 id="第二站：处理器映射（HandlerMapping）"><a href="#第二站：处理器映射（HandlerMapping）" class="headerlink" title="第二站：处理器映射（HandlerMapping）"></a>第二站：处理器映射（HandlerMapping）</h4><ul>
-<li><strong>问题：</strong> 典型的应用程序中可能会有多个控制器，这些请求到底应该发给哪一个控制器呢？</li>
-</ul>
-<p>所以 DispatcherServlet 会查询一个或多个处理器映射来确定请求的下一站在哪里，处理器映射会<strong>根据请求所携带的 URL 信息来进行决策</strong>，例如上面的例子中，我们通过配置 simpleUrlHandlerMapping 来将 /hello 地址交给 helloController 处理：</p>
-<pre><code>&lt;bean id=&quot;simpleUrlHandlerMapping&quot;
-      class=&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;&gt;
-    &lt;property name=&quot;mappings&quot;&gt;
-        &lt;props&gt;
-            &lt;!-- /hello 路径的请求交给 id 为 helloController 的控制器处理--&gt;
-            &lt;prop key=&quot;/hello&quot;&gt;helloController&lt;/prop&gt;
-        &lt;/props&gt;
-    &lt;/property&gt;
-&lt;/bean&gt;
-&lt;bean id=&quot;helloController&quot; class=&quot;controller.HelloController&quot;&gt;&lt;/bean&gt;</code></pre><h4 id="第三站：控制器"><a href="#第三站：控制器" class="headerlink" title="第三站：控制器"></a>第三站：控制器</h4><p>一旦选择了合适的控制器， DispatcherServlet 会将请求发送给选中的控制器，到了控制器，请求会卸下其负载（用户提交的请求）等待控制器处理完这些信息：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 处理逻辑</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第四站：返回-DispatcherServlet"><a href="#第四站：返回-DispatcherServlet" class="headerlink" title="第四站：返回 DispatcherServlet"></a>第四站：返回 DispatcherServlet</h4><p>当控制器在完成逻辑处理后，通常会产生一些信息，这些信息就是需要返回给用户并在浏览器上显示的信息，它们被称为<strong>模型（Model）</strong>。仅仅返回原始的信息时不够的——这些信息需要以用户友好的方式进行格式化，一般会是 HTML，所以，信息需要发送给一个<strong>视图（view）</strong>，通常会是 JSP。</p>
-<p>控制器所做的最后一件事就是将模型数据打包，并且表示出用于渲染输出的视图名<strong>（逻辑视图名）。它接下来会将请求连同模型和视图名发送回 DispatcherServlet。</strong></p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 处理逻辑</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token comment" spellcheck="true">// 返回给 DispatcherServlet</span>
-    <span class="token keyword">return</span> mav<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第五站：视图解析器"><a href="#第五站：视图解析器" class="headerlink" title="第五站：视图解析器"></a>第五站：视图解析器</h4><p>这样以来，控制器就不会和特定的视图相耦合，传递给 DispatcherServlet 的视图名并不直接表示某个特定的 JSP。（实际上，它甚至不能确定视图就是 JSP）相反，<strong>它传递的仅仅是一个逻辑名称，这个名称将会用来查找产生结果的真正视图。</strong></p>
-<p>DispatcherServlet 将会使用视图解析器（view resolver）来将逻辑视图名匹配为一个特定的视图实现，它可能是也可能不是 JSP</p>
-<blockquote>
-<p>上面的例子是直接绑定到了 index.jsp 视图</p>
-</blockquote>
-<h4 id="第六站：视图"><a href="#第六站：视图" class="headerlink" title="第六站：视图"></a>第六站：视图</h4><p>既然 DispatcherServlet 已经知道由哪个视图渲染结果了，那请求的任务基本上也就完成了。</p>
-<p>它的最后一站是视图的实现，在这里它交付模型数据，请求的任务也就完成了。视图使用模型数据渲染出结果，这个输出结果会通过响应对象传递给客户端。</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot;%&gt;
-
-&lt;h1&gt;${message}&lt;/h1&gt;</code></pre><hr>
-<h2 id="使用注解配置-Spring-MVC"><a href="#使用注解配置-Spring-MVC" class="headerlink" title="使用注解配置 Spring MVC"></a>使用注解配置 Spring MVC</h2><p>上面我们已经对 Spring MVC 有了一定的了解，并且通过 XML 配置的方式创建了第一个 Spring MVC 程序，我们来看看基于注解应该怎么完成上述程序的配置：</p>
-<h4 id="第一步：为-HelloController-添加注解"><a href="#第一步：为-HelloController-添加注解" class="headerlink" title="第一步：为 HelloController 添加注解"></a>第一步：为 HelloController 添加注解</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> controller<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>RequestMapping<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ModelAndView<span class="token punctuation">;</span>
-
-<span class="token annotation punctuation">@Controller</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloController</span><span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-        ModelAndView mav <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"index.jsp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        mav<span class="token punctuation">.</span><span class="token function">addObject</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">,</span> <span class="token string">"Hello Spring MVC"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> mav<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>把实现的接口也给去掉。</p>
-<ul>
-<li><strong>简单解释一下：</strong></li>
-<li><code>@Controller</code> 注解：<br>很明显，这个注解是用来声明控制器的，但实际上这个注解对 Spring MVC 本身的影响并不大。（Spring 实战说它仅仅是辅助实现组件扫描，可以用 <code>@Component</code> 注解代替，但我自己尝试了一下并不行，因为上述例子没有配置 JSP 视图解析器我还自己配了一个仍没有成功…）</li>
-<li><code>@RequestMapping</code> 注解：<br>很显然，这就表示路径 <code>/hello</code> 会映射到该方法上</li>
-</ul>
-<h4 id="第二步：取消之前的-XML-注释"><a href="#第二步：取消之前的-XML-注释" class="headerlink" title="第二步：取消之前的 XML 注释"></a>第二步：取消之前的 XML 注释</h4><p>在 dispatcher-servlet.xml 文件中，注释掉之前的配置，然后增加一句组件扫描：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-    &lt;!--&lt;bean id=&quot;simpleUrlHandlerMapping&quot;--&gt;
-                                        &lt;!--class=&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;&gt;--&gt;
-    &lt;!--&lt;property name=&quot;mappings&quot;&gt;--&gt;
-            &lt;!--&lt;props&gt;--&gt;
-                &lt;!--&amp;lt;!&amp;ndash; /hello 路径的请求交给 id 为 helloController 的控制器处理&amp;ndash;&amp;gt;--&gt;
-                &lt;!--&lt;prop key=&quot;/hello&quot;&gt;helloController&lt;/prop&gt;--&gt;
-            &lt;!--&lt;/props&gt;--&gt;
-        &lt;!--&lt;/property&gt;--&gt;
-    &lt;!--&lt;/bean&gt;--&gt;
-    &lt;!--&lt;bean id=&quot;helloController&quot; class=&quot;controller.HelloController&quot;&gt;&lt;/bean&gt;--&gt;
-
-    &lt;!-- 扫描controller下的组件 --&gt;
-    &lt;context:component-scan base-package=&quot;controller&quot;/&gt;
-&lt;/beans&gt;</code></pre><h4 id="第三步：重启服务器"><a href="#第三步：重启服务器" class="headerlink" title="第三步：重启服务器"></a>第三步：重启服务器</h4><p>当配置完成，重新启动服务器，输入 <code>localhost/hello</code> 地址仍然能看到效果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-390fb571e9f6ff03.png" alt=""></p>
-<h4 id="RequestMapping-注解细节"><a href="#RequestMapping-注解细节" class="headerlink" title="@RequestMapping 注解细节"></a>@RequestMapping 注解细节</h4><p>如果 <code>@RequestMapping</code> 作用在类上，那么就相当于是给该类所有配置的映射地址前加上了一个地址，例如：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Controller</span>
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/wmyskxz"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloController</span> <span class="token punctuation">{</span>
-    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<ul>
-<li>则访问地址： <code>localhost/wmyskxz/hello</code></li>
-</ul>
-<hr>
-<h2 id="配置视图解析器"><a href="#配置视图解析器" class="headerlink" title="配置视图解析器"></a>配置视图解析器</h2><p>还记得我们 Spring MVC 的请求流程吗，视图解析器负责定位视图，它接受一个由 DispaterServlet 传递过来的逻辑视图名来匹配一个特定的视图。</p>
-<ul>
-<li><strong>需求：</strong> 有一些页面我们不希望用户用户直接访问到，例如有重要数据的页面，例如有模型数据支撑的页面。</li>
-<li><strong>造成的问题：</strong><br>我们可以在【web】根目录下放置一个【test.jsp】模拟一个重要数据的页面，我们什么都不用做，重新启动服务器，网页中输入 <code>localhost/test.jsp</code> 就能够直接访问到了，这会造成<strong>数据泄露</strong>…<br>另外我们可以直接输入 <code>localhost/index.jsp</code> 试试，根据我们上面的程序，这会是一个空白的页面，因为并没有获取到 <code>${message}</code> 参数就直接访问了，这会<strong>影响用户体验</strong></li>
-</ul>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>我们将我们的 JSP 文件配置在【WEB-INF】文件夹中的【page】文件夹下，【WEB-INF】是 Java Web 中默认的安全目录，是不允许用户直接访问的<em>（也就是你说你通过 <code>localhost/WEB-INF/</code> 这样的方式是永远访问不到的）</em></p>
-<p>但是我们需要将这告诉给视图解析器，我们在 dispatcher-servlet.xml 文件中做如下配置：</p>
-<pre><code>&lt;bean id=&quot;viewResolver&quot;
-      class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
-    &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/page/&quot; /&gt;
-    &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
-&lt;/bean&gt;</code></pre><p>这里配置了一个 Spring MVC 内置的一个视图解析器，该解析器是遵循着一种约定：会<strong>在视图名上添加前缀和后缀，进而确定一个 Web 应用中视图资源的物理路径的。</strong>让我们实际来看看效果：</p>
-<h4 id="第一步：修改-HelloController"><a href="#第一步：修改-HelloController" class="headerlink" title="第一步：修改 HelloController"></a>第一步：修改 HelloController</h4><p>我们将代码修改一下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-2ce49e171bd6d547.png" alt=""></p>
-<h4 id="第二步：配置视图解析器："><a href="#第二步：配置视图解析器：" class="headerlink" title="第二步：配置视图解析器："></a>第二步：配置视图解析器：</h4><p>按照上述的配置，完成：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-    &lt;!--&lt;bean id=&quot;simpleUrlHandlerMapping&quot;--&gt;
-                                        &lt;!--class=&quot;org.springframework.web.servlet.handler.SimpleUrlHandlerMapping&quot;&gt;--&gt;
-    &lt;!--&lt;property name=&quot;mappings&quot;&gt;--&gt;
-            &lt;!--&lt;props&gt;--&gt;
-                &lt;!--&amp;lt;!&amp;ndash; /hello 路径的请求交给 id 为 helloController 的控制器处理&amp;ndash;&amp;gt;--&gt;
-                &lt;!--&lt;prop key=&quot;/hello&quot;&gt;helloController&lt;/prop&gt;--&gt;
-            &lt;!--&lt;/props&gt;--&gt;
-        &lt;!--&lt;/property&gt;--&gt;
-    &lt;!--&lt;/bean&gt;--&gt;
-    &lt;!--&lt;bean id=&quot;helloController&quot; class=&quot;controller.HelloController&quot;&gt;&lt;/bean&gt;--&gt;
-
-    &lt;!-- 扫描controller下的组件 --&gt;
-    &lt;context:component-scan base-package=&quot;controller&quot;/&gt;
-    &lt;bean id=&quot;viewResolver&quot;
-          class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
-        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/page/&quot; /&gt;
-        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
-    &lt;/bean&gt;
-&lt;/beans&gt;</code></pre><h4 id="第三步：剪贴-index-jsp-文件"><a href="#第三步：剪贴-index-jsp-文件" class="headerlink" title="第三步：剪贴 index.jsp 文件"></a>第三步：剪贴 index.jsp 文件</h4><p>在【WEB-INF】文件夹下新建一个【page】文件夹，并将【index.jsp】文件剪贴到里面：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-88995fd05ccd0f80.png" alt=""></p>
-<h4 id="第四步：更新资源重启服务器"><a href="#第四步：更新资源重启服务器" class="headerlink" title="第四步：更新资源重启服务器"></a>第四步：更新资源重启服务器</h4><p>访问 <code>localhost/hello</code> 路径，看到正确效果：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-390fb571e9f6ff03.png" alt=""></p>
-<ul>
-<li><strong>原理：</strong></li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-a716a3ac8f7e541d.png" alt=""></p>
-<p>我们传入的逻辑视图名为 index ，再加上 “<code>/WEB-INF/page/</code>” 前缀和 “<code>.jsp</code>” 后缀，就能确定物理视图的路径了，这样我们以后就可以将所有的视图放入【page】文件夹下了！</p>
-<ul>
-<li><strong>注意：</strong>此时的配置仅是 dispatcher-servlet.xml 下的</li>
-</ul>
-<hr>
-<h2 id="控制器接收请求数据"><a href="#控制器接收请求数据" class="headerlink" title="控制器接收请求数据"></a>控制器接收请求数据</h2><p>使用控制器接收参数往往是 Spring MVC 开发业务逻辑的第一步，为探索 Spring MVC 的传参方式，为此我们先来创建一个简单的表单用于提交数据：</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot; import=&quot;java.util.*&quot; isELIgnored=&quot;false&quot;%&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;utf-8&quot;&gt;
-    &lt;title&gt;Spring MVC 传参方式&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;form action=&quot;/param&quot; role=&quot;form&quot;&gt;
-    用户名：&lt;input type=&quot;text&quot; name=&quot;userName&quot;&gt;&lt;br/&gt;
-    密码：&lt;input type=&quot;text&quot; name=&quot;password&quot;&gt;&lt;br/&gt;
-    &lt;input type=&quot;submit&quot; value=&quot;提  交&quot;&gt;
-&lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre><p>丑就丑点儿吧，我们就是来测试一下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-b50a42db8debde97.png" alt=""></p>
-<h4 id="使用-Servlet-原生-API-实现："><a href="#使用-Servlet-原生-API-实现：" class="headerlink" title="使用 Servlet 原生 API 实现："></a>使用 Servlet 原生 API 实现：</h4><p>我们很容易知道，表单会提交到 <code>/param</code> 这个目录，我们先来使用 Servlet 原生的 API 来看看能不能获取到数据：</p>
-<pre><code>@RequestMapping(&quot;/param&quot;)
-public ModelAndView getParam(HttpServletRequest request,
-                         HttpServletResponse response) {
-    String userName = request.getParameter(&quot;userName&quot;);
-    String password = request.getParameter(&quot;password&quot;);
-
-    System.out.println(userName);
-    System.out.println(password);
-    return null;
-}</code></pre><p>测试成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-df21058b7ef71924.png" alt=""></p>
-<h4 id="使用同名匹配规则"><a href="#使用同名匹配规则" class="headerlink" title="使用同名匹配规则"></a>使用同名匹配规则</h4><p>我们可以把方法定义的形参名字设置成和前台传入参数名一样的方法，来获取到数据（同名匹配规则）：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/param"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> ModelAndView <span class="token function">getParam</span><span class="token punctuation">(</span>String userName<span class="token punctuation">,</span>
-                             String password<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>userName<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>测试成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-55a1c296c778e506.png" alt=""></p>
-<ul>
-<li><strong>问题：</strong> 这样又会和前台产生很强的耦合，这是我们不希望的</li>
-<li><strong>解决：</strong> 使用 <code>@RequestParam(&quot;前台参数名&quot;)</code> 来注入：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-a649ad50866a01c5.png" alt=""></p>
-<ul>
-<li><strong><code>@RequestParam</code> 注解细节：</strong><br>该注解有三个变量：<code>value</code>、<code>required</code>、<code>defaultvalue</code></li>
-<li><code>value</code> ：指定 <code>name</code> 属性的名称是什么，<code>value</code> 属性都可以默认不写</li>
-<li><code>required</code> ：是否必须要有该参数，可以设置为【true】或者【false】</li>
-<li><code>defaultvalue</code> ：设置默认值</li>
-</ul>
-<h4 id="使用模型传参"><a href="#使用模型传参" class="headerlink" title="使用模型传参"></a>使用模型传参</h4><ul>
-<li><strong>要求： 前台参数名字必须和模型中的字段名一样</strong></li>
-</ul>
-<p>让我们先来为我们的表单创建一个 User 模型：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> pojo<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
-
-    String userName<span class="token punctuation">;</span>
-    String password<span class="token punctuation">;</span>
-
-    <span class="token comment" spellcheck="true">/* getter and setter */</span>
-<span class="token punctuation">}</span></code></pre>
-<p>然后测试仍然成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-471d26bcb335aee6.png" alt=""></p>
-<h4 id="中文乱码问题"><a href="#中文乱码问题" class="headerlink" title="中文乱码问题"></a>中文乱码问题</h4><ul>
-<li><strong>注意：</strong> 跟 Servlet 中的一样，该方法只对 POST 方法有效（因为是直接处理的 request）</li>
-</ul>
-<p>我们可以通过配置 Spring MVC 字符编码过滤器来完成，在 web.xml 中添加：</p>
-<pre><code>&lt;filter&gt;
-    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.springframework.web.filter.CharacterEncodingFilter&lt;/filter-class&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;encoding&lt;/param-name&gt;
-        &lt;!-- 设置编码格式 --&gt;
-        &lt;param-value&gt;utf-8&lt;/param-value&gt;
-    &lt;/init-param&gt;
-&lt;/filter&gt;
-&lt;filter-mapping&gt;
-    &lt;filter-name&gt;CharacterEncodingFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-&lt;/filter-mapping&gt;</code></pre><hr>
-<h2 id="控制器回显数据"><a href="#控制器回显数据" class="headerlink" title="控制器回显数据"></a>控制器回显数据</h2><p>通过上面，我们知道了怎么接受请求数据，并能解决 POST 乱码的问题，那么我们怎么回显数据呢？为此我们在【page】下创建一个【test2.jsp】：</p>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot; import=&quot;java.util.*&quot; isELIgnored=&quot;false&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;Spring MVC 数据回显&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;回显数据：${message}&lt;/h1&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre><h4 id="使用-Servlet-原生-API-来实现"><a href="#使用-Servlet-原生-API-来实现" class="headerlink" title="使用 Servlet 原生 API 来实现"></a>使用 Servlet 原生 API 来实现</h4><p>我们先来测试一下 Servlet 原生的 API 是否能完成这个任务：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/value"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>HttpServletRequest request<span class="token punctuation">,</span>
-                                  HttpServletResponse response<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    request<span class="token punctuation">.</span><span class="token function">setAttribute</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">,</span><span class="token string">"成功！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"test1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>在浏览器地址栏中输入：<code>localhost/value</code> 测试</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-66d2f24a876306e6.png" alt=""></p>
-<h4 id="使用-Spring-MVC-所提供的-ModelAndView-对象"><a href="#使用-Spring-MVC-所提供的-ModelAndView-对象" class="headerlink" title="使用 Spring MVC 所提供的 ModelAndView 对象"></a>使用 Spring MVC 所提供的 ModelAndView 对象</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-360ce67947be817d.png" alt=""></p>
-<h4 id="使用-Model-对象"><a href="#使用-Model-对象" class="headerlink" title="使用 Model 对象"></a>使用 Model 对象</h4><p>在 Spring MVC 中，我们通常都是使用这样的方式来绑定数据，</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-685dd384904ad28f.png" alt=""></p>
-<ul>
-<li><strong>使用 <code>@ModelAttribute</code> 注解：</strong></li>
-</ul>
-<pre><code>@ModelAttribute
-public void model(Model model) {
-    model.addAttribute(&quot;message&quot;, &quot;注解成功&quot;);
-}
-
-@RequestMapping(&quot;/value&quot;)
-public String handleRequest() {
-    return &quot;test1&quot;;
-}</code></pre><p>这样写就会在访问控制器方法 handleRequest() 时，会首先调用 model() 方法将 <code>message</code> 添加进页面参数中去，在视图中可以直接调用，但是这样写会导致该控制器所有的方法都会首先调用 model() 方法，但同样的也很方便，因为可以加入各种各样的数据。</p>
-<hr>
-<h2 id="客户端跳转"><a href="#客户端跳转" class="headerlink" title="客户端跳转"></a>客户端跳转</h2><p>前面不管是地址 <code>/hello</code> 跳转到 index.jsp 还是 <code>/test</code> 跳转到 test.jsp，这些都是服务端的跳转，也就是 <code>request.getRequestDispatcher(&quot;地址&quot;).forward(request, response);</code></p>
-<p>那我们如何进行客户端跳转呢？我们继续在 HelloController 中编写：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/hello"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> ModelAndView <span class="token function">handleRequest</span><span class="token punctuation">(</span>javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest httpServletRequest<span class="token punctuation">,</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse httpServletResponse<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-    ModelAndView mav <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"index"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    mav<span class="token punctuation">.</span><span class="token function">addObject</span><span class="token punctuation">(</span><span class="token string">"message"</span><span class="token punctuation">,</span> <span class="token string">"Hello Spring MVC"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> mav<span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-
-<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/jump"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> ModelAndView <span class="token function">jump</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    ModelAndView mav <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"redirect:/hello"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> mav<span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<p>我们使用 <code>redirect:/hello</code> 就表示我们要跳转到 <code>/hello</code> 这个路径，我们重启服务器，在地址栏中输入：<code>localhost/jump</code> ，会自动跳转到 <code>/hello</code> 路径下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-390fb571e9f6ff03.png" alt=""></p>
-<p>也可以这样用：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/jump"</span><span class="token punctuation">)</span>
-<span class="token keyword">public</span> String <span class="token function">jump</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">return</span> <span class="token string">"redirect: ./hello"</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<hr>
-<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><p>我们先来回顾一下传统的文件上传和下载：<a href="https://www.jianshu.com/p/e7837435bf4c" target="_blank" rel="noopener">这里</a></p>
-<p>我们再来看一下在 Spring MVC 中如何实现文件的上传和下载</p>
-<ul>
-<li><strong>注意：</strong> 需要先导入 <code>commons-io-1.3.2.jar</code> 和 <code>commons-fileupload-1.2.1.jar</code> 两个包</li>
-</ul>
-<h4 id="第一步：配置上传解析器"><a href="#第一步：配置上传解析器" class="headerlink" title="第一步：配置上传解析器"></a>第一步：配置上传解析器</h4><p>在 dispatcher-servlet.xml 中新增一句：</p>
-<pre><code>&lt;bean id=&quot;multipartResolver&quot; class=&quot;org.springframework.web.multipart.commons.CommonsMultipartResolver&quot;/&gt;</code></pre><p>开启对上传功能的支持</p>
-<h4 id="第二步：编写-JSP"><a href="#第二步：编写-JSP" class="headerlink" title="第二步：编写 JSP"></a>第二步：编写 JSP</h4><p>文件名为 upload.jsp，仍创建在【page】下：</p>
-<pre><code>&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;测试文件上传&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
-    &lt;input type=&quot;file&quot; name=&quot;picture&quot;&gt;
-    &lt;input type=&quot;submit&quot; value=&quot;上 传&quot;&gt;
-&lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre><h4 id="第三步：编写控制器"><a href="#第三步：编写控制器" class="headerlink" title="第三步：编写控制器"></a>第三步：编写控制器</h4><p>在 Package【controller】下新建【UploadController】类：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> controller<span class="token punctuation">;</span>
-
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Controller<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>RequestMapping<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>RequestParam<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>multipart<span class="token punctuation">.</span>MultipartFile<span class="token punctuation">;</span>
-<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ModelAndView<span class="token punctuation">;</span>
-
-<span class="token annotation punctuation">@Controller</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UploadController</span> <span class="token punctuation">{</span>
-
-    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/upload"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">upload</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span><span class="token string">"picture"</span><span class="token punctuation">)</span> MultipartFile picture<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>picture<span class="token punctuation">.</span><span class="token function">getOriginalFilename</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/test2"</span><span class="token punctuation">)</span>
-    <span class="token keyword">public</span> ModelAndView <span class="token function">upload</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ModelAndView</span><span class="token punctuation">(</span><span class="token string">"upload"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第四步：测试"><a href="#第四步：测试" class="headerlink" title="第四步：测试"></a>第四步：测试</h4><p>在浏览器地址栏中输入：<code>localhost/test2</code> ，选择文件点击上传，测试成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-MVC%E3%80%90%E5%85%A5%E9%97%A8%E3%80%91%E5%B0%B1%E8%BF%99%E4%B8%80%E7%AF%87%EF%BC%81/7896890-531c47b14dbc71e5.png" alt=""></p>
-<hr>
-<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><ul>
-<li>《Java EE 互联网轻量级框架整合开发》</li>
-<li>《Spring 实战》</li>
-<li><a href="http://how2j.cn/k/springmvc/springmvc-springmvc/615.html" target="_blank" rel="noopener">How2j Spring MVC 系列教程</a></li>
-<li>全能的百度和万能的大脑</li>
-</ul>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3969,7 +4674,7 @@ public String handleRequest() {
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -4023,7 +4728,7 @@ public String handleRequest() {
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14.71px; color: #949494">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

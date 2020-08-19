@@ -436,6 +436,261 @@
         
           
   <h2 class="title">
+    <a href="/2018/03/21/chu-xue-java-web-3-di-yi-ge-servlet/">
+      初学Java Web(3)——第一个Servlet
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年3月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-0189f15458034df3.png" alt=""></p>
+<blockquote>
+<p>这学期 Java Web 课程的第一节课就简短复习了一下 Java 的一些基础知识，所以觉得 Java 的基础知识还是很重要的，但当我想要去写一篇 Java 回顾的文章的时候发现很难，因为坑实在太多了（一个头，两个大），只能另外找一些时间去写顺便巩固巩固自己的基础。</p>
+</blockquote>
+<h2 id="——【1-什么是-Servlet-】——"><a href="#——【1-什么是-Servlet-】——" class="headerlink" title="——【1. 什么是 Servlet 】——"></a>——【1. 什么是 Servlet 】——</h2><p>学习一个东西就要先去了解它是什么东西。</p>
+<p>Servlet 取自两个单词：Server、Applet （很符合 sun 公司的命名特点）， Java Servlet 的简称，<strong>其实质就是运行在 Web 应用服务器上的 Java 程序，</strong>与普通 Java 程序不同，它是位于 Web 服务器内部的服务器端的 Java 应用程序，可以对 Web 浏览器或其他 HTTP 客户端程序发送的请求进行处理。</p>
+<p>狭义的Servlet是指Java语言实现的一个接口，广义的Servlet是指任何实现了这个Servlet接口的类，一般情况下，人们将Servlet理解为后者。Servlet运行于支持Java的应用服务器中。从原理上讲，Servlet可以响应任何类型的请求，但绝大多数情况下Servlet只用来扩展基于HTTP协议的Web服务器。</p>
+<blockquote>
+<p>实际上，Servlet 就像是一个规范，想象一下我们的 USB 接口，它不仅约束了U盘的大小和形状，同样也约束了电脑的插槽，Servlet 也是如此，它不仅约束了服务器端如何实现规范，也约束着 Java Web 项目的结构，为什么这样说，我们下面再来讲，<strong>编写一个 Servlet 其实就是按照 Servlet 规范编写一个 Java 类。</strong></p>
+</blockquote>
+<h2 id="——【2-Servlet-与-Servlet-容器-】——"><a href="#——【2-Servlet-与-Servlet-容器-】——" class="headerlink" title="——【2. Servlet 与 Servlet 容器 】——"></a>——【2. Servlet 与 Servlet 容器 】——</h2><p>Servlet 对象与普通的 Java 对象不同，它可以处理 Web 浏览器或其他 HTTP 客户端程序发送的 HTTP 请求，但前提是把 Servlet 对象布置到 Servlet 容器中，也就是说，其运行需要 Servlet 容器的支持。</p>
+<p>Servlet 容器也叫做 Servlet 引擎，是 Web 服务器或应用程序服务器的一部分，用于在发送的请求和响应之上提供网络服务，解码基于 MIME 的请求，格式化基于 MIME 的响应。Servlet 没有 main 方法，不能独立运行，它必须被部署到 Servlet 容器中，由容器来实例化和调用 Servlet 的方法（如 doGet() 和 doPost() 方法），Servlet 容器在 Servlet 的生命周期内包容和管理 Servlet 。在 JSP 技术 推出后，管理和运行 Servlet / JSP 的容器也称为 Web 容器。</p>
+<p>有了 Servlet 之后，用户通过单击某个链接或者直接在浏览器的地址栏中输入 URL 来访问 Servlet ，Web 服务器接收到该请求后，并不是将请求直接交给 Servlet ，而是交给 Servlet 容器。Servlet 容器实例化 Servlet ，调用 Servlet 的一个特定方法对请求进行处理， 并产生一个响应。这个响应由 Servlet 容器返回给 Web 服务器，Web 服务器包装这个响应，以 HTTP 响应的形式发送给 Web 浏览器。</p>
+<h4 id="Servlet-容器能提供什么？"><a href="#Servlet-容器能提供什么？" class="headerlink" title="Servlet 容器能提供什么？"></a>Servlet 容器能提供什么？</h4><p>上面我们知道了需要由 Servlet 容器来管理和运行 Servlet ，但是为什么要这样做呢？使用 Servlet 容器的原因有：</p>
+<ol>
+<li><strong>通信支持：</strong>利用容器提供的方法，你能轻松的让 Servlet 与 web 服务器对话，而不用自己建立 serversocket 、监听某个端口、创建流等。容器知道自己与 web 服务器之间的协议，所以你的 Servlet 不用担心 web 服务器（如Apache）和你自己的 web 代码之间的 API ，只需要考虑如何在 Servlet 中实现业务逻辑（如处理一个订单）。 </li>
+<li><strong>生命周期管理：</strong> Servlet 容器控制着 Servlet 的生与死，它负责加载类、实例化和初始化 Servlet ，调用 Servlet 方法，以及使 Servlet 实例被垃圾回收，有了 Servlet 容器，你不需要太多的考虑资源管理。 </li>
+<li><strong>多线程支持：</strong>容器会自动为它所接收的每个 Servlet 请求创建一个新的 java 线程。针对用户的请求，如果 Servlet  已经运行完相应的http服务方法，这个线程就会结束。这并不是说你不需要考虑线程安全性，其实你还会遇到同步问题，不过这样能使你少做很多工作。 </li>
+<li><strong>声明方式实现安全：</strong>利用 Servlet 容器，你可以使用 xml 部署描述文件来配置和修改安全性，而不必将其硬编码写到 Servlet 类代码中。 </li>
+<li><strong>JSP支持：</strong> Servlet容器负责将 jsp 代码翻译为真正的 java 代码。</li>
+</ol>
+<h4 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h4><p>通常情况下，Servlet 容器也就是指 Web 容器，如 Tomcat、Jboss、Resin、Weblogic 等，它们对 Servlet 进行控制。当一个客户端发送 HTTP 请求时，由容器加载 Servlet 对其进行处理并做出响应。在 Web 容器中，Servlet 主要经历 4 个阶段，如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-a26b3e8c2114d5f0.png" alt="Servlet 与容器"></p>
+<p>Servlet 与 Web 容器的关系是非常密切的，在 Web 容器中 Servlet 主要经历了 4 个阶段，这 4 个阶段实质是 Servlet 的生命周期，由容器进行管理。</p>
+<p>（1）在 Web 容器启动或者客户机第一次请求服务时，容器将加载 Servlet 类并将其放入到 Servlet 实例池。</p>
+<p>（2）当 Servlet 实例化后，容器将调用 Servlet 对象的 init() 方法完成 Servlet 的初始化操作，主要是为了让 Servlet 在处理请求之前做一些初始化工作。</p>
+<p>（3）容器通过 Servlet 的 service() 方法处理客户端请求。在 Service() 方法中，Servlet 实例根据不同的 HTTP 请求类型作出不同处理，并在处理之后作出相应的响应。</p>
+<p>（4）在 Web 容器关闭时，容器调用 Servlet 对象的 destroy() 方法对资源进行释放。在调用此方法后，Servlet 对象将被垃圾回收器回收。</p>
+<h2 id="——【3-第一个-Servlet-】——"><a href="#——【3-第一个-Servlet-】——" class="headerlink" title="——【3. 第一个 Servlet 】——"></a>——【3. 第一个 Servlet 】——</h2><h4 id="①-搭建-Java-Web-项目"><a href="#①-搭建-Java-Web-项目" class="headerlink" title="① 搭建 Java Web 项目"></a>① 搭建 Java Web 项目</h4><ol>
+<li><p>创建 一个 Java 项目，并命名为 HelloServlet； <strong>（注意：这是普通的 Java 项目而不是动态 Web 项目）</strong></p>
+</li>
+<li><p>在项目的根目录下创建一个文件夹 webapp，表示 Web 项目的根；</p>
+</li>
+<li><p>在 webapp 中创建 WEB-INF 文件夹；</p>
+</li>
+<li><p>在 WEB-INF 文件夹中创建文件夹：classes,lib；</p>
+</li>
+<li><p>在 WEB-INF 文件中添加 Tomcat 根目录下 conf 文件夹中的 web.xml 文件；（只保留根元素，就像下面这样）</p>
+<pre><code> &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+   xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
+                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
+   version=&quot;3.1&quot;&gt;
+
+ &lt;/web-app&gt;
+</code></pre></li>
+<li><p>把当前项目的 classpath 路径改成 webapp/WEB-INF 下的 classes 中。</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-9d55e8be6d22fd9d.png" alt=""></p>
+<h4 id="②-编写-Servlet"><a href="#②-编写-Servlet" class="headerlink" title="② 编写 Servlet"></a>② 编写 Servlet</h4><ol>
+<li>为该项目增加Servlet的支持.<br>   1.1. 把Tomcat根/lib中servlet-api.jar文件拷贝到项目下WEB-INF下的lib中<br>   1.2. 在项目中选择servlet-api.jar,鼠标右键,build path–&gt;add to build path</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-ec14aa271cc510e8.png" alt=""></p>
+<ol start="2">
+<li>开发Servlet程序:<br>  2.1:定义一个类HelloServlet,并让该类去实现javax.servlet.Servlet接口;<br>  2.2:实现Servlet接口中的init,service,destory等方法.</li>
+</ol>
+<pre><code>import java.io.IOException;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+public class HelloServlet implements Servlet{
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+    }
+    @Override
+    public ServletConfig getServletConfig() {
+        return null;
+    }
+    @Override
+    public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+        System.out.println(&quot;测试一下！&quot;);     // 先在这里写下测试代码
+    }
+    @Override
+    public String getServletInfo() {
+        return null;
+    }
+    @Override
+    public void destroy() {
+    }
+
+}</code></pre><p><strong>注意:若生成方法中的参数是 arg0 或则 arg1 等格式的,原因是还没有关联源代码的问题:</strong> <a href="https://jingyan.baidu.com/article/0202781170ffa61bcc9ce5dd.html" target="_blank" rel="noopener">关联上 tomcat src 文件即可</a></p>
+<h4 id="③-配置-Servlet"><a href="#③-配置-Servlet" class="headerlink" title="③ 配置 Servlet"></a>③ 配置 Servlet</h4><p>上面编写好的 HelloServlet 类仅仅是一个普通的实现类而已，而现在我想要它运行在我自己的 Tomcat 服务器中，所以应该通知 Tomcat 服务器来管理我的 HelloServlet 类，具体的做法如下：</p>
+<ol>
+<li><p>找到项目根下的WEB-INF下的web.xml文件:</p>
+</li>
+<li><p>在根元素web-app中创建一个新的元素节点:servlet</p>
+</li>
+<li><p>在根元素web-app中创建一个新的元素节点:servlet-mapping（Servlet 的映射）</p>
+<pre><code> &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+ &lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
+   xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+   xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee
+                       http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd&quot;
+   version=&quot;3.1&quot;&gt;
+
+</code></pre></li>
+</ol>
+<pre><code>    &lt;servlet&gt;
+        &lt;servlet-name&gt;HelloServlet&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;lt.HelloServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;HelloServlet&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/hello&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+&lt;/web-app&gt;
+```
+&gt; web.xml 提供路径和servlet映射关系，这意思是把/hello这个路径，映射到 HelloServlet 这个类上，需要注意的是：**&lt; servlet&gt; 标签下的 &lt; servlet-name&gt;与 &lt; servlet-mapping&gt; 标签下的 &lt; servlet-name&gt; 必须一样**（因为标签被编辑器识别故&lt;后加了一个空格）</code></pre><ol start="4">
+<li><p>配置 Tomcat 服务器：</p>
+<p> 4.1. 修改默认端口为 80 端口：</p>
+<pre><code> 首先进入到 Tomcat 服务器的根路径下找到 conf 文件夹下的 server.xml 文件，默认是在第 70 行，找到 Connector 元素的 port 属性，修改为 80 ，重启 Tomcat 即可。
+ ![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web（3）——第一个Servlet/7896890-7812541ce51b78e5.png)</code></pre><blockquote>
+<p>Tomcat 的默认端口为8080，而 HTTP 协议的默认端口是 80，配置 80 端口的好处在于，我们平时输入的类似于 <a href="http://baidu.com" target="_blank" rel="noopener">http://baidu.com</a> 其实是默认省略了写 80端口的，它其实等价于：<a href="http://baidu.com:80/" target="_blank" rel="noopener">http://baidu.com:80/</a> ，所以以后我们就不用再写冒号直接输入 locahost 就能进入到 Tomcat 的配置页面了。</p>
+</blockquote>
+<p>  4.2 部署 Java 项目（告诉 Tomcat 服务器来管理我们的项目）：</p>
+<pre><code> 这里直接引用 how2j.cn 的教程啦：
+ ![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web（3）——第一个Servlet/7896890-9b8a876c38379a5a.png)</code></pre></li>
+</ol>
+<p>所以加上<code>&lt;Context path=&quot;&quot; docBase=&quot;F:\\Projects\\JavaProject\\HelloServlet\\webapp&quot; /&gt;</code>这一句重启 Tomcat 服务器</p>
+<p>在浏览器中输入 localhost/hello，回车，即可在 Tomcat 服务器上看到相关信息，至此第一个 Servlet 就编写成功了</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-d0df0d5429c132d3.png" alt=""></p>
+<h2 id="——【4-Servlet-请求过程】——"><a href="#——【4-Servlet-请求过程】——" class="headerlink" title="——【4. Servlet 请求过程】——"></a>——【4. Servlet 请求过程】——</h2><p>学习 Servlet 技术，就需要有一个 Servlet 运行环境，也就是需要有一个 Servlet 容器，如这里使用的<strong>【Tomcat】</strong>。</p>
+<p>Tomcat 服务器接受客户请求并做出响应的过程如下（以上面搭建的项目为例）：</p>
+<p>① 打开浏览器发起请求：<a href="http://localhost:80/hello/index.html" target="_blank" rel="noopener">http://localhost:80/hello/index.html</a> （假设有一个 index.html 文件）</p>
+<p>② 服务器接收到请求后处理请求：</p>
+<blockquote>
+<p>htpp：所使用的协议<br>localhost：ip地址，确定访问的主机<br>80：端口号<br>hello：上下文路径，确定访问项目的根路径<br>index.html：确定访问项目中的具体哪一个资源</p>
+</blockquote>
+<p>③ 根据 hello 去 tomcat/conf/server.xml 文件中找到相关配置文件，根据上下文路径找到项目的根路径：<br><code>&lt;Context path=&quot;&quot; docBase=&quot;F:\\Projects\\JavaProject\\HelloServlet\\webapp&quot; /&gt;</code><br>如果找不到根路径（因为这里默认上下文路径为空），返回 404</p>
+<p>④ 根据资源名称去项目中的 web.xml 文件中找到相关的配置，找到配置中的<code>&lt;url-pattern&gt;</code><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E7%AC%AC%E4%B8%80%E4%B8%AAServlet/7896890-bc647a56c9f6423f.png" alt=""></p>
+<p>如果找不到 hello 的资源名称，则返回 404</p>
+<p>⑤ 根据资源名称找到 Servlet 的全限定名，如果找不到则在启动服务器的时候报错<br><code>java.lang.IllegalArgumentException: Servlet mapping specifies an unknown servlet name HelloServlet</code></p>
+<p>⑥ 根据找到的全限定名创建对象，在创建对象之前需要判断是否是第一次请求，使用 Tomcat 中使用 Servlet 实例缓存池来实现，若是第一次则调用对象的 init 方法。</p>
+<p>⑦ 创建 req,resp 对象，执行 service 方法；</p>
+<p>⑧ 使用 resp 对象给浏览器响应信息。</p>
+<blockquote>
+<p>发现一边学一边写起来太麻烦了，一方面是因为自己的水平，另一方面是觉得这样太费时间了，也要开始找实习了，所以时间有些宝贵，可能这不会作为一个连续的系列，反而是一些学习的分享和感悟，emmm….事实上，Servlet也还有好多东西，包括最新支持注解方式配置等….<br>参考资料：<br>《Java Web程序设计 慕课版——明日科技》<br>how2j.cn<br><a href="http://blog.csdn.net/lz233333/article/details/68065749" target="_blank" rel="noopener">理解Servlet和Servlet容器、Web服务器等概念</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/03/14/chu-xue-java-web-2-da-jian-java-web-kai-fa-huan-jing/">
       初学Java Web(2)——搭建Java Web开发环境
     </a>
@@ -1663,248 +1918,6 @@ File Parent<span class="token operator">:</span>c<span class="token operator">:<
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/11/19/bian-xie-gao-zhi-liang-dai-ma-xue-xi-bi-ji-3/">
-      《编写高质量代码》学习笔记(3)
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Java%E8%BF%9B%E9%98%B6/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>学习笔记/Java进阶</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年11月19日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="建议125：优先选择线程池"><a href="#建议125：优先选择线程池" class="headerlink" title="建议125：优先选择线程池"></a>建议125：优先选择线程池</h2><p>在Java1.5之前，实现多线程比较麻烦，需要自己启动线程，并关注同步资源，防止出现线程死锁等问题，在1.5版本之后引入了并行计算框架，大大简化了多线程开发。我们知道一个线程有五个状态：新建状态(NEW)、可运行状态(Runnable，也叫作运行状态)、阻塞状态(Blocked)、等待状态(Waiting)、结束状态(Terminated)，线程的状态只能由新建转变为了运行状态后才能被阻塞或等待，最后终结，不可能产生本末倒置的情况，比如把一个结束状态的线程转变为新建状态，则会出现异常，例如如下代码会抛出异常：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> InterruptedException <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 创建一个线程，新建状态</span>
-        Thread t <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token annotation punctuation">@Override</span>
-            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"线程正在运行"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 运行状态</span>
-        t<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 是否是运行状态，若不是则等待10毫秒</span>
-        <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>t<span class="token punctuation">.</span><span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span>State<span class="token punctuation">.</span>TERMINATED<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            TimeUnit<span class="token punctuation">.</span>MICROSECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token comment" spellcheck="true">// 直接由结束转变为云心态</span>
-        t<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<p>此段程序运行时会报java.lang.IllegalThreadStateException异常，原因就是不能从结束状态直接转变为运行状态，我们知道一个线程的运行时间分为3部分：T1为线程启动时间，T2为线程的运行时间，T3为线程销毁时间，如果一个线程不能被重复使用，每次创建一个线程都需要经过启动、运行、销毁时间，这势必增大系统的响应时间，有没有更好的办法降低线程的运行时间呢？</p>
-<p>T2是无法避免的，只有通过优化代码来实现降低运行时间。T1和T2都可以通过线程池(Thread Pool)来缩减时间，比如在容器(或系统)启动时，创建足够多的线程，当容器(或系统)需要时直接从线程池中获得线程，运算出结果，再把线程返回到线程池中___ExecutorService就是实现了线程池的执行器，我们来看一个示例代码：　</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> InterruptedException <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">// 2个线程的线程池</span>
-        ExecutorService es <span class="token operator">=</span> Executors<span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 多次执行线程体</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">4</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            es<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token annotation punctuation">@Override</span>
-                <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token comment" spellcheck="true">// 关闭执行器</span>
-        es<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<p>此段代码首先创建了一个包含两个线程的线程池，然后在线程池中多次运行线程体，输出运行时的线程名称，结果如下：<br>**　　　　　　　　pool-1-thread-1<br>　　　　　　　　pool-1-thread-2<br>　　　　　　　　pool-1-thread-1<br>　　　　　　　　pool-1-thread-2**</p>
-<p>本次代码执行了4遍线程体，按照我们之前阐述的” 一个线程不可能从结束状态转变为可运行状态 “，那为什么此处的2个线程可以反复使用呢？这就是我们要搞清楚的重点。</p>
-<p>线程池涉及以下几个名词：</p>
-<ul>
-<li><strong>工作线程(Worker)：</strong>线程池中的线程，只有两个状态：可运行状态和等待状态，没有任务时它们处于等待状态，运行时它们循环的执行任务。</li>
-<li><strong>任务接口(Task)：</strong>这是每个任务必须实现的接口，以供工作线程调度器调度，它主要规定了任务的入口、任务执行完的场景处理，任务的执行状态等。这里有两种类型的任务：具有返回值(异常)的Callable接口任务和无返回值并兼容旧版本的Runnable接口任务。</li>
-<li><strong>任务对列(Work Quene)：</strong>也叫作工作队列，用于存放等待处理的任务，一般是BlockingQuene的实现类，用来实现任务的排队处理。</li>
-</ul>
-<p>我们首先从线程池的创建说起，Executors.newFixedThreadPool(2)表示创建一个具有两个线程的线程池，源代码如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Executors</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">//生成一个最大为nThreads的线程池执行器</span>
-  <span class="token keyword">public</span> <span class="token keyword">static</span> ExecutorService <span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token keyword">int</span> nThreads<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>nThreads<span class="token punctuation">,</span> nThreads<span class="token punctuation">,</span>
-                                      0L<span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">,</span>
-                                      <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token operator">&lt;</span>Runnable<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-<span class="token punctuation">}</span></code></pre>
-<p>这里使用了LinkedBlockingQueue作为队列任务管理器，所有等待处理的任务都会放在该对列中，需要注意的是，此队列是一个阻塞式的单端队列。线程池建立好了，那就需要线程在其中运行了，线程池中的线程是在submit第一次提交任务时建立的，代码如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> Future<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">submit</span><span class="token punctuation">(</span>Runnable task<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">//检查任务是否为null</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>task <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">//把Runnable任务包装成具有返回值的任务对象，不过此时并没有执行，只是包装</span>
-        RunnableFuture<span class="token operator">&lt;</span>Object<span class="token operator">></span> ftask <span class="token operator">=</span> <span class="token function">newTaskFor</span><span class="token punctuation">(</span>task<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">//执行此任务</span>
-        <span class="token function">execute</span><span class="token punctuation">(</span>ftask<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">//返回任务预期执行结果</span>
-        <span class="token keyword">return</span> ftask<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<p>此处的代码关键是execute方法，它实现了三个职责。</p>
-<ul>
-<li>创建足够多的工作线程数，数量不超过最大线程数量，并保持线程处于运行或等待状态。</li>
-<li>把等待处理的任务放到任务队列中</li>
-<li>从任务队列中取出任务来执行</li>
-</ul>
-<p>其中此处的关键是工作线程的创建，它也是通过new Thread方式创建的一个线程，只是它创建的并不是我们的任务线程(虽然我们的任务实现了Runnable接口，但它只是起了一个标志性的作用)，而是经过包装的Worker线程，代码如下：　　</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">Worker</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
-<span class="token comment" spellcheck="true">// 运行一次任务</span>
-    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">runTask</span><span class="token punctuation">(</span>Runnable task<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">/* 这里的task才是我们自定义实现Runnable接口的任务 */</span>
-        task<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">/* 该方法其它代码略 */</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 工作线程也是线程，必须实现run方法</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token keyword">try</span> <span class="token punctuation">{</span>
-            Runnable task <span class="token operator">=</span> firstTask<span class="token punctuation">;</span>
-            firstTask <span class="token operator">=</span> null<span class="token punctuation">;</span>
-            <span class="token keyword">while</span> <span class="token punctuation">(</span>task <span class="token operator">!=</span> null <span class="token operator">||</span> <span class="token punctuation">(</span>task <span class="token operator">=</span> <span class="token function">getTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                <span class="token function">runTask</span><span class="token punctuation">(</span>task<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                task <span class="token operator">=</span> null<span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
-            <span class="token function">workerDone</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 任务队列中获得任务</span>
-    Runnable <span class="token function">getTask</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token comment" spellcheck="true">/* 其它代码略 */</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">return</span> r <span class="token operator">=</span> workQueue<span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>此处为示意代码，删除了大量的判断条件和锁资源。execute方法是通过Worker类启动的一个工作线程，执行的是我们的第一个任务，然后改线程通过getTask方法从任务队列中获取任务，之后再继续执行，但问题是任务队列是一个BlockingQuene，是阻塞式的，也就是说如果该队列的元素为0，则保持等待状态，直到有任务进入为止，我们来看LinkedBlockingQuene的take方法，代码如下：　　</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> E <span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> InterruptedException <span class="token punctuation">{</span>
-        E x<span class="token punctuation">;</span>
-        <span class="token keyword">int</span> c <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
-        <span class="token keyword">final</span> AtomicInteger count <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>count<span class="token punctuation">;</span>
-        <span class="token keyword">final</span> ReentrantLock takeLock <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>takeLock<span class="token punctuation">;</span>
-        takeLock<span class="token punctuation">.</span><span class="token function">lockInterruptibly</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">try</span> <span class="token punctuation">{</span>
-            <span class="token keyword">try</span> <span class="token punctuation">{</span>
-                <span class="token comment" spellcheck="true">// 如果队列中的元素为0，则等待</span>
-                <span class="token keyword">while</span> <span class="token punctuation">(</span>count<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
-                    notEmpty<span class="token punctuation">.</span><span class="token function">await</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> ie<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                notEmpty<span class="token punctuation">.</span><span class="token function">signal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// propagate to a non-interrupted thread</span>
-                <span class="token keyword">throw</span> ie<span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-            <span class="token comment" spellcheck="true">// 等待状态结束，弹出头元素</span>
-            x <span class="token operator">=</span> <span class="token function">extract</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            c <span class="token operator">=</span> count<span class="token punctuation">.</span><span class="token function">getAndDecrement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token comment" spellcheck="true">// 如果队列数量还多于一个，唤醒其它线程</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">></span> <span class="token number">1</span><span class="token punctuation">)</span>
-                notEmpty<span class="token punctuation">.</span><span class="token function">signal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
-            takeLock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> capacity<span class="token punctuation">)</span>
-            <span class="token function">signalNotFull</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token comment" spellcheck="true">// 返回头元素</span>
-        <span class="token keyword">return</span> x<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span></code></pre>
-<p>分析到这里，我们就明白了线程池的创建过程：<strong>创建一个阻塞队列以容纳任务，在第一次执行任务时创建做够多的线程(不超过许可线程数)，并处理任务，之后每个工作线程自行从任务对列中获得任务，直到任务队列中的任务数量为0为止，此时，线程将处于等待状态，一旦有任务再加入到队列中，即召唤醒工作线程进行处理，实现线程的可复用性。</strong></p>
-<p><strong>使用线程池减少的是线程的创建和销毁时间，</strong>这对于多线程应用来说非常有帮助，比如我们常用的Servlet容器，每次请求处理的都是一个线程，如果不采用线程池技术，每次请求都会重新创建一个新的线程，这会导致系统的性能符合加大，响应效率下降，降低了系统的友好性。</p>
-<blockquote>
-<p>省略了很多东西，因为有一些东西现在对于自己来说还不是那么实用，后边还有几个章节的内容也没有整理，是因为感觉是一些更加广泛的东西。有一些东西仍然很有针对性，但是在这里就不给出了。</p>
-</blockquote>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2257,7 +2270,7 @@ File Parent<span class="token operator">:</span>c<span class="token operator">:<
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -2311,7 +2324,7 @@ File Parent<span class="token operator">:</span>c<span class="token operator">:<
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14px; color: #999">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14.71px; color: #949494">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 
