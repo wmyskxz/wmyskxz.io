@@ -436,6 +436,423 @@
         
           
   <h2 class="title">
+    <a href="/2019/01/05/spring-data-jpa-chang-xian-kuai-su-da-jian-crud-fen-ye-hou-tai-shi-li/">
+      Spring-Data-JPA尝鲜：快速搭建CRUD+分页后台实例
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E9%A1%B9%E7%9B%AE/Spring-Boot/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/项目/Spring Boot</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2019年1月5日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-abaf65a182488d22.png" alt=""></p>
+<blockquote>
+<p><strong>前言：</strong>由于之前没有接触过Hibernate框架，但是最近看一些博客深深被它的<em>“效率”</em>所吸引，所以这就来跟大家一起就着一个简单的例子来尝尝Spring全家桶里自带的JPA的鲜</p>
+</blockquote>
+<h1 id="Spring-DATA-JPA-简介"><a href="#Spring-DATA-JPA-简介" class="headerlink" title="Spring-DATA-JPA 简介"></a>Spring-DATA-JPA 简介</h1><p>JPA(Java Persistence API)是Sun官方提出的Java持久化规范。它为Java开发人员提供了一种对象/关联映射工具来管理Java应用中的关系数据。他的出现主要是为了简化现有的持久化开发工作和整合ORM技术，结束现在Hibernate，TopLink，JDO等ORM框架各自为营的局面。值得注意的是，JPA是在充分吸收了现有Hibernate，TopLink，JDO等ORM框架的基础上发展而来的，具有易于使用，伸缩性强等优点。从目前的开发社区的反应上看，JPA受到了极大的支持和赞扬，其中就包括了Spring与EJB3.0的开发团队。</p>
+<blockquote>
+<p><strong>注意：</strong>JPA是一套规范，不是一套产品，那么像Hibernate,TopLink,JDO他们是一套产品，如果说这些产品实现了这个JPA规范，那么我们就可以叫他们为JPA的实现产品。</p>
+</blockquote>
+<p>Spring Data JPA 是 Spring 基于 ORM 框架、JPA 规范的基础上封装的一套JPA应用框架，可使开发者用极简的代码即可实现对数据的访问和操作。它提供了包括增删改查等在内的常用功能，且易于扩展！学习并使用 Spring Data JPA 可以极大提高开发效率！（<em>spring data jpa让我们解脱了DAO层的操作，基本上所有CRUD都可以依赖于它来实现</em>）</p>
+<blockquote>
+<p>摘自：<a href="http://www.ityouknow.com/springboot/2016/08/20/spring-boo-jpa.html" target="_blank" rel="noopener">springboot(五)：spring data jpa的使用——纯洁的微笑</a></p>
+</blockquote>
+<h2 id="Hibernate-和-MyBatis-简单对比"><a href="#Hibernate-和-MyBatis-简单对比" class="headerlink" title="Hibernate 和 MyBatis 简单对比"></a>Hibernate 和 MyBatis 简单对比</h2><p>由于JPA底层干活的仍然是Hibernate框架，而我们之前学习的只有MyBatis相关的东西，所以在尝鲜之前还是有必要简单了解一下两者的区别：</p>
+<p><strong>Hibernate的优势：</strong></p>
+<ul>
+<li>Hibernate的DAO层开发比MyBatis简单，Mybatis需要维护SQL和结果映射。</li>
+<li>Hibernate对对象的维护和缓存要比MyBatis好，对增删改查的对象的维护要方便。</li>
+<li>Hibernate数据库移植性很好，MyBatis的数据库移植性不好，不同的数据库需要写不同SQL。</li>
+<li>Hibernate有更好的二级缓存机制，可以使用第三方缓存。MyBatis本身提供的缓存机制不佳。</li>
+</ul>
+<p><strong>MyBatis的优势：</strong></p>
+<ul>
+<li>MyBatis可以进行更为细致的SQL优化，可以减少查询字段。</li>
+<li>MyBatis容易掌握，而Hibernate门槛较高。</li>
+</ul>
+<p><strong>简单总结：</strong></p>
+<ul>
+<li><strong>MyBatis：</strong>小巧、方便、高效、简单、直接、半自动化</li>
+<li><strong>Hibernate：</strong>强大、方便、高效、复杂、间接、全自动化</li>
+</ul>
+<blockquote>
+<p>引用自：<a href="https://blog.csdn.net/jiuqiyuliang/article/details/45378065" target="_blank" rel="noopener">【持久化框架】Mybatis与Hibernate的详细对比——高亮</a></p>
+</blockquote>
+<h1 id="CRUD-分页后台实例"><a href="#CRUD-分页后台实例" class="headerlink" title="CRUD + 分页后台实例"></a>CRUD + 分页后台实例</h1><p>下面我们来快速搭建一个使用Spring-DATA-JPA的CRUD+分页后台实例，并且我们会直接使用到RESTful API（不熟悉的同学<a href="">戳这里</a>）</p>
+<h2 id="第一步：新建SpringBoot项目"><a href="#第一步：新建SpringBoot项目" class="headerlink" title="第一步：新建SpringBoot项目"></a>第一步：新建SpringBoot项目</h2><p>打开IDEA新建一个SpringBoot项目，不熟悉SpringBoot的同学请右转：<a href="https://www.jianshu.com/p/70963ab49f8c" target="_blank" rel="noopener">【传送门】</a>，然后在pom.xml中添加以下依赖：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- mysql--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>mysql<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>mysql-connector-java<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>5.1.21<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token comment" spellcheck="true">&lt;!-- jpa--></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-data-jpa<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<p>然后把application.properties弄成这个样子：</p>
+<pre class=" language-properties"><code class="language-properties"><span class="token comment" spellcheck="true">#数据库</span>
+<span class="token attr-name">spring.datasource.url</span><span class="token punctuation">=</span><span class="token attr-value">jdbc:mysql://127.0.0.1:3306/testdb?useUnicode=true&amp;characterEncoding=utf-8</span>
+<span class="token attr-name">spring.datasource.username</span><span class="token punctuation">=</span><span class="token attr-value">root</span>
+<span class="token attr-name">spring.datasource.password</span><span class="token punctuation">=</span><span class="token attr-value">123456</span>
+<span class="token attr-name">spring.datasource.driver-class-name</span><span class="token punctuation">=</span><span class="token attr-value">com.mysql.jdbc.Driver</span>
+<span class="token attr-name">spring.jpa.properties.hibernate.hbm2ddl.auto</span><span class="token punctuation">=</span><span class="token attr-value">update</span>
+<span class="token comment" spellcheck="true">#显示SQL语句</span>
+<span class="token attr-name">spring.jpa.show-sql</span><span class="token punctuation">=</span><span class="token attr-value">true</span>
+<span class="token comment" spellcheck="true">#不加下面这句则默认创建MyISAM引擎的数据库</span>
+<span class="token attr-name">spring.jpa.database-platform</span><span class="token punctuation">=</span><span class="token attr-value">org.hibernate.dialect.MySQL5InnoDBDialect</span>
+<span class="token comment" spellcheck="true">#自己重写的配置类，默认使用utf8编码</span>
+<span class="token attr-name">spring.jpa.properties.hibernate.dialect</span><span class="token punctuation">=</span><span class="token attr-value">com.wmyskxz.demo.config.MySQLConfig</span></code></pre>
+<p><code>spring.jpa.properties.hibernate.hbm2ddl.auto</code>是hibernate的配置属性，其主要作用是：自动创建、更新、验证数据库表结构。该参数的几种配置如下：</p>
+<ul>
+<li><strong>create：</strong>每次加载hibernate时都会删除上一次的生成的表，然后根据你的model类再重新来生成新表，哪怕两次没有任何改变也要这样执行，这就是导致数据库表数据丢失的一个重要原因。</li>
+<li><strong>create-drop：</strong>每次加载hibernate时根据model类生成表，但是sessionFactory一关闭,表就自动删除。</li>
+<li><strong>update：</strong>最常用的属性，第一次加载hibernate时根据model类会自动建立起表的结构（前提是先建立好数据库），以后加载hibernate时根据model类自动更新表结构，即使表结构改变了但表中的行仍然存在不会删除以前的行。要注意的是当部署到服务器后，表结构是不会被马上建立起来的，是要等应用第一次运行起来后才会。</li>
+<li><strong>validate：</strong>每次加载hibernate时，验证创建数据库表结构，只会和数据库中的表进行比较，不会创建新表，但是会插入新值。</li>
+</ul>
+<p>然后新建一个【config】包，创建一个【MySQLConfig】类（上面的<code>spring.jpa.properties.hibernate.dialect</code>属性就要配置这里的类全路径）：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>config<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>hibernate<span class="token punctuation">.</span>dialect<span class="token punctuation">.</span>MySQL5InnoDBDialect<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MySQLConfig</span> <span class="token keyword">extends</span> <span class="token class-name">MySQL5InnoDBDialect</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">getTableTypeString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"ENGINE=InnoDB DEFAULT CHARSET=utf8"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="第二步：创建好需要的数据库"><a href="#第二步：创建好需要的数据库" class="headerlink" title="第二步：创建好需要的数据库"></a>第二步：创建好需要的数据库</h2><p>打开SQL服务，建表语句也很简单啦：</p>
+<pre class=" language-SQL"><code class="language-SQL">create database testdb;</code></pre>
+<h2 id="第三步：创建实体类"><a href="#第三步：创建实体类" class="headerlink" title="第三步：创建实体类"></a>第三步：创建实体类</h2><p>实体类映射的实际上是数据库表的结构，在适当的包目录下（例如【entity】）下创建好实体类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>entity<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>persistence<span class="token punctuation">.</span>Column<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>persistence<span class="token punctuation">.</span>Entity<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>persistence<span class="token punctuation">.</span>GeneratedValue<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>persistence<span class="token punctuation">.</span>Id<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Entity</span> <span class="token comment" spellcheck="true">// 表明这是个实体类</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Id</span> <span class="token comment" spellcheck="true">// 表明这个属性是主键</span>
+    <span class="token annotation punctuation">@GeneratedValue</span> <span class="token comment" spellcheck="true">// 自增长</span>
+    <span class="token keyword">private</span> <span class="token keyword">long</span> id<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>nullable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">,</span> unique <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>    <span class="token comment" spellcheck="true">// 不允许为空，属性唯一</span>
+    <span class="token keyword">private</span> String username<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Column</span><span class="token punctuation">(</span>nullable <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span>   <span class="token comment" spellcheck="true">// 不允许为空</span>
+    <span class="token keyword">private</span> String password<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// getter and setter</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="第四步：DAO层"><a href="#第四步：DAO层" class="headerlink" title="第四步：DAO层"></a>第四步：DAO层</h2><p>新建一个【repository】包，然后新建一个【UserRepository】接口，并继承JpaRepository类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>repository<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>entity<span class="token punctuation">.</span>User<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>jpa<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>JpaRepository<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">UserRepository</span> <span class="token keyword">extends</span> <span class="token class-name">JpaRepository</span><span class="token operator">&lt;</span>User<span class="token punctuation">,</span> Long<span class="token operator">></span> <span class="token punctuation">{</span>
+<span class="token punctuation">}</span></code></pre>
+<p>继承JpaRepository需要传入两个参数，一个是实体类User一个是主键的类型Long，而凡是继承了JpaRepository类的就会自动实现很多内置的方法，包括增删改查，以及使用默认支持的Pageable对象来进行分页，默认的方法大致如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">JpaRepository</span><span class="token operator">&lt;</span>T<span class="token punctuation">,</span> ID<span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">PagingAndSortingRepository</span><span class="token operator">&lt;</span>T<span class="token punctuation">,</span> ID<span class="token operator">></span><span class="token punctuation">,</span> QueryByExampleExecutor<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">findAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">findAll</span><span class="token punctuation">(</span>Sort var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">findAllById</span><span class="token punctuation">(</span>Iterable<span class="token operator">&lt;</span>ID<span class="token operator">></span> var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>S <span class="token keyword">extends</span> <span class="token class-name">T</span><span class="token operator">></span> List<span class="token operator">&lt;</span>S<span class="token operator">></span> <span class="token function">saveAll</span><span class="token punctuation">(</span>Iterable<span class="token operator">&lt;</span>S<span class="token operator">></span> var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">flush</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>S <span class="token keyword">extends</span> <span class="token class-name">T</span><span class="token operator">></span> S <span class="token function">saveAndFlush</span><span class="token punctuation">(</span>S var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">deleteInBatch</span><span class="token punctuation">(</span>Iterable<span class="token operator">&lt;</span>T<span class="token operator">></span> var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">void</span> <span class="token function">deleteAllInBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    T <span class="token function">getOne</span><span class="token punctuation">(</span>ID var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>S <span class="token keyword">extends</span> <span class="token class-name">T</span><span class="token operator">></span> List<span class="token operator">&lt;</span>S<span class="token operator">></span> <span class="token function">findAll</span><span class="token punctuation">(</span>Example<span class="token operator">&lt;</span>S<span class="token operator">></span> var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">&lt;</span>S <span class="token keyword">extends</span> <span class="token class-name">T</span><span class="token operator">></span> List<span class="token operator">&lt;</span>S<span class="token operator">></span> <span class="token function">findAll</span><span class="token punctuation">(</span>Example<span class="token operator">&lt;</span>S<span class="token operator">></span> var1<span class="token punctuation">,</span> Sort var2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="第五步：Controller层"><a href="#第五步：Controller层" class="headerlink" title="第五步：Controller层"></a>第五步：Controller层</h2><p>新建【controller】包，新建一个【UserController】类，编写简单的增删改查代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>controoler<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>entity<span class="token punctuation">.</span>User<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>repository<span class="token punctuation">.</span>UserRepository<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Autowired<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>domain<span class="token punctuation">.</span>PageRequest<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>data<span class="token punctuation">.</span>domain<span class="token punctuation">.</span>Sort<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>web<span class="token punctuation">.</span>bind<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Optional<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@RestController</span> <span class="token comment" spellcheck="true">// 表明这是一个Controller并返回JSON格式</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserController</span> <span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@Autowired</span>
+    <span class="token keyword">private</span> UserRepository userRepository<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/getOne"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> Optional<span class="token operator">&lt;</span>User<span class="token operator">></span> <span class="token function">getOneUserById</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span> <span class="token keyword">long</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> userRepository<span class="token punctuation">.</span><span class="token function">findById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/all"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> Iterable<span class="token operator">&lt;</span>User<span class="token operator">></span> <span class="token function">getAllUsers</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"page"</span><span class="token punctuation">,</span> defaultValue <span class="token operator">=</span> <span class="token string">"0"</span><span class="token punctuation">)</span> <span class="token keyword">int</span> page<span class="token punctuation">,</span>
+                                      <span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"size"</span><span class="token punctuation">,</span> defaultValue <span class="token operator">=</span> <span class="token string">"5"</span><span class="token punctuation">)</span> <span class="token keyword">int</span> size<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        page <span class="token operator">=</span> page <span class="token operator">&lt;</span> <span class="token number">0</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> page<span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 如果page为负数则修改为0，防止在首页点击上一页发生错误</span>
+        Sort sort <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sort</span><span class="token punctuation">(</span>Sort<span class="token punctuation">.</span>Direction<span class="token punctuation">.</span>DESC<span class="token punctuation">,</span> <span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 按id倒叙排列</span>
+        <span class="token keyword">return</span> userRepository<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PageRequest</span><span class="token punctuation">(</span>page<span class="token punctuation">,</span> size<span class="token punctuation">,</span> sort<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@PostMapping</span><span class="token punctuation">(</span><span class="token string">"/add"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">addUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span> String username<span class="token punctuation">,</span>
+                          <span class="token annotation punctuation">@RequestParam</span> String password<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        User user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setUsername</span><span class="token punctuation">(</span>username<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        user<span class="token punctuation">.</span><span class="token function">setPassword</span><span class="token punctuation">(</span>password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        userRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">// 注意这里是save</span>
+        <span class="token keyword">return</span> <span class="token string">"Saved"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@DeleteMapping</span><span class="token punctuation">(</span><span class="token string">"/delete"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">deleteUserById</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestParam</span> <span class="token keyword">long</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        userRepository<span class="token punctuation">.</span><span class="token function">deleteById</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"Deleted"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@PutMapping</span><span class="token punctuation">(</span><span class="token string">"/update"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">updateUser</span><span class="token punctuation">(</span>User user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">//        User user = new User();</span>
+<span class="token comment" spellcheck="true">//        user.setId(id);</span>
+<span class="token comment" spellcheck="true">//        user.setUsername(username);</span>
+<span class="token comment" spellcheck="true">//        user.setPassword(password);</span>
+        userRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"Updated"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>上面就直接使用<code>@Autowired</code>自动引入了继承了JpaRepository的UserRepository接口，我们使用它默认的方法已经足够完成我们的基础功能了，值得一提的是我们的<code>getAllUsers(...)</code>方法，它往<code>findAll()</code>方法里传入了一个Pageable对象，这是Spring Data库中定义的一个接口，是所有分页相关信息的一个抽象，通过该接口，我们可以得到和分页相关的所有信息（例如<code>pageNumber</code>、<code>pageSize</code>等），这样Jpa就能够通过Pageable参数来得到一个带分页信息的Sql语句。</p>
+<p>当然上面我们是通过自己创建了一个Pageable对象，Spring也支持直接获取Pageable对象，可以把上面的<code>getAllUsers(...)</code>方法改写成下面这样：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/all"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> Iterable<span class="token operator">&lt;</span>User<span class="token operator">></span> <span class="token function">getAllUsers</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PageableDefault</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">,</span> sort <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"id"</span><span class="token punctuation">}</span><span class="token punctuation">,</span> direction <span class="token operator">=</span> Sort<span class="token punctuation">.</span>Direction<span class="token punctuation">.</span>DESC<span class="token punctuation">)</span> 
+                                              Pageable pageable<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> userRepository<span class="token punctuation">.</span><span class="token function">findAll</span><span class="token punctuation">(</span>pageable<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>默认从第0页开始，也可以自己传入一个page参数，跟上面的是一样的。</p>
+<h2 id="第六步：运行项目"><a href="#第六步：运行项目" class="headerlink" title="第六步：运行项目"></a>第六步：运行项目</h2><p>上面我们就快速搭建起来了一个基于Spring Boot和JPA的REST风格的后台增删改查实例，我们把项目跑起来，可以看到数据库自动创建了一些表：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-79e9330ba3e65578.png" alt=""></p>
+<p>JPA帮我们创建的user表的创建SQL如下：</p>
+<pre class=" language-SQL"><code class="language-SQL">CREATE TABLE `user` (
+  `id` bigint(20) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;</code></pre>
+<h3 id="使用REST测试工具测试"><a href="#使用REST测试工具测试" class="headerlink" title="使用REST测试工具测试"></a>使用REST测试工具测试</h3><p>完全符合我们的要求，然后我们使用一些REST的测试工具，来测试上面的功能是否都能正确运行，比如我这里使用的【Restlet Client】，在Chrome商店就可以下载到。</p>
+<h4 id="all地址测试："><a href="#all地址测试：" class="headerlink" title="/all地址测试："></a><code>/all</code>地址测试：</h4><p>首先先来测试一下<code>http://localhost:8080/all</code>地址，由于现在数据库还是空的，所以可以看到返回如下：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+    "content": [
+    ],
+    "pageable": {
+        "sort": {
+            "sorted": true,
+            "unsorted": false,
+            "empty": false
+        },
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 5,
+        "unpaged": false,
+        "paged": true
+    },
+    "totalElements": 0,
+    "last": true,
+    "totalPages": 0,
+    "number": 0,
+    "size": 5,
+    "sort": {
+        "sorted": true,
+        "unsorted": false,
+        "empty": false
+    },
+    "numberOfElements": 0,
+    "first": true,
+    "empty": true
+}</code></pre>
+<h4 id="添加用户测试："><a href="#添加用户测试：" class="headerlink" title="添加用户测试："></a>添加用户测试：</h4><p>然后我们使用<code>http://localhost:8080/add?username=wmyskxz&amp;password=123</code>地址，添加几个类似的用户信息：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-06ab5a7e0112c432.png" alt=""></p>
+<p>可以看到返回正确的<code>Saved</code>信息：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-bf225a31d9b65a11.png" alt=""></p>
+<h4 id="getOne地址测试："><a href="#getOne地址测试：" class="headerlink" title="/getOne地址测试："></a><code>/getOne</code>地址测试：</h4><p>我们就直接使用<code>http://localhost:8080/getOne?id=1</code>来获取刚才添加的用户，可以看到返回正确的数据：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+    "id": 1,
+    "username": "wmyskxz",
+    "password": "123"
+}</code></pre>
+<h4 id="修改用户测试："><a href="#修改用户测试：" class="headerlink" title="修改用户测试："></a>修改用户测试：</h4><p>然后我们使用<code>http://localhost:8080/update?id=1&amp;username=wmyskxz&amp;password=123456</code>来模拟进行用户密码的修改：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-66a8b828bb42f1ed.png" alt=""></p>
+<p>可以看到正确的更新信息<code>Updated</code>，再次查询用户，也能看到正确的数据：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+    "id": 1,
+    "username": "wmyskxz",
+    "password": "123456"
+}</code></pre>
+<h4 id="分页测试："><a href="#分页测试：" class="headerlink" title="分页测试："></a>分页测试：</h4><p>我们使用添加功能为数据库添加5条以上的数据，然后进行一次查询<code>/all</code>，可以看到能够按照<code>id</code>倒叙排列后返回5条数据：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-2305018edb7acb4a.png" alt="数据库的情况"></p>
+<p>返回的JSON数据如下：</p>
+<pre class=" language-JSON"><code class="language-JSON">{
+    "content": [
+        {
+            "id": 10,
+            "username": "wmyskxz8",
+            "password": "123"
+        },
+        {
+            "id": 9,
+            "username": "wmyskxz7",
+            "password": "123"
+        },
+        {
+            "id": 8,
+            "username": "wmyskxz6",
+            "password": "123"
+        },
+        {
+            "id": 7,
+            "username": "wmyskxz5",
+            "password": "123"
+        },
+        {
+            "id": 6,
+            "username": "wmyskxz4",
+            "password": "123"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "sorted": true,
+            "unsorted": false,
+            "empty": false
+        },
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 5,
+        "unpaged": false,
+        "paged": true
+    },
+    "totalElements": 9,
+    "last": false,
+    "totalPages": 2,
+    "number": 0,
+    "size": 5,
+    "sort": {
+        "sorted": true,
+        "unsorted": false,
+        "empty": false
+    },
+    "numberOfElements": 5,
+    "first": true,
+    "empty": false
+}</code></pre>
+<h4 id="删除用户测试："><a href="#删除用户测试：" class="headerlink" title="删除用户测试："></a>删除用户测试：</h4><p>使用地址<code>http://localhost:8080/delete?id=1</code>来删除ID为1的用户：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Data-JPA%E5%B0%9D%E9%B2%9C%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%90%AD%E5%BB%BACRUD+%E5%88%86%E9%A1%B5%E5%90%8E%E5%8F%B0%E5%AE%9E%E4%BE%8B/7896890-6da1d38e787828f1.png" alt=""></p>
+<p>能正确看到<code>Deleted</code>信息，并查看数据能够看到数据已经被删除了。</p>
+<hr>
+<p>以上，我们就快速搭建好了一个CRUD+分页的后台实例，还用了比较流行的RESTful风格，粗略的感受了一下JPA的方便，还是挺爽的..没有复杂的Mapper文件，不用自动生成实体，甚至不用管SQL，只需要专注在逻辑上就行了，其实简单使用的话以上的东西也能应付一些常见的场景了，后期再深入了解了解吧！</p>
+<p><strong>参考资料：</strong><br><a href="http://www.ityouknow.com/springboot/2016/08/20/spring-boo-jpa.html" target="_blank" rel="noopener">springboot(五)：spring data jpa的使用——纯洁的微笑</a><br><a href="http://www.ityouknow.com/springboot/2017/09/23/spring-boot-jpa-thymeleaf-curd.html" target="_blank" rel="noopener">springboot(十五)：springboot+jpa+thymeleaf增删改查示例——纯洁的微笑</a><br><a href="http://blog.didispace.com/springbootdata2/" target="_blank" rel="noopener">Spring Boot中使用Spring-data-jpa让数据访问更简单、更优雅——程序猿DD</a></p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2019/01/02/thymeleaf-kuai-su-ru-men/">
       Thymeleaf【快速入门】
     </a>
@@ -2732,190 +3149,6 @@ Age<span class="token operator">:</span> <span class="token number">0</span></co
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/08/15/qiu-zhao-ti-qian-pi-cvte-yi-mian-gua-a-li-san-mian-gua/">
-      秋招提前批（CVTE一面挂、阿里三面挂）
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/%E9%9D%A2%E8%AF%95/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>编程人生/面试</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年8月15日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="7月27日：CVTE一面-30分钟（挂）"><a href="#7月27日：CVTE一面-30分钟（挂）" class="headerlink" title="7月27日：CVTE一面 30分钟（挂）"></a>7月27日：CVTE一面 30分钟（挂）</h2><ol>
-<li>自我介绍</li>
-<li>有没有做过JavaWeb相关的项目？你觉得难点在哪里呢？</li>
-<li>你这个博客系统有没有加权限系统？如果被拦截封包获取了账号密码怎么办？（没加，凉拌..）</li>
-<li>用过事务吗？怎么用的举一个实际的例子？</li>
-<li>Spring中的@Transactional放在类级别和方法级别上有什么不同？（不知道..）</li>
-<li>你对Java哪一个方面的知识熟悉？</li>
-<li>List/ Set/ Map有什么区别？</li>
-<li>谈一下HashMap插入元素的过程？</li>
-<li>HashMap安全吗？那有安全的Map吗？</li>
-<li>多线程并发有什么问题？刚才安全的Map是如何解决这个问题的？</li>
-<li>Java中实现多线程有哪些方式？</li>
-</ol>
-<blockquote>
-<p>总体感觉CVTE一面还没开始问就已经结束了…所以面完感觉挺不好的，总觉得自己会凉凉…结果一查结果真凉了…懵逼…</p>
-</blockquote>
-<h2 id="7月30日：阿里一面-36分钟"><a href="#7月30日：阿里一面-36分钟" class="headerlink" title="7月30日：阿里一面 36分钟"></a>7月30日：阿里一面 36分钟</h2><ol>
-<li>自我介绍</li>
-<li>面试官开始自己介绍他所属的部门然后平时的一些业务</li>
-<li>说一下HashMap的底层结构？</li>
-<li>为什么1.8要引入红黑树这种结构呢？</li>
-<li>HashMap线程安全吗？那有没有线程安全的Map？（ConcurrentHashMap还有一个Collections类中的静态内部类SynrhonizedMap）</li>
-<li>ConcurrentHashMap底层结构？</li>
-<li>对JDK1.5的concurrent包了解吗？（不了解…）</li>
-<li>Java中有两种错误你能说一下嘛？（想不起具体名字来了..解释了半天..）</li>
-<li>说下JVM的内存结构？（本地方法栈打死没想起来…）堆、栈分别存储什么信息？</li>
-<li>说一下新生代和永久代有什么关系？</li>
-<li>平时学校学什么课？算法和数据结构学过吧？</li>
-<li>说一个你印象最深刻的数据结构，用来解决什么典型问题？（堆、TopK问题）</li>
-<li>说一个典型的算法解决什么问题？再回答一个（答得不好…）</li>
-<li>贪心算法有什么优点缺点？贪心算法可能不是最优解那什么算法能解决呢？（动态规划这个词老想不起来..）</li>
-<li>Spring了解吗？说一下装载Bean的过程？</li>
-<li>设计模式了解吗？说几个常用的</li>
-<li>装饰器模式和代理模式有什么区别？</li>
-<li>看你做过这么多项目说一个你刚开始难以解决然后通过什么方式最终解决的？</li>
-<li>有没有什么要问我的？</li>
-<li>平时都怎么学习的？</li>
-</ol>
-<blockquote>
-<p>正在寝室收拾东西的时候预约了6分钟后面试，那个激动..总的来说感觉答得不好，确实是没啥面试经验，有很多东西自己知道没有表达，不过回答的时候倒是挺有自信的，电话一挂脑子一去回想.药丸…不过面试官还算是比较好的…希望能过吧…</p>
-</blockquote>
-<h2 id="8月5日：阿里二面-60分钟"><a href="#8月5日：阿里二面-60分钟" class="headerlink" title="8月5日：阿里二面 60分钟"></a>8月5日：阿里二面 60分钟</h2><ol>
-<li>面试官开场白：介绍部门、业务，上一轮面试的大概情况，今天准备聊一聊编程能力和项目的一些问题；</li>
-<li>面向对象三大特点？你怎么理解多态？Java中是怎么实现多态的？</li>
-<li>序列化有了解过吗？</li>
-<li>Java网络I/O了解吗？（不是很了解..）HTTP三次握手和四次挥手的详细过程能说下吗？</li>
-<li>设计题：一个网络聊天室有思路吗？不要求界面，只说思路（后来想了想回答的很一般..）</li>
-<li>ArrayList和LinkedList的区别？ArrayList是怎么扩容的？</li>
-<li>Java中有两种异常，你能说说嘛（感觉是看了上一个面试官的评价来看我复习没有的感觉..）？Exception又分为两种你知道吗？举一个RunTimeException你遇到过的？（我说的NullPointer）除了这个你再说一个？再举一个非RunTimeException？</li>
-<li>GC什么时候开始？我调用System.gc()能保证GC一定发生吗？</li>
-<li>你说一下类加载器是怎么回事？（我说了一下双亲委派模型..但后来想面试官好像问的是怎么加载class？…）怎么实现自己的类加载器？</li>
-<li>设计题：现在我的jar包在云上，怎么动态添加进我的项目中？（不知道..后来想了一下自己写ClassLoader应该可以..）</li>
-<li>看你简历有前端的东西，那前端盒子模型有了解吗？</li>
-<li>可以给margin或者padding这样的属性赋值为负数吗？</li>
-<li>我想把border变成一个虚线该怎么写？（忘了具体的dashed，只记得border-style..）</li>
-<li>平常都用什么数据库？（MySQL）那MySQL有两种引擎了解吗？有什么区别？（这个说得挺完整的）我要用SQL获得一个表级锁应该怎么写？（不了解..）我给一个表三个ABC列建了一个组合索引，我查询B会用到索引嘛？（不知道..）</li>
-<li>事务了解吗？四大基本特性？什么是隔离性？数据库并发有几个隔离级别？（我说我从面临的问题开始说面试官说不用只用说几个级别就可以）MySQL默认级别？你确定？（确定..）</li>
-<li>平时有用到什么框架？（Spring/ SpringMVC/ SpringBoot/ MyBatis）</li>
-<li>MyBatis问一个问题，在mapper文件中#{}和${}有什么区别？</li>
-<li>Spring有两大特性，你是怎么理解IoC控制反转的？AOP实现原理你了解吗？JDK代理为什么非要实现一个接口呢？（这个一时间忘了…）</li>
-<li>MVC你是怎么理解的？</li>
-<li>什么时候需要重写equals()？什么时候需要重写hashCode()？</li>
-<li>项目相关，你博客是从0到有的？为什么要造这个轮子？</li>
-<li>JavaWeb安全方面的问题，你这个留言啥的有没有啥问题？（XSS攻击）知道有问题为啥不搞一下？（我…）</li>
-<li>我把面试结果报上去，一般两三天后出结果，拜拜；</li>
-</ol>
-<blockquote>
-<p>因为是靠回忆，所以有些问题的顺序有点儿记不太清了，比较基础但是有些宽泛..问了我一些前端的问题..比较遗憾的是网络I/O这一块自己不是特别熟悉，然后那一道设计题自己没有回答得很好..面试官说看得出我基础还行就是深度不够，他说要看总体的面试情况如果靠前就安排下一轮面试，让我自己下去准备等通知，但总觉得他在套路我..早上转发了一只专属锦鲤，希望能带来好运吧..</p>
-</blockquote>
-<h2 id="8月13日：阿里三面（P9钉钉视频面）-120分钟左右"><a href="#8月13日：阿里三面（P9钉钉视频面）-120分钟左右" class="headerlink" title="8月13日：阿里三面（P9钉钉视频面） 120分钟左右"></a>8月13日：阿里三面（P9钉钉视频面） 120分钟左右</h2><p>1.面试官让进一个链接做六道题，一个小时之后它来看代码，可以搜索资料啥的都可以，大概是这样六道题：①反转一串字符串；②从一串JSON字符串中提取所有的一个属性并输出；③统计一串字符串中的数字、英文字母、空格、其他字符的个数并打印输出；④计算N的阶乘；⑤数组排序算法随便写；⑥创建三个线程ABC，分别打印其线程名十次，并按照ABC的顺序执行；<br>2.最近的项目有没有什么想说的？印象深刻的？<br>3.项目有什么难点？怎么解决的？<br>4.设计模式有了解过哪些？模板模式应用于什么样的场景？<br>5.OSI七层模型知道吗？IP在哪一层？TCP在哪一层？<br>6.对称加密与非对称加密有了解吗？<br>7.谈谈对BIO/ NIO/ AIO的理解？（有点忘了..说的有点问题面试官给解释了一下..）分别用于什么样的场景？<br>8.SpringBoot你觉得对于MVC有什么不一样的地方，有什么优点？<br>9.平时怎么学习的？<br>10.有什么要问的..然后问了一些自己关心的问题，并让面试官给我一些建议，感觉自己凉凉..</p>
-<blockquote>
-<p>第二天下午更新了状态显示已回绝了..</p>
-</blockquote>
-<h2 id="简单总结"><a href="#简单总结" class="headerlink" title="简单总结"></a>简单总结</h2><p>其实自己投了蛮多公司的，但是目前接到电话并且面试的，就只有阿里和CVTE，特别是CVTE感觉还蛮效率的..投递了没过几天就打电话预约面试了，emm..虽然两家公司提前批的面试都挂了..但我已经重新申请了正常的网申流程..嘻嘻..感觉还是<strong>基础至上</strong>吧..而且的话，电话面试的经验也很重要，现在回想CVTE一面的时候确实自己也不知道是个啥状态..问题也没有回答很好..挂的那自然也是理所当然..对于阿里的话就比较可惜吧..特别是三面，问的问题都不是自己不知道的，而差不多都是自己有些遗忘或者不是很熟悉的..决定还是抓紧时间回炉锻造锻造..</p>
-<p>不过幸运的是这只是提前批吧..自己还是有一些时间去准备，通过上面的四次面试也是知道了自己的不足，另外想说的一点是：<strong>举一反三</strong>的能力，阿里三面也跟面试官有聊到，就是一个问题，你回答的时候最好能够引申出其他相关的一些东西，换位思考的角度讲，面试官希望这样，而你又能很好的展现自己的能力和基础知识，特别担心那种自己明明知道却说不好的问题，或者是遗漏了一些点的问题，还是下来需要多花时间准备吧..加油..</p>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -3268,7 +3501,7 @@ Age<span class="token operator">:</span> <span class="token number">0</span></co
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(2)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(3)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -3322,7 +3555,7 @@ Age<span class="token operator">:</span> <span class="token number">0</span></co
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14.71px; color: #949494">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 15.43px; color: #8f8f8f">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

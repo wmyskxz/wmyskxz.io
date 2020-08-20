@@ -436,6 +436,305 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/06/chu-xue-java-web-4-servlet-xue-xi-zong-jie/">
+      初学Java Web(4)——Servlet学习总结
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月6日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-65cb65e46c091671.png" alt=""></p>
+<blockquote>
+<p>经过一段时间的学习，对于Servlet有了新的不一样的见解，在这里做一下总结，将近来学习到的知识总结一下。</p>
+</blockquote>
+<hr>
+<h3 id="Servlet-的请求流程"><a href="#Servlet-的请求流程" class="headerlink" title="Servlet 的请求流程"></a>Servlet 的请求流程</h3><ol>
+<li><p><strong>浏览器发出请求：</strong><a href="http://localhost:80/xxx1/xxx2" target="_blank" rel="noopener">http://localhost:80/xxx1/xxx2</a> （80端口可以默认不写，因为这是http协议默认的端口，平时我们访问<a href="https://www.baidu.com/" target="_blank" rel="noopener">https://www.baidu.com/</a> 时其实访问的是<a href="https://www.baidu.com:80/）" target="_blank" rel="noopener">https://www.baidu.com:80/）</a></p>
+</li>
+<li><p><strong>服务器解析请求信息：</strong></p>
+<ul>
+<li><strong>http:</strong>协议名称</li>
+<li><strong>localhost:</strong>访问的是互联网中的<strong>哪一台计算机</strong></li>
+<li><strong>80:</strong>从主机当中找到<strong>对应 80 端口的程序 **（</strong>这里即为 Tomcat 服务器**）</li>
+<li><strong>/xxx1:</strong>当前项目的<strong>上下文路径</strong> （即在 server.xml 中配置主机时配置的 <strong>path属性</strong>）</li>
+<li><strong>/xxx2:</strong>当前<strong>请求的资源名</strong></li>
+</ul>
+</li>
+<li><p><strong>解析</strong> Tomcat 服务器根目录下的 <strong>/config/server.xml</strong> 文件：<br><code>&lt;Context docBase=&quot;D:\javaPros\test\webapp&quot; path=&quot;xxx1&quot; /&gt;</code><br>判断哪一个<code>&lt;Context /&gt;```元素的 **path属性** 属性为 ```xxx1</code></p>
+<ul>
+<li>若找不到，则返回 <strong>404错误</strong></li>
+<li>若找到了，则解析该<code>&lt;Context /&gt;</code>元素，得到<code>docBase</code>属性，获取当前访问 Web 项目的跟的绝对路径：<code>D:\javaPros\test\webapp</code></li>
+</ul>
+</li>
+<li><p>从<code>D:\javaPros\test\webapp</code>下的 <strong>WEB-INF</strong> 下找到 <strong>web.xml</strong> 文件<br>判断 <strong>web.xml</strong> 文件中是否有 <code>&lt;url-pattern&gt;</code> 的文本内容为 <strong>/xxx2</strong></p>
+<ul>
+<li>若找不到，则返回 <strong>404错误</strong></li>
+<li>若找到了，则继续<strong>获取该资源对应 Servlet 类的全限名称：</strong> xxx.xxx</li>
+</ul>
+</li>
+<li><p>判断 <strong>Servlet 实例缓存池</strong> 中是否有 xxx.xxx 的对象</p>
+</li>
+</ol>
+<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>Servlet<span class="token operator">></span> cache <span class="token operator">=</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">(</span>Tomcat提供的<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    key<span class="token operator">:</span>存Servlet类的全限定名称
+    value<span class="token operator">:</span>该Servlet类的对象<span class="token punctuation">.</span>
+Servlet obj <span class="token operator">=</span> cache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"xxx.xxx"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>obj<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//Servlet实例缓存中没有该类的对象,第一次.</span>
+        GOTO <span class="token number">6</span><span class="token operator">:</span>
+    <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//有对象,非第一次.</span>
+        GOTO <span class="token number">8</span><span class="token operator">:</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ol start="6">
+<li><strong>使用反射</strong>调用构造器，<strong>创建对应的对象</strong></li>
+</ol>
+<p><code>obj = Class.forName(&quot;xxx.xxx&quot;).newInstance();</code></p>
+<p>把当前创建的 <strong>Servlet 对象</strong>，存放在缓存之中，<strong>供给下一次的使用.</strong></p>
+<p><code>cache.put(&quot;xxx.xxx&quot;,obj);</code></p>
+<ol start="7">
+<li>创建 <strong>ServletConfig 对象</strong>，并调用 <strong>init()</strong> 方法</li>
+</ol>
+<p><code>obj.init(config);</code></p>
+<ol start="8">
+<li>创建 <strong>ServletRequest 对象和 ServletResponse 对象</strong>，并调用 <strong>service()</strong>方法</li>
+</ol>
+<p><code>obj.service(req,resp);</code></p>
+<ol start="9">
+<li>在 <strong>service()</strong> 方法中对浏览器作出响应操作。</li>
+</ol>
+<hr>
+<h3 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h3><p>在 Web 容器中，Servlet 主要经历 4 个阶段，如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-2599bf65a828350d.png" alt="Servlet 生命周期"></p>
+<ol>
+<li><strong>加载 Servlet：</strong>当 Tomcat <strong>第一次访问 Servlet</strong> 的时候，Tomcat 会负责<strong>创建 Servlet 的实例。</strong></li>
+<li><strong>初始化 Servlet：</strong>当 Servlet 被实例化之后，Tomcat 会调用 <strong>init()</strong> 方法来初始化这个对象。</li>
+<li><strong>处理服务：</strong>当浏览器<strong>访问 Servlet</strong> 的时候，Servlet 会调用 <strong>service()</strong> 方法处理请求。</li>
+<li><strong>销毁：</strong>当 <strong>Tomcat 关闭</strong>或者<strong>检测到 Servlet 要从 Tomcat 删除</strong>的时候，会自动调用 <strong>destroy()</strong> 方法，让该实例所占用的资源释放掉。一个 Servlet 如果长时间不被使用的话，也会被 Tomcat 自动销毁。</li>
+</ol>
+<ul>
+<li><strong>简单总结：</strong>只要访问 Servlet ，就会调用其对应的 <strong>service()</strong> 方法，<strong>init()</strong> 方法只会在第一次访问 Serlvet 的时候才会被调用。</li>
+</ul>
+<blockquote>
+<p>这一部分参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483680&idx=3&sn=d5380ff58c5077271ac9c43d2d96f6c1&chksm=ebd74021dca0c93733255324df8c1e522dbe36ccaf8c2c4bcca4765113a120eb9851ca0e2442#rd" target="_blank" rel="noopener">这里是链接</a></p>
+</blockquote>
+<hr>
+<h3 id="Servlet-提供处理请求的方法"><a href="#Servlet-提供处理请求的方法" class="headerlink" title="Servlet 提供处理请求的方法"></a>Servlet 提供处理请求的方法</h3><p><a href="https://www.jianshu.com/p/bbdc459b9187" target="_blank" rel="noopener">前面的文章</a>里面提到过，广义上，<strong>Servlet</strong> 即实现了 <strong>Servlet 接口</strong> 的类，当我们创建一个自定义类，实现 <strong>Servlet 接口</strong> 的时候，会发现有 5 个方法需要重写，有init【初始化】，destroy【销毁】,service【服务】,ServletConfig【Servlet配置】,getServletInfo【Serlvet信息】。</p>
+<p>这样做的话，我们每次都需要实现 5 个方法，太麻烦了！</p>
+<p>我们可以直接<strong>继承 HttpServlet</strong> 类，该类已经默认实现了 Servlet 接口中的所有方法，在编写 Servlet 的时候，你只需要<strong>重写你需要的方法</strong>就好了，并且该类还在原有 Servlet 接口上添加了一些与 HTTP 协议处理相关的方法，比 Servlet 接口的功能<strong>更强大。</strong></p>
+<ul>
+<li>Servlet 处理请求的方法一共有三种：<br>① 实现 <strong>service()</strong> 方法。<br>② 重写 <strong>doGet()</strong> 和 <strong>doPost()</strong> 方法，并在 <strong>doGet()</strong> 中添加一句<code>this.doPost(req, resp);</code>（因为无论是get或post请求提交的数据，处理方式都基本相同，下同）<br>③ 重写 <strong>doGet()</strong> 和 <strong>doPost()</strong> 方法，并在 <strong>doPost()</strong> 中添加一句<code>this.doGet()(req, resp);</code></li>
+<li><strong>推荐方式①。</strong></li>
+</ul>
+<hr>
+<h3 id="Servlet-是单例的"><a href="#Servlet-是单例的" class="headerlink" title="Servlet 是单例的"></a>Servlet 是单例的</h3><h4 id="为什么Servlet是单例的"><a href="#为什么Servlet是单例的" class="headerlink" title="为什么Servlet是单例的"></a>为什么Servlet是单例的</h4><p><strong>浏览器多次对Servlet的请求，</strong>一般情况下，<strong>服务器只创建一个Servlet对象，</strong>也就是说，Servlet对象<strong>一旦创建了，</strong>就会<strong>驻留在内存中，为后续的请求做服务，直到服务器关闭。</strong></p>
+<h4 id="每次访问请求对象和响应对象都是新的"><a href="#每次访问请求对象和响应对象都是新的" class="headerlink" title="每次访问请求对象和响应对象都是新的"></a>每次访问请求对象和响应对象都是新的</h4><p>对于<strong>每次访问请求，</strong>Servlet引擎都会<strong>创建一个新的HttpServletRequest请求对象和一个新的HttpServletResponse响应对象，</strong>然后将这<strong>两个对象作为参数传递给它调用的Servlet的service()方法，</strong>service方法再根据请求方式分别调用doXXX方法。</p>
+<h4 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h4><p>当多个用户访问Servlet的时候，<strong>服务器会为每个用户创建一个线程。</strong>当多个用户并发访问Servlet共享资源的时候就会出现线程安全问题。</p>
+<p><strong>原则：</strong><br>    1. 如果一个变量<strong>需要多个用户共享</strong>，则应当在访问该变量的时候，<strong>加同步机制synchronized (对象){}</strong><br>    2. 如果一个变量<strong>不需要共享，</strong>则<strong>直接在 doGet() 或者 doPost()定义</strong>.这样不会存在线程安全问题</p>
+<blockquote>
+<p>这一部分参考文章：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483680&idx=4&sn=2fdf4d0075d093389c03697ebdb9f47d&chksm=ebd74021dca0c937a240f47578b9c5f40093a307f6537d79d5a2fd12721c5311a9d89d5c5583#rd" target="_blank" rel="noopener">这里是链接</a></p>
+</blockquote>
+<hr>
+<h3 id="HttpServletRequest-和-HttpServletResponse-对象"><a href="#HttpServletRequest-和-HttpServletResponse-对象" class="headerlink" title="HttpServletRequest 和 HttpServletResponse 对象"></a>HttpServletRequest 和 HttpServletResponse 对象</h3><p>对于<strong>每次访问</strong>请求，<strong>Servlet引擎</strong>都会创建一个<strong>新的HttpServletRequest请求对象</strong>和一个<strong>新的HttpServletResponse响应对象</strong>，即 request 和 response 对象。</p>
+<p>既然 request 对象代表 http 请求，那么我们<strong>获取浏览器提交过来的数据，就找 request 对象</strong> 即可。response 对象代表 http 响应，那么我们<strong>向浏览器输出数据，找 response 对象</strong>即可。</p>
+<h3 id="HttpServletRequest-常用方法"><a href="#HttpServletRequest-常用方法" class="headerlink" title="HttpServletRequest 常用方法"></a>HttpServletRequest 常用方法</h3><ul>
+<li><strong>String getContextPath():</strong><br>获取上下文路径,&lt;Context path=”上下文” ../&gt;</li>
+<li><strong>String getHeader(String headName):</strong><br>根据指定的请求头获取对应的请求头的值.</li>
+<li><strong>String getRequestURI():</strong><br>返回当期请求的资源名称.  上下文路径/资源名</li>
+<li><strong>StringBuffer getRequestURL():</strong><br>返回浏览器地址栏的内容</li>
+<li><strong>String getRemoteAddr():</strong><br>返回请求服务器的客户端的IP</li>
+</ul>
+<h4 id="获取请求参数的方法："><a href="#获取请求参数的方法：" class="headerlink" title="获取请求参数的方法："></a>获取请求参数的方法：</h4><ul>
+<li><strong>String getParameter(String name):</strong><br>根据参数名称,获取对应参数的值.</li>
+<li><strong>String[] getParameterValues(String name):</strong><br>根据参数名称,获取该参数的多个值.</li>
+<li><strong>Enumeration<String> getParameterNames():</strong><br>获取所有请求参数的名字</li>
+<li><strong>Map&lt;String,String[]&gt; getParameterMap():</strong><br>返回请求参数组成的Map集合.</li>
+</ul>
+<p><strong>key:</strong>参数名称<br><strong>value:</strong>参数值,封装在String数组中.</p>
+<h3 id="HttpServletResponse-常用方法"><a href="#HttpServletResponse-常用方法" class="headerlink" title="HttpServletResponse 常用方法"></a>HttpServletResponse 常用方法</h3><ul>
+<li><strong>OutputStream getOutputStream():</strong><br>获取字节输出流:<strong>文件下载</strong></li>
+<li><strong>Writer getWriter():</strong><br>获取字符输出流:<strong>输出内容</strong><br>设置文件输出的编码格式和内容类型：<code>resp.setContentType(&quot;text/html;charset=utf-8&quot;);</code></li>
+</ul>
+<hr>
+<h3 id="GET-和-POST-的区别"><a href="#GET-和-POST-的区别" class="headerlink" title="GET 和 POST 的区别"></a>GET 和 POST 的区别</h3><p>要知道，GET 和 POST 都是请求方式</p>
+<ul>
+<li><strong>GET：</strong><br>浏览器器地址栏：<code>http://localhost/test.html</code><strong>?name=wmyskxz&amp;sex=male</strong><br>这里提交了两个参数，一个是<code>name</code>属性值为<code>wmyskxz</code>，另一个是<code>sex</code>属性值为<code>male</code>，这是一种直接的请求方式，在请求资源后面跟上 <strong>?</strong> 符号与参数连接，其他的参数使用 <strong>&amp;</strong> 符号连接。</li>
+<li><strong>缺点：</strong></li>
+</ul>
+<p>1.暴露请求信息，<strong>不安全</strong><br>2.请求信息不能超过<strong>1kb</strong>，可传输的信息有限，不能上传图片</p>
+<ul>
+<li><strong>POST：</strong><br>浏览器地址栏：<code>http://localhost/test.html#</code></li>
+<li><strong>优点：</strong></li>
+</ul>
+<p>1.隐藏了请求信息，<strong>较安全</strong>（但仍可以通过相关工具访问到数据）<br>2.POST 方式<strong>没有限制</strong>请求的数据大小，可以做图片的上传</p>
+<blockquote>
+<p>但并不是所有的数据都需要使用 POST 请求来完成，事实上，GET 请求方式会比 POST 请求更快，当数据小并且安全性要求不是那么高的时候，GET 仍然是很好的选择.(并且 GET 相较 POST 简单)</p>
+</blockquote>
+<hr>
+<h3 id="请求中文乱码的处理"><a href="#请求中文乱码的处理" class="headerlink" title="请求中文乱码的处理"></a>请求中文乱码的处理</h3><p>在 <strong>Tomcat 服务器</strong>中，接受请求的时候，<strong>默认的编码方式为 ISO-8859-1</strong>，而该编码方式只占一个字节，不支持中文（两个字节），所以当我们做请求的时候，会出现乱码的问题</p>
+<ul>
+<li><strong>解决方案：</strong></li>
+</ul>
+<p>1.对乱码使用 <strong>ISO-8859-1</strong> 解码，转换成<strong>byte数组</strong>，恢复为二进制<br><code>byte[] data = name.getBytes(&quot;ISO-8859-1&quot;);</code><br>2.对byte数组重新进行 UTF-8 编码：<br><code>name = new String(data,&quot;UTF-8&quot;);</code><br>但是这样会出现一个问题，那就是当表单数据太多的时候，这样反复解码-编码，会很繁琐。</p>
+<ul>
+<li><strong>终极解决方案：</strong></li>
+</ul>
+<p><strong>1.对于 POST 请求：</strong><br>设置请求的编码方式：<code>request.setCharacterEncoding(&quot;UTF-8&quot;);</code><br><strong>注意：</strong>必须在获取<strong>第一个参数之前设置</strong>，并且该方式<strong>只对 POST 方式有效。</strong><br><strong>2.对于 GET 请求：</strong><br>重新设置 Tomcat 的编码方式，修改 Tomcat 的配置文件:<br><code>Tomcat根目录/conf/server.xml(修改端口的那一行)</code><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-cd366b295c8ed531.png" alt=""></p>
+<hr>
+<h3 id="Servlet-细节"><a href="#Servlet-细节" class="headerlink" title="Servlet 细节"></a>Servlet 细节</h3><ul>
+<li>1.一个 Servlet 可以有<strong>多个</strong> <code>&lt;url-pattern&gt;</code> ，可以使用多个资源名称找到当前的 Servlet</li>
+<li>2.配置 Servlet 可以使用<strong>通配符</strong>（<em>）<br><code>*</code>表示任意字符<br><code>/*</code>：可以使用<strong>任意的字符</strong>访问当前的 Servlet<br>`</em>.xxx`：如 wmyskxz.wudi</li>
+<li>3.<strong>自定义的 Servlet 的 <code>&lt;servlet-name&gt;</code> 不能够为 default ，</strong>使用它会造成项目下面的静态资源找不到，在 <code>Tomcat/conf/web.xml</code> 文件中配置一个名字为default的Servlet,该Servlet在负责访问项目下的静态资源<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-23070ab172726a2e.png" alt="web.xml 中配置的默认项"></li>
+<li>4.关于 <strong>Servlet 的初始化操作，</strong>如果初始化操作非常的耗时，那么第一个请求的用户的用户体验就非常差</li>
+</ul>
+<p><strong>解决思路：</strong>将初始化操作<strong>向前移,</strong>在服务器启动的时候执行 Servlet 的初始化<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-afae824b9279c9ff.png" alt=""></p>
+<hr>
+<h3 id="通过注解配置-Servlet"><a href="#通过注解配置-Servlet" class="headerlink" title="通过注解配置 Servlet"></a>通过注解配置 Servlet</h3><p>这是 Servlet 3.0 提出的新特性，支持注解配置，这大大简化了我们的工作。</p>
+<p>在之前的开发工作中，我们总是去 <code>web.xml</code> 文件中进行配置，至少会出现8行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-1e9520edba4da3bc.png" alt="web.xml 中配置 Servlet"></p>
+<p>而当一个项目中存在<strong>很多 Servlet **，那么配置文件就会变得</strong>非常臃肿，不便于后期的维护，<strong>在 Servlet 3.0 推出之后，我们可以使用</strong>注解来配置 Servlet，**上面 8 行的配置可以简化为下面的简单的注解：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-9bb5cb4ed2098464.png" alt=""></p>
+<p>或者也可以使用属性 <code>value</code> 定义访问的 URL，<strong>只有 URL 这个属性是必要的，</strong><code>name</code> 是可以缺省的值，而默认的 <code>value</code> 也可以省略不写，所以可以简写成：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/foreServlet"</span><span class="token punctuation">)</span></code></pre>
+<hr>
+<h3 id="Web-组件之间的跳转方式"><a href="#Web-组件之间的跳转方式" class="headerlink" title="Web 组件之间的跳转方式"></a>Web 组件之间的跳转方式</h3><h4 id="1-请求转发（forward）"><a href="#1-请求转发（forward）" class="headerlink" title="1.请求转发（forward）"></a><strong>1.请求转发（forward）</strong></h4><p>又叫做<strong>直接转发方式，</strong>客户端和浏览器<strong>只发出一次请求，</strong>Servlet、HTML、JSP或其它信息资源，由<strong>第二个信息资源响应该请求，</strong>在请求对象request中，保存的对象对于<strong>每个信息资源是共享的。</strong></p>
+<p>比如：从 AServlet 请求转发到 BServlet</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-881fc9bb05d46ac8.png" alt=""></p>
+<ul>
+<li><strong>语法：</strong></li>
+</ul>
+<pre class=" language-java"><code class="language-java">request<span class="token punctuation">.</span><span class="token function">getRequestDispatcher</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forward</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> response<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><em>参数：</em><code>path</code>，要跳转到的资源路径：<strong>上下文路径 / 资源路径</strong></p>
+<ul>
+<li><strong>特点：</strong></li>
+</ul>
+<p><strong>1.地址栏中的地址【不会】改变</strong><br>通常看作是服务端的跳转<br><strong>2.只有一个请求</strong><br><strong>3.资源是共享的，</strong>也就是说在两个 Servlet 中可以共享请求的资源<br>可以通过<code>request.setAttribute(String var1,Object var2)</code><strong>设置要共享的数据资源</strong>，并通过<code>request.getAttribute(String var1);</code>来<strong>获取传递的资源</strong><br><strong>4.【可以】访问 WEB-INF 中的资源</strong><br><strong>WEB-INF</strong> 文件夹是 Java Web 应用的<strong>默认安全目录，</strong>即客户端无法直接访问，只有服务端可以访问的目录。<br>如果想在页面中<strong>直接访问</strong>其中的文件，<strong>必须通过web.xml文件</strong>对要访问的文件进行<strong>相应映射</strong>才能访问。<br><strong>注意：</strong>在实际的开发中，可以把不希望用户直接访问到（通过浏览器输入地址栏）的网页放在文件夹中<strong>通过此方式访问。</strong><br><strong>5.请求转发【不能】跨域访问</strong><br>所谓的同域，是指<strong>域名，协议，端口均相同</strong></p>
+<h4 id="2-URl-重定向（redirect）"><a href="#2-URl-重定向（redirect）" class="headerlink" title="2.URl 重定向（redirect）"></a>2.URl 重定向（redirect）</h4><p>又叫做<strong>间接转发方式（Redirect）</strong>实际是<strong>两次HTTP请求，</strong>服务器端在响应第一次请求的时候，让浏览器再向另外一个URL发出请求，从而达到转发的目的。</p>
+<p>比如:从AServlet重定向到BServlet</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(4)%E2%80%94%E2%80%94Servlet%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/7896890-c49539085575bc26.png" alt=""></p>
+<ul>
+<li><strong>语法：</strong></li>
+</ul>
+<pre class=" language-java"><code class="language-java">response<span class="token punctuation">.</span><span class="token function">sendRedirect</span><span class="token punctuation">(</span>String location<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><em>参数：</em><code>location</code>，转发到的资源路径</p>
+<ul>
+<li><strong>特点：</strong></li>
+</ul>
+<p><strong>1.地址栏中的地址【会】发生改变</strong><br>通常看作是客户端跳转<br><strong>2.有两个请求</strong><br><strong>3.在两个 Servlet 中不可以共享请求中的数据</strong><br><strong>4.最终的响应由 BServlet 来决定，和 AServlet 没有关系</strong><br><strong>5.【不可以】访问 WEB-INF 中的资源</strong><br><strong>6.请求转发【能】跨域访问</strong><br>就像是在网页中点开了新的链接一样</p>
+<ul>
+<li><strong>总结：</strong>URL 重定向相当于是将重定向的资源路径，重新复制到浏览器地址栏中按下回车一样，<strong>重新发送一次新的请求。</strong></li>
+</ul>
+<h4 id="3-请求包含（include）"><a href="#3-请求包含（include）" class="headerlink" title="3.请求包含（include）"></a>3.请求包含（include）</h4><hr>
+<h3 id="MVC-模式"><a href="#MVC-模式" class="headerlink" title="MVC 模式"></a>MVC 模式</h3><p>MVC 是一种分层的设计模式 。</p>
+<ul>
+<li><strong>M 代表 模型（Model）</strong><br>模型是什么呢？ 模型就是<strong>数据，</strong>就是dao,bean</li>
+<li><strong>V 代表 视图（View）</strong><br>视图是什么呢？ 就是网页, JSP，用来<strong>展示模型中的数据</strong></li>
+<li><strong>C 代表 控制器（controller)</strong><br>控制器是什么？ <strong>控制器的作用就是把不同的数据(Model)，显示在不同的视图(View)上。</strong></li>
+</ul>
+<p>这部分可以参考一下<a href="http://how2j.cn/k/mvc/mvc-tutorials/561.html" target="_blank" rel="noopener">这里</a></p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/03/21/chu-xue-java-web-3-di-yi-ge-servlet/">
       初学Java Web(3)——第一个Servlet
     </a>
@@ -1606,318 +1905,6 @@ List<span class="token operator">&lt;</span>Integer<span class="token operator">
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/11/20/java-7-de-xin-te-xing/">
-      Java 7的新特性
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年11月20日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>看大佬推荐的书单买了一本《Java 8实战》，总觉得在了解Java 8之前，是不是也应该去了解了解一下Java 7的一些特性？所以就自己百度了一些资料来学习。</p>
-</blockquote>
-<hr>
-<h2 id="当然还是要先看看官方文档啦"><a href="#当然还是要先看看官方文档啦" class="headerlink" title="当然还是要先看看官方文档啦"></a>当然还是要先看看官方文档啦</h2><blockquote>
-<p>这里是详细介绍（缺点是全英文的，貌似还不是官方的，不过很详细）：<a href="https://www.oreilly.com/learning/java7-features" target="_blank" rel="noopener">https://www.oreilly.com/learning/java7-features</a><br>下面大部分内容均来自这一篇文章，翻译一下而已。</p>
-</blockquote>
-<p>戳进去看看，大概还是能看懂的，看到有博客说Java 7大部分的特性都是语法糖。</p>
-<hr>
-<h2 id="1-Diamond-Operator"><a href="#1-Diamond-Operator" class="headerlink" title="1.Diamond Operator"></a>1.Diamond Operator</h2><p>类型判断是一个人特殊的烦恼，入下面的代码：</p>
-<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">>></span> anagrams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span>String<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">>></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>通过类型推断后变成：</p>
-<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span>List<span class="token operator">&lt;</span>String<span class="token operator">>></span> anagrams <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p><strong>注：这个&lt;&gt;被叫做diamond(钻石)运算符，Java 7后这个运算符从引用的声明中推断类型。</strong></p>
-<hr>
-<h2 id="2-在switch语句中使用字符串"><a href="#2-在switch语句中使用字符串" class="headerlink" title="2.在switch语句中使用字符串"></a>2.在switch语句中使用字符串</h2><p>switch语句可以使用原始类型或枚举类型。Java引入了另一种类型，我们可以在switch语句中使用：字符串类型。</p>
-<p>说我们有一个根据其地位来处理贸易的要求。直到现在，我们使用if-其他语句来完成这个任务。</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token function">voidprocessTrade</span><span class="token punctuation">(</span>Trade t<span class="token punctuation">)</span><span class="token punctuation">{</span>
-            String status <span class="token operator">=</span> t<span class="token punctuation">.</span><span class="token function">getStatus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span><span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>NEW<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                  <span class="token function">newTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>EXECUTE<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                  <span class="token function">executeTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span><span class="token punctuation">(</span>status<span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>PENDING<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                  <span class="token function">pendingTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>这种处理字符串的方法是粗糙的。在Java中，我们可以使用增强的switch语句来改进程序，该语句以String类型作为参数。</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidprocessTrade</span><span class="token punctuation">(</span>Trade t<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    String status <span class="token operator">=</span> t<span class="token punctuation">.</span><span class="token function">getStatus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">switch</span><span class="token punctuation">(</span>status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        caseNEW<span class="token operator">:</span>
-            <span class="token function">newTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        caseEXECUTE<span class="token operator">:</span>
-            <span class="token function">executeTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-        casePENDING<span class="token operator">:</span>
-            <span class="token function">pendingTrade</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-         <span class="token keyword">default</span><span class="token operator">:</span>
-            <span class="token keyword">break</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>在上面的程序中，状态字段总是通过使用 <strong>String.equals()</strong> 与案例标签来进行比较。</p>
-<hr>
-<h2 id="3-自动资源管理"><a href="#3-自动资源管理" class="headerlink" title="3.自动资源管理"></a>3.自动资源管理</h2><p>Java中有一些资源需要手动关闭，例如<strong>Connections，Files，Input/OutStreams</strong>等。通常我们使用 <strong>try-finally</strong> 来关闭资源：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidoldTry</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            <span class="token keyword">try</span><span class="token punctuation">{</span>
-                  fos<span class="token operator">=</span> <span class="token function">newFileOutputStream</span><span class="token punctuation">(</span><span class="token string">"movies.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                  dos<span class="token operator">=</span> <span class="token function">newDataOutputStream</span><span class="token punctuation">(</span>fos<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                  dos<span class="token punctuation">.</span><span class="token function">writeUTF</span><span class="token punctuation">(</span><span class="token string">"Java 7 Block Buster"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                  e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token punctuation">}</span> <span class="token keyword">finally</span><span class="token punctuation">{</span>
-                  <span class="token keyword">try</span><span class="token punctuation">{</span>
-                        fos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                        dos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-                  <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-                        <span class="token comment" spellcheck="true">// log the exception</span>
-                  <span class="token punctuation">}</span>
-            <span class="token punctuation">}</span>
-      <span class="token punctuation">}</span></code></pre>
-<p>然而，在Java 7中引入了另一个很酷的特性，可以自动管理资源。它的操作也很简单，我们所要做的就是在 <strong>try</strong> 块中申明资源如下：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">try</span><span class="token punctuation">(</span>resources_to_be_cleant<span class="token punctuation">)</span><span class="token punctuation">{</span>
-
-   <span class="token comment" spellcheck="true">// your code</span>
-
-<span class="token punctuation">}</span></code></pre>
-<p>以上方法与旧的 <strong>try-finally</strong> 能最终写成下面的代码：</p>
-<pre class=" language-java"><code class="language-java">      <span class="token keyword">public</span> <span class="token function">voidnewTry</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-
-
-            <span class="token keyword">try</span><span class="token punctuation">(</span>FileOutputStream fos <span class="token operator">=</span> <span class="token function">newFileOutputStream</span><span class="token punctuation">(</span><span class="token string">"movies.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-                        DataOutputStream dos <span class="token operator">=</span> <span class="token function">newDataOutputStream</span><span class="token punctuation">(</span>fos<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  dos<span class="token punctuation">.</span><span class="token function">writeUTF</span><span class="token punctuation">(</span><span class="token string">"Java 7 Block Buster"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>IOException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log the exception</span>
-
-            <span class="token punctuation">}</span>
-
-      <span class="token punctuation">}</span></code></pre>
-<p>上面的代码也代表了这个特性的另一个方面：处理多个资源。<strong>FileOutputStream</strong> 和 <strong>DataOutputStream</strong> 在try语句中一个接一个地含在语句中，每一个都用分号(;)分隔符分隔开。我们不必手动取消或关闭流，因为当空间存在try块时，它们将自动关闭。</p>
-<p>在后台，应该自动关闭的资源必须试验 <strong>java.lang.AutoCloseable</strong> 接口。</p>
-<p>任何实现 <strong>AutoCloseable</strong> 接口的资源都可以作为自动资源管理的候选。<strong>AutoCloseable</strong> 是 <strong>java.io.Closeable</strong> 接口的父类，JVM会在程序退出<strong>try</strong>块后调用一个方法 <strong>close()</strong>。</p>
-<hr>
-<h2 id="4-带下划线的数字文本"><a href="#4-带下划线的数字文本" class="headerlink" title="4.带下划线的数字文本"></a>4.带下划线的数字文本</h2><p>数字文字绝对是对眼睛的一种考验。我相信，如果你给了一个数字，比如说，十个零，你就会像我一样数零。如果不计算从右到左的位置，识别一个文字的话，就很容易出错，而且很麻烦。Not anymore。Java在识别位置时引入了下划线。例如，您可以声明1000，如下所示：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> thousand <span class="token operator">=</span>  1_000<span class="token punctuation">;</span></code></pre>
-<p>或1000000(一百万)如下:</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> million  <span class="token operator">=</span>  1_000_000</code></pre>
-<p><strong>请注意，这个版本中也引入了二进制文字-例如“0b1”-因此开发人员不必再将它们转换为十六进制。</strong></p>
-<hr>
-<h2 id="5-改进的异常处理"><a href="#5-改进的异常处理" class="headerlink" title="5.改进的异常处理"></a>5.改进的异常处理</h2><p>在异常处理区域有几处改进。Java引入了多个catch功能，以使用单个抓到块捕获多个异常类型。</p>
-<p>假设您有一个方法，它抛出三个异常。在当前状态下，您将分别处理它们，如下所示：</p>
-<pre class=" language-java"><code class="language-java">   <span class="token keyword">public</span> <span class="token function">voidoldMultiCatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-            <span class="token keyword">try</span><span class="token punctuation">{</span>
-
-                  <span class="token function">methodThatThrowsThreeExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionOne e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log and deal with ExceptionOne</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionTwo e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log and deal with ExceptionTwo</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionThree e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log and deal with ExceptionThree</span>
-
-            <span class="token punctuation">}</span>
-
-      <span class="token punctuation">}</span></code></pre>
-<p>在一个catch块中逐个捕获一个连续的异常，看起来很混乱。我还看到了捕获十几个异常的代码。这是非常低效和容易出错的。Java为解决这只丑小鸭带来了新的语言变化。请参阅下面的方法oldMultiCatch方法的改进版本：</p>
-<pre class=" language-java"><code class="language-java">      <span class="token keyword">public</span> <span class="token function">voidnewMultiCatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-            <span class="token keyword">try</span><span class="token punctuation">{</span>
-
-                  <span class="token function">methodThatThrowsThreeExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionOne <span class="token operator">|</span> ExceptionTwo <span class="token operator">|</span> ExceptionThree e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log and deal with all Exceptions</span>
-
-            <span class="token punctuation">}</span>
-
-      <span class="token punctuation">}</span></code></pre>
-<p>多个异常通过使用 <strong>“|”</strong>操作符在一个catch块中捕获。这样，您不必编写数十个异常捕获。但是，如果您有许多属于不同类型的异常，那么您也可以使用“多个catch块”块。下面的代码片段说明了这一点：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidnewMultiMultiCatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-            <span class="token keyword">try</span><span class="token punctuation">{</span>
-
-                  <span class="token function">methodThatThrowsThreeExceptions</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionOne e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log and deal with ExceptionOne</span>
-
-
-
-            <span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>ExceptionTwo <span class="token operator">|</span> ExceptionThree e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-                  <span class="token comment" spellcheck="true">// log and deal with ExceptionTwo and ExceptionThree</span>
-
-            <span class="token punctuation">}</span>
-
-
-
-      <span class="token punctuation">}</span></code></pre>
-<p>在上面的例子中，在和ExceptionThree属于不同的层次结构，因此您希望以不同的方式处理它们，但使用一个抓到块。</p>
-<hr>
-<h2 id="6-New-file-system-API-NIO-2-0"><a href="#6-New-file-system-API-NIO-2-0" class="headerlink" title="6.New file system API(NIO 2.0)"></a>6.New file system API(NIO 2.0)</h2><p>那些使用Java的人可能还记得框架引起的头痛。在操作系统或多文件系统之间无缝地工作从来都不是一件容易的事情.。有些方法，例如删除或重命名，在大多数情况下都是出乎意料的。使用符号链接是另一个问题。实质上API需要大修。</p>
-<p>为了解决上述问题，Java引入了一个新的API，并在许多情况下引入了新的api。</p>
-<p>在NIO2.0提出了许多增强功能。在处理多个文件系统时，它还引入了新的类来简化开发人员的生活。</p>
-<h3 id="Working-With-Path（使用路径）"><a href="#Working-With-Path（使用路径）" class="headerlink" title="Working With Path（使用路径）"></a>Working With Path（使用路径）</h3><p>新的 <strong>java.nio.file</strong> 由包和接口组成例如：<strong>Path,Paths,FileSystem,FileSystems</strong>等等。</p>
-<p>路径只是对文件路径的简单引用。它与java.io.File等价(并具有更多的特性)。下面的代码段显示了如何获取对“临时”文件夹的路径引用：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">voidpathInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-
-            Path path<span class="token operator">=</span> Paths<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"c:\Temp\temp"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Number of Nodes:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getNameCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"File Name:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getFileName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"File Root:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getRoot</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"File Parent:"</span><span class="token operator">+</span> path<span class="token punctuation">.</span><span class="token function">getParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-      <span class="token punctuation">}</span></code></pre>
-<p>最终控制台的输出将是:</p>
-<pre class=" language-java"><code class="language-java">Number of Nodes<span class="token operator">:</span><span class="token number">2</span>
-
-File Name<span class="token operator">:</span>temp<span class="token punctuation">.</span>txt
-
-File Root<span class="token operator">:</span>c<span class="token operator">:</span>
-
-File Parent<span class="token operator">:</span>c<span class="token operator">:</span>Temp</code></pre>
-<p>删除文件或目录就像在文件中调用delete方法(注意复数)一样简单。在类公开两个删除方法，一个抛出NoSuchFileException，另一个不抛。</p>
-<p>下面的delete方法调用抛出NoSuchFileException，因此您必须处理它：</p>
-<pre class=" language-java"><code class="language-java">Files<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>Where as Files.deleteIfExists(path) does not throw exception (as expected) if the file/directory does not exist.</p>
-<blockquote>
-<p>使用 <strong>Files.deteleIfExists(path)</strong> 则不会抛出异常。</p>
-</blockquote>
-<p>您可以使用其他实用程序方法，例如Files.copy(.)和Files.move(.)来有效地对文件系统执行操作。类似地，使用 <strong>createSymbolicLink(..)</strong> 方法使用代码创建符号链接。</p>
-<h3 id="文件更改通知"><a href="#文件更改通知" class="headerlink" title="文件更改通知"></a>文件更改通知</h3><p>JDK 7中最好的改善算是File change notifications（文件更改通知）了。这是一个长期等待的特性，它最终被刻在NIO 2.0中。<strong>WatchService</strong> API 允许您在对主题(目录或文件)进行更改时接收通知事件。</p>
-<blockquote>
-<p>具体的创建步骤就不给了，总之它的功能就跟它的名字一般，当文件发生更改的时候，能及时作出反馈。</p>
-</blockquote>
-<hr>
-<h2 id="7-Fork-and-Join（Fork-Join框架）"><a href="#7-Fork-and-Join（Fork-Join框架）" class="headerlink" title="7.Fork and Join（Fork/Join框架）"></a>7.Fork and Join（Fork/Join框架）</h2><p>在一个java程序中有效地使用并行内核一直是一个挑战。很少有国内开发的框架将工作分配到多个核心，然后加入它们来返回结果集。Java已经将这个特性作为Fork/Join框架结合了起来。</p>
-<p>基本上，在把手头的任务变成了小任务，直到小任务简单到可以不进一步分手的情况下解决。这就像一个分而治之的算法.。在这个框架中需要注意的一个重要概念是，理想情况下，没有工作线程是空闲的。他们实现了一个 work-stealing 算法，在空闲的工人“偷”工作从那些工人谁是忙。</p>
-<p>支持Fork-Join机制的核心类是ForkJoinPool和ForkJoinTask。</p>
-<blockquote>
-<p>这里是Java 7的新特性一览表：<a href="http://www.oschina.net/news/20119/new-features-of-java-7" target="_blank" rel="noopener">http://www.oschina.net/news/20119/new-features-of-java-7</a></p>
-</blockquote>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2270,7 +2257,7 @@ File Parent<span class="token operator">:</span>c<span class="token operator">:<
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(2)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(3)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -2324,7 +2311,7 @@ File Parent<span class="token operator">:</span>c<span class="token operator">:<
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14.71px; color: #949494">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 15.43px; color: #8f8f8f">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

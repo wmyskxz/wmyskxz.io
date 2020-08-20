@@ -435,6 +435,501 @@
         
           
   <h2 class="title">
+    <a href="/2018/05/29/shi-yong-restful-feng-ge-kai-fa-java-web/">
+      使用RESTful风格开发Java Web
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年5月29日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BD%BF%E7%94%A8RESTful%E9%A3%8E%E6%A0%BC%E5%BC%80%E5%8F%91Java-Web/7896890-0dfea1f13b593af6.png" alt=""></p>
+<h2 id="什么是RESTful风格？"><a href="#什么是RESTful风格？" class="headerlink" title="什么是RESTful风格？"></a>什么是RESTful风格？</h2><p>REST是<strong>REpresentational State Transfer</strong>的缩写（一般中文翻译为表述性状态转移），REST 是一种体系结构，而 HTTP 是一种包含了 REST 架构属性的协议，为了便于理解，我们把它的首字母拆分成不同的几个部分：</p>
+<ul>
+<li><strong>表述性（REpresentational）：</strong> REST 资源实际上可以用各种形式来进行表述，包括 XML、JSON 甚至 HTML——最适合资源使用者的任意形式；</li>
+<li><strong>状态（State）：</strong> 当使用 REST 的时候，我们更关注资源的状态而不是对资源采取的行为；</li>
+<li><strong>转义（Transfer）：</strong> REST 涉及到转移资源数据，它以某种表述性形式从一个应用转移到另一个应用。</li>
+</ul>
+<p><strong>简单地说，REST 就是将资源的状态以适合客户端或服务端的形式从服务端转移到客户端（或者反过来）。</strong>在 REST 中，资源<strong>通过 URL 进行识别和定位</strong>，然后通过<strong>行为(即 HTTP 方法)</strong>来定义 REST 来完成怎样的功能。</p>
+<h4 id="实例说明"><a href="#实例说明" class="headerlink" title="实例说明:"></a>实例说明:</h4><p>在平时的 Web 开发中，method 常用的值是 GET 和 POST，但是实际上，HTTP 方法还有 PATCH、DELETE、PUT 等其他值，这些方法又通常会匹配为如下的 CRUD 动作:</p>
+<table>
+<thead>
+<tr>
+<th align="center">CRUD 动作</th>
+<th align="center">HTTP 方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Create</td>
+<td align="center">POST</td>
+</tr>
+<tr>
+<td align="center">Read</td>
+<td align="center">GET</td>
+</tr>
+<tr>
+<td align="center">Update</td>
+<td align="center">PUT 或 PATCH</td>
+</tr>
+<tr>
+<td align="center">Delete</td>
+<td align="center">DELETE</td>
+</tr>
+</tbody></table>
+<p>尽管通常来讲，HTTP 方法会映射为 CRUD 动作，但这并不是严格的限制，有时候 PUT 也可以用来创建新的资源，POST 也可以用来更新资源。实际上，POST 请求<strong>非幂等的特性</strong>(即同一个 URL 可以得到不同的结果)使其成一个非常灵活地方法，对于无法适应其他 HTTP 方法语义的操作，它都能够胜任。</p>
+<p>在使用 RESTful 风格之前，我们如果想要<strong>增加一条商品数据</strong>通常是这样的:</p>
+<pre class=" language-java"><code class="language-java"><span class="token operator">/</span>addCategory<span class="token operator">?</span>name<span class="token operator">=</span>xxx</code></pre>
+<p>但是使用了 RESTful 风格之后就会变成:</p>
+<pre class=" language-java"><code class="language-java"><span class="token operator">/</span>category</code></pre>
+<p>这就变成了<strong>使用同一个 URL</strong> ，通过<strong>约定不同的 HTTP 方法</strong>来实施不同的业务，这就是 RESTful 风格所做的事情了，为了有一个更加直观的理解，引用一下来自how2j.cn的图:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BD%BF%E7%94%A8RESTful%E9%A3%8E%E6%A0%BC%E5%BC%80%E5%8F%91Java-Web/7896890-1273cfad7cda65ce.png" alt=""></p>
+<h2 id="SpringBoot-中使用-RESTful"><a href="#SpringBoot-中使用-RESTful" class="headerlink" title="SpringBoot 中使用 RESTful"></a>SpringBoot 中使用 RESTful</h2><blockquote>
+<p>下面我使用 SpringBoot 结合文章：<a href="http://blog.didispace.com/springbootrestfulapi/" target="_blank" rel="noopener">http://blog.didispace.com/springbootrestfulapi/</a>  来实例演示如何在 SpringBoot 中使用 RESTful 风格的编程并如何做单元测试</p>
+</blockquote>
+<p><strong>RESTful API 具体设计如下：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BD%BF%E7%94%A8RESTful%E9%A3%8E%E6%A0%BC%E5%BC%80%E5%8F%91Java-Web/7896890-931dc1cbc4331360.png" alt=""></p>
+<p>User实体定义：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span> 
+
+    <span class="token keyword">private</span> Long id<span class="token punctuation">;</span> 
+    <span class="token keyword">private</span> String name<span class="token punctuation">;</span> 
+    <span class="token keyword">private</span> Integer age<span class="token punctuation">;</span> 
+
+    <span class="token comment" spellcheck="true">// 省略setter和getter </span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>实现对User对象的操作接口 </p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RestController</span> 
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/users"</span><span class="token punctuation">)</span>     <span class="token comment" spellcheck="true">// 通过这里配置使下面的映射都在/users下 </span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserController</span> <span class="token punctuation">{</span> 
+
+    <span class="token comment" spellcheck="true">// 创建线程安全的Map </span>
+    <span class="token keyword">static</span> Map<span class="token operator">&lt;</span>Long<span class="token punctuation">,</span> User<span class="token operator">></span> users <span class="token operator">=</span> Collections<span class="token punctuation">.</span><span class="token function">synchronizedMap</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span>Long<span class="token punctuation">,</span> User<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>GET<span class="token punctuation">)</span> 
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>User<span class="token operator">></span> <span class="token function">getUserList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 处理"/users/"的GET请求，用来获取用户列表 </span>
+        <span class="token comment" spellcheck="true">// 还可以通过@RequestParam从页面中传递参数来进行查询条件或者翻页信息的传递 </span>
+        List<span class="token operator">&lt;</span>User<span class="token operator">></span> r <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>User<span class="token operator">></span><span class="token punctuation">(</span>users<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">return</span> r<span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>POST<span class="token punctuation">)</span> 
+    <span class="token keyword">public</span> String <span class="token function">postUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@ModelAttribute</span> User user<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 处理"/users/"的POST请求，用来创建User </span>
+        <span class="token comment" spellcheck="true">// 除了@ModelAttribute绑定参数之外，还可以通过@RequestParam从页面中传递参数 </span>
+        users<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>GET<span class="token punctuation">)</span> 
+    <span class="token keyword">public</span> User <span class="token function">getUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 处理"/users/{id}"的GET请求，用来获取url中id值的User信息 </span>
+        <span class="token comment" spellcheck="true">// url中的id可通过@PathVariable绑定到函数的参数中 </span>
+        <span class="token keyword">return</span> users<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>PUT<span class="token punctuation">)</span> 
+    <span class="token keyword">public</span> String <span class="token function">putUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">,</span> <span class="token annotation punctuation">@ModelAttribute</span> User user<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 处理"/users/{id}"的PUT请求，用来更新User信息 </span>
+        User u <span class="token operator">=</span> users<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        u<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        u<span class="token punctuation">.</span><span class="token function">setAge</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        users<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> u<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>DELETE<span class="token punctuation">)</span> 
+    <span class="token keyword">public</span> String <span class="token function">deleteUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span> 
+        <span class="token comment" spellcheck="true">// 处理"/users/{id}"的DELETE请求，用来删除User </span>
+        users<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+        <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span> 
+    <span class="token punctuation">}</span> 
+
+<span class="token punctuation">}</span></code></pre>
+<h5 id="编写测试单元"><a href="#编写测试单元" class="headerlink" title="编写测试单元"></a>编写测试单元</h5><blockquote>
+<p>参考文章：<a href="http://tengj.top/2017/12/28/springboot12/#Controller单元测试" target="_blank" rel="noopener">http://tengj.top/2017/12/28/springboot12/#Controller单元测试</a><br>看过这几篇文章之后觉得好棒，还有这么方便的测试方法，这些以前都没有接触过…</p>
+</blockquote>
+<p>下面针对该Controller编写测试用例验证正确性，具体如下。当然也可以通过浏览器插件等进行请求提交验证，因为涉及一些包的导入，这里给出全部代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>springboot<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>springboot<span class="token punctuation">.</span>controller<span class="token punctuation">.</span>UserController<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>Before<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>Test<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>junit<span class="token punctuation">.</span>runner<span class="token punctuation">.</span>RunWith<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span>SpringBootTest<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>mock<span class="token punctuation">.</span>web<span class="token punctuation">.</span>MockServletContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span>junit4<span class="token punctuation">.</span>SpringJUnit4ClassRunner<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>context<span class="token punctuation">.</span>web<span class="token punctuation">.</span>WebAppConfiguration<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>MockMvc<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>RequestBuilder<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>setup<span class="token punctuation">.</span>MockMvcBuilders<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token keyword">static</span> org<span class="token punctuation">.</span>hamcrest<span class="token punctuation">.</span>Matchers<span class="token punctuation">.</span>equalTo<span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token keyword">static</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>request<span class="token punctuation">.</span>MockMvcRequestBuilders<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token keyword">static</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>result<span class="token punctuation">.</span>MockMvcResultMatchers<span class="token punctuation">.</span>content<span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token keyword">static</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>test<span class="token punctuation">.</span>web<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>result<span class="token punctuation">.</span>MockMvcResultMatchers<span class="token punctuation">.</span>status<span class="token punctuation">;</span>
+
+
+<span class="token comment" spellcheck="true">/**
+ * @author: @我没有三颗心脏
+ * @create: 2018-05-29-上午 8:39
+ */</span>
+<span class="token annotation punctuation">@RunWith</span><span class="token punctuation">(</span>SpringJUnit4ClassRunner<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@SpringBootTest</span><span class="token punctuation">(</span>classes <span class="token operator">=</span> MockServletContext<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@WebAppConfiguration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ApplicationTests</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> MockMvc mvc<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Before</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setUp</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        mvc <span class="token operator">=</span> MockMvcBuilders<span class="token punctuation">.</span><span class="token function">standaloneSetup</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">UserController</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Test</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">testUserController</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 测试UserController</span>
+        RequestBuilder request <span class="token operator">=</span> null<span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 1、get查一下user列表，应该为空</span>
+        request <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/users/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"[]"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 2、post提交一个user</span>
+        request <span class="token operator">=</span> <span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/users/"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">,</span> <span class="token string">"1"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"测试大师"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"20"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"success"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 3、get获取user列表，应该有刚才插入的数据</span>
+        request <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/users/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"[{\"id\":1,\"name\":\"测试大师\",\"age\":20}]"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 4、put修改id为1的user</span>
+        request <span class="token operator">=</span> <span class="token function">put</span><span class="token punctuation">(</span><span class="token string">"/users/1"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"测试终极大师"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"30"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"success"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 5、get一个id为1的user</span>
+        request <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/users/1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"{\"id\":1,\"name\":\"测试终极大师\",\"age\":30}"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 6、del删除id为1的user</span>
+        request <span class="token operator">=</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token string">"/users/1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"success"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 7、get查一下user列表，应该为空</span>
+        request <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/users/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"[]"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>MockMvc实现了对HTTP请求的模拟，从示例的代码就能够看出MockMvc的简单用法，它能够直接使用网络的形式，转换到Controller的调用，这样使得测试速度快、不依赖网络环境，而且提供了一套验证的工具，这样可以使得请求的验证统一而且很方便。</p>
+<p>需要注意的就是在MockMvc使用之前需要先用MockMvcBuilders构建MockMvc对象，如果对单元测试感兴趣的童鞋请戳上面的链接哦，这里就不细说了</p>
+<h4 id="测试信息"><a href="#测试信息" class="headerlink" title="测试信息"></a>测试信息</h4><p>运行测试类，控制台返回的信息如下：</p>
+<pre><code> __      __                               __
+/\ \  __/\ \                             /\ \
+\ \ \/\ \ \ \    ___ ___   __  __    ____\ \ \/&#39;\    __  _  ____
+ \ \ \ \ \ \ \ /&#39; __` __`\/\ \/\ \  /&#39;,__\\ \ , &lt;   /\ \/&#39;\/\_ ,`\
+  \ \ \_/ \_\ \/\ \/\ \/\ \ \ \_\ \/\__, `\\ \ \ \`\\/&gt;  &lt;/\/_/  /_
+   \ `\___x___/\ \_\ \_\ \_\/`____ \/\____/ \ \_\ \_\/\_/\_\ /\____\
+    &#39;\/__//__/  \/_/\/_/\/_/`/___/&gt; \/___/   \/_/\/_/\//\/_/ \/____/
+                               /\___/
+                               \/__/
+2018-05-29 09:28:18.730  INFO 5884 --- [           main] cn.wmyskxz.springboot.ApplicationTests   : Starting ApplicationTests on SC-201803262103 with PID 5884 (started by Administrator in E:\Java Projects\springboot)
+2018-05-29 09:28:18.735  INFO 5884 --- [           main] cn.wmyskxz.springboot.ApplicationTests   : No active profile set, falling back to default profiles: default
+2018-05-29 09:28:18.831  INFO 5884 --- [           main] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@7c37508a: startup date [Tue May 29 09:28:18 CST 2018]; root of context hierarchy
+2018-05-29 09:28:19.200  INFO 5884 --- [           main] cn.wmyskxz.springboot.ApplicationTests   : Started ApplicationTests in 1.184 seconds (JVM running for 2.413)
+2018-05-29 09:28:19.798  INFO 5884 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped &quot;{[/users/{id}],methods=[PUT]}&quot; onto public java.lang.String cn.wmyskxz.springboot.controller.UserController.putUser(java.lang.Long,cn.wmyskxz.springboot.pojo.User)
+2018-05-29 09:28:19.800  INFO 5884 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped &quot;{[/users/],methods=[GET]}&quot; onto public java.util.List&lt;cn.wmyskxz.springboot.pojo.User&gt; cn.wmyskxz.springboot.controller.UserController.getUserList()
+2018-05-29 09:28:19.800  INFO 5884 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped &quot;{[/users/],methods=[POST]}&quot; onto public java.lang.String cn.wmyskxz.springboot.controller.UserController.postUser(cn.wmyskxz.springboot.pojo.User)
+2018-05-29 09:28:19.801  INFO 5884 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped &quot;{[/users/{id}],methods=[DELETE]}&quot; onto public java.lang.String cn.wmyskxz.springboot.controller.UserController.deleteUser(java.lang.Long)
+2018-05-29 09:28:19.801  INFO 5884 --- [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped &quot;{[/users/{id}],methods=[GET]}&quot; onto public cn.wmyskxz.springboot.pojo.User cn.wmyskxz.springboot.controller.UserController.getUser(java.lang.Long)
+2018-05-29 09:28:19.850  INFO 5884 --- [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : Looking for @ControllerAdvice: org.springframework.test.web.servlet.setup.StubWebApplicationContext@42f8285e
+2018-05-29 09:28:19.924  INFO 5884 --- [           main] o.s.mock.web.MockServletContext          : Initializing Spring FrameworkServlet &#39;&#39;
+2018-05-29 09:28:19.925  INFO 5884 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : FrameworkServlet &#39;&#39;: initialization started
+2018-05-29 09:28:19.926  INFO 5884 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : FrameworkServlet &#39;&#39;: initialization completed in 1 ms</code></pre><p>通过控制台信息，我们得知通过 RESTful 风格能成功调用到正确的方法并且能获取到或者返回正确的参数，没有任何错误，则说明成功！</p>
+<p>如果你想要看到更多的细节信息，可以在每次调用 <code>perform()</code> 方法后再跟上一句 <code>.andDo(MockMvcResultHandlers.print())</code> ，例如：</p>
+<pre class=" language-java"><code class="language-java">        <span class="token comment" spellcheck="true">// 1、get查一下user列表，应该为空</span>
+        request <span class="token operator">=</span> <span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/users/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        mvc<span class="token punctuation">.</span><span class="token function">perform</span><span class="token punctuation">(</span>request<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isOk</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andExpect</span><span class="token punctuation">(</span><span class="token function">content</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token function">equalTo</span><span class="token punctuation">(</span><span class="token string">"[]"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">andDo</span><span class="token punctuation">(</span>MockMvcResultHandlers<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>就能看到详细的信息，就像下面这样：</p>
+<pre><code>MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /users/
+       Parameters = {}
+          Headers = {}
+             Body = &lt;no character encoding set&gt;
+    Session Attrs = {}
+
+Handler:
+             Type = cn.wmyskxz.springboot.controller.UserController
+           Method = public java.util.List&lt;cn.wmyskxz.springboot.pojo.User&gt; cn.wmyskxz.springboot.controller.UserController.getUserList()
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = {Content-Type=[application/json;charset=UTF-8]}
+     Content type = application/json;charset=UTF-8
+             Body = []
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []</code></pre><h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>我们仍然使用 <strong>@RequestMapping</strong> 注解，但不同的是，我们指定 method 属性来处理不同的 HTTP 方法，并且通过 <strong>@PathVariable</strong> 注解来将 HTTP 请求中的属性绑定到我们指定的形参上。</p>
+<p>事实上，Spring 4.3 之后，为了更好的支持 RESTful 风格，增加了几个注解：<strong>@PutMapping</strong>、<strong>@GetMapping</strong>、<strong>@DeleteMapping</strong>、<strong>@PostMapping</strong>，从名字也能大概的看出，其实也就是将 method 属性的值与 @RequestMapping 进行了绑定而已，例如，我们对UserController中的deleteUser方法进行改造：</p>
+<pre class=" language-java"><code class="language-java"><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>改造前<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>DELETE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">deleteUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 处理"/users/{id}"的DELETE请求，用来删除User</span>
+    users<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>改造后<span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">--</span><span class="token operator">-</span>
+<span class="token annotation punctuation">@DeleteMapping</span><span class="token punctuation">(</span><span class="token string">"/{id}"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">deleteUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 处理"/users/{id}"的DELETE请求，用来删除User</span>
+    users<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="使用Swagger2构造RESTful-API文档"><a href="#使用Swagger2构造RESTful-API文档" class="headerlink" title="使用Swagger2构造RESTful API文档"></a>使用Swagger2构造RESTful API文档</h2><blockquote>
+<p>参考文章：<a href="http://blog.didispace.com/springbootswagger2/" target="_blank" rel="noopener">http://blog.didispace.com/springbootswagger2/</a></p>
+</blockquote>
+<p>RESTful 风格为后台与前台的交互提供了简洁的接口API，并且有利于减少与其他团队的沟通成本，通常情况下，我们会创建一份RESTful API文档来记录所有的接口细节，但是这样做有以下的几个问题：</p>
+<ol>
+<li>由于接口众多，并且细节复杂（需要考虑不同的HTTP请求类型、HTTP头部信息、HTTP请求内容等），<strong>高质量地创建这份文档本身就是件非常吃力的事</strong>，下游的抱怨声不绝于耳。</li>
+<li>随着时间推移，不断修改接口实现的时候都必须同步修改接口文档，而文档与代码又处于两个不同的媒介，除非有严格的管理机制，不然<strong>很容易导致不一致现象。</strong></li>
+</ol>
+<p>Swagger2的出现就是为了解决上述的这些问题，并且能够轻松的整合到我们的SpringBoot中去，它既可以减少我们创建文档的工作量，同时说明内容又可以整合到代码之中去，让维护文档和修改代码整合为一体，可以让我们在修改代码逻辑的同时方便的修改文档说明，这太酷了，另外<strong>Swagger2页提供了强大的页面测试功能来调试每个RESTful API</strong>，具体效果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BD%BF%E7%94%A8RESTful%E9%A3%8E%E6%A0%BC%E5%BC%80%E5%8F%91Java-Web/7896890-c5e98d9ffb2e2521.png" alt=""></p>
+<p>让我们赶紧来看看吧：</p>
+<h4 id="第一步：添加Swagger2依赖："><a href="#第一步：添加Swagger2依赖：" class="headerlink" title="第一步：添加Swagger2依赖："></a>第一步：添加Swagger2依赖：</h4><p>在 <code>pom.xml</code> 中加入Swagger2的依赖：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.springfox<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>springfox-swagger2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.2.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>io.springfox<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>springfox-swagger-ui<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.2.2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span></code></pre>
+<h4 id="第二步：创建Swagger2配置类"><a href="#第二步：创建Swagger2配置类" class="headerlink" title="第二步：创建Swagger2配置类"></a>第二步：创建Swagger2配置类</h4><p>在SpringBoot启动类的同级目录下创建Swagger2的配置类 <code>Swagger2</code>：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token annotation punctuation">@EnableSwagger2</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Swagger2</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> Docket <span class="token function">createRestApi</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Docket</span><span class="token punctuation">(</span>DocumentationType<span class="token punctuation">.</span>SWAGGER_2<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">select</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">apis</span><span class="token punctuation">(</span>RequestHandlerSelectors<span class="token punctuation">.</span><span class="token function">basePackage</span><span class="token punctuation">(</span><span class="token string">"cn.wmyskxz.springboot"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">paths</span><span class="token punctuation">(</span>PathSelectors<span class="token punctuation">.</span><span class="token function">any</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> ApiInfo <span class="token function">apiInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ApiInfoBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">"Spring Boot中使用Swagger2构建RESTful APIs"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">description</span><span class="token punctuation">(</span><span class="token string">"原文地址链接：http://blog.didispace.com/springbootswagger2/"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">termsOfServiceUrl</span><span class="token punctuation">(</span><span class="token string">"http://blog.didispace.com/"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">contact</span><span class="token punctuation">(</span><span class="token string">"@我没有三颗心脏"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">"1.0"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>如上面的代码所示，通过 <code>@Configuration</code> 注解让Spring来加载该配置类，再通过 <code>@EnableSwagger2</code> 注解来启动Swagger2；</p>
+<p>再通过 <code>createRestApi</code> 函数创建 <code>Docket</code> 的Bean之后，<code>apiInfo()</code> 用来创建该API的基本信息（这些基本信息会展现在文档页面中），<code>select()</code> 函数返回一个 <code>ApiSelectorBuilder</code> 实例用来控制哪些接口暴露给Swagger来展现，本例采用<strong>指定扫描的包路径</strong>来定义，Swagger会扫描该包下所有的Controller定义的API，并产生文档内容（除了被 <code>@ApiIgnore</code> 指定的请求）</p>
+<h4 id="第三步：添加文档内容"><a href="#第三步：添加文档内容" class="headerlink" title="第三步：添加文档内容"></a>第三步：添加文档内容</h4><p>在完成了上述配置后，其实已经可以生产文档内容，但是这样的文档主要针对请求本身，而描述主要来源于函数等命名产生，对用户并不友好，我们通常需要自己增加一些说明来丰富文档内容。如下所示，我们通过<code>@ApiOperation</code>注解来给API增加说明、通过<code>@ApiImplicitParams</code>、<code>@ApiImplicitParam</code>注解来给参数增加说明。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RestController</span>
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/users"</span><span class="token punctuation">)</span>     <span class="token comment" spellcheck="true">// 通过这里配置使下面的映射都在/users下，可去除</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserController</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> Map<span class="token operator">&lt;</span>Long<span class="token punctuation">,</span> User<span class="token operator">></span> users <span class="token operator">=</span> Collections<span class="token punctuation">.</span><span class="token function">synchronizedMap</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span>Long<span class="token punctuation">,</span> User<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"获取用户列表"</span><span class="token punctuation">,</span> notes<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">""</span><span class="token punctuation">}</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>GET<span class="token punctuation">)</span>
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>User<span class="token operator">></span> <span class="token function">getUserList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        List<span class="token operator">&lt;</span>User<span class="token operator">></span> r <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>User<span class="token operator">></span><span class="token punctuation">(</span>users<span class="token punctuation">.</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> r<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"创建用户"</span><span class="token punctuation">,</span> notes<span class="token operator">=</span><span class="token string">"根据User对象创建用户"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"user"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"用户详细实体user"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"User"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>POST<span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">postUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@RequestBody</span> User user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        users<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> user<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"获取用户详细信息"</span><span class="token punctuation">,</span> notes<span class="token operator">=</span><span class="token string">"根据url的id来获取用户详细信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"用户ID"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"Long"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>GET<span class="token punctuation">)</span>
+    <span class="token keyword">public</span> User <span class="token function">getUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> users<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"更新用户详细信息"</span><span class="token punctuation">,</span> notes<span class="token operator">=</span><span class="token string">"根据url的id来指定更新对象，并根据传过来的user信息来更新用户详细信息"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParams</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"用户ID"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"Long"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"user"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"用户详细实体user"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"User"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>PUT<span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">putUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">,</span> <span class="token annotation punctuation">@RequestBody</span> User user<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        User u <span class="token operator">=</span> users<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        u<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        u<span class="token punctuation">.</span><span class="token function">setAge</span><span class="token punctuation">(</span>user<span class="token punctuation">.</span><span class="token function">getAge</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        users<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>id<span class="token punctuation">,</span> u<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@ApiOperation</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"删除用户"</span><span class="token punctuation">,</span> notes<span class="token operator">=</span><span class="token string">"根据url的id来指定删除对象"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@ApiImplicitParam</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"id"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"用户ID"</span><span class="token punctuation">,</span> required <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">,</span> dataType <span class="token operator">=</span> <span class="token string">"Long"</span><span class="token punctuation">)</span>
+    <span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token string">"/{id}"</span><span class="token punctuation">,</span> method<span class="token operator">=</span>RequestMethod<span class="token punctuation">.</span>DELETE<span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">deleteUser</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> Long id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        users<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token string">"success"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span></code></pre>
+<p>完成上述代码添加之后，启动Spring Boot程序，访问：<a href="http://localhost:8080/swagger-ui.html，就能看到前文展示的RESTful" target="_blank" rel="noopener">http://localhost:8080/swagger-ui.html，就能看到前文展示的RESTful</a> API的页面，我们可以点开具体的API请求，POST类型的/users请求为例，可找到上述代码中我们配置的Notes信息以及参数user的描述信息，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BD%BF%E7%94%A8RESTful%E9%A3%8E%E6%A0%BC%E5%BC%80%E5%8F%91Java-Web/7896890-dc830a1e2bc8f3f8.png" alt=""></p>
+<h4 id="API文档访问与调试"><a href="#API文档访问与调试" class="headerlink" title="API文档访问与调试"></a>API文档访问与调试</h4><p>在上图请求的页面中，我们可以看到一个Value的输入框，并且在右边的Model Schema中有示例的User对象模板，我们点击右边黄色的区域Value框中就会自动填好示例的模板数据，我们可以稍微修改修改，然后点击下方的 <code>“Try it out!”</code> 按钮，即可完成一次请求调用，这太酷了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E4%BD%BF%E7%94%A8RESTful%E9%A3%8E%E6%A0%BC%E5%BC%80%E5%8F%91Java-Web/7896890-954cff576c43fa21.png" alt=""></p>
+<h4 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h4><p>对比之前用文档来记录RESTful API的方式，我们通过增加少量的配置内容，在原有代码的基础上侵入了忍受范围内的代码，就可以达到如此方便、直观的效果，可以说是使用Swagger2来对API文档进行管理，是个很不错的选择！</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/05/28/javaweb-zhong-shi-yong-json/">
       JavaWeb中使用JSON
     </a>
@@ -6383,490 +6878,6 @@ v<span class="token punctuation">.</span>x <span class="token operator">=</span>
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/05/08/spring-boot-kuai-su-ru-men/">
-      Spring Boot【快速入门】
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SpringBoot/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/SpringBoot</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年5月8日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-9323041dd0ce883e.png" alt=""></p>
-<h2 id="Spring-Boot-概述"><a href="#Spring-Boot-概述" class="headerlink" title="Spring Boot 概述"></a>Spring Boot 概述</h2><blockquote>
-<p><strong>Build Anything with Spring Boot：</strong> Spring Boot is the starting point for building all Spring-based applications. Spring Boot is designed to get you up and running as quickly as possible, with minimal upfront configuration of Spring.</p>
-</blockquote>
-<p>上面是引自官网的一段话，大概是说： Spring Boot 是所有基于 Spring 开发的项目的起点。Spring Boot 的设计是为了让你尽可能快的跑起来 Spring 应用程序并且尽可能减少你的配置文件。</p>
-<h4 id="什么是-Spring-Boot"><a href="#什么是-Spring-Boot" class="headerlink" title="什么是 Spring Boot"></a>什么是 Spring Boot</h4><ul>
-<li>它使用 “习惯优于配置” （项目中存在大量的配置，此外还内置一个习惯性的配置，让你无须）的理念让你的项目快速运行起来。</li>
-<li>它并不是什么新的框架，而是默认配置了很多框架的使用方式，就像 Maven 整合了所有的 jar 包一样，Spring Boot 整合了所有框架（引自：<a href="http://www.ityouknow.com/springboot/2016/01/06/springboot(%E4%B8%80)-%E5%85%A5%E9%97%A8%E7%AF%87.html" target="_blank" rel="noopener">springboot(一)：入门篇——纯洁的微笑</a>）</li>
-</ul>
-<h4 id="使用-Spring-Boot-有什么好处"><a href="#使用-Spring-Boot-有什么好处" class="headerlink" title="使用 Spring Boot 有什么好处"></a>使用 Spring Boot 有什么好处</h4><p>回顾我们之前的 SSM 项目，搭建过程还是比较繁琐的，需要：</p>
-<ul>
-<li>1）配置 web.xml，加载 spring 和 spring mvc</li>
-<li>2）配置数据库连接、配置日志文件</li>
-<li>3）配置家在配置文件的读取，开启注解</li>
-<li>4）配置mapper文件</li>
-<li><strong>…..</strong></li>
-</ul>
-<p>而使用 Spring Boot 来开发项目则只需要非常少的几个配置就可以搭建起来一个 Web 项目，并且利用 IDEA 可以自动生成生成，这简直是太爽了… </p>
-<ul>
-<li>划重点：简单、快速、方便地搭建项目；对主流开发框架的无配置集成；极大提高了开发、部署效率。</li>
-</ul>
-<hr>
-<h2 id="Spring-Boot-快速搭建"><a href="#Spring-Boot-快速搭建" class="headerlink" title="Spring Boot 快速搭建"></a>Spring Boot 快速搭建</h2><h4 id="第一步：新建项目"><a href="#第一步：新建项目" class="headerlink" title="第一步：新建项目"></a>第一步：新建项目</h4><p>选择 Spring Initializr ，然后选择默认的 url 点击【Next】：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-3e2c9c5742c10c86.png" alt=""></p>
-<p>然后修改一下项目的信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-28dbe478ff25a3a0.png" alt=""></p>
-<p>勾选上 Web 模板：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-532868b7e6760e03.png" alt=""></p>
-<p>选择好项目的位置，点击【Finish】：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-931cc2fb5c8964e9.png" alt=""></p>
-<p>如果是第一次配置 Spring Boot 的话可能需要等待一会儿 IDEA 下载相应的 依赖包，默认创建好的项目结构如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-9ac7acc56d5a32f0.png" alt=""></p>
-<p>项目结构还是看上去挺清爽的，少了很多配置文件，我们来了解一下默认生成的有什么：</p>
-<ul>
-<li>SpringbootApplication： 一个带有 main() 方法的类，用于启动应用程序</li>
-<li>SpringbootApplicationTests：一个空的 Junit 测试了，它加载了一个使用 Spring Boot 字典配置功能的 Spring 应用程序上下文</li>
-<li>application.properties：一个空的 properties 文件，可以根据需要添加配置属性</li>
-<li>pom.xml： Maven 构建说明文件</li>
-</ul>
-<h4 id="第二步：HelloController"><a href="#第二步：HelloController" class="headerlink" title="第二步：HelloController"></a>第二步：HelloController</h4><p>在【cn.wmyskxz.springboot】包下新建一个【HelloController】：</p>
-<pre><code>package cn.wmyskxz.springboot;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-/**
- * 测试控制器
- *
- * @author: @我没有三颗心脏
- * @create: 2018-05-08-下午 16:46
- */
-@RestController
-public class HelloController {
-
-    @RequestMapping(&quot;/hello&quot;)
-    public String hello() {
-        return &quot;Hello Spring Boot!&quot;;
-    }
-}</code></pre><ul>
-<li><strong>@RestController 注解：</strong> 该注解是 @Controller 和 @ResponseBody 注解的合体版</li>
-</ul>
-<h4 id="第三步：利用-IDEA-启动-Spring-Boot"><a href="#第三步：利用-IDEA-启动-Spring-Boot" class="headerlink" title="第三步：利用 IDEA 启动 Spring Boot"></a>第三步：利用 IDEA 启动 Spring Boot</h4><p>我们回到 SpringbootApplication 这个类中，然后右键点击运行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-bf1aa6ed5c0db7b4.png" alt=""></p>
-<ul>
-<li><strong>注意</strong>：我们之所以在上面的项目中没有手动的去配置 Tomcat 服务器，是因为 Spring Boot 内置了 Tomcat </li>
-</ul>
-<p>等待一会儿就会看到下方的成功运行的提示信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-63e43dc6a277de3e.png" alt=""></p>
-<p>可以看到我们的 Tomcat 运行在 8080 端口，我们来访问 “<code>/hello</code>” 地址试一下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-6111e1913c5bf6d6.png" alt=""></p>
-<p>可以看到页面成功显示出我们返回的信息。</p>
-<hr>
-<h2 id="解析-Spring-Boot-项目"><a href="#解析-Spring-Boot-项目" class="headerlink" title="解析 Spring Boot 项目"></a>解析 Spring Boot 项目</h2><blockquote>
-<p>这一部分参考自：<a href="http://tengj.top/2017/02/26/springboot1/" target="_blank" rel="noopener">Spring Boot干货系列（一）优雅的入门篇 ——嘟嘟独立博客</a></p>
-</blockquote>
-<h4 id="解析-pom-xml-文件"><a href="#解析-pom-xml-文件" class="headerlink" title="解析 pom.xml 文件"></a>解析 pom.xml 文件</h4><p>让我们来看看默认生成的 pom.xml 文件中到底有一些什么特别：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;groupId&gt;cn.wmyskxz&lt;/groupId&gt;
-    &lt;artifactId&gt;springboot&lt;/artifactId&gt;
-    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
-    &lt;packaging&gt;jar&lt;/packaging&gt;
-
-    &lt;name&gt;springboot&lt;/name&gt;
-    &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;
-
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;2.0.1.RELEASE&lt;/version&gt;
-        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
-    &lt;/parent&gt;
-
-    &lt;properties&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-            &lt;scope&gt;test&lt;/scope&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-&lt;/project&gt;</code></pre><p>我们可以看到一个比较陌生一些的标签 <code>&lt;parent&gt;</code> ，这个标签是在配置 Spring Boot 的父级依赖：</p>
-<pre><code>&lt;parent&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-    &lt;version&gt;2.0.1.RELEASE&lt;/version&gt;
-    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
-&lt;/parent&gt;</code></pre><p>有了这个，当前的项目才是 Spring Boot 项目，spring-boot-starter-parent 是一个特殊的 starter ，它用来提供相关的 Maven 默认依赖，<strong>使用它之后，常用的包依赖就可以省去 version 标签。</strong></p>
-<p>关于具体 Spring Boot 提供了哪些 jar 包的依赖，我们可以查看本地 Maven 仓库下：\repository\org\springframework\boot\spring-boot-dependencies\2.0.1.RELEASE\spring-boot-dependencies-2.0.1.RELEASE.pom 文件来查看，挺长的…</p>
-<h4 id="应用入口类"><a href="#应用入口类" class="headerlink" title="应用入口类"></a>应用入口类</h4><p>Spring Boot 项目通常有一个名为 <em>Application 的入口类，入口类里有一个 main 方法， *</em>这个 main 方法其实就是一个标准的 Javay 应用的入口方法。** </p>
-<p><strong>@SpringBootApplication</strong> 是 Spring Boot 的核心注解，它是一个组合注解，该注解组合了：<strong>@Configuration、@EnableAutoConfiguration、@ComponentScan；</strong> 若不是用 @SpringBootApplication 注解也可以使用这三个注解代替。</p>
-<ul>
-<li>其中，<strong>@EnableAutoConfiguration 让 Spring Boot 根据类路径中的 jar 包依赖为当前项目进行自动配置</strong>，例如，添加了 spring-boot-starter-web 依赖，会自动添加 Tomcat 和 Spring MVC 的依赖，那么 Spring Boot 会对 Tomcat 和 Spring MVC 进行自动配置。</li>
-<li><strong>Spring Boot 还会自动扫描 @SpringBootApplication 所在类的同级包以及下级包里的 Bean</strong> ，所以入口类建议就配置在 grounpID + arctifactID 组合的包名下（这里为 cn.wmyskxz.springboot 包）</li>
-</ul>
-<h4 id="Spring-Boot-的配置文件"><a href="#Spring-Boot-的配置文件" class="headerlink" title="Spring Boot 的配置文件"></a>Spring Boot 的配置文件</h4><p>Spring Boot 使用一个全局的配置文件 application.properties 或 application.yml，放置在【src/main/resources】目录或者类路径的 /config 下。</p>
-<p>Spring Boot 不仅支持常规的 properties 配置文件，还支持 yaml 语言的配置文件。yaml 是以数据为中心的语言，在配置数据的时候具有面向对象的特征。</p>
-<p>Spring Boot 的全局配置文件的作用是对一些默认配置的配置值进行修改。</p>
-<blockquote>
-<ul>
-<li>简单实例一下</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-bcd65f7469b06608.png" alt=""></p>
-<p>我们同样的将 Tomcat 默认端口设置为 8080 ，并将默认的访问路径从 “<code>/</code>” 修改为 “<code>/hello</code>” 时，使用 properties 文件和 yml 文件的区别如上图。</p>
-<ul>
-<li>注意： yml 需要在 “<code>:</code>” 后加一个空格，幸好 IDEA 很好地支持了 yml 文件的格式有良好的代码提示；</li>
-</ul>
-<blockquote>
-<ul>
-<li>我们可以自己配置多个属性</li>
-</ul>
-</blockquote>
-<p>我们直接把 .properties 后缀的文件删掉，使用 .yml 文件来进行简单的配置，然后使用 @Value 来获取配置属性：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-0e808a82254d6a4b.png" alt=""></p>
-<p>重启 Spring Boot ，输入地址：localhost:8080/hello 能看到正确的结果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-c85216e8ea7910f0.png" alt=""></p>
-<ul>
-<li><strong>注意：</strong> 我们并没有在 yml 文件中注明属性的类型，而是在使用的时候定义的。</li>
-</ul>
-<p>你也可以在配置文件中使用当前配置：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-37e91abbc4550982.png" alt=""></p>
-<p>仍然可以得到正确的结果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-eabc3cd39b44fd0d.png" alt=""></p>
-<ul>
-<li><strong>问题：</strong> 这样写配置文件繁琐而且可能会造成类的臃肿，因为有许许多多的 @Value 注解。</li>
-</ul>
-<blockquote>
-<ul>
-<li>封装配置信息</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2599817d8f2f50d2.png" alt=""></p>
-<p>我们可以把配置信息封装成一个类，首先在我们的 name 和 age 前加一个 student 前缀，然后新建一个 StudentProperties 的类用来封装这些信息，并用上两个注解：</p>
-<ul>
-<li>@Component：表明当前类是一个 Java Bean </li>
-<li>@ConfigurationProperties(prefix = “student”)：表示获取前缀为 sutdent 的配置信息</li>
-</ul>
-<p>这样我们就可以在控制器中使用，重启得到正确信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-84dc1215d01f3fa9.png" alt=""></p>
-<h4 id="Spring-Boot-热部署"><a href="#Spring-Boot-热部署" class="headerlink" title="Spring Boot 热部署"></a>Spring Boot 热部署</h4><p>在目前的 Spring Boot 项目中，当发生了任何修改之后我们都需要重新启动才能够正确的得到效果，这样会略显麻烦，Spring Boot 提供了热部署的方式，当发现任何类发生了改变，就会通过 JVM 类加载的方式，加载最新的类到虚拟机中，这样就不需要重新启动也能看到修改后的效果了。</p>
-<blockquote>
-<ul>
-<li>做法也很简单，修改 pom.xml 即可！</li>
-</ul>
-</blockquote>
-<p>我们往 pom.xml 中添加一个依赖就可以了：</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
-    &lt;optional&gt;true&lt;/optional&gt; &lt;!-- 这个需要为 true 热部署才有效 --&gt;
-&lt;/dependency&gt;</code></pre><p>重新启动 Spring Boot ，然后修改任意代码，就能观察到控制台的自动重启现象：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-cec869956c3cf158.png" alt=""></p>
-<blockquote>
-<p>关于如何在 IDEA 中配置热部署：<a href="https://blog.csdn.net/xusheng_Mr/article/details/78771746" target="_blank" rel="noopener">传送门</a></p>
-</blockquote>
-<hr>
-<h2 id="Spring-Boot-使用"><a href="#Spring-Boot-使用" class="headerlink" title="Spring Boot 使用"></a>Spring Boot 使用</h2><p>上面已经完成了 Spring Boot 项目的简单搭建，我们仅仅需要进行一些简单的设置，写一个 HelloController 就能够直接运行了，不要太简单…接下来我们再深入了解一下 Spring Boot 的使用。</p>
-<h4 id="Spring-Boot-支持-JSP"><a href="#Spring-Boot-支持-JSP" class="headerlink" title="Spring Boot 支持 JSP"></a>Spring Boot 支持 JSP</h4><p>Spring Boot 的默认视图支持是 Thymeleaf 模板引擎，但是这个我们不熟悉啊，我们还是想要使用 JSP 怎么办呢？</p>
-<blockquote>
-<ul>
-<li>第一步：修改 pom.xml 增加对 JSP 文件的支持</li>
-</ul>
-</blockquote>
-<pre><code>&lt;!-- servlet依赖. --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-    &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-    &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-&lt;/dependency&gt;
-
-&lt;!-- tomcat的支持.--&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
-    &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;</code></pre><blockquote>
-<ul>
-<li>第二步：配置试图重定向 JSP 文件的位置</li>
-</ul>
-</blockquote>
-<p>修改 application.yml 文件，将我们的 JSP 文件重定向到 /WEB-INF/views/ 目录下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-7c17f7e10cfb2629.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第三步：修改 HelloController</li>
-</ul>
-</blockquote>
-<p>修改 @RestController 注解为 @Controller ，然后将 hello 方法修改为：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2dc2c39cd962edc1.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第四步：新建 hello.jsp 文件</li>
-</ul>
-</blockquote>
-<p>在【src/main】目录下依次创建 webapp、WEB-INF、views 目录，并创建一个 hello.jsp 文件：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-a180556d7ead9605.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第五步：刷新网页</li>
-</ul>
-</blockquote>
-<p>因为我们部署了热部署功能，所以只需要等待控制台重启信息完成之后再刷新网页就可以看到正确效果了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-cfd20f747ffca978.png" alt=""></p>
-<ul>
-<li>关于 404，使用 spring-boot:run 运行项目可以解决：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-27c1bf46487ba5eb.png" alt=""></p>
-<h4 id="集成-MyBatis"><a href="#集成-MyBatis" class="headerlink" title="集成 MyBatis"></a>集成 MyBatis</h4><blockquote>
-<ul>
-<li>第一步：修改 pom.xml 增加对 MySql和 MyBatis 的支持</li>
-</ul>
-</blockquote>
-<pre><code>
-&lt;!-- mybatis --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
-    &lt;version&gt;1.1.1&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;!-- mysql --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;mysql&lt;/groupId&gt;
-    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-    &lt;version&gt;5.1.21&lt;/version&gt;
-&lt;/dependency&gt;</code></pre><blockquote>
-<ul>
-<li>第二步：新增数据库链接参数</li>
-</ul>
-</blockquote>
-<p>这里我们就直接使用之前创建好的 student 表了吧：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-1eda563cfdfbae65.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第三步：创建 Student 实体类和 StudentMapper 映射类</li>
-</ul>
-</blockquote>
-<p>在【cn.wmyskxz.springboot】下新建一个【pojo】包，然后在其下创建一个 Student 类：</p>
-<pre><code>public class Student {
-
-    private Integer id;
-    private Integer student_id;
-    private String name;
-    private Integer age;
-    private String sex;
-    private Date birthday;
-
-    /* getter and setter */
-}</code></pre><p>在【cn.wmyskxz.springboot】下新建一个【mapper】包，然后在其下创建一个 StudentMapper 映射类：</p>
-<pre><code>package cn.wmyskxz.springboot.mapper;
-
-import cn.wmyskxz.springboot.pojo.Student;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
-
-@Mapper
-public interface StudentMapper {
-
-    @Select(&quot;SELECT * FROM student&quot;)
-    List&lt;Student&gt; findAll();
-}</code></pre><blockquote>
-<ul>
-<li>第四步：编写 StudentController</li>
-</ul>
-</blockquote>
-<p>在【cn.wmyskxz.springboot】下新建一个【controller】包，然后在其下创建一个 StudentController ：</p>
-<pre><code>package cn.wmyskxz.springboot.controller;
-
-import cn.wmyskxz.springboot.mapper.StudentMapper;
-import cn.wmyskxz.springboot.pojo.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-
-/**
- * Student 控制器
- *
- * @author: @我没有三颗心脏
- * @create: 2018-05-08-下午 20:25
- */
-@Controller
-public class StudentController {
-
-    @Autowired
-    StudentMapper studentMapper;
-
-    @RequestMapping(&quot;/listStudent&quot;)
-    public String listStudent(Model model) {
-        List&lt;Student&gt; students = studentMapper.findAll();
-        model.addAttribute(&quot;students&quot;, students);
-        return &quot;listStudent&quot;;
-    }
-}</code></pre><blockquote>
-<p>第五步：编写 listStudent.jsp 文件</p>
-</blockquote>
-<p>我们简化一下 JSP 的文件，仅显示两个字段的数据：</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot;%&gt;
-
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot;%&gt;
-
-&lt;table align=&#39;center&#39; border=&#39;1&#39; cellspacing=&#39;0&#39;&gt;
-    &lt;tr&gt;
-        &lt;td&gt;id&lt;/td&gt;
-        &lt;td&gt;name&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;c:forEach items=&quot;${students}&quot; var=&quot;s&quot; varStatus=&quot;st&quot;&gt;
-        &lt;tr&gt;
-            &lt;td&gt;${s.id}&lt;/td&gt;
-            &lt;td&gt;${s.name}&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/c:forEach&gt;
-&lt;/table&gt;</code></pre><blockquote>
-<ul>
-<li>第六步：重启服务器运行</li>
-</ul>
-</blockquote>
-<p>因为往 pom.xml 中新增加了依赖的包，所以自动重启服务器没有作用，我们需要手动重启一次，然后在地址输入：localhost:8080/listStudent 查看效果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-5fd3c075d07b5840.png" alt=""></p>
-<blockquote>
-<p>以上。</p>
-</blockquote>
-<hr>
-<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><p>how2j.cn-Spring Boot 系列教程</p>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -7217,7 +7228,7 @@ public class StudentController {
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(2)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(3)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -7271,7 +7282,7 @@ public class StudentController {
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 14.71px; color: #949494">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 15.43px; color: #8f8f8f">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 
