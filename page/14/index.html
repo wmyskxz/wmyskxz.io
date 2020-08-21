@@ -435,6 +435,227 @@
         
           
   <h2 class="title">
+    <a href="/2017/12/27/java-8-lambda-biao-da-shi/">
+      Java 8——Lambda表达式
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2017年12月27日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文内容大部分来自《Java 8实战》一书</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在上一篇文章中，我们了解了利用行为参数化来传递代码有助于应对不断变化的需求，它允许你定义一个代码块来表示一个行为，然后传递它。一般来说，利用这个概念，你就可以编写更为灵活且可重复使用的代码了。</p>
+<p>但是你同时也看到，使用匿名类来表示不同的行为并不令人满意：代码十分啰嗦，这会影响程序员在时间中使用行为参数化的积极性。Lambda表达式很好的解决了这个问题，它可以让你很简洁地表示一个行为或传递代码。<em>现在你可以把Lambda表达式看作匿名功能，它基本上就是没有声明名称的方法，但和匿名类一样，它也可以作为参数传递给一个方法。</em></p>
+<h2 id="Lambda管中窥豹"><a href="#Lambda管中窥豹" class="headerlink" title="Lambda管中窥豹"></a>Lambda管中窥豹</h2><p>可以把Lambda表达式理解为简洁地表示可传递的匿名函数的一种方式：它没有名称，但它由参数列表、函数主体、返回类型，可能还有一个抛出的异常列表。</p>
+<p>Lambda表达式鼓励你采用上一篇文章中提到的行为参数化风格，最终结果就是你的额代码变得更加清晰、更加灵活。比如，利用Lambda表达式，你可以更为简洁地自定义一个Comparator对象：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d3f5c5e9f12542c8.png" alt=""></p>
+<p>不得不承认，代码看起来更清晰了。要是现在觉得Lambda表达式看起来一头雾水的话也没关系，很快就会一点点的解释清楚的。现在，请注意你基本上只传递了比较两个苹果重量所需要的代码。看起来就像只传递了compare方法的主体。你很快就会学到，你甚至还可以进一步简化代码。</p>
+<p>为了进一步说明，下面给出了Java 8五个有效的Lambda表达式的例子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-bb79f4b577fd7e90.png" alt=""></p>
+<p>Java语言设计者选择这样的语法，是因为C#和Scala等语言中的类似功能广受欢迎。Lambda的基本语法是：</p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> expression</code></pre>
+<p>或<strong>（请注意语句的花括号）</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token punctuation">(</span>parameters<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span> statements<span class="token punctuation">;</span> <span class="token punctuation">}</span></code></pre>
+<p>你可以看到，Lambda表达式的语法很简单，我们下来来测试一下你对这个模式的了解程度：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-06b3f2c0e4b6db8d.png" alt=""></p>
+<h2 id="在哪里以及如何使用Lambda"><a href="#在哪里以及如何使用Lambda" class="headerlink" title="在哪里以及如何使用Lambda"></a>在哪里以及如何使用Lambda</h2><p>现在你可能在想，在哪里可以使用Lambda表达式。直接公布答案：你可以在函数式接口上使用Lambda表达式。</p>
+<h4 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h4><p>还记得上一篇文章中，为了参数化filter方法的行为而创建的Predicate<T>接口吗？它就是一个函数式接口！为什么呢？<strong>因为Predicate仅仅定义了一个抽象方法：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Predicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">boolean</span> <span class="token function">test</span><span class="token punctuation">(</span>T t<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>一言以蔽之，<strong>函数式接口就是之定义一个抽象方法的接口。</strong>你已经知道了Java API中的一些其他函数式接口，如Comparator和Runnable</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>T<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>T o1<span class="token punctuation">,</span> T o2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Runnable</span><span class="token punctuation">{</span>
+    <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>接口现在还可以拥有<strong>默认方法（即在类没有对方法进行是现实时，其主体为方法提供默认实现的方法，如List的sort方法）。</strong>哪怕有很多默认方法，只要接口只定义了一个<strong>抽象方法</strong>，它就仍然是一个函数式接口。</p>
+</blockquote>
+<p>为了检测是否掌握了函数式接口的概念，我们来看一个小测试：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-f6f5aac41c69a941.png" alt=""></p>
+<p>用函数式接口可以干什么呢？Lambda表达式允许你直接以内联的形式为函数式接口的抽象方法提供实现，并把整个表达式作为函数式接口的实例。这听上去可能有些绕口，但是联想到上一篇文章中的Lambda表达式改造的语句，或许就会清晰许多，它不同于使用匿名内部类来完成时的笨拙，而是更加清晰直接：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-87c3fe03f78c82c7.png" alt=""></p>
+<p>你可能会想：“为什么只有在需要函数式接口的时候才可以传递Lambda呢？”语言的设计者也考虑过其他方法，例如给Java添加函数类型，但最终他们选择了现在这种方式，因为这种方式自然且能避免语言变得更加复杂。此外，大多数Java程序员都已经熟悉了具有一个抽象方法的接口的理念（例如事件处理）。</p>
+<h2 id="把Lambda付诸实践：环绕执行模式"><a href="#把Lambda付诸实践：环绕执行模式" class="headerlink" title="把Lambda付诸实践：环绕执行模式"></a>把Lambda付诸实践：环绕执行模式</h2><p>让我们通过一个例子，看看在实践中如何利用Lambda和行为参数化来让代码更为灵活，更为简洁。资源处理（例如处理文件或数据库）时一个常见的模式就是打开一个资源，做一些处理，然后关闭资源。这个设置和清理阶段总是很相似，并且会围绕着执行处理的那些重要代码。这就是所谓的环绕执行（execute around）模式：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d84c98d38f06f440.png" alt=""></p>
+<h4 id="第一步：记得行为参数化"><a href="#第一步：记得行为参数化" class="headerlink" title="第一步：记得行为参数化"></a>第一步：记得行为参数化</h4><p>现在这段代码时有局限的。你只能读文件的第一行。如果你想要返回头两行，甚至返回使用最频繁的词，该怎么办呢？在理想的情况下，你要重用执行设置和清理的代码，并告诉processFile方法对文件执行不同的操作。这听起来是不是很耳熟？是的，你需要把processFile的行为参数化。你需要一种方法把行为传递给processFile，以便它可以利用BufferedReader执行不同的行为。</p>
+<p>传递行为正是Lambda的拿手好戏。那要是想一次读两行，这个新的processFile方法看起来又该是什么样的呢？基本上，你需要一个接受BufferedReader并返回String的Lambda。例如，下面就是从BufferedReader中打印两行的写法：</p>
+<pre class=" language-java"><code class="language-java">String result <span class="token operator">=</span> <span class="token function">processFile</span><span class="token punctuation">(</span><span class="token punctuation">(</span>BufferedReader br<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> 
+                                            br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> br<span class="token punctuation">.</span><span class="token function">readLine</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第二步：使用函数式接口来传递行为"><a href="#第二步：使用函数式接口来传递行为" class="headerlink" title="第二步：使用函数式接口来传递行为"></a>第二步：使用函数式接口来传递行为</h4><p>前面已经解释过了，Lambda仅可用于上下文是函数式接口的情况。你需要创建一个能匹配BufferedReader -&gt; String，还可以抛出IOException异常的接口。让我们把这一接口叫做BufferedReaderProcessor吧。</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@FunctionalInterface</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BufferedReaderProcessor</span><span class="token punctuation">{</span>
+    String <span class="token function">process</span><span class="token punctuation">(</span>BufferedReader b<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>@FunctionalInterface 标注表示该接口会设计成一个函数式接口。如果你用此标注定义了一个接口，而它却不是函数式接口的话，编译器将返回一个提示原因的错误。</p>
+</blockquote>
+<p>现在你就可以把这个接口作为新的processFile方法的参数了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">processFile</span><span class="token punctuation">(</span>BufferedReaderProcessor p<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第三步：执行一个行为"><a href="#第三步：执行一个行为" class="headerlink" title="第三步：执行一个行为"></a>第三步：执行一个行为</h4><p>任何BufferedRader -&gt; String形式的Lambda都可以作为参数来传递，因为它们符合BufferedReaderProcessor接口中定义的process方法的签名。现在你只需要一种方法在processFile主体内执行Lambda所代表的代码。<strong>请记住，Lambda表达式允许你直接内联，为函数式接口的抽象方法提供实现，并且将整个表达式作为函数式接口的一个实例。</strong>因此，你可以在processFile主体内，对得到的BufferedReaderProcessor对象调用process方法执行处理：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">processFile</span><span class="token punctuation">(</span>BufferedReaderProcesssor p<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException<span class="token punctuation">{</span>
+    <span class="token keyword">try</span><span class="token punctuation">(</span>BufferedReader br <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BufferedReader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FileReader</span><span class="token punctuation">(</span><span class="token string">"data.txt"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> p<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>br<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="第四步：传递Lambda"><a href="#第四步：传递Lambda" class="headerlink" title="第四步：传递Lambda"></a>第四步：传递Lambda</h4><p>现在你就可以通过传递不同的Lambda重用processFile方法，并以不同的方式处理文件了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-05575cb8fe8ec81d.png" alt=""></p>
+<p>下面的图片总结了所采取的使processFile方法更加灵活的四个步骤：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-3dd5fb3566051fab.png" alt=""></p>
+<h2 id="使用函数式接口"><a href="#使用函数式接口" class="headerlink" title="使用函数式接口"></a>使用函数式接口</h2><p>如你所见的，函数式接口很有用，因为抽象方法的签名可以描述Lambda表达式的签名。Java 8的库设计师帮你在java.util.function包中引入了几个新的函数式接口。</p>
+<h4 id="Predicate"><a href="#Predicate" class="headerlink" title="Predicate"></a>Predicate</h4><p>java.util.function.Predicate<T>接口定义了一个名叫test的抽象方法，它接受泛型T对象，并返回一个boolean。在你需要一个涉及类型T的布尔表达式时，就可以使用这个接口：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-d66c0b5eca69e0fa.png" alt=""></p>
+<h4 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h4><p>java.util.function.Consumer<T>定义了一个名叫accept的抽象方法，它接受泛型T的对象，没有返回（void）。你如果需要访问类型T的对象，并对其执行某些操作，就可以使用这个接口：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-b82ecf93c4a48e75.png" alt=""></p>
+<h4 id="Function"><a href="#Function" class="headerlink" title="Function"></a>Function</h4><p>java.util.function.Function&lt;T,R&gt;接口定义了一个叫做apply的方法，它接受一个泛型T的对象，并返回一个泛型R的对象。如果你需要定义一个Lambda，将输入对象的信息映射到输出，就可以使用这个接口（比如提取苹果的重量，或把字符串映射为它的长度）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-94bc9527054fe819.png" alt=""></p>
+<blockquote>
+<p>还有更为丰富的一些函数式接口，这里列举了三个比较有代表性的。</p>
+</blockquote>
+<h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>方法引用让你可以重复使用现有的方法定义，并像Lambda一样传递它们。在一些情况下，比起使用Lambda表达式，它们似乎更易读，感觉也更自然。下面就是借助Java 8API，用方法引用写的一个排序的例子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-93999b52611588fe.png" alt=""></p>
+<p>是不是更酷了？念起来就是“给库存排序，比较苹果的重量”，这样的代码读起来简直就像是在描述问题本身，太酷了。</p>
+<p>为什么要关心方法引用呢？<strong>方法引用可以被看作调用特定方法的Lambda的一种快捷写法。</strong>它的基本思想是，如果一个Lambda代表的知识“直接调用这个方法”，拿最好还是用名称来调用它，而不是去描述如何调用它。</p>
+<p>事实上，方法引用就是让你根据已有的方法实现来创建Lambda表达式，但是，显式地指明方法的名称，你的代码可读性会更好。</p>
+<p>它是如何工作的呢？当你需要使用方法引用时，目标引用放在分隔符** :: **前，方法的名称放在后面。例如，Apple::getWeight就是引用了Apple类中定义的方法getWeight。请记住，不需要括号，因为你没有实际调用这个方法，方法引用就是Lambda表达式(Apple a) -&gt; a.getWeight()的快捷写法。</p>
+<p>下面给出一些在Java 8中方法引用的例子来让你更加了解：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/7896890-c3ab872955c9ad67.png" alt=""></p>
+<p>你可以把方法引用看作针对仅仅涉及单一方法的Lambda的语法糖，因为你表达同样的事情时写的代码更少了。</p>
+<h2 id="Lambda-和方法引用实战"><a href="#Lambda-和方法引用实战" class="headerlink" title="Lambda 和方法引用实战"></a>Lambda 和方法引用实战</h2><p>我们继续来研究开始的那个问题——用不同的排序策略给一个Apple列表排序，并展示如何把一个原始粗暴的解决方案转变得更为简明：<code>inventory.sort(comparing(Apple::getWeight));</code></p>
+<h4 id="第一步：传递代码"><a href="#第一步：传递代码" class="headerlink" title="第一步：传递代码"></a>第一步：传递代码</h4><p>很幸运，Java 8的API已经为你提供了一个List可用的sort方法，你不用自己去实现它。那么最困难的部分已经搞定了！但是，如何把排序的策略传递给sort方法呢？你看，sort方法的签名是这样的：</p>
+<p><code>void sort(Comparator&lt;? super E&gt; c)</code></p>
+<p>它需要一个Comparator对象来比较两个Apple！这就是在Java中传递策略的方式：<strong>它们必须包裹在一个对象里。</strong>我们说sort的行为被参数化了：传递给它的排序策略不同，其行为也会不同。</p>
+<p>你的第一个解决方案看上去是这样的：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AppleComparator</span> <span class="token keyword">implements</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>Apple<span class="token operator">></span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Apple a1<span class="token punctuation">,</span> Apple a2<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> a1<span class="token punctuation">.</span><span class="token function">getWeigh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AppleComparator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第二步：使用匿名类"><a href="#第二步：使用匿名类" class="headerlink" title="第二步：使用匿名类"></a>第二步：使用匿名类</h4><p>你可以使用<em>匿名类</em>来改进解决方案，而不是实现一个Comparator却只实例化一次：</p>
+<pre class=" language-java"><code class="language-java">inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Comparator</span><span class="token operator">&lt;</span>Apple<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">compare</span><span class="token punctuation">(</span>Apple a1<span class="token punctuation">,</span> Apple a2<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> a1<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第三步：使用Lambda表达式"><a href="#第三步：使用Lambda表达式" class="headerlink" title="第三步：使用Lambda表达式"></a>第三步：使用Lambda表达式</h4><p>但你的解决方案仍然挺啰嗦的。使用Java 8引入的Lambda改进后的代码如下：</p>
+<pre class=" language-java"><code class="language-java">inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a1<span class="token punctuation">,</span> a2<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a1<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>a2<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>你的代码还能变得更易读一点吗？Comparator具有一个叫做comparing的静态辅助方法，它可以接受一个Function来提取Comparable键值，并生成一个Comparator对象。它可以像下面这样用：</p>
+<p><code>Comparator&lt;Apple&gt; c = Comparator.comparing((Apple a1) -&gt; a.getWeight());</code></p>
+<p>现在你可以把代码再改得紧凑一点了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> <span class="token keyword">static</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Comparator<span class="token punctuation">.</span>comparing<span class="token punctuation">;</span>
+inventory<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token function">comparing</span><span class="token punctuation">(</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> a<span class="token punctuation">.</span><span class="token function">getWeight</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="第四步：使用方法引用"><a href="#第四步：使用方法引用" class="headerlink" title="第四步：使用方法引用"></a>第四步：使用方法引用</h4><p>前面解释过，方法引用就是替代那些转发参数的Lambda表达式的语法糖。你可以用方法引用让你的代码更加简洁（假设你已经静态导入了java.util.Comparator.comparing）：</p>
+<p><code>inventory.sort(comparing(Apple::getWeight));</code></p>
+<p>恭喜你，这就是你的最终解决方案！这笔Java 8之前的代码好在哪儿呢？它比较短；它的意思也很明显，并且代码读起来和问题描述差不多：“对库存进行排序，比较苹果的重量。”</p>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2017/12/26/java-8-xing-wei-can-shu-hua/">
       Java 8——行为参数化
     </a>
@@ -3680,242 +3901,6 @@ String str2 <span class="token operator">=</span> <span class="token keyword">ne
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2017/09/19/java-xue-xi-bi-ji-2-shu-ju-lei-xing/">
-      Java学习笔记(2)——数据类型
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2017年9月19日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>终于要写点干货了，其实思考了很久下面一篇文章要写什么，主要的纠结点在于，既想要分享那些精美的知识，又怕这些知识不太好嚼。后来想想还是对初学者不太好友算了..一来这系列文章叫做学习笔记，我的。另外写得足够有料，才能发挥笔记的作用，不然索然无味的，连收藏、喜欢的意义也没有了。</p>
-</blockquote>
-<h2 id="写在文章之前"><a href="#写在文章之前" class="headerlink" title="写在文章之前"></a>写在文章之前</h2><p>终于写点干货了，想先简单谈谈自己的一些看法。对于我自己而言，我比较厌烦那些繁琐的无聊的知识点，反而更在乎一些实际应用的东西。但了解一些底层的东西是非常有意义的，它有助于我们理解程序。</p>
-<blockquote>
-<p>每一点知识的积累，终会有用武之地。也许，它会使您在面试过程中正确地回答一道面试题；也许，它会让您更加清楚Java底层的实现方式；也许，它能让您在学业上感到更加充实…（以上摘自梁勇著的Java深入解析_前言）</p>
-</blockquote>
-<h2 id="Java中的数据类型"><a href="#Java中的数据类型" class="headerlink" title="Java中的数据类型"></a>Java中的数据类型</h2><p>Java是一种强类型的语言。这意味着必须为每一个变量都声明一种类型。</p>
-<p>在Java中，你可以把数据类型分为两部分，一部分<strong>是基本类型（primitive type）</strong>：4种整形、2种浮点类型、1种用于表示Unicode编码的字符单元的字符类型char和1种用于表示真值的boolean类型。</p>
-<p>另外一部分是<strong>引用类型（reference type）</strong>，如String和List。每个基本类型都有一个对应的引用类型，称作装箱基本类型（boxed primitive）。装箱基本类中对应于int、double、boolean的是Integer、Double和Boolean。</p>
-<h3 id="Java中的特例"><a href="#Java中的特例" class="headerlink" title="Java中的特例"></a>Java中的特例</h3><p>Java是一种完全面向对象的语言，从理论上来说，在Java中应该不存在对象以外的事务，即所有的类型都是对象。然而，在Java8中的8种基本数据类型不是对象，之所以这样设计，是因为相对于对象来说，基本数据在使用上更加方便，并且在效率上也高于对象类型。所以这就需要去了解一下Java中创建对象的过程。</p>
-<h3 id="创建对象的过程"><a href="#创建对象的过程" class="headerlink" title="创建对象的过程"></a>创建对象的过程</h3><blockquote>
-<p>当程序运行时，对象是怎么进行安排放置的呢？特别是内存是怎样分配的呢？</p>
-</blockquote>
-<p>Java大体上会把内存分为四块区域：堆、栈、静态区、常量区。</p>
-<ul>
-<li><strong>堆</strong> ： 位于RAM中，用于存放所有的java对象。</li>
-<li><strong>栈</strong> ： 位于RAM中，引用就存在于栈中。</li>
-<li><strong>静态区</strong>: 位于RAM中，被static修饰符修饰的变量会被放在这里</li>
-<li><strong>常量区</strong>：位于ROM中， 很明显，放常量的。（其实常量通常直接存放在程序代码的内部，因为这样非常安全，因为它们永远都不会被改变）</li>
-</ul>
-<p>所以当我们创建对象，例如实例化一个Person类：</p>
-<pre class=" language-java"><code class="language-java">Person p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Person</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<p>首先，会在堆中开辟一块空间存放这个新来的Person对象。然后，会创建一个引用p，存放在栈中，这个引用p指向Person对象（事实上是，p的值就是Person对象的内存地址）。</p>
-<p>这样，我们通过访问p，然后得到了Person的内存地址，进而找到了Person对象。</p>
-<p>然后又有了这样一句代码：</p>
-<pre class=" language-java"><code class="language-java">Person p2 <span class="token operator">=</span> p<span class="token punctuation">;</span></code></pre>
-<p>这句代码的含义是：</p>
-<p>创建了一个新的引用p2，保存在栈中，引用的地址也指向Person的地址。这个时候，你通过p2来改变Person对象的状态，也会改变p的结果。因为它们指向同一个对象。（String除外，之后会专门讲String）</p>
-<p>此时，内存中是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4047674-3a3740af2c4def76" alt="内存的状态"></p>
-<p>有一个很通俗的方式来讲解引用和对象。大家对于快捷方式应该不会陌生吧？我们桌面的图标大部分都是快捷方式。它并不是我们安装在电脑上的应用的可执行文件（不是.exe文件)，那么为什么点击它可以打开应用程序呢？是因为快捷方式连接了文件，这就像是引用和对象的关系了。</p>
-<p>我们不直接对文件进行操作，而是通过快捷方式来进行操作。快捷方式不能独立存在，同样，引用也不能独立存在（你可以只创建一个引用，但是当你要使用它的时候必须得给它赋值，否则它将毫无用处）。</p>
-<p>一个文件可以有多个快捷方式，同样一个对象也可以有多个引用。而一个引用只能同时对应一个对象。</p>
-<blockquote>
-<p>在java里，“=”不能被看成是一个赋值语句，它不是在把一个对象赋给另外一个对象，它的执行过程实质上是将右边对象的地址传给了左边的引用，使得左边的引用指向了右边的对象。java表面上看起来没有指针，但它的引用其实质就是一个指针。在java里，“=”语句不应该被翻译成赋值语句，因为它所执行的确实不是一个简单的赋值过程，而是一个传地址的过程，被译成赋值语句会造成很多误解，译得不准确。</p>
-</blockquote>
-<h3 id="特例：基本数据类型"><a href="#特例：基本数据类型" class="headerlink" title="特例：基本数据类型"></a>特例：基本数据类型</h3><p>为什么要有特例呢？是因为new将对象存储在“堆”里，一是用new创建一个对象——特别是小的，简单的变量<strong>（Java中数据定长，为了可移植性）</strong>往往不是很明智而且有效的方法，二是因为“堆”空间本来就有限，如果频繁的操作会导致不可想象的错误，并且别忘了<a href="http://www.jianshu.com/p/e0ba0863f2f1" target="_blank" rel="noopener">第一篇文章</a>里面提到的，Java的设计初衷是什么。</p>
-<p>所以针对这些类型，Java采取了与C和C++相同的方法，也就是说，不用new来创建变量，二是创建一个并非是引用的“自动”变量。这个变量直接存储“值”并置于常量区中，因此更加高效。</p>
-<p>先来看一个例子：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> j <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span></code></pre>
-<p>我们需要知道的是，在常量区中，相同的常量只会存在一个。当执行第一句代码时。先查找常量区中有没有2，没有，则开辟一个空间存放2，然后在栈中存入一个变量i，让i指向2；</p>
-<p>执行第二句的时候，查找发现2已经存在了，所以就不开辟新空间了。直接在栈中保存一个新变量j，让j指向2；</p>
-<p>当然，java堆每一个基本数据类型都提供了对应的包装类。我们依旧可以用new操作符来创建我们想要的变量。</p>
-<pre class=" language-java"><code class="language-java">Integer i <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-Integer j <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Integer</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<p>但是，用new操作符创建的对象是不同的，也就是说，此时，i和j指向不同的内存地址。<strong>因为每次调用new操作符，都会在堆开辟新的空间。</strong></p>
-<h3 id="深入了解Integer"><a href="#深入了解Integer" class="headerlink" title="深入了解Integer"></a>深入了解Integer</h3><p>来看一个例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/7896890-39d324cd6881b659.png" alt="一个例子"></p>
-<blockquote>
-<p>第一个返回true很好理解，就像上面讲的，a和b指向相同的地址。<br>第二个返回false是为什么呢？下面细说<br>第三个返回false是因为用了new关键字来开辟了新的空间，i和j两个对象分别指向堆区中的两块内存空间。</p>
-</blockquote>
-<p>我们可以跟踪一下Integer的源码，看看到底怎么回事。在IDEA中，你只需要按住Ctrl然后点击Integer，就会自动进入jar包中对应的类文件。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/7896890-315606fedfecd838.png" alt="Integer类"></p>
-<p>跟踪到文件的700多行，你会看到这么一段，感兴趣可以仔细读一下，不用去读也没有关系，因为你只需要知道这是Java的一个缓存机制。Integer类的内部类缓存了-128到127的所有数字。（事实上，Integer类的缓存上限是可以通过修改系统来更改的。了解就行了，不必去深究。）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/7896890-15d2ec8f9bc63240.png" alt="缓存机制"></p>
-<h3 id="为什么引入缓存机制"><a href="#为什么引入缓存机制" class="headerlink" title="为什么引入缓存机制"></a>为什么引入缓存机制</h3><p>这回到了为什么引入基础类型这个特例的问题上。我们看看Java语言规范是怎么规定的：</p>
-<blockquote>
-<p>If the value p being boxed is an integer literal of type int between -128 and 127 inclusive (<a href="https://link.zhihu.com/?target=https%3A//docs.oracle.com/javase/specs/jls/se8/html/jls-3.html%23jls-3.10.1">§3.10.1**</a>), or the boolean literal true or false (<a href="https://link.zhihu.com/?target=https%3A//docs.oracle.com/javase/specs/jls/se8/html/jls-3.html%23jls-3.10.3">§3.10.3**</a>), or a character literal between ‘\u0000’ and’\u007f’ inclusive (<a href="https://link.zhihu.com/?target=https%3A//docs.oracle.com/javase/specs/jls/se8/html/jls-3.html%23jls-3.10.4">§3.10.4**</a>), then let a and b be the results of any two boxing conversions of p. It is always the case that a == b.</p>
-<p>Ideally, boxing a primitive value would always yield an identical reference. In practice, this may not be feasible using existing implementation techniques. The rule above is a pragmatic compromise, requiring that certain common values always be boxed into indistinguishable objects. The implementation may cache these, lazily or eagerly. <strong>For other values, the rule disallows any assumptions about the identity of the boxed values on the programmer’s part.</strong> This allows (but does not require) sharing of some or all of these references. Notice that integer literals of type long are allowed, but not required, to be shared.</p>
-<p>This ensures that in most common cases, the behavior will be the desired one, without imposing an undue performance penalty, especially on small devices. Less memory-limited implementations might, for example, cache all char and short values, as well as int and long values in the range of -32K to +32K.</p>
-</blockquote>
-<p>事实上，不光是Integer这么特别，还包括boolean还有char类型。并且文章的最后提到了<strong>为了实现更少内存的可能。</strong></p>
-<h3 id="另一个特例：String"><a href="#另一个特例：String" class="headerlink" title="另一个特例：String"></a>另一个特例：String</h3><p>String是一个特殊的类，因为它被final修饰符所修饰，是一个不可改变的类。当然，看过java源码后你会发现，基本类型的各个包装类也被final所修饰。这里以String为例。</p>
-<p>我们来看这样一个例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4047674-1cb11559760bbad3" alt="例子"></p>
-<blockquote>
-<p> 执行第一句 ： 常量区开辟空间存放“abc”，s1存放在栈中指向“abc”<br>执行第二句，s2 也指向 “abc”，<br>执行第三句，因为“abc”已经存在，所以直接指向它。<br>所以三个变量指向同一块内存地址，结果都为true。<br>当s1内容改变的时候。这个时候，常量区开辟新的空间存放“bcd”，s1指向“bcd”，而s2和s3指向“abc”所以只有s2和s3相等。</p>
-</blockquote>
-<p>这种情况下，s1,s2,s3都是字符串常量，类似于基本数据类型。（如果执行的是s1 = “abc”,那么结果会都是true）</p>
-<p>我们再看一个例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4047674-530e77c58db5a82c" alt="例子2"></p>
-<blockquote>
-<p>执行第一行代码： 在堆里分配空间存放String对象，在常量区开辟空间存放常量“abc”，String对象指向常量，s1指向该对象。<br>执行第二行代码：s2指向上一步new出来的string对象。<br>执行第三行代码： 在堆里分配新的空间存放String对象，新对象指向常量“abc”，s3指向该对象。<br>到这里，很明显，s1和s2指向的是同一个对象</p>
-<p>接着就很诡异了，我们让s1 依旧= “abc”,但是结果s1和s2指向的地址不同了。</p>
-</blockquote>
-<p>怎么回事呢？这就是String类的特殊之处了，new出来的String不再是上面的字符串常量，而是字符串对象。</p>
-<p>由于String类是不可改变的，所以String对象也是不可改变的，我们每次给String赋值都相当于执行了一次new String()，然后让变量指向这个新对象，而不是在原来的对象上修改。</p>
-<p>当然，java还提供了StringBuffer类，这个是可以在原对象上做修改的。如果你需要修改原对象，那么请使用StringBuffer类。</p>
-<h3 id="引发的问题：值传递还是引用传递？"><a href="#引发的问题：值传递还是引用传递？" class="headerlink" title="引发的问题：值传递还是引用传递？"></a>引发的问题：值传递还是引用传递？</h3><p>java是值传递还是引用传递的呢？毫无疑问，java是值传递的。那么什么又叫值传递和引用传递呢？</p>
-<p>我们先来看一个例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4047674-cabe50a835eca720" alt="例子"></p>
-<p>这是一个很经典的例子，我们希望调用了swap函数以后，a和b的值可以互换，但是事实上并没有。为什么会这样呢？</p>
-<p>这就是因为java是值传递的。<strong>也就是说，我们在调用一个需要传递参数的函数时，传递给函数的参数并不是我们传进去的参数本身，而是它的副本。</strong>说起来比较拗口，但是其实原理很简单。我们可以这样理解：</p>
-<p>一个有形参的函数，当别的函数调用它的时候，必须要传递数据。比如swap函数，别的函数要调用swap就必须传两个整数过来。</p>
-<p>这个时候，有一个函数按耐不住寂寞，扔了两个整数过来，但是，swap函数有洁癖，它不喜欢用别人的东西，于是它把传过来的参数复制了一份，然后对复制的数据修修改改，而别人传过来的参数动根本没动。</p>
-<p>所以，当swap函数执行完毕之后，交换了的数据只是swap自己复制的那一份，而原来的数据没变。</p>
-<blockquote>
-<p>也可以理解为别的函数把数据传递给了swap函数的形参，最后改变的只是形参而实参没变，所以不会起到任何效果。</p>
-</blockquote>
-<p>我们再来看一个复杂一点的例子(Person类添加了get，set方法)：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4047674-12da05026aed184b" alt="例子"></p>
-<blockquote>
-<p>可以看到，我们把p1传进去，它并没有被替换成新的对象。因为change函数操作的不是p1这个引用本身，而是这个引用的一个副本。</p>
-<p>你依然可以理解为，主函数将p1复制了一份然后变成了chagne函数的形参，最终指向新Person对象的是那个副本引用，而实参p1并没有改变。</p>
-</blockquote>
-<p>再来看一个例子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/4047674-27ea492babe95e92" alt="例子2"></p>
-<blockquote>
-<p>这次为什么就改变了呢？分析一下。<br>首先，new了一个Person对象，暂且叫他小明吧。然后p1指向小明。<br>小明10岁了，随着时间的推移，小明的年龄要变了，调用了一下changgeAge方法，把小明的引用传了进去。<br>传递的过程中，changgeAge也有洁癖，于是复制了一份小明的引用，这个副本也指向小明。<br>然后changgeAge通过自己的副本引用，改变了小明的年龄。<br>由于是小明这个对象被改变了，所以所有小明的引用调用方法得到的年龄都会改变<br>所以就变了。</p>
-</blockquote>
-<p>最后简单的总结一下。</p>
-<p>java的传值过程，其实传的是副本，不管是变量还是引用。所以，不要期待把变量传递给一个函数来改变变量本身。</p>
-<h3 id="“-”是怎么连接字符串的？"><a href="#“-”是怎么连接字符串的？" class="headerlink" title="“+”是怎么连接字符串的？"></a>“+”是怎么连接字符串的？</h3><blockquote>
-<p>先抛个砖：对Java程序员来说，使用运算符“+”来连接字符串是非常普遍的，当“+”两边的操作数是String类型时（如果只有一个操作数是String类型，则系统也会将另外一个操作数转换成String类型），就会执行字符串连接的运算。但是，运算符“+”是怎样连接String对象的呢？编译器又是如何实现的呢?</p>
-<p>之后我再来补这个内容，先发表啦。</p>
-</blockquote>
-<h3 id="浮点类型"><a href="#浮点类型" class="headerlink" title="浮点类型"></a>浮点类型</h3><blockquote>
-<p>浮点类型用于表示有小数部分的数值。在Java中有两种浮点类型，一个是4字节的float，一个是8字节的double。我们平时用来编写程序用来表示增长率、物品重量等方面也非常有用。不过，在使用浮点类型时，也需要留意一些问题。</p>
-</blockquote>
-<h3 id="浮点类型只是近似的存储"><a href="#浮点类型只是近似的存储" class="headerlink" title="浮点类型只是近似的存储"></a>浮点类型只是近似的存储</h3><p>请问一个问题：0.1+0.2等于多少？请不要慌着报答案，我没有开玩笑的意思，看一下Java给出的答案你就知道了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/7896890-3d58b0edc9c4c1c0.png" alt="Java的答案"><br>结果似乎有些令人惊讶，这么简单的算术竟然也会算错。</p>
-<p>其实，这并不是计算错误，这只是浮点数类型存储的问题。计算机使用二进制来存储数据，而二进制无法准确的表示分数 1/10 ，就像使用十进制时，无法准确地表示 1/3 一样。</p>
-<h3 id="数量级差很大的浮点运算"><a href="#数量级差很大的浮点运算" class="headerlink" title="数量级差很大的浮点运算"></a>数量级差很大的浮点运算</h3><p>当浮点数值的数量级相差很大的时候，运算又会有什么问题呢？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/7896890-8234cf550c99320e.png" alt="数量级很大的浮点运算"></p>
-<p>又发生了预期外的结果。从输出结果来看，f3竟然和f4是相等的，也就是意味着对f3+1并没有改变f3的值。</p>
-<p>这同样是因为浮点数的存储造成的，<strong>二进制所能表示的两个相邻的浮点值之间存在一定的空隙。</strong>浮点值越大，这个间隙也会越大。当浮点值大道一定程度的时，如果对浮点值的改变很小（例如上面的30000000+1），就不足以使浮点值发生改变。就好比蒸发掉大海中的一滴水，大海还是大海，几乎不存在变化。</p>
-<blockquote>
-<p><strong>如果想要准确的存储，就去使用BigDecimal吧，有必要了解的可以去自行百度，这里就不做过多介绍了，已经是Java封装好的类库了</strong></p>
-</blockquote>
-<h3 id="抛出一个有趣的问题"><a href="#抛出一个有趣的问题" class="headerlink" title="抛出一个有趣的问题"></a>抛出一个有趣的问题</h3><blockquote>
-<p>我们知道，在Java中，long类型占用了8个字节，float类型占用了4个字节。</p>
-</blockquote>
-<p>照理来说，long类型的容量应该比float大许多，然而事实正好相反，float反而拥有比8字节long类型更大的取值范围。这同样是因为浮点数的存储格式造成的。有兴趣的可以去自行百度了解。</p>
-<blockquote>
-<p>参考资料：<br><a href="http://www.jianshu.com/p/39753aad9a38" target="_blank" rel="noopener">http://www.jianshu.com/p/39753aad9a38</a> ，原文作者:CleverFan<br>《Java深入解析》——梁勇著<br>《Effective Java》——第二版<br>《Java核心技术 卷I》——第九版<br>《Java编程思想》——第四版</p>
-</blockquote>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -4266,7 +4251,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(3)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(4)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -4320,7 +4305,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 15.43px; color: #8f8f8f">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.14px; color: #8a8a8a">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

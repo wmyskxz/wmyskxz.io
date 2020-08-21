@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#3.0.0-rc.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>Java10版本特性详解 - 我没有三颗心脏的博客</title>
+  
+    <meta name="keywords" content="原创,版本特性">
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+    
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/styles/solarized-light.css">
+
+    
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body>
+  
+  
+  
+  <div class="cover-wrapper">
+    <cover class='cover post' style="display: none;">
+      <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">我没有三颗心脏</p>
+    
+    
+      <p class="subtitle">分享知识&技术&成长&思考</p>
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="search here..." />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation search'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <i class='fas fa-rss fa-fw'></i><p>博客</p>
+            </a>
+          
+            <a href="/categories/"
+              
+              
+              id="categories">
+              <i class='fas fa-folder-open fa-fw'></i><p>分类</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <i class='fas fa-tags fa-fw'></i><p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <i class='fas fa-archive fa-fw'></i><p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <i class='fas fa-info-circle fa-fw'></i><p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+    </cover>
+    <header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  </div>
+  
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper' id="pjax-container">
+      
+        <!--此文件用来存放一些不方便取值的变量--> 
+<!--思路大概是将值藏到重加载的区域内--> 
+ 
+ 
+ 
+<div id="pjax-data" style="display: none"> 
+  <div id="pjax-ispage">true</div> 
+  <div id="pjax-pageTitle">Java10版本特性详解</div> 
+  <div id="pjax-enable-cover">true</div> 
+  <div id="pjax-comment-path">none</div> 
+  <div id="pjax-comment-placeholder">none</div> 
+</div> 
+ 
+ 
+<script> 
+  // 处理封面 此时 jquery 还没加载 
+  if ("none" == "none") { // 移除封面 
+    document.getElementsByClassName('cover')[0].style.display = "none"; 
+    document.getElementsByClassName('l_body')[0].classList.add("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
+  } else { 
+    if ("none" == "blog") { // 半屏 
+      document.getElementsByClassName('cover')[0].classList.remove("full"); 
+      document.getElementsByClassName('cover')[0].classList.add("half"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
+    } else if ("none" == "docs") { // 全屏 
+      document.getElementsByClassName('cover')[0].classList.remove("half"); 
+      document.getElementsByClassName('cover')[0].classList.add("full"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = ""; 
+    } 
+    document.getElementsByClassName('cover')[0].style.display = ""; 
+    document.getElementsByClassName('l_body', 'show')[0].classList.remove("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.remove("show"); 
+  } 
+</script> 
+
+      
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/08/21/java10-ban-ben-te-xing-xiang-jie/">
+      Java10版本特性详解
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>版本特性</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-21T09:42:50+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%BD%A0%E6%83%B3%E4%BA%86%E8%A7%A3%E7%9A%84JDK10%E7%89%88%E6%9C%AC%E6%9B%B4%E6%96%B0%E9%83%BD%E5%9C%A8%E8%BF%99%E9%87%8C/image-20200821092051478.png" alt=""></p>
+<a id="more"></a>
+
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="特性总览"><a href="#特性总览" class="headerlink" title="特性总览"></a>特性总览</h1><p>以下是 Java 10 中的引入的部分新特性。关于 Java 10 新特性更详细的介绍可参考<a href="http://openjdk.java.net/projects/jdk/10/" target="_blank" rel="noopener">这里</a>。</p>
+<ul>
+<li>基于时间的发行版本控制（JEP 322）</li>
+<li>局部变量类型推断（JEP 286）</li>
+<li>试验性 JIT 编译器（JEP 317）</li>
+<li>应用程序类数据共享（JEP 310）</li>
+<li>用于 G1 的并行 Full GC（JEP 307）</li>
+<li>清理垃圾收集器接口（JEP 304）</li>
+<li>其他 Unicode 语言标签扩展（JEP 314）</li>
+<li>根证书（JEP 319）</li>
+<li>线程本地握手（JEP 312）</li>
+<li>备用存储设备上的堆分配（JEP 316）</li>
+<li>删除本机头生成工具——javah（JEP 313）</li>
+<li>将JDK森林合并到单个存储库中（JEP 296）</li>
+<li>API 变更</li>
+</ul>
+<h1 id="一-基于时间的发行版本控制（JEP-322）"><a href="#一-基于时间的发行版本控制（JEP-322）" class="headerlink" title="一. 基于时间的发行版本控制（JEP 322）"></a>一. 基于时间的发行版本控制（JEP 322）</h1><h2 id="发行版本号的前世今生"><a href="#发行版本号的前世今生" class="headerlink" title="发行版本号的前世今生"></a>发行版本号的前世今生</h2><p>自 Java 江山易主，JDK 发行版本的字符串命名方式一直是一个耐人寻味的话题。</p>
+<p>单就下载 JDK 时，所看到的简短版本字符串形式来说，在 <code>7u40</code> 版本之前，<code>u</code> 之后的数字，代表了 JDK 发布以来的第几个修正版本，然而 Oracle 改变规则，为了彰显出安全之类的重大 <strong>修补（Cirtical Patch Updates）版本</strong>，采用 <strong>奇数</strong> 命名，而 Bug 修复、API 修改之类的 <strong>维护版本</strong>，则采用 <strong>偶数</strong>。<em>（另有版本号 <code>$MAJOR.$MINOR.$SECURITY</code> 的格式来区分 Bug 修正和 API 修改）</em></p>
+<p>为此，之前既有的 JDK 6/7 发布版本，还被重新命名。<em>（下方演示）</em></p>
+<pre class=" language-bash"><code class="language-bash">   Actual                    Hypothetical
+Release Type           long               short
+------------           ------------------------ 
+Security 2013/06       1.7.0_25-b15       7u25
+Minor    2013/09       1.7.0_40-b43       7u40
+Security 2013/10       1.7.0_45-b18       7u45
+Security 2014/01       1.7.0_51-b13       7u51
+Minor    2014/05       1.7.0_60-b19       7u60</code></pre>
+<p>就结论而言，重新命名之后，从 <code>7u9</code>、<code>6u37</code> 开始，就可以从奇偶数来判别是否为重大修补版本；至于 <code>7u40</code> 之后的版本，<strong>重大修补版本</strong> 是基于 <code>5</code> 的倍数，遇偶数加一，而 <strong>维护版本</strong> 则会是 <code>20</code> 的倍数。如此（不直观）的命名方式，被规范在了 <a href="http://openjdk.java.net/jeps/223" target="_blank" rel="noopener">JEP223</a> 中。<em>（随着 JDK 9 一起发布的）</em></p>
+<p>然而，自 JDK 8 发布之后，Oracle 的 Java 架构师 Mark Reinhold 就希望，未来 Java 发布可以基于时间，以半年为周期，持续发布新版本，让一些有用的小特性，也能被开发者使用，因此，JEP 223 的规范就不再适用了，而在 JDK 9 发布后，他们针对新版本曾经提出过基于 <code>$YEAR.$MONTH</code> 格式，然而收到了社区极大的反对，为此，还提出了三个替代方案，收集各方的意见。（<a href="https://goo.gl/7CA8B3" target="_blank" rel="noopener">https://goo.gl/7CA8B3</a>)</p>
+<p>那么，Java 下一个特性版本是 <code>8.3</code>？<code>1803</code>？还是 <code>10</code>？调查结果显示，社群大多数都支持 <code>10</code>，Stephen Colebourne 也发出请求（<a href="https://goo.gl/i5J44T），并表示" target="_blank" rel="noopener">https://goo.gl/i5J44T），并表示</a> Java 不像 Ubuntu 这类操作系统，基于 <code>$YEAR.$MONTH</code> 并不合适。</p>
+<p>最终，Oracle 采用了 <code>$FEATURE.$INTERIM.$UPDATE.$PATCH</code> 这样的方案，并规定在了 <a href="http://openjdk.java.net/jeps/322" target="_blank" rel="noopener">JEP 322</a> 中。</p>
+<h2 id="JEP-322-新模式解读"><a href="#JEP-322-新模式解读" class="headerlink" title="JEP 322 新模式解读"></a>JEP 322 新模式解读</h2><p>通过采用基于时间的发行周期，Oracle 更改了 Java SE 平台和 JDK 的版本字符串方案以及相关的版本信息，以适用于当前和将来的基于时间的发行模型。</p>
+<p>版本号的新模式是：</p>
+<p><code>$FEATURE.$INTERIM.$UPDATE.$PATCH</code></p>
+<ul>
+<li><strong>$ FEATURE</strong>：计数器将每 <code>6</code> 个月递增一次，并基于功能发布版本，例如：JDK 10，JDK 11。</li>
+<li><strong>$ INTERIM</strong>：对于包含兼容错误修复和增强功能但没有不兼容更改的非功能版本，计数器将增加。通常，这将是零，因为六个月内不会有任何临时发布。这保留了对发布模型的将来修订。</li>
+<li><strong>$ UPDATE</strong>：计数器将增加，用于解决安全问题，回归和较新功能中的错误的兼容更新版本。此功能会在功能发布后一个月更新，此后每三个月更新一次。2018 年 4 月版本是 <code>JDK 10.0.1</code>，7 月版本是 <code>JDK 10.0.2</code>，依此类推</li>
+<li><strong>$ PATCH</strong>：计数器将增加以用于紧急释放以解决严重问题。</li>
+</ul>
+<p>并添加了新的 API 以通过编程的方式获取这些计数器：</p>
+<pre class=" language-java"><code class="language-java">Version version <span class="token operator">=</span> Runtime<span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+version<span class="token punctuation">.</span><span class="token function">feature</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+version<span class="token punctuation">.</span><span class="token function">interim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+version<span class="token punctuation">.</span><span class="token function">update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+version<span class="token punctuation">.</span><span class="token function">patch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>现在，让我们来看一下返回版本信息的 Java 启动器：</p>
+<pre class=" language-bash"><code class="language-bash">$ java -version
+java version <span class="token string">"10"</span> 2018-03-20
+Java<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> SE Runtime Environment 18.3 <span class="token punctuation">(</span>build 10+46<span class="token punctuation">)</span>
+Java HotSpot<span class="token punctuation">(</span>TM<span class="token punctuation">)</span> 64-Bit Server VM 18.3 <span class="token punctuation">(</span>build 10+46, mixed mode<span class="token punctuation">)</span></code></pre>
+<p>版本号格式为 <code>10</code>，因为没有其他计数器为零。发布日期已添加。可以将 <code>18.3</code> 理解为 Year 2018＆3rd Month，版本 <code>10 + 46</code> 是版本 <code>10</code> 的 <code>46</code> 版本。对于 <code>JDK 10.0.1</code> 的假设版本 <code>93</code>，版本将为 <code>10.0.1 + 93</code>。</p>
+<p>因此，对于 Java 9 来说，目前可以看到的版本，会是 <code>9.0.4</code> 这样的格式，至于 2018 年 3 月发布的特性版本为 <code>10</code>，到了 <code>9</code> 月提供的新版本，就是 <code>11</code>，JDK 11 预计会是长期支援版本，所以，在版本字串上，也会特别显示 LTS（long-term support）。</p>
+<h1 id="二-局部变量类型推断（JEP-286）"><a href="#二-局部变量类型推断（JEP-286）" class="headerlink" title="二. 局部变量类型推断（JEP 286）"></a>二. 局部变量类型推断（JEP 286）</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>JDK 10 中最明显的增强功能之一是使用初始化程序对局部变量进行类型推断。</strong></p>
+<p>在 Java 9 之前，我们必须明确写出局部变量的类型，并确保它与用于初始化它的初始化程序兼容：</p>
+<pre class=" language-java"><code class="language-java">String message <span class="token operator">=</span> <span class="token string">"Good bye, Java 9"</span><span class="token punctuation">;</span></code></pre>
+<p>在 Java 10 中，这是我们可以声明局部变量的方式：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenVarInitWithString_thenGetStringTypeVar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    var message <span class="token operator">=</span> <span class="token string">"Hello, Java 10"</span><span class="token punctuation">;</span>
+    <span class="token function">assertTrue</span><span class="token punctuation">(</span>message <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>我们没有提供 <code>message</code> 的具体类型，相反，我们把 <code>message</code> 标记为了 <code>var</code>，编译器将从右侧的初始化程序的类型推断出 <code>message</code> 的类型。<em>（上面的例子中 <code>message</code> 为 <code>String</code> 类型）</em></p>
+<p><strong>请注意，此功能仅适用于带有初始化程序的局部变量</strong>。它不能用于成员变量、方法参数、返回类型等——初始化程序是必须的，否则，编译器无法推断出其类型。</p>
+<p>这个功能有助于我们减少样板式的代码，例如：</p>
+<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>Integer<span class="token punctuation">,</span> String<span class="token operator">></span> map <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>现在可以改写为：</p>
+<pre class=" language-java"><code class="language-java">var idToNameMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span>Integer<span class="token punctuation">,</span> String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>这也有助于我们把重点放在变量名，而不是变量类型上。</p>
+<p>要注意的另一件事是 <strong><code>var</code> 不是关键字</strong>——这确保了使用 <code>var</code> 作为函数或变量名的程序的向后兼容性。<code>var</code> 是一个保留类型名，就像 <code>int</code> 一样。</p>
+<p>最后，<strong>使用 <code>var</code> 不会增加运行时的开销，也不会使 Java 称为动态类型的语言</strong>。变量的类型仍然是在编译时进行判断，以后也无法更改。</p>
+<h2 id="非法使用-var-的情况解析"><a href="#非法使用-var-的情况解析" class="headerlink" title="非法使用 var 的情况解析"></a>非法使用 var 的情况解析</h2><p>1、如果没有初始化程序，<code>var</code> 将无法工作：</p>
+<pre class=" language-java"><code class="language-java">var n<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// error: cannot use 'var' on variable without initializer</span></code></pre>
+<p>2、如果将其初始化为 null，也不会起作用：</p>
+<pre class=" language-java"><code class="language-java">var emptyList <span class="token operator">=</span> null<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// error: variable initializer is 'null'</span></code></pre>
+<p>3、不适用于非局部变量：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> var word <span class="token operator">=</span> <span class="token string">"hello"</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// error: 'var' is not allowed here</span></code></pre>
+<p>4、Lambda 表达式需要显式的类型，因此无法使用 <code>var</code>：</p>
+<pre class=" language-java"><code class="language-java">var p <span class="token operator">=</span> <span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">10</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// error: lambda expression needs an explicit target-type</span></code></pre>
+<p>5、数组初始化程序也不支持：</p>
+<pre class=" language-java"><code class="language-java">var arr <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span> <span class="token punctuation">}</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// error: array initializer needs an explicit target-type</span></code></pre>
+<h2 id="使用-var-的准则"><a href="#使用-var-的准则" class="headerlink" title="使用 var 的准则"></a>使用 var 的准则</h2><p>在某些情况下，我们可以合法使用 <code>var</code>，但这样做并不是一个好主意。</p>
+<p>例如，在代码的可读性降低的情况下：</p>
+<pre class=" language-java"><code class="language-java">var result <span class="token operator">=</span> obj<span class="token punctuation">.</span><span class="token function">prcoess</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>在这里，尽管可以合法使用 <code>var</code>，但很难理解 <code>process()</code> 返回的类型，从而让代码的可读性降低。</p>
+<blockquote>
+<p><code>java.net</code>(OpenJDK 官网)上专门有一篇文章介绍了 <a href="https://openjdk.java.net/projects/amber/LVTIstyle.html" target="_blank" rel="noopener">Java 中的局部变量类型推断的书写准则</a>，该文章讨论了在使用此功能时应该注意的姿势和如何使用的一些良好建议。</p>
+</blockquote>
+<p>另外，最好避免使用 <code>var</code> 的另一种情况是在流水线较长的流中：</p>
+<pre class=" language-java"><code class="language-java">var x <span class="token operator">=</span> emp<span class="token punctuation">.</span>getProjects<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">findFirst</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>String<span class="token operator">:</span><span class="token operator">:</span>length<span class="token punctuation">)</span>
+  <span class="token punctuation">.</span><span class="token function">orElse</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>另外，将 <code>var</code> 与不可引用类型一起使用可能会导致意外错误。</p>
+<p>比如，如果我们将 <code>var</code> 与匿名类实例一起使用：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenVarInitWithAnonymous_thenGetAnonymousType</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    var obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    <span class="token function">assertFalse</span><span class="token punctuation">(</span>obj<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>现在，如果我们尝试将另一个 Object 分配给 <code>obj</code>，则会出现编译错误：</p>
+<pre class=" language-java"><code class="language-java">obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// error: Object cannot be converted to &lt;anonymous Object></span></code></pre>
+<p>这是因为 <code>obj</code> 的推断类型不是 Object。</p>
+<h1 id="三-试验性-JIT-编译器（JEP-317）"><a href="#三-试验性-JIT-编译器（JEP-317）" class="headerlink" title="三. 试验性 JIT 编译器（JEP 317）"></a>三. 试验性 JIT 编译器（JEP 317）</h1><p><a href="https://github.com/oracle/graal/blob/master/compiler/README.md" target="_blank" rel="noopener">Graal</a> 是用Java编写的，与 HotSpot JVM 集成的动态编译器。它专注于高性能和可扩展性。它也是 JDK 9 中引入的实验性 Ahead-of-Time（AOT）编译器的基础。</p>
+<p>JDK 10 使 Graal 编译器可以用作 Linux / x64 平台上的实验性 JIT 编译器。</p>
+<p>要将 Graal 用作 JIT 编译器，请在 Java 命令行上使用以下选项：</p>
+<pre class=" language-bash"><code class="language-bash">-XX:+UnlockExperimentalVMOptions -XX:+UseJVMCICompiler</code></pre>
+<p>请注意，这是一个实验性功能，我们不一定会获得比现有JIT编译器更好的性能。</p>
+<blockquote>
+<p>想要了解更多内容的童鞋请参考 Chris Seaton 的演讲：<a href="https://chrisseaton.com/truffleruby/jokerconf17/" target="_blank" rel="noopener">https://chrisseaton.com/truffleruby/jokerconf17/</a></p>
+<p><em>（ps：长文 + 特别底层警告..）</em></p>
+</blockquote>
+<h1 id="四-应用程序类数据共享-JEP-310"><a href="#四-应用程序类数据共享-JEP-310" class="headerlink" title="四. 应用程序类数据共享(JEP 310)"></a>四. 应用程序类数据共享(JEP 310)</h1><p>JDK 5 中引入的类数据共享允许将一组类预处理成共享的归档文件，然后在运行时对其进行内存映射，以减少启动时间，这还可以在多个 JVM 共享相同的归档文件时减少动态内存占用。</p>
+<p>CDS 只允许引导类装入器，将该特性限制为系统类。应用程序 CDS (AppCDS）扩展了 CDS 以允许内置的系统类装入器。内置的平台类装入器和用于装入归档类的自定义类装入器。这使得对应用程序类使用该特性成为可能。</p>
+<p>我们可以使用以下步骤来使用这个功能：</p>
+<p><strong>1、获取要存档的类列表</strong></p>
+<p>以下命令会将<em>HelloWorld</em> 应用程序加载的类转储到<em>hello.lst中</em>：</p>
+<pre class=" language-bash"><code class="language-bash">$ java -Xshare:off -XX:+UseAppCDS -XX:DumpLoadedClassList<span class="token operator">=</span>hello.lst \ 
+    -cp hello.jar HelloWorld</code></pre>
+<p><strong>2、创建 AppCDS 存档</strong></p>
+<p>以下命令使用<em>hello.lst</em> 作为输入创建<em>hello.js a</em> ：</p>
+<pre class=" language-bash"><code class="language-bash">$ java -Xshare:dump -XX:+UseAppCDS -XX:SharedClassListFile<span class="token operator">=</span>hello.lst \
+    -XX:SharedArchiveFile<span class="token operator">=</span>hello.jsa -cp hello.jar</code></pre>
+<p><strong>3、使用 AppCDS 存档</strong></p>
+<p>以下命令以<em>hello.jsa</em> 作为输入启动<em>HelloWorld</em> 应用程序：</p>
+<pre class=" language-bash"><code class="language-bash">$ java -Xshare:on -XX:+UseAppCDS -XX:SharedArchiveFile<span class="token operator">=</span>hello.jsa \
+    -cp hello.jar HelloWorld</code></pre>
+<p><strong>AppCDS 是用于 JDK 8 和 JDK 9 的 Oracle JDK 中的一项商业功能。现在它是开源的，并且可以公开使用。</strong></p>
+<h1 id="五-用于-G1-的并行-Full-GC-JEP-307"><a href="#五-用于-G1-的并行-Full-GC-JEP-307" class="headerlink" title="五. 用于 G1 的并行 Full GC(JEP 307)"></a>五. 用于 G1 的并行 Full GC(JEP 307)</h1><p>G1 垃圾收集器是自 JDK 9 以来的默认垃圾收集器。但是，G1 的 Full GC 使用了单线程的 mark-sweep-compact 算法。</p>
+<p>它已 <strong>更改为</strong> Java 10 中 <strong>的并行mark-sweep-compact算法</strong> ，有效地减少了 Full GC 期间的停滞时间。</p>
+<h1 id="六-清理垃圾收集器接口（JEP-304）"><a href="#六-清理垃圾收集器接口（JEP-304）" class="headerlink" title="六. 清理垃圾收集器接口（JEP 304）"></a>六. 清理垃圾收集器接口（JEP 304）</h1><p>这个 JEP 是未来的变化。通过引入公共垃圾收集器接口，它改善了不同垃圾收集器的代码隔离。</p>
+<p>次更改为内部 GC 代码提供了更好的模块化。将来将有助于在不更改现有代码库的情况下添加新 GC，还有助于删除或保留以前的 GC。</p>
+<blockquote>
+<p><strong>官方的动机解释：</strong> （<a href="http://openjdk.java.net/jeps/304" target="_blank" rel="noopener">传送门</a>）</p>
+<p>当前，每个垃圾收集器实现都由其 <code>src/hotspot/share/gc/$NAME</code> 目录内的源文件组成，例如 G1 在中 <code>src/hotspot/share/gc/g1</code>，CMS 在 <code>src/hotspot/share/gc/cms</code> 等中。但是，在 HotSpot 中散布着一些零散的信息。例如，大多数 GC 需要某些障碍，这些障碍需要在运行时，解释器 C1 和 C2 中实现。这些障碍并不包含在 GC 的具体目录，但在共享解释器，而不是实施，C1 和 C2 的源代码（通常由长守卫<code>if</code>- <code>else</code>-<code>chains</code>）。同样的问题也适用于诊断代码，例如 <code>MemoryMXBeans</code>。此源代码布局有几个缺点：</p>
+<ol>
+<li>对于GC开发人员，实施新的垃圾收集器需要有关所有这些地方的知识，以及如何扩展它们以满足其特定需求的知识。</li>
+</ol>
+<ol start="2">
+<li>对于不是 GC 开发人员的 HotSpot 开发人员，在哪里为给定 GC 找到特定的代码段会造成混乱。</li>
+</ol>
+<ol start="3">
+<li>在构建时很难排除特定的垃圾收集器。该<code>#define</code> <code>INCLUD E_ALL_GCS</code>长期以来建立与唯一内置串行收集JVM的一种方式，但这种机制变得过于呆板。</li>
+</ol>
+<p>较干净的 GC 接口将使实现新的收集器更加容易，使代码更加清洁，并且在构建时排除一个或多个收集器也更加容易。添加一个新的垃圾收集器应该是实现一组有据可查的接口，而不是弄清 HotSpot 中所有需要更改的地方。</p>
+</blockquote>
+<h1 id="七-其他Unicode语言标签扩展（JEP-314）"><a href="#七-其他Unicode语言标签扩展（JEP-314）" class="headerlink" title="七. 其他Unicode语言标签扩展（JEP 314）"></a>七. 其他Unicode语言标签扩展（JEP 314）</h1><p>此功能增强了 <code>java.util.Locale</code> 和相关 API，以实现 BCP 47 语言标签的其他 Unicode 扩展。从 Java SE 9 开始，受支持的 BCP 47 U 语言扩展名是 “ca” 和 “nu”。该 JEP 将增加对以下附加扩展的支持：</p>
+<ul>
+<li>cu（货币类型）</li>
+<li>fw（一周的第一天）</li>
+<li>rg（区域覆盖）</li>
+<li>tz（时区）</li>
+</ul>
+<p>为了支持这些附加扩展，对以下各种 API 进行了更改以提供基于 U 或附加扩展的信息：</p>
+<pre class=" language-java"><code class="language-java">java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>DateFormat<span class="token operator">:</span><span class="token operator">:</span>get<span class="token operator">*</span>Instance
+java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>DateFormatSymbols<span class="token operator">:</span><span class="token operator">:</span>getInstance
+java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>DecimalFormatSymbols<span class="token operator">:</span><span class="token operator">:</span>getInstance
+java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>NumberFormat<span class="token operator">:</span><span class="token operator">:</span>get<span class="token operator">*</span>Instance
+java<span class="token punctuation">.</span>time<span class="token punctuation">.</span>format<span class="token punctuation">.</span>DateTimeFormatter<span class="token operator">:</span><span class="token operator">:</span>localizedBy
+java<span class="token punctuation">.</span>time<span class="token punctuation">.</span>format<span class="token punctuation">.</span>DateTimeFormatterBuilder<span class="token operator">:</span><span class="token operator">:</span>getLocalizedDateTimePattern
+java<span class="token punctuation">.</span>time<span class="token punctuation">.</span>format<span class="token punctuation">.</span>DecimalStyle<span class="token operator">:</span><span class="token operator">:</span>of
+java<span class="token punctuation">.</span>time<span class="token punctuation">.</span>temporal<span class="token punctuation">.</span>WeekFields<span class="token operator">:</span><span class="token operator">:</span>of
+java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Calendar<span class="token operator">:</span><span class="token operator">:</span><span class="token punctuation">{</span>getFirstDayOfWeek<span class="token punctuation">,</span>getMinimalDaysInWeek<span class="token punctuation">}</span>
+java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Currency<span class="token operator">:</span><span class="token operator">:</span>getInstance
+java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Locale<span class="token operator">:</span><span class="token operator">:</span>getDisplayName
+java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>spi<span class="token punctuation">.</span>LocaleNameProvider</code></pre>
+<h1 id="八-根证书（JEP-319）"><a href="#八-根证书（JEP-319）" class="headerlink" title="八. 根证书（JEP 319）"></a>八. 根证书（JEP 319）</h1><p>cacerts 密钥库（迄今为止到目前为止是空的）旨在包含一组根证书，这些根证书可用于建立对各种安全协议所使用的证书链的信任。</p>
+<p>结果，在 OpenJDK 构建中，诸如 TLS 之类的关键安全组件默认情况下不起作用。</p>
+<p><strong>借助 Java 10，Oracle 将</strong> Oracle Java SE Root CA 程序中 <strong>的根证书开源了</strong> ，以使 OpenJDK 构建对开发人员更具吸引力，并减少了这些构建与 Oracle JDK 构建之间的差异。</p>
+<h1 id="九-线程本地握手（JEP-312）"><a href="#九-线程本地握手（JEP-312）" class="headerlink" title="九. 线程本地握手（JEP 312）"></a>九. 线程本地握手（JEP 312）</h1><p>这是用于提高 JVM 性能的内部特性。</p>
+<p>握手操作是在线程处于安全点状态时为每个 JavaThread 执行的回调。回调由线程本身或 VM 线程执行，同时保持线程处于阻塞状态。</p>
+<p>这个特性提供了一种无需执行全局 VM 安全点即可在线程上执行回调的方法。<strong>使停止单个线程，而不是停止所有线程或不停止线程成为可能</strong>，而且代价低廉。</p>
+<h1 id="十-备用存储设备上的堆分配-JEP-316"><a href="#十-备用存储设备上的堆分配-JEP-316" class="headerlink" title="十. 备用存储设备上的堆分配(JEP 316)"></a>十. 备用存储设备上的堆分配(JEP 316)</h1><p>应用程序的内存消耗越来越大，本地云应用程序、内存中的数据库、流应用程序都在增加。为了满足这些服务，有各种可用的内存架构。这个特性增强了 HotSpot VM 在用户指定的备用内存设备(比如NV-DIMM)上分配 Java 对象堆的能力。</p>
+<p>这个 JEP 的目标是具有与 DRAM 相同语义(包括原子操作的语义)的可选内存设备，因此，可以在不更改现有应用程序代码的情况下，将其用于对象堆，而不是用于 DRAM。</p>
+<h1 id="十一-删除本机头生成工具—javah-JEP-313"><a href="#十一-删除本机头生成工具—javah-JEP-313" class="headerlink" title="十一. 删除本机头生成工具—javah (JEP 313)"></a>十一. 删除本机头生成工具—javah (JEP 313)</h1><p>这是一个从 JDK 中删除 <code>javah</code> 工具的常规更改。工具功能是作为 JDK 8 的一部分在 <code>javac</code> 中添加的，它提供了在编译时编写使 <code>javah</code> 无用的本机头文件的能力。</p>
+<h1 id="十二-将JDK森林合并到单个存储库中-JEP-296"><a href="#十二-将JDK森林合并到单个存储库中-JEP-296" class="headerlink" title="十二. 将JDK森林合并到单个存储库中(JEP 296)"></a>十二. 将JDK森林合并到单个存储库中(JEP 296)</h1><p>多年来，有各种各样的 Mercurial 存储库用于 JDK 代码基。不同的存储库确实提供了一些优势，但它们也有各种操作上的缺点。作为这个变化的一部分，JDK 森林的许多存储库被合并到一个存储库中，以简化和简化开发。</p>
+<h1 id="十三-API-变更"><a href="#十三-API-变更" class="headerlink" title="十三. API 变更"></a>十三. API 变更</h1><p>Java 10 添加和删除了 API。Java 9 引入了增强的弃用，其中某些 API 被标记为将在未来的版本中删除。</p>
+<p>于是这些 API 被删除了：你可以在 <a href="https://cr.openjdk.java.net/~iris/se/10/latestSpec/#APIs-removed" target="_blank" rel="noopener">这里</a> 找到被删除的 API。</p>
+<p>新增API: Java 10 中新增 73 个API。您可以在 <a href="https://cr.openjdk.java.net/~iris/se/10/latestSpec/apidiffs/overview-summary.html" target="_blank" rel="noopener">这里</a> 找到添加的 API 并进行比较。</p>
+<p>让我们来看看对我们直接有用的部分。</p>
+<h2 id="不可修改集合的改进"><a href="#不可修改集合的改进" class="headerlink" title="不可修改集合的改进"></a>不可修改集合的改进</h2><p>Java 10 中有一些与不可修改集合相关的更改</p>
+<h3 id="copyOf"><a href="#copyOf" class="headerlink" title="copyOf()"></a>copyOf()</h3><p><code>java.util.List</code>、<code>java.util.Map</code> 和 <code>java.util.Set</code> 都有了一个新的静态方法 <code>copyOf(Collection)</code>。</p>
+<p>它返回给定 Collection 的不可修改的副本：</p>
+<pre class=" language-bash"><code class="language-bash">jshell<span class="token operator">></span> var originList <span class="token operator">=</span> new ArrayList<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+originList <span class="token operator">==</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span> originList.add<span class="token punctuation">(</span><span class="token string">"欢迎关注公众号："</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$2</span> <span class="token operator">==</span><span class="token operator">></span> <span class="token boolean">true</span>
+
+jshell<span class="token operator">></span> originList.add<span class="token punctuation">(</span><span class="token string">"我没有三颗心脏"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$3</span> <span class="token operator">==</span><span class="token operator">></span> <span class="token boolean">true</span>
+
+jshell<span class="token operator">></span> var copyList <span class="token operator">=</span> List.copyOf<span class="token punctuation">(</span>originList<span class="token punctuation">)</span>
+copyList <span class="token operator">==</span><span class="token operator">></span> <span class="token punctuation">[</span>欢迎关注公众号：, 我没有三颗心脏<span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span> originList.add<span class="token punctuation">(</span><span class="token string">"获取更多精彩内容"</span><span class="token punctuation">)</span>
+<span class="token variable">$5</span> <span class="token operator">==</span><span class="token operator">></span> <span class="token boolean">true</span>
+
+jshell<span class="token operator">></span> System.out.println<span class="token punctuation">(</span>copyList<span class="token punctuation">)</span>
+<span class="token punctuation">[</span>欢迎关注公众号：, 我没有三颗心脏<span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span> copyList.add<span class="token punctuation">(</span><span class="token string">"获取更多精彩内容"</span><span class="token punctuation">)</span>
+<span class="token operator">|</span>  异常错误 java.lang.UnsupportedOperationException
+<span class="token operator">|</span>        at ImmutableCollections.uoe <span class="token punctuation">(</span>ImmutableCollections.java:73<span class="token punctuation">)</span>
+<span class="token operator">|</span>        at ImmutableCollections<span class="token variable">$AbstractImmutableCollection</span>.add <span class="token punctuation">(</span>ImmutableCollections.java:77<span class="token punctuation">)</span>
+<span class="token operator">|</span>        at <span class="token punctuation">(</span><span class="token comment" spellcheck="true">#7:1)</span>
+
+jshell<span class="token operator">></span></code></pre>
+<h3 id="toUnmodifiable"><a href="#toUnmodifiable" class="headerlink" title="toUnmodifiable()"></a>toUnmodifiable()</h3><p><code>java.util.Collectors</code> 获得其他方法来将 Stream 收集到不可修改的 List、Map 或 Set 中：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Test</span><span class="token punctuation">(</span>expected <span class="token operator">=</span> UnsupportedOperationException<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenModifyToUnmodifiableList_thenThrowsException</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>Integer<span class="token operator">></span> evenList <span class="token operator">=</span> someIntList<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>i <span class="token operator">-</span><span class="token operator">></span> i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span>Collectors<span class="token punctuation">.</span><span class="token function">toUnmodifiableList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    evenList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>任何尝试修改此类集合的尝试都会导致 <code>java.lang.UnsupportedOperationException</code> 运行时异常。</p>
+<h2 id="Optinal-新增方法-orElseThrow"><a href="#Optinal-新增方法-orElseThrow" class="headerlink" title="Optinal 新增方法 orElseThrow()"></a>Optinal 新增方法 orElseThrow()</h2><p><code>java.util.Optional</code>，<code>java.util.OptionalDouble</code>，<code>java.util.OptionalInt</code> 和 <code>java.util.OptionalLong</code> 都有一个新方法 <code>orElseThrow()</code>，它不接受任何参数，如果不存在任何值，则抛出 <code>NoSuchElementException</code>：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">whenListContainsInteger_OrElseThrowReturnsInteger</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    Integer firstEven <span class="token operator">=</span> someIntList<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>i <span class="token operator">-</span><span class="token operator">></span> i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">findFirst</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+      <span class="token punctuation">.</span><span class="token function">orElseThrow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">is</span><span class="token punctuation">(</span>firstEven<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>Integer<span class="token punctuation">.</span><span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>它与现有的 <code>get()</code> 方法同义，并且现在是它的首选替代方法。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>OpenJDK 官方说明 - <a href="http://openjdk.java.net/projects/jdk/10/" target="_blank" rel="noopener">http://openjdk.java.net/projects/jdk/10/</a></li>
+<li>Java 10 Features | JournalDev - <a href="https://www.journaldev.com/20395/java-10-features" target="_blank" rel="noopener">https://www.journaldev.com/20395/java-10-features</a></li>
+<li>想跳舞的 Java | 林信良 - <a href="https://www.ithome.com.tw/voice/122249" target="_blank" rel="noopener">https://www.ithome.com.tw/voice/122249</a></li>
+<li>Java 10 Performance Improvements | Baeldung - <a href="https://www.baeldung.com/java-10-performance-improvements" target="_blank" rel="noopener">https://www.baeldung.com/java-10-performance-improvements</a></li>
+</ol>
+<h1 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h1><ol>
+<li>这都JDK15了，JDK7还不了解？ - <a href="https://www.wmyskxz.com/2020/08/18/java7-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/18/java7-ban-ben-te-xing-xiang-jie/</a></li>
+<li>全网最通透的 Java 8 版本特性讲解 - <a href="https://www.wmyskxz.com/2020/08/19/java8-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/19/java8-ban-ben-te-xing-xiang-jie/</a></li>
+<li>Java9的这些史诗级更新你都不知道？ - <a href="https://www.wmyskxz.com/2020/08/20/java9-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/20/java9-ban-ben-te-xing-xiang-jie/</a></li>
+<li>「MoreThanJava」系列文集 - <a href="https://www.wmyskxz.com/categories/MoreThanJava/">https://www.wmyskxz.com/categories/MoreThanJava/</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/common/qrcode.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/>http://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-21T09:42:50+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月21日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>版本特性</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/&title=Java10版本特性详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+          
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/&title=Java10版本特性详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://service.weibo.com/share/share.php?url=http://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/&title=Java10版本特性详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2020/08/20/java9-ban-ben-te-xing-xiang-jie/'>
+                <p class='title'>Java9版本特性详解<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>
+
+
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      <section id="comments">
+        <div id="gitalk-container"></div>
+
+      </section>
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#特性总览"><span class="toc-text">特性总览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一-基于时间的发行版本控制（JEP-322）"><span class="toc-text">一. 基于时间的发行版本控制（JEP 322）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#发行版本号的前世今生"><span class="toc-text">发行版本号的前世今生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JEP-322-新模式解读"><span class="toc-text">JEP 322 新模式解读</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-局部变量类型推断（JEP-286）"><span class="toc-text">二. 局部变量类型推断（JEP 286）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非法使用-var-的情况解析"><span class="toc-text">非法使用 var 的情况解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用-var-的准则"><span class="toc-text">使用 var 的准则</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三-试验性-JIT-编译器（JEP-317）"><span class="toc-text">三. 试验性 JIT 编译器（JEP 317）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四-应用程序类数据共享-JEP-310"><span class="toc-text">四. 应用程序类数据共享(JEP 310)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五-用于-G1-的并行-Full-GC-JEP-307"><span class="toc-text">五. 用于 G1 的并行 Full GC(JEP 307)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#六-清理垃圾收集器接口（JEP-304）"><span class="toc-text">六. 清理垃圾收集器接口（JEP 304）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#七-其他Unicode语言标签扩展（JEP-314）"><span class="toc-text">七. 其他Unicode语言标签扩展（JEP 314）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#八-根证书（JEP-319）"><span class="toc-text">八. 根证书（JEP 319）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#九-线程本地握手（JEP-312）"><span class="toc-text">九. 线程本地握手（JEP 312）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十-备用存储设备上的堆分配-JEP-316"><span class="toc-text">十. 备用存储设备上的堆分配(JEP 316)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十一-删除本机头生成工具—javah-JEP-313"><span class="toc-text">十一. 删除本机头生成工具—javah (JEP 313)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十二-将JDK森林合并到单个存储库中-JEP-296"><span class="toc-text">十二. 将JDK森林合并到单个存储库中(JEP 296)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十三-API-变更"><span class="toc-text">十三. API 变更</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#不可修改集合的改进"><span class="toc-text">不可修改集合的改进</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#copyOf"><span class="toc-text">copyOf()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#toUnmodifiable"><span class="toc-text">toUnmodifiable()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Optinal-新增方法-orElseThrow"><span class="toc-text">Optinal 新增方法 orElseThrow()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文章推荐"><span class="toc-text">文章推荐</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+    </div>
+    
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xxx.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/volantis-x/"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=260045301"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <div>
+    
+      
+  
+
+  <div id="rightmenu-wrapper">
+    <ul class="list-v rightmenu" id="rightmenu-content">
+      <li class='option'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-text' onclick='document.execCommand("copy")'><i class='fa fa-copy fa-fw'></i>复制文本</a>
+        <hr id='hr-text'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-href'><i class='fa fa-link fa-fw'></i>复制链接</a>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-open-href'><i class='fa fa-external-link-square-alt fa-fw'></i>在新标签页打开</a>
+        <hr id='hr-href'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-src'><i class='fa fa-image fa-fw'></i>复制图片地址</a>
+        <hr id='hr-src'>
+      </li>
+      <li class='navigation'>
+        <a class='nav icon-only fix-cursor-default' onclick='history.back()'><i class='fa fa-arrow-left fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='history.forward()'><i class='fa fa-arrow-right fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='window.location.reload()'><i class='fa fa-redo fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' href='/'><i class='fa fa-home fa-fw'></i></a>
+      </li>
+      <hr>
+      
+        
+      
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/volantis-docs/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xvolantis-docs"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 本站源码
+      </a>
+    </li>
+  
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/hexo-theme-volantis/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xhexo-theme-volantis"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 主题源码
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' 
+        
+        
+        
+          onclick="document.execCommand('print')"
+        
+        >
+        <i class='fa fa-print fa-fw'></i> 打印页面
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          <li class='music name'>
+            <p class='nav music-title fix-cursor-default'></p>
+          </li>
+          <li class='music ctrl'>
+            <a class='nav icon-only backward fix-cursor-default' onclick='aplayerBackward()'><i class='fa fa-step-backward fa-fw'></i></a>
+            <a class='nav icon-only toggle fix-cursor-default' onclick='aplayerToggle()'><i class='fa fa-play fa-fw'></i></a>
+            <a class='nav icon-only forward fix-cursor-default' onclick='aplayerForward()'><i class='fa fa-step-forward fa-fw'></i></a>
+          </li>
+          <li class='music volume'>
+            <a class='nav volume'>
+              <div class="aplayer-volume-bar-wrap">
+                <div class="aplayer-volume-bar fix-cursor-pointer">
+                  <div class="aplayer-volume"></div>
+                  <i class='left fa fa-volume-off fa-fw'></i>
+                  <i class='right fa fa-volume-up fa-fw'></i>
+                </div>
+              </div>
+            </a>
+          </li>
+        
+      
+    </ul>
+  </div>
+
+  <script>
+    window.document.oncontextmenu = function (event) {
+      if (event.ctrlKey) return true;
+      if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true;
+      return popMenu(event);
+    };
+    document.addEventListener("click", function (event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      mymenu.style.display = "none";
+    });
+    function popMenu(event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      var menuContent = document.getElementById('rightmenu-content');
+      var screenWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      var screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      mymenu.style.left = event.clientX + "px"; // 获取鼠标位置
+      mymenu.style.top = event.clientY + "px";
+      mymenu.style.display = 'block';
+      if (event.clientX * 2 > screenWidth) {
+        menuContent.classList.add('left');
+      } else {
+        menuContent.classList.remove('left');
+      }
+      if (event.clientY * 2 > screenHeight) {
+        menuContent.classList.add('top');
+      } else {
+        menuContent.classList.remove('top');
+      }
+
+      let hrText = document.getElementById('hr-text');
+      let hrSrc = document.getElementById('hr-src');
+      let hrHref = document.getElementById('hr-href');
+
+      // 选中图片
+      let copySrc = document.getElementById('menu-copy-src');
+      if (copySrc != undefined) {
+        if (event.target.currentSrc) {
+          copySrc.style.display = 'block';
+          copySrc.addEventListener("click", function (e) {
+            copyString(event.target.currentSrc);
+          },{once: true});
+          hrSrc.style.display = 'block';
+        } else {
+          copySrc.style.display = 'none';
+          hrSrc.style.display = 'none';
+        }
+      }
+
+      // 选中按钮
+      // 判断是不是按钮
+      let href = '';
+      if (event.path) {
+        for (i = 0; i < event.path.length; i++) {
+          if (event.path[i].href != undefined && event.path[i].href.length > 0) {
+            href = event.path[i].href;
+          }
+        }
+      }
+
+      let copyText = document.getElementById('menu-copy-text');
+      copyText.style.display = 'none';
+      hrText.style.display = 'none';
+      if (href.length == 0) {
+        // 选中文本
+        if (window.getSelection().toString()) {
+          copyText.style.display = 'block';
+          hrText.style.display = 'block';
+        }
+      }
+
+      // 在新标签页打开
+      let openHref = document.getElementById('menu-open-href');
+      if (openHref != undefined) {
+        if (href.length > 0) {
+          openHref.style.display = 'block';
+          openHref.addEventListener("click", function (e) {
+            window.open(href);
+          },{once: true});
+          hrHref.style.display = 'block';
+        } else {
+          openHref.style.display = 'none';
+          hrHref.style.display = 'none';
+        }
+      }
+      // 复制链接
+      let copyHref = document.getElementById('menu-copy-href');
+      if (copyHref != undefined) {
+        if (href.length > 0) {
+          copyHref.style.display = 'block';
+          copyHref.addEventListener("click", function (e) {
+            copyString(href);
+          },{once: true});
+        } else {
+          copyHref.style.display = 'none';
+        }
+      }
+
+      // 有音乐播放器
+      if (true == true) {
+        // 如果有aplayer，初始化一下
+      	try {
+      		checkAPlayer();
+          updateTitle();
+      	} catch (error) {
+      		console.log(error);
+      	}
+      }
+
+      return false; // 该行代码确保系统自带的右键菜单不会被调出
+    }
+    function hideMenu() {
+      document.getElementById('rightmenu-wrapper').style.display = 'none';
+    }
+    function copyString(str) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      document.body.appendChild(input);
+      input.setAttribute('value', str);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    document.execCommand('click');
+  </script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/001.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/002.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/003.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/004.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/005.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/006.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/012.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/016.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/019.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/025.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/034.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/035.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/038.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/039.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/046.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/051.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/052.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/054.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/056.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+  <script>
+    let APlayerController = new Object();
+    APlayerController.id = '3175833810';  // 设定全局音乐播放ID
+    APlayerController.volume = '0.7';
+  </script>
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js"></script>
+
+  
+    
+<script src="/js/aplayer.js"></script>
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  function pjax_gitalk() {
+    let pageUrl = $.trim($('#pjax-comment-path').text()) === "none" ? 
+      decodeURI(window.location.pathname) : $.trim($('#pjax-comment-path').text());
+    
+    let ALLPATH = '';
+    if(ALLPATH != '') pageUrl = ALLPATH;
+
+    if (document.getElementById('gitalk-container') != null) {
+      var gitalk = new Gitalk({
+        clientID: "a9f57bed080703426741",
+        clientSecret: "03fe7aec06a7794dedfcc123b6475f0231f6a0ce",
+        repo: "wmyskxz.github.io",
+        owner: "wmyskxz",
+        admin: "wmyskxz",
+        id: pageUrl,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      });
+      gitalk.render('gitalk-container');
+    }
+  }
+
+  $(function () {
+    pjax_gitalk();
+  });
+</script>
+
+
+
+
+<!-- darkmodejs -->
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+<!-- scrollreveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    function pjax_scrollrebeal() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '32px',
+        duration: '800',
+        interval: '20',
+        scale: '1',
+        easing: 'ease-out'
+      });
+    }
+
+    $(function () {
+      pjax_scrollrebeal();
+    });
+  </script>
+
+<!-- ******************************** -->
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+<!-- ******************************** -->
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="/js/search.js"></script>
+
+  
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js" data-pjax></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      $.fancybox.close();    // 关闭弹窗
+      $('.l_header .switcher .s-search').removeClass('active'); // 关闭移动端激活的搜索框
+      $('.l_header').removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      $('.wrapper').removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      $('.s-top').unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+
+      try{
+        pjax_fancybox();
+        
+          
+          if ('.cover') {
+            $('.cover').backstretch("resize");
+          } else {
+            $.backstretch("resize");
+          }
+        
+        
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        
+        
+          pjax_scrollrebeal();
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+          pjax_gitalk();
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>
