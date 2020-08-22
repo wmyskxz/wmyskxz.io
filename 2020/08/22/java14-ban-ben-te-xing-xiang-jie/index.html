@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#3.0.0-rc.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>Java14版本特性详解 - 我没有三颗心脏的博客</title>
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+    
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/styles/solarized-light.css">
+
+    
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body>
+  
+  
+  
+  <div class="cover-wrapper">
+    <cover class='cover post' style="display: none;">
+      <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">我没有三颗心脏</p>
+    
+    
+      <p class="subtitle">分享知识&技术&成长&思考</p>
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="search here..." />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation search'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <i class='fas fa-rss fa-fw'></i><p>博客</p>
+            </a>
+          
+            <a href="/categories/"
+              
+              
+              id="categories">
+              <i class='fas fa-folder-open fa-fw'></i><p>分类</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <i class='fas fa-tags fa-fw'></i><p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <i class='fas fa-archive fa-fw'></i><p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <i class='fas fa-info-circle fa-fw'></i><p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+    </cover>
+    <header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  </div>
+  
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper' id="pjax-container">
+      
+        <!--此文件用来存放一些不方便取值的变量--> 
+<!--思路大概是将值藏到重加载的区域内--> 
+ 
+ 
+ 
+<div id="pjax-data" style="display: none"> 
+  <div id="pjax-ispage">true</div> 
+  <div id="pjax-pageTitle">Java14版本特性详解</div> 
+  <div id="pjax-enable-cover">true</div> 
+  <div id="pjax-comment-path">none</div> 
+  <div id="pjax-comment-placeholder">none</div> 
+</div> 
+ 
+ 
+<script> 
+  // 处理封面 此时 jquery 还没加载 
+  if ("none" == "none") { // 移除封面 
+    document.getElementsByClassName('cover')[0].style.display = "none"; 
+    document.getElementsByClassName('l_body')[0].classList.add("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
+  } else { 
+    if ("none" == "blog") { // 半屏 
+      document.getElementsByClassName('cover')[0].classList.remove("full"); 
+      document.getElementsByClassName('cover')[0].classList.add("half"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
+    } else if ("none" == "docs") { // 全屏 
+      document.getElementsByClassName('cover')[0].classList.remove("half"); 
+      document.getElementsByClassName('cover')[0].classList.add("full"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = ""; 
+    } 
+    document.getElementsByClassName('cover')[0].style.display = ""; 
+    document.getElementsByClassName('l_body', 'show')[0].classList.remove("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.remove("show"); 
+  } 
+</script> 
+
+      
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/08/22/java14-ban-ben-te-xing-xiang-jie/">
+      Java14版本特性详解
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月22日</p>
+  </a>
+</div>
+
+            
+          
+            
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-22T20:58:14+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月22日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/Java14%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7%E3%80%90%E4%B8%80%E6%96%87%E4%BA%86%E8%A7%A3%E3%80%91/image-20200822180206407.png" alt=""></p>
+<a id="more"></a>
+
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 <strong>「帮助新朋友快速高质量的学习」</strong>。</li>
+<li>当然 <strong>不论新老朋友</strong> 我相信您都可以 <strong>从中获益</strong>。如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="特性总览"><a href="#特性总览" class="headerlink" title="特性总览"></a>特性总览</h1><p>以下是 Java 14 中的引入的部分新特性。关于 Java 14 新特性更详细的介绍可参考<a href="http://openjdk.java.net/projects/jdk/14/" target="_blank" rel="noopener">这里</a>。</p>
+<p>语言及特性更改：</p>
+<ul>
+<li>Switch 表达式-标准（JEP 361）</li>
+<li>instanceof 的模式匹配-预览（JEP 305）</li>
+<li>有用的 NullPointerExceptions（JEP 358）</li>
+<li>record-预览（JEP 359）</li>
+<li>文本块-预览（JEP 368）</li>
+</ul>
+<p>JVM 更改：</p>
+<ul>
+<li>针对 G1 NUMA 感知内存分配的优化（JEP 345）</li>
+<li>删除并发标记扫描(CMS)垃圾收集器（JEP 363）</li>
+<li>JFR 事件流（JEP 349）</li>
+<li>macOS 上的 ZGC-实验性（JEP 364）</li>
+<li>Windows 上的 ZGC-实验性（JEP 365）</li>
+<li>弃用 ParallelScavenge + SerialOld 的 GC 组合（JEP 366）</li>
+</ul>
+<p>其他特性：</p>
+<ul>
+<li>打包工具（JEP 343）</li>
+<li>非易失性映射字节缓冲区（JEP 352）</li>
+<li>弃用 Solaris 和 SPARC 端口（JEP 362）</li>
+<li>删除 Pack200 工具和 API（JEP 367）</li>
+<li>外部存储器访问 API（JEP 370）</li>
+</ul>
+<h1 id="一-Switch-表达式-标准（JEP-361）"><a href="#一-Switch-表达式-标准（JEP-361）" class="headerlink" title="一. Switch 表达式-标准（JEP 361）"></a>一. Switch 表达式-标准（JEP 361）</h1><p>在上两个版本中保留的预留功能，如今终于在 Java 14 中获得了永久性的地位。</p>
+<ul>
+<li><p><a href="https://www.wmyskxz.com/2020/08/22/java12-ban-ben-te-xing-xiang-jie/">Java 12</a> 为表达是引入了 Lambda 语法，从而允许使用多个大小写标签进行模式匹配，并防止出现导致冗长代码的错误。它还强制执行穷尽情况，如果没有涵盖所有输入情况，则会抛出编译错误。</p>
+</li>
+<li><p><a href="https://www.wmyskxz.com/2020/08/22/java13-ban-ben-te-xing-xiang-jie/">Java 13</a> 在第二个预览版本使用了 <code>yield</code> 替代了原有的 <code>break</code> 关键字来返回表达式的返回值。</p>
+</li>
+</ul>
+<p>Java 14 现在终于使这些功能成为了标准：</p>
+<pre class=" language-java"><code class="language-java">String result <span class="token operator">=</span> <span class="token keyword">switch</span> <span class="token punctuation">(</span>day<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">case</span> <span class="token string">"M"</span><span class="token punctuation">,</span> <span class="token string">"W"</span><span class="token punctuation">,</span> <span class="token string">"F"</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"MWF"</span><span class="token punctuation">;</span>
+    <span class="token keyword">case</span> <span class="token string">"T"</span><span class="token punctuation">,</span> <span class="token string">"TH"</span><span class="token punctuation">,</span> <span class="token string">"S"</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token string">"TTS"</span><span class="token punctuation">;</span>
+    <span class="token keyword">default</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>day<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            yield <span class="token string">"Please insert a valid day."</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            yield <span class="token string">"Looks like a Sunday."</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><em>注意，<code>yield</code> 不是 Java 中的新关键字，它仅用于 Switch 表达式中。</em></p>
+<h1 id="二-instanceof-的模式匹配-预览（JEP-305）"><a href="#二-instanceof-的模式匹配-预览（JEP-305）" class="headerlink" title="二. instanceof 的模式匹配-预览（JEP 305）"></a>二. instanceof 的模式匹配-预览（JEP 305）</h1><p>在 Java 14 之前，我们用于 <code>instanceof-and-cast</code> 检查对象的类型并将其转换为变量。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span>obj <span class="token keyword">instanceof</span> <span class="token class-name">String</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>        <span class="token comment" spellcheck="true">// instanceof</span>
+  String s <span class="token operator">=</span> <span class="token punctuation">(</span>String<span class="token punctuation">)</span> obj<span class="token punctuation">;</span>          <span class="token comment" spellcheck="true">// cast</span>
+  <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token string">"jdk14"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">//...</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token punctuation">{</span>
+       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"not a string"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>现在，在 Java 14 中，我们可以像这样重构上面的代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span>obj <span class="token keyword">instanceof</span> <span class="token class-name">String</span> s<span class="token punctuation">)</span> <span class="token punctuation">{</span>      <span class="token comment" spellcheck="true">// instanceof, cast and bind variable in one line.</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token string">"jdk4"</span><span class="token punctuation">.</span><span class="token function">equalsIgnoreCase</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token keyword">else</span> <span class="token punctuation">{</span>
+       System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"not a string"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>如果 <code>obj</code> 是的实例 <code>String</code>，则将其 <code>String</code> 强制转换为绑定变量并分配给该绑定变量  <code>s</code>。</p>
+<h1 id="三-有用的-NullPointerExceptions（JEP-358）"><a href="#三-有用的-NullPointerExceptions（JEP-358）" class="headerlink" title="三. 有用的 NullPointerExceptions（JEP 358）"></a>三. 有用的 NullPointerExceptions（JEP 358）</h1><p>空指针异常是任何开发人员的噩梦。以前，直到 Java 13 为止，调试臭名昭著的 NPE 都很棘手。开发人员不得不依靠其他调试工具，或者手动计算为空的变量/ 方法，因为堆栈跟踪只会显示行号。</p>
+<p>在 Java 14 之前：</p>
+<pre class=" language-java"><code class="language-java">String name <span class="token operator">=</span> jd<span class="token punctuation">.</span><span class="token function">getBlog</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getAuthor</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">//Stacktrace</span>
+Exception in thread <span class="token string">"main"</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>NullPointerException
+    at NullPointerExample<span class="token punctuation">.</span><span class="token function">main</span><span class="token punctuation">(</span>NullPointerExample<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">5</span><span class="token punctuation">)</span></code></pre>
+<p>Java 14 引入了新的 JVM 功能（带<code>-XX:+ShowCodeDetailsInExceptionMessages</code>选项），它通过更具描述性的堆栈提供了更好的见解，如下所示：</p>
+<pre class=" language-bash"><code class="language-bash">Exception <span class="token keyword">in</span> thread <span class="token string">"main"</span> java.lang.NullPointerException: Cannot invoke <span class="token string">"Blog.getAuthor()"</span> because the <span class="token keyword">return</span> value of <span class="token string">"Journaldev.getBlog()"</span> is null
+    at NullPointerExample.main<span class="token punctuation">(</span>NullPointerExample.java:4<span class="token punctuation">)</span></code></pre>
+<p><strong>注意</strong>：以上功能不是语言功能。这是对运行时环境的增强。</p>
+<h1 id="四-record-预览（JEP-359）"><a href="#四-record-预览（JEP-359）" class="headerlink" title="四. record-预览（JEP 359）"></a>四. record-预览（JEP 359）</h1><p><code>record</code> 是存储纯数据的数据类型。引入 <code>record</code> 背后的想法是快速创建没有样板代码的简单简洁类。<em>（这有点类似 Kotlin 中的数据类型，这也是为什么有言论说 <a href="https://www.infoq.cn/article/YgPRotsrI1qSr8cxRGlq" target="_blank" rel="noopener">Java 逐渐 “Kotlin 化”</a> 的原因之一）</em></p>
+<p>通常，Java 中的类需要您实现 <code>equals()</code>、<code>hashCode()</code>、<code>getters</code> 和 <code>setters</code> 方法。虽然某些 IDE 支持此类的自动生成，但是代码仍然很冗长。使用 <code>record</code> 您只需按照以下方式定义一个类。</p>
+<pre class=" language-java"><code class="language-java">record <span class="token function">Author</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">//or</span>
+record <span class="token function">Author</span> <span class="token punctuation">(</span>String name<span class="token punctuation">,</span> String topic<span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre>
+<p>Java 编译器将自动生成一个带有构造函数、私有 <code>final</code> 字段、访问器和 <code>equals</code>、 <code>hashCode</code>和 <code>toString</code> 方法的类。上一类的自动生成的 <code>getter</code> 方法是 <code>name()</code> 和 <code>topic()</code>。</p>
+<p>编译之后，我们可以查看上面 <code>record Author (String name, String topic){}</code> 语句，编译器为我们自动生成的类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">Author</span> <span class="token keyword">extends</span> <span class="token class-name">java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>Record</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String topic<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Author</span><span class="token punctuation">(</span>java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String name<span class="token punctuation">,</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String topic<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* compiled code */</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* compiled code */</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* compiled code */</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span>java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>Object o<span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* compiled code */</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String <span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* compiled code */</span> <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String <span class="token function">topic</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">/* compiled code */</span> <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>此外，我们可以通过以下方式向记录添加其他字段，方法和构造函数：</p>
+<pre class=" language-java"><code class="language-java">record <span class="token function">Author</span> <span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">,</span> String name<span class="token punctuation">,</span> String topic<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">static</span> <span class="token keyword">int</span> followers<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> String <span class="token function">followerCount</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"Followers are "</span><span class="token operator">+</span> followers<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">description</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"Author "</span><span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">" writes on "</span><span class="token operator">+</span> topic<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> Author<span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>id <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span> <span class="token string">"id must be greater than 0."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><code>record</code> 内定义的其他构造函数称为 Compact 构造函数。它不包含任何参数，只是规范本身构造函数的参数。</p>
+<p>关于 <code>record</code> 需要注意的几件事：</p>
+<ul>
+<li><code>record</code> 既不能扩展一个类，也不能被另一个类扩展。这是一个 <code>final class</code>。</li>
+<li><code>record</code> 不能是抽象的。</li>
+<li><code>record</code> 不能扩展任何其他类，也不能在主体内定义实例字段。实例字段只能在状态描述中定义。</li>
+<li>声明的字段是私有字段和 <code>final</code> 字段。</li>
+<li><code>record</code> 定义中允许使用静态字段和方法。</li>
+</ul>
+<h2 id="record-类的引用字段内的值可以被改变"><a href="#record-类的引用字段内的值可以被改变" class="headerlink" title="record 类的引用字段内的值可以被改变"></a>record 类的引用字段内的值可以被改变</h2><p>值得注意的是，对于定义为对象的字段，只有引用是不可变的。底层值可以修改。</p>
+<p>下面显示了修改 ArrayList 的一条记录。可以看到，每当 ArrayList 被更改时，该值都会被修改。</p>
+<pre class=" language-bash"><code class="language-bash">jshell<span class="token operator">></span> record Author<span class="token punctuation">(</span>String name, List<span class="token operator">&lt;</span>String<span class="token operator">></span> topics<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token operator">|</span>  已创建 记录 Author
+
+jshell<span class="token operator">></span> var topicList <span class="token operator">=</span> new ArrayList<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span>Arrays.asList<span class="token punctuation">(</span><span class="token string">"Java"</span><span class="token punctuation">))</span><span class="token punctuation">;</span>
+topicList <span class="token operator">==</span><span class="token operator">></span> <span class="token punctuation">[</span>Java<span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span> var author <span class="token operator">=</span> new Author<span class="token punctuation">(</span><span class="token string">"Wmyskxz"</span>, topicList<span class="token punctuation">)</span><span class="token punctuation">;</span>
+author <span class="token operator">==</span><span class="token operator">></span> Author<span class="token punctuation">[</span>name<span class="token operator">=</span>Wmyskxz, topics<span class="token operator">=</span><span class="token punctuation">[</span>Java<span class="token punctuation">]</span><span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span> topicList.add<span class="token punctuation">(</span><span class="token string">"Python"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$6</span> <span class="token operator">==</span><span class="token operator">></span> <span class="token boolean">true</span>
+
+jshell<span class="token operator">></span> author.topics<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$7</span> <span class="token operator">==</span><span class="token operator">></span> <span class="token punctuation">[</span>Java, Python<span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span></code></pre>
+<h2 id="record-能实现接口"><a href="#record-能实现接口" class="headerlink" title="record 能实现接口"></a>record 能实现接口</h2><p>下面的代码显示了一个实现有记录接口的示例:</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">Information</span> <span class="token punctuation">{</span>
+  String <span class="token function">getFullName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+record <span class="token function">Author</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> String topic<span class="token punctuation">)</span> <span class="token keyword">implements</span> <span class="token class-name">Information</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> String <span class="token function">getFullName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">"Author "</span><span class="token operator">+</span> name <span class="token operator">+</span> <span class="token string">" writes on "</span> <span class="token operator">+</span> topic<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="record-支持多个构造函数"><a href="#record-支持多个构造函数" class="headerlink" title="record 支持多个构造函数"></a>record 支持多个构造函数</h2><p>记录允许声明多个有或没有参数的构造函数，如下所示:</p>
+<pre class=" language-java"><code class="language-java">record <span class="token function">Author</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> String topic<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token function">Author</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">(</span><span class="token string">"NA"</span><span class="token punctuation">,</span> <span class="token string">"NA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">public</span> <span class="token function">Author</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">this</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token string">"NA"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="record-允许修改访问器方法"><a href="#record-允许修改访问器方法" class="headerlink" title="record 允许修改访问器方法"></a>record 允许修改访问器方法</h2><p>虽然 <code>record</code> 为状态描述中定义的字段生成公共访问方法，但它们也允许您在主体中重新定义访问方法，如下所示：</p>
+<pre class=" language-java"><code class="language-java">record <span class="token function">Author</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> String topic<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> String <span class="token function">name</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"This article was written by "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h2 id="在运行时检查-record-及其组件"><a href="#在运行时检查-record-及其组件" class="headerlink" title="在运行时检查 record 及其组件"></a>在运行时检查 record 及其组件</h2><p><code>record</code> 为我们提供了 <code>isRecord()</code> 和 <code>getRecordComponents()</code> 来检查类是否是一条记录，并查看它的字段和类型。下面展示了它是如何做到的：</p>
+<pre class=" language-java"><code class="language-java">jshell<span class="token operator">></span> record <span class="token function">Author</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> String topic<span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token operator">|</span>  已创建 记录 Author
+
+jshell<span class="token operator">></span> var author <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Author</span><span class="token punctuation">(</span><span class="token string">"Wmyskxz"</span><span class="token punctuation">,</span> <span class="token string">"MoreThanJava"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+author <span class="token operator">==</span><span class="token operator">></span> Author<span class="token punctuation">[</span>name<span class="token operator">=</span>Wmyskxz<span class="token punctuation">,</span> topic<span class="token operator">=</span>MoreThanJava<span class="token punctuation">]</span>
+
+jshell<span class="token operator">></span> author<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isRecord</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+$<span class="token number">3</span> <span class="token operator">==</span><span class="token operator">></span> <span class="token boolean">true</span>
+
+jshell<span class="token operator">></span> author<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getRecordComponents</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+$<span class="token number">4</span> <span class="token operator">==</span><span class="token operator">></span> RecordComponent<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token punctuation">{</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String name<span class="token punctuation">,</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>String topic <span class="token punctuation">}</span>
+
+jshell<span class="token operator">></span></code></pre>
+<blockquote>
+<p><strong>Tips</strong>：虽然我们在上面的代码示例中向记录添加了额外的字段和方法，但请确保不要做得过火。记录被设计为普通的数据载体，如果您想实现许多其他方法，最好回到常规类。</p>
+</blockquote>
+<h1 id="五-文本块-预览（JEP-368）"><a href="#五-文本块-预览（JEP-368）" class="headerlink" title="五. 文本块-预览（JEP 368）"></a>五. 文本块-预览（JEP 368）</h1><p>文本块是 <a href="https://www.wmyskxz.com/2020/08/22/java13-ban-ben-te-xing-xiang-jie/">Java 13</a> 中的预览功能，其目的是允许轻松创建多行字符串文字。在轻松创建 HTML 和 JSON 或 SQL 查询字符串时很有用。</p>
+<p>在 Java 14 中，文本块仍在预览中，并增加了一些新功能。我们现在可以使用：</p>
+<ul>
+<li><code>\</code> 反斜杠用于显示美观的多行字符串块。</li>
+<li><code>\s</code> 用于考虑尾随空格，默认情况下编译器会忽略它们。它保留了前面的所有空间。</li>
+</ul>
+<pre class=" language-java"><code class="language-java">String text <span class="token operator">=</span> <span class="token string">""</span>"
+                Did you know \
+                Java <span class="token number">14</span> \
+                has the most features among\
+                all non<span class="token operator">-</span>LTS versions so far\
+                <span class="token string">""</span>"<span class="token punctuation">;</span>
+
+String text2 <span class="token operator">=</span> <span class="token string">""</span>"
+                line1
+                line2 \s
+                line3
+                <span class="token string">""</span>"<span class="token punctuation">;</span>
+
+String text3 <span class="token operator">=</span> <span class="token string">"line1\nline2 \nline3\n"</span>
+
+<span class="token comment" spellcheck="true">//text2 and text3 are equal.</span></code></pre>
+<h1 id="六-针对-G1-NUMA-感知内存分配的优化（JEP-345）"><a href="#六-针对-G1-NUMA-感知内存分配的优化（JEP-345）" class="headerlink" title="六. 针对 G1 NUMA 感知内存分配的优化（JEP 345）"></a>六. 针对 G1 NUMA 感知内存分配的优化（JEP 345）</h1><p>新的 <a href="https://en.wikipedia.org/wiki/Non-uniform_memory_access" target="_blank" rel="noopener">NUMA感知内存</a> 分配模式提高了大型计算机上的 G1 性能。添加 <code>+XX:+UseNUMA</code> 选项以启用它。</p>
+<h1 id="七-删除并发标记扫描-CMS-垃圾收集器（JEP-363）"><a href="#七-删除并发标记扫描-CMS-垃圾收集器（JEP-363）" class="headerlink" title="七. 删除并发标记扫描(CMS)垃圾收集器（JEP 363）"></a>七. 删除并发标记扫描(CMS)垃圾收集器（JEP 363）</h1><p><a href="https://openjdk.java.net/jeps/291" target="_blank" rel="noopener">Java 9 – JEP 291</a> 已弃用此并发标记扫描（CMS）垃圾收集器，现在正式将其删除。</p>
+<pre class=" language-bash"><code class="language-bash">/usr/lib/jvm/jdk-14/bin/java -XX:+UseConcMarkSweepGC Test
+
+OpenJDK 64-Bit Server VM warning: Ignoring option UseConcMarkSweepGC<span class="token punctuation">;</span> support was removed <span class="token keyword">in</span> 14.0</code></pre>
+<h1 id="八-JFR-事件流（JEP-349）"><a href="#八-JFR-事件流（JEP-349）" class="headerlink" title="八. JFR 事件流（JEP 349）"></a>八. JFR 事件流（JEP 349）</h1><p>JDK Flight Recorder（JFR）是用于收集有关正在运行的 Java 应用程序的诊断和性能分析数据的工具。通常，我们开始记录，停止记录，然后将记录的事件转储到磁盘以进行分析，它可以很好地进行概要分析，分析或调试。</p>
+<p>该 JEP 改进了现有的 JFR 以支持事件流，这意味着现在我们可以实时传输 JFR 事件，而无需将记录的事件转储到磁盘并手动解析它。</p>
+<h1 id="九-macOS-上的-ZGC-实验性（JEP-364）"><a href="#九-macOS-上的-ZGC-实验性（JEP-364）" class="headerlink" title="九. macOS 上的 ZGC-实验性（JEP 364）"></a>九. macOS 上的 ZGC-实验性（JEP 364）</h1><p><a href="https://openjdk.java.net/jeps/333" target="_blank" rel="noopener">Java 11 – JEP 333</a> 在 Linux 上引入了 Z 垃圾收集器（ZGC），现在可移植到 macOS。</p>
+<h1 id="十-Windows-上的-ZGC-实验性（JEP-365）"><a href="#十-Windows-上的-ZGC-实验性（JEP-365）" class="headerlink" title="十. Windows 上的 ZGC-实验性（JEP 365）"></a>十. Windows 上的 ZGC-实验性（JEP 365）</h1><p><a href="https://openjdk.java.net/jeps/333" target="_blank" rel="noopener">Java 11 – JEP 333</a> 在 Linux 上引入了 Z 垃圾收集器（ZGC），现在可移植到 Windows版本 &gt;= 1803 的机器上。</p>
+<h1 id="十一-弃用-ParallelScavenge-SerialOld-的-GC-组合（JEP-366）"><a href="#十一-弃用-ParallelScavenge-SerialOld-的-GC-组合（JEP-366）" class="headerlink" title="十一. 弃用 ParallelScavenge + SerialOld 的 GC 组合（JEP 366）"></a>十一. 弃用 ParallelScavenge + SerialOld 的 GC 组合（JEP 366）</h1><p>由于较少的使用和大量的维护工作，Java 14 不赞成使用并行年轻代和串行老一代 GC 算法的组合。</p>
+<pre class=" language-bash"><code class="language-bash">/usr/lib/jvm/jdk-14/bin/java -XX:-UseParallelOldGC Test
+
+OpenJDK 64-Bit Server VM warning: Option UseParallelOldGC was deprecated <span class="token keyword">in</span> version 14.0 and will likely be removed <span class="token keyword">in</span> a future release.</code></pre>
+<h1 id="十二-其他特性"><a href="#十二-其他特性" class="headerlink" title="十二. 其他特性"></a>十二. 其他特性</h1><h2 id="打包工具（JEP-343）"><a href="#打包工具（JEP-343）" class="headerlink" title="打包工具（JEP 343）"></a>打包工具（JEP 343）</h2><p><code>jpackage</code>是将 Java 应用程序打包到特定于平台的程序包中的新工具。</p>
+<ul>
+<li>Linux：deb 和 rpm</li>
+<li>macOS：pkg 和 dmg</li>
+<li>Windows：MSI 和 EXE</li>
+</ul>
+<p>例如，将 <code>JAR</code> 文件打包到支持 <code>exe</code> 的 Windows 平台上。</p>
+<h2 id="非易失性映射字节缓冲区（JEP-352）"><a href="#非易失性映射字节缓冲区（JEP-352）" class="headerlink" title="非易失性映射字节缓冲区（JEP 352）"></a>非易失性映射字节缓冲区（JEP 352）</h2><p>改进的 <code>FileChannel</code> API 可创建 <code>MappedByteBuffer</code> 对 <a href="https://en.wikipedia.org/wiki/Non-volatile_memory" target="_blank" rel="noopener">非易失性存储器（NVM）的</a> 访问，该存储器即使在关闭电源后也可以检索存储的数据。例如，此功能可确保将可能仍在高速缓存中的所有更改写回到内存中。</p>
+<p><em>ps：仅 Linux / x64 和 Linux / AArch64 OS 支持此功能！</em></p>
+<h2 id="弃用-Solaris-和-SPARC-端口（JEP-362）"><a href="#弃用-Solaris-和-SPARC-端口（JEP-362）" class="headerlink" title="弃用 Solaris 和 SPARC 端口（JEP 362）"></a>弃用 Solaris 和 SPARC 端口（JEP 362）</h2><p>不再支持 Solaris / SPARC，Solaris / x64 和 Linux / SPARC 端口，更少的平台支持意味着更快地交付新功能。</p>
+<h2 id="删除-Pack200-工具和-API（JEP-367）"><a href="#删除-Pack200-工具和-API（JEP-367）" class="headerlink" title="删除 Pack200 工具和 API（JEP 367）"></a>删除 Pack200 工具和 API（JEP 367）</h2><p><a href="https://openjdk.java.net/jeps/336" target="_blank" rel="noopener">Java 11 – JEP 336</a> 不赞成使用 <code>pack200</code> 和 <code>unpack200</code> 工具，以及软件包中的 <code>Pack200</code> API  <code>java.util.jar</code>，现在正式将其删除。</p>
+<h2 id="外部存储器访问-API（JEP-370）"><a href="#外部存储器访问-API（JEP-370）" class="headerlink" title="外部存储器访问 API（JEP 370）"></a>外部存储器访问 API（JEP 370）</h2><p>孵化器模块，允许 Java API 访问 Java 堆外部的外部内存。</p>
+<p>外部存储器访问 API 引入了三个主要抽象：</p>
+<ul>
+<li>MemorySegment：提供对具有给定范围的连续内存区域的访问。</li>
+<li>MemoryAddress：提供到 MemorySegment 的偏移量（基本上是一个指针）。</li>
+<li>MemoryLayout：提供一种描述内存段布局的方法，该方法大大简化了使用 <code>var</code> 句柄访问 MemorySegment 的过程。使用此方法，不必根据内存的使用方式来计算偏移量。例如，一个整数或长整数数组的偏移量将有所不同，但将使用 MemoryLayout 透明地对其进行处理。</li>
+</ul>
+<p><strong>下面是一个例子：</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> jdk<span class="token punctuation">.</span>incubator<span class="token punctuation">.</span>foreign<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>invoke<span class="token punctuation">.</span>VarHandle<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>ByteOrder<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Test</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+         VarHandle intHandle <span class="token operator">=</span> MemoryHandles<span class="token punctuation">.</span><span class="token function">varHandle</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> ByteOrder<span class="token punctuation">.</span><span class="token function">nativeOrder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">(</span>MemorySegment segment <span class="token operator">=</span> MemorySegment<span class="token punctuation">.</span><span class="token function">allocateNative</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+            MemoryAddress base <span class="token operator">=</span> segment<span class="token punctuation">.</span><span class="token function">baseAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>base<span class="token punctuation">)</span><span class="token punctuation">;</span>                 <span class="token comment" spellcheck="true">// print memory address</span>
+
+              intHandle<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>base<span class="token punctuation">,</span> <span class="token number">999</span><span class="token punctuation">)</span><span class="token punctuation">;</span>                 <span class="token comment" spellcheck="true">// set value 999 into the foreign memory</span>
+
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>intHandle<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>base<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// get the value from foreign memory</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>编译并使用孵化器模块运行 <code>jdk.incubator.foreign</code>。</p>
+<pre class=" language-bash"><code class="language-bash">$ /usr/lib/jvm/jdk-14/bin/javac --add-modules jdk.incubator.foreign Test.java
+
+warning: using incubating module<span class="token punctuation">(</span>s<span class="token punctuation">)</span>: jdk.incubator.foreign
+1 warning
+
+$ /usr/lib/jvm/jdk-14/bin/java --add-modules jdk.incubator.foreign Test
+
+WARNING: Using incubator modules: jdk.incubator.foreign
+MemoryAddress<span class="token punctuation">{</span> region: MemorySegment<span class="token punctuation">{</span> id<span class="token operator">=</span>0x4aac6dca limit: 1024 <span class="token punctuation">}</span> offset<span class="token operator">=</span>0x0 <span class="token punctuation">}</span>
+999</code></pre>
+<blockquote>
+<p>进一步阅读：官方文档 - <a href="https://download.java.net/java/GA/jdk14/docs/api/jdk.incubator.foreign/jdk/incubator/foreign/package-summary.html" target="_blank" rel="noopener">https://download.java.net/java/GA/jdk14/docs/api/jdk.incubator.foreign/jdk/incubator/foreign/package-summary.html</a></p>
+</blockquote>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>OpenJDK 官方说明 - <a href="http://openjdk.java.net/projects/jdk/14/" target="_blank" rel="noopener">http://openjdk.java.net/projects/jdk/14/</a></li>
+<li>What is new in Java 14 - <a href="https://mkyong.com/java/what-is-new-in-java-14/" target="_blank" rel="noopener">https://mkyong.com/java/what-is-new-in-java-14/</a></li>
+<li>Java 14 Features | JournalDev - <a href="https://www.journaldev.com/37273/java-14-features" target="_blank" rel="noopener">https://www.journaldev.com/37273/java-14-features</a></li>
+</ol>
+<h1 id="文章推荐"><a href="#文章推荐" class="headerlink" title="文章推荐"></a>文章推荐</h1><ol>
+<li>这都JDK15了，JDK7还不了解？ - <a href="https://www.wmyskxz.com/2020/08/18/java7-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/18/java7-ban-ben-te-xing-xiang-jie/</a></li>
+<li>全网最通透的 Java 8 版本特性讲解 - <a href="https://www.wmyskxz.com/2020/08/19/java8-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/19/java8-ban-ben-te-xing-xiang-jie/</a></li>
+<li>Java9的这些史诗级更新你都不知道？ - <a href="https://www.wmyskxz.com/2020/08/20/java9-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/20/java9-ban-ben-te-xing-xiang-jie/</a></li>
+<li>你想了解的 JDK 10 版本更新都在这里 - <a href="https://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/21/java10-ban-ben-te-xing-xiang-jie/</a></li>
+<li>这里有你不得不了解的 Java 11 特性 - <a href="https://www.wmyskxz.com/2020/08/22/java11-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/22/java11-ban-ben-te-xing-xiang-jie/</a></li>
+<li>Java 12 版本特性【一文了解】 - <a href="https://www.wmyskxz.com/2020/08/22/java12-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/22/java12-ban-ben-te-xing-xiang-jie/</a></li>
+<li>Java 13 版本特性【一文了解】 - <a href="https://www.wmyskxz.com/2020/08/22/java13-ban-ben-te-xing-xiang-jie/">https://www.wmyskxz.com/2020/08/22/java13-ban-ben-te-xing-xiang-jie/</a></li>
+<li>「MoreThanJava」系列文集 - <a href="https://www.wmyskxz.com/categories/MoreThanJava/">https://www.wmyskxz.com/categories/MoreThanJava/</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/common/qrcode.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://www.wmyskxz.com/2020/08/22/java14-ban-ben-te-xing-xiang-jie/>http://www.wmyskxz.com/2020/08/22/java14-ban-ben-te-xing-xiang-jie/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-22T20:58:14+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月22日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.wmyskxz.com/2020/08/22/java14-ban-ben-te-xing-xiang-jie/&title=Java14版本特性详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+          
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.wmyskxz.com/2020/08/22/java14-ban-ben-te-xing-xiang-jie/&title=Java14版本特性详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://service.weibo.com/share/share.php?url=http://www.wmyskxz.com/2020/08/22/java14-ban-ben-te-xing-xiang-jie/&title=Java14版本特性详解 - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2020/08/22/java13-ban-ben-te-xing-xiang-jie/'>
+                <p class='title'>Java13版本特性详解<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>
+
+
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      <section id="comments">
+        <div id="gitalk-container"></div>
+
+      </section>
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#特性总览"><span class="toc-text">特性总览</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一-Switch-表达式-标准（JEP-361）"><span class="toc-text">一. Switch 表达式-标准（JEP 361）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二-instanceof-的模式匹配-预览（JEP-305）"><span class="toc-text">二. instanceof 的模式匹配-预览（JEP 305）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三-有用的-NullPointerExceptions（JEP-358）"><span class="toc-text">三. 有用的 NullPointerExceptions（JEP 358）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四-record-预览（JEP-359）"><span class="toc-text">四. record-预览（JEP 359）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#record-类的引用字段内的值可以被改变"><span class="toc-text">record 类的引用字段内的值可以被改变</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#record-能实现接口"><span class="toc-text">record 能实现接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#record-支持多个构造函数"><span class="toc-text">record 支持多个构造函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#record-允许修改访问器方法"><span class="toc-text">record 允许修改访问器方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#在运行时检查-record-及其组件"><span class="toc-text">在运行时检查 record 及其组件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#五-文本块-预览（JEP-368）"><span class="toc-text">五. 文本块-预览（JEP 368）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#六-针对-G1-NUMA-感知内存分配的优化（JEP-345）"><span class="toc-text">六. 针对 G1 NUMA 感知内存分配的优化（JEP 345）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#七-删除并发标记扫描-CMS-垃圾收集器（JEP-363）"><span class="toc-text">七. 删除并发标记扫描(CMS)垃圾收集器（JEP 363）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#八-JFR-事件流（JEP-349）"><span class="toc-text">八. JFR 事件流（JEP 349）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#九-macOS-上的-ZGC-实验性（JEP-364）"><span class="toc-text">九. macOS 上的 ZGC-实验性（JEP 364）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十-Windows-上的-ZGC-实验性（JEP-365）"><span class="toc-text">十. Windows 上的 ZGC-实验性（JEP 365）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十一-弃用-ParallelScavenge-SerialOld-的-GC-组合（JEP-366）"><span class="toc-text">十一. 弃用 ParallelScavenge + SerialOld 的 GC 组合（JEP 366）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#十二-其他特性"><span class="toc-text">十二. 其他特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#打包工具（JEP-343）"><span class="toc-text">打包工具（JEP 343）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#非易失性映射字节缓冲区（JEP-352）"><span class="toc-text">非易失性映射字节缓冲区（JEP 352）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#弃用-Solaris-和-SPARC-端口（JEP-362）"><span class="toc-text">弃用 Solaris 和 SPARC 端口（JEP 362）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#删除-Pack200-工具和-API（JEP-367）"><span class="toc-text">删除 Pack200 工具和 API（JEP 367）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#外部存储器访问-API（JEP-370）"><span class="toc-text">外部存储器访问 API（JEP 370）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#文章推荐"><span class="toc-text">文章推荐</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+    </div>
+    
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xxx.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/volantis-x/"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=260045301"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <div>
+    
+      
+  
+
+  <div id="rightmenu-wrapper">
+    <ul class="list-v rightmenu" id="rightmenu-content">
+      <li class='option'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-text' onclick='document.execCommand("copy")'><i class='fa fa-copy fa-fw'></i>复制文本</a>
+        <hr id='hr-text'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-href'><i class='fa fa-link fa-fw'></i>复制链接</a>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-open-href'><i class='fa fa-external-link-square-alt fa-fw'></i>在新标签页打开</a>
+        <hr id='hr-href'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-src'><i class='fa fa-image fa-fw'></i>复制图片地址</a>
+        <hr id='hr-src'>
+      </li>
+      <li class='navigation'>
+        <a class='nav icon-only fix-cursor-default' onclick='history.back()'><i class='fa fa-arrow-left fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='history.forward()'><i class='fa fa-arrow-right fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='window.location.reload()'><i class='fa fa-redo fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' href='/'><i class='fa fa-home fa-fw'></i></a>
+      </li>
+      <hr>
+      
+        
+      
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/volantis-docs/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xvolantis-docs"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 本站源码
+      </a>
+    </li>
+  
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/hexo-theme-volantis/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xhexo-theme-volantis"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 主题源码
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' 
+        
+        
+        
+          onclick="document.execCommand('print')"
+        
+        >
+        <i class='fa fa-print fa-fw'></i> 打印页面
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          <li class='music name'>
+            <p class='nav music-title fix-cursor-default'></p>
+          </li>
+          <li class='music ctrl'>
+            <a class='nav icon-only backward fix-cursor-default' onclick='aplayerBackward()'><i class='fa fa-step-backward fa-fw'></i></a>
+            <a class='nav icon-only toggle fix-cursor-default' onclick='aplayerToggle()'><i class='fa fa-play fa-fw'></i></a>
+            <a class='nav icon-only forward fix-cursor-default' onclick='aplayerForward()'><i class='fa fa-step-forward fa-fw'></i></a>
+          </li>
+          <li class='music volume'>
+            <a class='nav volume'>
+              <div class="aplayer-volume-bar-wrap">
+                <div class="aplayer-volume-bar fix-cursor-pointer">
+                  <div class="aplayer-volume"></div>
+                  <i class='left fa fa-volume-off fa-fw'></i>
+                  <i class='right fa fa-volume-up fa-fw'></i>
+                </div>
+              </div>
+            </a>
+          </li>
+        
+      
+    </ul>
+  </div>
+
+  <script>
+    window.document.oncontextmenu = function (event) {
+      if (event.ctrlKey) return true;
+      if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true;
+      return popMenu(event);
+    };
+    document.addEventListener("click", function (event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      mymenu.style.display = "none";
+    });
+    function popMenu(event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      var menuContent = document.getElementById('rightmenu-content');
+      var screenWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      var screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      mymenu.style.left = event.clientX + "px"; // 获取鼠标位置
+      mymenu.style.top = event.clientY + "px";
+      mymenu.style.display = 'block';
+      if (event.clientX * 2 > screenWidth) {
+        menuContent.classList.add('left');
+      } else {
+        menuContent.classList.remove('left');
+      }
+      if (event.clientY * 2 > screenHeight) {
+        menuContent.classList.add('top');
+      } else {
+        menuContent.classList.remove('top');
+      }
+
+      let hrText = document.getElementById('hr-text');
+      let hrSrc = document.getElementById('hr-src');
+      let hrHref = document.getElementById('hr-href');
+
+      // 选中图片
+      let copySrc = document.getElementById('menu-copy-src');
+      if (copySrc != undefined) {
+        if (event.target.currentSrc) {
+          copySrc.style.display = 'block';
+          copySrc.addEventListener("click", function (e) {
+            copyString(event.target.currentSrc);
+          },{once: true});
+          hrSrc.style.display = 'block';
+        } else {
+          copySrc.style.display = 'none';
+          hrSrc.style.display = 'none';
+        }
+      }
+
+      // 选中按钮
+      // 判断是不是按钮
+      let href = '';
+      if (event.path) {
+        for (i = 0; i < event.path.length; i++) {
+          if (event.path[i].href != undefined && event.path[i].href.length > 0) {
+            href = event.path[i].href;
+          }
+        }
+      }
+
+      let copyText = document.getElementById('menu-copy-text');
+      copyText.style.display = 'none';
+      hrText.style.display = 'none';
+      if (href.length == 0) {
+        // 选中文本
+        if (window.getSelection().toString()) {
+          copyText.style.display = 'block';
+          hrText.style.display = 'block';
+        }
+      }
+
+      // 在新标签页打开
+      let openHref = document.getElementById('menu-open-href');
+      if (openHref != undefined) {
+        if (href.length > 0) {
+          openHref.style.display = 'block';
+          openHref.addEventListener("click", function (e) {
+            window.open(href);
+          },{once: true});
+          hrHref.style.display = 'block';
+        } else {
+          openHref.style.display = 'none';
+          hrHref.style.display = 'none';
+        }
+      }
+      // 复制链接
+      let copyHref = document.getElementById('menu-copy-href');
+      if (copyHref != undefined) {
+        if (href.length > 0) {
+          copyHref.style.display = 'block';
+          copyHref.addEventListener("click", function (e) {
+            copyString(href);
+          },{once: true});
+        } else {
+          copyHref.style.display = 'none';
+        }
+      }
+
+      // 有音乐播放器
+      if (true == true) {
+        // 如果有aplayer，初始化一下
+      	try {
+      		checkAPlayer();
+          updateTitle();
+      	} catch (error) {
+      		console.log(error);
+      	}
+      }
+
+      return false; // 该行代码确保系统自带的右键菜单不会被调出
+    }
+    function hideMenu() {
+      document.getElementById('rightmenu-wrapper').style.display = 'none';
+    }
+    function copyString(str) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      document.body.appendChild(input);
+      input.setAttribute('value', str);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    document.execCommand('click');
+  </script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/001.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/002.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/003.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/004.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/005.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/006.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/012.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/016.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/019.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/025.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/034.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/035.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/038.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/039.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/046.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/051.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/052.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/054.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/056.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+  <script>
+    let APlayerController = new Object();
+    APlayerController.id = '3175833810';  // 设定全局音乐播放ID
+    APlayerController.volume = '0.7';
+  </script>
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js"></script>
+
+  
+    
+<script src="/js/aplayer.js"></script>
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  function pjax_gitalk() {
+    let pageUrl = $.trim($('#pjax-comment-path').text()) === "none" ? 
+      decodeURI(window.location.pathname) : $.trim($('#pjax-comment-path').text());
+    
+    let ALLPATH = '';
+    if(ALLPATH != '') pageUrl = ALLPATH;
+
+    if (document.getElementById('gitalk-container') != null) {
+      var gitalk = new Gitalk({
+        clientID: "a9f57bed080703426741",
+        clientSecret: "03fe7aec06a7794dedfcc123b6475f0231f6a0ce",
+        repo: "wmyskxz.github.io",
+        owner: "wmyskxz",
+        admin: "wmyskxz",
+        id: pageUrl,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      });
+      gitalk.render('gitalk-container');
+    }
+  }
+
+  $(function () {
+    pjax_gitalk();
+  });
+</script>
+
+
+
+
+<!-- darkmodejs -->
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+<!-- scrollreveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    function pjax_scrollrebeal() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '32px',
+        duration: '800',
+        interval: '20',
+        scale: '1',
+        easing: 'ease-out'
+      });
+    }
+
+    $(function () {
+      pjax_scrollrebeal();
+    });
+  </script>
+
+<!-- ******************************** -->
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+<!-- ******************************** -->
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="/js/search.js"></script>
+
+  
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js" data-pjax></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      $.fancybox.close();    // 关闭弹窗
+      $('.l_header .switcher .s-search').removeClass('active'); // 关闭移动端激活的搜索框
+      $('.l_header').removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      $('.wrapper').removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      $('.s-top').unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+
+      try{
+        pjax_fancybox();
+        
+          
+          if ('.cover') {
+            $('.cover').backstretch("resize");
+          } else {
+            $.backstretch("resize");
+          }
+        
+        
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        
+        
+          pjax_scrollrebeal();
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+          pjax_gitalk();
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>

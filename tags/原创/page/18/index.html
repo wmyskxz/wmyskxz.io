@@ -436,6 +436,587 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/08/chu-xue-java-web-8-guo-lu-qi-he-jian-ting-qi/">
+      初学Java Web(8)——过滤器和监听器
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%888%EF%BC%89%E2%80%94%E2%80%94%E8%BF%87%E6%BB%A4%E5%99%A8%E5%92%8C%E7%9B%91%E5%90%AC%E5%99%A8/7896890-45e64864a52fc3b8.png" alt=""></p>
+<h2 id="什么是过滤器"><a href="#什么是过滤器" class="headerlink" title="什么是过滤器"></a>什么是过滤器</h2><p><strong>过滤器就是 Servlet 的高级特性之一，</strong>就是一个具有<strong>拦截/过滤</strong>功能的一个东西，在生活中过滤器可以是香烟滤嘴，滤纸，净水器，空气净化器等，在 Web 中仅仅是一个<strong>实现了 Filter 接口的 Java 类</strong>而已。</p>
+<ul>
+<li><p><strong>特点：双向，拦截请求，拦截响应</strong><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%888%EF%BC%89%E2%80%94%E2%80%94%E8%BF%87%E6%BB%A4%E5%99%A8%E5%92%8C%E7%9B%91%E5%90%AC%E5%99%A8/7896890-e6d2758438da6a6f.png" alt=""></p>
+</li>
+<li><p><strong>作用：</strong><br>过滤器可以对<strong>所有的请求或者响应做拦截操作</strong></p>
+</li>
+</ul>
+<h4 id="为什么在-Web-开发中需要用到过滤器？"><a href="#为什么在-Web-开发中需要用到过滤器？" class="headerlink" title="为什么在 Web 开发中需要用到过滤器？"></a>为什么在 Web 开发中需要用到过滤器？</h4><ul>
+<li><strong>问题：</strong>为什么非得使用过滤器，我直接在 Servlet 中作判断不行吗？</li>
+<li><strong>开发遵循的原则：</strong></li>
+</ul>
+<p><strong>1.DRY原则（Don’t Reeat Yourself，不要重复你自己）</strong>：重复，意味着维护的成本很高。<br><strong>2.责任分离原则：</strong>谁擅长什么功能就做什么功能，Servlet 擅长的是逻辑而不是处理请求</p>
+<h4 id="举一个实际的例子：（处理-POST-请求中文编码的问题）"><a href="#举一个实际的例子：（处理-POST-请求中文编码的问题）" class="headerlink" title="举一个实际的例子：（处理 POST 请求中文编码的问题）"></a>举一个实际的例子：（处理 POST 请求中文编码的问题）</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%888%EF%BC%89%E2%80%94%E2%80%94%E8%BF%87%E6%BB%A4%E5%99%A8%E5%92%8C%E7%9B%91%E5%90%AC%E5%99%A8/7896890-b2d6af2506b2f548.png" alt=""></p>
+<ul>
+<li><strong>Web 中过滤器的作用：</strong></li>
+</ul>
+<p><strong>1.可以在请求资源之前设置请求的编码</strong><br><strong>2.可以进行登录校验</strong><br><strong>3.可以进行请求参数的内容的过滤</strong><br><strong>4.数据压缩 / 数据加密 / 数据格式的转换</strong><br>5.可以设置浏览器相关的数据</p>
+<h4 id="Filter-的开发和使用"><a href="#Filter-的开发和使用" class="headerlink" title="Filter 的开发和使用"></a>Filter 的开发和使用</h4><p>对应于 Servlet 的开发步骤：</p>
+<ol>
+<li>定义一个类，实现 Filter 接口</li>
+<li>在 <strong>doFilter()</strong> 方法中对<strong>请求</strong>和<strong>响应</strong>进行过滤</li>
+<li>在 web.xml 文件中进行 Filter 的配置（告诉服务器来管理当前的 Filter）<pre><code>&lt;!-- web.xml --&gt;
+&lt;filter&gt;
+ &lt;filter-name&gt;filter的名称&lt;/filter-name&gt;
+ &lt;filter-class&gt;filter类的全限定名&lt;/filter-class&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+ &lt;filter-name&gt;指定对哪一个filter做的映射&lt;/filter-name&gt;
+ &lt;url-pattern&gt;指定对哪些资源进行过滤&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;</code></pre></li>
+</ol>
+<ul>
+<li><strong>注意：</strong>此时 <code>&lt;url-pattern&gt;</code> 表示对哪些资源做过滤/拦截。例如：</li>
+<li><code>/hello.jsp</code><br>当前 Filter 就仅仅只对 hello.jsp 资源做拦截.</li>
+<li><code>/index</code><br>当前 Filter 就仅仅只对 /index 资源做拦截.</li>
+<li><code>/*</code><br>当前 Filter 就对<strong>所有资源做拦截</strong>.访问任意的资源,都会先进入该过滤器器.</li>
+<li><code>/system/*</code><br>当前 Filter 就对以 <code>/system/</code> 打头的资源做拦截.<br>如<code>/system</code> , <code>/system/a</code>,  <code>/system/a/b/c</code>, <code>/systema</code></li>
+</ul>
+<h4 id="Filter-映射细节"><a href="#Filter-映射细节" class="headerlink" title="Filter 映射细节"></a>Filter 映射细节</h4><ol>
+<li>在启动服务器的时候，就创建了 Filter 对象并执行了初始化方法 init()。<strong>Filter 先于 Servlet 存在于服务端</strong></li>
+<li>在应用中<strong>允许存在多个 Filter</strong> ，到底哪一个 Filter 先执行哪一个后执行，这<strong>取决于在 <code>web.xml</code> 中定义的先后次序</strong> <em>（如果使用注解配置，则 <strong>Filter 的执行顺序由 Filter 的类名的字母的顺序</strong>来决定，如 AFilter 和 BFilter，则先执行 AFilter）</em></li>
+<li><strong>一个 Filter 可以配置多个 <code>&lt;url-pattern&gt;</code></strong> 也可以对<strong>指定的 Servlet</strong> 做过滤（注解通过 <code>servletNames</code> 指定，配置由 <code>&lt;servlet-name&gt;</code> 指定）</li>
+<li><strong>默认情况下，Filter 只对新的请求做拦截，如果是请求转发，则不会过滤。</strong></li>
+</ol>
+<ul>
+<li><code>&lt;dispatcher&gt;</code>配置项指定了 Filter 的过滤时间：</li>
+<li><code>REQUEST</code>：<strong>只对请求做过滤，默认选项</strong>，如果有该配置项则必须显式写明</li>
+<li><code>FORWARD</code>：只对<strong>请求转发(forword)</strong>方式做过滤</li>
+<li><code>ERROR</code>：只对<strong>跳转到全局的错误页面</strong>做过滤</li>
+<li><code>INCLUDE</code>：只对<strong>请求包含(include)</strong>方式做过滤</li>
+<li><strong>对应的注解属性为:</strong><code>dispatcherTypes</code></li>
+</ul>
+<h4 id="过滤器实例"><a href="#过滤器实例" class="headerlink" title="过滤器实例"></a>过滤器实例</h4><blockquote>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483718&idx=3&sn=d63a56a3bdafa2df90178503e4d16d9d&chksm=ebd74047dca0c951eb72b5eb85553e513bd005318ee8c6ff9777d382581f0b352b2acdecf6fe#rd" target="_blank" rel="noopener">戳这里</a></p>
+</blockquote>
+<hr>
+<h2 id="监听器"><a href="#监听器" class="headerlink" title="监听器"></a>监听器</h2><ul>
+<li><strong>作用：</strong></li>
+</ul>
+<p>1.<strong>监听 web 应用的创建和销毁</strong><br>2.<strong>attribute发生的变化。</strong></p>
+<ul>
+<li><strong>web 应用：</strong>即ServletContext对象(jsp的<a href="http://how2j.cn/k/jsp/jsp-object/580.html" target="_blank" rel="noopener">隐式对象application</a>) </li>
+</ul>
+<p>除了对<a href="http://how2j.cn/k/listener/listener-context/605.html" target="_blank" rel="noopener">web应用</a>的监听外，还能监听<a href="http://how2j.cn/k/listener/listener-session/606.html" target="_blank" rel="noopener">session</a>和<a href="http://how2j.cn/k/listener/listener-request/607.html" target="_blank" rel="noopener">request</a>的生命周期，以及他们的attribute发生的变化。</p>
+<blockquote>
+<p>了解详情<a href="http://how2j.cn/k/listener/listener-tutorials/604.html" target="_blank" rel="noopener">戳这里</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2018/04/08/chu-xue-java-web-7-wen-jian-de-shang-chuan-he-xia-zai/">
+      初学Java Web(7)——文件的上传和下载
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-326744dd6c79212a.png" alt=""></p>
+<h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><h4 id="文件上传前的准备"><a href="#文件上传前的准备" class="headerlink" title="文件上传前的准备"></a>文件上传前的准备</h4><ol>
+<li>在表单中<strong>必须有一个上传的控件</strong><br><code>&lt;input type=&quot;file&quot; name=&quot;testImg&quot;/&gt;</code></li>
+<li>因为 GET 方式有请求大小的限制，所以<strong>表单的提交方式必须是 POST</strong><br><code>&lt;form action=&quot;/upload&quot; method=&quot;post&quot;&gt;</code></li>
+<li>表单默认的编码方式为 <code>application/x-www-form-urlencoded</code> ，应该修改为 <code>multipart/form-data</code> ，<strong>以二进制的形式进行数据的传输</strong><br><code>&lt;form action=&quot;/upload&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;</code></li>
+</ol>
+<ul>
+<li><strong>注意：</strong>此时 Servlet 中就不能再使用 <code>request对象.getParameter(String name)</code> 来获取请求参数<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-9ffa6de1139ff470.png" alt=""></li>
+</ul>
+<h4 id="上传组件"><a href="#上传组件" class="headerlink" title="上传组件"></a>上传组件</h4><p>要<strong>实现文件的上传</strong>，需要基于以下两种组件的一种：</p>
+<ul>
+<li><strong>Apache FileUpload 组件</strong>【操作比较复杂】</li>
+<li><strong>SmartUpload 组件</strong>【操作比较简单，但存在一些问题】</li>
+</ul>
+<hr>
+<h2 id="基于-FileUpload-组件"><a href="#基于-FileUpload-组件" class="headerlink" title="基于 FileUpload 组件"></a>基于 FileUpload 组件</h2><p>使用基于Apache FileUpload上传组件实现文件的上传，步骤：</p>
+<ol>
+<li>将<a href="https://pan.baidu.com/s/1HqCRcoRyVw3JbXApjCcglw" target="_blank" rel="noopener">必要的 jar 包</a>导入到项目中<br>commons-fileupload-1.2.2.jar<br>commons-io-1.4.jar</li>
+<li>简单写好 upload.jsp 上传页面：</li>
+</ol>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%@</span> <span class="token attr-name">page</span> <span class="token attr-name">language</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java<span class="token punctuation">"</span></span> <span class="token attr-name">contentType</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/html; charset<span class="token punctuation">=</span>UTF-8<span class="token punctuation">"</span></span>
+         <span class="token attr-name">pageEncoding</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token attr-name">import</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java.util.*<span class="token punctuation">"</span></span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>文件的上传和下载<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+
+文件上传：
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/upload<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">enctype</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>multipart/form-data<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>testImg<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-4103d55665ab457a.png" alt=""></p>
+<ol start="3">
+<li>编写 UploadServlet 处理相关请求：</li>
+</ol>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>FileItem<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>FileItemFactory<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>disk<span class="token punctuation">.</span>DiskFileItemFactory<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>fileupload<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletFileUpload<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>WebServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>File<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/upload"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UploadServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> HttpServletResponse resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头</span>
+        <span class="token keyword">boolean</span> isMultipart <span class="token operator">=</span> ServletFileUpload<span class="token punctuation">.</span><span class="token function">isMultipartContent</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 如果不满足要求就立即结束对该请求的处理</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isMultipart<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// FileItem 是表单中的每一个元素的封装</span>
+            <span class="token comment" spellcheck="true">// 创建一个 FileItem 的工厂类</span>
+            FileItemFactory factory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DiskFileItemFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 创建一个文件上传处理器（装饰设计模式）</span>
+            ServletFileUpload upload <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServletFileUpload</span><span class="token punctuation">(</span>factory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// 解析请求</span>
+            List<span class="token operator">&lt;</span>FileItem<span class="token operator">></span> items <span class="token operator">=</span> upload<span class="token punctuation">.</span><span class="token function">parseRequest</span><span class="token punctuation">(</span>req<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>FileItem fileItem <span class="token operator">:</span>
+                    items<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token comment" spellcheck="true">// 判断空间是否是普通控件</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>fileItem<span class="token punctuation">.</span><span class="token function">isFormField</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// 普通控件</span>
+                <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// 上传控件</span>
+                    <span class="token comment" spellcheck="true">// 将上传的文件保存到服务器</span>
+                    fileItem<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/"</span><span class="token punctuation">,</span> <span class="token string">"testImg.jpg"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="文件上传的细节"><a href="#文件上传的细节" class="headerlink" title="文件上传的细节"></a>文件上传的细节</h4><p>上面已经能实现简单的文件上传功能了，但文件上传有很多需要注意的地方。</p>
+<ul>
+<li><strong>缓存大小和临时目录</strong><br>在上传文件的时候,如果文件过大,而且是将文件放在缓存中,就可能造成内存溢出<br>默认的缓存大小为 <code>10 kb</code>，临时目录的默认值为 <code>tomcat/temp</code></li>
+<li><strong>解决方案：</strong>将操作缓存大小的文件放在服务器的磁盘(临时目录)中,在文件的大小超过设定的缓存大小的时候就会使用到临时目录<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 设置缓存大小 500kb</span>
+factory<span class="token punctuation">.</span><span class="token function">setSizeThreshold</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token operator">*</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 设置临时目录</span>
+factory<span class="token punctuation">.</span><span class="token function">setRepository</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token string">"C:/"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+</li>
+<li><strong>通常不需要设置</strong></li>
+</ul>
+<p>另一个问题是：如果用户 A 上传了一个文件名叫xxx，用户 B 也上传了一个文件名叫 xxx，那么此时用户 B 的文件会把用户 A 的文件给覆盖掉。</p>
+<ul>
+<li><strong>文件名称的处理</strong><br>相同文件名称的文件，后面的文件会把前面的文件覆盖掉</li>
+<li><strong>解决方案：使用UUID来生成一个随机的而且不重复字符串</strong>作为文件的名称，获取真实文件的后缀名需要用到 <code>FilenameUtils</code> 这个工具类</li>
+<li><strong>语法：</strong></li>
+</ul>
+<pre class=" language-java"><code class="language-java">String fileName <span class="token operator">=</span> UUID<span class="token punctuation">.</span><span class="token function">randomUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"."</span><span class="token operator">+</span>FilenameUtils<span class="token punctuation">.</span><span class="token function">getExtension</span><span class="token punctuation">(</span>fileItem<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h4 id="文件类型的约束"><a href="#文件类型的约束" class="headerlink" title="文件类型的约束"></a>文件类型的约束</h4><p>上传文件的类型应该需要做一些约束的，比如在上传头像的时候就只允许上传图片，其他类型的文件都不应该允许上传，并且如果类型不正确的时候，应该给用户一个错误的提示。</p>
+<ul>
+<li><strong>jsp 文件增加显示错误提示信息：</strong></li>
+</ul>
+<p>我们给我们的 jsp 开头增加一个 <code>&lt;span&gt;</code> 来显示错误信息</p>
+<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>%@</span> <span class="token attr-name">page</span> <span class="token attr-name">language</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java<span class="token punctuation">"</span></span> <span class="token attr-name">contentType</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>text/html; charset<span class="token punctuation">=</span>UTF-8<span class="token punctuation">"</span></span>
+         <span class="token attr-name">pageEncoding</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span> <span class="token attr-name">import</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>java.util.*<span class="token punctuation">"</span></span> <span class="token attr-name">%</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>文件的上传和下载<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+
+文件上传：<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token punctuation">></span></span>${errorMsg}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>/upload<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">enctype</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>multipart/form-data<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>testImg<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span></code></pre>
+<ul>
+<li><strong>判断上传文件类型：</strong><br>限制文件类型那么就需要对文件类型进行判断</li>
+<li>语法：<code>String contentType = fileItem.getContentType();</code></li>
+<li>Servlet 源码：<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+</code></pre>
+</li>
+</ul>
+<p>import org.apache.commons.fileupload.FileItem;<br>import org.apache.commons.fileupload.FileItemFactory;<br>import org.apache.commons.fileupload.disk.DiskFileItemFactory;<br>import org.apache.commons.fileupload.servlet.ServletFileUpload;<br>import org.apache.commons.io.FilenameUtils;</p>
+<p>import javax.servlet.ServletException;<br>import javax.servlet.annotation.WebServlet;<br>import javax.servlet.http.HttpServlet;<br>import javax.servlet.http.HttpServletRequest;<br>import javax.servlet.http.HttpServletResponse;<br>import java.io.File;<br>import java.io.IOException;<br>import java.util.List;<br>import java.util.UUID;</p>
+<p>@WebServlet(“/upload”)<br>public class UploadServlet extends HttpServlet {</p>
+<pre><code>protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    // 验证请求是否满足要求（post 请求 / enctype 是否以multipart打头
+    boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+    // 如果不满足要求就立即结束对该请求的处理
+    if (!isMultipart) {
+        return;
+    }
+
+    try {
+        // FileItem 是表单中的每一个元素的封装
+        // 创建一个 FileItem 的工厂类
+        FileItemFactory factory = new DiskFileItemFactory();
+        // 创建一个文件上传处理器（装饰设计模式）
+        ServletFileUpload upload = new ServletFileUpload(factory);
+        // 解析请求
+        List&lt;FileItem&gt; items = upload.parseRequest(req);
+        for (FileItem fileItem :
+                items) {
+            // 判断空间是否是普通控件
+            if (fileItem.isFormField()) {
+                // 普通控件
+            } else {
+                // 上传控件
+                String contentType = fileItem.getContentType();
+                if (!contentType.startsWith(&quot;image/&quot;)) {
+                    // 实现简单的错误提示
+                    req.setAttribute(&quot;errorMsg&quot;, &quot;亲，您上传的文件格式不正确，请重新上传！&quot;);
+                    req.getRequestDispatcher(&quot;upload.jsp&quot;).forward(req, resp);
+                    return;  // 如果不是图片类型则不再对请求进行处理
+                }
+                // 随机命名文件名
+                String fileName = UUID.randomUUID().toString() + &quot;.&quot; + FilenameUtils.getExtension(fileItem.getName());
+                // 将上传的文件保存到服务器
+                fileItem.write(new File(&quot;C:/&quot;, fileName));
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}</code></pre><p>}</p>
+<pre><code>
+#### 解决中文乱码问题
+- 解决中文文件名乱码（事实上我在本地测试并没有出现乱码），得到解析器以后，就**直接设置解析器的编码为UTF-8就行了**</code></pre><p> fileUpload.setHeaderEncoding(“UTF-8”);</p>
+<pre><code>- 解决表单数据乱码，在获取表单值的时候，按照UTF-8编码来获取</code></pre><p>String value = fileItem.getString(“UTF-8”);</p>
+<pre><code>
+
+#### 文件大小约束
+
+- 单个文件数据的大小约束
+即整个表单之中只有一个上传控件
+- 语法：`upload.setFileSizeMax(1024 * 500); // 单个文件不能超过500 kb`
+- 一次请求数据的大小约束
+限制整个请求之中的数据大小
+- 语法：`upload.setSizeMax(1024 * 750); // 整个请求文件大小不能超过 750 kb`
+
+
+#### 使用 Map 封装请求信息
+
+上面提到，我们已经无法用 request对象正常获取到参数，那么我们究竟应该怎么办呢？
+
+&gt; - 使用 Map 封装一下就好了，等到要用的时候再从 Map 中取出
+![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web(7)——文件的上传和下载/7896890-4e09be236b365217.png)
+
+
+---
+
+## SmartUpload
+
+上面已经基于 FileUpload 实现了文件的上传，事实上也没有想象中那么复杂，让我们来看看 SmartUpload
+
+要使用SmartUpload组件，就需要导入smartupload.jar开发包
+
+#### 快速入门
+
+``` java
+//实例化组件
+SmartUpload smartUpload = new SmartUpload();
+
+//初始化上传操作
+smartUpload.initialize(this.getServletConfig(), request, response);
+
+try {
+
+    //上传准备
+    smartUpload.upload();
+
+    //对于普通数据，单纯到request对象是无法获取得到提交参数的。也是需要依赖smartUpload
+    String password = smartUpload.getRequest().getParameter(&quot;password&quot;);
+    System.out.println(password);
+
+    //上传到uploadFile文件夹中
+    smartUpload.save(&quot;uploadFile&quot;);
+
+} catch (SmartUploadException e) {
+    e.printStackTrace();    
+}</code></pre><ul>
+<li>摘自：<a href="https://mp.weixin.qq.com/s?__biz=MzI4Njg5MDA5NA==&mid=2247483727&idx=1&sn=87db212ac7e2590c57749a9857028f14&chksm=ebd7404edca0c9583fb3074d6827952bbfb5335c13e236719cde573e52bfe89e85e133755ab3#rd" target="_blank" rel="noopener">这里</a></li>
+<li>上面链接提到 SmartUpload 组件在解决中文乱码中有一些小问题，我没有测试过，但我觉得自己写一个 FileUpload 工具类已经足够使用了</li>
+</ul>
+<hr>
+<h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><ol>
+<li>写一个简单的 jsp 页面：</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web(7)%E2%80%94%E2%80%94%E6%96%87%E4%BB%B6%E7%9A%84%E4%B8%8A%E4%BC%A0%E5%92%8C%E4%B8%8B%E8%BD%BD/7896890-6ace49a2c5c19e7e.png" alt=""></p>
+<ol start="2">
+<li>在 WEB-INF 下创建 download 文件夹，里面放入一个 test.zip</li>
+<li>编写 Servlet 处理相关请求</li>
+</ol>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> servlet<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>ServletOutputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>WebServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServlet<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletRequest<span class="token punctuation">;</span>
+<span class="token keyword">import</span> javax<span class="token punctuation">.</span>servlet<span class="token punctuation">.</span>http<span class="token punctuation">.</span>HttpServletResponse<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>File<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>net<span class="token punctuation">.</span>URLEncoder<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>file<span class="token punctuation">.</span>Files<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>file<span class="token punctuation">.</span>Paths<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@WebServlet</span><span class="token punctuation">(</span><span class="token string">"/download"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DownloadServlet</span> <span class="token keyword">extends</span> <span class="token class-name">HttpServlet</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">service</span><span class="token punctuation">(</span>HttpServletRequest req<span class="token punctuation">,</span> HttpServletResponse resp<span class="token punctuation">)</span> <span class="token keyword">throws</span> ServletException<span class="token punctuation">,</span> IOException <span class="token punctuation">{</span>
+
+        <span class="token comment" spellcheck="true">// 设置响应数据的 MIME 类型</span>
+        resp<span class="token punctuation">.</span><span class="token function">setContentType</span><span class="token punctuation">(</span><span class="token string">"application/x-msdownload"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 获取文件名称</span>
+        String fileName <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getParameter</span><span class="token punctuation">(</span><span class="token string">"fileName"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 判断浏览器是否是 IE</span>
+        String userAgent <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getHeader</span><span class="token punctuation">(</span><span class="token string">"User-Agent"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>userAgent<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span><span class="token string">"MSIE"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// IE</span>
+            <span class="token comment" spellcheck="true">// 设置文件的名称</span>
+            resp<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">"Content-Disposition"</span><span class="token punctuation">,</span> <span class="token string">"attachment; fileName="</span>
+                    <span class="token operator">+</span> URLEncoder<span class="token punctuation">.</span><span class="token function">encode</span><span class="token punctuation">(</span>fileName<span class="token punctuation">,</span> <span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 非IE</span>
+            resp<span class="token punctuation">.</span><span class="token function">setHeader</span><span class="token punctuation">(</span><span class="token string">"Content-Disposition"</span><span class="token punctuation">,</span> <span class="token string">"attachment; fileName="</span>
+                    <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>fileName<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token string">"UTF-8"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"ISO-8859-1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">// 获取文件所在的路径</span>
+        String path <span class="token operator">=</span> req<span class="token punctuation">.</span><span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getRealPath</span><span class="token punctuation">(</span><span class="token string">"/WEB-INF/download"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 获取指定的文件对象</span>
+        File f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ServletOutputStream out <span class="token operator">=</span> resp<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 将文件复制到输出流中，响应给浏览器</span>
+        Files<span class="token punctuation">.</span><span class="token function">copy</span><span class="token punctuation">(</span>Paths<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>f<span class="token punctuation">.</span><span class="token function">getAbsolutePath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> out<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/07/chu-xue-java-web-6-jsp-xue-xi-zong-jie/">
       初学Java Web(6)——JSP学习总结
     </a>
@@ -2221,459 +2802,6 @@ public class HelloServlet implements Servlet{
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/03/14/chu-xue-java-web-2-da-jian-java-web-kai-fa-huan-jing/">
-      初学Java Web(2)——搭建Java Web开发环境
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年3月14日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-2093e17bea460810.png" alt=""></p>
-<blockquote>
-<p>虽然说 html 和 css 等前端技术，是对于 Web 来说不可或缺的技术，但是毕竟更为简单一些，所以就不详细介绍了，没有基础的同学可以去<a href="http://www.runoob.com/" target="_blank" rel="noopener">菜鸟教程</a>或者<a href="http://www.w3school.com.cn/" target="_blank" rel="noopener">W3school</a>进行自主学习，最好的方式还是做一做简单的项目，相信你很快就可以上手啦。(有空把我仿的天猫给大家拿出来..)</p>
-</blockquote>
-<hr>
-<h2 id="——【1-JDK-的安装】——"><a href="#——【1-JDK-的安装】——" class="headerlink" title="——【1. JDK 的安装】——"></a>——【1. JDK 的安装】——</h2><p>在搭建环境之前呢，还是给搬一下一些名词的介绍和解释：</p>
-<table>
-<thead>
-<tr>
-<th>术语名</th>
-<th align="center">缩写</th>
-<th align="left">解释</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Java Development Kit</td>
-<td align="center">JDK</td>
-<td align="left">编写Java程序的从程序员使用的软件</td>
-</tr>
-<tr>
-<td>Java Runtime Environment</td>
-<td align="center">JRE</td>
-<td align="left">运行Java程序的用户使用的软件</td>
-</tr>
-<tr>
-<td>Standard Edition</td>
-<td align="center">SE</td>
-<td align="left">用于桌面或简单的服务器应用的Java平台</td>
-</tr>
-<tr>
-<td>Enterprise Edition</td>
-<td align="center">EE</td>
-<td align="left">用于复杂的服务器应用的Java平台</td>
-</tr>
-<tr>
-<td>Micro Edition</td>
-<td align="center">ME</td>
-<td align="left">用于手机和其他小型设备的Java平台</td>
-</tr>
-<tr>
-<td>Java 2</td>
-<td align="center">J2</td>
-<td align="left">一个过时的术语，用于描述1998年~2006年之间的Java版本</td>
-</tr>
-<tr>
-<td>Software Development Kit</td>
-<td align="center">SDK</td>
-<td align="left">一个过时的术语，用于描述1998年~2006年之间的JDK</td>
-</tr>
-</tbody></table>
-<p>再来引用一张图片来说明 Java SE 和 Jave EE 的区别：</p>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-7598a4014e3681d4.png" alt=""></p>
-</blockquote>
-<h4 id="JDK-的下载"><a href="#JDK-的下载" class="headerlink" title="JDK 的下载"></a>JDK 的下载</h4><p>JDK的官方下载地址在这：<a href="https://link.jianshu.com/?t=http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/java/javase/downloads/index.html</a><br>最新的JDK已经升级到了9.0，而且据说10.0都快出来了，可能对于一些新学 Java 的同学来说，8的特性还没熟悉，9不知道是啥，10.0 眼看着都要出来了…没关系，我也是差不多这样的感受…</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-1d9f0d63a970abac.png" alt="下载JDK"></p>
-<h4 id="JDK-的安装"><a href="#JDK-的安装" class="headerlink" title="JDK 的安装"></a>JDK 的安装</h4><p>上图就是一个JDK的下载过程，安装很简单，我就直接粘网上的图了<strong>（重要的是记住JDK安装的路径用于配置环境变量）</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-cebe189d85b2f197.png" alt="JDK 安装过程"></p>
-<h4 id="JDK-环境变量的配置"><a href="#JDK-环境变量的配置" class="headerlink" title="JDK 环境变量的配置"></a>JDK 环境变量的配置</h4><p>Java环境变量涉及到三个名词：JAVA_HOME、path、classpath。</p>
-<p>JAVA_HOME代表JDK安装主目录，path代表JDK下可执行文件目录，classpath代表运行java程序时需要查找class文件的目录。</p>
-<p>依据上面的安装步骤：</p>
-<p><strong>JAVA_HOME</strong>应该设置为：D:\DevelopTools\JAVA\JDK</p>
-<p><strong>path</strong>应该设置为：%JAVA_HOME%\bin;%JAVA_HOME%\jre\bin;<strong>（注意其中的分号）</strong></p>
-<p><strong>classpath</strong>应该设置为：.;%JAVA_HOME%\lib\dt.jar;%JAVA_HOME%\lib\tools.jar;<strong>（注意最前面的点代表当前路径，JDK1.5之后这项不用设置了）</strong></p>
-<p>设置方式如下：</p>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-0d9743df88cfd7f4.png" alt="第一步"></p>
-</blockquote>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-834a801ccff8eaa8.png" alt="第二步"></p>
-</blockquote>
-<blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-3e29c0172f7678b4.png" alt="第三步"><br>到此就已经成功配置好了 JDK 所需要的环境变量，我们下面来验证一下。</p>
-</blockquote>
-<h4 id="验证-JDK-是否安装成功"><a href="#验证-JDK-是否安装成功" class="headerlink" title="验证 JDK 是否安装成功"></a>验证 JDK 是否安装成功</h4><p>打开命令提示符，WINDOWS 下的快捷键为【Win + R】，然后输入 cmd ，输入【java -version】查看是否输出正确地版本信息，如果成功，则 JRE 配置成功。（我直接贴的老图啦，所以….）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-afcd436746c47e5a.png" alt="JRE 配置成功"></p>
-<p>输入【javac】看是否输出编译信息，若有，则 JDK 配置成功：</p>
-<p> <img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-9ce212cdd86347b4.png" alt="JDK 配置成功"></p>
-<p>至此，JDK 就彻底安装成功了。</p>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-8ec728678627b5d4.png" alt=""></p>
-<h2 id="——【2-安装和配置-Tomcat-服务器】——"><a href="#——【2-安装和配置-Tomcat-服务器】——" class="headerlink" title="——【2.安装和配置 Tomcat 服务器】——"></a>——【2.安装和配置 Tomcat 服务器】——</h2><p>正如上一篇说到的，Tomcat 是使用 Java 语言编写的一个服务器（程序），所以要运行 Tomcat ，必须配置好相关的 JDK 或 JRE。Tomcat 的官方网站是：<code>http://tomcat.apache.org/</code>   你可以去官网下载最新的版本，也可以下载我提供的绿色版本（v8.5.5）：<a href="https://pan.baidu.com/s/1gROPZCovNrsMxkWLFbZ9IQ（密码:142q）" target="_blank" rel="noopener">https://pan.baidu.com/s/1gROPZCovNrsMxkWLFbZ9IQ（密码:142q）</a></p>
-<p>以我提供的绿色版本为例，安装步骤如下：</p>
-<h4 id="①-解压提供的-Tomcat-到-D-盘"><a href="#①-解压提供的-Tomcat-到-D-盘" class="headerlink" title="① 解压提供的 Tomcat 到 D 盘"></a>① 解压提供的 Tomcat 到 D 盘</h4><p>并记录下其路径，如 D:\apache-tomcat-8.5.5.</p>
-<h4 id="②-配置-CATALINA-HOME-环境变量到上面记下的路径："><a href="#②-配置-CATALINA-HOME-环境变量到上面记下的路径：" class="headerlink" title="② 配置 CATALINA_HOME 环境变量到上面记下的路径："></a>② 配置 CATALINA_HOME 环境变量到上面记下的路径：</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-ed2ff0d5386258a0.png" alt="配置 Tomcat 的环境变量"></p>
-<h4 id="③-启动-Tomcat-服务器"><a href="#③-启动-Tomcat-服务器" class="headerlink" title="③ 启动 Tomcat 服务器"></a>③ 启动 Tomcat 服务器</h4><p>找到 D:\apache-tomcat-8.5.5 路径下的 bin 目录中的 startup.bat 文件，双击运行，如果输出启动信息，并未输出任何异常，则 Tomcat 安装正确<strong>（注意，弹出的命令提示符窗口不能关闭，否则服务器将停止运行！）</strong></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fc209705ccc487d0.png" alt="Tomcat 成功启动"></p>
-<h4 id="④-打开浏览器验证-Tomcat"><a href="#④-打开浏览器验证-Tomcat" class="headerlink" title="④ 打开浏览器验证 Tomcat"></a>④ 打开浏览器验证 Tomcat</h4><p>打开浏览器，在地址栏输入地址：<a href="http://localhost:8080/" target="_blank" rel="noopener">http://localhost:8080/</a> 或者 <a href="http://127.0.0.1:8080/" target="_blank" rel="noopener">http://127.0.0.1:8080/</a> ，如果能够打开 Tomcat 配置页面，则说明 Tomcat 配置成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fae8b489e0909f74.png" alt="Tomcat 配置页面"></p>
-<h4 id="关闭-Tomcat-服务器"><a href="#关闭-Tomcat-服务器" class="headerlink" title="关闭 Tomcat 服务器"></a>关闭 Tomcat 服务器</h4><p>在 Tomcat 开启的命令提示符界面按下【Ctrl + C】键，将关闭 Tomcat 服务器。再次尝试访问 Tomcat 配置页面，若出现网页不能访问提示，则说明 Tomcat 关闭成功：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-cb51285c022c0f6e.png" alt="Tomcat 关闭成功"></p>
-<h4 id="在-Tomcat-中新建-Web-工程"><a href="#在-Tomcat-中新建-Web-工程" class="headerlink" title="在 Tomcat 中新建 Web 工程"></a>在 Tomcat 中新建 Web 工程</h4><p><strong>步骤如下：</strong>（<a href="https://pan.baidu.com/s/18LpiltoAJA32f5ksyhkn8g" target="_blank" rel="noopener">下载文件-密码klhk</a>）<br>① 找到 Tomcat 目录下的 webapps 目录。<br>② 在 webapps 目录下新建一个目录： first_webapp。<strong>（注意 first 和 webapp 中间为下划线）</strong><br>③ 在 first_webapp 中建立一个目录： WEB-INF。<strong>（注意大小写，WEB 和 INF 之间为横线）</strong><br>④ 将上面的下载文件下载下来以后，将提供的 web.xml 文件复制到 WEB-INF 目录中。<br>⑤ 将提供的 index.html 文件复制到 first_webapp 目录下。<br>⑥ 启动 Tomcat。<br>⑦ 在浏览器中输入网址：<a href="http://localhose:8080/first_webapp" target="_blank" rel="noopener">http://localhose:8080/first_webapp</a> ，查看是否能够正确访问，如果可以正确显示页面，则表示 Tomcat 中创建新项目成功。</p>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-9acd3d85bb965e64.png" alt=""></p>
-<h2 id="——【3-安装配置-MySql-服务器】——"><a href="#——【3-安装配置-MySql-服务器】——" class="headerlink" title="——【3.安装配置 MySql 服务器】——"></a>——【3.安装配置 MySql 服务器】——</h2><p>不管怎样，服务器端总是要有数据库的，这里就给出两个绿色版本的工具，来建立一个 Web 开发所需要的 MySql 服务器：<br>链接：<a href="https://pan.baidu.com/s/1i-H4SUMcn2y5_arluK923A" target="_blank" rel="noopener">https://pan.baidu.com/s/1i-H4SUMcn2y5_arluK923A</a> 密码：1n04</p>
-<blockquote>
-<ul>
-<li><strong>xampp</strong> 是一套 Web 开发套件，里面包含了 mysql、apache、tomcat 等常用组件。这里我们主要利用其中的 mysql 组件来完成数据库的开发。</li>
-<li><strong>heidiSQL</strong> 是一款绿色版的 SQL 管理软件，能实现数据库的一些常用功能。</li>
-</ul>
-</blockquote>
-<p><strong>步骤如下：</strong><br>① 将提供的 xampp 工具解压到 D 盘根目录下。<strong>（注意 xampp 一定要解压到根目录下才有效。所谓根目录是指<br>D:\xampp\目录下不能再嵌套 xampp 目录，而是直接在 D:\xampp\目录下能够找到 mysql 目录。切记！！）</strong><br>② 双击 xampp 目录下的 xampp-control.exe 文件运行，并显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-5809de81fd592dca.png" alt="XAMPP Control 界面"></p>
-<p>③ 为了避免和本机上已经安装的 MySql 服务器冲突，我们需要更改 xampp 的服务名称：单机界面上的 Config 按<br>钮，显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-0041ed69cf0dfea7.png" alt="更改 xampp 服务名称"></p>
-<p>④ 点击“Service and Port Settings”按钮，将出现如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-2ed9787cf609403f.png" alt=""></p>
-<p>⑤ 点击 MySQL 标签页，配置 MySql，将 MySql 的 Service Name 从 mysql 更改为 mysql-xampp，然后保存：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-e41da7f359742232.png" alt="更改名称"></p>
-<p>⑥ 关闭 xampp。<strong>（ 注意 如果闭 关闭 xampp  后，xampp 。 任然在后台运行，必须从右下角系统托盘处完全关闭。）</strong>然后重新打开 xampp-control.exe 文件：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fa0caa490fe1bb5b.png" alt=""></p>
-<p>⑦ 点击 MySql 对应的 Start 按钮。如果 MySql 服务启动成功，则显示如下：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-77f7c9c22b3fe674.png" alt="MySql 服务启动成功"></p>
-<blockquote>
-<p>其中，MySql 字符的背景色变为绿色表示启动成功，PID 表示 MySql 在操作系统中的进程号，Port 表示 MySql 进程所监听的端口号。</p>
-</blockquote>
-<p>⑧ 打开提供的 heidiSQL 工具（绿色软件），将显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-508a72a1007c9a1b.png" alt="heidiSQL 工具界面"></p>
-<p>⑨ 点击 New 按钮，新建 MySql 连接：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-27ba879b7ecb728a.png" alt=""></p>
-<p>⑩ 在 hostname/IP 处填写：127.0.0.1 或者 localhost。在 User 处填写：root（这是 MySql 的登录用户名）。在 Password 处填写：root（这是 MySql 的登录密码。 <strong>注意：如果是自己下载的 xampp  工具，则密码为空。使用的我提供的 xampp  工具，则 MySql  登录密码被我改成 root</strong> ）在 Port 处填写：3306（这是 MySql 默认的监听端口），随后点击【Open】按钮，将显示如下界面：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-e4b1cbd954a1a6db.png" alt=""></p>
-<blockquote>
-<p>左边列出了目前 MySql 中的所有数据库，右边是当前数据库的内容。（请勿更改和删除默认数据库的内容）</p>
-</blockquote>
-<h4 id="在-Tomcat-中连接数据库"><a href="#在-Tomcat-中连接数据库" class="headerlink" title="在 Tomcat 中连接数据库"></a>在 Tomcat 中连接数据库</h4><p>将提供的 MySql 的 JDBC 驱动文件 mysql-connector-java-xxxx-bin.jar 文件复制到 Tomcat 目录下的 lib 目录中</p>
-<p>至此，就成功搭建好了 MySql 服务器。</p>
-<hr>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-b00ed47e7729312c.png" alt=""></p>
-<h2 id="——【4-安装-Eclipse-JEE】——"><a href="#——【4-安装-Eclipse-JEE】——" class="headerlink" title="——【4.安装 Eclipse-JEE】——"></a>——【4.安装 Eclipse-JEE】——</h2><h4 id="①-下载-Eclipse-Jee"><a href="#①-下载-Eclipse-Jee" class="headerlink" title="① 下载 Eclipse - Jee"></a>① 下载 Eclipse - Jee</h4><p>进入官网 <a href="http://www.eclipse.org/downloads/eclipse-packages" target="_blank" rel="noopener">http://www.eclipse.org/downloads/eclipse-packages</a> 选择Eclipse  IDE for Java EE Developers，根据自己电脑情况选择32位或者64位：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-298f33f5deb3562c.png" alt=""></p>
-<p>下好以后直接解压到相应位置，并找到 <strong>eclipse.exe</strong>，右键 –&gt; 发送到 –&gt; 桌面快捷方式就行了。</p>
-<h4 id="②-首次打开设置工作空间"><a href="#②-首次打开设置工作空间" class="headerlink" title="② 首次打开设置工作空间"></a>② 首次打开设置工作空间</h4><p>由于我们已经配置好了 JDK 的相关信息，所以这里的 Eclipse 可以直接打开：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-bb2a7938ed5cea78.png" alt="指定工作空间"></p>
-<p>工作空间大家设置成自己喜欢。熟悉的路径即可，以后建立的工程文件都在设置的工作空间里面。</p>
-<h4 id="③-进行简单配置"><a href="#③-进行简单配置" class="headerlink" title="③ 进行简单配置"></a>③ 进行简单配置</h4><ul>
-<li><strong>配置 Tomcat 服务器：</strong><br>1.进入 Eclipse 后首先将 Tomcat 服务器位置通知 Eclipse。选择菜单项“Window”→“Preferences”<br>2.打开“Preferences”对话框，在左边找到“Server”选项，并展开，选中其中“Runtime Environments”项目：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-41e9c8476c9e43c8.png" alt=""></p>
-<p>  3.点击右边界面中“Add”按钮，在弹出的界面中找到“Apache Tomcat 8.5”项目并选中：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-16e63ba0fd2c7026.png" alt=""></p>
-<p>  4.点击下一步，并在 Name 处输入：Apache Tomcat v8.5。然后将目标目录选定为刚刚安装的 Tomcat 目录</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-39ee47d65cb23c43.png" alt=""></p>
-<p>  5.最后点击“Finish”按钮完成服务器的配置</p>
-<ul>
-<li><strong>配置默认的格式：</strong><br>1.选择菜单项“Window”→“Preferences”，找到下方的“Web”，将其中红色框标记的选项里的【Encoding（编码格式）】均改为 UTF-8，是为防止使用中文乱码的问题。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-8c102147bbe01f1d.png" alt="配置格式"></p>
-<p>  2.点击“Apply and Close”完成配置。</p>
-<h4 id="④-创建一个动态网页项目测试"><a href="#④-创建一个动态网页项目测试" class="headerlink" title="④ 创建一个动态网页项目测试"></a>④ 创建一个动态网页项目测试</h4><ul>
-<li>1.选中 Eclipse 菜单项“New”→“Dynamic Web Project”，新建一个动态网页项目</li>
-<li>2.在新建项目界面中 project name 处输入工程名称 second_webapp（注意 second 和 webapp 中间为下划线）。并记住此名字。在 Runtime 中选择刚刚配置的 Tomat。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-0d365908b1d0b27a.png" alt=""></p>
-<ul>
-<li>3.点击“Next”按钮，并对配置不做修改，再次点击“Next”按钮，在下一个界面中，选中“Generate web.xml”选项。最后点击“Finish”按钮创建工程。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-00d15586da9c2718.png" alt=""></p>
-<ul>
-<li>4.在 second_webapp 上点击右键，并选中“Properties”菜单项，若看到工程默认编码为 GBK，则在对话框中将工程的编码方式改为 UTF-8，目的是避免以后中文出现乱码：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-34602d469d492830.png" alt=""></p>
-<ul>
-<li>5.展开 second_webapp 工程，并在“WebContent”项目上点击鼠标右键，并选中菜单项目“New”→“HTML<br>File”，然后输入网页的名字 index.html，并点击“Finish”按钮：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%88%9D%E5%AD%A6Java-Web%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E6%90%AD%E5%BB%BAJava-Web%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/7896890-fc77032a30d42f59.png" alt=""></p>
-<ul>
-<li>6.此时将显示 HTML 文件内容（默认为 HTML 5 格式），编辑 index.html 文件，成如下内容：<pre class=" language-html"><code class="language-html"><span class="token doctype">&lt;!DOCTYPE html></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">charset</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">></span></span>我的第二个网页<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>head</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
-Java EE 环境部署成功！
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">></span></span>
-</code></pre>
-</li>
-</ul>
-<pre><code>- 7.编辑完成后，点击 Eclipse 菜单：“Run”→“Run As”→“Run on Server”**（注意：此时在 Eclipse 外面不能启动Tomcat 服务器，即 Tomcat 的命令提示窗口不能已经打开）**，在弹出的对话框中选择，刚刚配置的 Tomcat 环境，边点击“Finish”按钮启动 Tomcat 服务器：
-
-![](https://cdn.jsdelivr.net/gh/wmyskxz/img/img/初学Java-Web（2）——搭建Java-Web开发环境/7896890-1e386be820188f6e.png)
-
-- 8.等待服务器启动完成。然后在浏览器中输入网址：http://localhost:8080/second_webapp/index.html，查看网页。如果能正确显示页面，则 Eclipse 新建项目成功。
-
-----
-
-至此，Java Web 的开发环境就已经全部搭建好了，关于为什么选择 Eclipse 而不选择 IDEA ，是因为这学期开的 Java Web 课程中使用的也是 Eclipse ，为了避免麻烦，所以还是用 Eclipse 吧。
-
-#### 参考资料：
-&gt; [1.迷路的国王博客](http://www.cnblogs.com/kangjianwei101/p/5621750.html)
-&gt; 2.本学校的实验说明
-
-
----
-
-&gt; 欢迎转载，转载请注明出处！   
-&gt; 简书ID：[@我没有三颗心脏](https://www.jianshu.com/u/a40d61a49221)  
-&gt; github：[wmyskxz](https://github.com/wmyskxz/)  
-&gt; 欢迎关注公众微信号：wmyskxz
-&gt; 分享自己的学习 &amp; 学习资料 &amp; 生活
-&gt; 想要交流的朋友也可以加qq群：3382693
-</code></pre>
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/01/01/java-8-han-shu-shi-shu-ju-chu-li-liu/">
-      Java 8——函数式数据处理（流）
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java基础</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年1月1日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>本篇内容大部分来自《Java 8实战》</p>
-</blockquote>
-<h2 id="流是什么？"><a href="#流是什么？" class="headerlink" title="流是什么？"></a>流是什么？</h2><p>流是<code>Java API</code>的新成员，它允许你以声明性方式处理数据集合（通过查询语句来表达，而不是临时写一个实现）。</p>
-<p>就现在来说，你可以把它们看成遍历数据集合的高级迭代器。此外，流还可以<em>透明地</em>并行处理，你无需写任何多线程代码！</p>
-<p>下面两段代码都是用来返回低热量的菜肴名称的，并按照卡路里排序，一个使用<code>java 7</code>写的，另一个是用<code>java 8</code>的流写的，比较一下，不用太关心java 8的语法：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-b4f78866265cbf3d.png" alt=""></p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-18563ca684ec7b8c.png" alt=""></p>
-<p>现在，你可以看出，从软件工程师的角度来看，新的方法有几个显而易见的好处。</p>
-<ul>
-<li><p><strong>代码是以声明性方式写的：</strong>说明想要完成什么（筛选热量低的菜肴）而不是说明如何实现一个操作（利用循环和if条件等控制流语句）。这种方法加上行为参数化让你可以轻松应对变化的需求：你很容易创建一个代码版本，利用Lambda表达式来筛选高卡路里的菜肴，而用不着去复制粘贴代码。</p>
-</li>
-<li><p><strong>你可以把几个基础操作链接起来，</strong>来表达复杂的数据处理流水线（在filter后面接上sorted、map和collect操作），同时保持代码清晰可读。</p>
-<blockquote>
-<p>因为filter、sorted、map和coleect等操作是与具体线程模型无关的高层次构件，所以它们的内部实现可以是单线程的，也可能<em>透明地</em>充分利用你的多核架构！在实践中，这意味着你用不着为了让某些数据处理任务并行而去操心线程和锁了，<code>Steam API</code>都替你做好了！<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-8d4b3d728dc7e707.png" alt=""> </p>
-</blockquote>
-</li>
-</ul>
-<p>并且新的<code>Steam APi</code>表达能力非常强，能写出例如下面这样的代码：</p>
-<pre class=" language-java"><code class="language-java">Map<span class="token operator">&lt;</span>Dish<span class="token punctuation">.</span>Type<span class="token punctuation">,</span> List<span class="token operator">&lt;</span>Dish<span class="token operator">>></span> dishesByType <span class="token operator">=</span> 
-        menu<span class="token punctuation">.</span><span class="token function">steam</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">collect</span><span class="token punctuation">(</span><span class="token function">groupingBy</span><span class="token punctuation">(</span>Dish<span class="token operator">:</span><span class="token operator">:</span>getType<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h2 id="流简介"><a href="#流简介" class="headerlink" title="流简介"></a>流简介</h2><p>要讨论流，就要先来讨论集合，这是最容易上手的方式了。<code>Java 8</code>中的集合支持一个新的stream方法，它会返回一个流（接口定义在<code>java.util,steam.Steam</code>里）。</p>
-<p>那么，流到底是什么呢？简短的定义就是<strong>“从支持数据处理操作的源，生成的元素序列”</strong>。Oh，听上去就让人头大。让我们一步步来剖析这个定义：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-bc37ab0d7390ffb9.png" alt=""></p>
-<p>让我们来看一段能够体现所有这些概念的代码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-48b16ead1be85bd1.png" alt=""></p>
-<p>在本例中，我们先是对menu调用steam方法，由菜单得到一个流。<em>数据源</em>是菜肴列表（菜单），它给流提供一个<em>元素序列。</em>接下来，对流应用一系列<em>数据处理操作：</em>filter、map、limit和collect。</p>
-<p>除了collect之外，所有这些操作都会返回另一个流，这样它们就可以竭诚一条流水线，于是就可以看作对源的一个查询。最后，collect操作开始处理流水线，并返回结果。下图展示了该流操作的每个操作的简介：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-f8629e20adea9ca6.png" alt=""></p>
-<p>感觉像不像变魔术呢？不过至少看起来，是挺酷的。</p>
-<h2 id="集合与流"><a href="#集合与流" class="headerlink" title="集合与流"></a>集合与流</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-03efb1b41d46c2dc.png" alt=""></p>
-<p>上图很好的说明了在<code>Java 8</code>中的集合与流的关系，集合就像是DVD一样，保存了完整的数据结构和所有的值，而流则像是现在视频网站中的视频那样，不必提前下好完整的视频，只需要提前下载好用户播放位置的那几帧就好了。</p>
-<blockquote>
-<p>请注意：流和迭代器一样，都只能遍历一次。</p>
-</blockquote>
-<h2 id="流操作"><a href="#流操作" class="headerlink" title="流操作"></a>流操作</h2><p><code>java.util.steam.Steam</code>中的<code>Steam</code>接口定义了许多操作。它们可以分为两大类，一类是<code>中间操作</code>，另一类是<code>终端操作</code>。</p>
-<p>为了方便，下面总结了一些<code>Steam API</code>提供的操作：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-8%E2%80%94%E2%80%94%E5%87%BD%E6%95%B0%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%EF%BC%88%E6%B5%81%EF%BC%89/7896890-ebed4fc34ec3412c.png" alt=""></p>
-<p>流的使用一般包括三件事：</p>
-<ul>
-<li><strong>一个数据源（如集合）来执行一个查询；</strong></li>
-<li><strong>一个中间操作链，形成一条流的流水线；</strong></li>
-<li><strong>一个终端操作，执行流水线，并能生成结果</strong></li>
-</ul>
-<p>流的流水线背后的理念有点类似于构建器模式。</p>
-<blockquote>
-<p>至此，流的基本操作就已经阐述完全了，相信你已经同我一样对<code>Java 8</code>的新特性感到兴奋了吧，不可避免，因为这实在是太酷啦！</p>
-</blockquote>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2688,7 +2816,7 @@ Java EE 环境部署成功！
           </a>
         
         <p class="current">
-          18 / 20
+          18 / 21
         </p>
         
           <a class="next" rel="next" href="/tags/%E5%8E%9F%E5%88%9B/page/19/">
@@ -3026,7 +3154,7 @@ Java EE 环境部署成功！
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(5)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -3080,7 +3208,7 @@ Java EE 环境部署成功！
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.86px; color: #868686">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.67px; color: #878787">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.33px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.67px; color: #5e5e5e">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 22px; color: #636363">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.67px; color: #6c6c6c">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.33px; color: #909090">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20px; color: #707070">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.67px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.67px; color: #878787">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.33px; color: #828282">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.33px; color: #828282">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.33px; color: #676767">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.67px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.33px; color: #909090">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16px; color: #8b8b8b">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.67px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.33px; color: #909090">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.33px; color: #828282">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.67px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.67px; color: #797979">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.67px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16px; color: #8b8b8b">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 18px; color: #7e7e7e">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.67px; color: #878787">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.33px; color: #676767">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.33px; color: #757575">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

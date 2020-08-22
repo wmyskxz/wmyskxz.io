@@ -436,6 +436,710 @@
         
           
   <h2 class="title">
+    <a href="/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">
+      Reids(4)——神奇的HyperLoglog解决统计问题
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>中间件/JavaWeb进阶</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年3月2日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-a408d790b0b4f4b9.png" alt=""></p>
+<h1 id="一、HyperLogLog-简介"><a href="#一、HyperLogLog-简介" class="headerlink" title="一、HyperLogLog 简介"></a>一、HyperLogLog 简介</h1><p><strong>HyperLogLog</strong> 是最早由 <a href="http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf" target="_blank" rel="noopener">Flajolet</a> 及其同事在 2007 年提出的一种 <strong>估算基数的近似最优算法</strong>。但跟原版论文不同的是，好像很多书包括 Redis 作者都把它称为一种 <strong>新的数据结构(new datastruct)</strong> <em>(算法实现确实需要一种特定的数据结构来实现)</em>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/006oOWahly1fpsc3t7fnng30ab05tkjl.gif" alt=""></p>
+<h2 id="关于基数统计"><a href="#关于基数统计" class="headerlink" title="关于基数统计"></a>关于基数统计</h2><p><strong>基数统计(Cardinality Counting)</strong> 通常是用来统计一个集合中不重复的元素个数。</p>
+<p><strong>思考这样的一个场景：</strong> 如果你负责开发维护一个大型的网站，有一天老板找产品经理要网站上每个网页的 <strong>UV(独立访客，每个用户每天只记录一次)</strong>，然后让你来开发这个统计模块，你会如何实现？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-a9dbcf6374d482ba.png" alt=""></p>
+<p>如果统计 <strong>PV(浏览量，用户没点一次记录一次)</strong>，那非常好办，给每个页面配置一个独立的 Redis 计数器就可以了，把这个计数器的 key 后缀加上当天的日期。这样每来一个请求，就执行 <code>INCRBY</code> 指令一次，最终就可以统计出所有的 <strong>PV</strong> 数据了。</p>
+<p>但是 <strong>UV</strong> 不同，它要去重，<strong>同一个用户一天之内的多次访问请求只能计数一次</strong>。这就要求了每一个网页请求都需要带上用户的 ID，无论是登录用户还是未登录的用户，都需要一个唯一 ID 来标识。</p>
+<p>你也许马上就想到了一个 <em>简单的解决方案</em>：那就是 <strong>为每一个页面设置一个独立的 set 集合</strong> 来存储所有当天访问过此页面的用户 ID。但这样的 <strong>问题</strong> 就是：</p>
+<ol>
+<li><strong>存储空间巨大：</strong> 如果网站访问量一大，你需要用来存储的 set 集合就会非常大，如果页面再一多.. 为了一个去重功能耗费的资源就可以直接让你 <strong>老板打死你</strong>；</li>
+<li><strong>统计复杂：</strong> 这么多 set 集合如果要聚合统计一下，又是一个复杂的事情；</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-b8ddfcd39cb46cb5.png" alt=""></p>
+<h2 id="基数统计的常用方法"><a href="#基数统计的常用方法" class="headerlink" title="基数统计的常用方法"></a>基数统计的常用方法</h2><p>对于上述这样需要 <strong>基数统计</strong> 的事情，通常来说有两种比 set 集合更好的解决方案：</p>
+<h3 id="第一种：B-树"><a href="#第一种：B-树" class="headerlink" title="第一种：B 树"></a>第一种：B 树</h3><p><strong>B 树最大的优势就是插入和查找效率很高</strong>，如果用 B 树存储要统计的数据，可以快速判断新来的数据是否存在，并快速将元素插入 B 树。要计算基础值，只需要计算 B 树的节点个数就行了。</p>
+<p>不过将 B 树结构维护到内存中，能够解决统计和计算的问题，但是 <strong>并没有节省内存</strong>。</p>
+<h3 id="第二种：bitmap"><a href="#第二种：bitmap" class="headerlink" title="第二种：bitmap"></a>第二种：bitmap</h3><p><strong>bitmap</strong> 可以理解为通过一个 bit 数组来存储特定数据的一种数据结构，<strong>每一个 bit 位都能独立包含信息</strong>，bit 是数据的最小存储单位，因此能大量节省空间，也可以将整个 bit 数据一次性 load 到内存计算。如果定义一个很大的 bit 数组，基础统计中 <strong>每一个元素对应到 bit 数组中的一位</strong>，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-fb4283ad7dbd89a2.png" alt=""></p>
+<p>bitmap 还有一个明显的优势是 <strong>可以轻松合并多个统计结果</strong>，只需要对多个结果求异或就可以了，也可以大大减少存储内存。可以简单做一个计算，如果要统计 <strong>1 亿</strong> 个数据的基数值，<strong>大约需要的内存</strong>：<code>100_000_000/ 8/ 1024/ 1024 ≈ 12 M</code>，如果用 <strong>32 bit</strong> 的 int 代表 <strong>每一个</strong> 统计的数据，<strong>大约需要内存</strong>：<code>32 * 100_000_000/ 8/ 1024/ 1024 ≈ 381 M</code></p>
+<p>可以看到 bitmap 对于内存的节省显而易见，但仍然不够。统计一个对象的基数值就需要 <code>12 M</code>，如果统计 1 万个对象，就需要接近 <code>120 G</code>，对于大数据的场景仍然不适用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-1ebb3265b4297fa1.png" alt=""></p>
+<h2 id="概率算法"><a href="#概率算法" class="headerlink" title="概率算法"></a>概率算法</h2><p>实际上目前还没有发现更好的在 <strong>大数据场景</strong> 中 <strong>准确计算</strong> 基数的高效算法，因此在不追求绝对精确的情况下，使用概率算法算是一个不错的解决方案。</p>
+<p>概率算法 <strong>不直接存储</strong> 数据集合本身，通过一定的 <strong>概率统计方法预估基数值</strong>，这种方法可以大大节省内存，同时保证误差控制在一定范围内。目前用于基数计数的概率算法包括:</p>
+<ul>
+<li><strong>Linear Counting(LC)</strong>：早期的基数估计算法，LC 在空间复杂度方面并不算优秀，实际上 LC 的空间复杂度与上文中简单 bitmap 方法是一样的（但是有个常数项级别的降低），都是 O(N<sub>max</sub>)</li>
+<li><strong>LogLog Counting(LLC)</strong>：LogLog Counting 相比于 LC 更加节省内存，空间复杂度只有 O(log<sub>2</sub>(log<sub>2</sub>(N<sub>max</sub>)))</li>
+<li><strong>HyperLogLog Counting(HLL)</strong>：HyperLogLog Counting 是基于 LLC 的优化和改进，在同样空间复杂度情况下，能够比 LLC 的基数估计误差更小</li>
+</ul>
+<p>其中，<strong>HyperLogLog</strong> 的表现是惊人的，上面我们简单计算过用 <strong>bitmap</strong> 存储 <strong>1 个亿</strong> 统计数据大概需要 <code>12 M</code> 内存，而在 <strong>HyperLoglog</strong> 中，只需要不到 <strong>1 K</strong> 内存就能够做到！在 Redis 中实现的 <strong>HyperLoglog</strong> 也只需要 <strong>12 K</strong> 内存，在 <strong>标准误差 0.81%</strong> 的前提下，<strong>能够统计 2<sup>64</sup> 个数据</strong>！</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-439fe643e2dc081a.png" alt=""></p>
+<p><strong>这是怎么做到的？！</strong> 下面赶紧来了解一下！</p>
+<h1 id="二、HyperLogLog-原理"><a href="#二、HyperLogLog-原理" class="headerlink" title="二、HyperLogLog 原理"></a>二、HyperLogLog 原理</h1><p>我们来思考一个抛硬币的游戏：你连续掷 n 次硬币，然后说出其中<strong>连续掷为正面的最大次数，我来猜你一共抛了多少次</strong>。</p>
+<p>这很容易理解吧，例如：你说你这一次 <em>最多连续出现了 2 次</em> 正面，那么我就可以知道你这一次投掷的次数并不多，所以 <em>我可能会猜是 5</em> 或者是其他小一些的数字，但如果你说你这一次 <em>最多连续出现了 20 次</em> 正面，虽然我觉得不可能，但我仍然知道你花了特别多的时间，所以 <em>我说 GUN…</em>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-2042926c4383c027.png" alt=""></p>
+<p>这期间我可能会要求你重复实验，然后我得到了更多的数据之后就会估计得更准。<strong>我们来把刚才的游戏换一种说法</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-24e8f48f5e3eb81f.png" alt=""></p>
+<p>这张图的意思是，我们给定一系列的随机整数，<strong>记录下低位连续零位的最大长度 K</strong>，即为图中的 <code>maxbit</code>，<strong>通过这个 K 值我们就可以估算出随机数的数量 N</strong>。</p>
+<h2 id="代码实验"><a href="#代码实验" class="headerlink" title="代码实验"></a>代码实验</h2><p>我们可以简单编写代码做一个实验，来探究一下 <code>K</code> 和 <code>N</code> 之间的关系：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PfTest</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">BitKeeper</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> maxbit<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">long</span> value <span class="token operator">=</span> ThreadLocalRandom<span class="token punctuation">.</span><span class="token function">current</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nextLong</span><span class="token punctuation">(</span>2L <span class="token operator">&lt;&lt;</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> bit <span class="token operator">=</span> <span class="token function">lowZeros</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>bit <span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>maxbit<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>maxbit <span class="token operator">=</span> bit<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> <span class="token function">lowZeros</span><span class="token punctuation">(</span><span class="token keyword">long</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">32</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>value <span class="token operator">>></span> i <span class="token operator">&lt;&lt;</span> i <span class="token operator">!=</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token keyword">break</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">return</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Experiment</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> n<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> BitKeeper keeper<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">Experiment</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>n <span class="token operator">=</span> n<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>keeper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BitKeeper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>keeper<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">debug</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out
+                <span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d %.2f %d\n"</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>n<span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>n<span class="token punctuation">)</span> <span class="token operator">/</span> Math<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>keeper<span class="token punctuation">.</span>maxbit<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100000</span><span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Experiment exp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Experiment</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exp<span class="token punctuation">.</span><span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exp<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>跟上图中的过程是一致的，话说为啥叫 <code>PfTest</code> 呢，包括 Redis 中的命令也一样带有一个 <code>PF</code> 前缀，还记得嘛，因为 <strong>HyperLogLog</strong> 的提出者上文提到过的，叫 <code>Philippe Flajolet</code>。</p>
+<p>截取部分输出查看：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//n   n/log2 maxbit</span>
+<span class="token number">34000</span> <span class="token number">15.05</span> <span class="token number">13</span>
+<span class="token number">35000</span> <span class="token number">15.10</span> <span class="token number">13</span>
+<span class="token number">36000</span> <span class="token number">15.14</span> <span class="token number">16</span>
+<span class="token number">37000</span> <span class="token number">15.18</span> <span class="token number">17</span>
+<span class="token number">38000</span> <span class="token number">15.21</span> <span class="token number">14</span>
+<span class="token number">39000</span> <span class="token number">15.25</span> <span class="token number">16</span>
+<span class="token number">40000</span> <span class="token number">15.29</span> <span class="token number">14</span>
+<span class="token number">41000</span> <span class="token number">15.32</span> <span class="token number">16</span>
+<span class="token number">42000</span> <span class="token number">15.36</span> <span class="token number">18</span></code></pre>
+<p>会发现 <code>K</code> 和 <code>N</code> 的对数之间存在显著的线性相关性：<strong>N 约等于 2<sup>k</sup></strong></p>
+<h2 id="更近一步：分桶平均"><a href="#更近一步：分桶平均" class="headerlink" title="更近一步：分桶平均"></a>更近一步：分桶平均</h2><p><strong>如果 <code>N</code> 介于 2<sup>k</sup> 和 2<sup>k+1</sup> 之间，用这种方式估计的值都等于 2<sup>k</sup>，这明显是不合理的</strong>，所以我们可以使用多个 <code>BitKeeper</code> 进行加权估计，就可以得到一个比较准确的值了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PfTest</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">BitKeeper</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 无变化, 代码省略</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Experiment</span> <span class="token punctuation">{</span>
+
+        <span class="token keyword">private</span> <span class="token keyword">int</span> n<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token keyword">int</span> k<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> BitKeeper<span class="token punctuation">[</span><span class="token punctuation">]</span> keepers<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">Experiment</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token function">Experiment</span><span class="token punctuation">(</span><span class="token keyword">int</span> n<span class="token punctuation">,</span> <span class="token keyword">int</span> k<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>n <span class="token operator">=</span> n<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>k <span class="token operator">=</span> k<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>keepers <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BitKeeper</span><span class="token punctuation">[</span>k<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> k<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>keepers<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BitKeeper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">long</span> m <span class="token operator">=</span> ThreadLocalRandom<span class="token punctuation">.</span><span class="token function">current</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">nextLong</span><span class="token punctuation">(</span>1L <span class="token operator">&lt;&lt;</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                BitKeeper keeper <span class="token operator">=</span> keepers<span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>m <span class="token operator">&amp;</span> <span class="token number">0xfff0000</span><span class="token punctuation">)</span> <span class="token operator">>></span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">%</span> keepers<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+                keeper<span class="token punctuation">.</span><span class="token function">random</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">estimate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">double</span> sumbitsInverse <span class="token operator">=</span> <span class="token number">0.0</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span>BitKeeper keeper <span class="token operator">:</span> keepers<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                sumbitsInverse <span class="token operator">+=</span> <span class="token number">1.0</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span> keeper<span class="token punctuation">.</span>maxbit<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">double</span> avgBits <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">float</span><span class="token punctuation">)</span> keepers<span class="token punctuation">.</span>length <span class="token operator">/</span> sumbitsInverse<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> Math<span class="token punctuation">.</span><span class="token function">pow</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> avgBits<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token keyword">this</span><span class="token punctuation">.</span>k<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">100000</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">1000000</span><span class="token punctuation">;</span> i <span class="token operator">+=</span> <span class="token number">100000</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            Experiment exp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Experiment</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            exp<span class="token punctuation">.</span><span class="token function">work</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">double</span> est <span class="token operator">=</span> exp<span class="token punctuation">.</span><span class="token function">estimate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d %.2f %.2f\n"</span><span class="token punctuation">,</span> i<span class="token punctuation">,</span> est<span class="token punctuation">,</span> Math<span class="token punctuation">.</span><span class="token function">abs</span><span class="token punctuation">(</span>est <span class="token operator">-</span> i<span class="token punctuation">)</span> <span class="token operator">/</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这个过程有点 <strong>类似于选秀节目里面的打分</strong>，一堆专业评委打分，但是有一些评委因为自己特别喜欢所以给高了，一些评委又打低了，所以一般都要 <strong>屏蔽最高分和最低分</strong>，然后 <strong>再计算平均值</strong>，这样的出来的分数就差不多是公平公正的了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-6c927d25750f20d1.png" alt=""></p>
+<p>上述代码就有 <strong>1024</strong> 个 “评委”，并且在计算平均值的时候，采用了 <strong>调和平均数</strong>，也就是倒数的平均值，它能有效地平滑离群值的影响：</p>
+<pre class=" language-java"><code class="language-java">avg <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">3</span> <span class="token operator">+</span> <span class="token number">4</span> <span class="token operator">+</span> <span class="token number">5</span> <span class="token operator">+</span> <span class="token number">104</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">4</span> <span class="token operator">=</span> <span class="token number">29</span>
+avg <span class="token operator">=</span> <span class="token number">4</span> <span class="token operator">/</span> <span class="token punctuation">(</span><span class="token number">1</span><span class="token operator">/</span><span class="token number">3</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">4</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">5</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token operator">/</span><span class="token number">104</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">5.044</span></code></pre>
+<p>观察脚本的输出，误差率百分比控制在个位数：</p>
+<pre class=" language-java"><code class="language-java"><span class="token number">100000</span> <span class="token number">94274.94</span> <span class="token number">0.06</span>
+<span class="token number">200000</span> <span class="token number">194092.62</span> <span class="token number">0.03</span>
+<span class="token number">300000</span> <span class="token number">277329.92</span> <span class="token number">0.08</span>
+<span class="token number">400000</span> <span class="token number">373281.66</span> <span class="token number">0.07</span>
+<span class="token number">500000</span> <span class="token number">501551.60</span> <span class="token number">0.00</span>
+<span class="token number">600000</span> <span class="token number">596078.40</span> <span class="token number">0.01</span>
+<span class="token number">700000</span> <span class="token number">687265.72</span> <span class="token number">0.02</span>
+<span class="token number">800000</span> <span class="token number">828778.96</span> <span class="token number">0.04</span>
+<span class="token number">900000</span> <span class="token number">944683.53</span> <span class="token number">0.05</span></code></pre>
+<p>真实的 HyperLogLog 要比上面的示例代码更加复杂一些，也更加精确一些。上面这个算法在随机次数很少的情况下会出现除零错误，因为 <code>maxbit = 0</code> 是不可以求倒数的。</p>
+<h2 id="真实的-HyperLogLog"><a href="#真实的-HyperLogLog" class="headerlink" title="真实的 HyperLogLog"></a>真实的 HyperLogLog</h2><p>有一个神奇的网站，可以动态地让你观察到 HyperLogLog 的算法到底是怎么执行的：<a href="http://content.research.neustar.biz/blog/hll.html" target="_blank" rel="noopener">http://content.research.neustar.biz/blog/hll.html</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-72f00a9983a1395e.png" alt=""></p>
+<p>其中的一些概念这里稍微解释一下，您就可以自行去点击 <code>step</code> 来观察了：</p>
+<ul>
+<li><strong>m 表示分桶个数：</strong> 从图中可以看到，这里分成了 64 个桶；</li>
+<li><strong>蓝色的 bit 表示在桶中的位置：</strong> 例如图中的 <code>101110</code> 实则表示二进制的 <code>46</code>，所以该元素被统计在中间大表格 <code>Register Values</code> 中标红的第 46 个桶之中；</li>
+<li><strong>绿色的 bit 表示第一个 1 出现的位置</strong>： 从图中可以看到标绿的 bit 中，从右往左数，第一位就是 1，所以在 <code>Register Values</code> 第 46 个桶中写入 1；</li>
+<li><strong>红色 bit 表示绿色 bit 的值的累加：</strong> 下一个出现在第 46 个桶的元素值会被累加；</li>
+</ul>
+<h3 id="为什么要统计-Hash-值中第一个-1-出现的位置？"><a href="#为什么要统计-Hash-值中第一个-1-出现的位置？" class="headerlink" title="为什么要统计 Hash 值中第一个 1 出现的位置？"></a>为什么要统计 Hash 值中第一个 1 出现的位置？</h3><p>因为第一个 1 出现的位置可以同我们抛硬币的游戏中第一次抛到正面的抛掷次数对应起来，根据上面掷硬币实验的结论，记录每个数据的第一个出现的位置 <code>K</code>，就可以通过其中最大值 K<sub>max</sub> 来推导出数据集合中的基数：<strong>N = 2<sup>K<sub>max</sub></sup></strong></p>
+<h3 id="PF-的内存占用为什么是-12-KB？"><a href="#PF-的内存占用为什么是-12-KB？" class="headerlink" title="PF 的内存占用为什么是 12 KB？"></a>PF 的内存占用为什么是 12 KB？</h3><p>我们上面的算法中使用了 <strong>1024</strong> 个桶，网站演示也只有 <strong>64</strong> 个桶，不过在 Redis 的 HyperLogLog 实现中，用的是 <strong>16384</strong> 个桶，即：2<sup>14</sup>，也就是说，就像上面网站中间那个 <code>Register Values</code> 大表格有 <strong>16384</strong> 格。</p>
+<p><strong>而Redis 最大能够统计的数据量是 2<sup>64</sup></strong>，即每个桶的 <code>maxbit</code> 需要 <strong>6</strong> 个 bit 来存储，最大可以表示 <code>maxbit = 63</code>，于是总共占用内存就是：<strong>(2<sup>14</sup>) x 6 / 8</strong> <em>(每个桶 6 bit，而这么多桶本身要占用 16384 bit，再除以 8 转换成 KB)</em>,算出来的结果就是 <code>12 KB</code>。</p>
+<h1 id="三、Redis-中的-HyperLogLog-实现"><a href="#三、Redis-中的-HyperLogLog-实现" class="headerlink" title="三、Redis 中的 HyperLogLog 实现"></a>三、Redis 中的 HyperLogLog 实现</h1><p>从上面我们算是对 <strong>HyperLogLog</strong> 的算法和思想有了一定的了解，并且知道了一个 <strong>HyperLogLog</strong> 实际占用的空间大约是 <code>12 KB</code>，但 Redis 对于内存的优化非常变态，当 <strong>计数比较小</strong> 的时候，大多数桶的计数值都是 <strong>零</strong>，这个时候 Redis 就会适当节约空间，转换成另外一种 <strong>稀疏存储方式</strong>，与之相对的，正常的存储模式叫做 <strong>密集存储</strong>，这种方式会恒定地占用 <code>12 KB</code>。</p>
+<h2 id="密集型存储结构"><a href="#密集型存储结构" class="headerlink" title="密集型存储结构"></a>密集型存储结构</h2><p>密集型的存储结构非常简单，就是 <strong>16384 个 6 bit 连续串成</strong> 的字符串位图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-0ba2adb0214afd0c.png" alt=""></p>
+<p>我们都知道，一个字节是由 8 个 bit 组成的，这样 6 bit 排列的结构就会导致，有一些桶会 <strong>跨越字节边界</strong>，我们需要 <strong>对这一个或者两个字节进行适当的移位拼接</strong> 才可以得到具体的计数值。</p>
+<p>假设桶的编号为 <code>index</code>，这个 6 bity 计数值的起始字节偏移用 <code>offset_bytes</code> 表示，它在这个字节的其实比特位置偏移用 <code>offset_bits</code> 表示，于是我们有：</p>
+<pre class=" language-python"><code class="language-python">offset_bytes <span class="token operator">=</span> <span class="token punctuation">(</span>index <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">8</span>
+offset_bits <span class="token operator">=</span> <span class="token punctuation">(</span>index <span class="token operator">*</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">%</span> <span class="token number">8</span></code></pre>
+<p>前者是商，后者是余数。比如 <code>bucket 2</code> 的字节偏移是 1，也就是第 2 个字节。它的位偏移是 4，也就是第 2 个字节的第 5 个位开始是 bucket 2 的计数值。需要注意的是 <strong>字节位序是左边低位右边高位</strong>，而通常我们使用的字节都是左边高位右边低位。</p>
+<p>这里就涉及到两种情况，<strong>如果 <code>offset_bits</code> 小于等于 2</strong>，说明这 <strong>6 bit 在一个字节的内部</strong>，可以直接使用下面的表达式得到计数值 <code>val</code>：</p>
+<pre class=" language-python"><code class="language-python">val <span class="token operator">=</span> buffer<span class="token punctuation">[</span>offset_bytes<span class="token punctuation">]</span> <span class="token operator">>></span> offset_bits  <span class="token comment" spellcheck="true"># 向右移位</span></code></pre>
+<p><strong>如果 <code>offset_bits</code> 大于 2</strong>，那么就会涉及到 <strong>跨越字节边界</strong>，我们需要拼接两个字节的位片段：</p>
+<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 低位值</span>
+low_val <span class="token operator">=</span> buffer<span class="token punctuation">[</span>offset_bytes<span class="token punctuation">]</span> <span class="token operator">>></span> offset_bits
+<span class="token comment" spellcheck="true"># 低位个数</span>
+low_bits <span class="token operator">=</span> <span class="token number">8</span> <span class="token operator">-</span> offset_bits
+<span class="token comment" spellcheck="true"># 拼接，保留低6位</span>
+val <span class="token operator">=</span> <span class="token punctuation">(</span>high_val <span class="token operator">&lt;&lt;</span> low_bits <span class="token operator">|</span> low_val<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0b111111</span></code></pre>
+<p>不过下面 Redis 的源码要晦涩一点，看形式它似乎只考虑了跨越字节边界的情况。这是因为如果 6 bit 在单个字节内，上面代码中的 <code>high_val</code> 的值是零，所以这一份代码可以同时照顾单字节和双字节：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">// 获取指定桶的计数值</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> HLL_DENSE_GET_REGISTER(target,p,regnum) do { \
+    uint8_t *_p = (uint8_t*) p; \
+    unsigned long _byte = regnum*HLL_BITS/8; \ </span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> _fb <span class="token operator">=</span> regnum<span class="token operator">*</span>HLL_BITS<span class="token operator">&amp;</span><span class="token number">7</span><span class="token punctuation">;</span> \  # <span class="token operator">%</span><span class="token number">8</span> <span class="token operator">=</span> <span class="token operator">&amp;</span><span class="token number">7</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> _fb8 <span class="token operator">=</span> <span class="token number">8</span> <span class="token operator">-</span> _fb<span class="token punctuation">;</span> \
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> b0 <span class="token operator">=</span> _p<span class="token punctuation">[</span>_byte<span class="token punctuation">]</span><span class="token punctuation">;</span> \
+    <span class="token keyword">unsigned</span> <span class="token keyword">long</span> b1 <span class="token operator">=</span> _p<span class="token punctuation">[</span>_byte<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span> \
+    target <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>b0 <span class="token operator">>></span> _fb<span class="token punctuation">)</span> <span class="token operator">|</span> <span class="token punctuation">(</span>b1 <span class="token operator">&lt;&lt;</span> _fb8<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> HLL_REGISTER_MAX<span class="token punctuation">;</span> \
+<span class="token punctuation">}</span> <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// 设置指定桶的计数值</span>
+<span class="token macro property">#<span class="token directive keyword">define</span> HLL_DENSE_SET_REGISTER(p,regnum,val) do { \
+    uint8_t *_p = (uint8_t*) p; \
+    unsigned long _byte = regnum*HLL_BITS/8; \
+    unsigned long _fb = regnum*HLL_BITS&amp;7; \
+    unsigned long _fb8 = 8 - _fb; \
+    unsigned long _v = val; \
+    _p[_byte] &amp;= ~(HLL_REGISTER_MAX &lt;&lt; _fb); \
+    _p[_byte] |= _v &lt;&lt; _fb; \
+    _p[_byte+1] &amp;= ~(HLL_REGISTER_MAX >> _fb8); \
+    _p[_byte+1] |= _v >> _fb8; \
+} while(0)</span></code></pre>
+<h2 id="稀疏存储结构"><a href="#稀疏存储结构" class="headerlink" title="稀疏存储结构"></a>稀疏存储结构</h2><p>稀疏存储适用于很多计数值都是零的情况。下图表示了一般稀疏存储计数值的状态：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-9d5a9018d2eedbd8.png" alt=""></p>
+<p>当 <strong>多个连续桶的计数值都是零</strong> 时，Redis 提供了几种不同的表达形式：</p>
+<ul>
+<li><code>00xxxxxx</code>：前缀两个零表示接下来的 6bit 整数值加 1 就是零值计数器的数量，注意这里要加 1 是因为数量如果为零是没有意义的。比如 <code>00010101</code> 表示连续 <code>22</code> 个零值计数器。</li>
+<li><code>01xxxxxx yyyyyyyy</code>：6bit 最多只能表示连续 <code>64</code> 个零值计数器，这样扩展出的  14bit 可以表示最多连续 <code>16384</code> 个零值计数器。这意味着 HyperLogLog 数据结构中 <code>16384</code> 个桶的初始状态，所有的计数器都是零值，可以直接使用 2 个字节来表示。</li>
+<li><code>1vvvvvxx</code>：中间 5bit 表示计数值，尾部 2bit 表示连续几个桶。它的意思是连续 <code>(xx +1)</code> 个计数值都是 <code>(vvvvv + 1)</code>。比如 <code>10101011</code> 表示连续 <code>4</code> 个计数值都是 <code>11</code>。</li>
+</ul>
+<p>注意 <em>上面第三种方式</em> 的计数值最大只能表示到 <code>32</code>，而 HyperLogLog 的密集存储单个计数值用 6bit 表示，最大可以表示到 <code>63</code>。<strong>当稀疏存储的某个计数值需要调整到大于 <code>32</code> 时，Redis 就会立即转换 HyperLogLog 的存储结构，将稀疏存储转换成密集存储。</strong></p>
+<h2 id="对象头"><a href="#对象头" class="headerlink" title="对象头"></a>对象头</h2><p>HyperLogLog 除了需要存储 16384 个桶的计数值之外，它还有一些附加的字段需要存储，比如总计数缓存、存储类型。所以它使用了一个额外的对象头来表示：</p>
+<pre class=" language-c"><code class="language-c"><span class="token keyword">struct</span> hllhdr <span class="token punctuation">{</span>
+    <span class="token keyword">char</span> magic<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">/* 魔术字符串"HYLL" */</span>
+    uint8_t encoding<span class="token punctuation">;</span>   <span class="token comment" spellcheck="true">/* 存储类型 HLL_DENSE or HLL_SPARSE. */</span>
+    uint8_t notused<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 保留三个字节未来可能会使用 */</span>
+    uint8_t card<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">;</span>    <span class="token comment" spellcheck="true">/* 总计数缓存 */</span>
+    uint8_t registers<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* 所有桶的计数器 */</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>所以 <strong>HyperLogLog</strong> 整体的内部结构就是 <strong>HLL 对象头</strong> 加上 <strong>16384</strong> 个桶的计数值位图。它在 Redis 的内部结构表现就是一个字符串位图。你可以把 <strong>HyperLogLog 对象当成普通的字符串来进行处理：</strong></p>
+<pre class=" language-console"><code class="language-console">> PFADD codehole python java golang
+(integer) 1
+> GET codehole
+"HYLL\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80C\x03\x84MK\x80P\xb8\x80^\xf3"</code></pre>
+<p>但是 <strong>不可以</strong> 使用 <strong>HyperLogLog</strong> 指令来 <strong>操纵普通的字符串</strong>，<strong>因为它需要检查对象头魔术字符串是否是 “HYLL”</strong>。</p>
+<h1 id="四、HyperLogLog-的使用"><a href="#四、HyperLogLog-的使用" class="headerlink" title="四、HyperLogLog 的使用"></a>四、HyperLogLog 的使用</h1><p><strong>HyperLogLog</strong> 提供了两个指令 <code>PFADD</code> 和 <code>PFCOUNT</code>，字面意思就是一个是增加，另一个是获取计数。<code>PFADD</code> 和 <code>set</code> 集合的 <code>SADD</code> 的用法是一样的，来一个用户 ID，就将用户 ID 塞进去就是，<code>PFCOUNT</code> 和 <code>SCARD</code> 的用法是一致的，直接获取计数值：</p>
+<pre class=" language-console"><code class="language-console">> PFADD codehole user1
+(interger) 1
+> PFCOUNT codehole
+(integer) 1
+> PFADD codehole user2
+(integer) 1
+> PFCOUNT codehole
+(integer) 2
+> PFADD codehole user3
+(integer) 1
+> PFCOUNT codehole
+(integer) 3
+> PFADD codehole user4 user 5
+(integer) 1
+> PFCOUNT codehole
+(integer) 5</code></pre>
+<p>我们可以用 Java 编写一个脚本来试试 HyperLogLog 的准确性到底有多少：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JedisTest</span> <span class="token punctuation">{</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">100000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      jedis<span class="token punctuation">.</span><span class="token function">pfadd</span><span class="token punctuation">(</span><span class="token string">"codehole"</span><span class="token punctuation">,</span> <span class="token string">"user"</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">long</span> total <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">pfcount</span><span class="token punctuation">(</span><span class="token string">"codehole"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%d %d\n"</span><span class="token punctuation">,</span> <span class="token number">100000</span><span class="token punctuation">,</span> total<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    jedis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>结果输出如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token number">100000</span> <span class="token number">99723</span></code></pre>
+<p>发现 <code>10</code> 万条数据只差了 <code>277</code>，按照百分比误差率是 <code>0.277%</code>，对于巨量的 UV 需求来说，这个误差率真的不算高。</p>
+<p>当然，除了上面的 <code>PFADD</code> 和 <code>PFCOUNT</code> 之外，还提供了第三个 <code>PFMEGER</code> 指令，用于将多个计数值累加在一起形成一个新的 <code>pf</code> 值：</p>
+<pre class=" language-console"><code class="language-console">> PFADD  nosql  "Redis"  "MongoDB"  "Memcached"
+(integer) 1
+
+> PFADD  RDBMS  "MySQL" "MSSQL" "PostgreSQL"
+(integer) 1
+
+> PFMERGE  databases  nosql  RDBMS
+OK
+
+> PFCOUNT  databases
+(integer) 6</code></pre>
+<h1 id="相关阅读"><a href="#相关阅读" class="headerlink" title="相关阅读"></a>相关阅读</h1><ol>
+<li>Redis(1)——5种基本数据结构 - <a href="https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/">https://www.wmyskxz.com/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/</a></li>
+<li>Redis(2)——跳跃表 - <a href="https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/">https://www.wmyskxz.com/2020/02/29/redis-2-tiao-yue-biao/</a></li>
+<li>Redis(3)——分布式锁深入探究 - <a href="https://www.wmyskxz.com/2020/03/01/redis-3/">https://www.wmyskxz.com/2020/03/01/redis-3/</a></li>
+</ol>
+<h1 id="扩展阅读"><a href="#扩展阅读" class="headerlink" title="扩展阅读"></a>扩展阅读</h1><ol>
+<li>【算法原文】HyperLogLog: the analysis of a near-optimal<br>cardinality estimation algorithm - <a href="http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf" target="_blank" rel="noopener">http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>【Redis 作者博客】Redis new data structure: the HyperLogLog - <a href="http://antirez.com/news/75" target="_blank" rel="noopener">http://antirez.com/news/75</a></li>
+<li>神奇的HyperLogLog算法 - <a href="http://www.rainybowe.com/blog/2017/07/13/%E7%A5%9E%E5%A5%87%E7%9A%84HyperLogLog%E7%AE%97%E6%B3%95/index.html" target="_blank" rel="noopener">http://www.rainybowe.com/blog/2017/07/13/%E7%A5%9E%E5%A5%87%E7%9A%84HyperLogLog%E7%AE%97%E6%B3%95/index.html</a></li>
+<li>深度探索 Redis HyperLogLog 内部数据结构 - <a href="https://zhuanlan.zhihu.com/p/43426875" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/43426875</a></li>
+<li>《Redis 深度历险》 - 钱文品/ 著</li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Reids%EF%BC%884%EF%BC%89%E2%80%94%E2%80%94%E7%A5%9E%E5%A5%87%E7%9A%84HyperLoglog%E8%A7%A3%E5%86%B3%E7%BB%9F%E8%AE%A1%E9%97%AE%E9%A2%98/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2020/03/01/redis-3/">
+      Redis(3)——分布式锁深入探究
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb进阶/中间件</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年3月1日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-5fe2adf61ccf11aa.png" alt=""></p>
+<h1 id="一、分布式锁简介"><a href="#一、分布式锁简介" class="headerlink" title="一、分布式锁简介"></a>一、分布式锁简介</h1><p><strong>锁</strong> 是一种用来解决多个执行线程 <strong>访问共享资源</strong> 错误或数据不一致问题的工具。</p>
+<p>如果 <em>把一台服务器比作一个房子</em>，那么 <em>线程就好比里面的住户</em>，当他们想要共同访问一个共享资源，例如厕所的时候，如果厕所门上没有锁…更甚者厕所没装门…这是会出原则性的问题的..</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-26a364bddb9218eb.png" alt=""></p>
+<p>装上了锁，大家用起来就安心多了，本质也就是 <strong>同一时间只允许一个住户使用</strong>。</p>
+<p>而随着互联网世界的发展，单体应用已经越来越无法满足复杂互联网的高并发需求，转而慢慢朝着分布式方向发展，慢慢进化成了 <strong>更大一些的住户</strong>。所以同样，我们需要引入分布式锁来解决分布式应用之间访问共享资源的并发问题。</p>
+<h2 id="为何需要分布式锁"><a href="#为何需要分布式锁" class="headerlink" title="为何需要分布式锁"></a>为何需要分布式锁</h2><p>一般情况下，我们使用分布式锁主要有两个场景：</p>
+<ol>
+<li><strong>避免不同节点重复相同的工作</strong>：比如用户执行了某个操作有可能不同节点会发送多封邮件；</li>
+<li><strong>避免破坏数据的正确性</strong>：如果两个节点在同一条数据上同时进行操作，可能会造成数据错误或不一致的情况出现；</li>
+</ol>
+<h2 id="Java-中实现的常见方式"><a href="#Java-中实现的常见方式" class="headerlink" title="Java 中实现的常见方式"></a>Java 中实现的常见方式</h2><p>上面我们用简单的比喻说明了锁的本质：<strong>同一时间只允许一个用户操作</strong>。所以理论上，能够满足这个需求的工具我们都能够使用 <em>(就是其他应用能帮我们加锁的)</em>：</p>
+<ol>
+<li><strong>基于 MySQL 中的锁</strong>：MySQL 本身有自带的悲观锁 <code>for update</code> 关键字，也可以自己实现悲观/乐观锁来达到目的；</li>
+<li><strong>基于 Zookeeper 有序节点</strong>：Zookeeper 允许临时创建有序的子节点，这样客户端获取节点列表时，就能够当前子节点列表中的序号判断是否能够获得锁；</li>
+<li><strong>基于 Redis 的单线程</strong>：由于 Redis 是单线程，所以命令会以串行的方式执行，并且本身提供了像 <code>SETNX(set if not exists)</code> 这样的指令，本身具有互斥性；</li>
+</ol>
+<p>每个方案都有各自的优缺点，例如 MySQL 虽然直观理解容易，但是实现起来却需要额外考虑 <strong>锁超时</strong>、<strong>加事务</strong> 等，并且性能局限于数据库，诸如此类我们在此不作讨论，重点关注 Redis。</p>
+<h2 id="Redis-分布式锁的问题"><a href="#Redis-分布式锁的问题" class="headerlink" title="Redis 分布式锁的问题"></a>Redis 分布式锁的问题</h2><h3 id="1）锁超时"><a href="#1）锁超时" class="headerlink" title="1）锁超时"></a>1）锁超时</h3><p>假设现在我们有两台平行的服务 A B，其中 A 服务在 <strong>获取锁之后</strong> 由于未知神秘力量突然 <strong>挂了</strong>，那么 B 服务就永远无法获取到锁了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-4ea386c23ef0eec9.png" alt=""></p>
+<p>所以我们需要额外设置一个超时时间，来保证服务的可用性。</p>
+<p>但是另一个问题随即而来：<strong>如果在加锁和释放锁之间的逻辑执行得太长，以至于超出了锁的超时限制</strong>，也会出现问题。因为这时候第一个线程持有锁过期了，而临界区的逻辑还没有执行完，与此同时第二个线程就提前拥有了这把锁，导致临界区的代码不能得到严格的串行执行。</p>
+<p>为了避免这个问题，<strong>Redis 分布式锁不要用于较长时间的任务</strong>。如果真的偶尔出现了问题，造成的数据小错乱可能就需要人工的干预。</p>
+<p>有一个稍微安全一点的方案是 <strong>将锁的 <code>value</code> 值设置为一个随机数</strong>，释放锁时先匹配随机数是否一致，然后再删除 key，这是为了 <strong>确保当前线程占有的锁不会被其他线程释放</strong>，除非这个锁是因为过期了而被服务器自动释放的。</p>
+<p>但是匹配 <code>value</code> 和删除 <code>key</code> 在 Redis 中并不是一个原子性的操作，也没有类似保证原子性的指令，所以可能需要使用像 Lua 这样的脚本来处理了，因为 Lua 脚本可以 <strong>保证多个指令的原子性执行</strong>。</p>
+<h3 id="延伸的讨论：GC-可能引发的安全问题"><a href="#延伸的讨论：GC-可能引发的安全问题" class="headerlink" title="延伸的讨论：GC 可能引发的安全问题"></a>延伸的讨论：GC 可能引发的安全问题</h3><p><a href="https://martin.kleppmann.com/" target="_blank" rel="noopener">Martin Kleppmann</a> 曾与 Redis 之父 Antirez 就 Redis 实现分布式锁的安全性问题进行过深入的讨论，其中有一个问题就涉及到 <strong>GC</strong>。</p>
+<p>熟悉 Java 的同学肯定对 GC 不陌生，在 GC 的时候会发生 <strong>STW(Stop-The-World)</strong>，这本身是为了保障垃圾回收器的正常执行，但可能会引发如下的问题：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-cf3a403968a23be4.png" alt=""></p>
+<p>服务 A 获取了锁并设置了超时时间，但是服务 A 出现了 STW 且时间较长，导致了分布式锁进行了超时释放，在这个期间服务 B 获取到了锁，待服务 A STW 结束之后又恢复了锁，这就导致了 <strong>服务 A 和服务 B 同时获取到了锁</strong>，这个时候分布式锁就不安全了。</p>
+<p>不仅仅局限于 Redis，Zookeeper 和 MySQL 有同样的问题。</p>
+<p>想吃更多瓜的童鞋，可以访问下列网站看看 Redis 之父 Antirez 怎么说：<a href="http://antirez.com/news/101" target="_blank" rel="noopener">http://antirez.com/news/101</a></p>
+<h3 id="2）单点-多点问题"><a href="#2）单点-多点问题" class="headerlink" title="2）单点/多点问题"></a>2）单点/多点问题</h3><p>如果 Redis 采用单机部署模式，那就意味着当 Redis 故障了，就会导致整个服务不可用。</p>
+<p>而如果采用主从模式部署，我们想象一个这样的场景：<em>服务 A</em> 申请到一把锁之后，如果作为主机的 Redis 宕机了，那么 <em>服务 B</em> 在申请锁的时候就会从从机那里获取到这把锁，为了解决这个问题，Redis 作者提出了一种 <strong>RedLock 红锁</strong> 的算法 <em>(Redission 同 Jedis)</em>：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 三个 Redis 集群</span>
+RLock lock1 <span class="token operator">=</span> redissionInstance1<span class="token punctuation">.</span><span class="token function">getLock</span><span class="token punctuation">(</span><span class="token string">"lock1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+RLock lock2 <span class="token operator">=</span> redissionInstance2<span class="token punctuation">.</span><span class="token function">getLock</span><span class="token punctuation">(</span><span class="token string">"lock2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+RLock lock3 <span class="token operator">=</span> redissionInstance3<span class="token punctuation">.</span><span class="token function">getLock</span><span class="token punctuation">(</span><span class="token string">"lock3"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+RedissionRedLock lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RedissionLock</span><span class="token punctuation">(</span>lock1<span class="token punctuation">,</span> lock2<span class="token punctuation">,</span> lock2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+lock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// do something....</span>
+lock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h1 id="二、Redis-分布式锁的实现"><a href="#二、Redis-分布式锁的实现" class="headerlink" title="二、Redis 分布式锁的实现"></a>二、Redis 分布式锁的实现</h1><p>分布式锁类似于 “占坑”，而 <code>SETNX(SET if Not eXists)</code> 指令就是这样的一个操作，只允许被一个客户端占有，我们来看看 <strong>源码(t_string.c/setGenericCommand)</strong> 吧：</p>
+<pre class=" language-c"><code class="language-c"><span class="token comment" spellcheck="true">// SET/ SETEX/ SETTEX/ SETNX 最底层实现</span>
+<span class="token keyword">void</span> <span class="token function">setGenericCommand</span><span class="token punctuation">(</span>client <span class="token operator">*</span>c<span class="token punctuation">,</span> <span class="token keyword">int</span> flags<span class="token punctuation">,</span> robj <span class="token operator">*</span>key<span class="token punctuation">,</span> robj <span class="token operator">*</span>val<span class="token punctuation">,</span> robj <span class="token operator">*</span>expire<span class="token punctuation">,</span> <span class="token keyword">int</span> unit<span class="token punctuation">,</span> robj <span class="token operator">*</span>ok_reply<span class="token punctuation">,</span> robj <span class="token operator">*</span>abort_reply<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">long</span> <span class="token keyword">long</span> milliseconds <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* initialized to avoid any harmness warning */</span>
+
+    <span class="token comment" spellcheck="true">// 如果定义了 key 的过期时间则保存到上面定义的变量中</span>
+    <span class="token comment" spellcheck="true">// 如果过期时间设置错误则返回错误信息</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>expire<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">getLongLongFromObjectOrReply</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> expire<span class="token punctuation">,</span> <span class="token operator">&amp;</span>milliseconds<span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token operator">!=</span> C_OK<span class="token punctuation">)</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>milliseconds <span class="token operator">&lt;=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token function">addReplyErrorFormat</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span><span class="token string">"invalid expire time in %s"</span><span class="token punctuation">,</span>c<span class="token operator">-></span>cmd<span class="token operator">-></span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>unit <span class="token operator">==</span> UNIT_SECONDS<span class="token punctuation">)</span> milliseconds <span class="token operator">*</span><span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// lookupKeyWrite 函数是为执行写操作而取出 key 的值对象</span>
+    <span class="token comment" spellcheck="true">// 这里的判断条件是：</span>
+    <span class="token comment" spellcheck="true">// 1.如果设置了 NX(不存在)，并且在数据库中找到了 key 值</span>
+    <span class="token comment" spellcheck="true">// 2.或者设置了 XX(存在)，并且在数据库中没有找到该 key</span>
+    <span class="token comment" spellcheck="true">// => 那么回复 abort_reply 给客户端</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>flags <span class="token operator">&amp;</span> OBJ_SET_NX <span class="token operator">&amp;&amp;</span> <span class="token function">lookupKeyWrite</span><span class="token punctuation">(</span>c<span class="token operator">-></span>db<span class="token punctuation">,</span>key<span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token constant">NULL</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+        <span class="token punctuation">(</span>flags <span class="token operator">&amp;</span> OBJ_SET_XX <span class="token operator">&amp;&amp;</span> <span class="token function">lookupKeyWrite</span><span class="token punctuation">(</span>c<span class="token operator">-></span>db<span class="token punctuation">,</span>key<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">addReply</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> abort_reply <span class="token operator">?</span> abort_reply <span class="token punctuation">:</span> shared<span class="token punctuation">.</span>null<span class="token punctuation">[</span>c<span class="token operator">-></span>resp<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 在当前的数据库中设置键为 key 值为 value 的数据</span>
+    <span class="token function">genericSetKey</span><span class="token punctuation">(</span>c<span class="token operator">-></span>db<span class="token punctuation">,</span>key<span class="token punctuation">,</span>val<span class="token punctuation">,</span>flags <span class="token operator">&amp;</span> OBJ_SET_KEEPTTL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 服务器每修改一个 key 后都会修改 dirty 值</span>
+    server<span class="token punctuation">.</span>dirty<span class="token operator">++</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>expire<span class="token punctuation">)</span> <span class="token function">setExpire</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span>c<span class="token operator">-></span>db<span class="token punctuation">,</span>key<span class="token punctuation">,</span><span class="token function">mstime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span>milliseconds<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">notifyKeyspaceEvent</span><span class="token punctuation">(</span>NOTIFY_STRING<span class="token punctuation">,</span><span class="token string">"set"</span><span class="token punctuation">,</span>key<span class="token punctuation">,</span>c<span class="token operator">-></span>db<span class="token operator">-></span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>expire<span class="token punctuation">)</span> <span class="token function">notifyKeyspaceEvent</span><span class="token punctuation">(</span>NOTIFY_GENERIC<span class="token punctuation">,</span>
+        <span class="token string">"expire"</span><span class="token punctuation">,</span>key<span class="token punctuation">,</span>c<span class="token operator">-></span>db<span class="token operator">-></span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">addReply</span><span class="token punctuation">(</span>c<span class="token punctuation">,</span> ok_reply <span class="token operator">?</span> ok_reply <span class="token punctuation">:</span> shared<span class="token punctuation">.</span>ok<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>就像上面介绍的那样，其实在之前版本的 Redis 中，由于 <code>SETNX</code> 和 <code>EXPIRE</code> 并不是 <strong>原子指令</strong>，所以在一起执行会出现问题。</p>
+<p>也许你会想到使用 Redis 事务来解决，但在这里不行，因为 <code>EXPIRE</code> 命令依赖于 <code>SETNX</code> 的执行结果，而事务中没有 <code>if-else</code> 的分支逻辑，如果 <code>SETNX</code> 没有抢到锁，<code>EXPIRE</code> 就不应该执行。</p>
+<p>为了解决这个疑难问题，Redis 开源社区涌现了许多分布式锁的 library，为了治理这个乱象，后来在 Redis 2.8 的版本中，加入了 <code>SET</code> 指令的扩展参数，使得 <code>SETNX</code> 可以和 <code>EXPIRE</code> 指令一起执行了：</p>
+<pre class=" language-console"><code class="language-console">> SET lock:test true ex 5 nx
+OK
+... do something critical ...
+> del lock:test</code></pre>
+<p>你只需要符合 <code>SET key value [EX seconds | PX milliseconds] [NX | XX] [KEEPTTL]</code> 这样的格式就好了，你也在下方右拐参照官方的文档：</p>
+<ul>
+<li>官方文档：<a href="https://redis.io/commands/set" target="_blank" rel="noopener">https://redis.io/commands/set</a></li>
+</ul>
+<p>另外，官方文档也在 <a href="https://redis.io/commands/setnx" target="_blank" rel="noopener"><code>SETNX</code> 文档</a>中提到了这样一种思路：<strong>把 SETNX 对应 key 的 value 设置为 &lt;current Unix time + lock timeout + 1&gt;</strong>，这样在其他客户端访问时就能够自己判断是否能够获取下一个 value 为上述格式的锁了。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><p>下面用 Jedis 来模拟实现以下，关键代码如下：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String LOCK_SUCCESS <span class="token operator">=</span> <span class="token string">"OK"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> Long RELEASE_SUCCESS <span class="token operator">=</span> 1L<span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String SET_IF_NOT_EXIST <span class="token operator">=</span> <span class="token string">"NX"</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String SET_WITH_EXPIRE_TIME <span class="token operator">=</span> <span class="token string">"PX"</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> String <span class="token function">acquire</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 获取锁的超时时间，超过这个时间则放弃获取锁</span>
+        <span class="token keyword">long</span> end <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> acquireTimeout<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 随机生成一个 value</span>
+        String requireToken <span class="token operator">=</span> UUID<span class="token punctuation">.</span><span class="token function">randomUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> end<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            String result <span class="token operator">=</span> jedis
+                <span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>lockKey<span class="token punctuation">,</span> requireToken<span class="token punctuation">,</span> SET_IF_NOT_EXIST<span class="token punctuation">,</span> SET_WITH_EXPIRE_TIME<span class="token punctuation">,</span> expireTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>LOCK_SUCCESS<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> requireToken<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">interrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"acquire lock due to error"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">release</span><span class="token punctuation">(</span>String identify<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>identify <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    String script <span class="token operator">=</span> <span class="token string">"if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end"</span><span class="token punctuation">;</span>
+    Object result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        result <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">eval</span><span class="token punctuation">(</span>script<span class="token punctuation">,</span> Collections<span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span>lockKey<span class="token punctuation">)</span><span class="token punctuation">,</span>
+            Collections<span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span>identify<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>RELEASE_SUCCESS<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"release lock success, requestToken:{}"</span><span class="token punctuation">,</span> identify<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"release lock due to error"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">finally</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>jedis <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            jedis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"release lock failed, requestToken:{}, result:{}"</span><span class="token punctuation">,</span> identify<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li>引用自下方 <em>参考资料 3</em>，其中还有 RedLock 的实现和测试，有兴趣的童鞋可以戳一下</li>
+</ul>
+<h1 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h1><ol>
+<li>【官方文档】Distributed locks with Redis - <a href="https://redis.io/topics/distlock" target="_blank" rel="noopener">https://redis.io/topics/distlock</a></li>
+<li>Redis【入门】就这一篇! - <a href="https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/">https://www.wmyskxz.com/2018/05/31/redis-ru-men-jiu-zhe-yi-pian/</a></li>
+<li>Redission - Redis Java Client 源码 - <a href="https://github.com/redisson/redisson" target="_blank" rel="noopener">https://github.com/redisson/redisson</a></li>
+<li>手写一个 Jedis 以及 JedisPool - <a href="https://juejin.im/post/5e5101c46fb9a07cab3a953a" target="_blank" rel="noopener">https://juejin.im/post/5e5101c46fb9a07cab3a953a</a></li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>再有人问你分布式锁，这篇文章扔给他 - <a href="https://juejin.im/post/5bbb0d8df265da0abd3533a5#heading-0" target="_blank" rel="noopener">https://juejin.im/post/5bbb0d8df265da0abd3533a5#heading-0</a></li>
+<li>【官方文档】Distributed locks with Redis - <a href="https://redis.io/topics/distlock" target="_blank" rel="noopener">https://redis.io/topics/distlock</a></li>
+<li>【分布式缓存系列】Redis实现分布式锁的正确姿势 - <a href="https://www.cnblogs.com/zhili/p/redisdistributelock.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhili/p/redisdistributelock.html</a></li>
+<li>Redis源码剖析和注释（九）— 字符串命令的实现(t_string) - <a href="https://blog.csdn.net/men_wen/article/details/70325566" target="_blank" rel="noopener">https://blog.csdn.net/men_wen/article/details/70325566</a></li>
+<li>《Redis 深度历险》 - 钱文品/ 著</li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-fca34cfd601e7449.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2020/02/29/redis-2-tiao-yue-biao/">
       Redis(2)——跳跃表
     </a>
@@ -2420,407 +3124,6 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/11/25/dang-dai-de-ji-dian-bian-hua/">
-      当代的几点变化
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>喜欢的三观</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年11月25日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BD%93%E4%BB%A3%E7%9A%84%E5%87%A0%E7%82%B9%E5%8F%98%E5%8C%96/7896890-173ed64ec25a206a.png" alt=""></p>
-<blockquote>
-<p>前言：以下所有观点均摘录 or 改编自参考资料，纯属观点分享…<br>为获得良好的阅读体验，请访问原文地址：<a href="https://www.wmyskxz.com/2019/11/25/dang-dai-de-ji-dian-bian-hua/">传送门</a></p>
-</blockquote>
-<h1 id="一、当我们说「当代」时，我们在说什么"><a href="#一、当我们说「当代」时，我们在说什么" class="headerlink" title="一、当我们说「当代」时，我们在说什么"></a>一、当我们说「当代」时，我们在说什么</h1><hr>
-<ul>
-<li>引用自：「当代」越来越让人看不懂，我们帮你找到了观察它的 15 个新角度 | 100个生活大问题 - <a href="https://www.qdaily.com/articles/62748.html" target="_blank" rel="noopener">https://www.qdaily.com/articles/62748.html</a></li>
-</ul>
-<p>当代的意思似乎就是「目前所处的时代」，看上去是一个「早就存在于生活之中，无需费心理解」的词语，但如果稍稍在记忆里检索一下，你可能就会发现，在很长一段时间里，它其实是以「当代艺术」、「当代作家」这些相当严肃的面貌出现的，直到最近几年才开始进入我们的日常词库，而且内涵也变得有点不易形容：现在的「当代」，与其说是对一段时间的概括，不如说更接近于「真是一个纷繁复杂、一句两句解释不明白、说时迟那时快的时代」，换言之，「当代」其实也跟「硬核」「流量」一样成了一种<a href="http://www.qdaily.com/articles/59766.html" target="_blank" rel="noopener">景观</a>，一个带点<a href="http://www.qdaily.com/articles/59539.html" target="_blank" rel="noopener">调侃和解构</a>意味的 meme，<strong>它真正想说的其实是「喏，看这个世界，就是这样」。</strong></p>
-<p>好奇心研究所在 2018 年末的时候，曾经问过大家，「<a href="http://www.qdaily.com/mobs/2619.html" target="_blank" rel="noopener">今年有哪些小事让你有一个时代开始/结束的感觉？</a>」，得到最多赞同的回答包括「发现当红明星的年纪比自己还小」「再也不用带现金出门」「金庸先生去世」「开始习惯了视频会员付费制度」，它们刚好完整概括了人们对「当代」这个概念的几种典型印象：</p>
-<ul>
-<li><p>以全球化、<a href="http://www.qdaily.com/articles/23355.html" target="_blank" rel="noopener">碎片化</a>、<a href="http://www.qdaily.com/articles/54099.html" target="_blank" rel="noopener">城市化</a>等关键词为代表的生活方式（一个典型的例子就是咖啡厅、机场这种<a href="http://www.qdaily.com/articles/58362.html" target="_blank" rel="noopener">走遍全世界都长得差不多的「云空间」</a>）；</p>
-</li>
-<li><p>热爱科技、拥抱互联网却又震慑于科技的阴暗面、被手机和社交媒体所困的普通人；</p>
-</li>
-<li><p>以生动诠释各种小而又小的<a href="http://www.qdaily.com/articles/37103.html" target="_blank" rel="noopener">第一世界问题</a>为特色的时髦情绪（比如<a href="http://www.qdaily.com/articles/54106.html" target="_blank" rel="noopener">社恐</a>、<a href="http://www.qdaily.com/articles/54474.html" target="_blank" rel="noopener">FOMO</a>、<a href="http://www.qdaily.com/articles/59830.html" target="_blank" rel="noopener">坏消息疲劳</a>）；</p>
-</li>
-<li><p>以及，被名人、网红、商品、大公司所象征的「xx 时代」（共享时代、偶像时代、即时通讯时代，等等）。</p>
-</li>
-</ul>
-<p>这几个维度叠加在一起，共同组成了你眼前的美丽新世界，以及一种看不见摸不着、但总会令人若有所思的<strong>「时代感」</strong>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BD%93%E4%BB%A3%E7%9A%84%E5%87%A0%E7%82%B9%E5%8F%98%E5%8C%96/7896890-3930c1821211e92b.png" alt=""></p>
-<p>但是话说回来，这个被冠以买买买、杠精遍地、网红经济、信息焦虑……之名的当代，究竟特别在何处？存身其中的我们，顶着<a href="http://www.qdaily.com/articles/62492.html" target="_blank" rel="noopener">千禧一代、Z 世代、数字游牧民族、飘一代</a>的荣誉称号，真的已经气质迥异到值得被划分得这么细致吗？</p>
-<p><strong>不，我们提出这个问题，并不是想否定「当代」的特殊性。</strong>从嬉皮士到 rapper、从电视到手机、从报纸到 Instagram，一代有一代的流行、象征、号召力，变化当然也是实实在在产生了的。我们只是提醒你，每一代人掌握话语权的时候，都会习惯性关注并强调自己的特立独行，习惯性认为「最好的时代已经过去了」「那帮年轻人怎么这样」，以及「我们这代人过得太不容易了」。</p>
-<p>从这个角度来讲，所谓的「新时代」其实也有点像一台复读机，它跟上个时代的差距，可能没有我们想得那么大：当你看到那些表象（<a href="http://www.qdaily.com/articles/58139.html" target="_blank" rel="noopener">对传统怀有叛逆</a>、<a href="http://www.qdaily.com/articles/58944.html" target="_blank" rel="noopener">总是在追忆过去</a>、<a href="http://www.qdaily.com/articles/52610.html" target="_blank" rel="noopener">对司空见惯的事物感到疲劳</a>）时，如果考虑藏在背后的人类理智和情感，就知道在多数情况下，它们并没有多么时髦新奇，有时甚至是反复出现、<a href="http://www.qdaily.com/articles/29390.html" target="_blank" rel="noopener">普遍存在的永恒体验</a>。</p>
-<p>英国科幻作家道格拉斯·亚当斯曾经提出过一个<strong>「科技三定律」，「任何在我出生时已经有的科技，都是稀松平常的，是世界自然秩序的一部分；任何在我 15-35 岁之间诞生的科技，都将会是改变世界的革命性产物；任何在我 35 岁以后诞生的科技，都是违反自然秩序的异端」。</strong>这段话可以在一定程度上解释「xx 时代」的说法为什么越来越密集而且越来越不值钱：在少数情况下，时间碰巧可以被一些叫做「里程碑/导火索/纪念日」的东西明确隔断，<strong>但更多时候，「时代」不过是一种「我想找到一个词来概括自己目力所及的一切」的快捷方式，是信息给我们制造的一张网，让我们每每生出「身处其中与有荣焉」的感觉。</strong></p>
-<h1 id="二、「当代」的几点变化"><a href="#二、「当代」的几点变化" class="headerlink" title="二、「当代」的几点变化"></a>二、「当代」的几点变化</h1><hr>
-<h2 id="所面对任务复杂度的改变"><a href="#所面对任务复杂度的改变" class="headerlink" title="所面对任务复杂度的改变"></a>所面对任务复杂度的改变</h2><p><strong>过去的社会，每个人面对的是一个任务系统。</strong>题目已经出好了，每个人各凭本事去答题，靠分数。在学校，你得做老师出的题，在单位，你得干领导布置的活儿。那每个人的刹车就是各种各样的条条框框，原则规矩。</p>
-<p><strong>但是现在不一样了，现在一个学生毕业面对的，往往不是一个确定的任务，而是一个目标，一个“事”，具体怎么达到这个目标，做成这个“事”，每个人有自己的定义。</strong>甚至这件事，在每一个地方都不一样。看起来好像更自由，但其实对人的约束力更大。为啥？因为完成一个别人定义的任务，还有讨价还价的可能，还有优良中差的等级，一道题答对一半还能给分。但是如果做一个事，达到一个目标，差一点都不行。这是一个更好的人格塑造系统和刹车系统。</p>
-<p>现在，人一到社会上，不管是做一个销售、还是搞一项科研、还是主办一个活动、还是搞一个产品、或者干脆去创业，你发现没有？没有任何一件事是完全一样的，达成目标，都需要根据一时一地的条件，做各种各样的创新。</p>
-<p>举个例子，您一路学霸，大学中文系高材生毕业。但是又能怎样呢？一旦到工作单位，你会发现，并没有抽象的中文写作能力这个事，世界上没有那么多作文大赛。你遇到的，都是类似于给某某产品写个文案，给某某公众号写个文章，给领导的某次演讲做个ppt，这样的事。在所有这些“事”面前，你需要的远远不止写作能力，你需要调动各个方面的潜能，学习全新的东西，才能把事做成。<strong>而且还有一点，在做事这个环境里，没有谁有确定的优势。</strong>领导和老板，写公司的公众号文章，还真不见得就比刚毕业的大学生强。</p>
-<h2 id="学习方式的改变"><a href="#学习方式的改变" class="headerlink" title="学习方式的改变"></a>学习方式的改变</h2><p><strong>在过去的手抄时代，我们记忆力越好越牛；印刷时代，知道得越多越牛；但到了现在的信息时代，学得越快越牛。</strong></p>
-<p>过去你要说自己有知识焦虑，社会已经给你准备了成熟的解决方案，说白了就是读书看报加上学。只要你勤于用功，肯于花钱，你的焦虑是能解决的。但是今天，这些解决方案本身就在出问题，为啥？因为社会的底层因素正在发生重大变动。</p>
-<ul>
-<li><strong>比如说，第一，人的时间在碎片化。</strong>现在我们不管在干什么，动不动就要去摸下手机，刷下微信什么的。当然，这赖不着人家微信，这是我们的社会协作关系极度复杂化的结果，我们有太多的事情要同步运行、分头照料，所以我们拿不出整块时间了。读书上学这种事可是要花整块时间的。一本书20万字，你怎么也得读个三四天吧？上个学几年，最短的短训班也得好几天吧？你越来越花不起这个时间。</li>
-<li><strong>第二，学习越来越是一个终身化的事情。</strong>过去有一个词叫“学业有成”。大学毕业基本上算学业有成吧，你要是留学回来我们叫“学成归国”。但是今天有学成这件事情吗？永远也成不了，新的知识像海浪一般涌来，你一辈子都要奋力前行，永远成不了。但是 20 多岁你就大学毕业了，整个社会没有为终身学习提供解决方案和服务，怎么办呢？</li>
-<li><strong>还有第三点，现在的学习越来越是跨界化的。</strong>这件事情要是几百年前，一点儿都不新鲜，那个时候的学者觉得自己上通天文，下晓地理，因为那个时候的知识总量少。可是，工业革命之后，人类的知识大爆炸，知识的负担太沉重。怎么办呢？两百年来我们找到了方法，叫分科治学。我们从中学的时候就文理分科，你学物理，他学化学，而且越分越细，分担人类的知识总量。每一个人都有一个知识的金字塔，你去往上爬吧，这辈子你爬一个塔就行了。但是今天，所有善于学习的人都明白一个道理，真正的创新的空间，恰恰在原来那些金字塔的中间地带。</li>
-</ul>
-<h2 id="对于退休认知的改变"><a href="#对于退休认知的改变" class="headerlink" title="对于退休认知的改变"></a>对于退休认知的改变</h2><p>这是正在发生的事情：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BD%93%E4%BB%A3%E7%9A%84%E5%87%A0%E7%82%B9%E5%8F%98%E5%8C%96/7896890-c6069f4a5ef36595.png" alt=""></p>
-<p>有一本书，叫《百岁人生》。这书就是提醒大家一件事，随着医疗技术的进步，我们这代人有很大概率能活到100多岁。您先别高兴，活得长虽然是好事，但是代价是什么呢？</p>
-<p><strong>最简单的一点，就是过去的三段式人生规划，没有用了。</strong></p>
-<p>所谓“三段式人生”，大概就是30岁之前，学习成家立业；30岁之后在社会和家庭中顶大梁；60岁之后退休回家，安度晚年等死。可是如果能活100岁，这个安排就出问题了。《百岁人生》里做了很多推导，比如人的伦理观会变化，过去相对不变的人是受尊重的，而未来敢于抛弃存量的人才是有道德的。再比如，人的婚姻选择会更加慎重，因为选一个人，要跟他在一起的时间实在太长了。还有，人的资产也会从金钱变成了信用和人脉，等等。</p>
-<p>过去，人受教育，掌握一门知识或者手艺，然后应用到退休问题不大。所以才有人提倡要干一行爱一行，进一个单位要忠诚于一个单位。</p>
-<p>可是你想过没有，现在产业迭代速度这么快，有的新兴行业从兴起到衰落，也许只有十几年的时间，你就是想为这个单位、这个行业奉献终生也做不到啊。我们如果能活100岁，一生要跨过的行业就可能有好几个。</p>
-<p><strong>所以我们必须有一种能力，就是不断扔掉存量，从零开始，创造一个新的生活阶段。</strong>60岁再去上个大学，65岁甚至70岁再去干一件全新的事，甚至创个业，未来这样的人会越来越常见。</p>
-<h2 id="对于感官的改变"><a href="#对于感官的改变" class="headerlink" title="对于感官的改变"></a>对于感官的改变</h2><ul>
-<li>以下摘录自《今日简史》P82</li>
-</ul>
-<p>人类有身体。在 20 世纪，科技让我们与身体的距离越来越远，逐渐失去了好好感受味觉和嗅觉的能力，一头扎进智能手机和计算机，对网络上发生的事比对大街上发生的事更感兴趣。今天，我要和在法国的姐姐说话比以前任何时候都容易，但要在早餐的时候和我的爱人说话却比较难，因为她总是不看着我，而是盯着智能手机。</p>
-<p>在远古时代，人类绝不可能如此的漫不经心。当时的采集者必须永远保持警觉、专心一意。走在森林里寻找蘑菇的时候，要注意地面是否有小小的凸起，还要注意草丛中是否发出了细微的声音，以免有蛇躲在那里。等到发现可食用的蘑菇，还要极其小心地试尝一下，以免吃到有毒的菌类。</p>
-<p><strong>但到了现代的富裕社会，人类不再需要如此敏锐的感官意识。</strong>我们可以边走在超市的走道里，一边发短信，一边在成百上千种食物中随意挑选。但不管我们挑了什么食物，最后都是坐在某个屏幕前一边狼吞虎咽，一边收着电子邮件或看着电视，全然不会注意食物究竟味道如何。</p>
-<p>扎克伯格说，脸谱网致力于“持续改进我们的工具，让人们能够分享自己的体验。”<strong>但我们真正需要的，可能是好好感受一下自己的体验。</strong>以”分享体验“为名，现代人对自己的理解常常从别人的观点出发，一发生什么有趣的事，脸谱网用户就会下意识地拿出智能手机，拍照、发帖、等着有人点赞。在这个过程中，他们几乎不会注意自己到底有何感受。事实上，他们的感受越来越来自网络上的响应。</p>
-<p><strong>人类一旦与身体、感官和真实环境越来越疏离，很可能就会感受孤单、迷失方向。</strong>很多权威评论人士把这种疏离感归咎于宗教和国家的凝聚力式微，但或许和你的身体失去联系才是最重要的原因。曾有几百年的时间，人类没有宗教，也没有国家，但还是过得开开心心，所以在 21 世纪应该也不成问题。然而一旦与身体失去联系，日子就肯定无法过得开心。只要你在自己的身体里感觉不自在，在这个世界上就不可能自在。</p>
-<p>就算到了今天，尽管我们可以在脸谱网上炫耀有许多好友，但是大多数人真正了解的人并不会超过 150 个。如果没有这些小团体的支持，人就会觉得寂寞，甚至被孤立。</p>
-<p><strong>于是，虽然整个地球连接得更加紧密，但每个人的生活却比过去更加孤独。</strong></p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><hr>
-<ol>
-<li>「当代」越来越让人看不懂，我们帮你找到了观察它的 15 个新角度 | 100个生活大问题 - <a href="https://www.qdaily.com/articles/62748.html" target="_blank" rel="noopener">https://www.qdaily.com/articles/62748.html</a></li>
-<li>《终身学习》 - 罗振宇</li>
-<li>逻辑思维系列课程摘选</li>
-<li>《洋葱阅读法》</li>
-<li>「Three Big Things: The Most Important Forces Shapiøng the World」 - <a href="https://www.collaborativefund.com/blog/three-big-things-the-most-important-forces-shaping-the-world/" target="_blank" rel="noopener">https://www.collaborativefund.com/blog/three-big-things-the-most-important-forces-shaping-the-world/</a></li>
-<li>《今日简史》</li>
-</ol>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2019/11/22/ying-jie-bi-ye-sheng-gong-zuo-7-ge-yue-xiao-jie/">
-      应届毕业生工作7个月小结
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>编程人生</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2019年11月22日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-4e217aba8a60dd32.png" alt=""></p>
-<blockquote>
-<p><strong>前言：</strong> 不知不觉已经工作了快 7 个月了，去年这个时候还跻身在考研的大军中，不禁有些感慨… 结合这 7 个月发生的一些事情，简单做一下总结吧…</p>
-<p>为获得更好的阅读体验，请访问原文地址：<a href="https://www.wmyskxz.com/2019/11/22/ying-jie-bi-ye-sheng-gong-zuo-7-ge-yue-xiao-jie/">传送门</a></p>
-</blockquote>
-<h1 id="一、那时候刚入职"><a href="#一、那时候刚入职" class="headerlink" title="一、那时候刚入职"></a>一、那时候刚入职</h1><hr>
-<p>不同于其他同学忙于毕设的 4 月，提早安排趁寒假已经完成毕设的我，已经开始扑在了「找工作」这件事上，有了去年「秋招」打下的基础，复习起来快了很多，没过多久就开始投简历面试了，面试也总体比较顺利，刚面没几家就迅速和一家自己看好的初创公司签下了。</p>
-<p>公司使用的技术栈区别于自己熟悉的 Java/ MySQL 这一套，而是主要使用的 Rails/ MongoDB，所以刚入职的一段时间，基本上都是在自己熟悉技术栈，也趁着闲暇的时间，把自己入门时候的一些学习心得写成了文章发表：</p>
-<ul>
-<li>MongoDB【快速入门】：<a href="http://www.wmyskxz.com/2019/04/25/mongodb-kuai-su-ru-men/">http://www.wmyskxz.com/2019/04/25/mongodb-kuai-su-ru-men/</a></li>
-<li>Java转Ruby【快速入门】：<a href="http://www.wmyskxz.com/2019/04/26/java-zhuan-ruby-kuai-su-ru-men/">http://www.wmyskxz.com/2019/04/26/java-zhuan-ruby-kuai-su-ru-men/</a></li>
-</ul>
-<p>对于职场小白来说，所谓「职场」还是显得有些陌生，刚来的时候，虽然跟周围的同事都稀松平常地打了一圈儿招呼，坐下之后，随着他们又埋头噼里啪啦敲打键盘工作的深入，又顿觉周围一片陌生，还挺奇妙的，在第一周完的周报里面我写道：</p>
-<blockquote>
-<p>刚来公司有些迷茫，只是看着CheckList对照着熟悉一些技术，也不了解自己应该要熟悉到哪种程度，就希望自己能再主动些，不管是技术问题还是其他问题多请教，然后尽快跟其他成员熟悉起来。</p>
-</blockquote>
-<p>刚开始上手的时候也有好多问题不懂，我都习惯性的选择自己研究一阵儿，因为自己有写博客的一些经历，被问过好多一搜索 or 自己一尝试就能解决的问题，所以比较克制，但是后来「入职 1v1」沟通的时候被说到有问题别自己死磕，半个小时没解决尽量就找一下旁边的同事。摁？我一下子就把我的「主动性」发挥了出来。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-323074f1f9b9b432.png" alt=""></p>
-<p>不过好记性也不如烂笔头，找了一些工具记录把这些「问题的答案」都记录了下来，方便之后再查找，当时对于 Git 都不是很熟悉，也记录了很多常用的命令在里面，还有一些问题的反馈，甚至知道了月会要自我介绍，也打了一遍草稿记录在了这里：（那段时间真的问了好多问题，周报里也手动感谢了坐我旁边的两位大佬..）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-8fe846266e1dfb55.png" alt=""></p>
-<p>入职两周的时候，虽然已经开始上手做一些简单的埋点工作，但自己对于 Ruby 还是不是特别了解和熟悉，趁着某一个双休，抓着一本《Effetive-Ruby》啃了两天，也把自己的学习输出了一下：</p>
-<ul>
-<li>《Effective-Ruby》读书笔记：<a href="http://www.wmyskxz.com/2019/05/12/effective-ruby-du-shu-bi-ji/">http://www.wmyskxz.com/2019/05/12/effective-ruby-du-shu-bi-ji/</a></li>
-</ul>
-<h1 id="二、逐渐能够上手"><a href="#二、逐渐能够上手" class="headerlink" title="二、逐渐能够上手"></a>二、逐渐能够上手</h1><hr>
-<p>就这样一边熟悉，一边开始接一些小需求，我记得我写下的第一个 BUG，就报出了 6K 条记录.. 慌慌张张在修复之后我不禁感叹：<strong>「不要太相信用户的任何数据」。</strong>（包括 <code>equal</code> 反写也是之后在错误之中学习到的..） </p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-dd1227353fdebef2.png" alt=""></p>
-<p>刚上手没有一段时间，就接到了一个新项目的需求，跟着一位大佬开发一个新功能，大佬负责搭建基础代码和设计，我负责完成其余的功能代码，没敢一丝懈怠，下班回家之后也对照着别人写的代码敲敲敲，时间和完成度上倒是没有一丝耽搁，只是现在回过头一想，当时没有什么单元测试的概念和意识，就自己在本地 Post-Man 测试完就完，所幸比较简单 + 自己测试得比较仔细，到现在也没有出现过什么问题。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-f775b7d28d018717.png" alt=""></p>
-<p>工作对我这样的小白另一个好处就是：<strong>「见识和增加技术的广度」</strong>。公司所使用技术栈不论是广度还是深度，都是自己在大学本科的学习中不可企及的程度，Jekins？Docker？K8S？跳板机？一下子冒出来好多新鲜陌生的名词，怀着好奇心也尝试了解了一些：</p>
-<ul>
-<li>了解【Docker】从这里开始：<a href="http://www.wmyskxz.com/2019/05/29/liao-jie-docker-cong-zhe-li-kai-shi/">http://www.wmyskxz.com/2019/05/29/liao-jie-docker-cong-zhe-li-kai-shi/</a></li>
-<li>「消息队列」看过来！：<a href="http://www.wmyskxz.com/2019/07/16/xiao-xi-dui-lie-kan-guo-lai/">http://www.wmyskxz.com/2019/07/16/xiao-xi-dui-lie-kan-guo-lai/</a></li>
-<li>Kafka【入门】就这一篇！：<a href="http://www.wmyskxz.com/2019/07/17/kafka-ru-men-jiu-zhe-yi-pian/">http://www.wmyskxz.com/2019/07/17/kafka-ru-men-jiu-zhe-yi-pian/</a></li>
-</ul>
-<p>也随着公司的逐渐壮大，各模块的耦合也越发严重，各条业务线之间的协作沟通成本越来越大，逐渐开始提出「微服务」这样的概念，具体怎么样理解就不作讨论了，总之就是期望通过梳理/ 重构/ 拆服务的方式来解决「协作」问题，所以期间也开始了解学习一些这方面的东西：</p>
-<ul>
-<li>什么是微服务？：<a href="http://www.wmyskxz.com/2019/06/07/shi-me-shi-wei-fu-wu/">http://www.wmyskxz.com/2019/06/07/shi-me-shi-wei-fu-wu/</a></li>
-<li>《重构：改善既有代码的设计》读书笔记：<a href="http://www.wmyskxz.com/2019/06/08/chong-gou-gai-shan-ji-you-dai-ma-de-she-ji-du-shu-bi-ji/">http://www.wmyskxz.com/2019/06/08/chong-gou-gai-shan-ji-you-dai-ma-de-she-ji-du-shu-bi-ji/</a></li>
-</ul>
-<p>甚至期间还做了一些「微服务」的调研，我们选用什么样的姿势和技术栈更加合适，所以也输出了一些关于「Spring Cloud」的东西，但是最终驳回的原因是待我们整个容器化之后 k8s 平台自带了这么一套东西，业务同学只需要关心业务代码就行了，也就没有继续深入了：</p>
-<ul>
-<li>你想了解的「Spring Cloud」都在这里：<a href="http://www.wmyskxz.com/2019/06/09/ni-xiang-liao-jie-de-springcloud-du-zai-zhe-li/">http://www.wmyskxz.com/2019/06/09/ni-xiang-liao-jie-de-springcloud-du-zai-zhe-li/</a></li>
-</ul>
-<p>然后我们在拆解的过程中，也借鉴到一些「DDD」的思想，也尝试进行了一波学习：</p>
-<ul>
-<li>【吐血推荐】领域驱动设计学习输出：<a href="http://www.wmyskxz.com/2019/06/13/tu-xie-tui-jian-ling-yu-qu-dong-she-ji-xue-xi-shu-chu/">http://www.wmyskxz.com/2019/06/13/tu-xie-tui-jian-ling-yu-qu-dong-she-ji-xue-xi-shu-chu/</a></li>
-</ul>
-<p>总之，这一段时间我一边通过各种小需求，接触和了解了公司的系统的大半，一边学习和了解着各种不同的技术，增加了技术上的广度。</p>
-<h1 id="三、开始负责一些项目"><a href="#三、开始负责一些项目" class="headerlink" title="三、开始负责一些项目"></a>三、开始负责一些项目</h1><hr>
-<p>为了加速服务化的推进工作和验证「DDD」的一些东西，部门老大把一个边界足够清晰，也足够小的一个模块单独交给我，期望我快速上线，不过最终交付已经逾期快大半个月了.. 虽然从最终的结果来看，顺利交付完成了拆解任务并从 MongoDB 数据库转变成了 MySQL.. 但期间也踩过好些坑，当然也学习到一些东西..</p>
-<p><strong>例如我真实地意识到「完美」这个词的理想化。</strong>就拿设计 API 来说吧.. 自己就基于 RESTful 风格设计了好几版.. 左想右想都觉得差一些，有一些接口觉得怎么设计都不优雅.. 后来纠结一阵子也就放弃了.. 再例如写代码这件事情吧，好的代码整洁的代码是一次一次迭代和重构中出来的，如果一开始就想着写出「完美」的代码，那么最终的结果可能就是写不出来代码。</p>
-<p>另外一个小插曲是，在做数据迁移的时候，我差点把线上服务器搞挂了.. 我在测试环境验证了一把之后，就直接在线上进行操作了，因为当时对于数据库的操作管控还没有那么严格，加上自己对于线上环境的复杂程度认识不足，我就起了 50 个线程，去分批量地读取 MongoDB 的数据迁移到 MySQL，造成了线上库的性能报警，就赶紧停了.. 紧接着就被一群大佬抓进了一个会议室做事件的复盘.. </p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-f4d0bcea50dfa737.png" alt=""></p>
-<p>说实话，我紧张坏了，第一次经历这样的算是「事故」的情况吧，差一点线上就被我搞挂啦，一时间不知所措… 让人感到温暖的是部门老大随即丢来的消息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-9aac5e24c498f15d.png" alt=""></p>
-<p>那天还有一些相关的同事都陪我写复盘邮件到了晚上 10：30，现在想来都十分感谢他们。后来回到家我还打电话给我妈，我说我在工作中犯错了，我做了xxxx这些动作，你觉得我做的怎么样呢，老妈的回复也让人安心，只是现在想来，一些后续的动作可以做得更好的…</p>
-<p>因为「埋点」这件事涉及到系统的方方面面，我也借此了解了很多不同的模块，也是拜这一点所赐吧，后来我被派到各种各样的支援任务中，同样也因为对不同模块都还不算陌生，都还算完成得不错吧…</p>
-<p>时间一晃，在公司就四个月过去了，也在这个过程中从各个大佬那儿都学到了一些东西，在 8 月底发的周报里面我写下了以下的总结：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-ab68fd93f69e0e5e.png" alt=""></p>
-<p>之后也跟着大佬碰了一些公司的核心模块，期间也没有停止在工作中不断地做学习输出：</p>
-<ul>
-<li>Git 原理入门解析：<a href="http://www.wmyskxz.com/2019/08/16/git-yuan-li-ru-men-jian-xi/">http://www.wmyskxz.com/2019/08/16/git-yuan-li-ru-men-jian-xi/</a></li>
-<li>Java计时新姿势√：<a href="http://www.wmyskxz.com/2019/07/30/java-ji-shi-xin-zi-shi/">http://www.wmyskxz.com/2019/07/30/java-ji-shi-xin-zi-shi/</a></li>
-<li>Java8流操作-基本使用&amp;性能测试：<a href="http://www.wmyskxz.com/2019/08/03/java8-liu-cao-zuo-ji-ben-shi-yong-xing-neng-ce-shi/">http://www.wmyskxz.com/2019/08/03/java8-liu-cao-zuo-ji-ben-shi-yong-xing-neng-ce-shi/</a></li>
-<li>《代码整洁之道》读书笔记：<a href="http://www.wmyskxz.com/2019/09/14/dai-ma-zheng-ji-zhi-dao-du-shu-bi-ji/">http://www.wmyskxz.com/2019/09/14/dai-ma-zheng-ji-zhi-dao-du-shu-bi-ji/</a></li>
-<li>React 入门学习：<a href="http://www.wmyskxz.com/2019/10/15/react-ru-men-xue-xi/">http://www.wmyskxz.com/2019/10/15/react-ru-men-xue-xi/</a></li>
-<li>谈一谈依赖倒置原则：<a href="http://www.wmyskxz.com/2019/11/18/tan-yi-tan-yi-lai-dao-zhi-yuan-ze/">http://www.wmyskxz.com/2019/11/18/tan-yi-tan-yi-lai-dao-zhi-yuan-ze/</a></li>
-</ul>
-<h1 id="四、回顾做的不好的部分"><a href="#四、回顾做的不好的部分" class="headerlink" title="四、回顾做的不好的部分"></a>四、回顾做的不好的部分</h1><hr>
-<ul>
-<li><strong>对代码还没有保持足够的敬畏之心。</strong></li>
-</ul>
-<p>特别是一开始上手的时候，有时候甚至是在线上环境搞测试，后来越来越<strong>注重 codereview 和单元测试好了很多。</strong></p>
-<ul>
-<li><strong>沟通还不够深入/ 到位</strong></li>
-</ul>
-<p>有一次是临时接到一个需求，因为「通用语言」没有达成一致，导致最终交付的结果不符合产品的期望，最终我们所有相关人员在一起开了一个会，统一了「通用语言」，造成了额外的工作和负担，<strong>拿到需求就应该确认好相关事宜的，越底层越细节越好，</strong>这方面的能力我仍然欠缺，但我已经持续在注意当中。</p>
-<p>另一次也是因为这一点，我需要帮助 A 系统拥有某一项功能，之前 A 系统已经介入了 B 系统完成了部分功能，我因为没有进一步地确认 B 系统的现状，就去接入了有完整功能的 C 系统，但其实 B 系统已经在上一周和开发 C 系统和 A 系统的同学对接好了，并完成了相关功能的接入，少了这一部分的沟通，就造成了不少额外的工作量.. 所以「沟通」还是非常重要的，也只能说持续进步吧…</p>
-<ul>
-<li><strong>缺少一些主动性</strong></li>
-</ul>
-<p>当我头上挂着一些事情的时候，还是能够保持着效率的，只是当我做完了，就时常缺乏一些主动地思考了，通常都是被动地去询问同小组的同事有什么事情是需要帮忙的.. 虽然也积极地参与到自己感兴趣的那些技术评审之类的事情之中，但似乎效果都不佳.. 也没有什么实际好的输出..</p>
-<ul>
-<li><strong>接了一些私活儿黑活儿（没有充分考虑团队之间的配合）</strong></li>
-</ul>
-<p>因为「埋点」会接触各个平台的童鞋，并且时常变化和有一些新的需求，有时候直接绕过了一些环节，直接找上我了，我心想直接自己弄弄改改就可以了，也就没多想… 但是现在想来，这样跨团队的事情，不能越过「顶头上司」私自进行，一方面经常我的 BOSS 不知道我接了活儿，另一方面这样的私自对接就会造成一些信息的流失，对于团队之内还是团队之间都会造成影响…</p>
-<h1 id="五、回顾做得好的部分"><a href="#五、回顾做得好的部分" class="headerlink" title="五、回顾做得好的部分"></a>五、回顾做得好的部分</h1><hr>
-<ul>
-<li><strong>养成了阅读的习惯</strong></li>
-</ul>
-<p>公司买书是免费的，也有自己的图书馆，同事也不乏喜欢阅读学习的，所以跟着跟着就养成了阅读的习惯，期间也学习到了一些方法论的东西，贴一下入职以来读过的那些书吧：（技术类的就没有囊括了）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-636a63e06a04b224.png" alt=""></p>
-<p>其实每天阅读的时间也不长，想我大学总共捧起的那么些课外书，不禁有些唏嘘…</p>
-<ul>
-<li><strong>早睡早起 + 晨间日记</strong></li>
-</ul>
-<p>早睡早起，从步入职场以来，就发现这样的习惯会带来一些额外的价值，例如一些阅读我会放在早上，后来还加入了「晨间日记」，用来「回顾前一天的事情」和提前部署「今天的任务」，这不禁让我多了一份清醒，也让现在不怎么锻炼的我每一天精力更加好一些：（目前正在从印象笔记往 Notion 逐步迁移的过程中）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-fceb227f302f513d.png" alt=""></p>
-<ul>
-<li><strong>学习撰写 Commit Message &amp;&amp; 遵守一些 Git 规范</strong></li>
-</ul>
-<p>起初使用 Git 十分不规范，后来向大佬那儿学习到了如何标准地提交 Commit，包括 Commit Message 应该怎么写，我觉得这是一个很好的习惯，每一个 Commit 都有上下文，并且还带上了 JIRA 号，任务也很好跟踪，虽然公司并没有大范围地盛行起来，但我觉得这样好习惯应该坚持下来：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E5%BA%94%E5%B1%8A%E6%AF%95%E4%B8%9A%E7%94%9F%E5%B7%A5%E4%BD%9C7%E4%B8%AA%E6%9C%88%E5%B0%8F%E7%BB%93/7896890-d1ac8ffb0a411847.png" alt=""></p>
-<ul>
-<li><strong>任务进度及时反馈给相关人员</strong></li>
-</ul>
-<p>自己比较注意这一点，因为不这样做会让别人感受不怎么好.. 光是自己心里清楚是不行的.. 要保持信息的通畅才行，及时反馈是很重要的一步.. </p>
-<ul>
-<li><strong>自己先 review 一遍代码</strong></li>
-</ul>
-<p>犯过一些白痴错误之后，就有些担心，逐步养成了自己先 review 一遍代码的习惯..</p>
-<h1 id="六、小结-amp-amp-展望"><a href="#六、小结-amp-amp-展望" class="headerlink" title="六、小结 &amp;&amp; 展望"></a>六、小结 &amp;&amp; 展望</h1><hr>
-<p>总的来说，看着自己这样一步一步成长过来，没有很懈怠，自己就算比较满意了，在工作中学习了很多东西，不管是技术上的硬技能，还是沟通中的软技能，也认识到了很多厉害的大佬和有趣的小伙伴们.. </p>
-<p>感恩在路上相遇，有幸共同行走过一段已然算是幸运，突然翻看起自己的朋友圈有一句话说得好：<strong>「成长从来都不是告别过去，成长是更加坚定的看向未来！」</strong></p>
-<p>期待一路同行的大家，都能够 <strong>Be Better！</strong></p>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>独立域名博客：wmyskxz.com<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -2835,7 +3138,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           </a>
         
         <p class="current">
-          6 / 20
+          6 / 21
         </p>
         
           <a class="next" rel="next" href="/tags/%E5%8E%9F%E5%88%9B/page/7/">
@@ -3173,7 +3476,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(5)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -3227,7 +3530,7 @@ Thread-1 线程是 Thread-0, session info.</code></pre><h3 id="内存泄漏"><a 
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.86px; color: #868686">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.67px; color: #878787">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.33px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.67px; color: #5e5e5e">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 22px; color: #636363">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.67px; color: #6c6c6c">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.33px; color: #909090">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20px; color: #707070">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.67px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.67px; color: #878787">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.33px; color: #828282">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.33px; color: #828282">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.33px; color: #676767">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.67px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.33px; color: #909090">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16px; color: #8b8b8b">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.67px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.33px; color: #909090">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.33px; color: #828282">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.67px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.67px; color: #797979">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.67px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16px; color: #8b8b8b">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 18px; color: #7e7e7e">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.67px; color: #878787">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.33px; color: #676767">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.33px; color: #757575">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

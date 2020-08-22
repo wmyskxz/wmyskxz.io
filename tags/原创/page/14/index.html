@@ -436,6 +436,1174 @@
         
           
   <h2 class="title">
+    <a href="/2018/05/21/java-mian-shi-zhi-shi-dian-jie-xi-liu-shu-ju-ku-pian/">
+      Java面试知识点解析(六)——数据库篇
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E9%9D%A2%E8%AF%95/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>面试</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年5月21日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-958b6a30c60032e8.png" alt=""></p>
+<blockquote>
+<ul>
+<li>前言： </li>
+</ul>
+</blockquote>
+<p>在遨游了一番 Java Web 的世界之后，发现了自己的一些缺失，所以就着一篇深度好文：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">知名互联网公司校招 Java 开发岗面试知识点解析</a> ，来好好的对 Java 知识点进行复习和学习一番，大部分内容参照自这一篇文章，有一些自己补充的，也算是重新学习一下 Java 吧。</p>
+<p>前序文章链接：</p>
+<p><a href="https://www.jianshu.com/p/883260941da8" target="_blank" rel="noopener">Java 面试知识点解析(一)——基础知识篇</a></p>
+<p><a href="https://www.jianshu.com/p/7382c0a843ff" target="_blank" rel="noopener">Java 面试知识点解析(二)——高并发编程篇</a></p>
+<p><a href="https://www.jianshu.com/p/bfb876565a1e" target="_blank" rel="noopener">Java 面试知识点解析(三)——JVM篇</a></p>
+<p><a href="https://www.jianshu.com/p/9c50729464b5" target="_blank" rel="noopener">Java 面试知识点解析(四)——版本特性篇</a></p>
+<p><a href="https://www.jianshu.com/p/210f85108c52" target="_blank" rel="noopener">Java 面试知识点解析(五)——网络协议篇</a></p>
+<hr>
+<blockquote>
+<p>前排引用说明及好文推荐：<a href="https://blog.csdn.net/justloveyou_/article/details/78308460" target="_blank" rel="noopener">面试/笔试第三弹 —— 数据库面试问题集锦</a>、<a href="https://segmentfault.com/a/1190000013517914" target="_blank" rel="noopener">数据库常见面试题(开发者篇)</a></p>
+</blockquote>
+<h3 id="1）什么是存储过程？有哪些优缺点？"><a href="#1）什么是存储过程？有哪些优缺点？" class="headerlink" title="1）什么是存储过程？有哪些优缺点？"></a>1）什么是存储过程？有哪些优缺点？</h3><p><strong>存储过程就像是编程语言中的函数一样，封装了我们的代码（PLSQL，T-SQL）</strong></p>
+<p>例如：</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">-------------创建名为GetUserAccount的存储过程----------------</span>
+<span class="token keyword">create</span> <span class="token keyword">Procedure</span> GetUserAccount
+<span class="token keyword">as</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> UserAccount
+go
+
+<span class="token comment" spellcheck="true">-------------执行上面的存储过程----------------</span>
+<span class="token keyword">exec</span> GetUserAccount</code></pre>
+<p>存储过程的优点：</p>
+<ul>
+<li><strong>能够将代码封装起来</strong></li>
+<li><strong>保存在数据库之中</strong></li>
+<li><strong>让编程语言进行调用</strong></li>
+<li><strong>存储过程是一个预编译的代码块，执行效率比较高</strong></li>
+<li><strong>一个存储过程替代大量T_SQL语句 ，可以降低网络通信量，提高通信速率</strong></li>
+</ul>
+<p>存储过程的缺点：</p>
+<ul>
+<li><strong>每个数据库的存储过程语法几乎都不一样，十分难以维护（不通用）</strong></li>
+<li><strong>业务逻辑放在数据库上，难以迭代</strong></li>
+</ul>
+<hr>
+<h3 id="2）三大范式"><a href="#2）三大范式" class="headerlink" title="2）三大范式"></a>2）三大范式</h3><blockquote>
+<ul>
+<li>思考这样的一个例子：</li>
+</ul>
+</blockquote>
+<p>我们现在需要建立一个描述学校教务的数据库，该数据库涉及的对象包括学生的学号（Sno）、所在系（Sdept）、系主任姓名（Mname）、课程号（Cno）和成绩（Grade），假设我们使用单一的关系模式 Student 来表示，那么根据现实世界已知的信息，会描述成以下这个样子：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-344feccbb3cb1fad.png" alt=""></p>
+<p>但是，这个关系模式存在以下问题：</p>
+<p><strong>（1） 数据冗余</strong><br>比如，每一个系的系主任姓名重复出现，重复次数与该系所有学生的所有课程成绩出现次数相同，这将浪费大量的存储空间。<br><strong>（2）更新异常（update anomalies）</strong><br>由于数据冗余，当更新数据库中的数据时，系统要付出很大的代价来维护数据库的完整性，否则会面临数据不一致的危险。比如，某系更换系主任后，必须修改与该系学生有关的每一个元组。<br><strong>（3）插入异常（insertion anomalies）</strong><br>如果一个系刚成立，尚无学生，则无法把这个系及其系主任的信息存入数据库。<br><strong>（4）删除异常（deletion anomalies）</strong><br>如果某个系的学生全部毕业了，则在删除该系学生信息的同时，这个系及其系主任的信息也丢失了。</p>
+<ul>
+<li><strong>总结：</strong> 所以，我们在设计数据库的时候，就需要满足一定的规范要求，而满足不同程度要求的就是不同的范式。</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>第一范式：</strong> 列不可分</li>
+</ul>
+</blockquote>
+<p>1NF（第一范式）是对属性具有<strong>原子性</strong>的要求，不可再分，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-7a54e7d5d8fbf659.png" alt=""></p>
+<p>如果认为最后一列还可以再分成出生年，出生月，出生日，则它就不满足第一范式的要求。</p>
+<blockquote>
+<ul>
+<li><strong>第二范式：</strong> 消除非主属性对码的部分函数依赖</li>
+</ul>
+</blockquote>
+<p>2NF（第二范式）是对记录有<strong>唯一性</strong>的要求，即实体的唯一性，不存在部分依赖，每一列与主键都相关，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-a10fdbaf10a7e6b8.png" alt=""></p>
+<p>该表明显说明了两个事物：学生信息和课程信息；正常的依赖应该是：学分依赖课程号，姓名依赖学号，但这里存在非主键字段对码的部分依赖，即与主键不相关，不满足第二范式的要求。</p>
+<p><strong>可能存在的问题：</strong></p>
+<ul>
+<li><strong>数据冗余</strong>：每条记录都含有相同信息；</li>
+<li><strong>删除异常</strong>：删除所有学生成绩，就把课程信息全删除了；</li>
+<li><strong>插入异常</strong>：学生未选课，无法记录进数据库；</li>
+<li><strong>更新异常</strong>：调整课程学分，所有行都调整。</li>
+</ul>
+<p><strong>正确的做法：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-fba36ca283ffd5fc.png" alt=""></p>
+<blockquote>
+<ul>
+<li><strong>第三范式：</strong> 消除非主属性对码的传递函数依赖</li>
+</ul>
+</blockquote>
+<p>3NF（第三范式）对字段有<strong>冗余性</strong>的要求，任何字段不能由其他字段派生出来，它要求字段没有冗余，即不存在依赖传递，例如：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-8d7548eb839bc8db.png" alt=""></p>
+<p>很明显，学院电话是一个冗余字段，因为存在依赖传递：（学号）→（学生）→（学院）→（学院电话）</p>
+<p><strong>可能会存在的问题：</strong></p>
+<ul>
+<li><strong>数据冗余</strong>：有重复值；</li>
+<li><strong>更新异常</strong>：有重复的冗余信息，修改时需要同时修改多条记录，否则会出现数据不一致的情况 。</li>
+</ul>
+<p><strong>正确的做法：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-83c0288ea9150976.png" alt=""></p>
+<hr>
+<h3 id="3）数据库索引"><a href="#3）数据库索引" class="headerlink" title="3）数据库索引"></a>3）数据库索引</h3><blockquote>
+<ul>
+<li>什么是索引？</li>
+</ul>
+</blockquote>
+<p><strong>索引是对数据库表中一个或多个列的值进行排序的数据结构，以协助快速查询、更新数据库表中数据。</strong></p>
+<p>你也可以这样理解：索引就是加快检索表中数据的方法。数据库的索引类似于书籍的索引。在书籍中，索引允许用户不必翻阅完整个书就能迅速地找到所需要的信息。在数据库中，索引也允许数据库程序迅速地找到表中的数据，而不必扫描整个数据库。 </p>
+<blockquote>
+<ul>
+<li>底层数据结构是什么，为什么使用这种数据结构？</li>
+</ul>
+</blockquote>
+<p><strong>（1）底层数据结构是B+树：</strong><br>在数据结构中，我们最为常见的搜索结构就是二叉搜索树和AVL树(高度平衡的二叉搜索树，为了提高二叉搜索树的效率，减少树的平均搜索长度)了。然而，无论二叉搜索树还是AVL树，当数据量比较大时，都会由于树的深度过大而造成I/O读写过于频繁，进而导致查询效率低下，因此对于索引而言，多叉树结构成为不二选择。特别地，B-Tree的各种操作能使B树保持较低的高度，从而保证高效的查找效率。</p>
+<p><strong>（2）使用B+树的原因：</strong><br>查找速度快、效率高，在查找的过程中，每次都能抛弃掉一部分节点，减少遍历个数。（此时，你应该在白纸上画出什么是B+树）</p>
+<blockquote>
+<ul>
+<li>索引的分类？</li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>唯一索引</strong>：唯一索引不允许两行具有相同的索引值</li>
+<li><strong>主键索引</strong>：为表定义一个主键将自动创建主键索引，主键索引是唯一索引的特殊类型。主键索引要求主键中的每个值是唯一的，并且不能为空</li>
+<li><strong>聚集索引(Clustered)</strong>：表中各行的物理顺序与键值的逻辑（索引）顺序相同，每个表只能有一个</li>
+<li><strong>非聚集索引(Non-clustered)</strong>：非聚集索引指定表的逻辑顺序。数据存储在一个位置，索引存储在另一个位置，索引中包含指向数据存储位置的指针。可以有多个，小于249个</li>
+</ul>
+<blockquote>
+<ul>
+<li>索引的优缺点？</li>
+</ul>
+</blockquote>
+<p><strong>（1）优点：</strong></p>
+<ul>
+<li><strong>大大加快数据的检索速度</strong>，这也是创建索引的最主要的原因；</li>
+<li>加速表和表之间的连接；</li>
+<li>在使用分组和排序子句进行数据检索时，同样可以显著减少查询中分组和排序的时间；</li>
+<li>通过创建唯一性索引，可以保证数据库表中每一行数据的唯一性；</li>
+</ul>
+<p><strong>（2）缺点：</strong></p>
+<ul>
+<li>时间方面：创建索引和维护索引要耗费时间，具体地，当对表中的数据进行增加、删除和修改的时候，索引也要动态的维护，这样就降低了数据的维护速度；</li>
+<li>空间方面：索引需要占物理空间。</li>
+</ul>
+<blockquote>
+<ul>
+<li>什么样的字段适合创建索引？</li>
+</ul>
+</blockquote>
+<ul>
+<li>经常作查询选择的字段</li>
+<li>经常作表连接的字段</li>
+<li>经常出现在order by, group by, distinct 后面的字段</li>
+</ul>
+<blockquote>
+<ul>
+<li>创建索引时需要注意什么？</li>
+</ul>
+</blockquote>
+<ul>
+<li><p><strong>非空字段</strong>：应该指定列为NOT NULL，除非你想存储NULL。在mysql中，含有空值的列很难进行查询优化，因为它们使得索引、索引的统计信息以及比较运算更加复杂。你应该用0、一个特殊的值或者一个空串代替空值；</p>
+</li>
+<li><p><strong>取值离散大的字段</strong>：（变量各个取值之间的差异程度）的列放到联合索引的前面，可以通过count()函数查看字段的差异值，返回值越大说明字段的唯一值越多字段的离散程度高；</p>
+</li>
+<li><p><strong>索引字段越小越好</strong>：数据库的数据存储以页为单位一页存储的数据越多一次IO操作获取的数据越大效率越高。</p>
+</li>
+</ul>
+<hr>
+<h3 id="4）听说过事务吗？（必考）"><a href="#4）听说过事务吗？（必考）" class="headerlink" title="4）听说过事务吗？（必考）"></a>4）听说过事务吗？（必考）</h3><p><strong>事务简单来说：一个 Session 中所进行所有的操作，要么同时成功，要么同时失败</strong>；作为单个逻辑工作单元执行的一系列操作，满足四大特性：</p>
+<ol>
+<li>原子性（Atomicity）：事务作为一个整体被执行 ，要么全部执行，要么全部不执行</li>
+<li>一致性（Consistency）：保证数据库状态从一个一致状态转变为另一个一致状态</li>
+<li>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行</li>
+<li>持久性（Durability）：一个事务一旦提交，对数据库的修改应该永久保存</li>
+</ol>
+<blockquote>
+<ul>
+<li>实例说明：</li>
+</ul>
+</blockquote>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/*
+ * 我们来模拟A向B账号转账的场景
+ *   A和B账户都有1000块，现在我让A账户向B账号转500块钱
+ *
+ **/</span>
+<span class="token comment" spellcheck="true">//JDBC默认的情况下是关闭事务的，下面我们看看关闭事务去操作转账操作有什么问题</span>
+
+<span class="token comment" spellcheck="true">//A账户减去500块</span>
+String sql <span class="token operator">=</span> <span class="token string">"UPDATE a SET money=money-500 "</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//B账户多了500块</span>
+String sql2 <span class="token operator">=</span> <span class="token string">"UPDATE b SET money=money+500"</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>从上面看，我们的确可以发现A向B转账，成功了。可是如果A向B转账的过程中出现了问题呢？下面模拟一下</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// A账户减去500块</span>
+String sql <span class="token operator">=</span> <span class="token string">"UPDATE a SET money=money-500 "</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// 这里模拟出现问题</span>
+<span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">3</span> <span class="token operator">/</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+String sql2 <span class="token operator">=</span> <span class="token string">"UPDATE b SET money=money+500"</span><span class="token punctuation">;</span>
+preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>显然，上面代码是会抛出异常的，我们再来查询一下数据。A账户少了500块钱，B账户的钱没有增加。这明显是不合理的。</p>
+<p>我们可以通过事务来解决上面出现的问题：</p>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">// 开启事务,对数据的操作就不会立即生效。</span>
+    connection<span class="token punctuation">.</span><span class="token function">setAutoCommit</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// A账户减去500块</span>
+    String sql <span class="token operator">=</span> <span class="token string">"UPDATE a SET money=money-500 "</span><span class="token punctuation">;</span>
+    preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 在转账过程中出现问题</span>
+    <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">3</span> <span class="token operator">/</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// B账户多500块</span>
+    String sql2 <span class="token operator">=</span> <span class="token string">"UPDATE b SET money=money+500"</span><span class="token punctuation">;</span>
+    preparedStatement <span class="token operator">=</span> connection<span class="token punctuation">.</span><span class="token function">prepareStatement</span><span class="token punctuation">(</span>sql2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    preparedStatement<span class="token punctuation">.</span><span class="token function">executeUpdate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 如果程序能执行到这里，没有抛出异常，我们就提交数据</span>
+    connection<span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 关闭事务【自动提交】</span>
+    connection<span class="token punctuation">.</span><span class="token function">setAutoCommit</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span> <span class="token keyword">catch</span><span class="token punctuation">(</span>SQLException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 如果出现了异常，就会进到这里来，我们就把事务回滚【将数据变成原来那样】</span>
+        connection<span class="token punctuation">.</span><span class="token function">rollback</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 关闭事务【自动提交】</span>
+        connection<span class="token punctuation">.</span><span class="token function">setAutoCommit</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">SQLException</span> e1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        e1<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>上面的程序也一样抛出了异常，A账户钱没有减少，B账户的钱也没有增加。</p>
+<ul>
+<li><strong>注意</strong>：当Connection遇到一个未处理的SQLException时，系统会非正常退出，事务也会自动回滚，但如果程序捕获到了异常，是需要在catch中显式回滚事务的。</li>
+</ul>
+<hr>
+<h3 id="5）事务的并发问题有哪几种？"><a href="#5）事务的并发问题有哪几种？" class="headerlink" title="5）事务的并发问题有哪几种？"></a>5）事务的并发问题有哪几种？</h3><ol>
+<li>丢失更新：一个事务的更新覆盖了另一个事务的更新；</li>
+<li>脏读：一个事务读取了另一个事务未提交的数据；</li>
+<li>不可重复读：不可重复读的重点是修改，同样条件下两次读取结果不同，也就是说，被读取的数据可以被其它事务修改；</li>
+<li>幻读：幻读的重点在于新增或者删除，同样条件下两次读出来的记录数不一样。</li>
+</ol>
+<hr>
+<h3 id="6）事务的隔离级别有哪几种？"><a href="#6）事务的隔离级别有哪几种？" class="headerlink" title="6）事务的隔离级别有哪几种？"></a>6）事务的隔离级别有哪几种？</h3><p>隔离级别决定了一个session中的事务可能对另一个session中的事务的影响。ANSI标准定义了4个隔离级别，MySQL的InnoDB都支持，分别是：</p>
+<ol>
+<li><p>读未提交（READ UNCOMMITTED）：最低级别的隔离，通常又称为dirty read，它允许一个事务读取另一个事务还没 commit 的数据，这样可能会提高性能，但是会导致脏读问题；</p>
+</li>
+<li><p>读已提交（READ COMMITTED）：在一个事务中只允许对其它事务已经 commit 的记录可见，该隔离级别不能避免不可重复读问题；</p>
+</li>
+<li><p>可重复读（REPEATABLE READ）：在一个事务开始后，其他事务对数据库的修改在本事务中不可见，直到本事务 commit 或 rollback。但是，其他事务的 insert/delete 操作对该事务是可见的，也就是说，该隔离级别并不能避免幻读问题。在一个事务中重复 select 的结果一样，除非本事务中 update 数据库。 </p>
+</li>
+<li><p>序列化（SERIALIZABLE）：最高级别的隔离，只允许事务串行执行。</p>
+</li>
+</ol>
+<p><strong>MySQL默认的隔离级别是可重复读（REPEATABLE READ）</strong></p>
+<blockquote>
+<ul>
+<li>MySql 的事务支持</li>
+</ul>
+</blockquote>
+<p>MySQL的事务支持不是绑定在MySQL服务器本身，而是与存储引擎相关：</p>
+<ul>
+<li>MyISAM：不支持事务，用于只读程序提高性能；</li>
+<li>InnoDB：支持ACID事务、行级锁、并发；</li>
+<li>Berkeley DB：支持事务。</li>
+</ul>
+<hr>
+<h3 id="7）什么是视图？以及视图的使用场景有哪些？"><a href="#7）什么是视图？以及视图的使用场景有哪些？" class="headerlink" title="7）什么是视图？以及视图的使用场景有哪些？"></a>7）什么是视图？以及视图的使用场景有哪些？</h3><p>视图是一种虚拟的表，具有和物理表相同的功能。可以对视图进行增，改，查，操作，试图通常是有一个表或者多个表的行或列的子集。对视图的修改不影响基本表。它使得我们获取数据更容易，相比多表查询。</p>
+<p>如下两种场景一般会使用到视图：</p>
+<ol>
+<li>不希望访问者获取整个表的信息，只暴露部分字段给访问者，所以就建一个虚表，就是视图。</li>
+<li>查询的数据来源于不同的表，而查询者希望以统一的方式查询，这样也可以建立一个视图，把多个表查询结果联合起来，查询者只需要直接从视图中获取数据，不必考虑数据来源于不同表所带来的差异。</li>
+</ol>
+<p><strong>注意</strong>：这个视图是在数据库中创建的 而不是用代码创建的。</p>
+<hr>
+<h3 id="8）drop-delete与truncate的区别？"><a href="#8）drop-delete与truncate的区别？" class="headerlink" title="8）drop,delete与truncate的区别？"></a>8）drop,delete与truncate的区别？</h3><p>drop 直接删除表；truncate 删除表中数据，再插入时自增长id又从1开始 ；delete 删除表中数据，可以加where字句。</p>
+<blockquote>
+<ul>
+<li><strong>drop table：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>属于DDL（Data Definition Language，数据库定义语言）</li>
+<li>不可回滚</li>
+<li>不可带 where</li>
+<li>表内容和结构删除</li>
+<li>删除速度快</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>truncate table：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>属于DDL（Data Definition Language，数据库定义语言）</li>
+<li>不可回滚</li>
+<li>不可带 where</li>
+<li>表内容删除</li>
+<li>删除速度快</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>delete from：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>属于DML</li>
+<li>可回滚</li>
+<li>可带where</li>
+<li>表结构在，表内容要看where执行的情况</li>
+<li>删除速度慢,需要逐行删除</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>使用简要说明：</strong></li>
+</ul>
+</blockquote>
+<ul>
+<li>不再需要一张表的时候，用drop</li>
+<li>想删除部分数据行时候，用delete，并且带上where子句</li>
+<li>保留表而删除所有数据的时候用truncate</li>
+</ul>
+<hr>
+<h3 id="9）触发器的作用？"><a href="#9）触发器的作用？" class="headerlink" title="9）触发器的作用？"></a>9）触发器的作用？</h3><p>触发器是与表相关的数据库对象，在满足定义条件时触发，并执行触发器中定义的语句集合。触发器的这种特性可以协助应用在数据库端确保数据库的完整性。</p>
+<hr>
+<h3 id="10）数据库的乐观锁和悲观锁是什么？"><a href="#10）数据库的乐观锁和悲观锁是什么？" class="headerlink" title="10）数据库的乐观锁和悲观锁是什么？"></a>10）数据库的乐观锁和悲观锁是什么？</h3><p>数据库管理系统（DBMS）中的并发控制的任务是确保在多个事务同时存取数据库中同一数据时不破坏事务的隔离性和统一性以及数据库的统一性。 </p>
+<p>乐观并发控制(乐观锁)和悲观并发控制（悲观锁）是并发控制主要采用的技术手段。</p>
+<blockquote>
+<ul>
+<li>悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作</li>
+</ul>
+</blockquote>
+<p>悲观锁是一种利用数据库内部机制提供的锁的方式，也就是对更新的数据加锁，这样在并发期间一旦有一个事务持有了数据库记录的锁，其他的线程将不能再对数据进行更新了，这就是悲观锁的实现方式。</p>
+<p><strong>MySQL InnoDB中使用悲观锁：</strong></p>
+<p>要使用悲观锁，我们必须关闭mysql数据库的自动提交属性，因为MySQL默认使用autocommit模式，也就是说，当你执行一个更新操作后，MySQL会立刻将结果进行提交。 set autocommit=0; </p>
+<pre class=" language-sql"><code class="language-sql"><span class="token comment" spellcheck="true">//0.开始事务</span>
+<span class="token keyword">begin</span><span class="token punctuation">;</span><span class="token operator">/</span><span class="token keyword">begin</span> <span class="token keyword">work</span><span class="token punctuation">;</span><span class="token operator">/</span><span class="token keyword">start</span> <span class="token keyword">transaction</span><span class="token punctuation">;</span> <span class="token punctuation">(</span>三者选一就可以<span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//1.查询出商品信息</span>
+<span class="token keyword">select</span> <span class="token keyword">status</span> <span class="token keyword">from</span> t_goods <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token number">1</span> <span class="token keyword">for</span> <span class="token keyword">update</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//2.根据商品信息生成订单</span>
+<span class="token keyword">insert</span> <span class="token keyword">into</span> t_orders <span class="token punctuation">(</span>id<span class="token punctuation">,</span>goods_id<span class="token punctuation">)</span> <span class="token keyword">values</span> <span class="token punctuation">(</span><span class="token boolean">null</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//3.修改商品status为2</span>
+<span class="token keyword">update</span> t_goods <span class="token keyword">set</span> <span class="token keyword">status</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//4.提交事务</span>
+<span class="token keyword">commit</span><span class="token punctuation">;</span><span class="token operator">/</span><span class="token keyword">commit</span> <span class="token keyword">work</span><span class="token punctuation">;</span></code></pre>
+<p>上面的查询语句中，我们使用了 <code>select…for update</code> 的方式，这样就通过开启排他锁的方式实现了悲观锁。此时在t_goods表中，id为1的 那条数据就被我们锁定了，其它的事务必须等本次事务提交之后才能执行。这样我们可以保证当前的数据不会被其它事务修改。</p>
+<p>上面我们提到，使用 <code>select…for update</code> 会把数据给锁住，不过我们需要注意一些锁的级别，MySQL InnoDB默认行级锁。行级锁都是基于索引的，如果一条SQL语句用不到索引是不会使用行级锁的，会使用表级锁把整张表锁住，这点需要注意。</p>
+<p><strong>优点与不足：</strong></p>
+<p>悲观并发控制实际上是“先取锁再访问”的保守策略，为数据处理的安全提供了保证。但是在效率方面，处理加锁的机制会让数据库产生额外的开销，还有增加产生死锁的机会；另外，在只读型事务处理中由于不会产生冲突，也没必要使用锁，这样做只能增加系统负载；还有会降低了并行性，一个事务如果锁定了某行数据，其他事务就必须等待该事务处理完才可以处理那行数</p>
+<blockquote>
+<ul>
+<li>乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。</li>
+</ul>
+</blockquote>
+<p>乐观锁是一种不会阻塞其他线程并发的控制，它不会使用数据库的锁进行实现，它的设计里面由于不阻塞其他线程，所以并不会引起线程频繁挂起和恢复，这样便能够提高并发能力，所以也有人把它称为非阻塞锁。一般的实现乐观锁的方式就是记录数据版本。</p>
+<p>数据版本,为数据增加的一个版本标识。当读取数据时，将版本标识的值一同读出，数据每更新一次，同时对版本标识进行更新。当我们提交更新的时候，判断数据库表对应记录的当前版本信息与第一次取出来的版本标识进行比对，如果数据库表当前版本号与第一次取出来的版本标识值相等，则予以更新，否则认为是过期数据。</p>
+<p>实现数据版本有两种方式，第一种是使用版本号，第二种是使用时间戳。</p>
+<p><strong>使用版本号实现乐观锁：</strong></p>
+<p>使用版本号时，可以在数据初始化时指定一个版本号，每次对数据的更新操作都对版本号执行+1操作。并判断当前版本号是不是该数据的最新的版本号。</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token number">1</span><span class="token punctuation">.</span>查询出商品信息
+<span class="token keyword">select</span> <span class="token punctuation">(</span><span class="token keyword">status</span><span class="token punctuation">,</span><span class="token keyword">status</span><span class="token punctuation">,</span>version<span class="token punctuation">)</span> <span class="token keyword">from</span> t_goods <span class="token keyword">where</span> id<span class="token operator">=</span><span class="token comment" spellcheck="true">#{id}</span>
+<span class="token number">2</span><span class="token punctuation">.</span>根据商品信息生成订单
+<span class="token number">3</span><span class="token punctuation">.</span>修改商品<span class="token keyword">status</span>为<span class="token number">2</span>
+<span class="token keyword">update</span> t_goods 
+<span class="token keyword">set</span> <span class="token keyword">status</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span>version<span class="token operator">=</span>version<span class="token operator">+</span><span class="token number">1</span>
+<span class="token keyword">where</span> id<span class="token operator">=</span><span class="token comment" spellcheck="true">#{id} and version=#{version};</span></code></pre>
+<p><strong>优点与不足：</strong></p>
+<p>乐观并发控制相信事务之间的数据竞争(data race)的概率是比较小的，因此尽可能直接做下去，直到提交的时候才去锁定，所以不会产生任何锁和死锁。但如果直接简单这么做，还是有可能会遇到不可预期的结果，例如两个事务都读取了数据库的某一行，经过修改以后写回数据库，这时就遇到了问题。</p>
+<blockquote>
+<p>参考文章：<a href="http://www.open-open.com/lib/view/open1452046967245.html" target="_blank" rel="noopener">深入理解乐观锁与悲观锁</a></p>
+</blockquote>
+<hr>
+<h3 id="11）超键、候选键、主键、外键分别是什么？"><a href="#11）超键、候选键、主键、外键分别是什么？" class="headerlink" title="11）超键、候选键、主键、外键分别是什么？"></a>11）超键、候选键、主键、外键分别是什么？</h3><ul>
+<li><p>超键：在关系中能唯一标识元组的属性集称为关系模式的超键。一个属性可以为作为一个超键，多个属性组合在一起也可以作为一个超键。超键包含候选键和主键。</p>
+</li>
+<li><p>候选键（候选码）：是最小超键，即没有冗余元素的超键。</p>
+</li>
+<li><p>主键（主码）：数据库表中对储存数据对象予以唯一和完整标识的数据列或属性的组合。一个数据列只能有一个主键，且主键的取值不能缺失，即不能为空值（Null）。</p>
+</li>
+<li><p>外键：在一个表中存在的另一个表的主键称此表的外键。</p>
+</li>
+</ul>
+<p><strong>候选码和主码：</strong></p>
+<p>例子：邮寄地址（城市名，街道名，邮政编码，单位名，收件人）</p>
+<ul>
+<li><strong>它有两个候选键:{城市名，街道名} 和 {街道名，邮政编码}</strong></li>
+<li><strong>如果我选取{城市名，街道名}作为唯一标识实体的属性，那么{城市名，街道名} 就是主码(主键)</strong></li>
+</ul>
+<hr>
+<h3 id="12）SQL-约束有哪几种？"><a href="#12）SQL-约束有哪几种？" class="headerlink" title="12）SQL 约束有哪几种？"></a>12）SQL 约束有哪几种？</h3><ul>
+<li>NOT NULL: 用于控制字段的内容一定不能为空（NULL）。</li>
+<li>UNIQUE: 控件字段内容不能重复，一个表允许有多个 Unique 约束。</li>
+<li>PRIMARY KEY: 也是用于控件字段内容不能重复，但它在一个表只允许出现一个。</li>
+<li>FOREIGN KEY: 用于预防破坏表之间连接的动作，也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。</li>
+<li>CHECK: 用于控制字段的值范围。</li>
+</ul>
+<hr>
+<h3 id="13）MySQL存储引擎中的MyISAM和InnoDB区别详解"><a href="#13）MySQL存储引擎中的MyISAM和InnoDB区别详解" class="headerlink" title="13）MySQL存储引擎中的MyISAM和InnoDB区别详解"></a>13）MySQL存储引擎中的MyISAM和InnoDB区别详解</h3><p>在MySQL 5.5之前，MyISAM是mysql的默认数据库引擎，其由早期的ISAM（Indexed Sequential Access Method：有索引的顺序访问方法）所改良。虽然MyISAM性能极佳，但却有一个显著的缺点： <strong>不支持事务处理</strong>。不过，MySQL也导入了另一种数据库引擎InnoDB，以强化参考完整性与并发违规处理机制，后来就逐渐取代MyISAM。</p>
+<p>InnoDB是MySQL的数据库引擎之一，其由Innobase oy公司所开发，2006年五月由甲骨文公司并购。与传统的ISAM、MyISAM相比，<strong>InnoDB的最大特色就是支持ACID兼容的事务功能</strong>，类似于PostgreSQL。目前InnoDB采用双轨制授权，一是GPL授权，另一是专有软件授权。具体地，MyISAM与InnoDB作为MySQL的两大存储引擎的差异主要包括：</p>
+<ul>
+<li><p><strong>存储结构</strong>：每个MyISAM在磁盘上存储成三个文件：第一个文件的名字以表的名字开始，扩展名指出文件类型。.frm文件存储表定义，数据文件的扩展名为.MYD (MYData)，索引文件的扩展名是.MYI (MYIndex)。InnoDB所有的表都保存在同一个数据文件中（也可能是多个文件，或者是独立的表空间文件），InnoDB表的大小只受限于操作系统文件的大小，一般为2GB。</p>
+</li>
+<li><p><strong>存储空间</strong>：MyISAM可被压缩，占据的存储空间较小，支持静态表、动态表、压缩表三种不同的存储格式。InnoDB需要更多的内存和存储，它会在主内存中建立其专用的缓冲池用于高速缓冲数据和索引。</p>
+</li>
+<li><p><strong>可移植性、备份及恢复</strong>：MyISAM的数据是以文件的形式存储，所以在跨平台的数据转移中会很方便，同时在备份和恢复时也可单独针对某个表进行操作。InnoDB免费的方案可以是拷贝数据文件、备份 binlog，或者用 mysqldump，在数据量达到几十G的时候就相对痛苦了。</p>
+</li>
+<li><p><strong>事务支持</strong>：MyISAM强调的是性能，每次查询具有原子性，其执行数度比InnoDB类型更快，但是不提供事务支持。InnoDB提供事务、外键等高级数据库功能，具有事务提交、回滚和崩溃修复能力。</p>
+</li>
+<li><p><strong>AUTO_INCREMENT</strong>：在MyISAM中，可以和其他字段一起建立联合索引。引擎的自动增长列必须是索引，如果是组合索引，自动增长可以不是第一列，它可以根据前面几列进行排序后递增。InnoDB中必须包含只有该字段的索引，并且引擎的自动增长列必须是索引，如果是组合索引也必须是组合索引的第一列。</p>
+</li>
+<li><p><strong>表锁差异</strong>：MyISAM只支持表级锁，用户在操作MyISAM表时，select、update、delete和insert语句都会给表自动加锁，如果加锁以后的表满足insert并发的情况下，可以在表的尾部插入新的数据。InnoDB支持事务和行级锁。行锁大幅度提高了多用户并发操作的新能，但是InnoDB的行锁，只是在WHERE的主键是有效的，非主键的WHERE都会锁全表的。</p>
+</li>
+<li><p><strong>全文索引</strong>：MyISAM支持 FULLTEXT类型的全文索引；InnoDB不支持FULLTEXT类型的全文索引，但是innodb可以使用sphinx插件支持全文索引，并且效果更好。</p>
+</li>
+<li><p><strong>表主键</strong>：MyISAM允许没有任何索引和主键的表存在，索引都是保存行的地址。对于InnoDB，如果没有设定主键或者非空唯一索引，就会自动生成一个6字节的主键(用户不可见)，数据是主索引的一部分，附加索引保存的是主索引的值。</p>
+</li>
+<li><p><strong>表的具体行数</strong>：MyISAM保存表的总行数，select count() from table;会直接取出出该值；而InnoDB没有保存表的总行数，如果使用select count() from table；就会遍历整个表，消耗相当大，但是在加了wehre条件后，myisam和innodb处理的方式都一样。</p>
+</li>
+<li><p><strong>CURD操作</strong>：在MyISAM中，如果执行大量的SELECT，MyISAM是更好的选择。对于InnoDB，如果你的数据执行大量的INSERT或UPDATE，出于性能方面的考虑，应该使用InnoDB表。DELETE从性能上InnoDB更优，但DELETE FROM table时，InnoDB不会重新建立表，而是一行一行的删除，在innodb上如果要清空保存有大量数据的表，最好使用truncate table这个命令。</p>
+</li>
+<li><p><strong>外键</strong>：MyISAM不支持外键，而InnoDB支持外键。</p>
+</li>
+</ul>
+<p>通过上述的分析，基本上可以考虑使用InnoDB来替代MyISAM引擎了，原因是InnoDB自身很多良好的特点，比如事务支持、存储过程、视图、行级锁、外键等等。尤其在并发很多的情况下，相信InnoDB的表现肯定要比MyISAM强很多。另外，必须需要注意的是，任何一种表都不是万能的，合适的才是最好的，才能最大的发挥MySQL的性能优势。如果是不复杂的、非关键的Web应用，还是可以继续考虑MyISAM的，这个具体情况具体考虑。</p>
+<hr>
+<h3 id="14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？"><a href="#14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？" class="headerlink" title="14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？"></a>14）MyIASM和Innodb两种引擎所使用的索引的数据结构是什么？</h3><p>答案:都是B+树!</p>
+<p>MyIASM引擎，B+树的数据结构中存储的内容实际上是实际数据的地址值。也就是说它的索引和实际数据是分开的，<strong>只不过使用索引指向了实际数据。这种索引的模式被称为非聚集索引。</strong></p>
+<p>Innodb引擎的索引的数据结构也是B+树，<strong>只不过数据结构中存储的都是实际的数据，这种索引有被称为聚集索引。</strong></p>
+<hr>
+<h3 id="15）varchar和char的区别"><a href="#15）varchar和char的区别" class="headerlink" title="15）varchar和char的区别"></a>15）varchar和char的区别</h3><p>char是一种固定长度的类型，varchar是一种可变长度的类型，例如：</p>
+<p>定义一个char[10]和varchar[10]，如果存进去的是 ‘test’，那么char所占的长度依然为10，除了字符 ‘test’ 外，后面跟六个空格，varchar就立马把长度变为4了，取数据的时候，char类型的要用trim()去掉多余的空格，而varchar是不需要的</p>
+<p>char的存取速度还是要比varchar要快得多，因为其长度固定，方便程序的存储于查找</p>
+<p>char也为此付出的是空间的代价，因为其长度固定，所以难免会有多余的空格占位符占据空间，可谓是以空间换取时间效率。</p>
+<p>varchar是以空间效率为首位。</p>
+<p>char的存储方式是：对英文字符（ASCII）占用1个字节，对一个汉字占用两个字节。</p>
+<p>varchar的存储方式是：对每个英文字符占用2个字节，汉字也占用2个字节。<br>两者的存储数据都非unicode的字符数据。</p>
+<hr>
+<h3 id="16）主键、自增主键、主键索引与唯一索引概念区别"><a href="#16）主键、自增主键、主键索引与唯一索引概念区别" class="headerlink" title="16）主键、自增主键、主键索引与唯一索引概念区别"></a>16）主键、自增主键、主键索引与唯一索引概念区别</h3><ol>
+<li><p>主键：指字段 <strong>唯一、不为空值</strong> 的列；</p>
+</li>
+<li><p>主键索引：指的就是主键，主键是索引的一种，是唯一索引的特殊类型。创建主键的时候，数据库默认会为主键创建一个唯一索引；</p>
+</li>
+<li><p>自增主键：字段类型为数字、自增、并且是主键；</p>
+</li>
+<li><p>唯一索引：索引列的值必须唯一，但允许有空值。<strong>主键是唯一索引，这样说没错；但反过来说，唯一索引也是主键就错误了，因为唯一索引允许空值，主键不允许有空值，所以不能说唯一索引也是主键。</strong></p>
+</li>
+</ol>
+<hr>
+<h3 id="17）主键就是聚集索引吗？主键和索引有什么区别？"><a href="#17）主键就是聚集索引吗？主键和索引有什么区别？" class="headerlink" title="17）主键就是聚集索引吗？主键和索引有什么区别？"></a>17）主键就是聚集索引吗？主键和索引有什么区别？</h3><p><strong>主键是一种特殊的唯一性索引，其可以是聚集索引，也可以是非聚集索引。</strong>在SQLServer中，主键的创建必须依赖于索引，默认创建的是聚集索引，但也可以显式指定为非聚集索引。InnoDB作为MySQL存储引擎时，默认按照主键进行聚集，如果没有定义主键，InnoDB会试着使用唯一的非空索引来代替。如果没有这种索引，InnoDB就会定义隐藏的主键然后在上面进行聚集。所以，对于聚集索引来说，你创建主键的时候，自动就创建了主键的聚集索引。</p>
+<hr>
+<h3 id="18）实践中如何优化MySQL"><a href="#18）实践中如何优化MySQL" class="headerlink" title="18）实践中如何优化MySQL"></a>18）实践中如何优化MySQL</h3><p>实践中，MySQL的优化主要涉及SQL语句及索引的优化、数据表结构的优化、系统配置的优化和硬件的优化四个方面，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-7a6deca3ebd226e3.png" alt=""></p>
+<h4 id="⑴-SQL语句优化："><a href="#⑴-SQL语句优化：" class="headerlink" title="⑴ SQL语句优化："></a>⑴ SQL语句优化：</h4><p>SQL语句的优化主要包括三个问题，即如何发现有问题的SQL、如何分析SQL的执行计划以及如何优化SQL，下面将逐一解释。</p>
+<p><strong>① 怎么发现有问题的SQL?（通过MySQL慢查询日志对有效率问题的SQL进行监控）</strong></p>
+<p>MySQL的慢查询日志是MySQL提供的一种日志记录，它用来记录在MySQL中响应时间超过阀值的语句，具体指运行时间超过long_query_time值的SQL，则会被记录到慢查询日志中。long_query_time的默认值为10，意思是运行10s以上的语句。慢查询日志的相关参数如下所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E5%85%AD%EF%BC%89%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AF%87/7896890-79123c126bb94a31.png" alt=""></p>
+<p>通过MySQL的慢查询日志，我们可以查询出执行的次数多占用的时间长的SQL、可以通过pt_query_disgest(一种mysql慢日志分析工具)分析Rows examine(MySQL执行器需要检查的行数)项去找出IO大的SQL以及发现未命中索引的SQL，对于这些SQL，都是我们优化的对象。</p>
+<p><strong>② 通过explain查询和分析SQL的执行计划：</strong></p>
+<p>使用 EXPLAIN 关键字可以知道MySQL是如何处理你的SQL语句的，以便分析查询语句或是表结构的性能瓶颈。通过explain命令可以得到表的读取顺序、数据读取操作的操作类型、哪些索引可以使用、哪些索引被实际使用、表之间的引用以及每张表有多少行被优化器查询等问题。当扩展列extra出现Using filesort和Using temporay，则往往表示SQL需要优化了。</p>
+<p><strong>③ SQL语句的优化：</strong></p>
+<p><strong>⒈优化insert语句：一次插入多值；</strong></p>
+<p><strong>⒉应尽量避免在 where 子句中使用!=或&lt;&gt;操作符，否则将引擎放弃使用索引而进行全表扫描；</strong></p>
+<p><strong>⒊应尽量避免在 where 子句中对字段进行null值判断，否则将导致引擎放弃使用索引而进行全表扫描；</strong></p>
+<p><strong>⒋优化嵌套查询：子查询可以被更有效率的连接(Join)替代；</strong></p>
+<p><strong>⒌很多时候用 exists 代替 in 是一个好的选择。</strong></p>
+<p><strong>⒍选择最有效率的表名顺序：数据库的解析器按照从右到左的顺序处理FROM子句中的表名，FROM子句中写在最后的表将被最先处理</strong></p>
+<p>在FROM子句中包含多个表的情况下：</p>
+<ul>
+<li>如果三个表是完全无关系的话，将记录和列名最少的表，写在最后，然后依次类推</li>
+<li>也就是说：选择记录条数最少的表放在最后</li>
+</ul>
+<p>如果有3个以上的表连接查询：</p>
+<ul>
+<li>如果三个表是有关系的话，将引用最多的表，放在最后，然后依次类推。</li>
+<li>也就是说：被其他表所引用的表放在最后</li>
+</ul>
+<p><strong>⒎用IN代替OR：</strong></p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp <span class="token keyword">where</span> sal <span class="token operator">=</span> <span class="token number">1500</span> <span class="token operator">or</span> sal <span class="token operator">=</span> <span class="token number">3000</span> <span class="token operator">or</span> sal <span class="token operator">=</span> <span class="token number">800</span><span class="token punctuation">;</span>
+<span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> emp <span class="token keyword">where</span> sal <span class="token operator">in</span> <span class="token punctuation">(</span><span class="token number">1500</span><span class="token punctuation">,</span><span class="token number">3000</span><span class="token punctuation">,</span><span class="token number">800</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p><strong>⒏SELECT子句中避免使用*号：</strong></p>
+<p>我们最开始接触 SQL 的时候，“<code>*</code>” 号是可以获取表中全部的字段数据的，<strong>但是它要通过查询数据字典完成，这意味着将消耗更多的时间</strong>，而且使用 “<code>*</code>” 号写出来的 SQL 语句也不够直观。</p>
+<hr>
+<h4 id="⑵-索引优化："><a href="#⑵-索引优化：" class="headerlink" title="⑵ 索引优化："></a>⑵ 索引优化：</h4><p>建议在经常作查询选择的字段、经常作表连接的字段以及经常出现在 order by、group by、distinct 后面的字段中建立索引。但必须注意以下几种可能会引起索引失效的情形：</p>
+<ul>
+<li><p>以 “%(表示任意0个或多个字符)” 开头的 LIKE 语句，模糊匹配；</p>
+</li>
+<li><p>OR语句前后没有同时使用索引；</p>
+</li>
+<li><p>数据类型出现隐式转化（如varchar不加单引号的话可能会自动转换为int型）；</p>
+</li>
+<li><p>对于多列索引，必须满足最左匹配原则(eg,多列索引col1、col2和col3，则 索引生效的情形包括col1或col1，col2或col1，col2，col3)。</p>
+</li>
+</ul>
+<hr>
+<h4 id="⑶-数据库表结构的优化："><a href="#⑶-数据库表结构的优化：" class="headerlink" title="⑶ 数据库表结构的优化："></a>⑶ 数据库表结构的优化：</h4><p><strong>① 选择合适数据类型：</strong></p>
+<ul>
+<li>使用较小的数据类型解决问题；</li>
+<li>使用简单的数据类型(mysql处理int要比varchar容易)；</li>
+<li>尽可能的使用not null 定义字段；</li>
+<li>尽量避免使用text类型，非用不可时最好考虑分表；</li>
+</ul>
+<p><strong>② 表的范式的优化：</strong></p>
+<p>一般情况下，表的设计应该遵循三大范式。</p>
+<p><strong>③ 表的垂直拆分：</strong></p>
+<p>把含有多个列的表拆分成多个表，解决表宽度问题，具体包括以下几种拆分手段：</p>
+<ul>
+<li>把不常用的字段单独放在同一个表中；</li>
+<li>把大字段独立放入一个表中；</li>
+<li>把经常使用的字段放在一起； </li>
+</ul>
+<p>这样做的好处是非常明显的，具体包括：拆分后业务清晰，拆分规则明确、系统之间整合或扩展容易、数据维护简单</p>
+<p><strong>④ 表的水平拆分：</strong></p>
+<p>表的水平拆分用于解决数据表中数据过大的问题，水平拆分每一个表的结构都是完全一致的。一般地，将数据平分到N张表中的常用方法包括以下两种：</p>
+<ul>
+<li>对ID进行hash运算，如果要拆分成5个表，mod(id,5)取出0~4个值；</li>
+<li>针对不同的hashID将数据存入不同的表中；</li>
+</ul>
+<p>表的水平拆分会带来一些问题和挑战，包括跨分区表的数据查询、统计及后台报表的操作等问题，但也带来了一些切实的好处：</p>
+<ul>
+<li>表分割后可以降低在查询时需要读的数据和索引的页数，同时也降低了索引的层数，提高查询速度；</li>
+<li>表中的数据本来就有独立性，例如表中分别记录各个地区的数据或不同时期的数据，特别是有些数据常用，而另外一些数据不常用。</li>
+<li>需要把数据存放到多个数据库中，提高系统的总体可用性(分库，鸡蛋不能放在同一个篮子里)。</li>
+</ul>
+<hr>
+<h4 id="⑷-系统配置的优化："><a href="#⑷-系统配置的优化：" class="headerlink" title="⑷ 系统配置的优化："></a>⑷ 系统配置的优化：</h4><ul>
+<li><p>操作系统配置的优化：增加TCP支持的队列数</p>
+</li>
+<li><p>mysql配置文件优化：Innodb缓存池设置(innodb_buffer_pool_size，推荐总内存的75%)和缓存池的个数（innodb_buffer_pool_instances）</p>
+</li>
+</ul>
+<hr>
+<h4 id="⑸-硬件的优化："><a href="#⑸-硬件的优化：" class="headerlink" title="⑸ 硬件的优化："></a>⑸ 硬件的优化：</h4><ul>
+<li>CPU：核心数多并且主频高的</li>
+<li>内存：增大内存</li>
+<li>磁盘配置和选择：磁盘性能</li>
+</ul>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
+    <a href="/2018/05/18/java-mian-shi-zhi-shi-dian-jie-xi-wu-wang-luo-xie-yi-pian/">
+      Java面试知识点解析(五)——网络协议篇
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E9%9D%A2%E8%AF%95/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>面试</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年5月18日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-958b6a30c60032e8.png" alt=""></p>
+<blockquote>
+<ul>
+<li>前言： </li>
+</ul>
+</blockquote>
+<p>在遨游了一番 Java Web 的世界之后，发现了自己的一些缺失，所以就着一篇深度好文：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">知名互联网公司校招 Java 开发岗面试知识点解析</a> ，来好好的对 Java 知识点进行复习和学习一番，大部分内容参照自这一篇文章，有一些自己补充的，也算是重新学习一下 Java 吧。</p>
+<p>前序文章链接：</p>
+<p><a href="https://www.jianshu.com/p/883260941da8" target="_blank" rel="noopener">Java 面试知识点解析(一)——基础知识篇</a></p>
+<p><a href="https://www.jianshu.com/p/7382c0a843ff" target="_blank" rel="noopener">Java 面试知识点解析(二)——高并发编程篇</a></p>
+<p><a href="https://www.jianshu.com/p/bfb876565a1e" target="_blank" rel="noopener">Java 面试知识点解析(三)——JVM篇</a></p>
+<p><a href="https://www.jianshu.com/p/9c50729464b5" target="_blank" rel="noopener">Java 面试知识点解析(四)——版本特性篇</a></p>
+<hr>
+<blockquote>
+<p>前排引用说明及好文推荐：<a href="https://blog.csdn.net/justloveyou_/article/details/78303617" target="_blank" rel="noopener">面试/笔试第一弹 —— 计算机网络面试问题集锦——书呆子Rico</a></p>
+</blockquote>
+<h2 id="（一）网络基础知识"><a href="#（一）网络基础知识" class="headerlink" title="（一）网络基础知识"></a>（一）网络基础知识</h2><h3 id="1）Http和Https的区别？"><a href="#1）Http和Https的区别？" class="headerlink" title="1）Http和Https的区别？"></a>1）Http和Https的区别？</h3><p>答：Http协议运行在TCP之上，明文传输，客户端与服务器端都无法验证对方的身份；Https是身披SSL(Secure Socket Layer)外壳的Http，运行于SSL上，SSL运行于TCP之上，是添加了加密和认证机制的HTTP。二者之间存在如下不同：</p>
+<ul>
+<li><p>端口不同：Http与Http使用不同的连接方式，用的端口也不一样，前者是80，后者是443；</p>
+</li>
+<li><p>资源消耗：和HTTP通信相比，Https通信会由于加减密处理消耗更多的CPU和内存资源；</p>
+</li>
+<li><p>开销：Https通信需要证书，而证书一般需要向认证机构购买；</p>
+</li>
+</ul>
+<p>Https的加密机制是一种共享密钥加密和公开密钥加密并用的混合加密机制。</p>
+<hr>
+<h3 id="2）对称加密与非对称加密"><a href="#2）对称加密与非对称加密" class="headerlink" title="2）对称加密与非对称加密"></a>2）对称加密与非对称加密</h3><p>答：</p>
+<p>对称密钥加密是指加密和解密使用同一个密钥的方式，这种方式存在的最大问题就是密钥发送问题，即如何安全地将密钥发给对方；而非对称加密是指使用一对非对称密钥，即公钥和私钥，公钥可以随意发布，但私钥只有自己知道。发送密文的一方使用对方的公钥进行加密处理，对方接收到加密信息后，使用自己的私钥进行解密。</p>
+<p>由于非对称加密的方式不需要发送用来解密的私钥，所以可以保证安全性；但是和对称加密比起来，它非常的慢，所以我们还是要用对称加密来传送消息，但对称加密所使用的密钥我们可以通过非对称加密的方式发送出去。</p>
+<hr>
+<h3 id="3）三次握手与四次挥手"><a href="#3）三次握手与四次挥手" class="headerlink" title="3）三次握手与四次挥手"></a>3）三次握手与四次挥手</h3><p>答：</p>
+<p><strong>(1). 三次握手（我要和你建立链接，你真的要和我建立链接么，我真的要和你建立链接，成功）</strong></p>
+<ul>
+<li><p>第一次握手：Client将标志位SYN置为1，随机产生一个值seq=J，并将该数据包发送给Server，Client进入SYN_SENT状态，等待Server确认。</p>
+</li>
+<li><p>第二次握手：Server收到数据包后由标志位SYN=1知道Client请求建立连接，Server将标志位SYN和ACK都置为1，ack=J+1，随机产生一个值seq=K，并将该数据包发送给Client以确认连接请求，Server进入SYN_RCVD状态。</p>
+</li>
+<li><p>第三次握手：Client收到确认后，检查ack是否为J+1，ACK是否为1，如果正确则将标志位ACK置为1，ack=K+1，并将该数据包发送给Server，Server检查ack是否为K+1，ACK是否为1，如果正确则连接建立成功，Client和Server进入ESTABLISHED状态，完成三次握手，随后Client与Server之间可以开始传输数据了。</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-ef0439a102c5432f.png" alt=""></p>
+<p><strong>(2). 四次挥手（我要和你断开链接；好的，断吧。我也要和你断开链接；好的，断吧）：</strong></p>
+<ul>
+<li><p>第一次挥手：Client发送一个FIN，<strong>用来关闭Client到Server的数据传送</strong>，Client进入FIN_WAIT_1状态。</p>
+</li>
+<li><p>第二次挥手：Server收到FIN后，发送一个ACK给Client，确认序号为收到序号+1（与SYN相同，一个FIN占用一个序号），Server进入CLOSE_WAIT状态。此时TCP链接处于半关闭状态，即客户端已经没有要发送的数据了，但服务端若发送数据，则客户端仍要接收。</p>
+</li>
+<li><p>第三次挥手：Server发送一个FIN，<strong>用来关闭Server到Client的数据传送</strong>，Server进入LAST_ACK状态。</p>
+</li>
+<li><p>第四次挥手：Client收到FIN后，Client进入TIME_WAIT状态，接着发送一个ACK给Server，确认序号为收到序号+1，Server进入CLOSED状态，完成四次挥手。</p>
+</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-23ddca6bf4289f92.png" alt=""></p>
+<p><strong>(3). 通俗一点的理解就是：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-895124472bd4317b.png" alt=""></p>
+<hr>
+<h3 id="4）为什么-TCP-链接需要三次握手，两次不可以么？"><a href="#4）为什么-TCP-链接需要三次握手，两次不可以么？" class="headerlink" title="4）为什么 TCP 链接需要三次握手，两次不可以么？"></a>4）为什么 TCP 链接需要三次握手，两次不可以么？</h3><p>答：“三次握手” 的目的是为了防止<strong>已失效的链接请求报文突然又传送到了服务端</strong>，因而产生错误。</p>
+<ul>
+<li><p>正常的情况：A 发出连接请求，但因连接请求报文丢失而未收到确认，于是 A 再重传一次连接请求。后来收到了确认，建立了连接。数据传输完毕后，就释放了连接。A 共发送了两个连接请求报文段，其中第一个丢失，第二个到达了 B。没有 “已失效的连接请求报文段”。</p>
+</li>
+<li><p>现假定出现了一种异常情况：即 A 发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，以致延误到连接释放以后的某个时间才到达 B。本来这是一个早已失效的报文段。但 B 收到此失效的连接请求报文段后，就误认为是 A 再次发出的一个新的连接请求。于是就向 A 发出确认报文段，同意建立连接。</p>
+</li>
+</ul>
+<p>假设不采用“三次握手”，那么只要 B 发出确认，新的连接就建立了。由于现在 A 并没有发出建立连接的请求，因此不会理睬 B 的确认，也不会向 B 发送数据。但 B 却以为新的运输连接已经建立，并一直等待 A 发来数据。这样，B 的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。</p>
+<hr>
+<h3 id="5）为什么要四次挥手？"><a href="#5）为什么要四次挥手？" class="headerlink" title="5）为什么要四次挥手？"></a>5）为什么要四次挥手？</h3><p>答：TCP 协议是一种面向连接的、可靠的、基于字节流的运输层通信协议。TCP 是全双工模式，这就意味着，当 A 向 B 发出 FIN 报文段时，只是表示 A 已经没有数据要发送了，而此时 A 还是能够接受到来自 B 发出的数据；B 向 A 发出 ACK 报文段也只是告诉 A ，它自己知道 A 没有数据要发了，但 B 还是能够向 A 发送数据。</p>
+<p>所以想要愉快的结束这次对话就需要四次挥手。</p>
+<hr>
+<h3 id="6）TCP-协议如何来保证传输的可靠性"><a href="#6）TCP-协议如何来保证传输的可靠性" class="headerlink" title="6）TCP 协议如何来保证传输的可靠性"></a>6）TCP 协议如何来保证传输的可靠性</h3><p>答：TCP 提供一种面向连接的、可靠的字节流服务。其中，面向连接意味着两个使用 TCP 的应用（通常是一个客户和一个服务器）在彼此交换数据之前必须先建立一个 TCP 连接。在一个 TCP 连接中，仅有两方进行彼此通信；而字节流服务意味着两个应用程序通过 TCP 链接交换 8 bit 字节构成的字节流，TCP 不在字节流中插入记录标识符。</p>
+<p><strong>对于可靠性，TCP通过以下方式进行保证：</strong></p>
+<ul>
+<li><p><strong>数据包校验</strong>：目的是检测数据在传输过程中的任何变化，若校验出包有错，则丢弃报文段并且不给出响应，这时TCP发送数据端超时后会重发数据；</p>
+</li>
+<li><p><strong>对失序数据包重排序</strong>：既然TCP报文段作为IP数据报来传输，而IP数据报的到达可能会失序，因此TCP报文段的到达也可能会失序。TCP将对失序数据进行重新排序，然后才交给应用层；</p>
+</li>
+<li><p><strong>丢弃重复数据</strong>：对于重复数据，能够丢弃重复数据；</p>
+</li>
+<li><p><strong>应答机制</strong>：当TCP收到发自TCP连接另一端的数据，它将发送一个确认。这个确认不是立即发送，通常将推迟几分之一秒；</p>
+</li>
+<li><p><strong>超时重发</strong>：当TCP发出一个段后，它启动一个定时器，等待目的端确认收到这个报文段。如果不能及时收到一个确认，将重发这个报文段；</p>
+</li>
+<li><p><strong>流量控制</strong>：TCP连接的每一方都有固定大小的缓冲空间。TCP的接收端只允许另一端发送接收端缓冲区所能接纳的数据，这可以防止较快主机致使较慢主机的缓冲区溢出，这就是流量控制。TCP使用的流量控制协议是可变大小的滑动窗口协议。</p>
+</li>
+</ul>
+<hr>
+<h3 id="7）客户端不断进行请求链接会怎样？DDos-Distributed-Denial-of-Service-攻击？"><a href="#7）客户端不断进行请求链接会怎样？DDos-Distributed-Denial-of-Service-攻击？" class="headerlink" title="7）客户端不断进行请求链接会怎样？DDos(Distributed Denial of Service)攻击？"></a>7）客户端不断进行请求链接会怎样？DDos(Distributed Denial of Service)攻击？</h3><p>答：服务器端会为每个请求创建一个链接，并向其发送确认报文，然后等待客户端进行确认</p>
+<p><strong>(1). DDos 攻击：</strong></p>
+<ul>
+<li>客户端向服务端发送请求链接数据包</li>
+<li>服务端向客户端发送确认数据包</li>
+<li>客户端不向服务端发送确认数据包，服务器一直等待来自客户端的确认</li>
+</ul>
+<p><strong>(2). DDos 预防：（没有彻底根治的办法，除非不使用TCP）</strong></p>
+<ul>
+<li>限制同时打开SYN半链接的数目</li>
+<li>缩短SYN半链接的Time out 时间</li>
+<li>关闭不必要的服务</li>
+</ul>
+<hr>
+<h3 id="8）GET-与-POST-的区别？"><a href="#8）GET-与-POST-的区别？" class="headerlink" title="8）GET 与 POST 的区别？"></a>8）GET 与 POST 的区别？</h3><p>答：GET与POST是我们常用的两种HTTP Method，二者之间的区别主要包括如下五个方面： </p>
+<p>(1). 从功能上讲，GET一般用来从服务器上获取资源，POST一般用来更新服务器上的资源；</p>
+<p>(2). 从REST服务角度上说，GET是幂等的，即读取同一个资源，总是得到相同的数据，而POST不是幂等的，因为每次请求对资源的改变并不是相同的；进一步地，GET不会改变服务器上的资源，而POST会对服务器资源进行改变；</p>
+<p>(3). 从请求参数形式上看，GET请求的数据会附在URL之后，即将请求数据放置在HTTP报文的 请求头 中，以?分割URL和传输数据，参数之间以&amp;相连。特别地，如果数据是英文字母/数字，原样发送；否则，会将其编码为 application/x-www-form-urlencoded MIME 字符串(如果是空格，转换为+，如果是中文/其他字符，则直接把字符串用BASE64加密，得出如：%E4%BD%A0%E5%A5%BD，其中％XX中的XX为该符号以16进制表示的ASCII)；而POST请求会把提交的数据则放置在是HTTP请求报文的 请求体 中。</p>
+<p>(4). 就安全性而言，POST的安全性要比GET的安全性高，因为GET请求提交的数据将明文出现在URL上，而且POST请求参数则被包装到请求体中，相对更安全。</p>
+<p>(5). 从请求的大小看，GET请求的长度受限于浏览器或服务器对URL长度的限制，允许发送的数据量比较小，而POST请求则是没有大小限制的。</p>
+<p><strong>为什么在GET请求中会对URL进行编码？</strong></p>
+<p>我们知道，在GET请求中会对URL中非西文字符进行编码，这样做的目的就是为了 <strong>避免歧义</strong>。看下面的例子，</p>
+<p>针对 “name1=value1&amp;name2=value2” 的例子，我们来谈一下数据从客户端到服务端的解析过程。首先，上述字符串在计算机中用ASCII吗表示为： </p>
+<pre><code>   6E616D6531 3D 76616C756531 26 6E616D6532 3D 76616C756532
+   6E616D6531：name1 
+   3D：= 
+   76616C756531：value1 
+   26：&amp;
+   6E616D6532：name2 
+   3D：= 
+   76616C756532：value2 </code></pre><p>服务端在接收到该数据后就可以遍历该字节流，一个字节一个字节的吃，当吃到3D这字节后，服务端就知道前面吃得字节表示一个key，再往后吃，如果遇到26，说明从刚才吃的3D到26子节之间的是上一个key的value，以此类推就可以解析出客户端传过来的参数。</p>
+<p>现在考虑这样一个问题，如果我们的参数值中就包含=或&amp;这种特殊字符的时候该怎么办？比如，“name1=value1”，其中value1的值是“va&amp;lu=e1”字符串，那么实际在传输过程中就会变成这样“name1=va&amp;lu=e1”。这样，我们的本意是只有一个键值对，但是服务端却会解析成两个键值对，这样就产生了歧义。</p>
+<p>那么，如何解决上述问题带来的歧义呢？解决的办法就是对参数进行URL编码：例如，我们对上述会产生歧义的字符进行URL编码后结果：“name1=va%26lu%3D”，这样服务端会把紧跟在“%”后的字节当成普通的字节，就是不会把它当成各个参数或键值对的分隔符。</p>
+<hr>
+<h3 id="9）TCP与UDP的区别"><a href="#9）TCP与UDP的区别" class="headerlink" title="9）TCP与UDP的区别"></a>9）TCP与UDP的区别</h3><p>答：TCP (Transmission Control Protocol)和UDP(User Datagram Protocol)协议属于传输层协议，它们之间的区别包括：</p>
+<ul>
+<li><p>TCP是面向连接的，UDP是无连接的；</p>
+</li>
+<li><p>TCP是可靠的，UDP是不可靠的；</p>
+</li>
+<li><p>TCP只支持点对点通信，UDP支持一对一、一对多、多对一、多对多的通信模式；</p>
+</li>
+<li><p>TCP是面向字节流的，UDP是面向报文的；</p>
+</li>
+<li><p>TCP有拥塞控制机制;UDP没有拥塞控制，适合媒体通信；</p>
+</li>
+<li><p>TCP首部开销(20个字节)比UDP的首部开销(8个字节)要大；</p>
+</li>
+</ul>
+<hr>
+<h3 id="10）TCP和UDP分别对应的常见应用层协议"><a href="#10）TCP和UDP分别对应的常见应用层协议" class="headerlink" title="10）TCP和UDP分别对应的常见应用层协议"></a>10）TCP和UDP分别对应的常见应用层协议</h3><p>答：</p>
+<p><strong>(1). TCP 对应的应用层协议：</strong></p>
+<ul>
+<li><p><strong>FTP</strong>：定义了文件传输协议，使用21端口。常说某某计算机开了FTP服务便是启动了文件传输服务。下载文件，上传主页，都要用到FTP服务。</p>
+</li>
+<li><p><strong>Telnet</strong>：它是一种用于远程登陆的端口，用户可以以自己的身份远程连接到计算机上，通过这种端口可以提供一种基于DOS模式下的通信服务。如以前的BBS是-纯字符界面的，支持BBS的服务器将23端口打开，对外提供服务。</p>
+</li>
+<li><p><strong>SMTP</strong>：定义了简单邮件传送协议，现在很多邮件服务器都用的是这个协议，用于发送邮件。如常见的免费邮件服务中用的就是这个邮件服务端口，所以在电子邮件设置-中常看到有这么SMTP端口设置这个栏，服务器开放的是25号端口。</p>
+</li>
+<li><p><strong>POP3</strong>：它是和SMTP对应，POP3用于接收邮件。通常情况下，POP3协议所用的是110端口。也是说，只要你有相应的使用POP3协议的程序（例如Fo-xmail或Outlook），就可以不以Web方式登陆进邮箱界面，直接用邮件程序就可以收到邮件（如是163邮箱就没有必要先进入网易网站，再进入自己的邮-箱来收信）。</p>
+</li>
+<li><p><strong>HTTP</strong>：从Web服务器传输超文本到本地浏览器的传送协议。</p>
+</li>
+</ul>
+<p><strong>(2). UDP 对应的应用层协议：</strong></p>
+<ul>
+<li><p><strong>DNS</strong>：用于域名解析服务，将域名地址转换为IP地址。DNS用的是53号端口。</p>
+</li>
+<li><p><strong>SNMP</strong>：简单网络管理协议，使用161号端口，是用来管理网络设备的。由于网络设备很多，无连接的服务就体现出其优势。</p>
+</li>
+<li><p><strong>TFTP(Trival File Transfer Protocal)</strong>：简单文件传输协议，该协议在熟知端口69上使用UDP服务</p>
+</li>
+</ul>
+<p><strong>(3). 图示：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-54d6f58268936b77.png" alt=""></p>
+<hr>
+<h3 id="11）TCP-的拥塞避免机制"><a href="#11）TCP-的拥塞避免机制" class="headerlink" title="11）TCP 的拥塞避免机制"></a>11）TCP 的拥塞避免机制</h3><p>答：</p>
+<p>拥塞：对资源的需求超过了可用的资源。若网络中许多资源同时供应不足，网络的性能就要明显变坏，整个网络的吞吐量随之负荷的增大而下降。</p>
+<p>拥塞控制：防止过多的数据注入到网络中，使得网络中的路由器或链路不致过载。</p>
+<p>拥塞控制的方法：</p>
+<p><strong>(1). 慢启动 + 拥塞避免：</strong></p>
+<p><strong>慢启动</strong>：不要一开始就发送大量的数据，先探测一下网络的拥塞程度，也就是说由小到大逐渐增加拥塞窗口的大小;</p>
+<p><strong>拥塞避免</strong>：拥塞避免算法让拥塞窗口缓慢增长，即每经过一个往返时间RTT就把发送方的拥塞窗口cwnd加1，而不是加倍，这样拥塞窗口按线性规律缓慢增长。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-15f6b11bb3c818ed.png" alt=""></p>
+<p><strong>(2). 快重传 + 快恢复：</strong></p>
+<p><strong>快重传</strong>：快重传要求接收方在收到一个 <strong>失序的报文段</strong> 后就立即发出 <strong>重复确认</strong>（为的是使发送方及早知道有报文段没有到达对方）而不要等到自己发送数据时捎带确认。快重传算法规定，发送方只要一连收到三个重复确认就应当立即重传对方尚未收到的报文段，而不必继续等待设置的重传计时器时间到期。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-6015eb200dacea82.png" alt=""></p>
+<p><strong>快恢复</strong>：快重传配合使用的还有快恢复算法，当发送方连续收到三个重复确认时，就执行“乘法减小”算法，把ssthresh门限减半，但是接下去并不执行慢开始算法：因为如果网络出现拥塞的话就不会收到好几个重复的确认，所以发送方现在认为网络可能没有出现拥塞。所以此时不执行慢开始算法，而是将cwnd设置为ssthresh的大小，然后执行拥塞避免算法。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-0d52d7832b4a9c2a.png" alt=""></p>
+<hr>
+<h3 id="12）浏览器中输入：“www-xxx-com”-之后都发生了什么？请详细阐述。"><a href="#12）浏览器中输入：“www-xxx-com”-之后都发生了什么？请详细阐述。" class="headerlink" title="12）浏览器中输入：“www.xxx.com” 之后都发生了什么？请详细阐述。"></a>12）浏览器中输入：“<code>www.xxx.com</code>” 之后都发生了什么？请详细阐述。</h3><p>解析：经典的网络协议问题。</p>
+<p>答：</p>
+<ol>
+<li>由域名→IP地址 寻找IP地址的过程依次经过了浏览器缓存、系统缓存、hosts文件、路由器缓存、 递归搜索根域名服务器。</li>
+<li>建立TCP/IP连接（三次握手具体过程）</li>
+<li>由浏览器发送一个HTTP请求</li>
+<li>经过路由器的转发，通过服务器的防火墙，该HTTP请求到达了服务器</li>
+<li>服务器处理该HTTP请求，返回一个HTML文件</li>
+<li>浏览器解析该HTML文件，并且显示在浏览器端</li>
+<li>这里需要注意：<ul>
+<li>HTTP协议是一种基于TCP/IP的应用层协议，进行HTTP数据请求必须先建立TCP/IP连接</li>
+<li>可以这样理解：HTTP是轿车，提供了封装或者显示数据的具体形式；Socket是发动机，提供了网络通信的能力。</li>
+<li>两个计算机之间的交流无非是两个端口之间的数据通信,具体的数据会以什么样的形式展现是以不同的应用层协议来定义的。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="13）什么是-HTTP-协议无状态协议？怎么解决Http协议无状态协议"><a href="#13）什么是-HTTP-协议无状态协议？怎么解决Http协议无状态协议" class="headerlink" title="13）什么是 HTTP 协议无状态协议？怎么解决Http协议无状态协议?"></a>13）什么是 HTTP 协议无状态协议？怎么解决Http协议无状态协议?</h3><p>答：HTTP 是一个无状态的协议，也就是没有记忆力，这意味着每一次的请求都是独立的，缺少状态意味着如果后续处理需要前面的信息，则它必须要重传，这样可能导致每次连接传送的数据量增大。另一方面，在服务器不需要先前信息时它的应答就很快。</p>
+<p>HTTP 的这种特性有优点也有缺点：</p>
+<ul>
+<li><strong>优点</strong>：解放了服务器，每一次的请求“点到为止”，不会造成不必要的连接占用</li>
+<li><strong>缺点</strong>：每次请求会传输大量重复的内容信息，并且，在请求之间无法实现数据的共享</li>
+</ul>
+<p>解决方案：</p>
+<ol>
+<li>使用参数传递机制：<br>将参数拼接在请求的 URL 后面，实现数据的传递（GET方式），例如：<code>/param/list?username=wmyskxz</code></li>
+</ol>
+<p><strong>问题</strong>：可以解决数据共享的问题，但是这种方式一不安全，二数据允许传输量只有1kb<br>2. 使用 Cookie 技术<br>3. 使用 Session 技术</p>
+<hr>
+<h3 id="14）Session、Cookie-与-Application"><a href="#14）Session、Cookie-与-Application" class="headerlink" title="14）Session、Cookie 与 Application"></a>14）Session、Cookie 与 Application</h3><p>答：Cookie和Session都是客户端与服务器之间保持状态的解决方案，具体来说，cookie机制采用的是在客户端保持状态的方案，而session机制采用的是在服务器端保持状态的方案。</p>
+<p><strong>(1). Cookie 及其相关 API ：</strong></p>
+<p>Cookie实际上是一小段的文本信息。客户端请求服务器，如果服务器需要记录该用户状态，就使用response向客户端浏览器颁发一个Cookie，而客户端浏览器会把Cookie保存起来。当浏览器再请求该网站时，浏览器把请求的网址连同该Cookie一同提交给服务器，服务器检查该Cookie，以此来辨认用户状态。服务器还可以根据需要修改Cookie的内容。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-5cba15b5ebdc21fa.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-aa39c7450ebaeb48.png" alt=""></p>
+<p><strong>(2). Session 及其相关 API：</strong></p>
+<p>同样地，会话状态也可以保存在服务器端。客户端请求服务器，如果服务器记录该用户状态，就获取Session来保存状态，这时，如果服务器已经为此客户端创建过session，服务器就按照sessionid把这个session检索出来使用；如果客户端请求不包含sessionid，则为此客户端创建一个session并且生成一个与此session相关联的sessionid，并将这个sessionid在本次响应中返回给客户端保存。保存这个sessionid的方式可以采用 <strong>cookie机制</strong> ，这样在交互过程中浏览器可以自动的按照规则把这个标识发挥给服务器；若浏览器禁用Cookie的话，可以通过 <strong>URL重写机制</strong> 将sessionid传回服务器。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-4045b82e54d98900.png" alt=""></p>
+<p><strong>(3). Session 与 Cookie 的对比：</strong></p>
+<ul>
+<li><p><strong>实现机制</strong>：Session的实现常常依赖于Cookie机制，通过Cookie机制回传SessionID；</p>
+</li>
+<li><p><strong>大小限制</strong>：Cookie有大小限制并且浏览器对每个站点也有cookie的个数限制，Session没有大小限制，理论上只与服务器的内存大小有关；</p>
+</li>
+<li><p><strong>安全性</strong>：Cookie存在安全隐患，通过拦截或本地文件找得到cookie后可以进行攻击，而Session由于保存在服务器端，相对更加安全；</p>
+</li>
+<li><p><strong>服务器资源消耗</strong>：Session是保存在服务器端上会存在一段时间才会消失，如果session过多会增加服务器的压力。</p>
+</li>
+</ul>
+<p><strong>(4). Application：</strong></p>
+<p>Application（ServletContext）：与一个Web应用程序相对应，为应用程序提供了一个全局的状态，所有客户都可以使用该状态。</p>
+<hr>
+<h3 id="15）滑动窗口机制"><a href="#15）滑动窗口机制" class="headerlink" title="15）滑动窗口机制"></a>15）滑动窗口机制</h3><p>答：由发送方和接收方在三次握手阶段，互相将自己的最大可接收的数据量告诉对方。也就是自己的数据接收缓冲池的大小。这样对方可以根据已发送的数据量来计算是否可以接着发送。在处理过程中，当接收缓冲池的大小发生变化时，要给对方发送更新窗口大小的通知。这就实现了流量的控制。</p>
+<hr>
+<h3 id="16）常用的HTTP方法有哪些？"><a href="#16）常用的HTTP方法有哪些？" class="headerlink" title="16）常用的HTTP方法有哪些？"></a>16）常用的HTTP方法有哪些？</h3><p>答：</p>
+<ul>
+<li>GET： 用于请求访问已经被URI（统一资源标识符）识别的资源，可以通过URL传参给服务器</li>
+<li>POST：用于传输信息给服务器，主要功能与GET方法类似，但一般推荐使用POST方式。</li>
+<li>PUT： 传输文件，报文主体中包含文件内容，保存到对应URI位置。</li>
+<li>HEAD： 获得报文首部，与GET方法类似，只是不返回报文主体，一般用于验证URI是否有效。</li>
+<li>DELETE：删除文件，与PUT方法相反，删除对应URI位置的文件。</li>
+<li>OPTIONS：查询相应URI支持的HTTP方法。</li>
+</ul>
+<hr>
+<h3 id="17）常见HTTP状态码"><a href="#17）常见HTTP状态码" class="headerlink" title="17）常见HTTP状态码"></a>17）常见HTTP状态码</h3><p>答：</p>
+<ol>
+<li><p>1xx（临时响应）</p>
+</li>
+<li><p>2xx（成功）</p>
+</li>
+<li><p>3xx（重定向）：表示要完成请求需要进一步操作</p>
+</li>
+<li><p>4xx（错误）：表示请求可能出错，妨碍了服务器的处理</p>
+</li>
+<li><p>5xx（服务器错误）：表示服务器在尝试处理请求时发生内部错误</p>
+</li>
+<li><p>常见状态码：</p>
+<ul>
+<li>200（成功）</li>
+<li>304（未修改）：自从上次请求后，请求的网页未修改过。服务器返回此响应时，不会返回网页内容</li>
+<li>401（未授权）：请求要求身份验证</li>
+<li>403（禁止）：服务器拒绝请求</li>
+<li>404（未找到）：服务器找不到请求的网页</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="18）SQL-注入"><a href="#18）SQL-注入" class="headerlink" title="18）SQL 注入"></a>18）SQL 注入</h3><p>答：SQL注入就是通过把SQL命令插入到Web表单提交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</p>
+<p><strong>(1).SQL注入攻击的总体思路：</strong></p>
+<ol>
+<li>寻找到SQL注入的位置</li>
+<li>判断服务器类型和后台数据库类型</li>
+<li>针对不通的服务器和数据库特点进行SQL注入攻击</li>
+</ol>
+<p><strong>(2). SQL注入攻击实例：</strong></p>
+<p>比如，在一个登录界面，要求输入用户名和密码，可以这样输入实现免帐号登录：</p>
+<pre><code>用户名： ‘or 1 = 1 --
+密 码：</code></pre><p>用户一旦点击登录，如若没有做特殊处理，那么这个非法用户就很得意的登陆进去了。这是为什么呢?下面我们分析一下：从理论上说，后台认证程序中会有如下的SQL语句：</p>
+<p><code>String sql = “select * from user_table where username=’ “+userName+” ’ and password=’ “+password+” ‘”;</code></p>
+<p> 因此，当输入了上面的用户名和密码，上面的SQL语句变成：</p>
+<p><code>SELECT * FROM user_table WHERE username=’’or 1 = 1 – and password=’’</code></p>
+<p>分析上述SQL语句我们知道，username=‘ or 1=1 这个语句一定会成功；然后后面加两个-，这意味着注释，它将后面的语句注释，让他们不起作用。这样，上述语句永远都能正确执行，用户轻易骗过系统，获取合法身份。</p>
+<p><strong>(3). 应对方法：</strong></p>
+<p>1.参数绑定：</p>
+<p>使用预编译手段，绑定参数是最好的防SQL注入的方法。目前许多的ORM框架及JDBC等都实现了SQL预编译和参数绑定功能，攻击者的恶意SQL会被当做SQL的参数而不是SQL命令被执行。在mybatis的mapper文件中，对于传递的参数我们一般是使用#和$来获取参数值。当使用#时，变量是占位符，就是一般我们使用javajdbc的PrepareStatement时的占位符，所有可以防止sql注入；当使用$时，变量就是直接追加在sql中，一般会有sql注入问题。</p>
+<p>2.使用正则表达式过滤传入的参数</p>
+<hr>
+<h3 id="19）XSS-攻击"><a href="#19）XSS-攻击" class="headerlink" title="19）XSS 攻击"></a>19）XSS 攻击</h3><p>答：XSS是一种经常出现在web应用中的计算机安全漏洞，与SQL注入一起成为web中最主流的攻击方式。XSS是指恶意攻击者利用网站没有对用户提交数据进行转义处理或者过滤不足的缺点，进而添加一些脚本代码嵌入到web页面中去，使别的用户访问都会执行相应的嵌入代码，从而盗取用户资料、利用用户身份进行某种动作或者对访问者进行病毒侵害的一种攻击方式。</p>
+<p><strong>(1). XSS攻击的危害：</strong></p>
+<ul>
+<li><p>盗取各类用户帐号，如机器登录帐号、用户网银帐号、各类管理员帐号</p>
+</li>
+<li><p>控制企业数据，包括读取、篡改、添加、删除企业敏感数据的能力</p>
+</li>
+<li><p>盗窃企业重要的具有商业价值的资料</p>
+</li>
+<li><p>非法转账</p>
+</li>
+<li><p>强制发送电子邮件</p>
+</li>
+<li><p>网站挂马</p>
+</li>
+<li><p>控制受害者机器向其它网站发起攻击</p>
+</li>
+</ul>
+<p><strong>(2). 原因解析：</strong></p>
+<ul>
+<li><strong>主要原因</strong>：过于信任客户端提交的数据！</li>
+<li><strong>解决办法</strong>：不信任任何客户端提交的数据，只要是客户端提交的数据就应该先进行相应的过滤处理然后方可进行下一步的操作。</li>
+<li><strong>进一步分析细节</strong>：客户端提交的数据本来就是应用所需要的，但是恶意攻击者利用网站对客户端提交数据的信任，在数据中插入一些符号以及javascript代码，那么这些数据将会成为应用代码中的一部分了，那么攻击者就可以肆无忌惮地展开攻击啦，因此我们绝不可以信任任何客户端提交的数据！！！</li>
+</ul>
+<p><strong>(3). XSS 攻击分类：</strong></p>
+<ul>
+<li><ol>
+<li>反射性 XSS 攻击（非持久性 XSS 攻击）：</li>
+</ol>
+</li>
+</ul>
+<p>漏洞产生的原因是攻击者注入的数据反映在响应中。一个典型的非持久性XSS攻击包含一个带XSS攻击向量的链接(即每次攻击需要用户的点击)，例如，正常发送消息：</p>
+<pre><code>http://www.test.com/message.php?send=Hello,World！</code></pre><p>接收者将会接收信息并显示Hello,World；但是，非正常发送消息：</p>
+<pre><code>http://www.test.com/message.php?send=&lt;script&gt;alert(‘foolish!’)&lt;/script&gt;！</code></pre><p>接收者接收消息显示的时候将会弹出警告窗口！</p>
+<ul>
+<li><ol start="2">
+<li>持久性XSS攻击 (留言板场景)：</li>
+</ol>
+</li>
+</ul>
+<p>XSS攻击向量(一般指XSS攻击代码)存储在网站数据库，当一个页面被用户打开的时候执行。也就是说，每当用户使用浏览器打开指定页面时，脚本便执行。与非持久性XSS攻击相比，持久性XSS攻击危害性更大。从名字就可以了解到，持久性XSS攻击就是将攻击代码存入数据库中，然后客户端打开时就执行这些攻击代码。</p>
+<p>例如，留言板表单中的表单域：</p>
+<pre><code>&lt;input type=“text” name=“content” value=“这里是用户填写的数据”&gt;</code></pre><p>正常操作流程是：用户是提交相应留言信息 —— 将数据存储到数据库 —— 其他用户访问留言板，应用去数据并显示；而非正常操作流程是攻击者在value填写:</p>
+<pre><code>&lt;script&gt;alert(‘foolish!’)；&lt;/script&gt; &lt;!--或者html其他标签（破坏样式）、一段攻击型代码--&gt;</code></pre><p>并将数据提交、存储到数据库中；当其他用户取出数据显示的时候，将会执行这些攻击性代码。</p>
+<p><strong>(4). 修复漏洞方针：</strong></p>
+<p>漏洞产生的根本原因是 <strong>太相信用户提交的数据，对用户所提交的数据过滤不足所导致的</strong>，因此解决方案也应该从这个方面入手，具体方案包括：</p>
+<ul>
+<li><p>将重要的cookie标记为http only, 这样的话Javascript 中的document.cookie语句就不能获取到cookie了（如果在cookie中设置了HttpOnly属性，那么通过js脚本将无法读取到cookie信息，这样能有效的防止XSS攻击）；</p>
+</li>
+<li><p>表单数据规定值的类型，例如：年龄应为只能为int、name只能为字母数字组合。。。。</p>
+</li>
+<li><p>对数据进行Html Encode 处理</p>
+</li>
+<li><p>过滤或移除特殊的Html标签，例如: <script>, <iframe> , < for <, > for>, &quot for</p>
+</li>
+<li><p>过滤JavaScript 事件的标签，例如 “onclick=”, “onfocus” 等等。</p>
+</li>
+</ul>
+<p>需要注意的是，在有些应用中是允许html标签出现的，甚至是javascript代码出现。因此，我们在过滤数据的时候需要仔细分析哪些数据是有特殊要求（例如输出需要html代码、javascript代码拼接、或者此表单直接允许使用等等），然后区别处理！</p>
+<hr>
+<h3 id="20）OSI-网络体系结构与-TCP-IP-协议模型"><a href="#20）OSI-网络体系结构与-TCP-IP-协议模型" class="headerlink" title="20）OSI 网络体系结构与 TCP/IP 协议模型"></a>20）OSI 网络体系结构与 TCP/IP 协议模型</h3><p>答：OSI 是一个理论上的网络通信模型，而 TCP/IP 则是实际上的网络通信标准。但是，它们的初衷是一样的，都是为了使得两台计算机能够像两个知心朋友那样能够互相准确理解对方的意思并做出优雅的回应。现在，我们对 OSI 七层模型的各层进行简要的介绍：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-345e2a0ad5199201.png" alt=""></p>
+<hr>
+<p>1). 物理层</p>
+<p>参考模型的最低层，也是OSI模型的第一层，实现了相邻计算机节点之间比特流的透明传送，并尽可能地屏蔽掉具体传输介质和物理设备的差异，使其上层(数据链路层)不必关心网络的具体传输介质。</p>
+<hr>
+<p>2). 数据链路层（data link layer）</p>
+<p>接收来自物理层的位流形式的数据，并封装成帧，传送到上一层；同样，也将来自上层的数据帧，拆装为位流形式的数据转发到物理层。这一层在物理层提供的比特流的基础上，通过差错控制、流量控制方法，使有差错的物理线路变为无差错的数据链路，即提供可靠的通过物理介质传输数据的方法。</p>
+<hr>
+<p>3). 网络层</p>
+<p>将网络地址翻译成对应的物理地址，并通过路由选择算法为分组通过通信子网选择最适当的路径。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-e4dc728c4dd77c69.png" alt=""></p>
+<hr>
+<p>4). 传输层（transport layer）</p>
+<p>在源端与目的端之间提供可靠的透明数据传输，使上层服务用户不必关系通信子网的实现细节。在协议栈中，传输层位于网络层之上，传输层协议为不同主机上运行的进程提供逻辑通信，而网络层协议为不同主机提供逻辑通信，如下图所示。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-c6ab5e41ee213bfc.png" alt=""></p>
+<p>实际上，网络层可以看作是传输层的一部分，其为传输层提供服务。但对于终端系统而言，网络层对它们而言是透明的，它们知道传输层的存在，也就是说，在逻辑上它们认为是传输层为它们提供了端对端的通信，这也是分层思想的妙处。</p>
+<hr>
+<p>5). 会话层（Session Layer）</p>
+<p>会话层是OSI模型的第五层，是用户应用程序和网络之间的接口，负责在网络中的两节点之间建立、维持和终止通信。</p>
+<hr>
+<p>6). 表示层（Presentation Layer）：数据的编码，压缩和解压缩，数据的加密和解密</p>
+<p>表示层是OSI模型的第六层，它对来自应用层的命令和数据进行解释，以确保一个系统的应用层所发送的信息可以被另一个系统的应用层读取。</p>
+<hr>
+<p>7). 应用层（Application layer）：为用户的应用进程提供网络通信服务</p>
+<hr>
+<h3 id="21）网络层的-ARP-协议工作原理？"><a href="#21）网络层的-ARP-协议工作原理？" class="headerlink" title="21）网络层的 ARP 协议工作原理？"></a>21）网络层的 ARP 协议工作原理？</h3><p>答：地址解析协议(ARP) 是通过解析网路层地址来找寻数据链路层地址的一个在网络协议包中极其重要的网络传输协议。</p>
+<p><strong>网络层的ARP协议完成了IP地址与物理地址的映射</strong>。首先，每台主机都会在自己的ARP缓冲区中建立一个ARP列表，以表示IP地址和MAC地址的对应关系。当源主机需要将一个数据包要发送到目的主机时，会首先检查自己ARP列表中是否存在该IP地址对应的MAC地址：如果有，就直接将数据包发送到这个MAC地址；如果没有，就向本地网段发起一个ARP请求的广播包，查询此目的主机对应的MAC地址。此ARP请求数据包里包括源主机的IP地址、硬件地址、以及目的主机的IP地址。网络中所有的主机收到这个ARP请求后，会检查数据包中的目的IP是否和自己的IP地址一致。如果不相同就忽略此数据包；如果相同，该主机首先将发送端的MAC地址和IP地址添加到自己的ARP列表中，如果ARP表中已经存在该IP的信息，则将其覆盖，然后给源主机发送一个ARP响应数据包，告诉对方自己是它需要查找的MAC地址；源主机收到这个ARP响应数据包后，将得到的目的主机的IP地址和MAC地址添加到自己的ARP列表中，并利用此信息开始数据的传输。如果源主机一直没有收到ARP响应数据包，表示ARP查询失败。</p>
+<hr>
+<h3 id="22）IP地址的分类"><a href="#22）IP地址的分类" class="headerlink" title="22）IP地址的分类"></a>22）IP地址的分类</h3><p>答：整个的因特网就是一个单一的、抽象的网络。IP 地址就是给因特网上的每一个主机（或路由器）的每一个接口分配一个在全世界范围是唯一的 32 位标识符，它是一个逻辑地址，用以屏蔽掉物理地址的差异。IP地址编址方案将IP地址空间划分为A、B、C、D、E五类，其中A、B、C是基本类，D、E类作为多播和保留使用，为特殊地址。</p>
+<p>每个IP地址包括两个标识码（ID），即网络ID和主机ID。同一个物理网络上的所有主机都使用同一个网络ID，网络上的一个主机（包括网络上工作站，服务器和路由器等）有一个主机ID与其对应。A~E类地址的特点如下：</p>
+<ul>
+<li>A类地址：以0开头，第一个字节范围：0~127；</li>
+<li>B类地址：以10开头，第一个字节范围：128~191；</li>
+<li>C类地址：以110开头，第一个字节范围：192~223；</li>
+<li>D类地址：以1110开头，第一个字节范围为224~239；</li>
+<li>E类地址：以1111开头，保留地址</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%94%EF%BC%89%E2%80%94%E2%80%94%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE%E7%AF%87/7896890-3e9b7e052218c240.png" alt=""></p>
+<hr>
+<p><strong>1). A类地址：1字节的网络地址 + 3字节主机地址，网络地址的最高位必须是“0”</strong></p>
+<p>一个A类IP地址是指， 在IP地址的四段号码中，第一段号码为网络号码，剩下的三段号码为本地计算机的号码。如果用二进制表示IP地址的话，A类IP地址就由1字节的网络地址和3字节主机地址组成，网络地址的最高位必须是“0”。A类IP地址中网络的标识长度为8位，主机标识的长度为24位，A类网络地址数量较少，有126个网络，每个网络可以容纳主机数达1600多万台。</p>
+<p>A类IP地址的地址范围1.0.0.0到127.255.255.255（二进制表示为：00000001 00000000 00000000 00000000 - 01111110 11111111 11111111 11111111），最后一个是广播地址。A类IP地址的子网掩码为255.0.0.0，每个网络支持的最大主机数为256的3次方-2=16777214台。</p>
+<hr>
+<p><strong>2). B类地址: 2字节的网络地址 + 2字节主机地址，网络地址的最高位必须是“10”</strong></p>
+<p>一个B类IP地址是指，在IP地址的四段号码中，前两段号码为网络号码。如果用二进制表示IP地址的话，B类IP地址就由2字节的网络地址和2字节主机地址组成，网络地址的最高位必须是“10”。B类IP地址中网络的标识长度为16位，主机标识的长度为16位，B类网络地址适用于中等规模的网络，有16384个网络，每个网络所能容纳的计算机数为6万多台。</p>
+<p>B类IP地址地址范围128.0.0.0-191.255.255.255（二进制表示为：10000000 00000000 00000000 00000000—-10111111 11111111 11111111 11111111），最后一个是广播地址。B类IP地址的子网掩码为255.255.0.0，每个网络支持的最大主机数为256的2次方-2=65534台。</p>
+<hr>
+<p><strong>3). C类地址: 3字节的网络地址 + 1字节主机地址，网络地址的最高位必须是“110”</strong></p>
+<p>一个C类IP地址是指，在IP地址的四段号码中，前三段号码为网络号码，剩下的一段号码为本地计算机的号码。如果用二进制表示IP地址的话，C类IP地址就由3字节的网络地址和1字节主机地址组成，网络地址的最高位必须是“110”。C类IP地址中网络的标识长度为24位，主机标识的长度为8位，C类网络地址数量较多，有209万余个网络。适用于小规模的局域网络，每个网络最多只能包含254台计算机。</p>
+<p>C类IP地址范围192.0.0.0-223.255.255.255（二进制表示为: 11000000 00000000 00000000 00000000 - 11011111 11111111 11111111 11111111）。C类IP地址的子网掩码为255.255.255.0，每个网络支持的最大主机数为256-2=254台。</p>
+<hr>
+<p><strong>4). D类地址:多播地址，用于1对多通信，最高位必须是“1110”</strong></p>
+<p>　　D类IP地址在历史上被叫做多播地址(multicast address)，即组播地址。在以太网中，多播地址命名了一组应该在这个网络中应用接收到一个分组的站点。多播地址的最高位必须是“1110”，范围从224.0.0.0到239.255.255.255。</p>
+<hr>
+<p><strong>5). E类地址:为保留地址，最高位必须是“1111”</strong></p>
+<hr>
+<h3 id="23）IP地址与物理地址"><a href="#23）IP地址与物理地址" class="headerlink" title="23）IP地址与物理地址"></a>23）IP地址与物理地址</h3><p>答：物理地址是数据链路层和物理层使用的地址，IP地址是网络层和以上各层使用的地址，是一种逻辑地址，其中ARP协议用于IP地址与物理地址的对应。</p>
+<hr>
+<h3 id="24）影响网络传输的因素有哪些？"><a href="#24）影响网络传输的因素有哪些？" class="headerlink" title="24）影响网络传输的因素有哪些？"></a>24）影响网络传输的因素有哪些？</h3><p>答：将一份数据从一个地方正确地传输到另一个地方所需要的时间我们称之为响应时间。影响这个响应时间的因素有很多。</p>
+<ul>
+<li><p>网络带宽：所谓带宽就是一条物理链路在 1s 内能够传输的最大比特数，注意这里是比特（bit）而不是字节数，也就是 b/s 。网络带宽肯定是影响数据传输的一个关键环节，因为在当前的网络环境中，平均网络带宽只有 1.7 MB/s 左右。</p>
+</li>
+<li><p>传输距离：也就是数据在光纤中要走的距离，虽然光的传播速度很快，但也是有时间的，由于数据在光纤中的移动并不是走直线的，会有一个折射率，所以大概是光的 2/3，这个时间也就是我们通常所说的传输延时。传输延时是一个无法避免的问题，例如，你要给在杭州和青岛的两个机房的一个数据库进行同步数据操作，那么必定会存在约 30ms 的一个延时。</p>
+</li>
+<li><p>TCP 拥塞控制：我们知道 TCP 传输是一个 “停-等-停-等” 的协议，传输方和接受方的步调要一致，要达到步调一致就要通过拥塞控制来调节。TCP 在传输时会设定一个 “窗口”，这个窗口的大小是由带宽和 RTT（Round-Trip Time，数据在两端的来回时间，也就是响应时间）决定的。计算的公式是带宽（b/s）xRTT（s）。通过这个值就可以得出理论上最优的 TCP 缓冲区的大小。Linux 2.4 已经可以自动地调整发送端的缓冲区的大小，而到 Linux 2.6.7 时接收端也可以自动调整了。</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/05/17/java-mian-shi-zhi-shi-dian-jie-xi-si-ban-ben-te-xing-pian/">
       Java面试知识点解析(四)——版本特性篇
     </a>
@@ -3966,755 +5134,6 @@ v<span class="token punctuation">.</span>x <span class="token operator">=</span>
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/05/08/spring-boot-kuai-su-ru-men/">
-      Spring Boot【快速入门】
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SpringBoot/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/SpringBoot</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年5月8日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-9323041dd0ce883e.png" alt=""></p>
-<h2 id="Spring-Boot-概述"><a href="#Spring-Boot-概述" class="headerlink" title="Spring Boot 概述"></a>Spring Boot 概述</h2><blockquote>
-<p><strong>Build Anything with Spring Boot：</strong> Spring Boot is the starting point for building all Spring-based applications. Spring Boot is designed to get you up and running as quickly as possible, with minimal upfront configuration of Spring.</p>
-</blockquote>
-<p>上面是引自官网的一段话，大概是说： Spring Boot 是所有基于 Spring 开发的项目的起点。Spring Boot 的设计是为了让你尽可能快的跑起来 Spring 应用程序并且尽可能减少你的配置文件。</p>
-<h4 id="什么是-Spring-Boot"><a href="#什么是-Spring-Boot" class="headerlink" title="什么是 Spring Boot"></a>什么是 Spring Boot</h4><ul>
-<li>它使用 “习惯优于配置” （项目中存在大量的配置，此外还内置一个习惯性的配置，让你无须）的理念让你的项目快速运行起来。</li>
-<li>它并不是什么新的框架，而是默认配置了很多框架的使用方式，就像 Maven 整合了所有的 jar 包一样，Spring Boot 整合了所有框架（引自：<a href="http://www.ityouknow.com/springboot/2016/01/06/springboot(%E4%B8%80)-%E5%85%A5%E9%97%A8%E7%AF%87.html" target="_blank" rel="noopener">springboot(一)：入门篇——纯洁的微笑</a>）</li>
-</ul>
-<h4 id="使用-Spring-Boot-有什么好处"><a href="#使用-Spring-Boot-有什么好处" class="headerlink" title="使用 Spring Boot 有什么好处"></a>使用 Spring Boot 有什么好处</h4><p>回顾我们之前的 SSM 项目，搭建过程还是比较繁琐的，需要：</p>
-<ul>
-<li>1）配置 web.xml，加载 spring 和 spring mvc</li>
-<li>2）配置数据库连接、配置日志文件</li>
-<li>3）配置家在配置文件的读取，开启注解</li>
-<li>4）配置mapper文件</li>
-<li><strong>…..</strong></li>
-</ul>
-<p>而使用 Spring Boot 来开发项目则只需要非常少的几个配置就可以搭建起来一个 Web 项目，并且利用 IDEA 可以自动生成生成，这简直是太爽了… </p>
-<ul>
-<li>划重点：简单、快速、方便地搭建项目；对主流开发框架的无配置集成；极大提高了开发、部署效率。</li>
-</ul>
-<hr>
-<h2 id="Spring-Boot-快速搭建"><a href="#Spring-Boot-快速搭建" class="headerlink" title="Spring Boot 快速搭建"></a>Spring Boot 快速搭建</h2><h4 id="第一步：新建项目"><a href="#第一步：新建项目" class="headerlink" title="第一步：新建项目"></a>第一步：新建项目</h4><p>选择 Spring Initializr ，然后选择默认的 url 点击【Next】：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-3e2c9c5742c10c86.png" alt=""></p>
-<p>然后修改一下项目的信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-28dbe478ff25a3a0.png" alt=""></p>
-<p>勾选上 Web 模板：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-532868b7e6760e03.png" alt=""></p>
-<p>选择好项目的位置，点击【Finish】：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-931cc2fb5c8964e9.png" alt=""></p>
-<p>如果是第一次配置 Spring Boot 的话可能需要等待一会儿 IDEA 下载相应的 依赖包，默认创建好的项目结构如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-9ac7acc56d5a32f0.png" alt=""></p>
-<p>项目结构还是看上去挺清爽的，少了很多配置文件，我们来了解一下默认生成的有什么：</p>
-<ul>
-<li>SpringbootApplication： 一个带有 main() 方法的类，用于启动应用程序</li>
-<li>SpringbootApplicationTests：一个空的 Junit 测试了，它加载了一个使用 Spring Boot 字典配置功能的 Spring 应用程序上下文</li>
-<li>application.properties：一个空的 properties 文件，可以根据需要添加配置属性</li>
-<li>pom.xml： Maven 构建说明文件</li>
-</ul>
-<h4 id="第二步：HelloController"><a href="#第二步：HelloController" class="headerlink" title="第二步：HelloController"></a>第二步：HelloController</h4><p>在【cn.wmyskxz.springboot】包下新建一个【HelloController】：</p>
-<pre><code>package cn.wmyskxz.springboot;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-/**
- * 测试控制器
- *
- * @author: @我没有三颗心脏
- * @create: 2018-05-08-下午 16:46
- */
-@RestController
-public class HelloController {
-
-    @RequestMapping(&quot;/hello&quot;)
-    public String hello() {
-        return &quot;Hello Spring Boot!&quot;;
-    }
-}</code></pre><ul>
-<li><strong>@RestController 注解：</strong> 该注解是 @Controller 和 @ResponseBody 注解的合体版</li>
-</ul>
-<h4 id="第三步：利用-IDEA-启动-Spring-Boot"><a href="#第三步：利用-IDEA-启动-Spring-Boot" class="headerlink" title="第三步：利用 IDEA 启动 Spring Boot"></a>第三步：利用 IDEA 启动 Spring Boot</h4><p>我们回到 SpringbootApplication 这个类中，然后右键点击运行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-bf1aa6ed5c0db7b4.png" alt=""></p>
-<ul>
-<li><strong>注意</strong>：我们之所以在上面的项目中没有手动的去配置 Tomcat 服务器，是因为 Spring Boot 内置了 Tomcat </li>
-</ul>
-<p>等待一会儿就会看到下方的成功运行的提示信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-63e43dc6a277de3e.png" alt=""></p>
-<p>可以看到我们的 Tomcat 运行在 8080 端口，我们来访问 “<code>/hello</code>” 地址试一下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-6111e1913c5bf6d6.png" alt=""></p>
-<p>可以看到页面成功显示出我们返回的信息。</p>
-<hr>
-<h2 id="解析-Spring-Boot-项目"><a href="#解析-Spring-Boot-项目" class="headerlink" title="解析 Spring Boot 项目"></a>解析 Spring Boot 项目</h2><blockquote>
-<p>这一部分参考自：<a href="http://tengj.top/2017/02/26/springboot1/" target="_blank" rel="noopener">Spring Boot干货系列（一）优雅的入门篇 ——嘟嘟独立博客</a></p>
-</blockquote>
-<h4 id="解析-pom-xml-文件"><a href="#解析-pom-xml-文件" class="headerlink" title="解析 pom.xml 文件"></a>解析 pom.xml 文件</h4><p>让我们来看看默认生成的 pom.xml 文件中到底有一些什么特别：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;groupId&gt;cn.wmyskxz&lt;/groupId&gt;
-    &lt;artifactId&gt;springboot&lt;/artifactId&gt;
-    &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
-    &lt;packaging&gt;jar&lt;/packaging&gt;
-
-    &lt;name&gt;springboot&lt;/name&gt;
-    &lt;description&gt;Demo project for Spring Boot&lt;/description&gt;
-
-    &lt;parent&gt;
-        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-        &lt;version&gt;2.0.1.RELEASE&lt;/version&gt;
-        &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
-    &lt;/parent&gt;
-
-    &lt;properties&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
-        &lt;java.version&gt;1.8&lt;/java.version&gt;
-    &lt;/properties&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
-        &lt;/dependency&gt;
-
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-            &lt;scope&gt;test&lt;/scope&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-
-    &lt;build&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/build&gt;
-&lt;/project&gt;</code></pre><p>我们可以看到一个比较陌生一些的标签 <code>&lt;parent&gt;</code> ，这个标签是在配置 Spring Boot 的父级依赖：</p>
-<pre><code>&lt;parent&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
-    &lt;version&gt;2.0.1.RELEASE&lt;/version&gt;
-    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
-&lt;/parent&gt;</code></pre><p>有了这个，当前的项目才是 Spring Boot 项目，spring-boot-starter-parent 是一个特殊的 starter ，它用来提供相关的 Maven 默认依赖，<strong>使用它之后，常用的包依赖就可以省去 version 标签。</strong></p>
-<p>关于具体 Spring Boot 提供了哪些 jar 包的依赖，我们可以查看本地 Maven 仓库下：\repository\org\springframework\boot\spring-boot-dependencies\2.0.1.RELEASE\spring-boot-dependencies-2.0.1.RELEASE.pom 文件来查看，挺长的…</p>
-<h4 id="应用入口类"><a href="#应用入口类" class="headerlink" title="应用入口类"></a>应用入口类</h4><p>Spring Boot 项目通常有一个名为 <em>Application 的入口类，入口类里有一个 main 方法， *</em>这个 main 方法其实就是一个标准的 Javay 应用的入口方法。** </p>
-<p><strong>@SpringBootApplication</strong> 是 Spring Boot 的核心注解，它是一个组合注解，该注解组合了：<strong>@Configuration、@EnableAutoConfiguration、@ComponentScan；</strong> 若不是用 @SpringBootApplication 注解也可以使用这三个注解代替。</p>
-<ul>
-<li>其中，<strong>@EnableAutoConfiguration 让 Spring Boot 根据类路径中的 jar 包依赖为当前项目进行自动配置</strong>，例如，添加了 spring-boot-starter-web 依赖，会自动添加 Tomcat 和 Spring MVC 的依赖，那么 Spring Boot 会对 Tomcat 和 Spring MVC 进行自动配置。</li>
-<li><strong>Spring Boot 还会自动扫描 @SpringBootApplication 所在类的同级包以及下级包里的 Bean</strong> ，所以入口类建议就配置在 grounpID + arctifactID 组合的包名下（这里为 cn.wmyskxz.springboot 包）</li>
-</ul>
-<h4 id="Spring-Boot-的配置文件"><a href="#Spring-Boot-的配置文件" class="headerlink" title="Spring Boot 的配置文件"></a>Spring Boot 的配置文件</h4><p>Spring Boot 使用一个全局的配置文件 application.properties 或 application.yml，放置在【src/main/resources】目录或者类路径的 /config 下。</p>
-<p>Spring Boot 不仅支持常规的 properties 配置文件，还支持 yaml 语言的配置文件。yaml 是以数据为中心的语言，在配置数据的时候具有面向对象的特征。</p>
-<p>Spring Boot 的全局配置文件的作用是对一些默认配置的配置值进行修改。</p>
-<blockquote>
-<ul>
-<li>简单实例一下</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-bcd65f7469b06608.png" alt=""></p>
-<p>我们同样的将 Tomcat 默认端口设置为 8080 ，并将默认的访问路径从 “<code>/</code>” 修改为 “<code>/hello</code>” 时，使用 properties 文件和 yml 文件的区别如上图。</p>
-<ul>
-<li>注意： yml 需要在 “<code>:</code>” 后加一个空格，幸好 IDEA 很好地支持了 yml 文件的格式有良好的代码提示；</li>
-</ul>
-<blockquote>
-<ul>
-<li>我们可以自己配置多个属性</li>
-</ul>
-</blockquote>
-<p>我们直接把 .properties 后缀的文件删掉，使用 .yml 文件来进行简单的配置，然后使用 @Value 来获取配置属性：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-0e808a82254d6a4b.png" alt=""></p>
-<p>重启 Spring Boot ，输入地址：localhost:8080/hello 能看到正确的结果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-c85216e8ea7910f0.png" alt=""></p>
-<ul>
-<li><strong>注意：</strong> 我们并没有在 yml 文件中注明属性的类型，而是在使用的时候定义的。</li>
-</ul>
-<p>你也可以在配置文件中使用当前配置：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-37e91abbc4550982.png" alt=""></p>
-<p>仍然可以得到正确的结果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-eabc3cd39b44fd0d.png" alt=""></p>
-<ul>
-<li><strong>问题：</strong> 这样写配置文件繁琐而且可能会造成类的臃肿，因为有许许多多的 @Value 注解。</li>
-</ul>
-<blockquote>
-<ul>
-<li>封装配置信息</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2599817d8f2f50d2.png" alt=""></p>
-<p>我们可以把配置信息封装成一个类，首先在我们的 name 和 age 前加一个 student 前缀，然后新建一个 StudentProperties 的类用来封装这些信息，并用上两个注解：</p>
-<ul>
-<li>@Component：表明当前类是一个 Java Bean </li>
-<li>@ConfigurationProperties(prefix = “student”)：表示获取前缀为 sutdent 的配置信息</li>
-</ul>
-<p>这样我们就可以在控制器中使用，重启得到正确信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-84dc1215d01f3fa9.png" alt=""></p>
-<h4 id="Spring-Boot-热部署"><a href="#Spring-Boot-热部署" class="headerlink" title="Spring Boot 热部署"></a>Spring Boot 热部署</h4><p>在目前的 Spring Boot 项目中，当发生了任何修改之后我们都需要重新启动才能够正确的得到效果，这样会略显麻烦，Spring Boot 提供了热部署的方式，当发现任何类发生了改变，就会通过 JVM 类加载的方式，加载最新的类到虚拟机中，这样就不需要重新启动也能看到修改后的效果了。</p>
-<blockquote>
-<ul>
-<li>做法也很简单，修改 pom.xml 即可！</li>
-</ul>
-</blockquote>
-<p>我们往 pom.xml 中添加一个依赖就可以了：</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
-    &lt;optional&gt;true&lt;/optional&gt; &lt;!-- 这个需要为 true 热部署才有效 --&gt;
-&lt;/dependency&gt;</code></pre><p>重新启动 Spring Boot ，然后修改任意代码，就能观察到控制台的自动重启现象：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-cec869956c3cf158.png" alt=""></p>
-<blockquote>
-<p>关于如何在 IDEA 中配置热部署：<a href="https://blog.csdn.net/xusheng_Mr/article/details/78771746" target="_blank" rel="noopener">传送门</a></p>
-</blockquote>
-<hr>
-<h2 id="Spring-Boot-使用"><a href="#Spring-Boot-使用" class="headerlink" title="Spring Boot 使用"></a>Spring Boot 使用</h2><p>上面已经完成了 Spring Boot 项目的简单搭建，我们仅仅需要进行一些简单的设置，写一个 HelloController 就能够直接运行了，不要太简单…接下来我们再深入了解一下 Spring Boot 的使用。</p>
-<h4 id="Spring-Boot-支持-JSP"><a href="#Spring-Boot-支持-JSP" class="headerlink" title="Spring Boot 支持 JSP"></a>Spring Boot 支持 JSP</h4><p>Spring Boot 的默认视图支持是 Thymeleaf 模板引擎，但是这个我们不熟悉啊，我们还是想要使用 JSP 怎么办呢？</p>
-<blockquote>
-<ul>
-<li>第一步：修改 pom.xml 增加对 JSP 文件的支持</li>
-</ul>
-</blockquote>
-<pre><code>&lt;!-- servlet依赖. --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-    &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-    &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-&lt;/dependency&gt;
-
-&lt;!-- tomcat的支持.--&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
-    &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
-    &lt;scope&gt;provided&lt;/scope&gt;
-&lt;/dependency&gt;</code></pre><blockquote>
-<ul>
-<li>第二步：配置试图重定向 JSP 文件的位置</li>
-</ul>
-</blockquote>
-<p>修改 application.yml 文件，将我们的 JSP 文件重定向到 /WEB-INF/views/ 目录下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-7c17f7e10cfb2629.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第三步：修改 HelloController</li>
-</ul>
-</blockquote>
-<p>修改 @RestController 注解为 @Controller ，然后将 hello 方法修改为：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2dc2c39cd962edc1.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第四步：新建 hello.jsp 文件</li>
-</ul>
-</blockquote>
-<p>在【src/main】目录下依次创建 webapp、WEB-INF、views 目录，并创建一个 hello.jsp 文件：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-a180556d7ead9605.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第五步：刷新网页</li>
-</ul>
-</blockquote>
-<p>因为我们部署了热部署功能，所以只需要等待控制台重启信息完成之后再刷新网页就可以看到正确效果了：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-cfd20f747ffca978.png" alt=""></p>
-<ul>
-<li>关于 404，使用 spring-boot:run 运行项目可以解决：</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-27c1bf46487ba5eb.png" alt=""></p>
-<h4 id="集成-MyBatis"><a href="#集成-MyBatis" class="headerlink" title="集成 MyBatis"></a>集成 MyBatis</h4><blockquote>
-<ul>
-<li>第一步：修改 pom.xml 增加对 MySql和 MyBatis 的支持</li>
-</ul>
-</blockquote>
-<pre><code>
-&lt;!-- mybatis --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
-    &lt;version&gt;1.1.1&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;!-- mysql --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;mysql&lt;/groupId&gt;
-    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-    &lt;version&gt;5.1.21&lt;/version&gt;
-&lt;/dependency&gt;</code></pre><blockquote>
-<ul>
-<li>第二步：新增数据库链接参数</li>
-</ul>
-</blockquote>
-<p>这里我们就直接使用之前创建好的 student 表了吧：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-1eda563cfdfbae65.png" alt=""></p>
-<blockquote>
-<ul>
-<li>第三步：创建 Student 实体类和 StudentMapper 映射类</li>
-</ul>
-</blockquote>
-<p>在【cn.wmyskxz.springboot】下新建一个【pojo】包，然后在其下创建一个 Student 类：</p>
-<pre><code>public class Student {
-
-    private Integer id;
-    private Integer student_id;
-    private String name;
-    private Integer age;
-    private String sex;
-    private Date birthday;
-
-    /* getter and setter */
-}</code></pre><p>在【cn.wmyskxz.springboot】下新建一个【mapper】包，然后在其下创建一个 StudentMapper 映射类：</p>
-<pre><code>package cn.wmyskxz.springboot.mapper;
-
-import cn.wmyskxz.springboot.pojo.Student;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
-
-@Mapper
-public interface StudentMapper {
-
-    @Select(&quot;SELECT * FROM student&quot;)
-    List&lt;Student&gt; findAll();
-}</code></pre><blockquote>
-<ul>
-<li>第四步：编写 StudentController</li>
-</ul>
-</blockquote>
-<p>在【cn.wmyskxz.springboot】下新建一个【controller】包，然后在其下创建一个 StudentController ：</p>
-<pre><code>package cn.wmyskxz.springboot.controller;
-
-import cn.wmyskxz.springboot.mapper.StudentMapper;
-import cn.wmyskxz.springboot.pojo.Student;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-
-/**
- * Student 控制器
- *
- * @author: @我没有三颗心脏
- * @create: 2018-05-08-下午 20:25
- */
-@Controller
-public class StudentController {
-
-    @Autowired
-    StudentMapper studentMapper;
-
-    @RequestMapping(&quot;/listStudent&quot;)
-    public String listStudent(Model model) {
-        List&lt;Student&gt; students = studentMapper.findAll();
-        model.addAttribute(&quot;students&quot;, students);
-        return &quot;listStudent&quot;;
-    }
-}</code></pre><blockquote>
-<p>第五步：编写 listStudent.jsp 文件</p>
-</blockquote>
-<p>我们简化一下 JSP 的文件，仅显示两个字段的数据：</p>
-<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
-         pageEncoding=&quot;UTF-8&quot;%&gt;
-
-&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot;%&gt;
-
-&lt;table align=&#39;center&#39; border=&#39;1&#39; cellspacing=&#39;0&#39;&gt;
-    &lt;tr&gt;
-        &lt;td&gt;id&lt;/td&gt;
-        &lt;td&gt;name&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;c:forEach items=&quot;${students}&quot; var=&quot;s&quot; varStatus=&quot;st&quot;&gt;
-        &lt;tr&gt;
-            &lt;td&gt;${s.id}&lt;/td&gt;
-            &lt;td&gt;${s.name}&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/c:forEach&gt;
-&lt;/table&gt;</code></pre><blockquote>
-<ul>
-<li>第六步：重启服务器运行</li>
-</ul>
-</blockquote>
-<p>因为往 pom.xml 中新增加了依赖的包，所以自动重启服务器没有作用，我们需要手动重启一次，然后在地址输入：localhost:8080/listStudent 查看效果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Spring-Boot%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-5fd3c075d07b5840.png" alt=""></p>
-<blockquote>
-<p>以上。</p>
-</blockquote>
-<hr>
-<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><p>how2j.cn-Spring Boot 系列教程</p>
-<hr>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/05/07/mo-fang-tian-mao-shi-zhan-ssm-zong-jie/">
-      模仿天猫实战【SSM】——总结
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/SSM/项目</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年5月7日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>第一篇文章链接：<a href="https://www.jianshu.com/p/5e44ee046b43" target="_blank" rel="noopener">模仿天猫实战【SSM版】——项目起步</a><br>第二篇文章链接：<a href="https://www.jianshu.com/p/484096db003f" target="_blank" rel="noopener">模仿天猫实战【SSM版】——后台开发</a></p>
-<p>总结：项目从4-27号开始写，到今天5-7号才算真正的完工，有许多粗糙的地方，但总算完成了，比想象中的开发周期要久的多，并且大部分的时间都花在了前端页面的编写上…仅以此文来总结一下</p>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-3eee3c0023557f8e.png" alt=""></p>
-<h2 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h2><h4 id="功能一览表"><a href="#功能一览表" class="headerlink" title="功能一览表"></a>功能一览表</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-8de7d88e63f5feab.png" alt=""></p>
-<p>大致理了一下功能列表，应该是齐全的，其中推荐链接暂时不支持修改。</p>
-<h4 id="项目页面一览表"><a href="#项目页面一览表" class="headerlink" title="项目页面一览表"></a>项目页面一览表</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-8265022a0d8fde56.png" alt=""></p>
-<ul>
-<li><strong>后端页面：</strong> 后台所需要用到的页面，从名字很好区分功能，其中 index.jsp 只有一行代码用于跳转</li>
-<li><strong>公共页面：</strong> 都是前端页面，从对天猫页面的分析提取出一些复用比较高的页面用于动态的包含在其他前端页面中。</li>
-<li><strong>前台页面：</strong>前台相较于后台页面 CSS 更加复杂，交互也更多，我把每一个页面的需要用到的 css 和 js 代码均保留在了当前 JSP 页面中，方便浏览学习。</li>
-</ul>
-<h4 id="项目主要逻辑类"><a href="#项目主要逻辑类" class="headerlink" title="项目主要逻辑类"></a>项目主要逻辑类</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-2ee2704c72494225.png" alt=""></p>
-<ul>
-<li><strong>控制器（Controller）：</strong> 用于控制页面的逻辑， 提取出一个 PageController 来专门控制页面的跳转，ForeController 用于前台所有的逻辑操作</li>
-<li><strong>拦截器（Interceptor）：</strong> LoginInteceptor 用于对登录进行判断，因为有一些页面需要登录之后才能访问的，例如：购物车；OtherInterceptor 用于向页面中添加一些其他的数据，例如：购物车数量。</li>
-<li><strong>业务层（Service层）：</strong> 业务处理层，其中封装了 Dao 层，用于完成主要的逻辑处理。</li>
-</ul>
-<blockquote>
-<p>不需要登录就能访问的页面（以下为拦截器中的代码片段）：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-0cc94a89ec585ea2.png" alt=""></p>
-<ul>
-<li>其中包括：主页、搜索结果页、产品展示页、登录页、注册页。</li>
-<li>还包括一些其他的路径用于处理逻辑，test 为开发过程中用于测试的页面</li>
-</ul>
-</blockquote>
-<h2 id="前台总结"><a href="#前台总结" class="headerlink" title="前台总结"></a>前台总结</h2><p>前台花费了大部分的时间，不仅仅是繁杂的样式和页面需要自己去编写，业务逻辑也比后台要复杂一些，因为是模仿，所以大部分的 CSS 我都是参照着天猫官网写的（利用FireFox来查看元素和元素样式）：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-253d0a2d979404f7.png" alt=""></p>
-<p>另外一部分是参照了how2j.cn上模仿的前端教程：<a href="http://how2j.cn/k/tmall-front/tmall-front-790/790.html" target="_blank" rel="noopener">戳这里</a></p>
-<h4 id="首页"><a href="#首页" class="headerlink" title="首页"></a>首页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-1a0c952535b9559d.png" alt=""></p>
-<p>简要的首页大概就是这样，请别在意轮播下面的【女装/内衣】中的产品，因为在4月份的时候，第一个分类的名字还叫【女装 /男装 /内衣】（好像是这个），后来项目写着写着突然改了…</p>
-<p>观察大部分的页面，其实都是包含了其中的三个部分：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-366e78dae956c6eb.png" alt=""></p>
-<p>即顶部导航栏、一个搜索框、还有底部，我们可以单独把他们写成一个 jsp ，并动态的包含在我们的页面中</p>
-<blockquote>
-<ul>
-<li>首页分类栏</li>
-</ul>
-</blockquote>
-<p>因为一开始，我以为分类栏中保存的是一些直接的产品，但是分析前端的时候发现它们只是一些 hot-word 热词，所以为了和天猫的首页保持一致，我直接把分类栏写死了写成了一个单独的 JSP 文件并包含进了主页：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-45ee80b50df9085c.png" alt=""></p>
-<p>我还自己写了一个小程序，用来将这些 hor-word 转换成对应的 html 代码，不然这手写 2000 行可能真的够呛…</p>
-<h4 id="产品搜索页"><a href="#产品搜索页" class="headerlink" title="产品搜索页"></a>产品搜索页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-c2f1edc856487a15.png" alt=""></p>
-<p>并且支持按照【综合（销量*评价）】、【人气（评论量）】、【销量】、【价格】来排序产品，使用 Java 8 的新特性来完成该功能：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-f8b52056229d0e0f.png" alt=""></p>
-<h4 id="产品展示页"><a href="#产品展示页" class="headerlink" title="产品展示页"></a>产品展示页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-7c2807d14ba0aa63.png" alt=""></p>
-<p>所有的产品展示图片均是来自how2j.com上的一张图，前面有链接，表示有参照这个教程来做。</p>
-<h4 id="购买页"><a href="#购买页" class="headerlink" title="购买页"></a>购买页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-08a11273e23d0019.png" alt=""></p>
-<p>在产品页中点击立即购买，或者在购物车点击结算都会跳转到该页面，创建订单。</p>
-<h4 id="付款页面"><a href="#付款页面" class="headerlink" title="付款页面"></a>付款页面</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-45fee843691d32a4.png" alt=""></p>
-<p>无耻的黏了一张自己的收款二维码…</p>
-<h4 id="付款成功页"><a href="#付款成功页" class="headerlink" title="付款成功页"></a>付款成功页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-4412da524b78fbc9.png" alt=""></p>
-<p>当点击确认支付按钮之后，就会跳转到该页面来。</p>
-<h4 id="购物车页"><a href="#购物车页" class="headerlink" title="购物车页"></a>购物车页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-f9d2c11534b7c884.png" alt=""></p>
-<p>该页面支持删除订单和对订单项进行相关的操作，点击结算页面跳转到购买页。</p>
-<h4 id="我的订单页"><a href="#我的订单页" class="headerlink" title="我的订单页"></a>我的订单页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-a9bba1fd07a97acc.png" alt=""></p>
-<p>该页面用于对订单的管理，可以查看和操作订单。</p>
-<h4 id="评价页"><a href="#评价页" class="headerlink" title="评价页"></a>评价页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-7f24722600e49c63.png" alt=""></p>
-<p>当完成购买，即经过购买→支付→发货→确认收货的流程之后，即可对产品进行评论，评论完成后能看到其他用户的评价信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-f597c88795ac8eef.png" alt=""></p>
-<h4 id="注册页"><a href="#注册页" class="headerlink" title="注册页"></a>注册页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-b3fcc1bebad7c58c.png" alt=""></p>
-<p>用户注册页，在前端判断两次密码是否相同，并提交给后台判断用户名是否唯一。</p>
-<h4 id="登录页"><a href="#登录页" class="headerlink" title="登录页"></a>登录页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-11c055b0974e3895.png" alt=""></p>
-<p>因为分辨率的问题有一点 BUG，不过不影响体验，登录之后顶部导航栏出现用户信息：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-9bc95b094347e682.png" alt=""></p>
-<hr>
-<h2 id="后台总结"><a href="#后台总结" class="headerlink" title="后台总结"></a>后台总结</h2><p>前台因为有现成的原型可以参照和模仿，后台需要自己去设计和实现界面，所以我直接找了一个模板代码，很方便也很快的完成了开发，在我的第二篇文章：<a href="https://www.jianshu.com/p/484096db003f" target="_blank" rel="noopener">模仿天猫实战【SSM版】——后台开发</a> 有介绍。</p>
-<h4 id="分类管理"><a href="#分类管理" class="headerlink" title="分类管理"></a>分类管理</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-8b874a9caba8a982.png" alt=""></p>
-<p>其中的分页和搜索功能是我找来的模板中用 js 代码来实现的，分类管理中不仅提供了更改分类名称的功能，还能管理分类下的产品和属性。</p>
-<h4 id="产品管理页"><a href="#产品管理页" class="headerlink" title="产品管理页"></a>产品管理页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-ec968f34fdba0fea.png" alt=""></p>
-<h4 id="产品图片管理页"><a href="#产品图片管理页" class="headerlink" title="产品图片管理页"></a>产品图片管理页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-c1a5f55b81f871a1.png" alt=""></p>
-<p>产品的图片是默认放置在 <code>img/product/产品的id号/</code> 目录下的，并且默认的五张图片分别为：1.jpg、2.jpg…..5.jpg，用于默认显示的图片均为 1.jpg</p>
-<h4 id="属性值管理页"><a href="#属性值管理页" class="headerlink" title="属性值管理页"></a>属性值管理页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-44c9c3d0b5bae37d.png" alt=""></p>
-<p>产品属性值管理页，能增加的属性值只能为当前分类下拥有的属性。</p>
-<h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-f155c8d139aa1f7c.png" alt=""></p>
-<p>提供一个修改密码的功能，给申诉修改密码的用户留一条后路。</p>
-<h4 id="订单管理页"><a href="#订单管理页" class="headerlink" title="订单管理页"></a>订单管理页</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-bb85ec56c0820d71.png" alt=""></p>
-<p>等待发货的订单有一个发货按钮，用于发货。</p>
-<blockquote>
-<p>上面有一些产品管理的按钮乱入了..直接拷贝的之前的图片，左侧栏中的产品管理按钮是删除了的…</p>
-</blockquote>
-<h4 id="推荐链接管理"><a href="#推荐链接管理" class="headerlink" title="推荐链接管理"></a>推荐链接管理</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-1dd1a3ec88dc56b6.png" alt=""></p>
-<p>暂时不提供修改功能。</p>
-<hr>
-<h2 id="项目中遇到的一些问题"><a href="#项目中遇到的一些问题" class="headerlink" title="项目中遇到的一些问题"></a>项目中遇到的一些问题</h2><h4 id="轮播失效"><a href="#轮播失效" class="headerlink" title="轮播失效"></a>轮播失效</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-883473b3c260be5f.png" alt=""></p>
-<p>Bootstrap 的引入要在 JQuery 之后，不然不能正常使用…</p>
-<h4 id="为什么不在-PropertyValue-表中增加-property-name-字段？"><a href="#为什么不在-PropertyValue-表中增加-property-name-字段？" class="headerlink" title="为什么不在 PropertyValue 表中增加 property_name 字段？"></a>为什么不在 PropertyValue 表中增加 property_name 字段？</h4><p>在产品详情页明显感觉到显示产品的属性的时候，特别不方便。</p>
-<h4 id="PropertyValue"><a href="#PropertyValue" class="headerlink" title="PropertyValue"></a>PropertyValue</h4><p>新增一个 Property 属性，来完成产品页的传递</p>
-<h4 id="后台属性值管理逻辑有点问题"><a href="#后台属性值管理逻辑有点问题" class="headerlink" title="后台属性值管理逻辑有点问题"></a>后台属性值管理逻辑有点问题</h4><p>之前的代码：</p>
-<pre><code>&lt;c:forEach items=&quot;${propertyValues}&quot; var=&quot;pv&quot;&gt;
-    &lt;tr&gt;
-        &lt;td&gt;
-            &lt;c:forEach items=&quot;${properties}&quot; var=&quot;p&quot;&gt;
-                &lt;c:if test=&quot;${p.id==pv.property_id}&quot;&gt;${p.name}&lt;/c:if&gt;
-            &lt;/c:forEach&gt;
-        &lt;/td&gt;
-        &lt;td&gt;${pv.value}&lt;/td&gt;
-        &lt;td&gt;&lt;a href=&quot;editPropertyValue?id=${pv.id}&quot;&gt;&lt;span
-                class=&quot;glyphicon glyphicon-edit&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
-        &lt;td&gt;
-            &lt;a href=&quot;deletePropertyValue?id=${pv.id}&amp;category_id=${product.category_id}&quot;&gt;&lt;span
-                    class=&quot;glyphicon glyphicon-trash&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/c:forEach&gt;</code></pre><p>非常糟糕，逻辑就是错的。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-f65e97fdeb5b4ecc.png" alt=""></p>
-<p>利用上面为 PropertyValue 添加的 Property 来完成功能：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-8e0814d7b3eb7ee7.png" alt=""></p>
-<blockquote>
-<ul>
-<li>下面的 select 标签也是错的</li>
-</ul>
-</blockquote>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-890297352553a12f.png" alt=""></p>
-<p>生成出来的代码是这样的：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-3848bd97481ea5a7.png" alt=""></p>
-<p>我想要绑定一个隐藏的 input ，看来这样写是不行的，搜索了一下，可以通过为 <code>&lt;select&gt;</code> 标签写 <code>onchange</code> 属性来完成：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-41859dc0dc714c79.png" alt=""></p>
-<h4 id="使用-Java-8-的新特性来排序"><a href="#使用-Java-8-的新特性来排序" class="headerlink" title="使用 Java 8 的新特性来排序"></a>使用 Java 8 的新特性来排序</h4><p>使用了 Java 8 的 Lambda 表达式来完成前端的排序工作：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-a5b7d31c428fc275.png" alt=""></p>
-<h4 id="注册页-1"><a href="#注册页-1" class="headerlink" title="注册页"></a>注册页</h4><p>天猫的注册搞得很高大上的样子，淘宝也弄成了一样的，不是很好模仿出效果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-e8c8b999970823a2.png" alt=""></p>
-<p>所以照着改了一改，弄成了这个样子：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-0e7b1c5090bede21.png" alt=""></p>
-<p>在前端通过 JS 来判断完成确认密码的功能，然后这是注册成功的页面：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-227ec2309e4921c5.png" alt=""></p>
-<h4 id="发现-OrderItem-少设计了一个字段"><a href="#发现-OrderItem-少设计了一个字段" class="headerlink" title="发现 OrderItem 少设计了一个字段"></a>发现 OrderItem 少设计了一个字段</h4><p>这是最初设计的数据库表与表之间的关系：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E3%80%91%E2%80%94%E2%80%94%E6%80%BB%E7%BB%93/7896890-5b661e7395805c1e.png" alt=""></p>
-<p>当我按照流程一步一步完成着项目，在完成立即购买这个功能时，我需要按照user_id来返回订单项时，不容易实现，我们需要为 OrderItem 增加一个字段（user_id）：</p>
-<pre><code>CREATE TABLE `order_item` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT COMMENT &#39;唯一索引id&#39;,
-    `product_id` INT(11) NOT NULL COMMENT &#39;对应产品id&#39;,
-    `order_id` INT(11) NOT NULL COMMENT &#39;对应订单id&#39;,
-    `user_id` INT(11) NOT NULL COMMENT &#39;对应用户id&#39;,
-    `number` INT(11) NULL DEFAULT NULL COMMENT &#39;对应产品购买的数量&#39;,
-    INDEX `fk_order_item_product` (`product_id`),
-    INDEX `fk_order_item_order` (`order_id`),
-    INDEX `fk_order_item_user` (`user_id`),
-    PRIMARY KEY (`id`),
-    CONSTRAINT `fk_order_item_order` FOREIGN KEY (`order_id`) REFERENCES `order_` (`id`),
-    CONSTRAINT `fk_order_item_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    CONSTRAINT `fk_order_item_product` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-)COLLATE=&#39;utf8_general_ci&#39; ENGINE=InnoDB;</code></pre><p>然后运行 TestMybatisGenerator 来重新生成相关的文件.</p>
-<h4 id="更改-OrderItem-表中的-order-id-字段默认为空"><a href="#更改-OrderItem-表中的-order-id-字段默认为空" class="headerlink" title="更改 OrderItem 表中的 order_id 字段默认为空"></a>更改 OrderItem 表中的 order_id 字段默认为空</h4><p>order_id 是用于判断当前的 OrderItem 是否存在于购物车中的依据，最开始我们将这个字段设计为不能为空，那么就只能在购物车中存在，当我们不需要经过购物车而要直接购买的时候，就不能得到满足…</p>
-<h4 id="修复购物车逻辑问题"><a href="#修复购物车逻辑问题" class="headerlink" title="修复购物车逻辑问题"></a>修复购物车逻辑问题</h4><p>之前给 cart.jsp 页面的 List<OrderItem> 仅仅是通过 listByUserId 方法来获取，但其实真正的购物车是那些 order_id 为空的，所以我在 OrderItemService 中新增了一个方法：listForCart 来返回那些真正属于购物车的订单项：</p>
-<pre><code>@Override
-public List&lt;OrderItem&gt; listForCart(Integer user_id) {
-    OrderItemExample example = new OrderItemExample();
-    example.or().andUser_idEqualTo(user_id).andOrder_idIsNull();
-    List&lt;OrderItem&gt; result = orderItemMapper.selectByExample(example);
-    setProduct(result);
-    return result;
-}</code></pre><hr>
-<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>完成之后的项目直接上传 Github，代码可能有些乱，可读性不是很高，但结构还是清晰的，还是值得参考：<a href="https://github.com/wmyskxz/Tmall_SSM" target="_blank" rel="noopener">传送门</a></p>
-<blockquote>
-<p>后期再对代码进行维护吧…菜鸟学习代码，勿喷….</p>
-</blockquote>
-<h4 id="关于-sql-语句"><a href="#关于-sql-语句" class="headerlink" title="关于 sql 语句"></a>关于 sql 语句</h4><p>这里给一个连接提供建表语句以及一些数据：<a href="https://pan.baidu.com/s/18e_ZBRv3TL7Jhgqy0fMLGg" target="_blank" rel="noopener">传送门</a></p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -4729,7 +5148,7 @@ public List&lt;OrderItem&gt; listForCart(Integer user_id) {
           </a>
         
         <p class="current">
-          14 / 20
+          14 / 21
         </p>
         
           <a class="next" rel="next" href="/tags/%E5%8E%9F%E5%88%9B/page/15/">
@@ -5067,7 +5486,7 @@ public List&lt;OrderItem&gt; listForCart(Integer user_id) {
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(5)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -5121,7 +5540,7 @@ public List&lt;OrderItem&gt; listForCart(Integer user_id) {
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.86px; color: #868686">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.67px; color: #878787">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.33px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.67px; color: #5e5e5e">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 22px; color: #636363">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.67px; color: #6c6c6c">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.33px; color: #909090">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20px; color: #707070">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.67px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.67px; color: #878787">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.33px; color: #828282">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.33px; color: #828282">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.33px; color: #676767">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.67px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.33px; color: #909090">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16px; color: #8b8b8b">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.67px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.33px; color: #909090">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.33px; color: #828282">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.67px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.67px; color: #797979">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.67px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16px; color: #8b8b8b">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 18px; color: #7e7e7e">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.67px; color: #878787">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.33px; color: #676767">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.33px; color: #757575">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 
