@@ -435,6 +435,622 @@
         
           
   <h2 class="title">
+    <a href="/2018/05/10/java-mian-shi-zhi-shi-dian-jie-xi-er-gao-bing-fa-bian-cheng-pian/">
+      Java面试知识点解析(二)——高并发编程篇
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E9%9D%A2%E8%AF%95/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>面试</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年5月10日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-958b6a30c60032e8.png" alt=""></p>
+<blockquote>
+<ul>
+<li>前言： </li>
+</ul>
+</blockquote>
+<p>在遨游了一番 Java Web 的世界之后，发现了自己的一些缺失，所以就着一篇深度好文：<a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">知名互联网公司校招 Java 开发岗面试知识点解析</a> ，来好好的对 Java 知识点进行复习和学习一番，大部分内容参照自这一篇文章，有一些自己补充的，也算是重新学习一下 Java 吧。</p>
+<p>前序文章链接：</p>
+<p><a href="https://www.jianshu.com/p/883260941da8" target="_blank" rel="noopener">Java 面试知识点解析(一)——基础知识篇</a></p>
+<hr>
+<h2 id="（一）高并发编程基础知识"><a href="#（一）高并发编程基础知识" class="headerlink" title="（一）高并发编程基础知识"></a>（一）高并发编程基础知识</h2><blockquote>
+<p>这里涉及到一些基础的概念，我重新捧起了一下《实战 Java 高并发程序设计》这一本书，感觉到心潮澎湃，这或许就是笔者叙述功底扎实的魅力吧，喜欢。对于并发的基础可以参照一下我之前写过的一篇博文：<a href="https://www.jianshu.com/p/cd9d0927be35" target="_blank" rel="noopener">Java学习笔记（4）——并发基础</a></p>
+</blockquote>
+<h4 id="1）多线程和单线程的区别和联系？"><a href="#1）多线程和单线程的区别和联系？" class="headerlink" title="1）多线程和单线程的区别和联系？"></a>1）多线程和单线程的区别和联系？</h4><p>答：</p>
+<ol>
+<li><p>在单核 CPU 中，将 CPU 分为很小的时间片，在每一时刻只能有一个线程在执行，是一种微观上轮流占用 CPU 的机制。</p>
+</li>
+<li><p>多线程会存在线程上下文切换，会导致程序执行速度变慢，即采用一个拥有两个线程的进程执行所需要的时间比一个线程的进程执行两次所需要的时间要多一些。</p>
+</li>
+</ol>
+<p>结论：即采用多线程不会提高程序的执行速度，反而会降低速度，但是对于用户来说，可以减少用户的响应时间。</p>
+<p><strong>面试官：那使用多线程有什么优势？</strong></p>
+<p>解析：尽管面临很多挑战，多线程有一些优点仍然使得它一直被使用，而这些优点我们应该了解。</p>
+<p>答：</p>
+<p>（1）资源利用率更好</p>
+<p>想象一下，一个应用程序需要从本地文件系统中读取和处理文件的情景。比方说，从磁盘读取一个文件需要5秒，处理一个文件需要2秒。处理两个文件则需要：</p>
+<pre><code>1| 5秒读取文件A
+2| 2秒处理文件A
+3| 5秒读取文件B
+4| 2秒处理文件B
+5| ---------------------
+6| 总共需要14秒</code></pre><p>从磁盘中读取文件的时候，大部分的CPU时间用于等待磁盘去读取数据。在这段时间里，CPU非常的空闲。它可以做一些别的事情。通过改变操作的顺序，就能够更好的使用CPU资源。看下面的顺序：</p>
+<pre><code>1| 5秒读取文件A
+2| 5秒读取文件B + 2秒处理文件A
+3| 2秒处理文件B
+4| ---------------------
+5| 总共需要12秒</code></pre><p>CPU等待第一个文件被读取完。然后开始读取第二个文件。当第二文件在被读取的时候，CPU会去处理第一个文件。记住，在等待磁盘读取文件的时候，CPU大部分时间是空闲的。</p>
+<p>总的说来，CPU能够在等待IO的时候做一些其他的事情。这个不一定就是磁盘IO。它也可以是网络的IO，或者用户输入。通常情况下，网络和磁盘的IO比CPU和内存的IO慢的多。</p>
+<p>（2）程序设计在某些情况下更简单</p>
+<p>在单线程应用程序中，如果你想编写程序手动处理上面所提到的读取和处理的顺序，你必须记录每个文件读取和处理的状态。相反，你可以启动两个线程，每个线程处理一个文件的读取和操作。线程会在等待磁盘读取文件的过程中被阻塞。在等待的时候，其他的线程能够使用CPU去处理已经读取完的文件。其结果就是，磁盘总是在繁忙地读取不同的文件到内存中。这会带来磁盘和CPU利用率的提升。而且每个线程只需要记录一个文件，因此这种方式也很容易编程实现。</p>
+<p>（3）程序响应更快</p>
+<p>有时我们会编写一些较为复杂的代码（这里的复杂不是说复杂的算法，而是复杂的业务逻辑），例如，一笔订单的创建，它包括插入订单数据、生成订单赶快找、发送邮件通知卖家和记录货品销售数量等。用户从单击“订购”按钮开始，就要等待这些操作全部完成才能看到订购成功的结果。但是这么多业务操作，如何能够让其更快地完成呢？</p>
+<p>在上面的场景中，可以使用多线程技术，即将数据一致性不强的操作派发给其他线程处理（也可以使用消息队列），如生成订单快照、发送邮件等。这样做的好处是响应用户请求的线程能够尽可能快地处理完成，缩短了响应时间，提升了用户体验。</p>
+<blockquote>
+<p><strong>多线程还有一些优势也显而易见：</strong><br>① 进程之前不能共享内存，而线程之间共享内存(堆内存)则很简单。<br>② 系统创建进程时需要为该进程重新分配系统资源,创建线程则代价小很多,因此实现多任务并发时,多线程效率更高.<br>③ Java语言本身内置多线程功能的支持,而不是单纯第作为底层系统的调度方式,从而简化了多线程编程.</p>
+</blockquote>
+<h4 id="2）多线程一定快吗？"><a href="#2）多线程一定快吗？" class="headerlink" title="2）多线程一定快吗？"></a>2）多线程一定快吗？</h4><p>答：不一定。</p>
+<p>比如，我们尝试使用并行和串行来分别执行累加的操作观察是否并行执行一定比串行执行更快：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-a698017d4c0dbf79.png" alt=""></p>
+<p>以下是我测试的结果，可以看出，当不超过1百万的时候，并行是明显比串行要慢的，为什么并发执行的速度会比串行慢呢？这是因为线程有创建和上下文切换的开销。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-e515dc406651240b.png" alt=""></p>
+<h4 id="3）什么是同步？什么又是异步？"><a href="#3）什么是同步？什么又是异步？" class="headerlink" title="3）什么是同步？什么又是异步？"></a>3）什么是同步？什么又是异步？</h4><p>解析：这是对多线程基础知识的考察</p>
+<p>答：同步和异步通常用来形容一次方法调用。</p>
+<p>同步方法调用一旦开始，调用者必须等到方法返回后，才能继续后续的行为。这就好像是我们去商城买一台空调，你看中了一台空调，于是就跟售货员下了单，然后售货员就去仓库帮你调配物品，这天你热的实在不行，就催着商家赶紧发货，于是你就在商店里等着，知道商家把你和空调都送回家，一次愉快的购物才结束，这就是同步调用。</p>
+<p>而异步方法更像是一个消息传递，一旦开始，方法调用就会立即返回，调用者就可以继续后续的操作。回到刚才买空调的例子，我们可以坐在里打开电脑，在网上订购一台空调。当你完成网上支付的时候，对你来说购物过程已经结束了。虽然空调还没有送到家，但是你的任务都已经完成了。商家接到你的订单后，就会加紧安排送货，当然这一切已经跟你无关了，你已经支付完成，想什么就能去干什么了，出去溜达几圈都不成问题。等送货上门的时候，接到商家电话，回家一趟签收即可。这就是异步调用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-a8d7703b4874703a.png" alt=""></p>
+<p><strong>面试官：那并发（Concurrency）和并行（Parallelism）的区别呢？</strong></p>
+<p>解析：并行性和并发性是既相似又有区别的两个概念。</p>
+<p><strong>答：并行性是指两个或多个事件在同一时刻发生。而并发性是指连个或多个事件在同一时间间隔内发生。</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-672dfca5db6de845.png" alt=""></p>
+<p>在多道程序环境下，并发性是指在一段时间内宏观上有多个程序在同时运行，但在单处理机环境下（一个处理器），每一时刻却仅能有一道程序执行，故微观上这些程序只能是分时地交替执行。例如，在1秒钟时间内，0-15ms程序A运行；15-30ms程序B运行；30-45ms程序C运行；45-60ms程序D运行，因此可以说，在1秒钟时间间隔内，宏观上有四道程序在同时运行，但微观上，程序A、B、C、D是分时地交替执行的。</p>
+<p>如果在计算机系统中有多个处理机，这些可以并发执行的程序就可以被分配到多个处理机上，实现并发执行，即利用每个处理机处理一个可并发执行的程序。这样，多个程序便可以同时执行。以此就能提高系统中的资源利用率，增加系统的吞吐量。</p>
+<h4 id="4）线程和进程的区别：（必考）"><a href="#4）线程和进程的区别：（必考）" class="headerlink" title="4）线程和进程的区别：（必考）"></a>4）线程和进程的区别：（必考）</h4><p>答：</p>
+<ol>
+<li><p>进程是一个 “执行中的程序”，是系统进行资源分配和调度的一个独立单位；</p>
+</li>
+<li><p>线程是进程的一个实体，一个进程中拥有多个线程，线程之间共享地址空间和其它资源（所以通信和同步等操作线程比进程更加容易）；</p>
+</li>
+<li><p>线程上下文的切换比进程上下文切换要快很多。</p>
+<ul>
+<li><p>（1）进程切换时，涉及到当前进程的 CPU 环境的保存和新被调度运行进程的 CPU 环境的设置。</p>
+</li>
+<li><p>（2）线程切换仅需要保存和设置少量的寄存器内容，不涉及存储管理方面的操作。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>面试官：进程间如何通讯？线程间如何通讯？</strong></p>
+<p>答：进程间通讯依靠 IPC 资源，例如管道（pipes）、套接字（sockets）等；</p>
+<p>线程间通讯依靠 JVM 提供的 API，例如 wait()、notify()、notifyAll() 等方法，线程间还可以通过共享的主内存来进行值的传递。</p>
+<blockquote>
+<p>关于线程和进程有一篇写得非常不错的文章，不过是英文的，我进行了翻译，相信阅读之后会对进程和线程有不一样的理解：<a href="https://www.jianshu.com/p/11e6cb1c3d38" target="_blank" rel="noopener">线程和进程基础——翻译文</a></p>
+</blockquote>
+<h4 id="5）什么是阻塞（Blocking）和非阻塞（Non-Blocking）？"><a href="#5）什么是阻塞（Blocking）和非阻塞（Non-Blocking）？" class="headerlink" title="5）什么是阻塞（Blocking）和非阻塞（Non-Blocking）？"></a>5）什么是阻塞（Blocking）和非阻塞（Non-Blocking）？</h4><p>答：阻塞和非阻塞通常用来形容多线程间的相互影响。比如一个线程占用了临界区资源，那么其他所有需要这个而资源的线程就必须在这个临界区中进行等待。等待会导致线程挂起，这种情况就是阻塞。此时，如果占用资源的线程一直不愿意释放资源，那么其他所有阻塞在这个临界区上的线程都不能工作。</p>
+<p>非阻塞的意思与之相反，它强调没有一个线程可以妨碍其他线程执行。所有的线程都会尝试不断前向执行。</p>
+<p><strong>面试官：临界区是什么？</strong></p>
+<p>答：临界区用来表示一种公共资源或者说是共享资源，可以被多个线程使用。但是每一次，只能有一个线程使用它，一旦临界区资源被占用，其他线程要想使用这个资源，就必须等待。</p>
+<p>比如，在一个办公室里有一台打印机，打印机一次只能执行一个任务。如果小王和小明同时需要打印文件，很显然，如果小王先下发了打印任务，打印机就开始打印小王的文件了，小明的任务就只能等待小王打印结束后才能打印，这里的打印机就是一个临界区的例子。</p>
+<p>在并行程序中，临界区资源是保护的对象，如果意外出现打印机同时执行两个打印任务，那么最可能的结果就是打印出来的文件就会是损坏的文件，它既不是小王想要的，也不是小明想要的。</p>
+<h4 id="6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？"><a href="#6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？" class="headerlink" title="6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？"></a>6）什么是死锁（Deadlock）、饥饿（Starvation）和活锁（Livelock）？</h4><p>答：死锁、饥饿和活锁都属于多线程的活跃性问题，如果发现上述几种情况，那么相关线程可能就不再活跃，也就说它可能很难再继续往下执行了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-a6041256aed650a5.png" alt=""></p>
+<ol>
+<li><p>死锁应该是最糟糕的一种情况了，它表示两个或者两个以上的进程在执行过程中，由于竞争资源或者由于彼此通信而造成的一种阻塞的现象，若无外力作用，它们都将无法推进下去。此时称系统处于死锁状态或系统产生了死锁，这些永远在互相等待的进程称为死锁进程。 </p>
+</li>
+<li><p>饥饿是指某一个或者多个线程因为种种原因无法获得所需要的资源，导致一直无法执行。比如：<br>1）它的线程优先级可能太低，而高优先级的线程不断抢占它需要的资源，导致低优先级的线程无法工作。在自然界中，母鸡喂食雏鸟时，很容易出现这种情况，由于雏鸟很多，食物有限，雏鸟之间的食物竞争可能非常厉害，小雏鸟因为经常抢不到食物，有可能会被饿死。线程的饥饿也非常类似这种情况。<br>2）另外一种可能是，某一个线程一直占着关键资源不放，导致其他需要这个资源的线程无法正常执行，这种情况也是饥饿的一种。<br>与死锁相比，饥饿还是有可能在未来一段时间内解决的（比如高优先级的线程已经完成任务，不再疯狂的执行）</p>
+</li>
+<li><p>活锁是一种非常有趣的情况。不知道大家是不是有遇到过这样一种情况，当你要坐电梯下楼，电梯到了，门开了，这时你正准备出去，但不巧的是，门外一个人挡着你的去路，他想进来。于是你很绅士的靠左走，避让对方，但同时对方也很绅士，但他靠右走希望避让你。结果，你们又撞上了。于是乎，你们都意识到了问题，希望尽快避让对方，你立即向右走，他也立即向左走，结果又撞上了！不过介于人类的只能，我相信这个动作重复 2、 3 次后，你应该可以顺利解决这个问题，因为这个时候，大家都会本能的对视，进行交流，保证这种情况不再发生。<br>但如果这种情况发生在两个线程间可能就不会那么幸运了，如果线程的智力不够，且都秉承着 “谦让” 的原则，主动将资源释放给他人使用，那么就会出现资源不断在两个线程中跳动，而没有一个线程可以同时拿到所有的资源而正常执行。这种情况就是活锁。</p>
+</li>
+</ol>
+<h4 id="7）多线程产生死锁的-4-个必要条件？"><a href="#7）多线程产生死锁的-4-个必要条件？" class="headerlink" title="7）多线程产生死锁的 4 个必要条件？"></a>7）多线程产生死锁的 4 个必要条件？</h4><p>答：</p>
+<ol>
+<li><p>互斥条件：一个资源每次只能被一个线程使用；</p>
+</li>
+<li><p>请求与保持条件：一个线程因请求资源而阻塞时，对已获得的资源保持不放；</p>
+</li>
+<li><p>不剥夺条件：进程已经获得的资源，在未使用完之前，不能强行剥夺；</p>
+</li>
+<li><p>循环等待条件：若干线程之间形成一种头尾相接的循环等待资源关系。</p>
+</li>
+</ol>
+<p><strong>面试官：如何避免死锁？（经常接着问这个问题哦~）</strong></p>
+<p>答：指定获取锁的顺序，举例如下：</p>
+<ol>
+<li><p>比如某个线程只有获得 A 锁和 B 锁才能对某资源进行操作，在多线程条件下，如何避免死锁？</p>
+</li>
+<li><p>获得锁的顺序是一定的，比如规定，只有获得 A 锁的线程才有资格获取 B 锁，按顺序获取锁就可以避免死锁！！！</p>
+</li>
+</ol>
+<h4 id="8）如何指定多个线程的执行顺序？"><a href="#8）如何指定多个线程的执行顺序？" class="headerlink" title="8）如何指定多个线程的执行顺序？"></a>8）如何指定多个线程的执行顺序？</h4><p>解析：面试官会给你举个例子，如何让 10 个线程按照顺序打印 0123456789？（写代码实现）</p>
+<p>答：</p>
+<ol>
+<li><p>设定一个 orderNum，每个线程执行结束之后，更新 orderNum，指明下一个要执行的线程。并且唤醒所有的等待线程。</p>
+</li>
+<li><p>在每一个线程的开始，要 while 判断 orderNum 是否等于自己的要求值！！不是，则 wait，是则执行本线程。</p>
+</li>
+</ol>
+<h4 id="9）Java-中线程有几种状态？"><a href="#9）Java-中线程有几种状态？" class="headerlink" title="9）Java 中线程有几种状态？"></a>9）Java 中线程有几种状态？</h4><p>答：六种（查看 Java 源码也可以看到是 6 种），并且某个时刻 Java 线程只能处于其中的一个状态。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-7b69db5925631d29.png" alt=""></p>
+<ol>
+<li><p>新建（NEW）状态：表示新创建了一个线程对象，而此时线程并没有开始执行。</p>
+</li>
+<li><p>可运行（RUNNABLE）状态：线程对象创建后，其它线程（比如 main 线程）调用了该对象的 start() 方法，才表示线程开始执行。当线程执行时，处于 RUNNBALE 状态，表示线程所需的一切资源都已经准备好了。该状态的线程位于可运行线程池中，等待被线程调度选中，获取 cpu 的使用权。</p>
+</li>
+<li><p>阻塞（BLOCKED）状态：如果线程在执行过程终于到了 synchronized 同步块，就会进入 BLOCKED 阻塞状态，这时线程就会暂停执行，直到获得请求的锁。</p>
+</li>
+<li><p>等待（WAITING）状态：当线程等待另一个线程通知调度器一个条件时，它自己进入等待状态。在调用Object.wait方法或Thread.join方法，或者是等待java.util.concurrent库中的Lock或Condition时，就会出现这种情况；</p>
+</li>
+<li><p>计时等待（TIMED_WAITING）状态：Object.wait、Thread.join、Lock.tryLock和Condition.await 等方法有超时参数，还有 Thread.sleep 方法、LockSupport.parkNanos 方法和 LockSupport.parkUntil 方法，这些方法会导致线程进入计时等待状态，如果超时或者出现通知，都会切换会可运行状态；</p>
+</li>
+<li><p>终止（TERMINATED）状态：当线程执行完毕，则进入该状态，表示结束。</p>
+</li>
+</ol>
+<p>注意：从 NEW 状态出发后，线程不能再回到 NEW 状态，同理，处于 TERMINATED 状态的线程也不能再回到 RUNNABLE 状态。</p>
+<hr>
+<h2 id="（二）高并发编程-JUC-包"><a href="#（二）高并发编程-JUC-包" class="headerlink" title="（二）高并发编程-JUC 包"></a>（二）高并发编程-JUC 包</h2><blockquote>
+<p>在 Java 5.0 提供了 java.util.concurrent（简称 JUC ）包，在此包中增加了在并发编程中很常用的实用工具类，用于定义类似于线程的自定义子系统，包括线程池、异步 IO 和轻量级任务框架。</p>
+</blockquote>
+<h4 id="1）sleep-和-wait-n-、wait-的区别："><a href="#1）sleep-和-wait-n-、wait-的区别：" class="headerlink" title="1）sleep( ) 和 wait( n)、wait( ) 的区别："></a>1）sleep( ) 和 wait( n)、wait( ) 的区别：</h4><p>答：</p>
+<ol>
+<li><p>sleep 方法：是 Thread 类的静态方法，当前线程将睡眠 n 毫秒，线程进入阻塞状态。当睡眠时间到了，会解除阻塞，进行可运行状态，等待 CPU 的到来。睡眠不释放锁（如果有的话）；</p>
+</li>
+<li><p>wait 方法：是 Object 的方法，必须与 synchronized 关键字一起使用，线程进入阻塞状态，当 notify 或者 notifyall 被调用后，会解除阻塞。但是，只有重新占用互斥锁之后才会进入可运行状态。睡眠时，释放互斥锁。</p>
+</li>
+</ol>
+<h4 id="2）synchronized-关键字："><a href="#2）synchronized-关键字：" class="headerlink" title="2）synchronized 关键字："></a>2）synchronized 关键字：</h4><p>答：底层实现：</p>
+<ol>
+<li><p>进入时，执行 monitorenter，将计数器 +1，释放锁 monitorexit 时，计数器-1；</p>
+</li>
+<li><p>当一个线程判断到计数器为 0 时，则当前锁空闲，可以占用；反之，当前线程进入等待状态。</p>
+</li>
+</ol>
+<p>含义：（monitor 机制）</p>
+<p>Synchronized 是在加锁，加对象锁。对象锁是一种重量锁（monitor），synchronized 的锁机制会根据线程竞争情况在运行时会有偏向锁（单一线程）、轻量锁（多个线程访问 synchronized 区域）、对象锁（重量锁，多个线程存在竞争的情况）、自旋锁等。</p>
+<p>该关键字是一个几种锁的封装。</p>
+<h4 id="3）volatile-关键字："><a href="#3）volatile-关键字：" class="headerlink" title="3）volatile 关键字："></a>3）volatile 关键字：</h4><p>答：该关键字可以保证可见性不保证原子性。</p>
+<p>功能：</p>
+<ol>
+<li><p>主内存和工作内存，直接与主内存产生交互，进行读写操作，保证可见性；</p>
+</li>
+<li><p>禁止 JVM 进行的指令重排序。</p>
+</li>
+</ol>
+<p>解析：关于指令重排序的问题，可以查阅 DCL 双检锁失效相关资料。</p>
+<h4 id="4）volatile-能使得一个非原子操作变成原子操作吗？"><a href="#4）volatile-能使得一个非原子操作变成原子操作吗？" class="headerlink" title="4）volatile 能使得一个非原子操作变成原子操作吗？"></a>4）volatile 能使得一个非原子操作变成原子操作吗？</h4><p>答：能。</p>
+<p>一个典型的例子是在类中有一个 long 类型的成员变量。如果你知道该成员变量会被多个线程访问，如计数器、价格等，你最好是将其设置为 volatile。为什么？因为 Java 中读取 long 类型变量不是原子的，需要分成两步，如果一个线程正在修改该 long 变量的值，另一个线程可能只能看到该值的一半（前 32 位）。但是对一个 volatile 型的 long 或 double 变量的读写是原子。</p>
+<p><strong>面试官：volatile 修饰符的有过什么实践？</strong></p>
+<p>答：</p>
+<ol>
+<li><p>一种实践是用 volatile 修饰 long 和 double 变量，使其能按原子类型来读写。double 和 long 都是64位宽，因此对这两种类型的读是分为两部分的，第一次读取第一个 32 位，然后再读剩下的 32 位，这个过程不是原子的，但 Java 中 volatile 型的 long 或 double 变量的读写是原子的。</p>
+</li>
+<li><p>volatile 修复符的另一个作用是提供内存屏障（memory barrier），例如在分布式框架中的应用。简单的说，就是当你写一个 volatile 变量之前，Java 内存模型会插入一个写屏障（write barrier），读一个 volatile 变量之前，会插入一个读屏障（read barrier）。意思就是说，在你写一个 volatile 域时，能保证任何线程都能看到你写的值，同时，在写之前，也能保证任何数值的更新对所有线程是可见的，因为内存屏障会将其他所有写的值更新到缓存。</p>
+</li>
+</ol>
+<h4 id="5）ThreadLocal（线程局部变量）关键字："><a href="#5）ThreadLocal（线程局部变量）关键字：" class="headerlink" title="5）ThreadLocal（线程局部变量）关键字："></a>5）ThreadLocal（线程局部变量）关键字：</h4><p>答：当使用 ThreadLocal 维护变量时，其为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立的改变自己的副本，而不会影响其他线程对应的副本。</p>
+<p>ThreadLocal 内部实现机制：</p>
+<ol>
+<li><p>每个线程内部都会维护一个类似 HashMap 的对象，称为 ThreadLocalMap，里边会包含若干了 Entry（K-V 键值对），相应的线程被称为这些 Entry 的属主线程；</p>
+</li>
+<li><p>Entry 的 Key 是一个 ThreadLocal 实例，Value 是一个线程特有对象。Entry 的作用即是：为其属主线程建立起一个 ThreadLocal 实例与一个线程特有对象之间的对应关系；</p>
+</li>
+<li><p>Entry 对 Key 的引用是弱引用；Entry 对 Value 的引用是强引用。</p>
+</li>
+</ol>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-219b164cba63247a.png" alt=""></p>
+<h4 id="6）线程池有了解吗？（必考）"><a href="#6）线程池有了解吗？（必考）" class="headerlink" title="6）线程池有了解吗？（必考）"></a>6）线程池有了解吗？（必考）</h4><p>答：java.util.concurrent.ThreadPoolExecutor 类就是一个线程池。客户端调用 ThreadPoolExecutor.submit(Runnable task) 提交任务，线程池内部维护的工作者线程的数量就是该线程池的线程池大小，有 3 种形态：</p>
+<blockquote>
+<ul>
+<li>当前线程池大小 ：表示线程池中实际工作者线程的数量；</li>
+<li>最大线程池大小 （maxinumPoolSize）：表示线程池中允许存在的工作者线程的数量上限；</li>
+<li>核心线程大小 （corePoolSize ）：表示一个不大于最大线程池大小的工作者线程数量上限。</li>
+</ul>
+</blockquote>
+<ol>
+<li><p>如果运行的线程少于 corePoolSize，则 Executor 始终首选添加新的线程，而不进行排队；</p>
+</li>
+<li><p>如果运行的线程等于或者多于 corePoolSize，则 Executor 始终首选将请求加入队列，而不是添加新线程；</p>
+</li>
+<li><p>如果无法将请求加入队列，即队列已经满了，则创建新的线程，除非创建此线程超出 maxinumPoolSize， 在这种情况下，任务将被拒绝。</p>
+</li>
+</ol>
+<p><strong>面试官：我们为什么要使用线程池？</strong></p>
+<p>答：</p>
+<ol>
+<li><p>减少创建和销毁线程的次数，每个工作线程都可以被重复利用，可执行多个任务。</p>
+</li>
+<li><p>可以根据系统的承受能力，调整线程池中工作线程的数目，放置因为消耗过多的内存，而把服务器累趴下（每个线程大约需要 1 MB 内存，线程开的越多，消耗的内存也就越大，最后死机）</p>
+</li>
+</ol>
+<p><strong>面试官：核心线程池内部实现了解吗？</strong></p>
+<p>答：对于核心的几个线程池，无论是 newFixedThreadPool() 方法，newSingleThreadExecutor() 还是 newCachedThreadPool() 方法，虽然看起来创建的线程有着完全不同的功能特点，但其实内部实现均使用了 ThreadPoolExecutor 实现，其实都只是 ThreadPoolExecutor 类的封装。</p>
+<p>为何 ThreadPoolExecutor 有如此强大的功能呢？我们可以来看一下 ThreadPoolExecutor 最重要的构造函数：</p>
+<pre><code>    public ThreadPoolExecutor(int corePoolSize,
+                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue&lt;Runnable&gt; workQueue,
+                              ThreadFactory threadFactory,
+                              RejectedExecutionHandler handler)</code></pre><p>函数的参数含义如下：</p>
+<ul>
+<li>corePoolSize：指定了线程池中的线程数量</li>
+<li>maximumPoolSize：指定了线程池中的最大线程数量</li>
+<li>keepAliveTime：当线程池线程数量超过 corePoolSize 时，多余的空闲线程的存活时间。即，超过了 corePoolSize 的空闲线程，在多长时间内，会被销毁。</li>
+<li>unit: keepAliveTime 的单位。</li>
+<li>workQueue：任务队列，被提交但尚未被执行的任务。</li>
+<li>threadFactory：线程工厂，用于创建线程，一般用默认的即可。</li>
+<li>handler：拒绝策略。当任务太多来不及处理，如何拒绝任务。</li>
+</ul>
+<h4 id="7）Atomic关键字："><a href="#7）Atomic关键字：" class="headerlink" title="7）Atomic关键字："></a>7）Atomic关键字：</h4><p><strong>答：可以使基本数据类型以原子的方式实现自增自减等操作。参考博客：<a href="http://blog.csdn.net/qq_25827845/article/details/70225658" target="_blank" rel="noopener">concurrent.atomic包下的类AtomicInteger的使用</a></strong></p>
+<h4 id="8）创建线程有哪几种方式？"><a href="#8）创建线程有哪几种方式？" class="headerlink" title="8）创建线程有哪几种方式？"></a>8）创建线程有哪几种方式？</h4><p>答：有两种创建线程的方法：一是实现Runnable接口，然后将它传递给Thread的构造函数，创建一个Thread对象;二是直接继承Thread类。</p>
+<p><strong>面试官：两种方式有什么区别呢？</strong></p>
+<ol>
+<li>继承方式:<ul>
+<li>（1）Java中类是单继承的,如果继承了Thread了,该类就不能再有其他的直接父类了.</li>
+<li>（2）从操作上分析,继承方式更简单,获取线程名字也简单.(操作上,更简单)</li>
+<li>（3）从多线程共享同一个资源上分析,继承方式不能做到.</li>
+</ul>
+</li>
+<li>实现方式:<ul>
+<li>（1）Java中类可以多实现接口,此时该类还可以继承其他类,并且还可以实现其他接口(设计上,更优雅).<ul>
+<li>（2）从操作上分析,实现方式稍微复杂点,获取线程名字也比较复杂,得使用Thread.currentThread()来获取当前线程的引用.</li>
+<li>（3）从多线程共享同一个资源上分析,实现方式可以做到(是否共享同一个资源).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="9）run-方法和-start-方法有什么区别？"><a href="#9）run-方法和-start-方法有什么区别？" class="headerlink" title="9）run() 方法和 start() 方法有什么区别？"></a>9）run() 方法和 start() 方法有什么区别？</h4><p>答：start() 方法会新建一个线程并让这个线程执行 run() 方法；而直接调用 run() 方法知识作为一个普通的方法调用而已，它只会在当前线程中，串行执行 run() 中的代码。</p>
+<h4 id="10）你怎么理解线程优先级？"><a href="#10）你怎么理解线程优先级？" class="headerlink" title="10）你怎么理解线程优先级？"></a>10）你怎么理解线程优先级？</h4><p>答：Java 中的线程可以有自己的优先级。优先极高的线程在竞争资源时会更有优势，更可能抢占资源，当然，这只是一个概率问题。如果运行不好，高优先级线程可能也会抢占失败。</p>
+<p>由于线程的优先级调度和底层操作系统有密切的关系，在各个平台上表现不一，并且这种优先级产生的后果也可能不容易预测，无法精准控制，比如一个低优先级的线程可能一直抢占不到资源，从而始终无法运行，而产生饥饿（虽然优先级低，但是也不能饿死它啊）。因此，在要求严格的场合，还是需要自己在应用层解决线程调度的问题。</p>
+<p>在 Java 中，使用 1 到 10 表示线程优先级，一般可以使用内置的三个静态标量表示：</p>
+<pre><code>public final static int MIN_PRIORITY = 1;
+public final static int NORM_PRIORITY = 5;
+public final static int MAX_PRIORITY = 10;</code></pre><p>数字越大则优先级越高，但有效范围在 1 到 10 之间，默认的优先级为 5 。</p>
+<h4 id="11）在-Java-中如何停止一个线程？"><a href="#11）在-Java-中如何停止一个线程？" class="headerlink" title="11）在 Java 中如何停止一个线程？"></a>11）在 Java 中如何停止一个线程？</h4><p>答：Java 提供了很丰富的 API 但没有为停止线程提供 API 。</p>
+<p>JDK 1.0 本来有一些像 stop()，suspend() 和 resume() 的控制方法但是由于潜在的死锁威胁因此在后续的 JDK 版本中他们被弃用了，之后 Java API 的设计者就没有提供一个兼容且线程安全的方法来停止任何一个线程。</p>
+<p>当 run() 或者 call() 方法执行完的时候线程会自动结束，如果要手动结束一个线程，你可以用 volatile 布尔变量来退出 run() 方法的循环或者是取消任务来中断线程。</p>
+<h4 id="12）多线程中的忙循环是什么？"><a href="#12）多线程中的忙循环是什么？" class="headerlink" title="12）多线程中的忙循环是什么？"></a>12）多线程中的忙循环是什么？</h4><p>答：忙循环就是程序员用循环让一个线程等待，不像传统方法 wait(),sleep() 或yield() 它们都放弃了 CPU 控制权，而忙循环不会放弃 CPU，它就是在运行一个空循环。这么做的目的是为了保留 CPU 缓存。</p>
+<p>在多核系统中，一个等待线程醒来的时候可能会在另一个内核运行，这样会重建缓存，为了避免重建缓存和减少等待重建的时间就可以使用它了。</p>
+<h4 id="13）10-个线程和-2-个线程的同步代码，哪个更容易写？"><a href="#13）10-个线程和-2-个线程的同步代码，哪个更容易写？" class="headerlink" title="13）10 个线程和 2 个线程的同步代码，哪个更容易写？"></a>13）10 个线程和 2 个线程的同步代码，哪个更容易写？</h4><p>答：从写代码的角度来说，两者的复杂度是相同的，因为同步代码与线程数量是相互独立的。但是同步策略的选择依赖于线程的数量，因为越多的线程意味着更大的竞争，所以你需要利用同步技术，如锁分离，这要求更复杂的代码和专业知识。</p>
+<h4 id="14）你是如何调用-wait（）方法的？使用-if-块还是循环？为什么？"><a href="#14）你是如何调用-wait（）方法的？使用-if-块还是循环？为什么？" class="headerlink" title="14）你是如何调用 wait（）方法的？使用 if 块还是循环？为什么？"></a>14）你是如何调用 wait（）方法的？使用 if 块还是循环？为什么？</h4><p>答：wait() 方法应该在循环调用，因为当线程获取到 CPU 开始执行的时候，其他条件可能还没有满足，所以在处理前，循环检测条件是否满足会更好。下面是一段标准的使用 wait 和 notify 方法的代码：</p>
+<pre><code>// The standard idiom for using the wait method
+synchronized (obj) {
+while (condition does not hold)
+obj.wait(); // (Releases lock, and reacquires on wakeup)
+... // Perform action appropriate to condition
+}</code></pre><p>参见 Effective Java 第 69 条，获取更多关于为什么应该在循环中来调用 wait 方法的内容。</p>
+<h4 id="15）什么是多线程环境下的伪共享（false-sharing）？"><a href="#15）什么是多线程环境下的伪共享（false-sharing）？" class="headerlink" title="15）什么是多线程环境下的伪共享（false sharing）？"></a>15）什么是多线程环境下的伪共享（false sharing）？</h4><p>答：伪共享是多线程系统（每个处理器有自己的局部缓存）中一个众所周知的性能问题。伪共享发生在不同处理器的上的线程对变量的修改依赖于相同的缓存行，如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java-%E9%9D%A2%E8%AF%95%E7%9F%A5%E8%AF%86%E7%82%B9%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89%E2%80%94%E2%80%94%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%AF%87/7896890-3cbee585a5f68f02.png" alt=""></p>
+<p>伪共享问题很难被发现，因为线程可能访问完全不同的全局变量，内存中却碰巧在很相近的位置上。如其他诸多的并发问题，避免伪共享的最基本方式是仔细审查代码，根据缓存行来调整你的数据结构。</p>
+<h4 id="16）用-wait-notify-写一段代码来解决生产者-消费者问题？"><a href="#16）用-wait-notify-写一段代码来解决生产者-消费者问题？" class="headerlink" title="16）用 wait-notify 写一段代码来解决生产者-消费者问题？"></a>16）用 wait-notify 写一段代码来解决生产者-消费者问题？</h4><p>解析：这是常考的基础类型的题，只要记住在同步块中调用 wait() 和 notify()方法，如果阻塞，通过循环来测试等待条件。</p>
+<p>答：</p>
+<pre><code>import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * Java program to solve Producer Consumer problem using wait and notify
+ * method in Java. Producer Consumer is also a popular concurrency design pattern.
+ *
+ * @author Javin Paul
+ */
+public class ProducerConsumerSolution {
+
+    public static void main(String args[]) {
+        Vector sharedQueue = new Vector();
+        int size = 4;
+        Thread prodThread = new Thread(new Producer(sharedQueue, size), &quot;Producer&quot;);
+        Thread consThread = new Thread(new Consumer(sharedQueue, size), &quot;Consumer&quot;);
+        prodThread.start();
+        consThread.start();
+    }
+}
+
+class Producer implements Runnable {
+
+    private final Vector sharedQueue;
+    private final int SIZE;
+
+    public Producer(Vector sharedQueue, int size) {
+        this.sharedQueue = sharedQueue;
+        this.SIZE = size;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i &lt; 7; i++) {
+            System.out.println(&quot;Produced: &quot; + i);
+            try {
+                produce(i);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Producer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    private void produce(int i) throws InterruptedException {
+
+        // wait if queue is full
+        while (sharedQueue.size() == SIZE) {
+            synchronized (sharedQueue) {
+                System.out.println(&quot;Queue is full &quot; + Thread.currentThread().getName()
+                                    + &quot; is waiting , size: &quot; + sharedQueue.size());
+
+                sharedQueue.wait();
+            }
+        }
+
+        // producing element and notify consumers
+        synchronized (sharedQueue) {
+            sharedQueue.add(i);
+            sharedQueue.notifyAll();
+        }
+    }
+}
+
+class Consumer implements Runnable {
+
+    private final Vector sharedQueue;
+    private final int SIZE;
+
+    public Consumer(Vector sharedQueue, int size) {
+        this.sharedQueue = sharedQueue;
+        this.SIZE = size;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                System.out.println(&quot;Consumed: &quot; + consume());
+                Thread.sleep(50);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Consumer.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }
+
+    private int consume() throws InterruptedException {
+        // wait if queue is empty
+        while (sharedQueue.isEmpty()) {
+            synchronized (sharedQueue) {
+                System.out.println(&quot;Queue is empty &quot; + Thread.currentThread().getName()
+                                    + &quot; is waiting , size: &quot; + sharedQueue.size());
+
+                sharedQueue.wait();
+            }
+        }
+
+        // Otherwise consume element and notify waiting producer
+        synchronized (sharedQueue) {
+            sharedQueue.notifyAll();
+            return (Integer) sharedQueue.remove(0);
+        }
+    }
+}
+
+Output:
+Produced: 0
+Queue is empty Consumer is waiting , size: 0
+Produced: 1
+Consumed: 0
+Produced: 2
+Produced: 3
+Produced: 4
+Produced: 5
+Queue is full Producer is waiting , size: 4
+Consumed: 1
+Produced: 6
+Queue is full Producer is waiting , size: 4
+Consumed: 2
+Consumed: 3
+Consumed: 4
+Consumed: 5
+Consumed: 6
+Queue is empty Consumer is waiting , size: 0</code></pre><h4 id="17）用-Java-写一个线程安全的单例模式（Singleton）？"><a href="#17）用-Java-写一个线程安全的单例模式（Singleton）？" class="headerlink" title="17）用 Java 写一个线程安全的单例模式（Singleton）？"></a>17）用 Java 写一个线程安全的单例模式（Singleton）？</h4><p>解析：有多种方法，但重点掌握的是双重校验锁。</p>
+<p>答：</p>
+<p>1.饿汉式单例</p>
+<p>饿汉式单例是指在方法调用前，实例就已经创建好了。下面是实现代码：</p>
+<pre><code>public class Singleton {
+
+    private static Singleton instance = new Singleton();
+
+    private Singleton (){}
+
+    public static Singleton getInstance() {
+        return instance;
+    }
+}</code></pre><p>2.加入 synchronized 的懒汉式单例</p>
+<p>所谓懒汉式单例模式就是在调用的时候才去创建这个实例，我们在对外的创建实例方法上加如 synchronized 关键字保证其在多线程中很好的工作：</p>
+<pre><code>public class Singleton {    
+
+    private static Singleton instance;    
+
+    private Singleton (){}    
+
+    public static synchronized Singleton getInstance() {    
+        if (instance == null) {    
+            instance = new Singleton();    
+    }    
+    return instance;    
+    }    
+}  </code></pre><p>3.使用静态内部类的方式创建单例</p>
+<p>这种方式利用了 classloder 的机制来保证初始化 instance 时只有一个线程，它跟饿汉式的区别是：饿汉式只要 Singleton 类被加载了，那么 instance 就会被实例化（没有达到 lazy loading 的效果），而这种方式是 Singleton 类被加载了，instance 不一定被初始化。只有显式通过调用 getInstance() 方法时才会显式装载 SingletonHoder 类，从而实例化 singleton</p>
+<pre><code>public class Singleton {
+
+    private Singleton() {
+    }
+
+    private static class SingletonHolder {// 静态内部类  
+        private static Singleton singleton = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return SingletonHolder.singleton;
+    }
+}</code></pre><p>4.双重校验锁</p>
+<p>为了达到线程安全，又能提高代码执行效率，我们这里可以采用DCL的双检查锁机制来完成，代码实现如下：</p>
+<pre><code>public class Singleton {  
+
+    private static Singleton singleton;  
+
+    private Singleton() {  
+    }  
+
+    public static Singleton getInstance(){  
+        if (singleton == null) {  
+            synchronized (Singleton.class) {  
+                if (singleton == null) {  
+                    singleton = new Singleton();  
+                }  
+            }  
+        }  
+        return singleton;  
+    }  
+} </code></pre><p>这种是用双重判断来创建一个单例的方法，那么我们为什么要使用两个if判断这个对象当前是不是空的呢 ？因为当有多个线程同时要创建对象的时候，多个线程有可能都停止在第一个if判断的地方，等待锁的释放，然后多个线程就都创建了对象，这样就不是单例模式了，所以我们要用两个if来进行这个对象是否存在的判断。</p>
+<p>5.使用 static 代码块实现单例</p>
+<p>静态代码块中的代码在使用类的时候就已经执行了，所以可以应用静态代码块的这个特性的实现单例设计模式。</p>
+<pre><code>public class Singleton{  
+
+    private static Singleton instance = null;  
+
+    private Singleton(){}  
+
+    static{  
+        instance = new Singleton();  
+    }  
+
+    public static Singleton getInstance() {   
+        return instance;  
+    }   
+}  </code></pre><p>6.使用枚举数据类型实现单例模式</p>
+<p>枚举enum和静态代码块的特性相似，在使用枚举时，构造方法会被自动调用，利用这一特性也可以实现单例：</p>
+<pre><code>public class ClassFactory{   
+
+    private enum MyEnumSingleton{  
+        singletonFactory;  
+
+        private MySingleton instance;  
+
+        private MyEnumSingleton(){//枚举类的构造方法在类加载是被实例化  
+            instance = new MySingleton();  
+        }  
+
+        public MySingleton getInstance(){  
+            return instance;  
+        }  
+    }   
+
+    public static MySingleton getInstance(){  
+        return MyEnumSingleton.singletonFactory.getInstance();  
+    }  
+}  </code></pre><blockquote>
+<p>小结：关于 Java 中多线程编程，线程安全等知识一直都是面试中的重点和难点，还需要熟练掌握。</p>
+</blockquote>
+<hr>
+<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><p><a href="https://mp.weixin.qq.com/s?__biz=MjM5MjAwODM4MA==&mid=2650692240&idx=1&sn=dc39f07097656042344e7fee8a17259e&chksm=bea62b4389d1a255619238b869b0fc33c1c8fda9172f0da2b62da71524b4ea1b32989df6bc76&mpshare=1&scene=23&srcid=1225zdAW9iFdJ86OiBQSr8mP#rd" target="_blank" rel="noopener">① 知名互联网公司校招 Java 开发岗面试知识点解析</a><br><a href="https://zhuanlan.zhihu.com/p/23533393" target="_blank" rel="noopener">② 最近5年133个Java面试问题列表</a><br>③ 《实战 Java 高并发程序设计 —— 葛一鸣 郭超 编著》</p>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/05/09/java-mian-shi-zhi-shi-dian-jie-xi-yi-ji-chu-zhi-shi-pian/">
       Java面试知识点解析(一)——基础知识篇
     </a>
@@ -6479,391 +7095,6 @@ ${user.id}：${user.username}
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/18/mybatis-yu-spring-zheng-he/">
-      MyBatis与Spring整合
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>JavaWeb基础/Spring</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月18日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-f534c3282f1f6192.png" alt=""></p>
-<h2 id="MyBatis—Spring-项目"><a href="#MyBatis—Spring-项目" class="headerlink" title="MyBatis—Spring 项目"></a>MyBatis—Spring 项目</h2><p>目前大部分的 Java 互联网项目，都是用 Spring MVC + Spring + MyBatis 搭建平台的。</p>
-<p>使用 <a href="https://www.jianshu.com/p/20cea9170110" target="_blank" rel="noopener">Spring IoC</a> 可以有效的管理各类的 Java 资源，达到即插即拔的功能；通过 <a href="https://www.jianshu.com/p/994027425b44" target="_blank" rel="noopener">Spring AOP</a> 框架，数据库事务可以委托给 Spring 管理，消除很大一部分的事务代码，配合 MyBatis 的高灵活、可配置、可优化 SQL 等特性，完全可以构建高性能的大型网站。 </p>
-<p>毫无疑问，MyBatis 和 Spring 两大框架已经成了 Java 互联网技术主流框架组合，它们经受住了大数据量和大批量请求的考验，在互联网系统中得到了广泛的应用。使用 MyBatis-Spring 使得业务层和模型层得到了更好的分离，与此同时，在 Spring 环境中使用 MyBatis 也更加简单，节省了不少代码，甚至可以不用 SqlSessionFactory、 SqlSession 等对象，因为 MyBatis-Spring 为我们封装了它们。</p>
-<blockquote>
-<p>摘自：《Java EE 互联网轻量级框架整合开发》</p>
-</blockquote>
-<h4 id="第一步：创建测试工程"><a href="#第一步：创建测试工程" class="headerlink" title="第一步：创建测试工程"></a>第一步：创建测试工程</h4><p>第一步，首先在 IDEA 中新建一个名为【MybatisAndSpring】的 WebProject 工程：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-7c8242b9afa48492.png" alt=""></p>
-<p>然后在【src】中创建 4 个空包：</p>
-<ul>
-<li>cn.wmyskxz.dao（放置 DAO 数据交互层处理类）</li>
-<li>cn.wmyskxz.mapper（放置 Mapper 代理接口）</li>
-<li>cn.wmyskxz.pojo（放置 Java 实体类）</li>
-<li>cn.wmyskxz.test（放置测试类）</li>
-</ul>
-<p>接着新建源文件夹【config】，用于放置各种资源配置文件：</p>
-<ul>
-<li>在【config / mybatis】下创建一个空的名为 “SqlMapConfig.xml” 的 MyBatis 全局配置文件</li>
-<li>在【config / spring】下创建一个空的名为 “applicationContext.xml” 的 Spring 资源配置文件</li>
-<li>在【config / sqlmap】下创建一个空的名为 “UserMapper.xml” 的 Mapper 映射文件。</li>
-<li>在【config】下创建两个 properties 属性文件，分别为 “db.properties” 和 “log4j.properties”，用于数据库连接和日志系统参数设置。</li>
-</ul>
-<p>再在【web】文件夹下新建一个【WEB-INF】默认安全文件夹，并在其下创建一个【classes】和【lib】，并将项目的输出位置，改在【classes】下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-f33c52b56b56ad91.png" alt=""></p>
-<p>工程的完整初始结构如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-2ea182a1f1e9bd9a.png" alt=""></p>
-<h4 id="第二步：引入依赖-jar-包"><a href="#第二步：引入依赖-jar-包" class="headerlink" title="第二步：引入依赖 jar 包"></a>第二步：引入依赖 jar 包</h4><p>第二步，就是要准备项目的依赖 jar 包：</p>
-<ul>
-<li>MyBatis 的包（<a href="https://github.com/mybatis/mybatis-3/releases" target="_blank" rel="noopener">MyBatis 3.4.6</a>）</li>
-<li>Spring 的 jar 包（<a href="http://repo.spring.io/release/org/springframework/spring/" target="_blank" rel="noopener">Spring 4.3.15</a>）</li>
-<li>MyBatis 与 Spring 的整合 jar 包（<a href="http://mvnrepository.com/artifact/org.mybatis/mybatis-spring" target="_blank" rel="noopener">mybatis-spring 1.3.2</a>）</li>
-<li>mysql-connector-java-5.1.21.jar</li>
-<li>junit-4.12.jar</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-9b60a2c6d0cde57d.png" alt=""></p>
-<p>在【WEB-INF】文件夹下的【lib】文件夹中放置上面列举的 jar 包，然后添加依赖。</p>
-<h4 id="第三步：编写-Spring-配置文件"><a href="#第三步：编写-Spring-配置文件" class="headerlink" title="第三步：编写 Spring 配置文件"></a>第三步：编写 Spring 配置文件</h4><p>第三步，编写 Spring 的配置文件：</p>
-<ul>
-<li>加载数据库连接文件 “db.properties” 中的数据，建立数据源</li>
-<li>配置 sqlSessionFactory 会话工厂对象</li>
-</ul>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-    &lt;!-- 加载配置文件 --&gt;
-    &lt;context:property-placeholder location=&quot;classpath:db.properties&quot;/&gt;
-
-    &lt;!-- 配置数据源 --&gt;
-    &lt;bean id=&quot;dataSource&quot; class=&quot;org.springframework.jdbc.datasource.DriverManagerDataSource&quot;&gt;
-        &lt;property name=&quot;driverClassName&quot; value=&quot;${jdbc.driver}&quot;/&gt;
-        &lt;property name=&quot;url&quot; value=&quot;${jdbc.url}&quot;/&gt;
-        &lt;property name=&quot;username&quot; value=&quot;${jdbc.username}&quot;/&gt;
-        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- sqlSessionFactory --&gt;
-    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
-        &lt;!-- 加载 MyBatis 的配置文件 --&gt;
-        &lt;property name=&quot;configLocation&quot; value=&quot;mybatis/SqlMapConfig.xml&quot;/&gt;
-        &lt;!-- 数据源 --&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
-    &lt;/bean&gt;
-&lt;/beans&gt;</code></pre><ul>
-<li><strong>头部的信息就是声明 xml 文档配置标签的规则的限制与规范。</strong></li>
-<li><strong>“context:property-placeholder”</strong> 配置是<strong>用于读取工程中的静态属性文件</strong>，然后在其他配置中使用时，就<strong>可以采用 “${属性名}” 的方式获取该属性文件中的配置参数值。</strong></li>
-<li>配置了一个名为 <strong>“dataSrouce”</strong> 的 bean 的信息，实际上是<strong>连接数据库的数据源。</strong></li>
-<li>设置 <strong>sqlSessionFactory</strong> 的 bean 实现类为 MyBatis 与 Spring 整合 jar 包中的 <strong>SqlSessionFactoryBean</strong> 类，<strong>在其中只需要注入两个参数：一个是 MyBatis 的全局配置文件，一个是上面配置的数据源 bean</strong></li>
-</ul>
-<h4 id="第四步：编写-MyBatis-配置文件"><a href="#第四步：编写-MyBatis-配置文件" class="headerlink" title="第四步：编写 MyBatis 配置文件"></a>第四步：编写 MyBatis 配置文件</h4><p>第四步，在【mybatis】包下编写 MyBatis 的全局配置文件 SqlMapConfig.xml ：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE configuration
-        PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
-&lt;configuration&gt;
-
-    &lt;!-- settings --&gt;
-    &lt;settings&gt;
-        &lt;!-- 打开延迟加载的开关 --&gt;
-        &lt;setting name=&quot;lazyLoadingEnabled&quot; value=&quot;true&quot;/&gt;
-        &lt;!-- 将积极加载改为消极加载（即按需加载） --&gt;
-        &lt;setting name=&quot;aggressiveLazyLoading&quot; value=&quot;false&quot;/&gt;
-        &lt;!-- 打开全局缓存开关（二级缓存）默认值就是 true --&gt;
-        &lt;setting name=&quot;cacheEnabled&quot; value=&quot;true&quot;/&gt;
-    &lt;/settings&gt;
-
-    &lt;!-- 别名定义 --&gt;
-    &lt;typeAliases&gt;
-        &lt;package name=&quot;cn.wmyskxz.pojo&quot;/&gt;
-    &lt;/typeAliases&gt;
-
-    &lt;!-- 加载映射文件 --&gt;
-    &lt;mappers&gt;
-        &lt;!-- 通过 resource 方法一次加载一个映射文件 --&gt;
-        &lt;mapper resource=&quot;sqlmap/UserMapper.xml&quot;/&gt;
-        &lt;!-- 批量加载mapper --&gt;
-        &lt;package name=&quot;cn.wmyskxz.mapper&quot;/&gt;
-    &lt;/mappers&gt;
-&lt;/configuration&gt;</code></pre><p>在该配置文件中：</p>
-<ul>
-<li>通过 <strong>settings 配置了一些延迟加载和缓存的开关信息</strong></li>
-<li>在 <strong>typeAliases 中设置了一个 package 的别名扫描路径</strong>，在该路径下的 Java 实体类都可以拥<strong>有一个别名（即首字母小写的类名）</strong></li>
-<li>在 mappers 配置中，使用 mapper 标签配置了即将要加载的 Mapper 映射文件的资源路径，当然也可以使用 package 标签，配置 mapper 代理接口所在的包名，以批量加载 mapper 代理对象。</li>
-<li><strong>注意：</strong> 有了 Spring 托管数据源，在 MyBatis 配置文件中仅仅需要关注性能化配置。</li>
-</ul>
-<h4 id="第五步：编写-Mapper-以及其他配置文件"><a href="#第五步：编写-Mapper-以及其他配置文件" class="headerlink" title="第五步：编写 Mapper 以及其他配置文件"></a>第五步：编写 Mapper 以及其他配置文件</h4><p>第五步，编写 Mapper 映射文件，这里依然定义 Mapper 映射文件的名字为 “UserMapper.xml” （与 SqlMapConfig.xml 中配置一致），为了测试效果，只配置了一个查询类 SQL 映射：</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
-        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
-&lt;mapper namespace=&quot;test&quot;&gt;
-    &lt;select id=&quot;findUserById&quot; parameterType=&quot;_int&quot; resultType=&quot;user&quot;&gt;
-    SELECT * FROM USER WHERE id = #{id}
-&lt;/select&gt;
-&lt;/mapper&gt;</code></pre><p>在该配置中，输出参数的映射为 “user” ，这是因为之前在 SqlMapConfig.xml 中配置了 “cn.wmyskxz.pojo” 包下的实体类使用别名（即首字母小写的类名），所以这里只需在 “cn.wmyskxz.pojo” 包下，创建 “finduserById” 对应的 Java 实体类 User：</p>
-<pre><code>package cn.wmyskxz.pojo;
-
-import java.io.Serializable;
-
-public class User implements Serializable {
-    private int id;
-    private String username;
-
-    /* getter and setter */
-}</code></pre><ul>
-<li>实现 Serializable 接口是为之后使用 Mapper 动态代理做准备，这里没有使用动态代理。</li>
-</ul>
-<p>在数据库资源 “db.properties” 中配置了数据库的连接信息，以 “key=value” 的形式配置，String 正是使用 “${}” 获取其中 key 对应的 value 配置的：</p>
-<pre><code>jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/mybatis?characterEncoding=UTF-8
-jdbc.username=root
-jdbc.password=root</code></pre><p>另外日志配置和<a href="https://www.jianshu.com/p/76d35d939539" target="_blank" rel="noopener">之前的配置</a>一样，我就直接黏贴了：</p>
-<pre><code># Global logging configuration
-# 在开发环境下日志级别要设置成 DEBUG ，生产环境设为 INFO 或 ERROR
-log4j.rootLogger=DEBUG, stdout
-# Console output...
-log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n</code></pre><h4 id="第六步：编写-DAO-层"><a href="#第六步：编写-DAO-层" class="headerlink" title="第六步：编写 DAO 层"></a>第六步：编写 DAO 层</h4><p>第六步，进行数据库交互（Data Access Object）层的编写。</p>
-<p>由于该项目只对 User 用户查询，所以 DAO 层就只有一个类，在 “cn.wmyskxz” 包下创建 DAO 层的 interface 接口，其中定义了 findUserById 方法，参数为用户的 id 值（int 类型）：</p>
-<pre><code>package cn.wmyskxz.dao;
-
-import cn.wmyskxz.pojo.User;
-
-public interface UserDAO {
-
-    // 根据 id 查询用户信息
-    public User findUserById(int id) throws Exception;
-}</code></pre><p>然后在同一个包下创建 UserDAO 接口的实现类 UserDAOImpl:</p>
-<pre><code>package cn.wmyskxz.dao;
-
-import cn.wmyskxz.pojo.User;
-import org.apache.ibatis.session.SqlSession;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
-
-public class UserDAOImpl extends SqlSessionDaoSupport implements UserDAO {
-
-    @Override
-    public User findUserById(int id) throws Exception {
-        // 继承 SqlSessionDaoSupport 类，通过 this.getSqlSession() 得到 sqlSession
-        SqlSession sqlSession = this.getSqlSession();
-        User user = sqlSession.selectOne(&quot;test.findUserById&quot;, id);
-        return user;
-    }
-}</code></pre><ul>
-<li><strong>有几点解释：</strong></li>
-<li><strong>UserDAOImpl 不仅实现了 UserDAO 接口，而且继承了 SqlSessionDaoSupport 类。</strong></li>
-<li>SqlSessionDaoSupport 类是 MyBatis 与 Spring 整合的 jar 包中提供的，<strong>在该类中已经包含了 sqlSessionFactory 对象作为其成员变量</strong>，而且对外提供 get 和 set 方法，方便 Spring 从外部注入 sqlSessionFactory 对象。</li>
-<li>UserDAOImpl 类要成功获取 sqlSessionFactory 对象，还<strong>需要在 Spring 配置文件 applicationContext.xml 中添加 userDAO 的 bean 配置，将其中定义的 sqlSessionFactory 对象当做参数注入进去</strong>，这样 UserDAOImpl 继承 SqlSessionDaoSupport 类才会起到作用：</li>
-</ul>
-<pre><code>&lt;!-- 原始 DAO 接口 --&gt;
-&lt;bean id=&quot;userDAO&quot; class=&quot;cn.wmyskxz.dao.UserDAOImpl&quot;&gt;
-    &lt;property name=&quot;sqlSessionFactory&quot; ref=&quot;sqlSessionFactory&quot;/&gt;
-&lt;/bean&gt;</code></pre><ul>
-<li><strong>注意：</strong> DAO 实现类继承了 SqlSessionDaoSupport 父类后，就无须自己定义获取 SqlSession 会话实例类方法了，该父类会默认加载数据源信息并提供获取 SqlSession 类的方法。</li>
-</ul>
-<h4 id="第七步：编写-Service-测试类"><a href="#第七步：编写-Service-测试类" class="headerlink" title="第七步：编写 Service 测试类"></a>第七步：编写 Service 测试类</h4><p>在 “cn.wmyskxz.test” 包下创建【UserServiceTest】测试类：</p>
-<pre><code>package cn.wmyskxz.test;
-
-import cn.wmyskxz.dao.UserDAO;
-import cn.wmyskxz.pojo.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class UserServiceTest {
-
-    private ApplicationContext applicationContext;
-
-    // 在执行测试方法之前首先获取 Spring 配置文件对象
-    // 注解@Before在执行本类所有测试方法之前先调用这个方法
-    @Before
-    public void setup() throws Exception {
-        applicationContext = new
-                ClassPathXmlApplicationContext(&quot;classpath:spring/applicationContext.xml&quot;);
-    }
-
-    @Test
-    public void testFindUserById() throws Exception {
-        // 通过配置资源对象获取 userDAO 对象
-        UserDAO userDAO = (UserDAO) applicationContext.getBean(&quot;userDAO&quot;);
-        // 调用 UserDAO 的方法
-        User user = userDAO.findUserById(1);
-        // 输出用户信息
-        System.out.println(user.getId() + &quot;:&quot; + user.getUsername());
-    }
-}</code></pre><p>运行测试方法，输出结果如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-3aa5986831a67175.png" alt=""></p>
-<hr>
-<h2 id="动态代理-注解实现"><a href="#动态代理-注解实现" class="headerlink" title="动态代理 + 注解实现"></a>动态代理 + 注解实现</h2><p>上面的实例程序并没有使用 Mapper 动态代理和注解来完成，下面我们就来试试如何用动态代理和注解：</p>
-<h4 id="第一步：编写-UserQueryMapper"><a href="#第一步：编写-UserQueryMapper" class="headerlink" title="第一步：编写 UserQueryMapper"></a>第一步：编写 UserQueryMapper</h4><p>在【mapper】下新建一个【UserQueryMapper】代理接口，并使用注解：</p>
-<pre><code>package cn.wmyskxz.mapper;
-
-import cn.wmyskxz.pojo.User;
-import org.apache.ibatis.annotations.Select;
-
-public interface UserQueryMapper {
-
-    @Select(&quot;SELECT * FROM USER WHERE id = #{id}&quot;)
-    public User findUserById(int id) throws Exception;
-}</code></pre><ul>
-<li><strong>注意：</strong> 在默认情况下，该 bean 的名字为 userQueryMapper（即首字母小写）</li>
-</ul>
-<p>现在有了代理类，我们需要通知 Spring 在这里来扫描到该类，Mapper 扫描配置对象需要用专门的扫描器：</p>
-<pre><code>&lt;!-- Mapper 扫描器 --&gt;
-&lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
-    &lt;!-- 扫描 cn.wmyskxz.mapper 包下的组件 --&gt;
-    &lt;property name=&quot;basePackage&quot; value=&quot;cn.wmyskxz.mapper&quot;/&gt;
-&lt;/bean&gt;</code></pre><h4 id="第二步：编写测试类"><a href="#第二步：编写测试类" class="headerlink" title="第二步：编写测试类"></a>第二步：编写测试类</h4><p>这一次我们获取的不再是 userDAO 对象，而是定义的 Mapper 代理对象 userQueryMapper：</p>
-<pre><code>package cn.wmyskxz.test;
-
-import cn.wmyskxz.mapper.UserQueryMapper;
-import cn.wmyskxz.pojo.User;
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class UserServiceTest {
-
-    private ApplicationContext applicationContext;
-
-    // 在执行测试方法之前首先获取 Spring 配置文件对象
-    // 注解@Before在执行本类所有测试方法之前先调用这个方法
-    @Before
-    public void setup() throws Exception {
-        applicationContext = new
-                ClassPathXmlApplicationContext(&quot;classpath:spring/applicationContext.xml&quot;);
-    }
-
-    @Test
-    public void testFindUserById() throws Exception {
-        // 通过配置资源对象获取 userDAO 对象
-        UserQueryMapper userQueryMapper = (UserQueryMapper) applicationContext.getBean(&quot;userQueryMapper&quot;);
-        // 调用 UserDAO 的方法
-        User user = userQueryMapper.findUserById(1);
-        // 输出用户信息
-        System.out.println(user.getId() + &quot;:&quot; + user.getUsername());
-    }
-}</code></pre><p>运行测试方法，得到正确结果：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MyBatis-%E4%B8%8E-Spring-%E6%95%B4%E5%90%88/7896890-8543b70d3880b5ac.png" alt=""></p>
-<p>可以看到，查询结果和之前非 Mapper 代理的查询结果一样。</p>
-<ul>
-<li><strong>原理：</strong> 在 applicationContext.xml 配置文件中配置的 <strong>mapper 批量扫描器类，会从 mapper 包中扫描出 Mapper 接口，自动创建代理对象并且在 Spring 容器中注入。</strong>自动扫描出来的 Mapper 的 bean 的 id 为 mapper 类名（首字母小写），所以这里获取的就是名为 “userQueryMapper” 的 mapper 代理对象。</li>
-</ul>
-<h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><ul>
-<li>《Java EE 互联网轻量级框架整合开发》</li>
-<li>《Spring MVC + MyBatis开发从入门到项目实战》</li>
-<li>全能的百度和万能的大脑</li>
-</ul>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -7214,7 +7445,7 @@ public class UserServiceTest {
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(4)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -7268,7 +7499,7 @@ public class UserServiceTest {
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.14px; color: #8a8a8a">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.86px; color: #868686">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

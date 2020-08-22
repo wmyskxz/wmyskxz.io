@@ -436,6 +436,910 @@
         
           
   <h2 class="title">
+    <a href="/2018/04/28/mo-fang-tian-mao-shi-zhan-ssm-ban-hou-tai-kai-fa/">
+      模仿天猫实战【SSM版】——后台开发
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>JavaWeb基础/SSM/项目</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2018年4月28日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>上一篇文章链接：<a href="https://www.jianshu.com/p/5e44ee046b43" target="_blank" rel="noopener">模仿天猫实战【SSM版】——项目起步</a></p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-3eee3c0023557f8e.png" alt=""></p>
+<h2 id="后台需求分析"><a href="#后台需求分析" class="headerlink" title="后台需求分析"></a>后台需求分析</h2><p>在开始码代码之前，还是需要先清楚自己要做什么事情，后台具体需要实现哪些功能：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-ccc3aa2fdf8e00de.png" alt=""></p>
+<ul>
+<li><strong>注意：</strong> 订单、用户、订单、推荐链接均不提供增删的功能。</li>
+</ul>
+<hr>
+<h2 id="后台界面设计"><a href="#后台界面设计" class="headerlink" title="后台界面设计"></a>后台界面设计</h2><p>不像前端那样有原型直接照搬就可以了，后台的设计还真的有难到我…毕竟我是一个对美有一定要求的人，一方面想尽量的简洁、简单，另一方面又不想要太难看，那怎么办呢？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-c27798bcd2932a19.png" alt=""></p>
+<p>那当然是找模板了，找到一个顺眼的下载下来就开始改，</p>
+<p>这个模板的原地址在这里：<a href="http://www.cssmoban.com/cssthemes/7381.shtml" target="_blank" rel="noopener">戳这里</a></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-f1c023b9fdbb91ff.png" alt=""></p>
+<p>顺便安利一下 FireFox ，真是开发神器，配合着修改，棒棒哒：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-16d9367e5b6b201e.png" alt=""></p>
+<h4 id="经过一番折腾…"><a href="#经过一番折腾…" class="headerlink" title="经过一番折腾…"></a>经过一番折腾…</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-c5f593fb37178a82.png" alt=""></p>
+<p>摁，就这风格了，而且我还发现右上角的【Search】框是下载的模板用 js 实现的…对于管理来说更加方便了….而且居然还实现了分页….</p>
+<p>一个邪恶的想法又诞生了…</p>
+<h4 id="一些规定"><a href="#一些规定" class="headerlink" title="一些规定"></a>一些规定</h4><blockquote>
+<ul>
+<li>为了降低项目的难度，我们做了很多的精简，现在我们作出如下的规定：</li>
+</ul>
+</blockquote>
+<ul>
+<li><strong>全站没有商家，只有一家 Tmall ，后台没有验证，可以直接进入</strong></li>
+<li><strong>前台的路径就是默认路径，后台的路径需要加上 “/admin” 后缀，</strong>如访问后台则为：localhost/admin （<strong>默认为分类管理页</strong>）</li>
+<li><strong>管理路径统一为：admin/listXxxxx</strong>，如分类管理路径为：admin/listCategory，用户管理路径为：admin/listUser，诸如此类</li>
+<li><strong>编辑路径统一为：admin/editXxxxx</strong>，如编辑分类路径为：admin/editCategory，产品编辑页为：admin/editProduct，诸如此类</li>
+<li><strong>删除路径统一为：admin/deleteXxxxx</strong></li>
+<li><strong>更新路径统一为：admin/updateXxxxx</strong></li>
+</ul>
+<blockquote>
+<ul>
+<li>关于页面路径的一些规定：</li>
+</ul>
+</blockquote>
+<ul>
+<li>前端页面统一在【WEB-INF/views】下，后端页面统一在【WEB-INF/views/admin】下</li>
+</ul>
+<hr>
+<h2 id="分类管理"><a href="#分类管理" class="headerlink" title="分类管理"></a>分类管理</h2><p>正式开始编写我们的代码，以 Category 为例。</p>
+<h4 id="编写-Service-层"><a href="#编写-Service-层" class="headerlink" title="编写 Service 层"></a>编写 Service 层</h4><p>我们需要在这一层上考虑需要完成的功能，对应我们上面画的后台功能图，分类管理也就是完成分类的查询还有修改的工作：</p>
+<pre><code>package cn.wmyskxz.service;
+
+import cn.wmyskxz.pojo.Category;
+
+import java.util.List;
+
+public interface CategoryService {
+
+    /**
+     * 返回分类列表
+     * @return
+     */
+    List&lt;Category&gt; list();
+
+    /**
+     * 通过id获取对应的数据
+     * @param id
+     * @return
+     */
+    Category get(Integer id);
+
+    /**
+     * 更新分类
+     * @param category
+     * @return
+     */
+    void update(Category category);
+}</code></pre><ul>
+<li>编写 CategoryServiceImpl ：<br>在同一包下编写实现类</li>
+</ul>
+<pre><code>package cn.wmyskxz.service;
+
+import cn.wmyskxz.mapper.CategoryMapper;
+import cn.wmyskxz.pojo.Category;
+import cn.wmyskxz.pojo.CategoryExample;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * CategoryService 的实现类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-27-下午 16:35
+ */
+@Service
+public class CategoryServiceImpl implements CategoryService {
+
+    @Autowired
+    CategoryMapper categoryMapper;
+
+    public List&lt;Category&gt; list() {
+        CategoryExample example = new CategoryExample();
+        List&lt;Category&gt; categories = categoryMapper.selectByExample(example);
+        return categories;
+    }
+
+    public Category get(Integer id) {
+        return categoryMapper.selectByPrimaryKey(id);
+    }
+
+    public void update(Category category) {
+        categoryMapper.updateByPrimaryKey(category);
+    }
+}</code></pre><h4 id="编写-CategoryController"><a href="#编写-CategoryController" class="headerlink" title="编写 CategoryController"></a>编写 CategoryController</h4><p>根据业务需求可以很容易的编写出来：</p>
+<pre><code>package cn.wmyskxz.controller;
+
+import cn.wmyskxz.pojo.Category;
+import cn.wmyskxz.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+/**
+ * Category 的控制类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-27-下午 16:37
+ */
+@Controller
+@RequestMapping(&quot;/admin&quot;)
+public class CategoryController {
+
+    @Autowired
+    CategoryService categoryService;
+
+    @RequestMapping(&quot;/listCategory&quot;)
+    public String list(Model model) {
+        List&lt;Category&gt; categories = categoryService.list();
+        model.addAttribute(&quot;categories&quot;, categories);
+        return &quot;admin/listCategory&quot;;
+    }
+
+    @RequestMapping(&quot;/editCategory&quot;)
+    public String edit(Category category,Model model) {
+        model.addAttribute(&quot;category&quot;, category);
+        return &quot;admin/editCategory&quot;;
+    }
+
+    @RequestMapping(&quot;/updateCategory&quot;)
+    public String update(Category category) {
+        categoryService.update(category);
+        return &quot;redirect:listCategory&quot;;
+    }
+}</code></pre><h4 id="JSP-相关文件编写"><a href="#JSP-相关文件编写" class="headerlink" title="JSP 相关文件编写"></a>JSP 相关文件编写</h4><p>自己研究了一会儿这个模板，感觉还是挺好改的，然后就给改成了大概以下这个样子（<em>自己在数据库中加入了 16 条数据</em>）：</p>
+<ul>
+<li>分类管理页</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-4a983d7478357872.png" alt=""></p>
+<ul>
+<li>分类编辑页</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-16014296cfec5ea8.png" alt=""></p>
+<p>模板下载下来之后文件目录是这样的：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-971cc1225aa97f5a.png" alt=""></p>
+<p>我们直接整个拷贝【assets】文件夹放在【webapp】目录下，然后根据模板里面的代码就可以开始修改了，修改下来的两个文件源码如下：</p>
+<ul>
+<li>listCategory.jsp</li>
+</ul>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+         pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot; /&gt;
+    &lt;title&gt;模仿天猫-后台&lt;/title&gt;
+    &lt;!-- Bootstrap Styles--&gt;
+    &lt;link href=&quot;../assets/css/bootstrap.css&quot; rel=&quot;stylesheet&quot; /&gt;
+    &lt;!-- FontAwesome Styles--&gt;
+    &lt;link href=&quot;../assets/css/font-awesome.css&quot; rel=&quot;stylesheet&quot; /&gt;
+    &lt;!-- Morris Chart Styles--&gt;
+
+    &lt;!-- Custom Styles--&gt;
+    &lt;link href=&quot;../assets/css/custom-styles.css&quot; rel=&quot;stylesheet&quot; /&gt;
+    &lt;!-- Google Fonts--&gt;
+    &lt;link href=&#39;https://fonts.googleapis.com/css?family=Open+Sans&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39; /&gt;
+    &lt;!-- TABLE STYLES--&gt;
+    &lt;link href=&quot;../assets/js/dataTables/dataTables.bootstrap.css&quot; rel=&quot;stylesheet&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;wrapper&quot;&gt;
+    &lt;nav class=&quot;navbar navbar-default top-navbar&quot; role=&quot;navigation&quot;&gt;
+        &lt;div class=&quot;navbar-header&quot;&gt;
+            &lt;button type=&quot;button&quot; class=&quot;navbar-toggle&quot; data-toggle=&quot;collapse&quot; data-target=&quot;.sidebar-collapse&quot;&gt;
+                &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
+                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;a class=&quot;navbar-brand&quot; href=&quot;listCategory&quot;&gt;Tmall&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+
+    &lt;!--/. NAV TOP  --&gt;
+    &lt;nav class=&quot;navbar-default navbar-side&quot; role=&quot;navigation&quot;&gt;
+        &lt;div class=&quot;sidebar-collapse&quot;&gt;
+            &lt;ul class=&quot;nav&quot; id=&quot;main-menu&quot;&gt;
+
+                &lt;li&gt;
+                    &lt;a class=&quot;active-menu&quot; href=&quot;listCategory&quot;&gt;&lt;i class=&quot;fa fa-bars&quot;&gt;&lt;/i&gt; 分类管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listUser&quot;&gt;&lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 用户管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listOrder&quot;&gt;&lt;i class=&quot;fa fa-list-alt&quot;&gt;&lt;/i&gt; 订单管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listProduct&quot;&gt;&lt;i class=&quot;fa fa-th-list&quot;&gt;&lt;/i&gt; 产品管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listLink&quot;&gt;&lt;i class=&quot;fa fa-link&quot;&gt;&lt;/i&gt; 推荐链接管理&lt;/a&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+
+    &lt;/nav&gt;
+    &lt;!-- /. NAV SIDE  --&gt;
+    &lt;div id=&quot;page-wrapper&quot;&gt;
+        &lt;div id=&quot;page-inner&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-md-12&quot;&gt;
+                    &lt;h1 class=&quot;page-header&quot;&gt;
+                        分类管理
+                        &lt;small&gt;&lt;/small&gt;
+                    &lt;/h1&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-md-12&quot;&gt;
+                    &lt;!-- Advanced Tables --&gt;
+                    &lt;div class=&quot;panel panel-default&quot;&gt;
+                        &lt;div class=&quot;panel-heading&quot;&gt;
+                            分类管理表
+                        &lt;/div&gt;
+                        &lt;div class=&quot;panel-body&quot;&gt;
+                            &lt;div class=&quot;table-responsive&quot;&gt;
+                                &lt;table class=&quot;table table-striped table-bordered table-hover&quot; id=&quot;dataTables-example&quot;&gt;
+                                    &lt;thead&gt;
+                                    &lt;tr&gt;
+                                        &lt;th&gt;分类id&lt;/th&gt;
+                                        &lt;th&gt;分类名称&lt;/th&gt;
+
+                                        &lt;th&gt;编辑分类&lt;/th&gt;
+                                        &lt;th&gt;产品管理&lt;/th&gt;
+                                        &lt;th&gt;属性管理&lt;/th&gt;
+                                    &lt;/tr&gt;
+                                    &lt;/thead&gt;
+                                    &lt;tbody&gt;
+                                    &lt;c:forEach items=&quot;${categories}&quot; var=&quot;c&quot;&gt;
+                                        &lt;tr&gt;
+                                            &lt;td&gt;${c.id}&lt;/td&gt;
+                                            &lt;td&gt;${c.name}&lt;/td&gt;
+
+                                            &lt;td&gt;&lt;a href=&quot;editCategory?id=${c.id}&amp;name=${c.name}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-th-list&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
+                                            &lt;td&gt;&lt;a href=&quot;listProduct?category_id=${c.id}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-shopping-cart&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
+                                            &lt;td&gt;&lt;a href=&quot;listProperty?category_id=${c.id}&quot;&gt;&lt;span class=&quot;glyphicon glyphicon-edit&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
+                                        &lt;/tr&gt;
+                                    &lt;/c:forEach&gt;
+                                    &lt;/tbody&gt;
+                                &lt;/table&gt;
+                            &lt;/div&gt;
+
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;!--End Advanced Tables --&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- /. PAGE WRAPPER  --&gt;
+&lt;/div&gt;
+&lt;!-- /. WRAPPER  --&gt;
+&lt;!-- JS Scripts--&gt;
+&lt;!-- jQuery Js --&gt;
+&lt;script src=&quot;../assets/js/jquery-1.10.2.js&quot;&gt;&lt;/script&gt;
+&lt;!-- Bootstrap Js --&gt;
+&lt;script src=&quot;../assets/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+&lt;!-- Metis Menu Js --&gt;
+&lt;script src=&quot;../assets/js/jquery.metisMenu.js&quot;&gt;&lt;/script&gt;
+&lt;!-- DATA TABLE SCRIPTS --&gt;
+&lt;script src=&quot;../assets/js/dataTables/jquery.dataTables.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;../assets/js/dataTables/dataTables.bootstrap.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+    $(document).ready(function () {
+        $(&#39;#dataTables-example&#39;).dataTable();
+    });
+&lt;/script&gt;
+&lt;!-- Custom Js --&gt;
+&lt;script src=&quot;../assets/js/custom-scripts.js&quot;&gt;&lt;/script&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><ul>
+<li>editCategory.jsp</li>
+</ul>
+<pre><code>&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot;
+         pageEncoding=&quot;UTF-8&quot; isELIgnored=&quot;false&quot; %&gt;
+&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;/&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;/&gt;
+    &lt;title&gt;模仿天猫-后台&lt;/title&gt;
+    &lt;!-- Bootstrap Styles--&gt;
+    &lt;link href=&quot;../assets/css/bootstrap.css&quot; rel=&quot;stylesheet&quot;/&gt;
+    &lt;!-- FontAwesome Styles--&gt;
+    &lt;link href=&quot;../assets/css/font-awesome.css&quot; rel=&quot;stylesheet&quot;/&gt;
+    &lt;!-- Morris Chart Styles--&gt;
+
+    &lt;!-- Custom Styles--&gt;
+    &lt;link href=&quot;../assets/css/custom-styles.css&quot; rel=&quot;stylesheet&quot;/&gt;
+    &lt;!-- Google Fonts--&gt;
+    &lt;link href=&#39;https://fonts.googleapis.com/css?family=Open+Sans&#39; rel=&#39;stylesheet&#39; type=&#39;text/css&#39;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;wrapper&quot;&gt;
+    &lt;nav class=&quot;navbar navbar-default top-navbar&quot; role=&quot;navigation&quot;&gt;
+        &lt;div class=&quot;navbar-header&quot;&gt;
+            &lt;button type=&quot;button&quot; class=&quot;navbar-toggle&quot; data-toggle=&quot;collapse&quot; data-target=&quot;.sidebar-collapse&quot;&gt;
+                &lt;span class=&quot;sr-only&quot;&gt;Toggle navigation&lt;/span&gt;
+                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+                &lt;span class=&quot;icon-bar&quot;&gt;&lt;/span&gt;
+            &lt;/button&gt;
+            &lt;a class=&quot;navbar-brand&quot; href=&quot;listCategory&quot;&gt;Tmall&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+
+    &lt;!--/. NAV TOP  --&gt;
+    &lt;nav class=&quot;navbar-default navbar-side&quot; role=&quot;navigation&quot;&gt;
+        &lt;div class=&quot;sidebar-collapse&quot;&gt;
+            &lt;ul class=&quot;nav&quot; id=&quot;main-menu&quot;&gt;
+
+                &lt;li&gt;
+                    &lt;a class=&quot;active-menu&quot; href=&quot;listCategory&quot;&gt;&lt;i class=&quot;fa fa-bars&quot;&gt;&lt;/i&gt; 分类管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listUser&quot;&gt;&lt;i class=&quot;fa fa-user&quot;&gt;&lt;/i&gt; 用户管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listOrder&quot;&gt;&lt;i class=&quot;fa fa-list-alt&quot;&gt;&lt;/i&gt; 订单管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listProduct&quot;&gt;&lt;i class=&quot;fa fa-th-list&quot;&gt;&lt;/i&gt; 产品管理&lt;/a&gt;
+                &lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;listLink&quot;&gt;&lt;i class=&quot;fa fa-link&quot;&gt;&lt;/i&gt; 推荐链接管理&lt;/a&gt;
+                &lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+
+    &lt;/nav&gt;
+    &lt;!-- /. NAV SIDE  --&gt;
+    &lt;div id=&quot;page-wrapper&quot;&gt;
+        &lt;div id=&quot;page-inner&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-md-12&quot;&gt;
+                    &lt;h1 class=&quot;page-header&quot;&gt;
+                        分类管理
+                        &lt;small&gt; - id:${category.id} &lt;/small&gt;
+                    &lt;/h1&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-md-6&quot;&gt;
+                    &lt;!-- Advanced Tables --&gt;
+                    &lt;div class=&quot;panel panel-default&quot;&gt;
+                        &lt;div class=&quot;panel-heading&quot;&gt;
+                            编辑分类
+                        &lt;/div&gt;
+                        &lt;div class=&quot;panel-body&quot;&gt;
+                            &lt;div class=&quot;row col-lg-12&quot;&gt;
+                                &lt;form action=&quot;updateCategory&quot; role=&quot;form&quot;&gt;
+                                    &lt;div class=&quot;form-group&quot;&gt;
+                                        &lt;%-- 隐藏id属性，一并提交 --%&gt;
+                                        &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;${category.id}&quot;&gt;
+                                        &lt;label&gt;分类名称：&lt;/label&gt;
+                                        &lt;input name=&quot;name&quot; class=&quot;form-control&quot; value=&quot;${category.name}&quot;&gt; &lt;br/&gt;
+                                        &lt;div class=&quot;pull-right&quot;&gt;
+                                            &lt;input type=&quot;submit&quot; class=&quot;btn btn-default&quot;&gt;
+                                        &lt;/div&gt;
+                                    &lt;/div&gt;
+                                &lt;/form&gt;
+                            &lt;/div&gt;
+
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;!--End Advanced Tables --&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- /. PAGE WRAPPER  --&gt;
+&lt;/div&gt;
+&lt;!-- /. WRAPPER  --&gt;
+&lt;!-- JS Scripts--&gt;
+&lt;!-- jQuery Js --&gt;
+&lt;script src=&quot;../assets/js/jquery-1.10.2.js&quot;&gt;&lt;/script&gt;
+&lt;!-- Bootstrap Js --&gt;
+&lt;script src=&quot;../assets/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><h4 id="这样就完成了-Category-的后台管理模块"><a href="#这样就完成了-Category-的后台管理模块" class="headerlink" title="这样就完成了 Category 的后台管理模块"></a>这样就完成了 Category 的后台管理模块</h4><p>其他模块的思路跟 Category 如出一辙，就比较偏向于体力劳动了…</p>
+<ul>
+<li><strong>注意：</strong> 所有本类的 id 属性均为 <code>id</code> ，所有外键的 id 都是 <code>属性名_id</code> 这样的格式，保持统一！</li>
+</ul>
+<hr>
+<h2 id="Example-条件查询"><a href="#Example-条件查询" class="headerlink" title="Example 条件查询"></a>Example 条件查询</h2><p>MyBatis 逆向工程自动生成文件的时候自动生成了 Example 条件查询类，我们到底应该怎么使用它呢，这里简要的说明一下。</p>
+<p>不得不说这个东西还挺神奇，也很方便，比如我们需要查询 category_id 对应下的属性表，我们可以这样写：</p>
+<pre><code>public List&lt;Property&gt; list(Integer category_id) {
+    PropertyExample example = new PropertyExample();
+    example.or().andCategory_idEqualTo(category_id);
+    List&lt;Property&gt; properties = propertyMapper.selectByExample(example);
+    return properties;
+}</code></pre><p>通过方法名其实也很容易看懂这些是什么意思，我们首先创建了一个 PropertyExample 实例对象，然后通过 <code>.or()</code> 方法开启条件查询，<code>.andCategory_idEqualTo()</code> 匹配对应的 category_id ，自动生成的 sql 语句就像这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-77a9f0157eba3e78.png" alt=""></p>
+<blockquote>
+<p><a href="https://blog.csdn.net/biandous/article/details/65630783" target="_blank" rel="noopener">更多详情戳这里 - 引用其他博客的详细说明</a></p>
+</blockquote>
+<hr>
+<h2 id="IDEA-快速重构"><a href="#IDEA-快速重构" class="headerlink" title="IDEA 快速重构"></a>IDEA 快速重构</h2><p>当我编写好了 PropertyService 、PropertyServiceImpl、 PropertyController 之后再想要去编写 Product 的这一系列文件的时候，发现其实很多代码都是重复的，只是很少一部分的代码需要改动，暂时不考虑设计模式的话，我们可以使用 IDEA 来完成快速重构：</p>
+<ul>
+<li>直接复制 PropertyController 的代码到 ProductController 中，然后【Ctrl + F】搜索 Property ：</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-02324398e7cb52b3.png" alt=""></p>
+<p>我们可以发现所有的 Property 都高亮了，然后我们怎么批量修改呢？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-22868fcd1d7ab8ff.gif" alt=""></p>
+<p>然后继续疯狂码代码…</p>
+<hr>
+<h2 id="开发过程中遇到的一些问题"><a href="#开发过程中遇到的一些问题" class="headerlink" title="开发过程中遇到的一些问题"></a>开发过程中遇到的一些问题</h2><h4 id="PropertyValue-遇到的麻烦"><a href="#PropertyValue-遇到的麻烦" class="headerlink" title="PropertyValue 遇到的麻烦"></a>PropertyValue 遇到的麻烦</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-320fc236c47427d3.png" alt=""></p>
+<p>PropertyValue 属性值表，这个表关联了两个外键，一个指向 Product ，另一个指向 Property ，当我按照之前的设计把 listProduct.jsp 设计成下面这个样子的时候，点击【编辑属性】，Property 的信息应该怎么传递？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-663fe5770f82dc3d.png" alt=""></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-c1937d1fb2ff0ad2.png" alt=""></p>
+<ul>
+<li>也就是说，如何处理从 listProduct 跳转到 listPropertyValue 页面时凭空跳出来的 Property 的相关信息？</li>
+</ul>
+<p><strong>解决方案：</strong></p>
+<p>在 PropertyValueServiceImpl 中增加：</p>
+<pre><code>@Autowired
+PropertyService propertyService;</code></pre><p>我们现在有 category_id 和 product_id ，我们可以利用 Property 和 Category 之间的联系，通过 category_id 查询出所有对应的 Property ，然后再筛选出同时匹配 property_id 和 product_id 的 PropertyValue：</p>
+<pre><code>public List&lt;PropertyValue&gt; list(Integer product_id, Integer category_id) {
+    PropertyValueExample example = new PropertyValueExample();
+    List&lt;PropertyValue&gt; propertyValues = new ArrayList&lt;PropertyValue&gt;();
+    List&lt;Property&gt; properties = propertyService.list(category_id);
+    for (Property property : properties) {
+        // 筛选出同时匹配 property_id 和 product_id 的值
+        example.or().andProperti_idEqualTo(property.getId()).andProduct_idEqualTo(product_id);
+        propertyValues.addAll(propertyValueMapper.selectByExample(example));
+    }
+    return propertyValues;
+}</code></pre><p>emmm…这样的思路出来之后，对应的 Controller 就清晰了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/listPropertyValue"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">list</span><span class="token punctuation">(</span>Model model<span class="token punctuation">,</span> Integer product_id<span class="token punctuation">,</span> Integer category_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> propertyValueService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>product_id<span class="token punctuation">,</span> category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"propertyValues"</span><span class="token punctuation">,</span> propertyValues<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Product product <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"product"</span><span class="token punctuation">,</span> product<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">"admin/listPropertyValue"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>加入一条数据测试：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-6e15372ceb60a814.png" alt=""></p>
+<ul>
+<li>bingo！</li>
+</ul>
+<p><strong>另一个问题是添加属性值：</strong> </p>
+<p>添加的属性值必须是当前 Category 下有的属性值，所以我们可以在 Controller 上自动注入一个 PropertyService 通过 category_id 查询到当前分类下所有的 Property 然后传递给 listPropertyValue ：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Autowired</span>
+PropertyService propertyService<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/listPropertyValue"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">list</span><span class="token punctuation">(</span>Model model<span class="token punctuation">,</span> Integer product_id<span class="token punctuation">,</span> Integer category_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> propertyValueService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>product_id<span class="token punctuation">,</span> category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"propertyValues"</span><span class="token punctuation">,</span> propertyValues<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    Product product <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"product"</span><span class="token punctuation">,</span> product<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    List<span class="token operator">&lt;</span>Property<span class="token operator">></span> properties <span class="token operator">=</span> propertyService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    model<span class="token punctuation">.</span><span class="token function">addAttribute</span><span class="token punctuation">(</span><span class="token string">"properties"</span><span class="token punctuation">,</span> properties<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">"admin/listPropertyValue"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<blockquote>
+<p>期间发现一个 BUG，PropertyValue 表里的 property_id 居然写成了 properti_id，吓得我赶紧检查了一下所有表的字段，其他的没问题，重新生成一下逆向工程</p>
+</blockquote>
+<p><strong>然后获取属性名称：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-913cf5641162aaa8.png" alt=""></p>
+<ul>
+<li>完善之后大概是这样：</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-63c0a4d1c28f7633.png" alt=""></p>
+<h4 id="产品图片管理"><a href="#产品图片管理" class="headerlink" title="产品图片管理"></a>产品图片管理</h4><p>产品图片的管理需要涉及到文件的上传操作，我们需要先提供必要的 jar 包依赖：</p>
+<ul>
+<li>commons-fileupload</li>
+<li>commons-io</li>
+</ul>
+<p>同样的搜索 maven 库添加依赖到 pom.xml中：</p>
+<pre><code>&lt;!-- 上传文件fileupload --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-fileupload&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-fileupload&lt;/artifactId&gt;
+    &lt;version&gt;1.3.3&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+    &lt;version&gt;2.6&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p><strong>产品图片如何管理？</strong></p>
+<ul>
+<li><strong>规定一：</strong><br>所有的产品图片均保存在【img/product/】对应的 product_id 目录下，并且默认的文件名为 1，2，3，4，5 ，例如 product_id 为 1 的产品的产品图片 1 保存于：【img/product/1/1.jpg】</li>
+<li><strong>规定二：</strong><br>每一个产品对应五张图片，文件名分别为 1.jpg ，2.jpg 以此类推，不能少也不能多，删除也只是将对应目录下的图片删除，id 并不改变</li>
+<li><strong>规定三：</strong><br>默认产品打开的大图即为该产品图片目录中的 1.jpg</li>
+</ul>
+<blockquote>
+<ul>
+<li>界面大概设计成了这样：</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-77a779e13d7b2d50.png" alt=""></p>
+<blockquote>
+<ul>
+<li>莫名其妙一个 BUG：</li>
+</ul>
+</blockquote>
+<p>我把表单设计成了这样，隐藏了两个属性，一个 product_id，一个 id：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-7ef327a861da75d4.png" alt=""></p>
+<p>为了方便操作，我想要直接申明两个参数用来接收上面的两个属性，大概是这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-dc05f02505bc41ac.png" alt=""></p>
+<p>但是上面两种方法都不行，我还查了一些资料在 @RequestParam 注解里设置了 required 属性，仍然获取不到，但是我改成用 ProductImage 来接收就好了..Why?</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-6bf39c8f3fe9ca82.png" alt=""></p>
+<p>后来写着写着，又必须要使用上面两种方法了….</p>
+<blockquote>
+<ul>
+<li>根据我们的规定来完成代码</li>
+</ul>
+</blockquote>
+<p>ProductImageService 层还是跟之前的没有多大的区别，但是值得注意的是，根据我们的规定，我们的删除需要做一些改动（根据 product_id 批量删除）：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>service<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>mapper<span class="token punctuation">.</span>PropertyValueMapper<span class="token punctuation">;</span>
+<span class="token keyword">import</span> cn<span class="token punctuation">.</span>wmyskxz<span class="token punctuation">.</span>pojo<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>beans<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>annotation<span class="token punctuation">.</span>Autowired<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>stereotype<span class="token punctuation">.</span>Service<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">/**
+ * cn.wmyskxz.pojo.PropertyValueValueService 实现类
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-28-上午 7:47
+ */</span>
+<span class="token annotation punctuation">@Service</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PropertyValueServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">PropertyValueService</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    PropertyValueMapper propertyValueMapper<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    PropertyService propertyService<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Autowired</span>
+    ProductService productService<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">add</span><span class="token punctuation">(</span>PropertyValue propertyValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        propertyValueMapper<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>propertyValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">delete</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        propertyValueMapper<span class="token punctuation">.</span><span class="token function">deleteByPrimaryKey</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">deleteByProductId</span><span class="token punctuation">(</span>Integer product_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 按条件查询出需要删除的列表</span>
+        PropertyValueExample example <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PropertyValueExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        example<span class="token punctuation">.</span><span class="token function">or</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">andProduct_idEqualTo</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Integer category_id <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getCategory_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> <span class="token function">list</span><span class="token punctuation">(</span>product_id<span class="token punctuation">,</span> category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 循环删除</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> propertyValues<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            propertyValueMapper<span class="token punctuation">.</span><span class="token function">deleteByPrimaryKey</span><span class="token punctuation">(</span>propertyValues<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">update</span><span class="token punctuation">(</span>PropertyValue propertyValue<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        propertyValueMapper<span class="token punctuation">.</span><span class="token function">updateByPrimaryKey</span><span class="token punctuation">(</span>propertyValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> <span class="token function">list</span><span class="token punctuation">(</span>Integer product_id<span class="token punctuation">,</span> Integer category_id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        PropertyValueExample example <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PropertyValueExample</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        List<span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span> propertyValues <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span>PropertyValue<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        List<span class="token operator">&lt;</span>Property<span class="token operator">></span> properties <span class="token operator">=</span> propertyService<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span>category_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>Property property <span class="token operator">:</span> properties<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 筛选出同时匹配 property_id 和 product_id 的值</span>
+            example<span class="token punctuation">.</span><span class="token function">or</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">andProperty_idEqualTo</span><span class="token punctuation">(</span>property<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">andProduct_idEqualTo</span><span class="token punctuation">(</span>product_id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            propertyValues<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>propertyValueMapper<span class="token punctuation">.</span><span class="token function">selectByExample</span><span class="token punctuation">(</span>example<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> propertyValues<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> PropertyValue <span class="token function">get</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> propertyValueMapper<span class="token punctuation">.</span><span class="token function">selectByPrimaryKey</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<ul>
+<li>首先在 ProductController 中 add 和 delete 方法中增加以下代码：</li>
+</ul>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Autowired</span>
+ProductImageService productImageService<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/addProduct"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">add</span><span class="token punctuation">(</span>Product product<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    productService<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>product<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 创建新的 Product 时默认创建 5 个对应的 ProductImage 数据</span>
+    ProductImage productImage <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProductImage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    productImage<span class="token punctuation">.</span><span class="token function">setProduct_id</span><span class="token punctuation">(</span>product<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">5</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        productImage<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        productImageService<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>productImage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token string">"redirect:listProduct?category_id="</span> <span class="token operator">+</span> product<span class="token punctuation">.</span><span class="token function">getCategory_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"/deleteProduct"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">delete</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">,</span> HttpServletRequest request<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">// 在删除产品的时候将对应的 5 个 ProductImage 数据也删除了</span>
+    productImageService<span class="token punctuation">.</span><span class="token function">deleteByProductId</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 同时删除目录下的相关文件</span>
+    String path <span class="token operator">=</span> request<span class="token punctuation">.</span><span class="token function">getSession</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getServletContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getRealPath</span><span class="token punctuation">(</span><span class="token string">""</span> <span class="token operator">+</span> id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">deleteDir</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">// 删除外键对应的数据</span>
+    propertyValueService<span class="token punctuation">.</span><span class="token function">deleteByProductId</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> category_id <span class="token operator">=</span> productService<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getCategory_id</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    productService<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token string">"redirect:listProduct?category_id="</span> <span class="token operator">+</span> category_id<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">/**
+ * 递归删除目录下的所有文件及子目录下所有文件
+ *
+ * @param dir 将要删除的文件目录
+ * @return boolean Returns "true" if all deletions were successful.
+ * If a deletion fails, the method stops attempting to
+ * delete and returns "false".
+ */</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">deleteDir</span><span class="token punctuation">(</span>File dir<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>dir<span class="token punctuation">.</span><span class="token function">isDirectory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String<span class="token punctuation">[</span><span class="token punctuation">]</span> children <span class="token operator">=</span> dir<span class="token punctuation">.</span><span class="token function">list</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//递归删除目录中的子目录下</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> children<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">boolean</span> success <span class="token operator">=</span> <span class="token function">deleteDir</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>dir<span class="token punctuation">,</span> children<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>success<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">// 目录此时为空，可以删除</span>
+    <span class="token keyword">return</span> dir<span class="token punctuation">.</span><span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后编写我们的 ProductImageController ：</p>
+<pre><code>package cn.wmyskxz.controller;
+
+import cn.wmyskxz.pojo.Product;
+import cn.wmyskxz.pojo.ProductImage;
+import cn.wmyskxz.service.ProductImageService;
+import cn.wmyskxz.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.List;
+
+/**
+ * ProductImage 的控制器
+ *
+ * @author: @我没有三颗心脏
+ * @create: 2018-04-28-下午 14:10
+ */
+@Controller
+@RequestMapping(&quot;/admin&quot;)
+public class ProductImageController {
+
+    @Autowired
+    ProductImageService productImageService;
+
+    @Autowired
+    ProductService productService;
+
+    @RequestMapping(&quot;/editProductImage&quot;)
+    public String edit(Model model, Integer product_id) {
+        List&lt;ProductImage&gt; productImages = productImageService.list(product_id);
+        model.addAttribute(&quot;productImages&quot;, productImages);
+        Product product = productService.get(product_id);
+        model.addAttribute(&quot;product&quot;, product);
+        return &quot;admin/editProductImage&quot;;
+    }
+
+    @RequestMapping(value = &quot;/updateProductImage&quot;, method = RequestMethod.POST)
+    public String update(HttpServletRequest request,
+//                         @RequestParam(&quot;productImage&quot;) ProductImage productImage,
+                         Integer product_id, 
+                         Integer id,
+                         @RequestParam(&quot;picture&quot;) MultipartFile picture) {
+
+        // 上传文件到指定位置
+        String filePath = request.getSession().getServletContext()
+                .getRealPath(&quot;img/product/&quot; + product_id);
+        // 因为 id 是自增长键，所以需要 % 5 来作为文件名
+        String fileName = (id % 5 == 0 ? 5 : id % 5) + &quot;.jpg&quot;;
+        File uploadPicture = new File(filePath, fileName);
+        if (!uploadPicture.exists()) {
+            uploadPicture.mkdirs();
+        }
+        // 保存
+        try {
+            picture.transferTo(uploadPicture);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return &quot;redirect:editProductImage?product_id=&quot; + product_id;
+    }
+
+    @RequestMapping(&quot;/deleteProductImage&quot;)
+    public String delete(Integer id, Integer product_id, HttpServletRequest request) {
+        // 不删除表中的数据（在 ProductController 中统一删除），删除对应文件
+        String filePath = request.getSession().getServletContext()
+                .getRealPath(&quot;img/product/&quot; + product_id);
+        String fileName = id + &quot;.jpg&quot;;
+        new File(filePath, fileName).delete();
+
+        return &quot;redirect:editProductImage?product_id=&quot; + product_id;
+    }
+}
+</code></pre><blockquote>
+<ul>
+<li>再优化一下界面的东西，增加没有图片显示的 error 图片，大概就是这个样子：</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-1503d0b3ed63d785.png" alt=""></p>
+<p>这里就只贴一下 table 的代码吧：</p>
+<pre><code>&lt;c:forEach items=&quot;${productImages}&quot; var=&quot;pi&quot;&gt;
+    &lt;tr&gt;
+        &lt;td&gt;${pi.product_id}&lt;/td&gt;
+        &lt;td&gt;${pi.id}&lt;/td&gt;
+        &lt;td&gt;&lt;img class=&quot;col-md-8&quot;
+                 src=&quot;../img/product/${pi.product_id}/${pi.id%5==0?5:pi.id%5}.jpg&quot;
+                 onerror=&quot;this.src=&#39;../img/product/error.png&#39;&quot;&gt;&lt;/td&gt;
+        &lt;td class=&quot;col-md-5&quot;&gt;
+            &lt;form action=&quot;updateProductImage&quot; method=&quot;post&quot;
+                  enctype=&quot;multipart/form-data&quot;&gt;
+                &lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;${pi.id}&quot;&gt;
+                &lt;input type=&quot;hidden&quot; name=&quot;product_id&quot;
+                       value=&quot;${pi.product_id}&quot;&gt;
+                &lt;input type=&quot;file&quot; name=&quot;picture&quot; class=&quot;pull-left&quot;&gt;
+                &lt;input type=&quot;submit&quot; class=&quot;btn btn-primary pull-right&quot; value=&quot;上传&quot;&gt;
+            &lt;/form&gt;
+        &lt;/td&gt;
+        &lt;td&gt;
+            &lt;a href=&quot;deleteProductImage?product_id=${pi.product_id}&amp;id=${pi.id}&quot;&gt;&lt;span
+                    class=&quot;glyphicon glyphicon-trash&quot;&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/c:forEach&gt;</code></pre><h4 id="在写图片管理的时候又遇到一个坑"><a href="#在写图片管理的时候又遇到一个坑" class="headerlink" title="在写图片管理的时候又遇到一个坑"></a>在写图片管理的时候又遇到一个坑</h4><p><strong>在删除顶层数据库数据的时候，要注意删除其下的有外键关联的数据</strong>，特别是 product_id 这个东西，是很多表的外键，删除 product 之前需要先清空有关联的其他表的数据….</p>
+<p>总之坑是很多啦..不过项目在进展总归是好事…耐心耐心…</p>
+<h4 id="接着码代码…"><a href="#接着码代码…" class="headerlink" title="接着码代码…."></a>接着码代码….</h4><p>还剩下一些体力活的东西，就先结博文啦…（心累.jpg）</p>
+<p>有一些催更的朋友，希望能别催啦…每天都在码啦，而且本身也是很low的东西，写完之后我会上传 github 的。</p>
+<hr>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%AE%9E%E6%88%98%E3%80%90SSM%E7%89%88%E3%80%91%E2%80%94%E2%80%94%E5%90%8E%E5%8F%B0%E5%BC%80%E5%8F%91/7896890-dc0bd48aaa532767.jpg" alt=""></p>
+<p>当我给自己埋了一个大坑说要模仿天猫，并且陷进去的时候，一方面痛苦着一方面也察觉了自己很多不足的地方，就觉得还是很值得，现在来做一下简短的总结。</p>
+<ul>
+<li>进度比想象中慢了很多，虽然一步一步按照之前的分析图来编写代码总体是顺畅的，但是有那种写着写着突然发现之前的设计有问题的感觉，中途也改了几次，<strong>发现自己分析问题不够全面。</strong></li>
+<li>项目中有许多类似的代码，并且在 Controller 和 Impl 中不断有其他的东西加入，总觉得是糟糕的代码，但是又不知道应该进一步如何改进。</li>
+<li><strong>方向永远比努力重要，在行动之前思考清楚，</strong>我一直觉得是很重要的一点，我觉得通过对项目的分析，对我项目的进展有一个整体的构思，各个模块该有什么功能都比较清晰，特别在编写 JSP 文件的时候能明显感觉不会很迷茫，这是比较好的一点</li>
+<li><strong>发现自己阅读代码量很少，</strong>这种感觉体现在很多地方，一是写代码时感觉到自己思想的局限性，二是觉得自己写的代码有很多的相似性，虽然这个项目是自己突发奇想的想要去做的，但是有很多细节的地方，是自己没有去注意到的，比如类型要求、边界判断、事务处理等等等…</li>
+</ul>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2018/04/27/mo-fang-tian-mao-shi-zhan-ssm-ban-xiang-mu-qi-bu/">
       模仿天猫实战【SSM版】——项目起步
     </a>
@@ -4284,437 +5188,6 @@ public class UserServiceTest {
           </div>
         
       
-        
-          <div class='post-wrapper'>
-            <article class="post white-box shadow reveal ">
-  
-
-
-  <section class='meta'>
-    
-      
-      
-      <div class="meta" id="header-meta">
-        
-          
-  <h2 class="title">
-    <a href="/2018/04/18/a-li-ba-ba-java-kai-fa-shou-ce-du-shu-bi-ji/">
-      《阿里巴巴Java开发手册》读书笔记
-    </a>
-  </h2>
-
-
-        
-        <div class='new-meta-box'>
-          
-            
-          
-            
-              
-<div class='new-meta-item author'>
-  <a class='author' href="" rel="nofollow">
-    <img no-lazy src="">
-    <p></p>
-  </a>
-</div>
-
-            
-          
-            
-              
-  
-  <div class='new-meta-item category'>
-    <a href='/categories/Java-Web/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/' rel="nofollow">
-      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java Web/学习笔记</p>
-    </a>
-  </div>
-
-
-            
-          
-            
-              <div class="new-meta-item date">
-  <a class='notlink'>
-    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
-    <p>发布于：2018年4月18日</p>
-  </a>
-</div>
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-  
-
-
-            
-          
-            
-              
-
-            
-          
-            
-              
-
-            
-          
-        </div>
-        
-          <hr>
-        
-      </div>
-    
-  </section>
-
-
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-06738d992f4f26c3.png" alt=""></p>
-<blockquote>
-<p>偶然看到阿里巴巴居然出书了？？？趁着满减活动（节约节约….）我赶紧买来准备看看，刚拿到的时候掂量了好多下，总觉得商家给我少发了一本书，结果打开才知道..原来这本书这么小….</p>
-</blockquote>
-<h2 id="编码规范的重要性"><a href="#编码规范的重要性" class="headerlink" title="编码规范的重要性"></a>编码规范的重要性</h2><p>别人都说我们是搬砖的码农，但我们知道自己是追求个性的艺术家。也许我们不会过多在意自己的外表和穿着，但在我们不羁的外表下，骨子里追求着代码的美、系统的美、设计的美，代码规范其实就是一个对程序美的定义。—— 引自 序</p>
-<p>如果有一天在我们的项目中看到了这样的代码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-7a425dfcb3e64156.jpg" alt=""></p>
-<p>或者是这样的代码：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-9d11189e03398d5b.jpg" alt=""></p>
-<p>这样美不美呢？或许看着是还挺美的，但是如果需要修改，是不是人傻啦？</p>
-<p>那这样的代码呢？</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-7d15a7023b8062b0.jpg" alt=""></p>
-<p>作为一个对自己有一定要求的程序猿，是不是第一反应就是：</p>
-<ul>
-<li><strong>重写！</strong></li>
-<li><strong>原作者是谁？锤他！</strong></li>
-</ul>
-<p>规范不一，就会像下图中的小鸭和小鸡对话一样，语言不通，一脸囧相。鸡同鸭讲也恰恰形容了人与人之间沟通的痛点，自说自话，无法达成一致意见。再举一个生活中的例子，交通规则靠左行驶还是靠右行驶，两者孰好孰坏并不重要，重要的是必须要在统一的方向上通行，表面上限制了自由，但实际上是保障了公众的人身安全。试想，如果没有规定靠右行驶，那样的路况肯定拥堵不堪，险象环生。同样，过分自由随意、天马行空的代码会严重的伤害系统的健康，影响到可扩展性以及可维护性。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-b83024fdf26aa03a.png" alt=""></p>
-<ul>
-<li><strong>总结：代码规范很重要！</strong></li>
-</ul>
-<h4 id="关于编码规范的三大圣战"><a href="#关于编码规范的三大圣战" class="headerlink" title="关于编码规范的三大圣战"></a>关于编码规范的三大圣战</h4><p>众所周知，互联网公司的优势在于效率，它是企业核心竞争力。体现在产品开发领域，就是够沟通效率和研发效率。对于沟通效率的重要性，可以从程序猿三大 “编码理念之争” 说起：</p>
-<ul>
-<li><strong>缩进采用空格键，还是 Tab 键</strong></li>
-<li><strong>if 单行语句需要大括号还是不需要大括号</strong></li>
-<li><strong>左大括号不换行，还是单独另起一行</strong></li>
-</ul>
-<p>在美剧《硅谷》中，有这样的一个经典镜头：</p>
-<ul>
-<li>程序媛：Kid? 我们似乎很久没有一起睡了。</li>
-<li>程序猿：现在？不可能！我永远不会和使用空格来缩进的人睡在一起！</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-f413e0959ed3dc70.png" alt=""></p>
-<ul>
-<li>程序媛：（疯狂敲 space 气走了程序猿）</li>
-<li>程序猿：（甩了一句）一个 Tab 可以代替 8个 空格！<br>之后程序猿就因为视图一步跨下八个阶梯而摔了….</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-92573e8f4d3aa24d.png" alt=""></p>
-<p>Tab 键和空格键的争议确实存在，并且在知乎上讨论得火热：<a href="https://www.zhihu.com/question/19960028" target="_blank" rel="noopener">写代码时，缩进使用 tab 还是空格？</a></p>
-<ul>
-<li>总结：<strong>使用 4 个空格好</strong>，在《阿里巴巴 Java 开发手册》中也明确支持了这样的做法。下面也引用一张图来调侃一下。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-8e876a01142ffffd.jpg" alt=""></p>
-<p>if 单语句是否需要换行，也是争论不休的话题。相对来说，写过格式缩进类编程语言的开发者， 更加习惯于不加大括号。<strong>《手册》中明确 if/for 单行语句必须加大括号</strong>，因为单行语句的写法，容易在添加逻辑时引起视觉上的错误判断。此外，if 不加大括号还会有局部变量作用域的问题。</p>
-<p>左大括号是否单独另起一行？因为 Go 语言的强制不换行，在这点上，“编程理念之争” 的硝烟味似乎没有那么浓。如果一定要给一个理由，那么换行的代码可以增加一行，对于按代码行数考核工作量的公司员工，肯定倾向于左大括号前换行。<strong>《手册》明确左大括号不换行！</strong></p>
-<ul>
-<li><strong>总结：</strong> 其实，很多编程方式客观上没有对错之分，一致性很重要，可读性很重要，团队沟通效率很重要。</li>
-</ul>
-<hr>
-<h2 id="第1章：编程规约"><a href="#第1章：编程规约" class="headerlink" title="第1章：编程规约"></a>第1章：编程规约</h2><p>这一章是对传统意义上的代码规范，包括变量命名、代码风格、控制语句、代码注释等基本的变成习惯，以及从高并发场景中提炼出来的集合处理技巧与并发多线程的注意事项。</p>
-<h3 id="1-1-命名风格"><a href="#1-1-命名风格" class="headerlink" title="1.1 命名风格"></a>1.1 命名风格</h3><h4 id="第一条：【强制】代码中的命名均不能以下划线或美元符号开始，也不能以下划线或美元符号结束。"><a href="#第一条：【强制】代码中的命名均不能以下划线或美元符号开始，也不能以下划线或美元符号结束。" class="headerlink" title="第一条：【强制】代码中的命名均不能以下划线或美元符号开始，也不能以下划线或美元符号结束。"></a>第一条：【强制】代码中的命名均不能以下划线或美元符号开始，也不能以下划线或美元符号结束。</h4><blockquote>
-<ul>
-<li>反例：<code>_name</code> / <code>$name</code> / <code>name_</code> / <code>name$</code></li>
-</ul>
-</blockquote>
-<p>尽管 <code>$</code> 可以作为标识符使用，然而我们应该尽量避免对其使用。</p>
-<ul>
-<li><strong>原因：</strong> <code>$</code> 通常在编译器生成的标识符名称中使用，如果我们也使用这个符号，可能会有一些意想不到的错误发生….</li>
-<li><strong>意想不到的错误示例：</strong></li>
-</ul>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> test<span class="token punctuation">;</span>
-
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span>$VIP <span class="token punctuation">{</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        User user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        User<span class="token punctuation">.</span>VIP vip <span class="token operator">=</span> user<span class="token punctuation">.</span><span class="token keyword">new</span> <span class="token class-name">VIP</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        vip<span class="token punctuation">.</span><span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-
-<span class="token keyword">class</span> <span class="token class-name">User</span><span class="token punctuation">{</span>
-    <span class="token keyword">class</span> <span class="token class-name">VIP</span><span class="token punctuation">{</span>
-        <span class="token keyword">void</span> <span class="token function">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"成员类"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p>仔细阅读以下，似乎并没有什么问题，代码也比较简单，但正在我们编译的时候，IDEA提示我们：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-9dc75135490af597.png" alt=""></p>
-<p>定义了重复的代码？归根到底，都是 <code>$</code> 惹的祸！因为 <code>$</code> 被编译器所使用，在源文件（.java 文件）编译成字节码（.class 文件）后，会称为顶层类型与嵌套类型之间的连接符。例如，如果存在一个顶层类 A，在其内声明了一个成员类 B，那么编译之后就会产生两个 class 文件，分别为 <code>A.class</code> 与 <code>A$B.class</code>。</p>
-<p>就本程序来说，会生成 3 个 class 文件（如果可以编译的话），分别是 <code>User$VIP.class</code>（顶层类）、<code>User.class</code> 与 <code>User$VIP.class</code>（User 类的成员类，也就是类 VIP）。由于试图存在两个 <code>User$VIP.class</code> 所以才会报错！</p>
-<h4 id="第三至第六条：【强制】"><a href="#第三至第六条：【强制】" class="headerlink" title="第三至第六条：【强制】"></a>第三至第六条：【强制】</h4><ul>
-<li><p>类名使用 UpperCamelCase 风格，方法名、参数名、成员变量、局部变量都同意使用 lowerCamelCase 风格，必须遵从驼峰形式。</p>
-</li>
-<li><p>变量命名全部大写，单词兼用下划线隔开，力求予以表达完整清楚，不要嫌名字太长。</p>
-<blockquote>
-<p>正例：MAX_STOCK_COUNT / PRIZE_NUMBER_EVERYDAY<br>反例：MAX_COUNT / PRIZE_NUMBER</p>
-</blockquote>
-</li>
-<li><p>抽象类命名使用 Abstract 或 Base 开头；异常类命名使用 Exception 结尾；测试类命名以它要测试的类名开始，以 Test 结尾。</p>
-</li>
-</ul>
-<h4 id="第八条：【强制】-POJO-类中布尔类型的变量都不要加-is-前缀，否则部分框架解析会引起序列化错误。"><a href="#第八条：【强制】-POJO-类中布尔类型的变量都不要加-is-前缀，否则部分框架解析会引起序列化错误。" class="headerlink" title="第八条：【强制】 POJO 类中布尔类型的变量都不要加 is 前缀，否则部分框架解析会引起序列化错误。"></a>第八条：【强制】 POJO 类中布尔类型的变量都不要加 is 前缀，否则部分框架解析会引起序列化错误。</h4><blockquote>
-<p>反例：定义为基本数据类型 <code>Boolen isDeleted;</code> 的属性，它的方法名称也是 <code>isDeleted()</code> ，RPC 框架在反向解析的时候，“误以为” 对应的属性名称是 <code>deleted</code> ，导致属性获取不到抛出异常。</p>
-</blockquote>
-<h4 id="第十二条：【推荐】-如果模块、类、方法使用了设计模式，应在命名时体现出具体模式"><a href="#第十二条：【推荐】-如果模块、类、方法使用了设计模式，应在命名时体现出具体模式" class="headerlink" title="第十二条：【推荐】 如果模块、类、方法使用了设计模式，应在命名时体现出具体模式"></a>第十二条：【推荐】 如果模块、类、方法使用了设计模式，应在命名时体现出具体模式</h4><ul>
-<li><strong>说明：</strong> 将设计模式体现在名字中，有利于阅读者快速理解架构设计理念。<blockquote>
-<p>正例：<br><code>public class OrderFactory;</code><br><code>public class LoginProxy;</code><br><code>public class ResourceObserver;</code></p>
-</blockquote>
-</li>
-</ul>
-<h4 id="第十三条：【推荐】-接口类中的方法和属性不要加任何修饰符号（public-也不要加），保持代码的间接性，并加上有效的-Javadoc-注释。尽量不要在接口里定义变量，如果一定要定义变量，必须是与接口方法相关的，并且是整个应用的基础变量。"><a href="#第十三条：【推荐】-接口类中的方法和属性不要加任何修饰符号（public-也不要加），保持代码的间接性，并加上有效的-Javadoc-注释。尽量不要在接口里定义变量，如果一定要定义变量，必须是与接口方法相关的，并且是整个应用的基础变量。" class="headerlink" title="第十三条：【推荐】 接口类中的方法和属性不要加任何修饰符号（public 也不要加），保持代码的间接性，并加上有效的 Javadoc 注释。尽量不要在接口里定义变量，如果一定要定义变量，必须是与接口方法相关的，并且是整个应用的基础变量。"></a>第十三条：【推荐】 接口类中的方法和属性不要加任何修饰符号（public 也不要加），保持代码的间接性，并加上有效的 Javadoc 注释。尽量不要在接口里定义变量，如果一定要定义变量，必须是与接口方法相关的，并且是整个应用的基础变量。</h4><blockquote>
-<p>正例：<br>接口方法签名： <code>void commit();</code><br>接口基础变量： <code>String COMPANY = &quot;alibaba&quot;;</code><br>反例：<br>接口定义方法： <code>public abstract void commit();</code></p>
-</blockquote>
-<ul>
-<li><strong>说明：</strong> 如果 JDK8 中接口允许有默认实现，那么这个 default 方法，是对所有实现类都有价值的默认实现。</li>
-</ul>
-<h4 id="第十四条：接口和实现类的命名规则"><a href="#第十四条：接口和实现类的命名规则" class="headerlink" title="第十四条：接口和实现类的命名规则"></a>第十四条：接口和实现类的命名规则</h4><ul>
-<li><strong>1）：【强制】</strong> 对于 Service 和 DAO 类，基于 SOA 的理念，暴露出来的服务一定是接口，内部的实现类用 Impl 后缀与接口区别。</li>
-</ul>
-<blockquote>
-<p>正例： CacheServiceImpl 实现 CacheServcie 接口</p>
-</blockquote>
-<ul>
-<li><strong>2）：【推荐】</strong> 如果是形容能力的接口名称，取对应的形容词为接口名（通常是 -able 的形式）。<blockquote>
-<p>正例： AbstractTranslator 实现 Translatable。</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="1-2-常量定义"><a href="#1-2-常量定义" class="headerlink" title="1.2 常量定义"></a>1.2 常量定义</h3><h4 id="第二条：【强制】-long-或者-Long-初始赋值时，使用大写的-L，不能是小写的-l。小写的-l-容易跟数字-1-混淆，造成误解。"><a href="#第二条：【强制】-long-或者-Long-初始赋值时，使用大写的-L，不能是小写的-l。小写的-l-容易跟数字-1-混淆，造成误解。" class="headerlink" title="第二条：【强制】 long 或者 Long 初始赋值时，使用大写的 L，不能是小写的 l。小写的 l 容易跟数字 1 混淆，造成误解。"></a>第二条：【强制】 long 或者 Long 初始赋值时，使用大写的 L，不能是小写的 l。小写的 l 容易跟数字 1 混淆，造成误解。</h4><ul>
-<li><strong>说明：</strong> <code>Long a = 2l;</code> 写得是数字的 21 还是 Long 型的 2？</li>
-</ul>
-<h4 id="第三条：【推荐】-不要使用一个常量类维护所有变量，要按常量功能进行归类，分开维护。"><a href="#第三条：【推荐】-不要使用一个常量类维护所有变量，要按常量功能进行归类，分开维护。" class="headerlink" title="第三条：【推荐】 不要使用一个常量类维护所有变量，要按常量功能进行归类，分开维护。"></a>第三条：【推荐】 不要使用一个常量类维护所有变量，要按常量功能进行归类，分开维护。</h4><ul>
-<li><strong>说明：</strong> 大而全的变量类，非得使用查找功能才能定位到修改的常量，不利于理解和维护。<blockquote>
-<p>正例：缓存相关常量放在类 CacheConsts 下；系统配置相关常量放在 ConfigConsts 下。</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="1-3-代码格式"><a href="#1-3-代码格式" class="headerlink" title="1.3 代码格式"></a>1.3 代码格式</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span><span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 注释的双斜线与注释内容之间有且仅有一个空格</span>
-    <span class="token comment" spellcheck="true">// 缩进 4 个空格</span>
-    String say <span class="token operator">=</span> <span class="token string">"hello"</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 运算符的左右必须有 1 个空格</span>
-    <span class="token keyword">int</span> flag <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 关键字 if 与括号之间必须有 1 个空格，括号内的 f与左括号、</span>
-    <span class="token comment" spellcheck="true">// 0 与右括号之间不需要空格</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>say<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    <span class="token comment" spellcheck="true">// 左大括号前加空格且不换行；左大括号后换行</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>flag <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"world"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 右大括号前换行，右大括号后有 else，不用换行</span>
-    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"ok"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token comment" spellcheck="true">// 在右大括号后直接结束，则必须换行</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<h4 id="第八条：【强制】-方法参数在定义和传入时，多个参数逗号后边必须加空格。"><a href="#第八条：【强制】-方法参数在定义和传入时，多个参数逗号后边必须加空格。" class="headerlink" title="第八条：【强制】 方法参数在定义和传入时，多个参数逗号后边必须加空格。"></a>第八条：【强制】 方法参数在定义和传入时，多个参数逗号后边必须加空格。</h4><blockquote>
-<p>正例：下例中实参的“one”，后边必须要有一个空格。<br><code>method(&quot;one&quot;, &quot;two&quot;, &quot;three&quot;);</code></p>
-</blockquote>
-<h3 id="1-4-OOP-规约"><a href="#1-4-OOP-规约" class="headerlink" title="1.4 OOP 规约"></a>1.4 OOP 规约</h3><h4 id="第二条：【强制】-所有的复写方法，必须加-Override-注解。"><a href="#第二条：【强制】-所有的复写方法，必须加-Override-注解。" class="headerlink" title="第二条：【强制】 所有的复写方法，必须加 @Override 注解。"></a>第二条：【强制】 所有的复写方法，必须加 @Override 注解。</h4><ul>
-<li><strong>说明：</strong> getObject() 与 get0bject() 的问题。一个是字母 O,一个是数字 0，<br>加 @Override 注解可以准确判断是否覆盖成功。另外，如果在抽象类中对方法签名进行修改，其实现类会马上编译报错。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h4 id="第七条：【强制】-所有相同类型的包装类对象之间值得比较，全部使用-equals-方法"><a href="#第七条：【强制】-所有相同类型的包装类对象之间值得比较，全部使用-equals-方法" class="headerlink" title="第七条：【强制】 所有相同类型的包装类对象之间值得比较，全部使用 equals 方法"></a>第七条：【强制】 所有相同类型的包装类对象之间值得比较，全部使用 equals 方法</h4><ul>
-<li><strong>说明：</strong> 对于 <code>Intergre var = ?</code> 在 -128~127 范围内的赋值， Integer 对象是在 IntegerCache.cache 中产生的，会复用已有的对象，这个区间内的 Integer 值可以直接使用 == 进行判断，但是这个区间之外的所有数据，都会在堆上产生，并不会复用已有对象。这是一个大坑，推荐使用 equals 方法进行判断。</li>
-</ul>
-<h4 id="第十二条：【强制】-POJO-类必须写-toString-方法。在使用-IDE-中的工具-source-gt-generate-toString-时，如果继承了另一个-POJO-类，注意在前面加一下-super-toString。"><a href="#第十二条：【强制】-POJO-类必须写-toString-方法。在使用-IDE-中的工具-source-gt-generate-toString-时，如果继承了另一个-POJO-类，注意在前面加一下-super-toString。" class="headerlink" title="第十二条：【强制】 POJO 类必须写 toString 方法。在使用 IDE 中的工具 source&gt;generate toString 时，如果继承了另一个 POJO 类，注意在前面加一下 super.toString。"></a>第十二条：【强制】 POJO 类必须写 toString 方法。在使用 IDE 中的工具 source&gt;generate toString 时，如果继承了另一个 POJO 类，注意在前面加一下 super.toString。</h4><ul>
-<li><strong>说明：</strong> 在方法执行抛出异常时，可以直接调用 POJO 的 toString() 方法打印其属性值，便于排查问题。</li>
-</ul>
-<h3 id="1-5-集合处理"><a href="#1-5-集合处理" class="headerlink" title="1.5 集合处理"></a>1.5 集合处理</h3><h4 id="第七条：【强制】-不要在-foreach-循环里进行元素的-remove-add-操作。remove-元素请使用-Iterator-方式，如果并发操作，需要对-Iterator-对象加锁。"><a href="#第七条：【强制】-不要在-foreach-循环里进行元素的-remove-add-操作。remove-元素请使用-Iterator-方式，如果并发操作，需要对-Iterator-对象加锁。" class="headerlink" title="第七条：【强制】 不要在 foreach 循环里进行元素的 remove / add 操作。remove 元素请使用 Iterator 方式，如果并发操作，需要对 Iterator 对象加锁。"></a>第七条：【强制】 不要在 foreach 循环里进行元素的 remove / add 操作。remove 元素请使用 Iterator 方式，如果并发操作，需要对 Iterator 对象加锁。</h4><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 正例</span>
-Iterator<span class="token operator">&lt;</span>String<span class="token operator">></span> iterator <span class="token operator">=</span> list<span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">while</span> <span class="token punctuation">(</span>iterator<span class="token punctuation">.</span><span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    String item <span class="token operator">=</span> iterator<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>删除元素的条件<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        iterator<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-<span class="token comment" spellcheck="true">// 反例</span>
-List<span class="token operator">&lt;</span>String<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">for</span> <span class="token punctuation">(</span>String item <span class="token operator">:</span> list<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">// 如果把 1 改为 2 再试一下看看是否相同</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        list<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h4 id="第十一条：【推荐】-高度注意-Map-类集合-K-V-能不能存储-null-值得情况"><a href="#第十一条：【推荐】-高度注意-Map-类集合-K-V-能不能存储-null-值得情况" class="headerlink" title="第十一条：【推荐】 高度注意 Map 类集合 K/V 能不能存储 null 值得情况"></a>第十一条：【推荐】 高度注意 Map 类集合 K/V 能不能存储 null 值得情况</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-52aa37dc5d3758c9.png" alt=""></p>
-<h3 id="1-6-并发处理"><a href="#1-6-并发处理" class="headerlink" title="1.6 并发处理"></a>1.6 并发处理</h3><h4 id="第三条：【强制】-线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。"><a href="#第三条：【强制】-线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。" class="headerlink" title="第三条：【强制】 线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。"></a>第三条：【强制】 线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。</h4><ul>
-<li><strong>说明：</strong> 使用线程池的好处是减少在创建和销毁线程上所消耗的时间以及系统资源，解决资源不足的问题。如果不适用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者 “过渡切换” 的问题。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h3 id="1-7-控制语句"><a href="#1-7-控制语句" class="headerlink" title="1.7 控制语句"></a>1.7 控制语句</h3><h4 id="第二条：【强制】-在-if-else-for-while-do-语句中，必须使用大括号。即使只有一行代码，也应该避免采用单行的编码方式：if-condition-statements"><a href="#第二条：【强制】-在-if-else-for-while-do-语句中，必须使用大括号。即使只有一行代码，也应该避免采用单行的编码方式：if-condition-statements" class="headerlink" title="第二条：【强制】 在 if / else / for / while / do 语句中，必须使用大括号。即使只有一行代码，也应该避免采用单行的编码方式：if (condition) statements;"></a>第二条：【强制】 在 if / else / for / while / do 语句中，必须使用大括号。即使只有一行代码，也应该避免采用单行的编码方式：<code>if (condition) statements;</code></h4><h4 id="第三条：【强制】-在高并发场景中，避免使用-“等于”-判断作为终端或退出的条件"><a href="#第三条：【强制】-在高并发场景中，避免使用-“等于”-判断作为终端或退出的条件" class="headerlink" title="第三条：【强制】 在高并发场景中，避免使用 “等于” 判断作为终端或退出的条件"></a>第三条：【强制】 在高并发场景中，避免使用 “等于” 判断作为终端或退出的条件</h4><ul>
-<li><strong>说明：</strong> 如果并发控制没有处理好，容易产生等值判断被 “击穿” 的情况，应使用大于或小于的区间判断条件来代替。</li>
-</ul>
-<blockquote>
-<p>反例：判断剩余奖品数量等于 0 时，终止发放奖品，但因为并发处理错误导致奖品数量瞬间变成了负数，这样的话，活动无法终止。</p>
-</blockquote>
-<h4 id="第四条：【推荐】-在表达异常的分支时，尽量少用-if-else-方式"><a href="#第四条：【推荐】-在表达异常的分支时，尽量少用-if-else-方式" class="headerlink" title="第四条：【推荐】 在表达异常的分支时，尽量少用 if-else 方式"></a>第四条：【推荐】 在表达异常的分支时，尽量少用 if-else 方式</h4><ul>
-<li><strong>说明：</strong> 如果不得不使用 if()…else if()…else… 方式表达逻辑，<strong>【强制】</strong> 避免后续代码维护困难，请勿超过 3 层。</li>
-</ul>
-<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 正例：超过 3 层的 if-else 逻辑判断代码可以使用卫语句、策略模式</span>
-<span class="token comment" spellcheck="true">// 状态模式等来实现，其中卫语句实例如下：</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">today</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isBusy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"change time,"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isFree</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"go to travel."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"stay at home to learn Java"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
-<h3 id="1-8-注释规约"><a href="#1-8-注释规约" class="headerlink" title="1.8 注释规约"></a>1.8 注释规约</h3><h4 id="第一条：【强制】-类、类属性、类方法的注释必须使用-Javadoc-规范，使用-内容-格式，不得使用-xxx-方式"><a href="#第一条：【强制】-类、类属性、类方法的注释必须使用-Javadoc-规范，使用-内容-格式，不得使用-xxx-方式" class="headerlink" title="第一条：【强制】 类、类属性、类方法的注释必须使用 Javadoc 规范，使用 /**内容*/ 格式，不得使用 //xxx 方式"></a>第一条：【强制】 类、类属性、类方法的注释必须使用 Javadoc 规范，使用 <code>/**内容*/</code> 格式，不得使用 <code>//xxx</code> 方式</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-d50046750bd937b0.png" alt=""></p>
-<h4 id="第二条：【强制】-所有的抽象方法（包括接口中的方法）必须要用-Javadoc-注释，除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"><a href="#第二条：【强制】-所有的抽象方法（包括接口中的方法）必须要用-Javadoc-注释，除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。" class="headerlink" title="第二条：【强制】 所有的抽象方法（包括接口中的方法）必须要用 Javadoc 注释，除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"></a>第二条：【强制】 所有的抽象方法（包括接口中的方法）必须要用 Javadoc 注释，除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。</h4><ul>
-<li><strong>说明：</strong> 对子类的实现要求，或者调用注意事项，请一并说明。</li>
-</ul>
-<h4 id="第三条：【强制】-所有的类都必须添加创建者和创建日期。"><a href="#第三条：【强制】-所有的类都必须添加创建者和创建日期。" class="headerlink" title="第三条：【强制】 所有的类都必须添加创建者和创建日期。"></a>第三条：【强制】 所有的类都必须添加创建者和创建日期。</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h3 id="1-9-其他"><a href="#1-9-其他" class="headerlink" title="1.9 其他"></a>1.9 其他</h3><h4 id="第三条：【强制】-后台输送给网页的变量必须加-var-——中间是感叹号"><a href="#第三条：【强制】-后台输送给网页的变量必须加-var-——中间是感叹号" class="headerlink" title="第三条：【强制】 后台输送给网页的变量必须加$!{var}——中间是感叹号"></a>第三条：【强制】 后台输送给网页的变量必须加$!{var}——中间是感叹号</h4><ul>
-<li><strong>说明：</strong> 如果 var=null 或者不存在，那么 ${var} 会直接显示在页面上。</li>
-</ul>
-<h4 id="第四条：【强制】-注意-Math-random-这个方法返回的是-double-类型，取值的范围-0≤x＜1（能够取到零值，注意除零异常），如果向获取整数类型的随机数，不要将-x-放大-10-的若干倍然后取整，直接使用-Random-对象的-nextInt-或者-nextLong-方法。"><a href="#第四条：【强制】-注意-Math-random-这个方法返回的是-double-类型，取值的范围-0≤x＜1（能够取到零值，注意除零异常），如果向获取整数类型的随机数，不要将-x-放大-10-的若干倍然后取整，直接使用-Random-对象的-nextInt-或者-nextLong-方法。" class="headerlink" title="第四条：【强制】 注意 Math.random() 这个方法返回的是 double 类型，取值的范围 0≤x＜1（能够取到零值，注意除零异常），如果向获取整数类型的随机数，不要将 x 放大 10 的若干倍然后取整，直接使用 Random 对象的 nextInt 或者 nextLong 方法。"></a>第四条：【强制】 注意 Math.random() 这个方法返回的是 double 类型，取值的范围 0≤x＜1（能够取到零值，注意除零异常），如果向获取整数类型的随机数，不要将 x 放大 10 的若干倍然后取整，直接使用 Random 对象的 nextInt 或者 nextLong 方法。</h4><h4 id="第六条：【推荐】-不要在视图模板中加入任何复杂的逻辑。"><a href="#第六条：【推荐】-不要在视图模板中加入任何复杂的逻辑。" class="headerlink" title="第六条：【推荐】 不要在视图模板中加入任何复杂的逻辑。"></a>第六条：【推荐】 不要在视图模板中加入任何复杂的逻辑。</h4><ul>
-<li><strong>说明：</strong> 根据 MVC 理论，视图的职责是展示，不要抢模型和控制器的工作。</li>
-</ul>
-<hr>
-<h2 id="第4章：安全规约"><a href="#第4章：安全规约" class="headerlink" title="第4章：安全规约"></a>第4章：安全规约</h2><p>“安全生产，责任重于泰山。” 这句话同样适用于软件生产，本章主要说明编程中需要注意的比较基础的安全准则。</p>
-<h4 id="第一条：【强制】-隶属于用户个人的页面或者功能必须进行权限控制校验"><a href="#第一条：【强制】-隶属于用户个人的页面或者功能必须进行权限控制校验" class="headerlink" title="第一条：【强制】 隶属于用户个人的页面或者功能必须进行权限控制校验"></a>第一条：【强制】 隶属于用户个人的页面或者功能必须进行权限控制校验</h4><ul>
-<li><strong>说明：</strong> 放置皆有做水平权限校验就可以随意访问、修改、删除别人的数据，比如查看他人的私信内容、修改他人的订单。</li>
-</ul>
-<h4 id="第二条：【强制】-用户敏感数据禁止直接展示，必须对展示数据进行脱敏。"><a href="#第二条：【强制】-用户敏感数据禁止直接展示，必须对展示数据进行脱敏。" class="headerlink" title="第二条：【强制】 用户敏感数据禁止直接展示，必须对展示数据进行脱敏。"></a>第二条：【强制】 用户敏感数据禁止直接展示，必须对展示数据进行脱敏。</h4><ul>
-<li><strong>说明：</strong> 个人手机号码会显示为 158****9119，隐藏中间 4 位，防止个人隐私泄露。</li>
-</ul>
-<h4 id="第三条：【强制】-用户输入的-SQL-参数严格使用参数绑定或者-METADATA-字段值限定，防止-SQL-注入，禁止字符串拼接-SQL-访问数据库。"><a href="#第三条：【强制】-用户输入的-SQL-参数严格使用参数绑定或者-METADATA-字段值限定，防止-SQL-注入，禁止字符串拼接-SQL-访问数据库。" class="headerlink" title="第三条：【强制】 用户输入的 SQL 参数严格使用参数绑定或者 METADATA 字段值限定，防止 SQL 注入，禁止字符串拼接 SQL 访问数据库。"></a>第三条：【强制】 用户输入的 SQL 参数严格使用参数绑定或者 METADATA 字段值限定，防止 SQL 注入，禁止字符串拼接 SQL 访问数据库。</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h4 id="第四条：【强制】-用户请求传入的任何参数必须做有效性验证"><a href="#第四条：【强制】-用户请求传入的任何参数必须做有效性验证" class="headerlink" title="第四条：【强制】 用户请求传入的任何参数必须做有效性验证"></a>第四条：【强制】 用户请求传入的任何参数必须做有效性验证</h4><ul>
-<li><strong>说明：</strong> 忽略参数校验可能导致如下情况。<br>1）page size 过大导致内存溢出<br>2）恶意 order by 导致数据库慢查询<br>3）任意重定向<br>4）SQL 注入<br>5）反序列化注入<br>6）正则输入源串拒绝服务 ReDoS<br>Java 代码用正则来验证客户端的输入，有些正则写法验证普通用户输入没有问题，但是如果攻击人员使用的是特殊构造的字符串来验证，则有可能导致死循环。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h4 id="第五条：【强制】-禁止向-HTML-页面输出未经安全过滤或未正确转义的用户数据。"><a href="#第五条：【强制】-禁止向-HTML-页面输出未经安全过滤或未正确转义的用户数据。" class="headerlink" title="第五条：【强制】 禁止向 HTML 页面输出未经安全过滤或未正确转义的用户数据。"></a>第五条：【强制】 禁止向 HTML 页面输出未经安全过滤或未正确转义的用户数据。</h4><h4 id="第六条：【强制】-表单、AJAX-提交必须执行-CSRF-安全过滤"><a href="#第六条：【强制】-表单、AJAX-提交必须执行-CSRF-安全过滤" class="headerlink" title="第六条：【强制】 表单、AJAX 提交必须执行 CSRF 安全过滤"></a>第六条：【强制】 表单、AJAX 提交必须执行 CSRF 安全过滤</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-352b9e453404444d.png" alt=""></p>
-<h4 id="第七条：【强制】-在使用平台资源，譬如短信、邮件、电话、下单、支付，必须实现正确的防重放限制，如数量限制、疲劳度控制、验证码校验，避免被滥刷、资损。"><a href="#第七条：【强制】-在使用平台资源，譬如短信、邮件、电话、下单、支付，必须实现正确的防重放限制，如数量限制、疲劳度控制、验证码校验，避免被滥刷、资损。" class="headerlink" title="第七条：【强制】 在使用平台资源，譬如短信、邮件、电话、下单、支付，必须实现正确的防重放限制，如数量限制、疲劳度控制、验证码校验，避免被滥刷、资损。"></a>第七条：【强制】 在使用平台资源，譬如短信、邮件、电话、下单、支付，必须实现正确的防重放限制，如数量限制、疲劳度控制、验证码校验，避免被滥刷、资损。</h4><ul>
-<li><strong>说明：</strong>如注册时发送验证码到手机，如果没有限制次数和频率，那么可以利用此功能骚扰到其它用户，并造成短信平台资源浪费。</li>
-</ul>
-<hr>
-<h2 id="第5章：MySQL-数据库"><a href="#第5章：MySQL-数据库" class="headerlink" title="第5章：MySQL 数据库"></a>第5章：MySQL 数据库</h2><h3 id="5-1-建表规约"><a href="#5-1-建表规约" class="headerlink" title="5.1 建表规约"></a>5.1 建表规约</h3><h4 id="第二条：【强制】-表名、字段名必须使用小写字母或数字-，-禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。"><a href="#第二条：【强制】-表名、字段名必须使用小写字母或数字-，-禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。" class="headerlink" title="第二条：【强制】 表名、字段名必须使用小写字母或数字 ， 禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。"></a>第二条：【强制】 表名、字段名必须使用小写字母或数字 ， 禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。</h4><ul>
-<li><strong>说明：</strong> MySQL 在 Windows 下不区分大小写，但在 Linux 下默认区分大小写。因此，数据库名、表明、字段名都不允许出现任何大写字母，避免节外生枝。<blockquote>
-<p>正例： getter _ admin ， task _ config ， level 3_ name<br>反例： GetterAdmin ， taskConfig ， level <em>3</em> name</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="第四条：【强制】禁用保留字，如-desc-、-range-、-match-、-delayed-等，请参考-MySQL-官方保留字。"><a href="#第四条：【强制】禁用保留字，如-desc-、-range-、-match-、-delayed-等，请参考-MySQL-官方保留字。" class="headerlink" title="第四条：【强制】禁用保留字，如 desc 、 range 、 match 、 delayed 等，请参考 MySQL 官方保留字。"></a>第四条：【强制】禁用保留字，如 desc 、 range 、 match 、 delayed 等，请参考 MySQL 官方保留字。</h4><h4 id="第五条：-【强制】主键索引名为-pk-字段名；唯一索引名为-uk-字段名-；-普通索引名则为-idx-字段名。"><a href="#第五条：-【强制】主键索引名为-pk-字段名；唯一索引名为-uk-字段名-；-普通索引名则为-idx-字段名。" class="headerlink" title="第五条： 【强制】主键索引名为 pk_ 字段名；唯一索引名为 uk _字段名 ； 普通索引名则为 idx _字段名。"></a>第五条： 【强制】主键索引名为 pk_ 字段名；唯一索引名为 uk _字段名 ； 普通索引名则为 idx _字段名。</h4><ul>
-<li><strong>说明：</strong> pk_  即 primary key；uk _ 即  unique key；idx _ 即 index 的简称。</li>
-</ul>
-<h4 id="第六条：【强制】小数类型为-decimal-，禁止使用-float-和-double-。"><a href="#第六条：【强制】小数类型为-decimal-，禁止使用-float-和-double-。" class="headerlink" title="第六条：【强制】小数类型为 decimal ，禁止使用 float 和 double 。"></a>第六条：【强制】小数类型为 decimal ，禁止使用 float 和 double 。</h4><ul>
-<li><strong>说明：</strong>float 和 double 在存储的时候，存在精度损失的问题，很可能在值的比较时，得到不正确的结果。如果存储的数据范围超过 decimal 的范围，建议将数据拆成整数和小数分开存储。</li>
-</ul>
-<h4 id="第八条：【强制】-varchar-是可变长字符串，不预先分配存储空间，长度不要超过-5000，如果存储长度大于此值，定义字段类型为-text-，独立出来一张表，用主键来对应，避免影响其它字段索引效率。"><a href="#第八条：【强制】-varchar-是可变长字符串，不预先分配存储空间，长度不要超过-5000，如果存储长度大于此值，定义字段类型为-text-，独立出来一张表，用主键来对应，避免影响其它字段索引效率。" class="headerlink" title="第八条：【强制】 varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text ，独立出来一张表，用主键来对应，避免影响其它字段索引效率。"></a>第八条：【强制】 varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text ，独立出来一张表，用主键来对应，避免影响其它字段索引效率。</h4><h4 id="第九条：【强制】表必备三字段：-id-gmt-create-gmt-modified"><a href="#第九条：【强制】表必备三字段：-id-gmt-create-gmt-modified" class="headerlink" title="第九条：【强制】表必备三字段： id ,  gmt _ create ,  gmt _ modified"></a>第九条：【强制】表必备三字段： id ,  gmt _ create ,  gmt _ modified</h4><ul>
-<li><strong>说明：</strong>其中 id 必为主键，类型为 unsigned bigint 、单表时自增、步长为 1。 gmt _ create ,gmt _ modified 的类型均为 date _ time 类型。</li>
-</ul>
-<h4 id="第十条：-【推荐】表的命名最好是加上“业务名称-表的作用”。"><a href="#第十条：-【推荐】表的命名最好是加上“业务名称-表的作用”。" class="headerlink" title="第十条： 【推荐】表的命名最好是加上“业务名称_表的作用”。"></a>第十条： 【推荐】表的命名最好是加上“业务名称_表的作用”。</h4><blockquote>
-<p>正例： tiger _ task /  tiger _ reader /  mpp _ config</p>
-</blockquote>
-<h4 id="第十五条：【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。"><a href="#第十五条：【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。" class="headerlink" title="第十五条：【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。"></a>第十五条：【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。</h4><blockquote>
-<p>正例：如下表，其中无符号值可以避免误存负数，且扩大了表示范围。</p>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th align="left">对象</th>
-<th align="left">年龄区间</th>
-<th align="left">类型</th>
-<th align="left">表示范围</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">人</td>
-<td align="left">150 岁之内</td>
-<td align="left">unsigned tinyint</td>
-<td align="left">无符号值：0 到 255</td>
-</tr>
-<tr>
-<td align="left">龟</td>
-<td align="left">数百岁</td>
-<td align="left">unsigned smallint</td>
-<td align="left">无符号值：0 到 65535</td>
-</tr>
-<tr>
-<td align="left">恐龙化石</td>
-<td align="left">数千万年</td>
-<td align="left">unsigned int</td>
-<td align="left">无符号值：0 到约 42.9 亿</td>
-</tr>
-<tr>
-<td align="left">太阳</td>
-<td align="left">约 50 亿年</td>
-<td align="left">unsigned bigint</td>
-<td align="left">无符号值：0 到约 10 的 19 次方</td>
-</tr>
-</tbody></table>
-<h3 id="5-2-索引规约"><a href="#5-2-索引规约" class="headerlink" title="5.2 索引规约"></a>5.2 索引规约</h3><h4 id="第五条：-【推荐】如果有-order-by-的场景，请注意利用索引的有序性。-order-by-最后的字段是组合索引的一部分，并且放在索引组合顺序的最后，避免出现-file-sort-的情况，影响查询性能。"><a href="#第五条：-【推荐】如果有-order-by-的场景，请注意利用索引的有序性。-order-by-最后的字段是组合索引的一部分，并且放在索引组合顺序的最后，避免出现-file-sort-的情况，影响查询性能。" class="headerlink" title="第五条： 【推荐】如果有 order by 的场景，请注意利用索引的有序性。 order by 最后的字段是组合索引的一部分，并且放在索引组合顺序的最后，避免出现 file _ sort 的情况，影响查询性能。"></a>第五条： 【推荐】如果有 order by 的场景，请注意利用索引的有序性。 order by 最后的字段是组合索引的一部分，并且放在索引组合顺序的最后，避免出现 file _ sort 的情况，影响查询性能。</h4><blockquote>
-<p><strong>正例：</strong> where a =?  and b =?  order by c; 索引： a _ b _ c<br><strong>反例：</strong>索引中有范围查找，那么索引有序性无法利用，如： WHERE a &gt;10  ORDER BY b; 索引 a _ b 无法排序。</p>
-</blockquote>
-<h4 id="第九条：-【推荐】建组合索引的时候，区分度最高的在最左边。"><a href="#第九条：-【推荐】建组合索引的时候，区分度最高的在最左边。" class="headerlink" title="第九条： 【推荐】建组合索引的时候，区分度最高的在最左边。"></a>第九条： 【推荐】建组合索引的时候，区分度最高的在最左边。</h4><p>正例：如果 where a =?  and b =? ， a 列的几乎接近于唯一值，那么只需要单建 idx _ a 索引即可。</p>
-<ul>
-<li><strong>说明：</strong> 存在非等号和等号混合判断条件时，在建索引时，请把等号条件的列前置。如： where a &gt;? and b = ? 那么即使 a 的区分度更高，也必须把 b 放在索引的最前列。</li>
-</ul>
-<h3 id="5-3-SQL-语句"><a href="#5-3-SQL-语句" class="headerlink" title="5.3 SQL 语句"></a>5.3 SQL 语句</h3><h4 id="第一条：【强制】不要使用-count-列名-或-count-常量-来替代-count-，-count-是-SQL-92-定义的标准统计行数的语法，跟数据库无关，跟-NULL-和非-NULL-无关。"><a href="#第一条：【强制】不要使用-count-列名-或-count-常量-来替代-count-，-count-是-SQL-92-定义的标准统计行数的语法，跟数据库无关，跟-NULL-和非-NULL-无关。" class="headerlink" title="第一条：【强制】不要使用 count( 列名 ) 或 count( 常量 ) 来替代 count( * ) ， count( * ) 是 SQL 92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。"></a>第一条：【强制】不要使用 count( 列名 ) 或 count( 常量 ) 来替代 count( * ) ， count( * ) 是 SQL 92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。</h4><ul>
-<li><strong>说明：</strong> count( * ) 会统计值为 NULL 的行，而 count( 列名 ) 不会统计此列为 NULL 值的行。</li>
-</ul>
-<h4 id="第六条：-【强制】不得使用外键与级联，一切外键概念必须在应用层解决。"><a href="#第六条：-【强制】不得使用外键与级联，一切外键概念必须在应用层解决。" class="headerlink" title="第六条： 【强制】不得使用外键与级联，一切外键概念必须在应用层解决。"></a>第六条： 【强制】不得使用外键与级联，一切外键概念必须在应用层解决。</h4><ul>
-<li><strong>说明：</strong> （ 概念解释 ） 学生表中的 student _ id 是主键，那么成绩表中的 student _ id 则为外键。如果更新学生表中的 student _ id ，同时触发成绩表中的 student _ id 更新，则为级联更新。外键与级联更新适用于单机低并发，不适合分布式、高并发集群 ； 级联更新是强阻塞，存在数据库更新风暴的风险 ； 外键影响数据库的插入速度。</li>
-</ul>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h4 id="第八条：-【强制】数据订正时，删除和修改记录时，要先-select-，避免出现误删除，确认无误才能执行更新语句。"><a href="#第八条：-【强制】数据订正时，删除和修改记录时，要先-select-，避免出现误删除，确认无误才能执行更新语句。" class="headerlink" title="第八条： 【强制】数据订正时，删除和修改记录时，要先 select ，避免出现误删除，确认无误才能执行更新语句。"></a>第八条： 【强制】数据订正时，删除和修改记录时，要先 select ，避免出现误删除，确认无误才能执行更新语句。</h4><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8A%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4-Java-%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/7896890-2a5a3a661c669555.png" alt="打脸"></p>
-<h3 id="5-4-ORM-映射"><a href="#5-4-ORM-映射" class="headerlink" title="5.4 ORM 映射"></a>5.4 ORM 映射</h3><blockquote>
-<p>整个规约对自己来说都挺有用的，因为正好涉及到这方面，幸好感觉脸不怎么疼。</p>
-</blockquote>
-<h4 id="第一条：【强制】在表查询中，一律不要使用-作为查询的字段列表，需要哪些字段必须明确写明。"><a href="#第一条：【强制】在表查询中，一律不要使用-作为查询的字段列表，需要哪些字段必须明确写明。" class="headerlink" title="第一条：【强制】在表查询中，一律不要使用 * 作为查询的字段列表，需要哪些字段必须明确写明。"></a>第一条：【强制】在表查询中，一律不要使用 * 作为查询的字段列表，需要哪些字段必须明确写明。</h4><ul>
-<li><strong>说明：</strong> 1 ） 增加查询分析器解析成本。2 ） 增减字段容易与 resultMap 配置不一致。</li>
-</ul>
-<h4 id="第二条：【强制】-POJO-类的-布尔-属性不能加-is-，而数据库字段必须加-is-，要求在-resultMap-中进行字段与属性之间的映射。"><a href="#第二条：【强制】-POJO-类的-布尔-属性不能加-is-，而数据库字段必须加-is-，要求在-resultMap-中进行字段与属性之间的映射。" class="headerlink" title="第二条：【强制】 POJO 类的 布尔 属性不能加 is ，而数据库字段必须加 is _，要求在 resultMap 中进行字段与属性之间的映射。"></a>第二条：【强制】 POJO 类的 布尔 属性不能加 is ，而数据库字段必须加 is _，要求在 resultMap 中进行字段与属性之间的映射。</h4><ul>
-<li><strong>说明：</strong> 参见定义 POJO 类以及数据库字段定义规定，在 <resultMap>中 增加映射，是必须的。在 MyBatis Generator 生成的代码中，需要进行对应的修改。</li>
-</ul>
-<h4 id="第三条：【强制】不要用-resultClass-当返回参数，即使所有类属性名与数据库字段一一对应，也需要定义-；-反过来，每一个表也必然有一个与之对应。"><a href="#第三条：【强制】不要用-resultClass-当返回参数，即使所有类属性名与数据库字段一一对应，也需要定义-；-反过来，每一个表也必然有一个与之对应。" class="headerlink" title="第三条：【强制】不要用 resultClass 当返回参数，即使所有类属性名与数据库字段一一对应，也需要定义 ； 反过来，每一个表也必然有一个与之对应。"></a>第三条：【强制】不要用 resultClass 当返回参数，即使所有类属性名与数据库字段一一对应，也需要定义 ； 反过来，每一个表也必然有一个与之对应。</h4><ul>
-<li><strong>说明：</strong> 配置映射关系，使字段与 DO 类解耦，方便维护。</li>
-</ul>
-<h4 id="第七条：【强制】更新数据表记录时，必须同时更新记录对应的-gmt-modified-字段值为当前时间。"><a href="#第七条：【强制】更新数据表记录时，必须同时更新记录对应的-gmt-modified-字段值为当前时间。" class="headerlink" title="第七条：【强制】更新数据表记录时，必须同时更新记录对应的 gmt _ modified 字段值为当前时间。"></a>第七条：【强制】更新数据表记录时，必须同时更新记录对应的 gmt _ modified 字段值为当前时间。</h4><h4 id="第九条：【参考】-Transactional-事务不要滥用。事务会影响数据库的-QPS-，另外使用事务的地方需要考虑各方面的回滚方案，包括缓存回滚、搜索引擎回滚、消息补偿、统计修正等。"><a href="#第九条：【参考】-Transactional-事务不要滥用。事务会影响数据库的-QPS-，另外使用事务的地方需要考虑各方面的回滚方案，包括缓存回滚、搜索引擎回滚、消息补偿、统计修正等。" class="headerlink" title="第九条：【参考】@ Transactional 事务不要滥用。事务会影响数据库的 QPS ，另外使用事务的地方需要考虑各方面的回滚方案，包括缓存回滚、搜索引擎回滚、消息补偿、统计修正等。"></a>第九条：【参考】@ Transactional 事务不要滥用。事务会影响数据库的 QPS ，另外使用事务的地方需要考虑各方面的回滚方案，包括缓存回滚、搜索引擎回滚、消息补偿、统计修正等。</h4><hr>
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>浏览了一遍，还是学习到了很多东西吧，上面也仅仅只是总结了对我自己比较收益，现阶段我能吸收能实际感受得到的规约，如果想要 PDF 版的可以在这里下载：<a href="http://www.cnblogs.com/han-1034683568/p/7680354.html" target="_blank" rel="noopener">戳这里</a></p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz_javaweb<br>分享自己的Java Web学习之路以及各种Java学习资料</p>
-</blockquote>
-
-      
-    </div>
-    
-      
-    
-  </section>
-</article>
-
-          </div>
-        
-      
     
   </section>
   
@@ -5067,7 +5540,7 @@ list<span class="token punctuation">.</span><span class="token function">add</sp
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(4)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -5121,7 +5594,7 @@ list<span class="token punctuation">.</span><span class="token function">add</sp
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.14px; color: #8a8a8a">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.86px; color: #868686">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

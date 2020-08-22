@@ -435,6 +435,212 @@
         
           
   <h2 class="title">
+    <a href="/2017/10/25/java-xue-xi-bi-ji-3-string-lei-xiang-jie/">
+      Java学习笔记(3)——String类详解
+    </a>
+  </h2>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2017年10月25日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  
+
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+  <section class="article typo">
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>因为没有成功地为IDEA配上反编译工具，所以自己下载了一个XJad工具，背景是白色的，所以忍着强迫症硬是把IDEA的主体也给换成白色了，感觉为了这篇文章付出了诸多啊….</p>
+</blockquote>
+<h2 id="字符串简介"><a href="#字符串简介" class="headerlink" title="字符串简介"></a>字符串简介</h2><p>《Thinging in Java》中有一句话：<strong>可以证明，字符串操作是计算机程序设计中最常见的行为。</strong></p>
+<p>把多个字符按照一定的顺序排列起来，就叫字符串（就像羊肉串一样，串起来的），具体是怎么排列的，你可以跟进String的源代码去看一下，会发现它其实内部维护的是一个char类型的数组：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-036e64ee9ee2051c.png" alt="String类内部维护的是一个char数组"></p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 也就是说</span>
+String str <span class="token operator">=</span> <span class="token string">"ABCD"</span><span class="token punctuation">;</span>      <span class="token comment" spellcheck="true">// 定义一个字符串对象，其实等价于：</span>
+<span class="token keyword">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span> cr <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">char</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">{</span><span class="token string">'A'</span><span class="token punctuation">,</span><span class="token string">'B'</span><span class="token punctuation">,</span><span class="token string">'C'</span><span class="token punctuation">,</span><span class="token string">'D'</span><span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<h2 id="字符串的分类"><a href="#字符串的分类" class="headerlink" title="字符串的分类"></a>字符串的分类</h2><p>其实说起来会有些别扭，为什么字符串会有分类这种东西。了解的朋友可能会知道字符串的操作除了String，还有StringBuffer和StringBuilder（区别我们在下面来说）</p>
+<h3 id="不可变的字符串"><a href="#不可变的字符串" class="headerlink" title="不可变的字符串"></a>不可变的字符串</h3><p>String是一个奇葩。</p>
+<p><strong>String对象不可变，也就是说当对象创建完毕之后，该对象的内容（字符序列）是不允许改变的，如果内容改变则会创建一个新的String对象，返回到原地址中。</strong></p>
+<p>细心的朋友也许会发现，String类维护的char数组不仅被final所修饰，并且查看JDK源码你就会发现，<strong>String类中每一个看起来会修改String值得方法，实际上都是创建了一个全新的String对象，以包含修改后的字符串对象。</strong>而最初的String对象则丝毫未动。我们可以简单的来看一个实例（从替换操作中就能明显看出）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-02c6c109b166f52d.png" alt="String类中的replace方法"></p>
+<blockquote>
+<p>replace方法就是替换字符串中的内容，如果替换之后跟原来的字符串相同则返回this，如果不相同则new一个新的对象返回。这明显体现了内容改变则返回新对象而不是直接修改String对象的值。</p>
+</blockquote>
+<h3 id="表面的错觉"><a href="#表面的错觉" class="headerlink" title="表面的错觉"></a>表面的错觉</h3><p>关于String对象是否可变，有些操作确实会给人错觉，先来看一段程序：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-2644ac6bf600a649.png" alt="一个例子"></p>
+<p>从结果来看，s1的值最初是“A”，经过赋值以后，变成了“C”,经过字符串连接运算并赋值以后，变成了“BC”。String对象的内容真的改变了吗？<strong>实际上，这只是错觉而已。</strong>有疑惑的朋友可以去看我的上一篇笔记，你就能知道：</p>
+<p><strong>String对象“A”，“B”，“C”在全程中都没有任何改变，改变的只是引用s1所指向的内容，也就是s1的值。</strong></p>
+<h3 id="String对象的创建"><a href="#String对象的创建" class="headerlink" title="String对象的创建"></a>String对象的创建</h3><p>有两种方式：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 第一种：直接赋一个字面量</span>
+String str1 <span class="token operator">=</span> <span class="token string">"ABCD"</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">// 第二种：通过构造器创建</span>
+String str2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span><span class="token string">"ABCD"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>那么这两种方式有什么不同呢？这里可能会涉及到一个面试题：</p>
+<blockquote>
+<p>上述的两种方法分别创建了几个String对象？</p>
+</blockquote>
+<p>回答这个问题也特别简单，首先你需要直到JVM的内存模型是怎样的，在上一篇笔记中也有简单提到，这里需要补充的是：<strong>常量池（专门存储常量的地方，都指的是方法区中）分为编译常量池（不研究，存储字节码的相关信息）和运行常量池（存储常量数据）。</strong></p>
+<blockquote>
+<p>先来看一张结果图：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-e4659bc6656d9d6b.png" alt="结果图"></p>
+</blockquote>
+<ul>
+<li>当执行第一句话的时候，会在常量池中添加一个新的ABCD字符，str1指向常量池的ABCD</li>
+<li>当执行第二句话的时候，因为有new操作符，所以会在堆空间新开辟一块空间用来存储新的String对象，因为此时常量池中已经有了ABCD字符，所以堆中的String对象指向常量池中的ABCD，而str2则指向堆空间中的String对象。</li>
+</ul>
+<blockquote>
+<p>所以结论：<br><strong>String str1 = “ABCD”;</strong><br>最多创建一个String对象,最少不创建String对象.如果常量池中,存在”ABCD”,那么str1直接引用,此时不创建String对象.否则,先在常量池先创建”ABCD”内存空间,再引用.<br><strong>String str2 = new String(“ABCD”);</strong><br>最多创建两个String对象，至少创建一个String对象。new关键字绝对会在堆空间创建一块新的内存区域，所以至少创建一个String对象。</p>
+</blockquote>
+<h3 id="String对象的空值"><a href="#String对象的空值" class="headerlink" title="String对象的空值"></a>String对象的空值</h3><p>一种是表示引用为空（null）的空值：</p>
+<pre class=" language-java"><code class="language-java">String str1 <span class="token operator">=</span> null<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 没有初始化，没有分配内存空间</span></code></pre>
+<p>另外一种表示内容为空的空值：</p>
+<pre class=" language-java"><code class="language-java">String str2 <span class="token operator">=</span> "<span class="token punctuation">;</span>  <span class="token comment" spellcheck="true">// 分配有内存空间，有内容。</span></code></pre>
+<blockquote>
+<p>所以当你需要判断字符串是否为空的时候，实际上应该这样：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-514016865e382497.png" alt="判断字符串非空"></p>
+</blockquote>
+<h3 id="字符串的比较"><a href="#字符串的比较" class="headerlink" title="字符串的比较"></a>字符串的比较</h3><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-6ba349f9c811b3a7.png" alt="字符串的比较"></p>
+<p>从上图可以明显看出，<strong>使用“==”，只能比较引用的内存地址是否相同，而使用“equals”方法，则比较的是字符串的内容。</strong></p>
+<blockquote>
+<p>我们可以跟到String类的equals方法：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-dc520a0855cdaf2c.png" alt="String类的equals方法"></p>
+</blockquote>
+<h4 id="“-”号是怎么来连接字符串的"><a href="#“-”号是怎么来连接字符串的" class="headerlink" title="“+”号是怎么来连接字符串的"></a>“+”号是怎么来连接字符串的</h4><p>先来直接看一个简单的例子，程序中创建了三个String对象，str是hello和wrold两个字符串连接赋值后的对象，程序的结果很明显，但我们关心的是，hello和world是怎样连接起来的呢？</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-885c895308af612b.png" alt="先来看一个例子"></p>
+<p>我们在XJad（Java反编译程序，把生成的class反编译成java）中打开刚刚生成的class文件会发现：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-736f29f79984abc2.png" alt="反编译的结果"></p>
+<p>编译器自动引入了一个<strong>java.lang.StringBuilder</strong>类。虽然我们在源代码中并没有使用StringBuilder类，但是编译器却自作主张地使用了它，因为它更高效。</p>
+<p>在这个例子中，编译器创建了一个<strong>StringBuilde</strong>对象，用以构造最终的<strong>String</strong>，并为每个字符串调用了一次<strong>StringBuilder</strong>的<strong>append()</strong>方法，总计两次。最后调用<strong>toString()</strong>生成结果。这是编译器自动优化的结果，包括自动生成的Tester()无参数默认的构造函数也是。</p>
+<p>现在，你也许会觉得可以随意使用<strong>String</strong>对象，反正编译器会为你自动地优化性能。可是在这之前，我们先要看看编译器究竟能给我们优化到什么程度（下面再详细介绍StringBuilder）。</p>
+<h3 id="可变的字符串"><a href="#可变的字符串" class="headerlink" title="可变的字符串"></a>可变的字符串</h3><p><strong>StringBuilder/StringBuffer：</strong>当对象创建完毕之后，该对象的内容可以发生改变，当内容发生改变的时候，对象保持不变。</p>
+<p>接着上面的问题，我们继续来看一个例子：</p>
+<blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-2431fab5600e3952.png" alt="程序和程序的结果"><br>程序的结果显而易见，我们来看看反编译之后的代码：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-056c471c0b3a3f6d.png" alt="反编译之后的代码"><br>可以看到，对比两个对象，后者的循环部分的代码更简短、更简单，而且它只生成了一个<strong>StringBuilder</strong>对象。</p>
+</blockquote>
+<p><strong>结论是：如果字符串操作比较简单，那就可以信赖编译器，它会为你合理地构造最终的字符串结果。但如果你还使用循环，多次地改变字符串的内容，那就更适合StringBuilder对象。</strong></p>
+<p>但是如果你想要走捷径，例如<strong>append(a+”:”+c)，</strong>则编译器就会调入陷阱，从而为你另外创建一个<strong>StringBuilder</strong>对象处理括号内的字符串操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-a9ca5459d4a64468.png" alt="编译器陷阱"></p>
+<h3 id="String对象的比较"><a href="#String对象的比较" class="headerlink" title="String对象的比较"></a>String对象的比较</h3><p><strong>StringBuilder</strong>是Java SE5引入的，在这之前Java用的是<strong>StringBuffer</strong>。后者线程安全（只需要了解，该对象方法中所有的方法都是用了<strong>synchronized</strong>修饰符），因此开销也会大。有没有用<strong>synchronized</strong>修饰符，就是这两者唯一的区别。我们可以简单地来比较一下这三个String对象在拼接字符串中的性能：</p>
+<blockquote>
+<p>创建好三个方法，分别测试三个类型的对象的拼接效率：<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-15ef1480ca9fbd62.png" alt="测试拼接效率"><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-31e967f832ee92ce.png" alt="最后在main方法中测试"></p>
+</blockquote>
+<h3 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h3><p>最后再有一个String的面试题：</p>
+<blockquote>
+<p><strong>说说下面的String对象，彼此之间是否相等？</strong><br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-f1adb2146cdb6116.png" alt="面试题"></p>
+</blockquote>
+<p>如果你自己写几个判断相等的语句，分别判断str1和另外五个是否相等，则会发现：<br><strong>str1和str2/str3相等，和另外几个都不相等。</strong>我们先来看一下反编译之后的代码：</p>
+<blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-6ebaa00780d60fd0.png" alt="编译之后的代码（存在编译优化）"></p>
+</blockquote>
+<p>知识点（纯干货）：</p>
+<ul>
+<li>单独使用””引号创建的字符串都是直接量,编译期就已经确定存储到常量池中；</li>
+<li>使用new String(“”)创建的对象会存储到堆内存中,是运行期才创建；</li>
+<li>使用只包含直接量的字符串连接符如”aa” + “bb”创建的也是直接量编译期就能确定,已经确定存储到常量池中(str2和str3)；</li>
+<li>使用包含String直接量(无final修饰符)的字符串表达式(如”aa” + s1)创建的对象是运行期才创建的,存储在堆中；</li>
+<li>通过变量/调用方法去连接字符串,都只能在运行时期才能确定变量的值和方法的返回值,不存在编译优化操作.</li>
+</ul>
+<h3 id="文章结尾"><a href="#文章结尾" class="headerlink" title="文章结尾"></a>文章结尾</h3><p>其实还想写关于正则表达的东西的，还是改天找时间另外研究研究写一篇像样的吧。关于String的操作，就简单给一下图吧，感兴趣也可以自己百度或者跟踪进源代码里面去看，这里就不细说了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94-String%E7%B1%BB%E8%AF%A6%E8%A7%A3/7896890-c749c80d3b904c5c.png" alt="String类中常用的方法"></p>
+<blockquote>
+<p>参考资料：</p>
+<ul>
+<li><a href="http://study.163.com/course/courseMain.htm?courseId=1003108028" target="_blank" rel="noopener">http://study.163.com/course/courseMain.htm?courseId=1003108028</a> 《Java零基础入门教程》</li>
+<li>《Thinking in Java》第四版</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
+</blockquote>
+
+      
+    </div>
+    
+      
+    
+  </section>
+</article>
+
+          </div>
+        
+      
+        
+          <div class='post-wrapper'>
+            <article class="post white-box shadow reveal ">
+  
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h2 class="title">
     <a href="/2017/09/19/java-xue-xi-bi-ji-2-shu-ju-lei-xing/">
       Java学习笔记(2)——数据类型
     </a>
@@ -1395,7 +1601,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
           <li><a class="flat-box"
             title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
             id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(4)</div></a></li>
+            ><div class='name'>版本特性</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
@@ -1449,7 +1655,7 @@ Integer j <span class="token operator">=</span> <span class="token keyword">new<
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.14px; color: #8a8a8a">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.86px; color: #868686">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.29px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.57px; color: #5f5f5f">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 21.86px; color: #646464">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.43px; color: #6d6d6d">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.86px; color: #868686">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.57px; color: #818181">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.57px; color: #818181">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.14px; color: #686868">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.71px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.71px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.57px; color: #818181">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.71px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.71px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 16.86px; color: #868686">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.86px; color: #868686">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.14px; color: #686868">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 
