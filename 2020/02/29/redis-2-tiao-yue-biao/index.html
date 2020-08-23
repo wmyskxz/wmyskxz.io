@@ -18,7 +18,7 @@
   
   <title>Redis(2)——跳跃表 - 我没有三颗心脏的博客</title>
   
-    <meta name="keywords" content="原创,JavaWeb进阶,中间件,Redis">
+    <meta name="keywords" content="原创,Redis,数据库">
   
 
   
@@ -475,10 +475,10 @@
             
           
             
-              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-03T17:46:48+08:00">
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-23T18:20:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年8月3日</p>
+    <p>更新于：2020年8月23日</p>
   </a>
 </div>
 
@@ -486,6 +486,24 @@
           
             
               
+
+            
+          
+            
+              
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：3.9k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：16分钟</p>
+    </a>
+  </div>
+
 
             
           
@@ -503,6 +521,7 @@
           
           
           <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-97a4ce9191464f62.png" alt=""></p>
+<a id="more"></a>
 <h1 id="一、跳跃表简介"><a href="#一、跳跃表简介" class="headerlink" title="一、跳跃表简介"></a>一、跳跃表简介</h1><p>跳跃表（skiplist）是一种随机化的数据结构，由 <strong>William Pugh</strong> 在论文<a href="https://www.cl.cam.ac.uk/teaching/0506/Algorithms/skiplists.pdf" target="_blank" rel="noopener">《Skip lists: a probabilistic alternative to balanced trees》</a>中提出，是一种可以于平衡树媲美的层次化链表结构——查找、删除、添加等操作都可以在对数期望时间下完成，以下是一个典型的跳跃表例子：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%882%EF%BC%89%E2%80%94%E2%80%94%E8%B7%B3%E8%B7%83%E8%A1%A8/7896890-65a5b1a2849fb91c.png" alt=""></p>
 <p>我们在上一篇中提到了 Redis 的五种基本结构中，有一个叫做 <strong>有序列表 zset</strong> 的数据结构，它类似于 Java 中的 <strong>SortedSet</strong> 和 <strong>HashMap</strong> 的结合体，一方面它是一个 set 保证了内部 value 的唯一性，另一方面又可以给每个 value 赋予一个排序的权重值 score，来达到 <strong>排序</strong> 的目的。</p>
@@ -873,10 +892,10 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-03T17:46:48+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-23T18:20:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年8月3日</p>
+    <p>更新于：2020年8月23日</p>
   </a>
 </div>
 
@@ -885,7 +904,7 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
         
           
   
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>JavaWeb进阶</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>中间件</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>数据库</p></a></div>
 
 
         
@@ -954,16 +973,18 @@ zsl<span class="token operator">-></span>length<span class="token operator">++</
               <a class='prev' href='/2020/03/01/redis-3/'>
                 <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Redis(3)——分布式锁深入探究</p>
                 <p class='content'>
+
 一、分布式锁简介锁 是一种用来解决多个执行线程 访问共享资源 错误或数据不一致问题的工具。
-如果 把一台服务器比作一个房子，那么 线程就好比里面的住户，当他们想要共同访问一个共享资源，例如厕所...</p>
+如果 把一台服务器比作一个房子，那么 线程就好比里面的住户，当他们想要共同访问一个共享资源，例如厕...</p>
               </a>
             
             
               <a class='next' href='/2020/02/28/redis-1-5-chong-ji-ben-shu-ju-jie-gou/'>
                 <p class='title'>Redis(1)——5种基本数据结构<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
                 <p class='content'>
+
 一、Redis 简介
-“Redis is an open source (BSD licensed), in-memory data structure store, used as a da...</p>
+“Redis is an open source (BSD licensed), in-memory data structure store, used as a d...</p>
               </a>
             
           </div>

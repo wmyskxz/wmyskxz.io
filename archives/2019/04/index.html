@@ -489,6 +489,19 @@
           
             
               
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：5.5k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：23分钟</p>
+    </a>
+  </div>
+
 
             
           
@@ -525,789 +538,13 @@
 <blockquote>
 <p>最近参加实习了，公司的技术栈中需要用到 Ruby 以及 Rails 框架，所以算是开始了踩坑之旅吧..</p>
 </blockquote>
-<h1 id="Ruby-简介"><a href="#Ruby-简介" class="headerlink" title="Ruby 简介"></a>Ruby 简介</h1><p>网上的简介要搜都能搜到，具体涉及的包括历史啦之类这里不再赘述，提几个关键词吧：</p>
-<ul>
-<li>1993 年由日本的松本行弘创建</li>
-<li>纯粹面相对象编程/ 脚本语言/ 解释型/ 动态类型</li>
-</ul>
-<p>对于准备迈入 Ruby 的 Java 程序员来说，有几个地方需要特别的去了解一下。</p>
-<ul>
-<li><strong>纯粹面相对象</strong><br>其实经过<a href="http://www.codeceo.com/article/why-java-purely-object-oriented-language.html" target="_blank" rel="noopener">论证</a>，Java 同 Ruby 一样都是纯粹的面相对象的语言，这也就意味着包含所有的数字等在内都是对象，注意所有的都是。</li>
-<li><strong>脚本语言</strong><br>这意味着你写的程序不用编译就能运行，甚至实时生效。</li>
-<li><strong>解释型</strong><br>同 Java 一样，Ruby 有自己的虚拟机，运行需要一定的环境，也就是 Ruby 解释器，它会负责把 Ruby 翻译成及其能够执行的代码。</li>
-<li><strong>动态类型</strong><br>Ruby 中的数据更像是一种符号，在使用的时候不检查类型，而是在运行时动态的检查。</li>
-</ul>
-<h2 id="为什么是-Ruby-？"><a href="#为什么是-Ruby-？" class="headerlink" title="为什么是 Ruby ？"></a>为什么是 Ruby ？</h2><ul>
-<li>原因很简单：<strong>高效/ 灵活/ 优雅/ 简单</strong></li>
-</ul>
-<p>如果你再稍微花一些心思搜索一下 Ruby on Rails 这个 Web 开发框架，并且打开一些详细说明了体验之后的文章或者是多年经验开发者的分享，你可能会对它产生一些兴趣，这一Part就留着之后介绍了，这也是为以后学习 RoR 框架做准备的。</p>
-<p>总之我们要明确我们目的：<strong>知道最基本的语法，理解其中的一些关键概念即可。</strong></p>
-<h2 id="Ruby-初体验"><a href="#Ruby-初体验" class="headerlink" title="Ruby 初体验"></a>Ruby 初体验</h2><p>Mac OX 中有默认的 Ruby 环境，我们可以来一个最短的 “Hello World” 程序，首先在控制台中输入 <code>irb</code> 命令，然后输入 <code>puts &quot;Hello World!&quot;</code> 命令：</p>
-<pre class=" language-ruby"><code class="language-ruby">irb
-<span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">001</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> puts <span class="token string">"Hello World!"</span>
-<span class="token constant">Hello</span> <span class="token constant">World!</span>
-<span class="token operator">=</span><span class="token operator">></span> <span class="token keyword">nil</span></code></pre>
-<p>你就能看到紧跟着你的输入会有一个 <code>Hello World!</code> 的输出以及一个 <code>nil</code> （对应 Java 中的 <code>null</code>）的返回。</p>
-<p>再来一个更加复杂的例子，我们这一次来创建一个数组然后循环输出它：</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">002</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> properties <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'name'</span><span class="token punctuation">,</span><span class="token string">'age'</span><span class="token punctuation">,</span><span class="token string">'sex'</span><span class="token punctuation">]</span>
-<span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"sex"</span><span class="token punctuation">]</span>
-<span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">003</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> properties
-<span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"sex"</span><span class="token punctuation">]</span>
-<span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">005</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> properties<span class="token punctuation">.</span><span class="token keyword">each</span> <span class="token punctuation">{</span><span class="token operator">|</span>property<span class="token operator">|</span> puts <span class="token string">"This is <span class="token interpolation"><span class="token delimiter tag">#{</span>property<span class="token delimiter tag">}</span></span>."</span><span class="token punctuation">}</span>
-<span class="token constant">This</span> is name<span class="token punctuation">.</span>
-<span class="token constant">This</span> is age<span class="token punctuation">.</span>
-<span class="token constant">This</span> is sex<span class="token punctuation">.</span>
-<span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">[</span><span class="token string">"name"</span><span class="token punctuation">,</span> <span class="token string">"age"</span><span class="token punctuation">,</span> <span class="token string">"sex"</span><span class="token punctuation">]</span></code></pre>
-<p>不知道感觉如何？至少我们可以直观的感受到：</p>
-<ul>
-<li>不用生命变量，直接 <code>=</code> 就好</li>
-<li>每条 Ruby 代码都会返回某个值</li>
-</ul>
-<h2 id="从-Java-到-Ruby"><a href="#从-Java-到-Ruby" class="headerlink" title="从 Java 到 Ruby"></a>从 Java 到 Ruby</h2><p>Java 非常成熟，并且通过  Spring 的加持得到了许多企业的青睐，但是不知道大家有没有感受到一点：<strong>它或许有些啰嗦</strong>…（我乱说的啊，我也不知道，别问我啊..）从 Java 到 Ruby 据说可以预见性的将代码的规模量大大缩小，因此也能使用更少的时间来输出产品原型。</p>
-<h3 id="相似点"><a href="#相似点" class="headerlink" title="相似点"></a>相似点</h3><p>Ruby 与 Java 有一些相似的地方…</p>
-<ul>
-<li>垃圾回收器帮你管理内存。</li>
-<li>强类型对象。</li>
-<li>有 public、 private 和 protected 方法。</li>
-<li>拥有嵌入式文档工具（Ruby 的工具叫 rdoc）。rdoc 生成的文档与 javadoc 非常相似。</li>
-</ul>
-<h3 id="不同点"><a href="#不同点" class="headerlink" title="不同点"></a>不同点</h3><p>Ruby 与 Java 不同的地方…</p>
-<ul>
-<li>你不需要编译你的代码。你只需要直接运行它。</li>
-<li>有几个不同的流行的第三方GUI工具包。Ruby 用户可以尝试 <a href="https://github.com/eumario/wxruby" target="_blank" rel="noopener">WxRuby</a>、 <a href="https://github.com/larskanis/fxruby" target="_blank" rel="noopener">FXRuby</a>、 <a href="https://ruby-gnome2.osdn.jp/" target="_blank" rel="noopener">Ruby-GNOME2</a>、 <a href="https://github.com/ryanmelt/qtbindings/" target="_blank" rel="noopener">Qt</a> 或 Ruby 内置的 Tk。</li>
-<li>定义像类这样的东西时，可以使用 <code>end</code> 关键字，而不使用花括号包裹代码块。</li>
-<li>使用 <code>require</code> 代替 <code>import</code>。</li>
-<li>所有成员变量为私有。在外部，使用方法获取所有你需要的一切。</li>
-<li>方法调用的括号通常是可选的，经常被省略。</li>
-<li>一切皆对象，包括像 2 和 3.14159 这样的数字。</li>
-<li>没有静态类型检查。</li>
-<li>变量名只是标签。它们没有相应的类型。</li>
-<li>没有类型声明。按需分配变量名，及时可用（如：<code>a = [1,2,3]</code> 而不是 <code>int[] a = {1,2,3};</code>）。</li>
-<li>没有显式转换。只需要调用方法。代码运行之前，单元测试应该告诉你出现异常。</li>
-<li>使用 <code>foo = Foo.new(&quot;hi&quot;)</code> 创建新对象，而非 <code>Foo foo = new Foo(&quot;hi&quot;)</code>。</li>
-<li>构造器总是命名为“initialize” 而不是类名称。</li>
-<li>作为接口的替代，你将获得“混入（mixins）”。</li>
-<li>相比 XML，倾向于使用 YAML。</li>
-<li><code>nil</code> 替代 <code>null</code>。</li>
-<li>Ruby 对 <code>==</code> 和 <code>equals()</code> 的处理方式与 Java 不一样。测试相等性使用 <code>==</code>（Java 中是 <code>equals()</code>）。测试是否为同一对象使用 <code>equals?()</code>（Java 中是 <code>==</code>）。</li>
-</ul>
-<blockquote>
-<p>以上的相同与不同来自：<a href="https://www.ruby-lang.org/zh_cn/documentation/ruby-from-other-languages/to-ruby-from-java/" target="_blank" rel="noopener">https://www.ruby-lang.org/zh_cn/documentation/ruby-from-other-languages/to-ruby-from-java/</a><br>延伸阅读：<a href="https://gquintana.github.io/2017/01/08/From-Java-to-Ruby.html" target="_blank" rel="noopener">https://gquintana.github.io/2017/01/08/From-Java-to-Ruby.html</a></p>
-</blockquote>
-<hr>
-<h1 id="Ruby-基础"><a href="#Ruby-基础" class="headerlink" title="Ruby 基础"></a>Ruby 基础</h1><p>在大致了解了 Ruby 一些基础信息之后，我们开始 Ruby 基础语法的学习，虽然面对一门新的语言，语法啊特性啊之类的了解很有必要，但还是想在了解之前看一看 Ruby 的一些代码规范，好让自己能快速了解 Ruby 的基础上还能养成一个良好的编码习惯。</p>
-<h2 id="学习之前必备-代码规范"><a href="#学习之前必备-代码规范" class="headerlink" title="学习之前必备 - 代码规范"></a>学习之前必备 - 代码规范</h2><p>或许有些语句还不能理解，没关系，有一个基础印象就好。</p>
-<ul>
-<li><p>一般来讲，Ruby 中的变量名和方法名使用<strong>下划线命名法</strong>(小写字母 + <code>_</code>)，类名和模块名使用 Java 类似的<strong>驼峰命名法</strong></p>
-</li>
-<li><p>每个缩进级别使用两个 <strong>space</strong>（又名软 tabs），不要使用硬 tabs</p>
-</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad - four spaces</span>
-<span class="token keyword">def</span> some_method
-    do_something
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">def</span> some_method
-  do_something
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>不用使用 <code>;</code> 来分割语句和表达式。以此推论 - 一行使用一个表达式</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-puts <span class="token string">'foobar'</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true"># superfluous semicolon</span>
-
-puts <span class="token string">'foo'</span><span class="token punctuation">;</span> puts <span class="token string">'bar'</span> <span class="token comment" spellcheck="true"># two expression on the same line</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-puts <span class="token string">'foobar'</span>
-
-puts <span class="token string">'foo'</span>
-puts <span class="token string">'bar'</span>
-
-puts <span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token string">'bar'</span> <span class="token comment" spellcheck="true"># this applies to puts in particular</span></code></pre>
-<ul>
-<li>避免单行方法。即便还是会受到一些人的欢迎，这里还是会有一些古怪的语法用起来很容易犯错. 无论如何 - 应该一行不超过一个单行方法.</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">def</span> too_much<span class="token punctuation">;</span> something<span class="token punctuation">;</span> something_else<span class="token punctuation">;</span> <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># okish - notice that the first ; is required</span>
-<span class="token keyword">def</span> no_braces_method<span class="token punctuation">;</span> body <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># okish - notice that the second ; is optional</span>
-<span class="token keyword">def</span> no_braces_method<span class="token punctuation">;</span> body<span class="token punctuation">;</span> <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># okish - valid syntax, but no ; make it kind of hard to read</span>
-<span class="token keyword">def</span> <span class="token function">some_method</span><span class="token punctuation">(</span><span class="token punctuation">)</span> body <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">def</span> some_method
-  body
-<span class="token keyword">end</span></code></pre>
-<p>空方法是这个规则的例外。</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">def</span> no_op<span class="token punctuation">;</span> <span class="token keyword">end</span></code></pre>
-<ul>
-<li>当赋值一个条件表达式的结果给一个变量时，保持分支的缩排在同一层。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad - pretty convoluted</span>
-kind <span class="token operator">=</span> <span class="token keyword">case</span> year
-<span class="token keyword">when</span> <span class="token number">1850</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1889</span> <span class="token keyword">then</span> <span class="token string">'Blues'</span>
-<span class="token keyword">when</span> <span class="token number">1890</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1909</span> <span class="token keyword">then</span> <span class="token string">'Ragtime'</span>
-<span class="token keyword">when</span> <span class="token number">1910</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1929</span> <span class="token keyword">then</span> <span class="token string">'New Orleans Jazz'</span>
-<span class="token keyword">when</span> <span class="token number">1930</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1939</span> <span class="token keyword">then</span> <span class="token string">'Swing'</span>
-<span class="token keyword">when</span> <span class="token number">1940</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1950</span> <span class="token keyword">then</span> <span class="token string">'Bebop'</span>
-<span class="token keyword">else</span> <span class="token string">'Jazz'</span>
-<span class="token keyword">end</span>
-
-result <span class="token operator">=</span> <span class="token keyword">if</span> some_cond
-  calc_something
-<span class="token keyword">else</span>
-  calc_something_else
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good - it's apparent what's going on</span>
-kind <span class="token operator">=</span> <span class="token keyword">case</span> year
-       <span class="token keyword">when</span> <span class="token number">1850</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1889</span> <span class="token keyword">then</span> <span class="token string">'Blues'</span>
-       <span class="token keyword">when</span> <span class="token number">1890</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1909</span> <span class="token keyword">then</span> <span class="token string">'Ragtime'</span>
-       <span class="token keyword">when</span> <span class="token number">1910</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1929</span> <span class="token keyword">then</span> <span class="token string">'New Orleans Jazz'</span>
-       <span class="token keyword">when</span> <span class="token number">1930</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1939</span> <span class="token keyword">then</span> <span class="token string">'Swing'</span>
-       <span class="token keyword">when</span> <span class="token number">1940</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1950</span> <span class="token keyword">then</span> <span class="token string">'Bebop'</span>
-       <span class="token keyword">else</span> <span class="token string">'Jazz'</span>
-       <span class="token keyword">end</span>
-
-result <span class="token operator">=</span> <span class="token keyword">if</span> some_cond
-           calc_something
-         <span class="token keyword">else</span>
-           calc_something_else
-         <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good (and a bit more width efficient)</span>
-kind <span class="token operator">=</span>
-  <span class="token keyword">case</span> year
-  <span class="token keyword">when</span> <span class="token number">1850</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1889</span> <span class="token keyword">then</span> <span class="token string">'Blues'</span>
-  <span class="token keyword">when</span> <span class="token number">1890</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1909</span> <span class="token keyword">then</span> <span class="token string">'Ragtime'</span>
-  <span class="token keyword">when</span> <span class="token number">1910</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1929</span> <span class="token keyword">then</span> <span class="token string">'New Orleans Jazz'</span>
-  <span class="token keyword">when</span> <span class="token number">1930</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1939</span> <span class="token keyword">then</span> <span class="token string">'Swing'</span>
-  <span class="token keyword">when</span> <span class="token number">1940</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token number">1950</span> <span class="token keyword">then</span> <span class="token string">'Bebop'</span>
-  <span class="token keyword">else</span> <span class="token string">'Jazz'</span>
-  <span class="token keyword">end</span>
-
-result <span class="token operator">=</span>
-  <span class="token keyword">if</span> some_cond
-    calc_something
-  <span class="token keyword">else</span>
-    calc_something_else
-  <span class="token keyword">end</span></code></pre>
-<ul>
-<li>在方法定义之间使用空行并且一个方法根据逻辑段来隔开。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> some_method
-  data <span class="token operator">=</span> <span class="token function">initialize</span><span class="token punctuation">(</span>options<span class="token punctuation">)</span>
-
-  data<span class="token punctuation">.</span>manipulate<span class="token operator">!</span>
-
-  data<span class="token punctuation">.</span>result
-<span class="token keyword">end</span>
-
-<span class="token keyword">def</span> some_methods
-  result
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>不要使用区块注释。它们不能由空白引导（=begin 必须顶头开始），并且不如普通注释容易辨认。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token operator">==</span> <span class="token keyword">begin</span>
-comment line
-another comment line
-<span class="token operator">==</span> <span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token comment" spellcheck="true"># comment line</span>
-<span class="token comment" spellcheck="true"># another comment line</span></code></pre>
-<ul>
-<li>使用括号将def的参数括起来。当方法不接收任何参数的时候忽略括号。<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">def</span> <span class="token function">some_method</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment" spellcheck="true"># body omitted</span>
-<span class="token keyword">end</span>
-</code></pre>
-</li>
-</ul>
-<h1 id="good"><a href="#good" class="headerlink" title="good"></a>good</h1><p>def some_method</p>
-<h1 id="body-omitted"><a href="#body-omitted" class="headerlink" title="body omitted"></a>body omitted</h1><p>end</p>
-<h1 id="bad"><a href="#bad" class="headerlink" title="bad"></a>bad</h1><p>def some_method_with_arguments arg1, arg2</p>
-<h1 id="body-omitted-1"><a href="#body-omitted-1" class="headerlink" title="body omitted"></a>body omitted</h1><p>end</p>
-<h1 id="good-1"><a href="#good-1" class="headerlink" title="good"></a>good</h1><p>def some_method_with_arguments(arg1, arg2)</p>
-<h1 id="body-omitted-2"><a href="#body-omitted-2" class="headerlink" title="body omitted"></a>body omitted</h1><p>end</p>
-<pre><code>
-- 从来不要使用 `for`， 除非你知道使用它的准确原因。大多数时候迭代器都可以用来替 `for`。`for` 是由一组 `each` 实现的 (因此你正间接添加了一级)，但是有一个小道道 - `for` 并不包含一个新的 scope (不像 `each`)并且在它的块中定义的变量在外面也是可以访问的。（这里有些像 Java 中不用 for-each 语句类似，感兴趣的也可以去搜一搜）
-
-```ruby
-arr = [1, 2, 3]
-
-# bad
-for elem in arr do
-  puts elem
-end
-
-# note that elem is accessible outside of the for loop
-elem #=&gt; 3
-
-# good
-arr.each { |elem| puts elem }
-
-# elem is not accessible outside each&#39;s block
-elem #=&gt; NameError: undefined local variable or method `elem&#39;</code></pre><ul>
-<li>利用 <code>if</code> and <code>case</code> 是表达式这样的事实它们返回一个结果。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">if</span> condition
-  result <span class="token operator">=</span> x
-<span class="token keyword">else</span>
-  result <span class="token operator">=</span> y
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-result <span class="token operator">=</span>
-  <span class="token keyword">if</span> condition
-    x
-  <span class="token keyword">else</span>
-    y
-  <span class="token keyword">end</span></code></pre>
-<ul>
-<li>布尔表达式使用<code>&amp;&amp;/||</code>, <code>and/or</code>用于控制流程。（经验Rule:如果你必须使用额外的括号（表达逻辑），那么你正在使用错误的的操作符。）</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># boolean expression</span>
-<span class="token keyword">if</span> some_condition <span class="token operator">&amp;&amp;</span> some_other_condition
-  do_something
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># control flow</span>
-document<span class="token punctuation">.</span>save<span class="token operator">?</span> <span class="token keyword">or</span> document<span class="token punctuation">.</span>save<span class="token operator">!</span></code></pre>
-<ul>
-<li>永远不要使用 <code>unless</code> 和 <code>else</code> 组合。将它们改写成肯定条件。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">unless</span> success<span class="token operator">?</span>
-  puts <span class="token string">'failure'</span>
-<span class="token keyword">else</span>
-  puts <span class="token string">'success'</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">if</span> success<span class="token operator">?</span>
-  puts <span class="token string">'success'</span>
-<span class="token keyword">else</span>
-  puts <span class="token string">'failure'</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>不用使用括号包含 <code>if/unless/while</code> 的条件。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token operator">></span> <span class="token number">10</span><span class="token punctuation">)</span>
-  <span class="token comment" spellcheck="true"># body omitted</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">if</span> x <span class="token operator">></span> <span class="token number">10</span>
-  <span class="token comment" spellcheck="true"># body omitted</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>倾向使用 <code>module</code>，而不是只有类方法的 <code>class</code>。类别应该只在创建实例是合理的时候使用。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">class</span> <span class="token class-name">SomeClass</span>
-  <span class="token keyword">def</span> <span class="token keyword">self</span><span class="token punctuation">.</span>some_method
-    <span class="token comment" spellcheck="true"># body omitted</span>
-  <span class="token keyword">end</span>
-
-  <span class="token keyword">def</span> <span class="token keyword">self</span><span class="token punctuation">.</span>some_other_method
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">module</span> <span class="token constant">SomeClass</span>
-  module_function
-
-  <span class="token keyword">def</span> some_method
-    <span class="token comment" spellcheck="true"># body omitted</span>
-  <span class="token keyword">end</span>
-
-  <span class="token keyword">def</span> some_other_method
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>当你希望将模块的实例方法变成 <code>class</code> 方法时，偏爱使用 <code>module_function</code> 胜过 <code>extend self</code>。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">module</span> <span class="token constant">Utilities</span>
-  extend <span class="token keyword">self</span>
-
-  <span class="token keyword">def</span> <span class="token function">parse_something</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span>
-    <span class="token comment" spellcheck="true"># do stuff here</span>
-  <span class="token keyword">end</span>
-
-  <span class="token keyword">def</span> <span class="token function">other_utility_method</span><span class="token punctuation">(</span>number<span class="token punctuation">,</span> string<span class="token punctuation">)</span>
-    <span class="token comment" spellcheck="true"># do some more stuff</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">module</span> <span class="token constant">Utilities</span>
-  module_function
-
-  <span class="token keyword">def</span> <span class="token function">parse_something</span><span class="token punctuation">(</span>string<span class="token punctuation">)</span>
-    <span class="token comment" spellcheck="true"># do stuff here</span>
-  <span class="token keyword">end</span>
-
-  <span class="token keyword">def</span> <span class="token function">other_utility_method</span><span class="token punctuation">(</span>number<span class="token punctuation">,</span> string<span class="token punctuation">)</span>
-    <span class="token comment" spellcheck="true"># do some more stuff</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>总是为你自己的类提供 <code>to_s</code> 方法, 用来表现这个类（实例）对象包含的对象.</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">class</span> <span class="token class-name">Person</span>
-  attr_reader <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
-
-  <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
-    <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
-    <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
-  <span class="token keyword">end</span>
-
-  <span class="token keyword">def</span> to_s
-    <span class="token string">"#@first_name #@last_name"</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>考虑使用 <code>Struct.new</code>, 它可以定义一些琐碎的 <code>accessors</code>, <code>constructor</code>（构造函数） 和 <code>comparison</code>（比较） 操作。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">class</span> <span class="token class-name">Person</span>
-  attr_reader <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
-
-  <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
-    <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
-    <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># better</span>
-<span class="token keyword">class</span> <span class="token class-name">Person</span> <span class="token operator">&lt;</span> <span class="token builtin">Struct</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span><span class="token punctuation">)</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li>考虑使用 <code>Struct.new</code>，它替你定义了那些琐碎的存取器（accessors），构造器（constructor）以及比较操作符（comparison operators）。</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">class</span> <span class="token class-name">Person</span>
-  attr_accessor <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
-
-  <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
-    <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
-    <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># better</span>
-<span class="token constant">Person</span> <span class="token operator">=</span> <span class="token builtin">Struct</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span><span class="token punctuation">)</span> <span class="token keyword">do</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li><p>不要去 <code>extend</code> 一个 <code>Struct.new</code> - 它已经是一个新的 <code>class</code>。扩展它会产生一个多余的 <code>class</code> 层级 并且可能会产生怪异的错误如果文件被加载多次。</p>
-</li>
-<li><p>鸭子类型（<a href="http://en.wikipedia.org/wiki/Duck_typing" target="_blank" rel="noopener">duck-typing</a>）优于继承。</p>
-</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-<span class="token keyword">class</span> <span class="token class-name">Animal</span>
-  <span class="token comment" spellcheck="true"># abstract method</span>
-  <span class="token keyword">def</span> speak
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># extend superclass</span>
-<span class="token keyword">class</span> <span class="token class-name">Duck</span> <span class="token operator">&lt;</span> <span class="token constant">Animal</span>
-  <span class="token keyword">def</span> speak
-    puts <span class="token string">'Quack! Quack'</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># extend superclass</span>
-<span class="token keyword">class</span> <span class="token class-name">Dog</span> <span class="token operator">&lt;</span> <span class="token constant">Animal</span>
-  <span class="token keyword">def</span> speak
-    puts <span class="token string">'Bau! Bau!'</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-<span class="token keyword">class</span> <span class="token class-name">Duck</span>
-  <span class="token keyword">def</span> speak
-    puts <span class="token string">'Quack! Quack'</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token keyword">class</span> <span class="token class-name">Dog</span>
-  <span class="token keyword">def</span> speak
-    puts <span class="token string">'Bau! Bau!'</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li><p>当访问一个数组的第一个或者最后一个元素，倾向使用 first 或 last 而不是 [0] 或 [-1]。</p>
-</li>
-<li><p>优先使用 <code>字符串插值</code> 来代替 <code>字符串串联</code>。</p>
-</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># bad</span>
-email_with_name <span class="token operator">=</span> user<span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">' &lt;'</span> <span class="token operator">+</span> user<span class="token punctuation">.</span>email <span class="token operator">+</span> <span class="token string">'>'</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-email_with_name <span class="token operator">=</span> <span class="token string">"<span class="token interpolation"><span class="token delimiter tag">#{</span>user<span class="token punctuation">.</span>name<span class="token delimiter tag">}</span></span> &lt;<span class="token interpolation"><span class="token delimiter tag">#{</span>user<span class="token punctuation">.</span>email<span class="token delimiter tag">}</span></span>>"</span>
-
-<span class="token comment" spellcheck="true"># good</span>
-email_with_name <span class="token operator">=</span> <span class="token function">format</span><span class="token punctuation">(</span><span class="token string">'%s &lt;%s>'</span><span class="token punctuation">,</span> user<span class="token punctuation">.</span>name<span class="token punctuation">,</span> user<span class="token punctuation">.</span>email<span class="token punctuation">)</span></code></pre>
-<ul>
-<li><p>在对象插值的时候不要使用 <code>Object#to_s</code>，它将会被自动调用。</p>
-</li>
-<li><p>操作较大的字符串时, 避免使用 <code>String#+</code> 做为替代使用 <code>String#&lt;&lt;</code>。就地级联字符串块总是比 <code>String#+</code> 更快，它创建了多个字符串对象。</p>
-</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token comment" spellcheck="true"># good and also fast</span>
-html <span class="token operator">=</span> <span class="token string">''</span>
-html <span class="token operator">&lt;</span><span class="token operator">&lt;</span> <span class="token string">'&lt;h1>Page title&lt;/h1>'</span>
-
-paragraphs<span class="token punctuation">.</span><span class="token keyword">each</span> <span class="token keyword">do</span> <span class="token operator">|</span>paragraph<span class="token operator">|</span>
-  html <span class="token operator">&lt;</span><span class="token operator">&lt;</span> <span class="token string">"&lt;p><span class="token interpolation"><span class="token delimiter tag">#{</span>paragraph<span class="token delimiter tag">}</span></span>&lt;/p>"</span>
-<span class="token keyword">end</span></code></pre>
-<ul>
-<li><p>RuboCop<br><a href="https://github.com/bbatsov/rubocop" target="_blank" rel="noopener">RuboCop</a> 是一个基于本指南的 Ruby 代码风格检查工具。 RuboCop 涵盖了本指南相当大的部分，支持 MRI 1.9 和 MRI 2.0，而且与 Emacs 整合良好。</p>
-</li>
-<li><p>RubyMine<br><a href="http://www.jetbrains.com/ruby/" target="_blank" rel="noopener">RubyMine</a> 的代码检查是 <a href="http://confluence.jetbrains.com/display/RUBYDEV/RubyMine+Inspections" target="_blank" rel="noopener">部分基于</a> 本指南的。</p>
-</li>
-</ul>
-<blockquote>
-<p>基于下面链接简化了大部分，因为有一些编码风格能从 Java 自然的切换过来，而且我们也可以使用相应的工具来检查我们的代码，更多可以看这里：<a href="https://ruby-china.org/wiki/coding-style" target="_blank" rel="noopener">https://ruby-china.org/wiki/coding-style</a></p>
-</blockquote>
-<h2 id="Ruby-语言基础"><a href="#Ruby-语言基础" class="headerlink" title="Ruby 语言基础"></a>Ruby 语言基础</h2><p>其实通过上面的语法规范，我们或多或少能感知到一些 Ruby 的语法，有一些细节的地方可以自行去菜鸟教程or其他网站能看到，下面我们就着一些重要的东西快速的学习一遍吧..</p>
-<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>Ruby 中有以下几种不同的数据类型：</p>
-<ul>
-<li><p>数字/ 字符串/ 符号/ 哈希/ 数组/ 布尔<br>比较在意的是 Ruby 并没有 Java 中的枚举类型，可能是出于安全方面的考虑吧..（我也不知道…）</p>
-</li>
-<li><p><strong>符号</strong>就像字符串。一个符号之前是冒号（<code>:</code>）。例如：</p>
-</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token symbol">:abcd</span></code></pre>
-<p>它们不包含空格。 含有多个单词的符号用(<code>_</code>)写成。 字符串和符号之间的一个区别是，如果文本是一个数据，那么它是一个字符串，但如果它是一个代码，它是一个符号。</p>
-<p>符号是唯一的标识符，表示静态值，而字符串表示更改的值。</p>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">011</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> <span class="token string">"string"</span><span class="token punctuation">.</span>object_id
-<span class="token operator">=</span><span class="token operator">></span> <span class="token number">26922000</span>
-<span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">012</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> <span class="token string">"string"</span><span class="token punctuation">.</span>object_id
-<span class="token operator">=</span><span class="token operator">></span> <span class="token number">29115220</span>
-<span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">013</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> <span class="token symbol">:symbol</span><span class="token punctuation">.</span>object_id
-<span class="token operator">=</span><span class="token operator">></span> <span class="token number">788188</span>
-<span class="token function">irb</span><span class="token punctuation">(</span>main<span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token number">014</span><span class="token punctuation">:</span><span class="token number">0</span><span class="token operator">></span> <span class="token symbol">:symbol</span><span class="token punctuation">.</span>object_id
-<span class="token operator">=</span><span class="token operator">></span> <span class="token number">788188</span></code></pre>
-<ul>
-<li><strong>哈希</strong>将其值分配给其键。 它们可以用键关联指定值。键的值由 <code>=&gt;</code> 符号分配。 键/值对之间用逗号分隔，所有对都用大括号括起来。 例如：</li>
-</ul>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token punctuation">{</span><span class="token string">"key1"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"value1"</span><span class="token punctuation">,</span> <span class="token string">"key2"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"Chemistry"</span><span class="token punctuation">,</span> <span class="token string">"key3"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"Maths"</span><span class="token punctuation">}</span></code></pre>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby">data <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"key1"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"Physics"</span><span class="token punctuation">,</span> <span class="token string">"key2"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"Chemistry"</span><span class="token punctuation">,</span> <span class="token string">"key3"</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token string">"Maths"</span><span class="token punctuation">}</span>   
-puts data<span class="token punctuation">[</span><span class="token string">"key1"</span><span class="token punctuation">]</span>   
-puts data<span class="token punctuation">[</span><span class="token string">"key2"</span><span class="token punctuation">]</span>   
-puts data<span class="token punctuation">[</span><span class="token string">"key3"</span><span class="token punctuation">]</span></code></pre>
-<p>执行上述代码，得到以下结果：</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token constant">Physics</span>
-<span class="token constant">Chemistry</span>
-<span class="token constant">Maths</span></code></pre>
-<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>Ruby 有四种类型的变量，<strong>变量的命名方式决定了变量的种类</strong>：</p>
-<ul>
-<li><p><strong>局部变量</strong><br>以英文小写字母或者 <code>_</code> 开头，作用域等同于 Java 局部变量。</p>
-</li>
-<li><p><strong>全局变量</strong><br>以 <code>$</code> 开头，作用域等同于 Java 全局变量。只要全局变量的名称相同，不管变量在程序的哪个部分使用，程序都认为是它们是同一个变量。未初始化的全局变量的值会被初始化为：<code>nil</code>。建议不要使用全局变量，因为它们使程序变得秘密和复杂。</p>
-</li>
-</ul>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token variable">$global_var</span> <span class="token operator">=</span> <span class="token string">"GLOBAL"</span>   
-<span class="token keyword">class</span> <span class="token class-name">One</span>   
-  <span class="token keyword">def</span> display   
-     puts <span class="token string">"Global variable in One is #$global_var"</span>   
-  <span class="token keyword">end</span>   
-<span class="token keyword">end</span>   
-<span class="token keyword">class</span> <span class="token class-name">Two</span>   
-  <span class="token keyword">def</span> display   
-     puts <span class="token string">"Global variable in Two is #$global_var"</span>   
-  <span class="token keyword">end</span>   
-<span class="token keyword">end</span>   
-
-oneobj <span class="token operator">=</span> <span class="token constant">One</span><span class="token punctuation">.</span><span class="token keyword">new</span>   
-<span class="token class-name">oneobj<span class="token punctuation">.</span>display</span>   
-twoobj <span class="token operator">=</span> <span class="token constant">Two</span><span class="token punctuation">.</span><span class="token keyword">new</span>   
-<span class="token class-name">twoobj<span class="token punctuation">.</span>display</span></code></pre>
-<p>执行代码输出结果如下：</p>
-<pre class=" language-shell"><code class="language-shell">Total number of states written: 4
-Total number of states written: 4
-Total number of states written: 4
-Total number of states written: 4</code></pre>
-<ul>
-<li><strong>实例变量</strong><br>以 <code>@</code> 开头，在同一个实例中，程序可以超越方法定义，任意引用、修改实例变量。它属于类的一个实例，可以从方法中的类的任何实例访问。 它们只能访问一个特定的类的实例。它们不需要初始化，未初始化的实例变量的值是：<code>nil</code> 。</li>
-</ul>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">class</span> <span class="token class-name">States</span>   
-   <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>   
-      <span class="token variable">@states_name</span><span class="token operator">=</span>name   
-   <span class="token keyword">end</span>   
-   <span class="token keyword">def</span> <span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-      puts <span class="token string">"States name #@states_name"</span>   
-    <span class="token keyword">end</span>   
-<span class="token keyword">end</span>   
-
-<span class="token comment" spellcheck="true"># Create Objects   </span>
-first<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Hainan"</span><span class="token punctuation">)</span>   
-second<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"GuangDong"</span><span class="token punctuation">)</span>   
-third<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Beijing"</span><span class="token punctuation">)</span>   
-fourth<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"ShangDong"</span><span class="token punctuation">)</span>   
-
-<span class="token comment" spellcheck="true"># Call Methods   </span>
-first<span class="token punctuation">.</span><span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-second<span class="token punctuation">.</span><span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-third<span class="token punctuation">.</span><span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-fourth<span class="token punctuation">.</span><span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<p>执行代码输出结果如下：</p>
-<pre class=" language-shell"><code class="language-shell">States name GuangDong
-States name Beijing
-States name ShangDong</code></pre>
-<ul>
-<li><strong>类变量</strong><br>以 <code>@@</code> 开头，作用域为该类的所有实例。需要在使用前进行初始化，由类的所有后代共享，未初始化的变量将导致错误。</li>
-</ul>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">class</span> <span class="token class-name">States</span>   
-   <span class="token variable">@@no_of_states</span><span class="token operator">=</span><span class="token number">0</span>   
-   <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>   
-      <span class="token variable">@states_name</span><span class="token operator">=</span>name   
-      <span class="token variable">@@no_of_states</span> <span class="token operator">+</span><span class="token operator">=</span> <span class="token number">1</span>   
-   <span class="token keyword">end</span>   
-   <span class="token keyword">def</span> <span class="token function">display</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-     puts <span class="token string">"State name #@state_name"</span>   
-    <span class="token keyword">end</span>   
-    <span class="token keyword">def</span> <span class="token function">total_no_of_states</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-       puts <span class="token string">"Total number of states written: #@@no_of_states"</span>   
-    <span class="token keyword">end</span>   
-<span class="token keyword">end</span>   
-
-<span class="token comment" spellcheck="true"># Create Objects   </span>
-first<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Assam"</span><span class="token punctuation">)</span>   
-second<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Meghalaya"</span><span class="token punctuation">)</span>   
-third<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Maharashtra"</span><span class="token punctuation">)</span>   
-fourth<span class="token operator">=</span><span class="token constant">States</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Pondicherry"</span><span class="token punctuation">)</span>   
-
-<span class="token comment" spellcheck="true"># Call Methods   </span>
-first<span class="token punctuation">.</span><span class="token function">total_no_of_states</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-second<span class="token punctuation">.</span><span class="token function">total_no_of_states</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-third<span class="token punctuation">.</span><span class="token function">total_no_of_states</span><span class="token punctuation">(</span><span class="token punctuation">)</span>   
-fourth<span class="token punctuation">.</span><span class="token function">total_no_of_states</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
-<p>执行上面代码输出结果如下：</p>
-<pre class=" language-shell"><code class="language-shell">Total number of states written: 4
-Total number of states written: 4
-Total number of states written: 4
-Total number of states written: 4</code></pre>
-<h3 id="类和对象"><a href="#类和对象" class="headerlink" title="类和对象"></a>类和对象</h3><p><code>Object</code> 类是所有 Ruby 对象的默认根。 Ruby 对象继承自 <code>BasicObject</code>(它是Ruby中所有类的父类)类，允许创建替代对象层次结构。</p>
-<p>首先与 Java 很不同的是<strong>创建对象：</strong></p>
-<pre class=" language-java"><code class="language-java">Object newObject <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Java 中新建对象</span></code></pre>
-<p>对比 Ruby：</p>
-<pre class=" language-ruby"><code class="language-ruby">objectName <span class="token operator">=</span> className<span class="token punctuation">.</span><span class="token keyword">new</span></code></pre>
-<p>每个 Ruby 类都是 <code>Class</code> 类的一个实例。通常对于类名，使用驼峰命名规则，类的名称始终以大写字母开头。定义类是用 <code>end</code> 关键字完成的。</p>
-<p><strong>语法</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">class</span> <span class="token class-name">ClassName</span>  
-    codes<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>  
-<span class="token keyword">end</span></code></pre>
-<p>我们使用上面学习过的语法规范来创建一个 <code>Person</code> 类（写上 <code>to_s</code> 方法）：</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">class</span> <span class="token class-name">Person</span>
-  attr_reader <span class="token symbol">:first_name</span><span class="token punctuation">,</span> <span class="token symbol">:last_name</span>
-
-  <span class="token keyword">def</span> <span class="token function">initialize</span><span class="token punctuation">(</span>first_name<span class="token punctuation">,</span> last_name<span class="token punctuation">)</span>
-    <span class="token variable">@first_name</span> <span class="token operator">=</span> first_name
-    <span class="token variable">@last_name</span> <span class="token operator">=</span> last_name
-  <span class="token keyword">end</span>
-
-  <span class="token keyword">def</span> to_s
-    <span class="token string">"#@first_name #@last_name"</span>
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span></code></pre>
-<p>注意这里的 <code>attr_reader</code> 对应在 Java 中相当于为 <code>first_name</code> 和 <code>last_name</code> 定义了 <code>getter</code> ，在 Ruby 中，从对象外部不能直接访问实例变量或对实例变量赋值，需要通过方法来访问对象的内部，如果像 Java 那样一遍一遍为每一个变量写 <code>getter/setter</code> 就有些冗杂了，Ruby 为我们提供了一些方便的<strong>存取器。</strong></p>
-<table>
-<thead>
-<tr>
-<th align="center">定义</th>
-<th align="center">意义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">attr_reader :name</td>
-<td align="center">只读（定义 name 方法）</td>
-</tr>
-<tr>
-<td align="center">attr_writer :name</td>
-<td align="center">只写（定义 name= 方法）</td>
-</tr>
-<tr>
-<td align="center">attr_accessor :name</td>
-<td align="center">读写（定义以上两个方法）</td>
-</tr>
-</tbody></table>
-<blockquote>
-<p>另外一点上面有一个非常有趣的规范是使用 <code>Struct.new</code> 来简化代码，我觉得很酷也想把它应用在上述 Person 类的创建中，但是发现失败了（不能在其中定义其他功能性的代码），所以可能结论是：<strong>这样的简化只适用于一些实体类保存数据的类吧。</strong></p>
-</blockquote>
-<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>Ruby 方法使用 <code>def</code> 关键字开始，最后还需要使用 <code>end</code> 关键字来表示方法定义结束。</p>
-<p><strong>语法：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> methodName  
-    code<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>  
-<span class="token keyword">end</span></code></pre>
-<p>示例：</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token function">method_defining</span><span class="token punctuation">(</span>a1 <span class="token operator">=</span> <span class="token string">"Ruby"</span><span class="token punctuation">,</span> a2 <span class="token operator">=</span> <span class="token string">"Python"</span><span class="token punctuation">)</span>
-   puts <span class="token string">"The programming language is <span class="token interpolation"><span class="token delimiter tag">#{</span>a1<span class="token delimiter tag">}</span></span>"</span>
-   puts <span class="token string">"The programming language is <span class="token interpolation"><span class="token delimiter tag">#{</span>a2<span class="token delimiter tag">}</span></span>"</span>
-<span class="token keyword">end</span>
-method_defining <span class="token string">"C"</span><span class="token punctuation">,</span> <span class="token string">"C++"</span>
-method_defining</code></pre>
-<p>运行上面的代码执行结果如下：</p>
-<pre class=" language-shell"><code class="language-shell">The programming language is C
-The programming language is C++
-The programming language is Ruby
-The programming language is Python</code></pre>
-<p><strong>方法返回值：</strong></p>
-<p>在初探 Ruby 的时候我们就感受到，貌似每一条指令都会返回一个返回值，方法也是这样，在 Ruby 中每个方法都有一个返回值，这个返回的值将是最后一个语句的值。例如：</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> my_method
-   i <span class="token operator">=</span> <span class="token number">100</span>
-   j <span class="token operator">=</span> <span class="token number">10</span>
-   k <span class="token operator">=</span> <span class="token number">1</span>
-<span class="token keyword">end</span></code></pre>
-<p>上面代码中，最后方法的返回值是 <code>1</code>。</p>
-<p><strong>Ruby return 语句</strong></p>
-<p>Ruby 中的 <code>return</code> 语句用于从 Ruby 方法中返回一个或多个值</p>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> method
-   i <span class="token operator">=</span> <span class="token number">100</span>
-   j <span class="token operator">=</span> <span class="token number">200</span>
-   k <span class="token operator">=</span> <span class="token number">300</span>
-<span class="token keyword">return</span> i<span class="token punctuation">,</span> j<span class="token punctuation">,</span> k
-<span class="token keyword">end</span>
-var <span class="token operator">=</span> method
-puts var</code></pre>
-<p>上面代码结果如下：</p>
-<pre class=" language-shell"><code class="language-shell">100
-200
-300</code></pre>
-<p><strong>可变参数：</strong></p>
-<p>假设声明一个方法需要两个参数，每当调用这个方法时，需要传递两个参数。但是，Ruby允许您声明使用可变数量参数的方法。 让我们来看一下这个示例：</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token function">sample</span> <span class="token punctuation">(</span><span class="token operator">*</span>test<span class="token punctuation">)</span>
-   puts <span class="token string">"The number of parameters is <span class="token interpolation"><span class="token delimiter tag">#{</span>test<span class="token punctuation">.</span>length<span class="token delimiter tag">}</span></span>"</span>
-   <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">0</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>test<span class="token punctuation">.</span>length
-      puts <span class="token string">"The parameters are <span class="token interpolation"><span class="token delimiter tag">#{</span>test<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token delimiter tag">}</span></span>"</span>
-   <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-sample <span class="token string">"Maxsu"</span><span class="token punctuation">,</span> <span class="token string">"6"</span><span class="token punctuation">,</span> <span class="token string">"F"</span>
-sample <span class="token string">"Mac"</span><span class="token punctuation">,</span> <span class="token string">"38"</span><span class="token punctuation">,</span> <span class="token string">"M"</span><span class="token punctuation">,</span> <span class="token string">"MCA"</span></code></pre>
-<p>执行上面代码，得到如下结果：</p>
-<pre class=" language-shell"><code class="language-shell">The number of parameters is 3
-The parameters are Maxsu
-The parameters are 6
-The parameters are F
-The number of parameters is 4
-The parameters are Mac
-The parameters are 38
-The parameters are M
-The parameters are MCA</code></pre>
-<p><strong>类方法：</strong></p>
-<p>当方法在类定义之外定义时，默认情况下该方法被标记为 <code>private</code>。 另一方面，默认情况下，类定义中定义的方法被标记为 <code>public</code>。模块的默认可见性和 <code>private</code> 标记可以通过模块的 <code>public</code> 或 <code>private</code> 更改。</p>
-<p>Ruby 给出一种不用实例化一个类就可以访问一个方法。下面来看看看如何声明和访问类方法 -</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">class</span> <span class="token class-name">Accounts</span>
-   <span class="token keyword">def</span> reading_charge
-   <span class="token keyword">end</span>
-   <span class="token keyword">def</span> <span class="token constant">Accounts</span><span class="token punctuation">.</span>return_date
-   <span class="token keyword">end</span>
-<span class="token keyword">end</span></code></pre>
-<p>访问类方法 -</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token constant">Accounts</span><span class="token punctuation">.</span>return_date</code></pre>
-<h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><p>Ruby 模块是方法和常量的集合。暂时你可简单的理解为一个不能实例化的类，这样做的好处是一来可以提供一个命名空间避免名字冲突，另一个是实现了 <code>mixin</code> 的功能。</p>
-<p>不知道您有没有发现，Ruby 没有提供多重继承的功能，但 Ruby 的模板几乎消除了多重继承的需要，提供了一种名为 <code>mixin</code> 的装置。</p>
-<p><strong>示例：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">module</span> <span class="token constant">A</span>
-  <span class="token keyword">def</span> a1
-  <span class="token keyword">end</span>
-  <span class="token keyword">def</span> a2
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-<span class="token keyword">module</span> <span class="token constant">B</span>
-  <span class="token keyword">def</span> b1
-  <span class="token keyword">end</span>
-  <span class="token keyword">def</span> b2
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-<span class="token keyword">class</span> <span class="token class-name">Sample</span>
-  include <span class="token constant">A</span>
-  include <span class="token constant">B</span>
-  <span class="token keyword">def</span> s1
-  <span class="token keyword">end</span>
-<span class="token keyword">end</span>
-
-samp<span class="token operator">=</span><span class="token constant">Sample</span><span class="token punctuation">.</span><span class="token keyword">new</span>
-<span class="token class-name">samp<span class="token punctuation">.</span>a1</span>
-samp<span class="token punctuation">.</span>a2
-samp<span class="token punctuation">.</span>b1
-samp<span class="token punctuation">.</span>b2
-samp<span class="token punctuation">.</span>s1</code></pre>
-<h3 id="块"><a href="#块" class="headerlink" title="块"></a>块</h3><p>Ruby 代码在其他编程语言中被称为闭包。它由一组代码组成，它们始终用大括号括起来，或者在 <code>do..end</code> 之间书写。大括号语法总是具有比 <code>do..end</code> 语法更高的优先级。也就是说大括号优先级高，<code>do..end</code> 优先级低。</p>
-<p><strong>语法：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby">block_name<span class="token punctuation">{</span>
-   statement1
-   statement2
-   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">}</span></code></pre>
-<p><strong>yield语句：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> test
-   puts <span class="token string">"在 test 方法内"</span>
-   <span class="token keyword">yield</span>
-   puts <span class="token string">"你又回到了 test 方法内"</span>
-   <span class="token keyword">yield</span>
-<span class="token keyword">end</span>
-test <span class="token punctuation">{</span>puts <span class="token string">"你在块内"</span><span class="token punctuation">}</span></code></pre>
-<p>上面代码运行结果如下：</p>
-<pre class=" language-shell"><code class="language-shell">在 test 方法内
-你在块内
-你又回到了 test 方法内
-你在块内</code></pre>
-<p><strong>块和方法：</strong></p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> test
-  <span class="token keyword">yield</span>
-<span class="token keyword">end</span>
-test<span class="token punctuation">{</span> puts <span class="token string">"Hello world"</span><span class="token punctuation">}</span></code></pre>
-<p>本实例是实现块的最简单的方式。您使用 yield 语句调用 test 块。</p>
-<p>但是如果方法的最后一个参数前带有 <code>&amp;</code>，那么您可以向该方法传递一个块，且这个块可被赋给最后一个参数。如果 <code>*</code> 和 <code>&amp;</code> 同时出现在参数列表中，<code>&amp;</code> 应放在后面。</p>
-<pre class=" language-ruby"><code class="language-ruby"><span class="token keyword">def</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>block<span class="token punctuation">)</span>
-   block<span class="token punctuation">.</span>call
-<span class="token keyword">end</span>
-test <span class="token punctuation">{</span> puts <span class="token string">"Hello World!"</span><span class="token punctuation">}</span></code></pre>
-<p>上述代码运行结果如下：</p>
-<pre class=" language-shelll"><code class="language-shelll">Hello World!</code></pre>
-<blockquote>
-<p>这一部分建议再去看一下慕课网上的教程，看关于第三章的内容即可：<a href="https://www.imooc.com/learn/765" target="_blank" rel="noopener">Ruby语言快速入门：https://www.imooc.com/learn/765</a></p>
-</blockquote>
-<hr>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>经过以上简单的学习，我们对 Ruby 有了一个大致的了解，算是简单入了个门（有一些简单的例如循环啊，判断啊，运算符之类的简单我就没有写了），更多的东西需要自己平时的编码中去总结学习（肯定有一些坑需要自己去填的）。</p>
-<blockquote>
-<p>参考文章：<br><a href="http://www.runoob.com/ruby/ruby-intro.html" target="_blank" rel="noopener">1.Ruby 教程 - 菜鸟驿站 - http://www.runoob.com/ruby/ruby-intro.html</a><br><a href="https://www.yiibai.com/ruby" target="_blank" rel="noopener">2.Ruby 教程 - 易百教程 - https://www.yiibai.com/ruby</a><br><a href="https://www.ruby-lang.org/zh_cn/documentation/quickstart/" target="_blank" rel="noopener">3.20分钟体验 Ruby - https://www.ruby-lang.org/zh_cn/documentation/quickstart/</a><br><a href="https://lrthw.github.io/intro/" target="_blank" rel="noopener">4.笨方法学 Ruby - https://lrthw.github.io/intro/</a><br><a href="https://wdxtub.com/2016/03/30/ruby-first-step/" target="_blank" rel="noopener">5.Ruby 快速入门 - https://wdxtub.com/2016/03/30/ruby-first-step/</a></p>
-</blockquote>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
       
     </div>
     
+      
+        <a class= "readmore" href="/2019/04/26/java-zhuan-ruby-kuai-su-ru-men/">
+          阅读全文 <i class="fas fa-chevron-right"></i>
+        </a>
       
     
   </section>
@@ -1356,9 +593,9 @@ test <span class="token punctuation">{</span> puts <span class="token string">"H
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/Java-Web/' rel="nofollow">
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E6%95%B0%E6%8D%AE%E5%BA%93/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>Java Web</p>
+      <p>JavaWeb进阶/数据库</p>
     </a>
   </div>
 
@@ -1377,6 +614,19 @@ test <span class="token punctuation">{</span> puts <span class="token string">"H
           
             
               
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：5.2k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：20分钟</p>
+    </a>
+  </div>
+
 
             
           
@@ -1410,262 +660,13 @@ test <span class="token punctuation">{</span> puts <span class="token string">"H
     <div class="article-entry" itemprop="articleBody">
       
         <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-2572826f53174702.png" alt=""></p>
-<h1 id="1-MongDB-简介"><a href="#1-MongDB-简介" class="headerlink" title="1.MongDB 简介"></a>1.MongDB 简介</h1><p><strong>MongoDB</strong>（来自于英文单词“Humongous”，中文含义为“庞大”）是可以应用于各种规模的企业、各个行业以及各类应用程序的开源数据库。作为一个适用于敏捷开发的数据库，MongoDB 的数据模式可以随着应用程序的发展而灵活地更新。与此同时，它也为开发人员 提供了传统数据库的功能：二级索引，完整的查询系统以及严格一致性等等。 MongoDB 能够使企业更加具有敏捷性和可扩展性，各种规模的企业都可以通过使用 MongoDB 来创建新的应用，提高与客户之间的工作效率，加快产品上市时间，以及降低企业成本。</p>
-<p><strong>MongoDB</strong> 是专为可扩展性，高性能和高可用性而设计的数据库。它可以从单服务器部署扩展到大型、复杂的多数据中心架构。利用内存计算的优势，MongoDB 能够提供高性能的数据读写操作。 MongoDB 的本地复制和自动故障转移功能使您的应用程序具有企业级的可靠性和操作灵活性。</p>
-<blockquote>
-<p>以上内容摘自官网：</p>
-</blockquote>
-<h2 id="1-1-文档型数据库"><a href="#1-1-文档型数据库" class="headerlink" title="1.1 文档型数据库"></a>1.1 文档型数据库</h2><p>简而言之，MongoDB是一个免费开源跨平台的 NoSQL 数据库，与关系型数据库不同，MongoDB 的数据以类似于 JSON 格式的二进制文档存储：</p>
-<pre class=" language-JSON"><code class="language-JSON">{
-    name: "我没有三颗心脏",
-    age: 22,
-}</code></pre>
-<p>文档型的数据存储方式有几个重要好处：</p>
-<ol>
-<li>文档的数据类型可以对应到语言的数据类型，如数组类型（Array）和对象类型（Object）；</li>
-<li>文档可以嵌套，有时关系型数据库涉及几个表的操作，在 MongoDB 中一次就能完成，可以减少昂贵的连接花销；</li>
-<li>文档不对数据结构加以限制，不同的数据结构可以存储在同一张表；</li>
-<li>MongoDB 的文档数据模型和索引系统能有效提升数据库性能；</li>
-<li>复制集功能提供数据冗余，自动化容灾容错，提升数据库可用性；</li>
-<li>分片技术能够分散单服务器的读写压力，提高并发能力，提升数据库的可拓展性；</li>
-<li>MongoDB 高性能，高可用性、可扩展性等特点，使其至 2009 年发布以来，逐渐被认可，并被越来越多的用于生产环境中。AWS、GCP、阿里云等云平台都提供了十分便捷的 MongoDB 云服务。</li>
-</ol>
-<h2 id="1-2-MongoDB-基础概念"><a href="#1-2-MongoDB-基础概念" class="headerlink" title="1.2 MongoDB 基础概念"></a>1.2 MongoDB 基础概念</h2><p>可以使用我们熟悉的 MySQL 数据库来加以对比：</p>
-<table>
-<thead>
-<tr>
-<th align="center">MySQL 基础概念</th>
-<th align="center">MongoDB 对应概念</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">数据库（database）</td>
-<td align="center">容器（database）</td>
-</tr>
-<tr>
-<td align="center">表（table）</td>
-<td align="center">集合（collection）</td>
-</tr>
-<tr>
-<td align="center">行（row）</td>
-<td align="center">文档（document）</td>
-</tr>
-<tr>
-<td align="center">列（column）</td>
-<td align="center">域（filed）</td>
-</tr>
-<tr>
-<td align="center">索引（index）</td>
-<td align="center">索引（index）</td>
-</tr>
-</tbody></table>
-<p>也借用一下<a href="[http://www.runoob.com/mongodb/mongodb-databases-documents-collections.html](http://www.runoob.com/mongodb/mongodb-databases-documents-collections.html)">菜鸟教程</a>的图来更加形象生动的说明一下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-dee79a699491eb9a.png" alt=""></p>
-<p>这很容易理解，但是问题在于：<strong>我们为什么要引入新的概念呢？</strong>（也就是为什么我们要把“表”替换成“集合”，“行”替换成“文档”，“列”替换成“域”呢？）原因在于，其实在 <strong>MySQL 这样的典型关系型数据</strong>中，我们是在<strong>定义表的时候定义列</strong>的，但是由于上述<strong>文档型数据库</strong>的特点，它允许文档的数据类型可以对应到语言的数据类型，所以我们是在<strong>定义文档的时候才会定义域</strong>的。</p>
-<p>也就是说，集合中的每个文档都可以有独立的域。因此，虽说集合相对于表来说是一个简化了的容器，而文档则包含了比行要多得多的信息。</p>
-<h1 id="2-搭建环境"><a href="#2-搭建环境" class="headerlink" title="2 搭建环境"></a>2 搭建环境</h1><p>怎么样都好，搭建好环境就行，这里以 OS 环境为例，你可以使用 OSX 的 brew 安装 mongodb：</p>
-<pre class=" language-shell"><code class="language-shell">brew install mongodb</code></pre>
-<p>在运行之前我们需要创建一个数据库存储目录 <code>/data/db</code>：</p>
-<pre class=" language-shell"><code class="language-shell">sudo mkdir -p /data/db</code></pre>
-<p>然后启动 mongodb，默认数据库目录即为 <code>/data/db</code>（如果不是，可以使用 <code>--dbpath</code> 指令来指定）：</p>
-<pre class=" language-shell"><code class="language-shell">sudo mongd</code></pre>
-<p>过一会儿你就能看到你的 mongodb 运行起来的提示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d36d3a631ee47120.png" alt=""></p>
-<blockquote>
-<p>具体的搭建过程可以参考菜鸟的教程：<a href="http://www.runoob.com/mongodb/mongodb-window-install.html" target="_blank" rel="noopener">http://www.runoob.com/mongodb/mongodb-window-install.html</a></p>
-</blockquote>
-<h1 id="3-基于-Shell-的-CRUD"><a href="#3-基于-Shell-的-CRUD" class="headerlink" title="3 基于 Shell 的 CRUD"></a>3 基于 Shell 的 CRUD</h1><h2 id="3-1-连接实例"><a href="#3-1-连接实例" class="headerlink" title="3.1 连接实例"></a>3.1 连接实例</h2><p>通过上面的步骤我们在系统里运行了一个 mongodb 实例，接下来通过 <code>mongo</code> 命令来连接它：</p>
-<pre class=" language-shell"><code class="language-shell">mongo [options] [db address] [file names]</code></pre>
-<p>由于上面运行的 mongodb 运行在 27017 端口，并且灭有启动安全模式，所以我们也不需要输入用户名和密码就可以直接连接：</p>
-<pre class=" language-shell"><code class="language-shell">mongo 127.0.0.1:27017</code></pre>
-<p>或者通过 <code>--host</code> 和 <code>--port</code> 选项指定主机和端口。一切顺利的话，就进入了 mongoDB <code>shell</code>，<code>shell</code> 会报出一连串权限警告，不过不用担心，这并不会影响之后的操作。在添加授权用户和开启认证后，这些警告会自动消失。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/MongoDB%E3%80%90%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E3%80%91/7896890-d95f2f6b1df42f2d.png" alt=""></p>
-<h2 id="3-2-CRUD-操作"><a href="#3-2-CRUD-操作" class="headerlink" title="3.2 CRUD 操作"></a>3.2 CRUD 操作</h2><p>在进行增删改查操作之前，我们需要先了解一下常用的 <code>shell</code> 命令：</p>
-<ul>
-<li><code>db</code> 显示当前所在数据库，默认为 <code>test</code></li>
-<li><code>show dbs</code> 列出可用数据库</li>
-<li><code>show tables</code> <code>show collections</code> 列出数据库中可用集合</li>
-<li><code>use &lt;database&gt;</code> 用于切换数据库</li>
-</ul>
-<p>mongoDB 预设有两个数据库，admin 和 local，admin 用来存放系统数据，local 用来存放该实例数据，在副本集中，一个实例的 local 数据库对于其它实例是不可见的。使用 use 命令切换数据库：</p>
-<pre class=" language-shell"><code class="language-shell">> use admin
-> use local
-> use newDatabase</code></pre>
-<p>可以 use 一个不存在的数据库，当你存入新数据时，mongoDB 会创建这个数据库：</p>
-<pre class=" language-shell"><code class="language-shell">> use newDatabase
-> db.newCollection.insert({x:1})
-WriteResult({ "nInserted" : 1 })</code></pre>
-<p>以上命令向数据库中插入一个文档，返回 1 表示插入成功，mongoDB 自动创建 newCollection 集合和数据库 newDatabase。下面将对增查改删操作进行一个简单的演示。</p>
-<h3 id="3-2-1-创建（Create）"><a href="#3-2-1-创建（Create）" class="headerlink" title="3.2.1 创建（Create）"></a>3.2.1 创建（Create）</h3><p>MongoDB 提供 <strong>insert</strong> 方法创建新文档：</p>
-<ul>
-<li><code>db.collection.inserOne()</code> 插入单个文档<br>WriteResult({ “nInserted” : 1 })</li>
-<li><code>db.collection.inserMany()</code> 插入多个文档</li>
-<li><code>db.collection.insert()</code> 插入单条或多条文档</li>
-</ul>
-<p>我们接着在刚才新创建的 newDatabase 下面新增数据吧：</p>
-<pre class=" language-shell"><code class="language-shell">db.newCollection.insert({name:"wmyskxz",age:22})</code></pre>
-<p>根据以往经验应该会觉得蛮奇怪的，因为之前在这个集合中插入的数据格式是 <code>{x:1}</code> 的，而这里新增的数据格式确是 <code>{name:&quot;wmyskxz&quot;,age:22}</code> 这个样子的。还记得吗，<strong>文档型数据库</strong>的与传统型的<strong>关系型数据</strong>的区别就是在这里！</p>
-<p>并且要注意，<code>age:22</code> 和 <code>age:&quot;22&quot;</code> 是不一样的哦，前者插入的是一个数值，而后者是字符串，我们可以通过 <code>db.newCollection.find()</code> 命令查看到刚刚插入的文档：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find()
-{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }</code></pre>
-<p>这里有一个神奇的返回，那就是多了一个叫做 <code>_id</code> 的东西，这是 MongoDB 为你自动添加的字段，你也可以自己生成。大部分情况下还是会让 MongoDB 为我们生成，而且默认情况下，该字段是被加上了索引的。</p>
-<h3 id="3-2-2-查找（Read）"><a href="#3-2-2-查找（Read）" class="headerlink" title="3.2.2 查找（Read）"></a>3.2.2 查找（Read）</h3><p>MongoDB 提供 <strong>find</strong> 方法查找文档，<strong>第一个参数为查询条件：</strong></p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find() # 查找所有文档
-{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
-> db.newCollection.find({name:"wmyskxz"}) # 查找 name 为 wmyskxz 的文档
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
-> db.newCollection.find({age:{$gt:20}}) # 查找 age 大于 20 的文档
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }</code></pre>
-<p>上述代码中的$gt对应于大于号&gt;的转义。</p>
-<p><strong>第二个参数可以传入投影文档映射数据：</strong></p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find({age:{$gt:20}},{name:1})
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz" }</code></pre>
-<p>上述命令将查找 <code>age</code> 大于 20 的文档，返回 <code>name</code> 字段，排除其他字段。投影文档中字段为 1 或其他真值表示包含，0 或假值表示排除，可以设置多个字段位为 1 或 0，但不能混合使用。</p>
-<p>为了测试，我们为这个集合弄了一些奇奇怪怪的数据：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find()
-{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
-{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30 }</code></pre>
-<p>然后再来测试：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find({age:{$gt:20}},{name:1,x:1}) 
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz" }
-{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "x" : 1 }
-> db.newCollection.find({age:{$gt:20}},{name:0,x:0}) 
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "age" : 22 }
-{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "age" : 22, "y" : 30 }
-> db.newCollection.find({age:{$gt:20}},{name:0,x:1})
-Error: error: {
-    "ok" : 0,
-    "errmsg" : "Projection cannot have a mix of inclusion and exclusion.",
-    "code" : 2,
-    "codeName" : "BadValue"
-}</code></pre>
-<p>从上面的命令我们就可以把我们的一些想法和上面的结论得以验证，perfect！</p>
-<p>除此之外，还可以通过 <code>count</code>、<code>skip</code>、<code>limit</code> 等指针（Cursor）方法，改变文档查询的执行方式：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find().count()
-3
-> db.newCollection.find().skip(1).limit(10).sort({age:1})
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 22 }
-{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30 }</code></pre>
-<p>上述查找命令跳过 1 个文档，限制输出 10 个，以 <code>age</code> 子段正序排序（大于 0 为正序，小于 0 位反序）输出结果。最后，可以使用 Cursor 方法中的 pretty 方法，提升查询文档的易读性，特别是在查看嵌套的文档和配置文件的时候：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.find().pretty()
-{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
-{
-    "_id" : ObjectId("5cc102fb33907ae66490e46d"),
-    "name" : "wmyskxz",
-    "age" : 22
-}
-{
-    "_id" : ObjectId("5cc108fb33907ae66490e46e"),
-    "name" : "wmyskxz-test",
-    "age" : 22,
-    "x" : 1,
-    "y" : 30
-}</code></pre>
-<h3 id="3-2-3-更新（Update）"><a href="#3-2-3-更新（Update）" class="headerlink" title="3.2.3 更新（Update）"></a>3.2.3 更新（Update）</h3><p>MongoDB 提供 <strong>update</strong> 方法更新文档：</p>
-<ul>
-<li><code>db.collection.updateOne()</code> 更新最多一个符合条件的文档</li>
-<li><code>db.collection.updateMany()</code> 更新所有符合条件的文档</li>
-<li><code>db.collection.replaceOne()</code> 替代最多一个符合条件的文档</li>
-<li><code>db.collection.update()</code> 默认更新一个文档，可配置 multi 参数，跟新多个文档</li>
-</ul>
-<p>以 <code>update()</code> 方法为例。其格式：</p>
-<pre class=" language-shell"><code class="language-shell">> db.collection.update(
-    <query>,
-    <update>,
-    {
-        upsert: <boolean>,
-        multi: <boolean>
-    }
-)</code></pre>
-<p>各参数意义：</p>
-<ul>
-<li>query 为查询条件</li>
-<li>update 为修改的文档</li>
-<li>upsert 为真，查询为空时插入文档</li>
-<li>multi 为真，更新所有符合条件的文档</li>
-</ul>
-<p>下面我们测试把 <code>name</code> 字段为 <code>wmyskxz</code> 的文档更新一下试试：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({name:"wmyskxz"},{name:"wmyskxz",age:30})
-WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })</code></pre>
-<p>要注意的是，如果更新文档只传入 <code>age</code> 字段，那么文档会被更新为<code>{age: 30}</code>，而不是<code>{name:&quot;wmyskxz&quot;, age:30}</code>。要避免文档被覆盖，需要用到 <code>$set</code> 指令，<code>$set</code> 仅替换或添加指定字段：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({name:"wmyskxz"},{$set:{age:30}})</code></pre>
-<p>如果要在查询的文档不存在的时候插入文档，要把 upsert 参数设置真值：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({name:"wmyskxz11"},{$set:{age:30}},{upsert:true})</code></pre>
-<p>update 方法默认情况只更新一个文档，如果要更新符合条件的所有文档，要把 multi 设为真值，并使用 <code>$set</code> 指令：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.update({age:{$gt:20}},{$set:{test:"A"}},{multi:true})
-WriteResult({ "nMatched" : 3, "nUpserted" : 0, "nModified" : 3 })
-> db.newCollection.find()
-{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
-{ "_id" : ObjectId("5cc102fb33907ae66490e46d"), "name" : "wmyskxz", "age" : 30, "test" : "A" }
-{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30, "test" : "A" }
-{ "_id" : ObjectId("5cc110148d0a578f03d43e81"), "name" : "wmyskxz11", "age" : 30, "test" : "A" }</code></pre>
-<h3 id="3-2-4-删除（Delete）"><a href="#3-2-4-删除（Delete）" class="headerlink" title="3.2.4 删除（Delete）"></a>3.2.4 删除（Delete）</h3><p>MongoDB 提供了 <strong>delete</strong> 方法删除文档：</p>
-<ul>
-<li><code>db.collection.deleteOne()</code> 删除最多一个符合条件的文档</li>
-<li><code>db.collection.deleteMany()</code> 删除所有符合条件的文档</li>
-<li><code>db.collection.remove()</code> 删除一个或多个文档</li>
-</ul>
-<p>以 remove 方法为例：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.remove({name:"wmyskxz11"})
-> db.newCollection.remove({age:{$gt:20}},{justOne:true})
-> db.newCollection.find()
-{ "_id" : ObjectId("5cc1026533907ae66490e46c"), "x" : 1 }
-{ "_id" : ObjectId("5cc108fb33907ae66490e46e"), "name" : "wmyskxz-test", "age" : 22, "x" : 1, "y" : 30, "test" : "A" }</code></pre>
-<p>MongoDB 提供了 drop 方法删除集合，返回 true 表面删除集合成功：</p>
-<pre class=" language-shell"><code class="language-shell">> db.newCollection.drop()</code></pre>
-<h3 id="3-2-5-小结"><a href="#3-2-5-小结" class="headerlink" title="3.2.5 小结"></a>3.2.5 小结</h3><p>相比传统关系型数据库，MongoDB 的 CURD 操作更像是编写程序，更符合开发人员的直觉，不过 MongoDB 同样也支持 SQL 语言。MongoDB 的 CURD 引擎配合索引技术、数据聚合技术和 JavaScript 引擎，赋予 MongoDB 用户更强大的操纵数据的能力。</p>
-<blockquote>
-<p>参考文章：<a href="https://segmentfault.com/a/1190000010556670" target="_blank" rel="noopener">简明 MongoDB 入门教程 - https://segmentfault.com/a/1190000010556670</a></p>
-</blockquote>
-<h1 id="4-MongoDB-数据模型的一些讨论"><a href="#4-MongoDB-数据模型的一些讨论" class="headerlink" title="4 MongoDB 数据模型的一些讨论"></a>4 MongoDB 数据模型的一些讨论</h1><blockquote>
-<p>前置申明：这一部分基于以下链接整理 <a href="https://github.com/justinyhuang/the-little-mongodb-book-cn/blob/master/mongodb.md#%E8%AE%B8%E5%8F%AF%E8%AF%81" target="_blank" rel="noopener">https://github.com/justinyhuang/the-little-mongodb-book-cn/blob/master/mongodb.md#%E8%AE%B8%E5%8F%AF%E8%AF%81</a></p>
-</blockquote>
-<p>这是一个抽象的话题，与大多数NoSQL方案相比,在建模方面,面向文档的数据库算是和关系数据库相差最小的。这些差别是很小，但是并不是说不重要。</p>
-<h2 id="4-1-没有连接（Join）"><a href="#4-1-没有连接（Join）" class="headerlink" title="4.1 没有连接（Join）"></a>4.1 没有连接（Join）</h2><p>您要接受的第一个也是最基本的一个差别，就是 <strong>MongoDB 没有连接（join）</strong>。我不知道MongoDB不支持某些类型连接句法的具体原因，但是我知道一般而言人们认为连接是不可扩展的。也就是说，<strong>一旦开始横向分割数据，最终不可避免的就是在客户端（应用程序服务器）使用连接</strong>。且不论MongoDB为什么不支持连接，事实是数据是有关系的，可是MongoDB不支持连接。（译者：这里的关系指的是不同的数据之间是有关联的，对于没有关系的数据，就完全不需要连接。）</p>
-<p>为了在没有连接的MongoDB中生存下去，在没有其他帮助的情况下，我们必须在自己的应用程序中实现连接。</p>
-<p>基本上我们需要<strong>用第二次查询</strong>去找到相关的数据。找到并组织这些数据相当于在关系数据库中声明一个外来的键。现在先别管什么独角兽了，我们来看看我们的员工。首先我们创建一个员工的数据（这次我告诉您具体的_id值，这样我们的例子就是一样的了）：</p>
-<pre class=" language-shell"><code class="language-shell">db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d730"), name: 'Leto'})</code></pre>
-<p>然后我们再加入几个员工并把 <code>Leto</code> 设成他们的老板：</p>
-<pre class=" language-shell"><code class="language-shell">db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d731"), name: 'Duncan', manager: ObjectId("4d85c7039ab0fd70a117d730")});
-db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', manager: ObjectId("4d85c7039ab0fd70a117d730")});</code></pre>
-<p><em>（有必要再强调一下，_id可以是任何的唯一的值。在实际工作中你很可能会用到ObjectId， 所以我们在这里也使用它）</em></p>
-<p>显然，要找到Leto的所有员工，只要执行：</p>
-<pre class=" language-shell"><code class="language-shell">db.employees.find({manager: ObjectId("4d85c7039ab0fd70a117d730")})</code></pre>
-<p>没什么了不起的。在最糟糕的情况下，为弥补连接的缺失需要做的只是再多查询一次而已，该查询很可能是经过索引了的。</p>
-<h3 id="4-1-1-数组和嵌入文档（Embedded-Documents）"><a href="#4-1-1-数组和嵌入文档（Embedded-Documents）" class="headerlink" title="4.1.1 数组和嵌入文档（Embedded Documents）"></a>4.1.1 数组和嵌入文档（Embedded Documents）</h3><p>MongoDB 没有连接并不意味着它没有其他的优势。还记得我们曾说过 MongoDB 支持数组并把它当成文档中的一级对象吗？当处理多对一或是多对多关系的时候，这一特性就显得非常好用了。用一个简单的例子来说明，如果一个员工有两个经理，我们可以把这个关系储存在一个数组当中：</p>
-<pre class=" language-shell"><code class="language-shell">({name: 'Siona', manager: [ObjectId("4d85c7039ab0fd70a117d730"), ObjectId("4d85c7039ab0fd70a117d732")] })</code></pre>
-<p>需要注意的是，在这种情况下，有些文档中的 <code>manager</code> 可能是一个向量，而其他的却是数组。在两种情况下，前面的 <code>find</code> 还是一样可以工作：</p>
-<pre class=" language-shell"><code class="language-shell">db.employees.find({manager: ObjectId("4d85c7039ab0fd70a117d730")})</code></pre>
-<p>很快您就会发现数组中的值比起多对多的连接表（join-table）来说要更容易处理。</p>
-<p>除了数组，MongoDB 还支持嵌入文档。尝试插入含有内嵌文档的文档，像这样：</p>
-<pre class=" language-shell"><code class="language-shell">db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d734"), name: 'Ghanima', family: {mother: 'Chani', father: 'Paul', brother: ObjectId("4d85c7039ab0fd70a117d730")}})</code></pre>
-<p>也许您会这样想，确实也可以这样做：嵌入文档可以用‘.’符号来查询：</p>
-<pre class=" language-shell"><code class="language-shell">db.employees.find({'family.mother': 'Chani'})</code></pre>
-<p>就这样，我们简要地介绍了嵌入文档适用的场合以及您应该怎样使用它。</p>
-<h3 id="4-1-2-DBRef"><a href="#4-1-2-DBRef" class="headerlink" title="4.1.2 DBRef"></a>4.1.2 DBRef</h3><p>MongoDB 支持一个叫做 DBRef 的功能，许多 MongoDB 的驱动都提供对这一功能的支持。当驱动遇到一个 <code>DBRef</code> 时它会把当中引用的文档读取出来。<code>DBRef</code> 包含了所引用的文档的 ID 和所在的集合。它通常专门用于这样的场合：相同集合中的文档需要引用另外一个集合中的不同文档。例如，文档 1 的 <code>DBRef</code> 可能指向 <code>managers</code> 中的文档，而文档 2 中的 <code>DBRef</code> 可能指向 <code>employees</code> 中的文档。</p>
-<h3 id="4-1-3-范规范化（Denormalization）"><a href="#4-1-3-范规范化（Denormalization）" class="headerlink" title="4.1.3 范规范化（Denormalization）"></a>4.1.3 范规范化（Denormalization）</h3><p>代替连接的另一种方法就是反规范化数据。在过去，反规范化是为性能敏感代码所设，或者是需要数据快照（例如审计日志）的时候才应用的。然而，随着NoSQL的日渐普及，有许多这样的数据库并不提供连接操作，于是作为规范建模的一部分，反规范化就越来越常见了。这样说并不是说您就需要为每个文档中的每一条信息创建副本。与此相反，与其在设计的时候被复制数据的担忧牵着走，还不如按照不同的信息应该归属于相应的文档这一思路来对数据建模。</p>
-<p>比如说，假设您在编写一个论坛的应用程序。把一个 <code>user</code> 和一篇 <code>post</code> 关联起来的传统方法是在 <code>posts</code> 中加入一个 <code>userid</code> 的列。这样的模型中，如果要显示 <code>posts</code> 就不得不读取（连接）<code>users</code>。一种简单可行的替代方案就是直接把 <code>name</code> 和 <code>userid</code> 存储在 <code>post</code> 中。您甚至可以用嵌入文档来实现，比如说 <code>user: {id: ObjectId(&#39;Something&#39;), name: &#39;Leto&#39;}</code>。当然，如果允许用户更改他们的用户名，那么每当有用户名修改的时候，您就需要去更新所有的文档了（这需要一个额外的查询）。</p>
-<p>对一些人来说改用这种方法并非易事。甚至在一些情况下根本行不通。不过别不敢去尝试这种方法：有时候它不仅可行，而且就是正确的方法。</p>
-<h3 id="4-1-4-应该选择哪一种？"><a href="#4-1-4-应该选择哪一种？" class="headerlink" title="4.1.4 应该选择哪一种？"></a>4.1.4 应该选择哪一种？</h3><p>当处理一对多或是多对多问题的时候，采用id数组往往都是正确的策略。可以这么说，<code>DBRef</code> 并不是那么常用，虽然您完全可以试着采用这项技术。这使得新手们在面临选择嵌入文档还是手工引用（manual reference）时犹豫不决。</p>
-<p>首先，要知道目前一个单独的文档的大小限制是 4MB，虽然已经比较大了。了解了这个限制可以为如何使用文档提供一些思路。目前看来多数的开发者还是大量地依赖手工引用来维护数据的关系。嵌入文档经常被使用，but mostly for small pieces of data which we want to always pull with the parent document。一个真实的例子，我把 <code>accounts</code> 文档嵌入存储在用户的文档中，就像这样：</p>
-<pre class=" language-shell"><code class="language-shell">db.users.insert({name: 'leto', email: 'leto@dune.gov', account: {allowed_gholas: 5, spice_ration: 10}})</code></pre>
-<p>这不是说您就应该低估嵌入文档的作用，也不是说应该把它当成是鲜少用到的工具并直接忽略。将数据模型直接映射到目标对象上可以使问题变得更加简单，也往往因此而不再需要连接操作。当您知道 MongoDB 允许对嵌入文档的域进行查询并做索引后，这个说法就尤其显得正确了。</p>
-<h2 id="4-2-集合：少一些还是多一些？"><a href="#4-2-集合：少一些还是多一些？" class="headerlink" title="4.2 集合：少一些还是多一些？"></a>4.2 集合：少一些还是多一些？</h2><p>既然集合不强制使用模式，那么就完全有可能用一个单一的集合以及一个不匹配的文档构建一个系统。以我所见过的情况，大部分的 MongoDB 系统都像您在关系数据库中所见到的那样布局。换句话说，如果在关系数据库中会用表，那么很有可能在 MongoDB 中就要用集合（多对多连接表在这里是一个不可忽视的例外）</p>
-<p>当把嵌入文档引进来的时候，讨论就会变得更加有意思了。最常见的例子就是博客系统。是应该分别维护 <code>posts</code> 和 <code>comments</code> 两个集合，还是在每个 <code>post</code> 中嵌入一个 <code>comments</code> 数组？暂且不考虑那个 4MB 的限制（哈姆雷特所有的评论也不超过200KB，谁的博客会比他更受欢迎？），大多数的开发者还是倾向于把数据划分开。因为这样既简洁又明确。</p>
-<p>没有什么硬性的规定（呃，除了 4MB 的限制）。做了不同的尝试之后您就可以凭感觉知道怎样做是对的了。 </p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>至此已经对 MongoDB 有了一个基本的了解和入门，但是要运用在实际的项目中仍然有许多实践需要自己去完成</p>
-<hr>
-<p>按照惯例黏一个尾巴：</p>
-<blockquote>
-<p>欢迎转载，转载请注明出处！<br>简书ID：<a href="https://www.jianshu.com/u/a40d61a49221" target="_blank" rel="noopener">@我没有三颗心脏</a><br>github：<a href="https://github.com/wmyskxz/" target="_blank" rel="noopener">wmyskxz</a><br>欢迎关注公众微信号：wmyskxz<br>分享自己的学习 &amp; 学习资料 &amp; 生活<br>想要交流的朋友也可以加qq群：3382693</p>
-</blockquote>
-
       
     </div>
     
+      
+        <a class= "readmore" href="/2019/04/25/mongodb-kuai-su-ru-men/">
+          阅读全文 <i class="fas fa-chevron-right"></i>
+        </a>
       
     
   </section>
@@ -1772,84 +773,64 @@ db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', m
       <ul class="entry navigation">
         
           <li><a class="flat-box"
-            title="/categories/Java-Web/" href="/categories/Java-Web/"
-            id="categoriesJava-Web"
-            ><div class='name'>Java Web</div><div class='badge'>(6)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/Java-Web/Spring/" href="/categories/Java-Web/Spring/"
-            id="categoriesJava-WebSpring"
-            ><div class='name'>Spring</div><div class='badge'>(3)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/Java-Web/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" href="/categories/Java-Web/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
-            id="categoriesJava-WebE5ADA6E4B9A0E7AC94E8AEB0"
-            ><div class='name'>学习笔记</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
             title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/"
             id="categoriesJavaWebE59FBAE7A180"
-            ><div class='name'>JavaWeb基础</div><div class='badge'>(23)</div></a></li>
+            ><div class='name'>JavaWeb基础</div><div class='badge'>(31)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/MyBatis/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/MyBatis/"
+            id="categoriesJavaWebE59FBAE7A180MyBatis"
+            ><div class='name'>MyBatis</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/"
             id="categoriesJavaWebE59FBAE7A180SSM"
-            ><div class='name'>SSM</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SSM/%E9%A1%B9%E7%9B%AE/"
-            id="categoriesJavaWebE59FBAE7A180SSME9A1B9E79BAE"
-            ><div class='name'>项目</div><div class='badge'>(4)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring-MVC/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring-MVC/"
-            id="categoriesJavaWebE59FBAE7A180Spring-MVC"
-            ><div class='name'>Spring MVC</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>SSM</div><div class='badge'>(6)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/Spring/"
             id="categoriesJavaWebE59FBAE7A180Spring"
-            ><div class='name'>Spring</div><div class='badge'>(3)</div></a></li>
+            ><div class='name'>Spring</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SpringBoot/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SpringBoot/"
             id="categoriesJavaWebE59FBAE7A180SpringBoot"
-            ><div class='name'>SpringBoot</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>SpringBoot</div><div class='badge'>(5)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/%E9%A1%B9%E7%9B%AE/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/%E9%A1%B9%E7%9B%AE/"
-            id="categoriesJavaWebE59FBAE7A180E9A1B9E79BAE"
-            ><div class='name'>项目</div><div class='badge'>(1)</div></a></li>
+            title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SpringMVC/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/SpringMVC/"
+            id="categoriesJavaWebE59FBAE7A180SpringMVC"
+            ><div class='name'>SpringMVC</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/JavaWeb%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E5%BA%93/" href="/categories/JavaWeb%E5%9F%BA%E7%A1%80/%E6%95%B0%E6%8D%AE%E5%BA%93/"
+            id="categoriesJavaWebE59FBAE7A180E695B0E68DAEE5BA93"
+            ><div class='name'>数据库</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/"
             id="categoriesJavaWebE8BF9BE998B6"
-            ><div class='name'>JavaWeb进阶</div><div class='badge'>(14)</div></a></li>
+            ><div class='name'>JavaWeb进阶</div><div class='badge'>(21)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/"
-            id="categoriesJavaWebE8BF9BE998B6Spring-Boot"
-            ><div class='name'>Spring Boot</div><div class='badge'>(3)</div></a></li>
+            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Docker/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Docker/"
+            id="categoriesJavaWebE8BF9BE998B6Docker"
+            ><div class='name'>Docker</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/%E9%A1%B9%E7%9B%AE/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/Spring-Boot/%E9%A1%B9%E7%9B%AE/"
-            id="categoriesJavaWebE8BF9BE998B6Spring-BootE9A1B9E79BAE"
-            ><div class='name'>项目</div><div class='badge'>(1)</div></a></li>
+            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/SpringBoot/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/SpringBoot/"
+            id="categoriesJavaWebE8BF9BE998B6SpringBoot"
+            ><div class='name'>SpringBoot</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/SpringCloud/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/SpringCloud/"
+            id="categoriesJavaWebE8BF9BE998B6SpringCloud"
+            ><div class='name'>SpringCloud</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/"
             id="categoriesJavaWebE8BF9BE998B6E4B8ADE997B4E4BBB6"
-            ><div class='name'>中间件</div><div class='badge'>(5)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E5%89%8D%E7%AB%AF/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E5%89%8D%E7%AB%AF/"
-            id="categoriesJavaWebE8BF9BE998B6E5898DE7ABAF"
-            ><div class='name'>前端</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E5%89%8D%E7%AB%AF/Spring-Boot/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E5%89%8D%E7%AB%AF/Spring-Boot/"
-            id="categoriesJavaWebE8BF9BE998B6E5898DE7ABAFSpring-Boot"
-            ><div class='name'>Spring Boot</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>中间件</div><div class='badge'>(15)</div></a></li>
         
           <li><a class="flat-box child"
             title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E5%BE%AE%E6%9C%8D%E5%8A%A1/"
@@ -1857,94 +838,39 @@ db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', m
             ><div class='name'>微服务</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/"
-            id="categoriesJavaWebE8BF9BE998B6E69EB6E69E84E4B98BE8B7AF"
-            ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E9%A1%B9%E7%9B%AE/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E9%A1%B9%E7%9B%AE/"
-            id="categoriesJavaWebE8BF9BE998B6E9A1B9E79BAE"
-            ><div class='name'>项目</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E9%A1%B9%E7%9B%AE/Spring-Boot/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E9%A1%B9%E7%9B%AE/Spring-Boot/"
-            id="categoriesJavaWebE8BF9BE998B6E9A1B9E79BAESpring-Boot"
-            ><div class='name'>Spring Boot</div><div class='badge'>(1)</div></a></li>
+            title="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E6%95%B0%E6%8D%AE%E5%BA%93/" href="/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E6%95%B0%E6%8D%AE%E5%BA%93/"
+            id="categoriesJavaWebE8BF9BE998B6E695B0E68DAEE5BA93"
+            ><div class='name'>数据库</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Java%E5%9F%BA%E7%A1%80/" href="/categories/Java%E5%9F%BA%E7%A1%80/"
             id="categoriesJavaE59FBAE7A180"
-            ><div class='name'>Java基础</div><div class='badge'>(15)</div></a></li>
+            ><div class='name'>Java基础</div><div class='badge'>(30)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/Java%E5%9F%BA%E7%A1%80/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/"
-            id="categoriesJavaE59FBAE7A180E5B9B6E58F91E7BC96E7A88B"
-            ><div class='name'>并发编程</div><div class='badge'>(1)</div></a></li>
+            title="/categories/Java%E5%9F%BA%E7%A1%80/IO/" href="/categories/Java%E5%9F%BA%E7%A1%80/IO/"
+            id="categoriesJavaE59FBAE7A180IO"
+            ><div class='name'>IO</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95/" href="/categories/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95/"
-            id="categoriesJavaE59FBAE7A180E99DA2E8AF95"
-            ><div class='name'>面试</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/MoreThanJava/" href="/categories/MoreThanJava/"
-            id="categoriesMoreThanJava"
-            ><div class='name'>MoreThanJava</div><div class='badge'>(15)</div></a></li>
+            title="/categories/Java%E5%9F%BA%E7%A1%80/%E5%B9%B6%E5%8F%91/" href="/categories/Java%E5%9F%BA%E7%A1%80/%E5%B9%B6%E5%8F%91/"
+            id="categoriesJavaE59FBAE7A180E5B9B6E58F91"
+            ><div class='name'>并发</div><div class='badge'>(3)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/MoreThanJava/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
-            id="categoriesMoreThanJavaE5A49AE7BABFE7A88B"
-            ><div class='name'>多线程</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/MoreThanJava/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" href="/categories/MoreThanJava/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/"
-            id="categoriesMoreThanJavaE79FA5E4B98EE997AEE9A298"
-            ><div class='name'>知乎问题</div><div class='badge'>(1)</div></a></li>
+            title="/categories/Java%E5%9F%BA%E7%A1%80/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/Java%E5%9F%BA%E7%A1%80/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
+            id="categoriesJavaE59FBAE7A180E78988E69CACE789B9E680A7"
+            ><div class='name'>版本特性</div><div class='badge'>(13)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/Python/" href="/categories/Python/"
             id="categoriesPython"
             ><div class='name'>Python</div><div class='badge'>(1)</div></a></li>
         
-          <li><a class="flat-box child"
-            title="/categories/Python/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" href="/categories/Python/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/"
-            id="categoriesPythonE68782E4B880E782B9E7B3BBE58897"
-            ><div class='name'>懂一点系列</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Redis/" href="/categories/Redis/"
-            id="categoriesRedis"
-            ><div class='name'>Redis</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6/" href="/categories/Redis/%E4%B8%AD%E9%97%B4%E4%BB%B6/"
-            id="categoriesRedisE4B8ADE997B4E4BBB6"
-            ><div class='name'>中间件</div><div class='badge'>(1)</div></a></li>
-        
           <li><a class="flat-box"
             title="/categories/Ruby/" href="/categories/Ruby/"
             id="categoriesRuby"
-            ><div class='name'>Ruby</div><div class='badge'>(2)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/Spring-Cloud/" href="/categories/Spring-Cloud/"
-            id="categoriesSpring-Cloud"
-            ><div class='name'>Spring Cloud</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/"
-            id="categoriesE4B8ADE997B4E4BBB6"
-            ><div class='name'>中间件</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box child"
-            title="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/"
-            id="categoriesE4B8ADE997B4E4BBB6JavaWebE8BF9BE998B6"
-            ><div class='name'>JavaWeb进阶</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%9Awmyskxz/" href="/categories/%E5%85%AC%E4%BC%97%E5%8F%B7%EF%BC%9Awmyskxz/"
-            id="categoriesE585ACE4BC97E58FB7EFBC9Awmyskxz"
-            ><div class='name'>公众号：wmyskxz</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>Ruby</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E5%89%8D%E7%AB%AF/" href="/categories/%E5%89%8D%E7%AB%AF/"
@@ -1952,19 +878,19 @@ db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', m
             ><div class='name'>前端</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/%E5%89%8D%E7%AB%AF/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" href="/categories/%E5%89%8D%E7%AB%AF/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/"
-            id="categoriesE5898DE7ABAFE68782E4B880E782B9E7B3BBE58897"
-            ><div class='name'>懂一点系列</div><div class='badge'>(1)</div></a></li>
+            title="/categories/%E5%89%8D%E7%AB%AF/React/" href="/categories/%E5%89%8D%E7%AB%AF/React/"
+            id="categoriesE5898DE7ABAFReact"
+            ><div class='name'>React</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box child"
+            title="/categories/%E5%89%8D%E7%AB%AF/Vue/" href="/categories/%E5%89%8D%E7%AB%AF/Vue/"
+            id="categoriesE5898DE7ABAFVue"
+            ><div class='name'>Vue</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" href="/categories/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/"
             id="categoriesE5969CE6ACA2E79A84E4B889E8A782"
             ><div class='name'>喜欢的三观</div><div class='badge'>(4)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"
-            id="categoriesE5A49AE7BABFE7A88B"
-            ><div class='name'>多线程</div><div class='badge'>(1)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" href="/categories/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/"
@@ -1974,67 +900,52 @@ db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', m
           <li><a class="flat-box"
             title="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"
             id="categoriesE5ADA6E4B9A0E7AC94E8AEB0"
-            ><div class='name'>学习笔记</div><div class='badge'>(6)</div></a></li>
+            ><div class='name'>学习笔记</div><div class='badge'>(1)</div></a></li>
         
-          <li><a class="flat-box child"
-            title="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Java%E8%BF%9B%E9%98%B6/" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Java%E8%BF%9B%E9%98%B6/"
-            id="categoriesE5ADA6E4B9A0E7AC94E8AEB0JavaE8BF9BE998B6"
-            ><div class='name'>Java进阶</div><div class='badge'>(3)</div></a></li>
+          <li><a class="flat-box"
+            title="/categories/%E5%BF%85%E5%A4%87%E7%9F%A5%E8%AF%86%E7%82%B9/" href="/categories/%E5%BF%85%E5%A4%87%E7%9F%A5%E8%AF%86%E7%82%B9/"
+            id="categoriesE5BF85E5A487E79FA5E8AF86E782B9"
+            ><div class='name'>必备知识点</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"
             id="categoriesE695B0E68DAEE7BB93E69E84E4B88EE7AE97E6B395"
             ><div class='name'>数据结构与算法</div><div class='badge'>(4)</div></a></li>
         
-          <li><a class="flat-box child"
-            title="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%9D%A2%E8%AF%95/" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/%E9%9D%A2%E8%AF%95/"
-            id="categoriesE695B0E68DAEE7BB93E69E84E4B88EE7AE97E6B395E99DA2E8AF95"
-            ><div class='name'>面试</div><div class='badge'>(4)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" href="/categories/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/"
-            id="categoriesE69C89E8B6A3E99B86E4B8ADE890A5"
-            ><div class='name'>有趣集中营</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" href="/categories/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/"
-            id="categoriesE69EB6E69E84E4B98BE8B7AF"
-            ><div class='name'>架构之路</div><div class='badge'>(1)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" href="/categories/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/"
-            id="categoriesE78988E69CACE789B9E680A7"
-            ><div class='name'>版本特性</div><div class='badge'>(7)</div></a></li>
-        
-          <li><a class="flat-box"
-            title="/categories/%E7%94%9F%E6%B4%BB/" href="/categories/%E7%94%9F%E6%B4%BB/"
-            id="categoriesE7949FE6B4BB"
-            ><div class='name'>生活</div><div class='badge'>(2)</div></a></li>
-        
           <li><a class="flat-box"
             title="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" href="/categories/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/"
             id="categoriesE79FA5E4B98EE997AEE7AD94"
-            ><div class='name'>知乎问答</div><div class='badge'>(1)</div></a></li>
+            ><div class='name'>知乎问答</div><div class='badge'>(2)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/"
             id="categoriesE7BC96E7A88BE4BABAE7949F"
-            ><div class='name'>编程人生</div><div class='badge'>(5)</div></a></li>
+            ><div class='name'>编程人生</div><div class='badge'>(6)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"
+            id="categoriesE8AEBEE8AEA1E6A8A1E5BC8F"
+            ><div class='name'>设计模式</div><div class='badge'>(1)</div></a></li>
+        
+          <li><a class="flat-box"
+            title="/categories/%E8%AF%BB%E4%B9%A6/" href="/categories/%E8%AF%BB%E4%B9%A6/"
+            id="categoriesE8AFBBE4B9A6"
+            ><div class='name'>读书</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box child"
-            title="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/%E9%9D%A2%E8%AF%95/" href="/categories/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/%E9%9D%A2%E8%AF%95/"
-            id="categoriesE7BC96E7A88BE4BABAE7949FE99DA2E8AF95"
-            ><div class='name'>面试</div><div class='badge'>(1)</div></a></li>
+            title="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF%E5%90%91/" href="/categories/%E8%AF%BB%E4%B9%A6/%E6%8A%80%E6%9C%AF%E5%90%91/"
+            id="categoriesE8AFBBE4B9A6E68A80E69CAFE59091"
+            ><div class='name'>技术向</div><div class='badge'>(7)</div></a></li>
         
           <li><a class="flat-box"
             title="/categories/%E9%9D%A2%E8%AF%95/" href="/categories/%E9%9D%A2%E8%AF%95/"
             id="categoriesE99DA2E8AF95"
-            ><div class='name'>面试</div><div class='badge'>(8)</div></a></li>
+            ><div class='name'>面试</div><div class='badge'>(10)</div></a></li>
         
-          <li><a class="flat-box child"
-            title="/categories/%E9%9D%A2%E8%AF%95/%E4%B8%AD%E9%97%B4%E4%BB%B6/" href="/categories/%E9%9D%A2%E8%AF%95/%E4%B8%AD%E9%97%B4%E4%BB%B6/"
-            id="categoriesE99DA2E8AF95E4B8ADE997B4E4BBB6"
-            ><div class='name'>中间件</div><div class='badge'>(1)</div></a></li>
+          <li><a class="flat-box"
+            title="/categories/%E9%A1%B9%E7%9B%AE/" href="/categories/%E9%A1%B9%E7%9B%AE/"
+            id="categoriesE9A1B9E79BAE"
+            ><div class='name'>项目</div><div class='badge'>(1)</div></a></li>
         
       </ul>
     </div>
@@ -2058,7 +969,7 @@ db.employees.insert({_id: ObjectId("4d85c7039ab0fd70a117d732"), name: 'Moneo', m
 
 
     <div class='content'>
-      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/Elasticsearch/" style="font-size: 14px; color: #999">Elasticsearch</a> <a href="/tags/Java-Web/" style="font-size: 16.67px; color: #878787">Java Web</a> <a href="/tags/Java8/" style="font-size: 14px; color: #999">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 23.33px; color: #5a5a5a">JavaWeb基础</a> <a href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" style="font-size: 22.67px; color: #5e5e5e">JavaWeb进阶</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 22px; color: #636363">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 20.67px; color: #6c6c6c">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.33px; color: #909090">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 20px; color: #707070">Redis</a> <a href="/tags/Ruby/" style="font-size: 14.67px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 16.67px; color: #878787">SSM</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 17.33px; color: #828282">Spring</a> <a href="/tags/Spring-Boot/" style="font-size: 17.33px; color: #828282">Spring Boot</a> <a href="/tags/Spring-Cloud/" style="font-size: 14px; color: #999">Spring Cloud</a> <a href="/tags/Spring-MVC/" style="font-size: 14px; color: #999">Spring MVC</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 21.33px; color: #676767">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 14.67px; color: #949494">代码规范</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.33px; color: #909090">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16px; color: #8b8b8b">喜欢的三观</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 14.67px; color: #949494">多线程</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.33px; color: #909090">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 17.33px; color: #828282">学习笔记</a> <a href="/tags/%E5%AF%BC%E8%88%AA/" style="font-size: 14px; color: #999">导航</a> <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" style="font-size: 14.67px; color: #949494">并发编程</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14px; color: #999">微服务</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.67px; color: #797979">总结</a> <a href="/tags/%E6%87%82%E4%B8%80%E7%82%B9%E7%B3%BB%E5%88%97/" style="font-size: 14.67px; color: #949494">懂一点系列</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16px; color: #8b8b8b">数据结构与算法</a> <a href="/tags/%E6%9C%89%E8%B6%A3%E9%9B%86%E4%B8%AD%E8%90%A5/" style="font-size: 14px; color: #999">有趣集中营</a> <a href="/tags/%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/" style="font-size: 14px; color: #999">架构之路</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 18px; color: #7e7e7e">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14px; color: #999">知乎问答</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E9%A2%98/" style="font-size: 14px; color: #999">知乎问题</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 16.67px; color: #878787">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 14px; color: #999">翻译</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14px; color: #999">翻译文</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 21.33px; color: #676767">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19.33px; color: #757575">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
+      <a href="/tags/Docker/" style="font-size: 14px; color: #999">Docker</a> <a href="/tags/IO/" style="font-size: 14px; color: #999">IO</a> <a href="/tags/JSON/" style="font-size: 14px; color: #999">JSON</a> <a href="/tags/JSP/" style="font-size: 14px; color: #999">JSP</a> <a href="/tags/Java8/" style="font-size: 16.86px; color: #868686">Java8</a> <a href="/tags/JavaWeb%E5%9F%BA%E7%A1%80/" style="font-size: 14px; color: #999">JavaWeb基础</a> <a href="/tags/Java%E5%9F%BA%E7%A1%80/" style="font-size: 17.57px; color: #818181">Java基础</a> <a href="/tags/Kafka/" style="font-size: 14px; color: #999">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 14px; color: #999">MongoDB</a> <a href="/tags/MoreThanJava/" style="font-size: 21.14px; color: #686868">MoreThanJava</a> <a href="/tags/MyBatis/" style="font-size: 15.43px; color: #8f8f8f">MyBatis</a> <a href="/tags/Python/" style="font-size: 14px; color: #999">Python</a> <a href="/tags/React/" style="font-size: 14px; color: #999">React</a> <a href="/tags/Redis/" style="font-size: 19.71px; color: #727272">Redis</a> <a href="/tags/Restful/" style="font-size: 14px; color: #999">Restful</a> <a href="/tags/Ruby/" style="font-size: 14.71px; color: #949494">Ruby</a> <a href="/tags/SSM/" style="font-size: 15.43px; color: #8f8f8f">SSM</a> <a href="/tags/Servlet/" style="font-size: 14.71px; color: #949494">Servlet</a> <a href="/tags/Shiro/" style="font-size: 14px; color: #999">Shiro</a> <a href="/tags/Spring/" style="font-size: 18.29px; color: #7c7c7c">Spring</a> <a href="/tags/SpringBoot/" style="font-size: 17.57px; color: #818181">SpringBoot</a> <a href="/tags/SpringCloud/" style="font-size: 14px; color: #999">SpringCloud</a> <a href="/tags/SpringMVC/" style="font-size: 14px; color: #999">SpringMVC</a> <a href="/tags/Sprint/" style="font-size: 14px; color: #999">Sprint</a> <a href="/tags/Thymeleaf/" style="font-size: 14px; color: #999">Thymeleaf</a> <a href="/tags/Vue/" style="font-size: 14px; color: #999">Vue</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 14px; color: #999">中间件</a> <a href="/tags/%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83/" style="font-size: 16.14px; color: #8a8a8a">代码规范</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 14px; color: #999">分布式</a> <a href="/tags/%E5%88%86%E9%A1%B5/" style="font-size: 14px; color: #999">分页</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15.43px; color: #8f8f8f">前端</a> <a href="/tags/%E5%8E%9F%E5%88%9B/" style="font-size: 24px; color: #555">原创</a> <a href="/tags/%E5%96%9C%E6%AC%A2%E7%9A%84%E4%B8%89%E8%A7%82/" style="font-size: 16.14px; color: #8a8a8a">喜欢的三观</a> <a href="/tags/%E5%A5%BD%E5%A5%87%E6%98%9F%E4%BA%BA/" style="font-size: 15.43px; color: #8f8f8f">好奇星人</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 14.71px; color: #949494">学习笔记</a> <a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 16.14px; color: #8a8a8a">并发</a> <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" style="font-size: 14.71px; color: #949494">微服务</a> <a href="/tags/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/" style="font-size: 22.57px; color: #5f5f5f">快速入门</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 18.29px; color: #7c7c7c">总结</a> <a href="/tags/%E6%8A%80%E5%B7%A7/" style="font-size: 16.14px; color: #8a8a8a">技巧</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 21.86px; color: #646464">数据库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" style="font-size: 16.14px; color: #8a8a8a">数据结构与算法</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 14px; color: #999">消息队列</a> <a href="/tags/%E7%89%88%E6%9C%AC%E7%89%B9%E6%80%A7/" style="font-size: 20.43px; color: #6d6d6d">版本特性</a> <a href="/tags/%E7%9F%A5%E4%B9%8E%E9%97%AE%E7%AD%94/" style="font-size: 14.71px; color: #949494">知乎问答</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%BA%BA%E7%94%9F/" style="font-size: 17.57px; color: #818181">编程人生</a> <a href="/tags/%E7%BF%BB%E8%AF%91%E6%96%87/" style="font-size: 14.71px; color: #949494">翻译文</a> <a href="/tags/%E8%A7%82%E7%82%B9-%E6%80%9D%E8%80%83-%E6%80%BB%E7%BB%93/" style="font-size: 14.71px; color: #949494">观点&思考&总结</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%8F%91%E5%B1%95%E5%8F%B2/" style="font-size: 16.14px; color: #8a8a8a">计算机发展史</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 14px; color: #999">设计模式</a> <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" style="font-size: 18.29px; color: #7c7c7c">读书笔记</a> <a href="/tags/%E9%87%8D%E6%9E%84/" style="font-size: 14px; color: #999">重构</a> <a href="/tags/%E9%9B%86%E5%90%88/" style="font-size: 14px; color: #999">集合</a> <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/" style="font-size: 15.43px; color: #8f8f8f">面向对象</a> <a href="/tags/%E9%9D%A2%E8%AF%95/" style="font-size: 23.29px; color: #5a5a5a">面试</a> <a href="/tags/%E9%A1%B9%E7%9B%AE/" style="font-size: 19px; color: #777">项目</a> <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/" style="font-size: 14px; color: #999">领域驱动设计</a>
     </div>
   </section>
 

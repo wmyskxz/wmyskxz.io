@@ -18,7 +18,7 @@
   
   <title>Redis(5)——亿级数据过滤和布隆过滤器 - 我没有三颗心脏的博客</title>
   
-    <meta name="keywords" content="原创,JavaWeb进阶,中间件,Redis">
+    <meta name="keywords" content="原创,Redis,数据库">
   
 
   
@@ -455,9 +455,9 @@
               
   
   <div class='new-meta-item category'>
-    <a href='/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/JavaWeb%E8%BF%9B%E9%98%B6/' rel="nofollow">
+    <a href='/categories/JavaWeb%E8%BF%9B%E9%98%B6/%E4%B8%AD%E9%97%B4%E4%BB%B6/' rel="nofollow">
       <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
-      <p>中间件/JavaWeb进阶</p>
+      <p>JavaWeb进阶/中间件</p>
     </a>
   </div>
 
@@ -475,10 +475,10 @@
             
           
             
-              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-03T17:48:35+08:00">
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-23T18:20:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年8月3日</p>
+    <p>更新于：2020年8月23日</p>
   </a>
 </div>
 
@@ -486,6 +486,24 @@
           
             
               
+
+            
+          
+            
+              
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：4k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：15分钟</p>
+    </a>
+  </div>
+
 
             
           
@@ -503,6 +521,7 @@
           
           
           <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-59d043fad3a66d7f.png" alt=""></p>
+<a id="more"></a>
 <h1 id="一、布隆过滤器简介"><a href="#一、布隆过滤器简介" class="headerlink" title="一、布隆过滤器简介"></a>一、布隆过滤器简介</h1><p><a href="https://www.wmyskxz.com/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/">上一次</a> 我们学会了使用 <strong>HyperLogLog</strong> 来对大数据进行一个估算，它非常有价值，可以解决很多精确度不高的统计需求。但是如果我们想知道某一个值是不是已经在 <strong>HyperLogLog</strong> 结构里面了，它就无能为力了，它只提供了 <code>pfadd</code> 和 <code>pfcount</code> 方法，没有提供类似于 <code>contains</code> 的这种方法。</p>
 <p>就举一个场景吧，比如你 <strong>刷抖音</strong>：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%885%EF%BC%89%E2%80%94%E2%80%94%E4%BA%BF%E7%BA%A7%E6%95%B0%E6%8D%AE%E8%BF%87%E6%BB%A4%E5%92%8C%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8/7896890-c7b6b5c8a47caf4a.png" alt=""></p>
@@ -872,10 +891,10 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-03T17:48:35+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-23T18:20:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年8月3日</p>
+    <p>更新于：2020年8月23日</p>
   </a>
 </div>
 
@@ -884,7 +903,7 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
         
           
   
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>JavaWeb进阶</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>中间件</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>数据库</p></a></div>
 
 
         
@@ -953,8 +972,9 @@ System<span class="token punctuation">.</span>out<span class="token punctuation"
               <a class='prev' href='/2020/03/12/redis-6-geohash-cha-zhao-fu-jin-de-ren/'>
                 <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Redis(6)——GeoHash查找附近的人</p>
                 <p class='content'>
+
 像微信 “附近的人”，美团 “附近的餐厅”，支付宝共享单车 “附近的车” 是怎么设计实现的呢？
-一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示，...</p>
+一、使用数据库实现查找附近的人我们都知道，地球上的任何一个位置都可以使用二维的 经纬度 来表示...</p>
               </a>
             
             

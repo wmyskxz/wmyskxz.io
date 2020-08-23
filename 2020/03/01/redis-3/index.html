@@ -18,7 +18,7 @@
   
   <title>Redis(3)——分布式锁深入探究 - 我没有三颗心脏的博客</title>
   
-    <meta name="keywords" content="原创,JavaWeb进阶,中间件,Redis">
+    <meta name="keywords" content="原创,Redis,数据库">
   
 
   
@@ -475,10 +475,10 @@
             
           
             
-              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-03T17:47:15+08:00">
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-23T18:20:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年8月3日</p>
+    <p>更新于：2020年8月23日</p>
   </a>
 </div>
 
@@ -486,6 +486,24 @@
           
             
               
+
+            
+          
+            
+              
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：2.7k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：10分钟</p>
+    </a>
+  </div>
+
 
             
           
@@ -503,6 +521,7 @@
           
           
           <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-5fe2adf61ccf11aa.png" alt=""></p>
+<a id="more"></a>
 <h1 id="一、分布式锁简介"><a href="#一、分布式锁简介" class="headerlink" title="一、分布式锁简介"></a>一、分布式锁简介</h1><p><strong>锁</strong> 是一种用来解决多个执行线程 <strong>访问共享资源</strong> 错误或数据不一致问题的工具。</p>
 <p>如果 <em>把一台服务器比作一个房子</em>，那么 <em>线程就好比里面的住户</em>，当他们想要共同访问一个共享资源，例如厕所的时候，如果厕所门上没有锁…更甚者厕所没装门…这是会出原则性的问题的..</p>
 <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/Redis%EF%BC%883%EF%BC%89%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%A9%B6/7896890-26a364bddb9218eb.png" alt=""></p>
@@ -765,10 +784,10 @@ OK
     <div class='new-meta-box'>
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-03T17:47:15+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-23T18:20:03+08:00">
   <a class='notlink'>
     <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
-    <p>更新于：2020年8月3日</p>
+    <p>更新于：2020年8月23日</p>
   </a>
 </div>
 
@@ -777,7 +796,7 @@ OK
         
           
   
-  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/JavaWeb%E8%BF%9B%E9%98%B6/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>JavaWeb进阶</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>中间件</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div>
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Redis/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Redis</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>数据库</p></a></div>
 
 
         
@@ -846,14 +865,16 @@ OK
               <a class='prev' href='/2020/03/02/reids-4-shen-qi-de-hyperloglog-jie-jue-tong-ji-wen-ti/'>
                 <p class='title'><i class="fas fa-chevron-left" aria-hidden="true"></i>Reids(4)——神奇的HyperLoglog解决统计问题</p>
                 <p class='content'>
-一、HyperLogLog 简介HyperLogLog 是最早由 Flajolet 及其同事在 2007 年提出的一种 估算基数的近似最优算法。但跟原版论文不同的是，好像很多书包括 Redis...</p>
+
+一、HyperLogLog 简介HyperLogLog 是最早由 Flajolet 及其同事在 2007 年提出的一种 估算基数的近似最优算法。但跟原版论文不同的是，好像很多书包括 Redi...</p>
               </a>
             
             
               <a class='next' href='/2020/02/29/redis-2-tiao-yue-biao/'>
                 <p class='title'>Redis(2)——跳跃表<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
                 <p class='content'>
-一、跳跃表简介跳跃表（skiplist）是一种随机化的数据结构，由 William Pugh 在论文《Skip lists: a probabilistic alternative to ba...</p>
+
+一、跳跃表简介跳跃表（skiplist）是一种随机化的数据结构，由 William Pugh 在论文《Skip lists: a probabilistic alternative to b...</p>
               </a>
             
           </div>
