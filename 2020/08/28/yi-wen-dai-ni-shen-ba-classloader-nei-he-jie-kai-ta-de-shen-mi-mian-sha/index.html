@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#3.0.0-rc.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>一文带你深扒ClassLoader内核，揭开它的神秘面纱！ - 我没有三颗心脏的博客</title>
+  
+    <meta name="keywords" content="原创,Java基础">
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+    
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/styles/solarized-light.css">
+
+    
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body>
+  
+  
+  
+  <div class="cover-wrapper">
+    <cover class='cover post' style="display: none;">
+      <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">我没有三颗心脏</p>
+    
+    
+      <p class="subtitle">分享知识&技术&成长&思考</p>
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="search here..." />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation search'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <i class='fas fa-rss fa-fw'></i><p>博客</p>
+            </a>
+          
+            <a href="/learning-path/"
+              
+              
+              id="learning-path">
+              <i class='fas fa-chalkboard fa-fw'></i><p>学习路线</p>
+            </a>
+          
+            <a href="/categories/"
+              
+              
+              id="categories">
+              <i class='fas fa-folder-open fa-fw'></i><p>分类</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <i class='fas fa-tags fa-fw'></i><p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <i class='fas fa-archive fa-fw'></i><p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <i class='fas fa-info-circle fa-fw'></i><p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+    </cover>
+    <header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/learning-path/
+                  
+                  
+                  
+                    id="learning-path"
+                  >
+                  <i class='fas fa-chalkboard fa-fw'></i>学习路线
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/learning-path/
+                  
+                  
+                  
+                    id="learning-path"
+                  >
+                  <i class='fas fa-chalkboard fa-fw'></i>学习路线
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  </div>
+  
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper' id="pjax-container">
+      
+        <!--此文件用来存放一些不方便取值的变量--> 
+<!--思路大概是将值藏到重加载的区域内--> 
+ 
+ 
+ 
+<div id="pjax-data" style="display: none"> 
+  <div id="pjax-ispage">true</div> 
+  <div id="pjax-pageTitle">一文带你深扒ClassLoader内核，揭开它的神秘面纱！</div> 
+  <div id="pjax-enable-cover">true</div> 
+  <div id="pjax-comment-path">none</div> 
+  <div id="pjax-comment-placeholder">none</div> 
+</div> 
+ 
+ 
+<script> 
+  // 处理封面 此时 jquery 还没加载 
+  if ("none" == "none") { // 移除封面 
+    document.getElementsByClassName('cover')[0].style.display = "none"; 
+    document.getElementsByClassName('l_body')[0].classList.add("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
+  } else { 
+    if ("none" == "blog") { // 半屏 
+      document.getElementsByClassName('cover')[0].classList.remove("full"); 
+      document.getElementsByClassName('cover')[0].classList.add("half"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
+    } else if ("none" == "docs") { // 全屏 
+      document.getElementsByClassName('cover')[0].classList.remove("half"); 
+      document.getElementsByClassName('cover')[0].classList.add("full"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = ""; 
+    } 
+    document.getElementsByClassName('cover')[0].style.display = ""; 
+    document.getElementsByClassName('l_body', 'show')[0].classList.remove("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.remove("show"); 
+  } 
+</script> 
+
+      
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2020/08/28/yi-wen-dai-ni-shen-ba-classloader-nei-he-jie-kai-ta-de-shen-mi-mian-sha/">
+      一文带你深扒ClassLoader内核，揭开它的神秘面纱！
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+<div class='new-meta-item author'>
+  <a class='author' href="" rel="nofollow">
+    <img no-lazy src="">
+    <p></p>
+  </a>
+</div>
+
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/Java%E5%9F%BA%E7%A1%80/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>Java基础</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2020年8月28日</p>
+  </a>
+</div>
+
+            
+          
+            
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-28T06:43:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月28日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：7.2k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：28分钟</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827234848003.png" alt=""></p>
+<a id="more"></a>
+
+<ul>
+<li><strong>「MoreThanJava」</strong> 宣扬的是 <strong>「学习，不止 CODE」</strong>。</li>
+<li>如果觉得 <strong>「不错」</strong> 的朋友，欢迎 <strong>「关注 + 留言 + 分享」</strong>，文末有完整的获取链接，您的支持是我前进的最大的动力！</li>
+</ul>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ClassLoader 可以说是 Java 最为神秘的功能之一了，好像大家都知道怎么回事儿 <em>(双亲委派模型好像都都能说得出来…)</em>，又都说不清楚具体是怎么一回事 <em>(为什么需要需要有什么实际用途就很模糊了…)</em>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/1598311905-57783.jpg" alt=""></p>
+<p>今天，我们就来深度扒一扒，揭开它神秘的面纱！</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/006qOO1Xly1ghftzela9eg308c05sald.gif" alt=""></p>
+<h1 id="Part-1-类加载是做什么的？"><a href="#Part-1-类加载是做什么的？" class="headerlink" title="Part 1. 类加载是做什么的？"></a>Part 1. 类加载是做什么的？</h1><p>首先，我们知道，Java 为了实现 <strong>「一次编译，到处运行」</strong> 的目标，采用了一种特别的方案：先 <strong>编译</strong> 为 <strong>与任何具体及其环境及操作系统环境无关的中间代码</strong>（也就是 <code>.class</code> 字节码文件），然后交由各个平台特定的 Java 解释器（也就是 JVM）来负责 <strong>解释</strong> 运行。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/%E3%80%8CMoreThanJava%E3%80%8D%E6%9C%BA%E5%99%A8%E6%8C%87%E4%BB%A4%E5%88%B0%E6%B1%87%E7%BC%96%E5%86%8D%E5%88%B0%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/7896890-81a0bce7dbea21a5.png" alt=""></p>
+<p>ClassLoader <em>(顾名思义就是类加载器)</em> 就是那个把字节码交给 JVM 的搬运工 <em>（加载进内存）</em>。它负责将 <strong>字节码形式</strong> 的 Class 转换成 JVM 中 <strong>内存形式</strong> 的 Class 对象。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200826073719796.png" alt=""></p>
+<p>字节码可以是来自于磁盘上的 <code>.class</code> 文件，也可以是 <code>jar</code> 包里的 <code>*.class</code>，甚至是来自远程服务器提供的字节流。<strong>字节码的本质其实就是一个有特定复杂格式的字节数组 <code>byte[]</code>。</strong> <em>(从后面解析 ClassLoader 类中的方法时更能体会)</em></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200825080559568.png" alt=""></p>
+<p>另外，类加载器不光可以把 Class 加载到 JVM 之中并解析成 JVM 统一要求的对象格式，还有一个重要的作用就是 <strong>审查每个类应该由谁加载</strong>。</p>
+<p>而且，这些 Java 类不会一次全部加载到内存，而是在应用程序需要时加载，这也是需要类加载器的地方。</p>
+<h1 id="Part-2-ClassLoader-类结构分析"><a href="#Part-2-ClassLoader-类结构分析" class="headerlink" title="Part 2. ClassLoader 类结构分析"></a>Part 2. ClassLoader 类结构分析</h1><p>以下就是 ClassLoader 的主要方法了：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827083357060.png" alt=""></p>
+<ul>
+<li><p><code>defineClass()</code> 用于将 <code>byte</code> 字节流解析成 JVM 能够识别的 Class 对象。有了这个方法意味着我们不仅可以通过 <code>.class</code> 文件实例化对象，还可以通过其他方式实例化对象，例如通过网络接收到一个类的字节码。</p>
+<p><em>（注意，如果直接调用这个方法生成类的 Class 对象，这个类的 Class 对象还没有 <code>resolve</code>，JVM 会在这个对象真正实例化时才调用 <code>resolveClass()</code> 进行链接）</em></p>
+</li>
+<li><p><code>findClass()</code> 通常和 <code>defineClass()</code> 一起使用，我们需要直接覆盖 ClassLoader 父类的 <code>findClass()</code> 方法来实现类的加载规则，从而取得要加载类的字节码。<em>(以下是 ClassLoader 源码)</em></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">findClass</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token keyword">throws</span> ClassNotFoundException <span class="token punctuation">{</span>
+  <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>如果你不想重新定义加载类的规则，也没有复杂的处理逻辑，只想在运行时能够加载自己制定的一个类，那么你可以用 <code>this.getClass().getClassLoader().loadClass(&quot;class&quot;)</code> 调用 ClassLoader 的 <code>loadClass()</code> 方法来获取这个类的 Class 对象，这个 <code>loadClass()</code> 还有重载方法，你同样可以决定再什么时候解析这个类。</p>
+</li>
+<li><p><code>loadClass()</code> 用于接受一个全类名，然后返回一个 Class 类型的对象。<em>（该方法源码蕴含了著名的双亲委派模型）</em></p>
+</li>
+<li><p><code>resolveClass()</code> 用于对 Class 进行 <strong>链接</strong>，也就是把单一的 Class 加入到有继承关系的类树中。如果你想在类被加载到 JVM 中时就被链接（Link），那么可以在调用 <code>defineClass()</code> 之后紧接着调用一个 <code>resolveClass()</code> 方法，当然你也可以选择让 JVM 来解决什么时候才链接这个类（通常是真正被实实例化的时候）。</p>
+</li>
+</ul>
+<p>ClassLoader 是个抽象类，它还有很多子类，如果我们要实现自己的 ClassLoader，一般都会继承 <strong>URLClassLoader</strong> 这个子类，因为这个类已经帮我们实现了大部分工作。</p>
+<p>例如，我们来看一下 <code>java.net.URLClassLoader.findClass()</code> 方法的实现：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 入参为 Class 的 binary name，如 java.lang.String</span>
+<span class="token keyword">protected</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">findClass</span><span class="token punctuation">(</span><span class="token keyword">final</span> String name<span class="token punctuation">)</span> <span class="token keyword">throws</span> ClassNotFoundException <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 以上代码省略</span>
+
+    <span class="token comment" spellcheck="true">// 通过 binary name 生成包路径，如 java.lang.String -> java/lang/String.class</span>
+    String path <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">,</span> <span class="token string">'/'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span><span class="token string">".class"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">// 根据包路径，找到该 Class 的文件资源</span>
+    Resource res <span class="token operator">=</span> ucp<span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>res <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+           <span class="token comment" spellcheck="true">// 调用 defineClass 生成 java.lang.Class 对象</span>
+            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 以下代码省略</span>
+<span class="token punctuation">}</span></code></pre>
+<h1 id="Part-3-Java-类加载流程详解"><a href="#Part-3-Java-类加载流程详解" class="headerlink" title="Part 3. Java 类加载流程详解"></a>Part 3. Java 类加载流程详解</h1><p>以下就是 ClassLoader 加载一个 class 文件到 JVM 时需要经过的步骤。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827092015305.png" alt=""></p>
+<p>事实上，我们每一次在 IDEA 中点击运行时，IDE 都会默认替我们执行以下的命令：</p>
+<ul>
+<li><code>javac Xxxx.java</code> ➡️ 找到源文件中的 <code>public class</code>，再找 <code>public class</code> 引用的其他类，Java 编译器会根据每一个类生成一个字节码文件；</li>
+<li><code>java Xxxx</code> ➡️ 找到文件中的唯一主类 <code>public class</code>，并根据 <code>public static</code> 关键字找到跟主类关联可执行的 <code>main</code> 方法 <em>（这也是为什么 <code>main</code> 方法需要被定义为 <code>public static void</code> 的原因了——我们需要在类没有加载时访问）</em>，开始执行。</li>
+</ul>
+<p>在真正的运行 <code>main</code> 方法之前，JVM 需要 <strong>加载、链接</strong> 以及 <strong>初始化</strong> 上述的 Xxxx 类。</p>
+<h2 id="第一步：加载（Loading）"><a href="#第一步：加载（Loading）" class="headerlink" title="第一步：加载（Loading）"></a>第一步：加载（Loading）</h2><p>这一步是读取到类文件产生的二进制流（<code>findClass()</code>），并转换为特定的数据结构（<code>defineClass()</code>），初步校验 <code>cafe babe</code> 魔法数 <em>（二进制中前四个字节为 <code>0xCAFEBABE</code> 用来标识该文件是 Java 文件，这是很多软件的做法，比如 <code>zip压缩文件</code>）</em>、常量池、文件长度、是否有父类等，然后在 Java <strong>堆</strong> 中创建对应类的 <code>java.lang.Class</code> 实例，类中存储的各部分信息也需要对应放入 <strong>运行时数据区</strong> 中（例如静态变量、类信息等放入方法区）。</p>
+<blockquote>
+<p>以下是一个 Class 文件具有的基本结构的简单图示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827093649056.png" alt=""></p>
+<p>如果对 Class 文件更多细节感兴趣的可以进一步阅读：<a href="https://juejin.im/post/6844904199617003528" target="_blank" rel="noopener">https://juejin.im/post/6844904199617003528</a></p>
+</blockquote>
+<p>这里我们可能会有一个疑问，<strong>为什么 JVM 允许还没有进行验证、准备和解析的类信息放入方法区呢？</strong></p>
+<p>答案是加载阶段和链接阶段的部分动作（比如一部分字节码文件格式验证动作）是 <strong>交叉进行</strong> 的，也就是说 <strong>加载阶段还没完成，链接阶段可能已经开始了</strong>。但这些夹杂在加载阶段的动作（验证文件格式等）仍然属于链接操作。</p>
+<h2 id="第二步：链接（Linking）"><a href="#第二步：链接（Linking）" class="headerlink" title="第二步：链接（Linking）"></a>第二步：链接（Linking）</h2><p>Link 阶段包括验证、准备、解析三个步骤。下面👇我们来详细说说。</p>
+<h3 id="验证：确保被加载的类的正确性"><a href="#验证：确保被加载的类的正确性" class="headerlink" title="验证：确保被加载的类的正确性"></a>验证：确保被加载的类的正确性</h3><p>验证是连接阶段的第一步，这一阶段的目的是 <strong>为了确保 Class 文件的字节流中包含的信息符合当前虚拟机的要求，并且不会危害虚拟机自身的安全</strong>。验证阶段大致会完成 <code>4</code> 个阶段的检验动作：</p>
+<ul>
+<li><strong>文件格式验证：</strong> 验证字节流是否符合 Class 文件格式的规范；例如：是否以 <code>0xCAFEBABE</code> 开头、主次版本号是否在当前虚拟机的处理范围之内、常量池中的常量是否有不被支持的类型。</li>
+<li><strong>元数据验证：</strong> 对字节码描述的信息进行语义分析（注意：对比 <code>javac</code> 编译阶段的语义分析），以保证其描述的信息符合 Java 语言规范的要求；例如：这个类是否有父类，除了 <code>java.lang.Object</code> 之外。</li>
+<li><strong>字节码验证：</strong> 通过数据流和控制流分析，确定程序语义是合法的、符合逻辑的。</li>
+<li><strong>符号引用验证：</strong> 确保解析动作能正确执行。</li>
+</ul>
+<p><strong>验证阶段是非常重要的，但不是必须的</strong>，它对程序运行期没有影响，如果所引用的类经过反复验证，那么可以考虑采用 <code>-Xverifynone</code> 参数来关闭大部分的类验证措施，以缩短虚拟机类加载的时间。</p>
+<h3 id="准备：为类的静态变量分配内存，并将其初始化为默认值"><a href="#准备：为类的静态变量分配内存，并将其初始化为默认值" class="headerlink" title="准备：为类的静态变量分配内存，并将其初始化为默认值"></a>准备：为类的静态变量分配内存，并将其初始化为默认值</h3><p>准备阶段是正式为类变量分配内存并设置类变量初始值的阶段，这些内存都将在 <strong>方法区</strong> 中分配。对于该阶段有以下几点需要注意：</p>
+<ul>
+<li><p>1️⃣ 这时候进行内存分配的 <strong>仅包括类变量</strong>（static），而不包括实例变量，实例变量会在对象实例化时随着对象一块分配在 Java 堆中。</p>
+</li>
+<li><p>2️⃣ 这里所设置的 <strong>初始值通常情况下是数据类型默认的零值</strong>（如 <code>0</code>、<code>0L</code>、<code>null</code>、<code>false</code>等），而不是被在 Java 代码中被显式地赋予的值。</p>
+</li>
+<li><p>3️⃣ 如果类字段的字段属性表中存在 ConstantValue 属性，即 <strong>同时被 <code>final</code> 和 <code>static</code> 修饰</strong>，那么在准备阶段变量 <code>value</code> 就会被初始化为 ConstValue 属性所指定的值。</p>
+</li>
+</ul>
+<p>➡️ 例如，假设这里有一个类变量 <code>public static int value = 666;</code>，在准备阶段时初始值是 <code>0</code> 而不是 <code>666</code>，在 <strong>初始化阶段</strong> 才会被真正赋值为 <code>666</code>。</p>
+<p>➡️ 假设是一个静态类变量 <code>public static final int value = 666;</code>，则再准备阶段 JVM 就已经赋值为 <code>666</code> 了。</p>
+<h3 id="解析：把类中的符号引用转换为直接引用（重要）"><a href="#解析：把类中的符号引用转换为直接引用（重要）" class="headerlink" title="解析：把类中的符号引用转换为直接引用（重要）"></a>解析：把类中的符号引用转换为直接引用（重要）</h3><p>解析阶段是虚拟机将常量池内的 <strong>符号引用</strong> 替换为 <strong>直接引用</strong> 的过程，解析动作主要针对类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符 <code>7</code> 类符号引用进行。</p>
+<p>➡️ <strong>符号引用</strong> 的作用是在编译的过程中，JVM 并不知道引用的具体地址，所以用符号引用进行代替，而在解析阶段将会将这个符号引用转换为真正的内存地址。</p>
+<p>➡️ <strong>直接引用</strong> 可以理解为指向 <strong>类、变量、方法</strong> 的指针，指向 <strong>实例</strong> 的指针和一个 <strong>间接定位</strong> 到对象的对象句柄。 </p>
+<p>为了理解👆上面两种概念的区别，来看一个实际的例子吧：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String str <span class="token operator">=</span> <span class="token string">"关注【我没有三颗心脏】，关注更多精彩"</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>我们先在该类同级目录下运行 <code>javac Tester</code> 编译成 <code>.class</code> 文件然后再利用 <code>javap -verbose Tester</code> 查看类的详细信息 <em>（为了节省篇幅只截取了 <code>main</code> 方法反编译后的代码）</em>：</p>
+<pre class=" language-bash"><code class="language-bash">// 上面是类的详细信息省略<span class="token punctuation">..</span>.
+<span class="token punctuation">{</span>
+    // <span class="token punctuation">..</span><span class="token punctuation">..</span>.
+  public static void main<span class="token punctuation">(</span>java.lang.String<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    descriptor: <span class="token punctuation">(</span><span class="token punctuation">[</span>Ljava/lang/String<span class="token punctuation">;</span><span class="token punctuation">)</span>V
+    flags: <span class="token punctuation">(</span>0x0009<span class="token punctuation">)</span> ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack<span class="token operator">=</span>2, locals<span class="token operator">=</span>2, args_size<span class="token operator">=</span>1
+         0: ldc           <span class="token comment" spellcheck="true">#7                  // String 关注【我没有三颗心脏】，关注更多精彩</span>
+         2: astore_1
+         3: getstatic     <span class="token comment" spellcheck="true">#9                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+         6: aload_1
+         7: invokevirtual <span class="token comment" spellcheck="true">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+        10: <span class="token keyword">return</span>
+      LineNumberTable:
+        line 4: 0
+        line 5: 3
+        line 6: 10
+<span class="token punctuation">}</span>
+SourceFile: <span class="token string">"Tester.java"</span></code></pre>
+<p>可以看到，上面👆定义的 <code>str</code> 变量在编译阶段会被解析称为 <strong>符号引用</strong>，符号引用的标志是 <code>astore_&lt;n&gt;</code>，这里就是 <code>astore_1</code>。</p>
+<p><code>store_1</code>的含义是将操作数栈顶的 <code>关注【我没有三颗心脏】，关注更多精彩</code> 保存回索引为 <code>1</code> 的局部变量表中，此时访问变量 <code>str</code> 就会读取局部变量表索引值为 <code>1</code> 中的数据。所以局部变量 <code>str</code> 就是一个符号引用。</p>
+<p>再来看另外一个例子：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"关注【我没有三颗心脏】，关注更多精彩"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这一段代码反编译之后得到如下的代码：</p>
+<pre class=" language-bash"><code class="language-bash">// 上面是类的详细信息省略<span class="token punctuation">..</span>.
+<span class="token punctuation">{</span>
+  // <span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+  public static void main<span class="token punctuation">(</span>java.lang.String<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    descriptor: <span class="token punctuation">(</span><span class="token punctuation">[</span>Ljava/lang/String<span class="token punctuation">;</span><span class="token punctuation">)</span>V
+    flags: <span class="token punctuation">(</span>0x0009<span class="token punctuation">)</span> ACC_PUBLIC, ACC_STATIC
+    Code:
+      stack<span class="token operator">=</span>2, locals<span class="token operator">=</span>1, args_size<span class="token operator">=</span>1
+         0: getstatic     <span class="token comment" spellcheck="true">#7                  // Field java/lang/System.out:Ljava/io/PrintStream;</span>
+         3: ldc           <span class="token comment" spellcheck="true">#13                 // String 关注【我没有三颗心脏】，关注更多精彩</span>
+         5: invokevirtual <span class="token comment" spellcheck="true">#15                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span>
+         8: <span class="token keyword">return</span>
+      LineNumberTable:
+        line 4: 0
+        line 5: 8
+<span class="token punctuation">}</span>
+SourceFile: <span class="token string">"Tester.java"</span>
+</code></pre>
+<p>我们可以看到这里直接使用了 <code>ldc</code> 指令将 <code>关注【我没有三颗心脏】，关注更多精彩</code> 推送到了栈，紧接着就是调用指令 <code>invokevirtual</code>，并没有将字符串存入局部变量表中，这里的字符串就是一个 <strong>直接引用</strong>。</p>
+<h2 id="第三步：初始化（Initialization）"><a href="#第三步：初始化（Initialization）" class="headerlink" title="第三步：初始化（Initialization）"></a>第三步：初始化（Initialization）</h2><p>初始化，为类的静态变量赋予正确的初始值，JVM 负责对类进行初始化，主要对类变量进行初始化。在 Java 中对类变量进行初始值设定有两种方式：</p>
+<ul>
+<li>1️⃣ 声明类变量是指定初始值；</li>
+<li>2️⃣ 使用静态代码块为类变量指定初始值；</li>
+</ul>
+<p><strong>JVM 初始化步骤：</strong></p>
+<ul>
+<li>1️⃣ 假如这个类还没有被加载和连接，则程序先加载并连接该类</li>
+<li>2️⃣ 假如该类的直接父类还没有被初始化，则先初始化其直接父类</li>
+<li>3️⃣ 假如类中有初始化语句，则系统依次执行这些初始化语句</li>
+</ul>
+<p><strong>类初始化时机</strong>：只有当对类的主动使用的时候才会导致类的初始化，类的主动使用包括以下几种：</p>
+<ul>
+<li>创建类的实例，也就是 <code>new</code> 的方式</li>
+<li>访问某个类或接口的静态变量，或者对该静态变量赋值</li>
+<li>调用类的静态方法</li>
+<li>反射（如 <code>Class.forName(&quot;com.wmyskxz.Tester&quot;)</code>）</li>
+<li>初始化某个类的子类，则其父类也会被初始化</li>
+<li>Java 虚拟机启动时被标明为启动类的类，直接使用 <code>java.exe</code> 命令来运行某个主类</li>
+<li>使用 JDK 7 新加入的动态语言支持时，如果一个 <code>java.lang.invoke.MethodHanlde</code> 实例最后的解析结果为 <code>REF_getstatic</code>、<code>REF_putstatic</code>、<code>REF_invokeStatic</code>、<code>REF_newInvokeSpecial</code> 四种类型的方法句柄时，都需要先初始化该句柄对应的类</li>
+<li>接口中定义了 JDK 8 新加入的默认方法（<code>default</code>修饰符），<strong>实现类在初始化之前需要先初始化其接口</strong></li>
+</ul>
+<h1 id="Part-4-深入理解双亲委派模型"><a href="#Part-4-深入理解双亲委派模型" class="headerlink" title="Part 4. 深入理解双亲委派模型"></a>Part 4. 深入理解双亲委派模型</h1><p>我们在上面👆已经了解了一个类是如何被加载进 JVM 的——依靠类加载器——在 Java 语言中自带有三个类加载器：</p>
+<ul>
+<li><strong>Bootstrap ClassLoader</strong> 最顶层的加载类，主要加载  <strong>核心类库</strong>，<code>%JRE_HOME%\lib</code> 下的<code>rt.jar</code>、<code>resources.jar</code>、<code>charsets.jar</code> 和 <code>class</code> 等。</li>
+<li><strong>Extention ClassLoader</strong> 扩展的类加载器，加载目录 <code>%JRE_HOME%\lib\ext</code> 目录下的 <code>jar</code> 包和 <code>class</code> 文件。</li>
+<li><strong>Appclass Loader 也称为 SystemAppClass</strong> 加载当前应用的 <code>classpath</code> 的所有类。</li>
+</ul>
+<p>我们可以通过一个简单的例子来简单了解 Java 中这些自带的类加载器：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrintClassLoader</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">printClassLoaders</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">printClassLoaders</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Classloader of this class:"</span>
+            <span class="token operator">+</span> PrintClassLoader<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Classloader of Logging:"</span>
+            <span class="token operator">+</span> com<span class="token punctuation">.</span>sun<span class="token punctuation">.</span>javafx<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Logging<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Classloader of ArrayList:"</span>
+            <span class="token operator">+</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>ArrayList<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>上方程序打印输出如下：</strong></p>
+<pre class=" language-bash"><code class="language-bash">Classloader of this class:sun.misc.Launcher<span class="token variable">$AppClassLoader@18b4aac2</span>
+Classloader of Logging:sun.misc.Launcher<span class="token variable">$ExtClassLoader@60e53b93</span>
+Classloader of ArrayList:null</code></pre>
+<p>如我们所见，这里分别对应三种不同类型的类加载器：AppClassLoader、ExtClassLoader 和 BootstrapClassLoader（显示为 <code>null</code>）。</p>
+<p>一个很好的问题是：<strong>Java 类是由 <code>java.lang.ClassLoader</code> 实例加载的，但类加载器本身也是类，那么谁来加载类加载器呢？</strong></p>
+<p>我们假装不知道，先来跟着源码一步一步来看。</p>
+<h2 id="先来看看-Java-虚拟机入口代码"><a href="#先来看看-Java-虚拟机入口代码" class="headerlink" title="先来看看 Java 虚拟机入口代码"></a>先来看看 Java 虚拟机入口代码</h2><p>在 JDK 源码 <code>sun.misc.Launcher</code> 中，蕴含了 Java 虚拟机的入口方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Launcher</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> Launcher launcher <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Launcher</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> String bootClassPath <span class="token operator">=</span>
+        System<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"sun.boot.class.path"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Launcher <span class="token function">getLauncher</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> launcher<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> ClassLoader loader<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">Launcher</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Create the extension class loader</span>
+        ClassLoader extcl<span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            extcl <span class="token operator">=</span> ExtClassLoader<span class="token punctuation">.</span><span class="token function">getExtClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InternalError</span><span class="token punctuation">(</span>
+                <span class="token string">"Could not create extension class loader"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">// Now create the class loader to use to launch the application</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            loader <span class="token operator">=</span> AppClassLoader<span class="token punctuation">.</span><span class="token function">getAppClassLoader</span><span class="token punctuation">(</span>extcl<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">InternalError</span><span class="token punctuation">(</span>
+                <span class="token string">"Could not create application class loader"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">// 设置 AppClassLoader 为线程上下文类加载器，这个文章后面部分讲解</span>
+        Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setContextClassLoader</span><span class="token punctuation">(</span>loader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">/*
+     * Returns the class loader used to launch the main application.
+     */</span>
+    <span class="token keyword">public</span> ClassLoader <span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> loader<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">/*
+     * The class loader used for loading installed extensions.
+     */</span>
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">ExtClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">URLClassLoader</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">/**
+     * The class loader used for loading from java.class.path.
+     * runs in a restricted security context.
+     */</span>
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">AppClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">URLClassLoader</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>源码有精简，但是我们可以得到以下信息：</p>
+<p>1️⃣ Launcher 初始化了 ExtClassLoader 和 AppClassLoader。</p>
+<p>2️⃣ Launcher 没有看到 Bootstrap ClassLoader 的影子，但是有一个叫做 <code>bootClassPath</code> 的变量，大胆一猜就是 Bootstrap ClassLoader 加载的 <code>jar</code> 包的路径。</p>
+<p><em>(ps: 可以自己尝试输出一下 <code>System.getProperty(&quot;sun.boot.class.path&quot;)</code> 的内容，它正好对应了 JDK 目录 <code>lib</code> 和 <code>classes</code> 目录下的 <code>jar</code> 包——也就是通常你配置环境变量时设置的 <code>%JAVA_HOME/lib</code> 的目录了——同样的方式你也可以看看 Ext 和 App 的源码)</em></p>
+<p>3️⃣ ExtClassLoader 和 AppClassLoader 都继承自 URLClassLoader，进一步查看 ClassLoader 的继承树，传说中的双亲委派模型也并没有出现。<em>（甚至看不到 Bootstrap ClassLoader 的影子，Ext 也没有直接继承自 App 类加载器）</em></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827155234783.png" alt="ClassLoader 继承树"></p>
+<p><em>（⚠️注意，这里可以明确看到每一个 ClassLoader 都有一个 <code>parent</code> 变量，用于标识自己的父类，下面👇详细说）</em></p>
+<p>4️⃣ 注意以下代码：</p>
+<pre class=" language-java"><code class="language-java">ClassLoader extcl<span class="token punctuation">;</span>
+
+extcl <span class="token operator">=</span> ExtClassLoader<span class="token punctuation">.</span><span class="token function">getExtClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+loader <span class="token operator">=</span> AppClassLoader<span class="token punctuation">.</span><span class="token function">getAppClassLoader</span><span class="token punctuation">(</span>extcl<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>分别跟踪查看到这两个 ClassLoader 初始化时的代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">// 一直追踪到最顶层的 ClassLoader 定义，构造器的第二个参数标识了类加载器的父类</span>
+<span class="token keyword">private</span> <span class="token function">ClassLoader</span><span class="token punctuation">(</span>Void unused<span class="token punctuation">,</span> ClassLoader parent<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>parent <span class="token operator">=</span> parent<span class="token punctuation">;</span>
+  <span class="token comment" spellcheck="true">// 代码省略.....</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// Ext 设置自己的父类为 null</span>
+<span class="token keyword">public</span> <span class="token function">ExtClassLoader</span><span class="token punctuation">(</span>File<span class="token punctuation">[</span><span class="token punctuation">]</span> var1<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token function">getExtURLs</span><span class="token punctuation">(</span>var1<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>ClassLoader<span class="token punctuation">)</span>null<span class="token punctuation">,</span> Launcher<span class="token punctuation">.</span>factory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  SharedSecrets<span class="token punctuation">.</span><span class="token function">getJavaNetAccess</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getURLClassPath</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">initLookupCache</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token comment" spellcheck="true">// 手动把 Ext 设置为 App 的 parent（这里的 var2 是传进来的 extc1）</span>
+<span class="token function">AppClassLoader</span><span class="token punctuation">(</span>URL<span class="token punctuation">[</span><span class="token punctuation">]</span> var1<span class="token punctuation">,</span> ClassLoader var2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">super</span><span class="token punctuation">(</span>var1<span class="token punctuation">,</span> var2<span class="token punctuation">,</span> Launcher<span class="token punctuation">.</span>factory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>ucp<span class="token punctuation">.</span><span class="token function">initLookupCache</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>由此，我们得到了这样一个类加载器的关系图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827164809547.png" alt=""></p>
+<h2 id="类加载器的父类都来自哪里？"><a href="#类加载器的父类都来自哪里？" class="headerlink" title="类加载器的父类都来自哪里？"></a>类加载器的父类都来自哪里？</h2><p>奇怪，为什么 ExtClassLoader 的 <code>parent</code> 明明是 <code>null</code>，我们却一般地认为 Bootstrap ClassLoader 才是 ExtClassLoader 的父加载器呢？</p>
+<p>答案的一部分就藏在 <code>java.lang.ClassLoader.loadClass()</code> 方法里面：<strong>（这也就是著名的「双亲委派模型」现场了）</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">loadClass</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> <span class="token keyword">boolean</span> resolve<span class="token punctuation">)</span>
+  <span class="token keyword">throws</span> ClassNotFoundException
+<span class="token punctuation">{</span>
+  <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token function">getClassLoadingLock</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 首先检查是否已经加载过了</span>
+    Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> c <span class="token operator">=</span> <span class="token function">findLoadedClass</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">long</span> t0 <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>parent <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// 父加载器不为空则调用父加载器的 loadClass 方法</span>
+          c <span class="token operator">=</span> parent<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          <span class="token comment" spellcheck="true">// 父加载器为空则调用 Bootstrap ClassLoader</span>
+          c <span class="token operator">=</span> <span class="token function">findBootstrapClassOrNull</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// ClassNotFoundException thrown if class not found</span>
+        <span class="token comment" spellcheck="true">// from the non-null parent class loader</span>
+      <span class="token punctuation">}</span>
+
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// If still not found, then invoke findClass in order</span>
+        <span class="token comment" spellcheck="true">// to find the class.</span>
+        <span class="token keyword">long</span> t1 <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 父加载器没有找到，则调用 findclass</span>
+        c <span class="token operator">=</span> <span class="token function">findClass</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// this is the defining class loader; record the stats</span>
+        sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>PerfCounter<span class="token punctuation">.</span><span class="token function">getParentDelegationTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addTime</span><span class="token punctuation">(</span>t1 <span class="token operator">-</span> t0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>PerfCounter<span class="token punctuation">.</span><span class="token function">getFindClassTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">addElapsedTimeFrom</span><span class="token punctuation">(</span>t1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        sun<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>PerfCounter<span class="token punctuation">.</span><span class="token function">getFindClasses</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">increment</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>resolve<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// 调用 resolveClass()</span>
+      <span class="token function">resolveClass</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> c<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>代码逻辑很好地解释了双亲委派的原理。</p>
+<p>1️⃣ 当前 ClassLoader 首先从 <strong>自己已经加载的类中查询是否此类已经加载</strong>，如果已经加载则直接返回原来已经加载的类。(每个类加载器都有自己的加载缓存，当一个类被加载了以后就会放入缓存，等下次加载的时候就可以直接返回了。)</p>
+<p>2️⃣ 当前 ClassLoader 的缓存中没有找到被加载的类的时候，<strong>委托父类加载器去加载</strong>，父类加载器采用同样的策略，首先查看自己的缓存，然后委托父类的父类去加载，一直到 Bootstrap ClassLoader。（当所有的父类加载器都没有加载的时候，再由当前的类加载器加载，并将其放入它自己的缓存中，以便下次有加载请求的时候直接返回。）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827213241812.png" alt=""></p>
+<p>所以，答案的另一部分是因为最高一层的类加载器 Bootstrap 是通过 C/C++ 实现的，并不存在于 JVM 体系内 <em>（不是一个 Java 类，没办法直接表示为 ExtClassLoader 的父加载器）</em>，所以输出为 <code>null</code>。</p>
+<p><em>（我们可以很轻易跟踪到 <code>findBootstrapClass()</code> 方法被 <code>native</code> 修饰：<code>private native Class&lt;?&gt; findBootstrapClass(String name);</code>）</em></p>
+<p>➡️ OK，我们理解了为什么 ExtClassLoader 的父加载器为什么是表示为 <code>null</code> 的 Bootstrap 加载器，那我们 <strong>自己实现的 ClassLoader 父加载器应该是谁呢？</strong></p>
+<p>观察一下 ClassLoader 的源码就知道了：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> <span class="token function">ClassLoader</span><span class="token punctuation">(</span>ClassLoader parent<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">(</span><span class="token function">checkCreateClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> parent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">protected</span> <span class="token function">ClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">(</span><span class="token function">checkCreateClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">getSystemClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>类加载器的 <code>parent</code> 的赋值是在 ClassLoader 对象的构造方法中，它有两个情况：</p>
+<p>1️⃣ 由外部类创建 ClassLoader 时直接指定一个 ClassLoader 为 <code>parent</code>；</p>
+<p>2️⃣ 由 <code>getSystemClassLoader()</code> 方法生成，也就是在 <code>sun.misc.Laucher</code> 通过 <code>getClassLoader()</code> 获取，也就是 AppClassLoader。直白的说，一个 ClassLoader 创建时如果没有指定 <code>parent</code>，那么它的 <code>parent</code> 默认就是 AppClassLoader。（建议去看一下源码）</p>
+<h2 id="为什么这样设计呢？"><a href="#为什么这样设计呢？" class="headerlink" title="为什么这样设计呢？"></a>为什么这样设计呢？</h2><p>简单来说，主要是为了 <strong>安全性</strong>，避免用户自己编写的类动态替换 Java 的一些核心类，比如 String，同时也 <strong>避免了重复加载</strong>，因为 JVM 中区分不同类，不仅仅是根据类名，<strong>相同的 class 文件被不同的 ClassLoader 加载就是不同的两个类</strong>，如果相互转型的话会抛 <code>java.lang.ClassCaseException</code>。</p>
+<p>如果我们要实现自己的类加载器，不管你是直接实现抽象类 ClassLoader，还是继承 URLClassLoader 类，或者其他子类，它的父加载器都是 AppClassLoader。</p>
+<p>因为不管调用哪个父类构造器，创建的对象都必须最终调用 <code>getSystemClassLoader()</code> 作为父加载器 <em>（我们已经从上面👆的源码中看到了）</em>。而该方法最终获取到的正是 AppClassLoader <em>（别称 SystemClassLoader）</em>。</p>
+<p>这也就是我们熟知的最终的双亲委派模型了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage01/%E4%B8%80%E6%96%87%E5%B8%A6%E4%BD%A0%E6%B7%B1%E6%89%92%E7%A5%9E%E7%A7%98ClassLoader%E5%86%85%E6%A0%B8/image-20200827215439538.png" alt=""></p>
+<h1 id="Part-5-实现自己的类加载器"><a href="#Part-5-实现自己的类加载器" class="headerlink" title="Part 5. 实现自己的类加载器"></a>Part 5. 实现自己的类加载器</h1><h2 id="什么情况下需要自定义类加载器"><a href="#什么情况下需要自定义类加载器" class="headerlink" title="什么情况下需要自定义类加载器"></a>什么情况下需要自定义类加载器</h2><p>在学习了类加载器的实现机制之后，我们知道了双亲委派模型并非强制模型，用户可以自定义类加载器，在什么情况下需要自定义类加载器呢？</p>
+<p>1️⃣ <strong>隔离加载类</strong>。在某些框架内进行中间件与应用的模块隔离，把类加载器到不同的环境。比如，阿里内某容器框架通过自定义类加载器确保应用中依赖的 <code>jar</code> 包不会影响到中间件运行时使用的 <code>jar</code> 包。</p>
+<p>2️⃣ <strong>修改类加载方式</strong>。类的加载模型并非强制，除了 Bootstrap 外，其他的加载并非一定要引入，或者根据实际情况在某个时间点进行按需的动态加载。</p>
+<p>3️⃣ <strong>扩展加载源</strong>。比如从数据库、网络，甚至是电视机顶盒进行加载。（下面👇我们会编写一个从网络加载类的例子）</p>
+<p>4️⃣ <strong>防止源码泄露</strong>。Java 代码容易被编译和篡改，可以进行编译加密。那么类加载器也需要自定义，还原加密的字节码。</p>
+<h2 id="一个常规的例子"><a href="#一个常规的例子" class="headerlink" title="一个常规的例子"></a>一个常规的例子</h2><p>实现一个自定义的类加载器比较简单：继承 ClassLoader，重写 <code>findClass()</code> 方法，调用 <code>defineClass()</code> 方法，就差不多行了。</p>
+<h3 id="Tester-java"><a href="#Tester-java" class="headerlink" title="Tester.java"></a>Tester.java</h3><p>我们先来编写一个测试用的类文件：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Tester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">say</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"关注【我没有三颗心脏】，解锁更多精彩！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>在同级目录下执行 <code>javac Tester.java</code> 命令，并把编译后的 <code>Tester.class</code> 放到指定的目录下（我这边为了方便就放在桌面上啦 <code>/Users/wmyskxz/Desktop</code>）</p>
+<h3 id="MyClassLoader-java"><a href="#MyClassLoader-java" class="headerlink" title="MyClassLoader.java"></a>MyClassLoader.java</h3><p>我们编写自定义 ClassLoader 代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>ByteArrayOutputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>File<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>FileInputStream<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String mLibPath<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">MyClassLoader</span><span class="token punctuation">(</span>String path<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// TODO Auto-generated constructor stub</span>
+        mLibPath <span class="token operator">=</span> path<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">findClass</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token keyword">throws</span> ClassNotFoundException <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// TODO Auto-generated method stub</span>
+
+        String fileName <span class="token operator">=</span> <span class="token function">getFileName</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        File file <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mLibPath<span class="token punctuation">,</span> fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            FileInputStream is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            ByteArrayOutputStream bos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> is<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    bos<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> bos<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            is<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            bos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> data<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> data<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">findClass</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">// 获取要加载的 class 文件名</span>
+    <span class="token keyword">private</span> String <span class="token function">getFileName</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// TODO Auto-generated method stub</span>
+        <span class="token keyword">int</span> index <span class="token operator">=</span> name<span class="token punctuation">.</span><span class="token function">lastIndexOf</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>index <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> name <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> name<span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>我们在 <code>findClass()</code> 方法中定义了查找 class 的方法，然后数据通过 <code>defineClass()</code> 生成了 Class 对象。</p>
+<h3 id="ClassLoaderTester-测试类"><a href="#ClassLoaderTester-测试类" class="headerlink" title="ClassLoaderTester 测试类"></a>ClassLoaderTester 测试类</h3><p>我们需要删除刚才在项目目录创建的 <code>Tester.java</code> 和编译后的 <code>Tester.class</code> 文件来观察效果：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span>InvocationTargetException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">.</span>reflect<span class="token punctuation">.</span>Method<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ClassLoaderTester</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// 创建自定义的 ClassLoader 对象</span>
+        MyClassLoader myClassLoader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">MyClassLoader</span><span class="token punctuation">(</span><span class="token string">"/Users/wmyskxz/Desktop"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 加载class文件</span>
+            Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> c <span class="token operator">=</span> myClassLoader<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span><span class="token string">"Tester"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">if</span><span class="token punctuation">(</span>c <span class="token operator">!=</span> null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+                <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                    Object obj <span class="token operator">=</span> c<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    Method method <span class="token operator">=</span> c<span class="token punctuation">.</span><span class="token function">getDeclaredMethod</span><span class="token punctuation">(</span><span class="token string">"say"</span><span class="token punctuation">,</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token comment" spellcheck="true">//通过反射调用Test类的say方法</span>
+                    method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>obj<span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InstantiationException</span> <span class="token operator">|</span> IllegalAccessException
+                    <span class="token operator">|</span> NoSuchMethodException
+                    <span class="token operator">|</span> SecurityException <span class="token operator">|</span>
+                    IllegalArgumentException <span class="token operator">|</span>
+                    InvocationTargetException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    <span class="token comment" spellcheck="true">// TODO Auto-generated catch block</span>
+                    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// TODO Auto-generated catch block</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>运行测试，正常输出：</strong></p>
+<pre class=" language-bash"><code class="language-bash">关注【我没有三颗心脏】，解锁更多精彩！</code></pre>
+<h2 id="加密解密类加载器"><a href="#加密解密类加载器" class="headerlink" title="加密解密类加载器"></a>加密解密类加载器</h2><p>突破了 JDK 系统内置加载路径的限制之后，我们就可以编写自定义的 ClassLoader。你完全可以按照自己的意愿进行业务的定制，将 ClassLoader 玩出花样来。</p>
+<p>例如，一个加密解密的类加载器。（不涉及完整代码，我们可以来说一下思路和关键代码）</p>
+<p>首先，在编译之后的字节码文件中动一动手脚，例如，给文件每一个 <code>byte</code> 异或一个数字 2：（这就算是模拟加密过程）</p>
+<pre class=" language-java"><code class="language-java">File file <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+  FileInputStream fis <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  FileOutputStream fos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileOutputStream</span><span class="token punctuation">(</span>path<span class="token operator">+</span><span class="token string">"en"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> b1 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token punctuation">(</span>b <span class="token operator">=</span> fis<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// 每一个 byte 异或一个数字 2</span>
+      fos<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>b <span class="token operator">^</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    fos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    fis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// TODO Auto-generated catch block</span>
+    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">FileNotFoundException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// TODO Auto-generated catch block</span>
+  e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>然后我们再在 <code>findClass()</code> 中自己解密：</p>
+<pre class=" language-java"><code class="language-java">File file <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span>mLibPath<span class="token punctuation">,</span>fileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">try</span> <span class="token punctuation">{</span>
+  FileInputStream is <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FileInputStream</span><span class="token punctuation">(</span>file<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  ByteArrayOutputStream bos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">int</span> len <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">byte</span> b <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">try</span> <span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> is<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token comment" spellcheck="true">// 将数据异或一个数字 2 进行解密</span>
+      b <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">byte</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>len <span class="token operator">^</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      bos<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+
+  <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> data <span class="token operator">=</span> bos<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  is<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  bos<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span>data<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span>data<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// TODO Auto-generated catch block</span>
+  e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p><em>（代码几乎与上面👆一个例子等同，所以只说一下思路和完整代码）</em></p>
+<h2 id="网络类加载器"><a href="#网络类加载器" class="headerlink" title="网络类加载器"></a>网络类加载器</h2><p>其实非常类似，也不做过多讲解，直接上代码：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>ByteArrayOutputStream<span class="token punctuation">;</span>  
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>InputStream<span class="token punctuation">;</span>  
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>net<span class="token punctuation">.</span>URL<span class="token punctuation">;</span>  
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">NetworkClassLoader</span> <span class="token keyword">extends</span> <span class="token class-name">ClassLoader</span> <span class="token punctuation">{</span>  
+
+    <span class="token keyword">private</span> String rootUrl<span class="token punctuation">;</span>  
+
+    <span class="token keyword">public</span> <span class="token function">NetworkClassLoader</span><span class="token punctuation">(</span>String rootUrl<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token comment" spellcheck="true">// 指定URL  </span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>rootUrl <span class="token operator">=</span> rootUrl<span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+
+    <span class="token comment" spellcheck="true">// 获取类的字节码  </span>
+    <span class="token annotation punctuation">@Override</span>  
+    <span class="token keyword">protected</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">findClass</span><span class="token punctuation">(</span>String name<span class="token punctuation">)</span> <span class="token keyword">throws</span> ClassNotFoundException <span class="token punctuation">{</span>  
+        <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> classData <span class="token operator">=</span> <span class="token function">getClassData</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>classData <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassNotFoundException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>  
+            <span class="token keyword">return</span> <span class="token function">defineClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> classData<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> classData<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span>  
+    <span class="token punctuation">}</span>  
+
+    <span class="token keyword">private</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">getClassData</span><span class="token punctuation">(</span>String className<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token comment" spellcheck="true">// 从网络上读取的类的字节  </span>
+        String path <span class="token operator">=</span> <span class="token function">classNameToPath</span><span class="token punctuation">(</span>className<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>  
+            URL url <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">URL</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            InputStream ins <span class="token operator">=</span> url<span class="token punctuation">.</span><span class="token function">openStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            ByteArrayOutputStream baos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token keyword">int</span> bufferSize <span class="token operator">=</span> <span class="token number">4096</span><span class="token punctuation">;</span>  
+            <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">byte</span><span class="token punctuation">[</span>bufferSize<span class="token punctuation">]</span><span class="token punctuation">;</span>  
+            <span class="token keyword">int</span> bytesNumRead <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>  
+            <span class="token comment" spellcheck="true">// 读取类文件的字节  </span>
+            <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>bytesNumRead <span class="token operator">=</span> ins<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>buffer<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+                baos<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> bytesNumRead<span class="token punctuation">)</span><span class="token punctuation">;</span>  
+            <span class="token punctuation">}</span>  
+            <span class="token keyword">return</span> baos<span class="token punctuation">.</span><span class="token function">toByteArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+        <span class="token punctuation">}</span>  
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+
+    <span class="token keyword">private</span> String <span class="token function">classNameToPath</span><span class="token punctuation">(</span>String className<span class="token punctuation">)</span> <span class="token punctuation">{</span>  
+        <span class="token comment" spellcheck="true">// 得到类文件的URL  </span>
+        <span class="token keyword">return</span> rootUrl <span class="token operator">+</span> <span class="token string">"/"</span>  
+                <span class="token operator">+</span> className<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">,</span> <span class="token string">'/'</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".class"</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span>  </code></pre>
+<p><em>(代码来自：<a href="https://blog.csdn.net/justloveyou_/article/details/72217806" target="_blank" rel="noopener">https://blog.csdn.net/justloveyou_/article/details/72217806</a>)</em></p>
+<h1 id="Part-6-必要的扩展阅读"><a href="#Part-6-必要的扩展阅读" class="headerlink" title="Part 6. 必要的扩展阅读"></a>Part 6. 必要的扩展阅读</h1><p>学习到这里，我们对 ClassLoader 已经不再陌生了，但是仍然有一些必要的知识点需要去掌握 <em>（限于篇幅和能力这里不扩展了）<em>，希望您能认真阅读以下的材料：</em>（可能排版上面层次不齐，但内容都是有质量的，并用 ♨️ 标注了更加重点一些的内容）</em></p>
+<p>1️⃣ ♨️<strong>能不能自己写一个类叫 <code>java.lang.System</code> 或者 <code>java.lang.String</code>？</strong> - <a href="https://blog.csdn.net/tang9140/article/details/42738433" target="_blank" rel="noopener">https://blog.csdn.net/tang9140/article/details/42738433</a></p>
+<p>2️⃣ 深入理解 Java 之 JVM 启动流程 - <a href="https://cloud.tencent.com/developer/article/1038435" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1038435</a></p>
+<p>3️⃣ ♨️<strong>真正理解线程上下文类加载器（多案例分析）</strong> - <a href="https://blog.csdn.net/yangcheng33/article/details/52631940" target="_blank" rel="noopener">https://blog.csdn.net/yangcheng33/article/details/52631940</a></p>
+<p>4️⃣ ♨️<strong>曹工杂谈：Java 类加载器还会死锁？这是什么情况？</strong> - <a href="https://www.cnblogs.com/grey-wolf/p/11378747.html#_label2" target="_blank" rel="noopener">https://www.cnblogs.com/grey-wolf/p/11378747.html#_label2</a></p>
+<p>5️⃣ 谨防JDK8重复类定义造成的内存泄漏 - <a href="https://segmentfault.com/a/1190000022837543" target="_blank" rel="noopener">https://segmentfault.com/a/1190000022837543</a></p>
+<p>7️⃣ ♨️<strong>Tomcat 类加载器的实现</strong> - <a href="https://juejin.im/post/6844903945496690695" target="_blank" rel="noopener">https://juejin.im/post/6844903945496690695</a></p>
+<p>8️⃣ ♨️<strong>Spring 中的类加载机制</strong> - <a href="https://www.shuzhiduo.com/A/gVdnwgAlzW/" target="_blank" rel="noopener">https://www.shuzhiduo.com/A/gVdnwgAlzW/</a></p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>《深入分析 Java Web 技术内幕》 | 许令波 著</li>
+<li>Java 类加载机制分析 - <a href="https://www.jianshu.com/p/3615403c7c84" target="_blank" rel="noopener">https://www.jianshu.com/p/3615403c7c84</a></li>
+<li>Class 文件解析实战 - <a href="https://juejin.im/post/6844904199617003528" target="_blank" rel="noopener">https://juejin.im/post/6844904199617003528</a></li>
+<li>图文兼备看懂类加载机制的各个阶段，就差你了！ - <a href="https://juejin.im/post/6844904119258316814" target="_blank" rel="noopener">https://juejin.im/post/6844904119258316814</a></li>
+<li>Java面试知识点解析（三）——JVM篇 - <a href="https://www.wmyskxz.com/2018/05/16/java-mian-shi-zhi-shi-dian-jie-xi-san-jvm-pian/">https://www.wmyskxz.com/2018/05/16/java-mian-shi-zhi-shi-dian-jie-xi-san-jvm-pian/</a></li>
+<li>一看你就懂，超详细Java中的ClassLoader详解 - <a href="https://blog.csdn.net/briblue/article/details/54973413" target="_blank" rel="noopener">https://blog.csdn.net/briblue/article/details/54973413</a></li>
+</ol>
+<blockquote>
+<ul>
+<li>本文已收录至我的 Github 程序员成长系列 <strong>【More Than Java】，学习，不止 Code，欢迎 star：<a href="https://github.com/wmyskxz/MoreThanJava" target="_blank" rel="noopener">https://github.com/wmyskxz/MoreThanJava</a></strong></li>
+<li><strong>个人公众号</strong> ：wmyskxz，<strong>个人独立域名博客</strong>：wmyskxz.com，坚持原创输出，下方扫码关注，2020，与您共同成长！</li>
+</ul>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/common/qrcode.png" alt=""></p>
+<p>非常感谢各位人才能 <strong>看到这里</strong>，如果觉得本篇文章写得不错，觉得 <strong>「我没有三颗心脏」有点东西</strong> 的话，<strong>求点赞，求关注，求分享，求留言！</strong></p>
+<p>创作不易，各位的支持和认可，就是我创作的最大动力，我们下篇文章见！</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://www.wmyskxz.com/2020/08/28/yi-wen-dai-ni-shen-ba-classloader-nei-he-jie-kai-ta-de-shen-mi-mian-sha/>http://www.wmyskxz.com/2020/08/28/yi-wen-dai-ni-shen-ba-classloader-nei-he-jie-kai-ta-de-shen-mi-mian-sha/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2020-08-28T06:43:43+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2020年8月28日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/tags/%E5%8E%9F%E5%88%9B/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>原创</p></a></div> <div class="new-meta-item meta-tags"><a class="tag" href="/tags/Java%E5%9F%BA%E7%A1%80/" rel="nofollow"><i class="fas fa-hashtag fa-fw" aria-hidden="true"></i><p>Java基础</p></a></div>
+
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.wmyskxz.com/2020/08/28/yi-wen-dai-ni-shen-ba-classloader-nei-he-jie-kai-ta-de-shen-mi-mian-sha/&title=一文带你深扒ClassLoader内核，揭开它的神秘面纱！ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+          
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.wmyskxz.com/2020/08/28/yi-wen-dai-ni-shen-ba-classloader-nei-he-jie-kai-ta-de-shen-mi-mian-sha/&title=一文带你深扒ClassLoader内核，揭开它的神秘面纱！ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://service.weibo.com/share/share.php?url=http://www.wmyskxz.com/2020/08/28/yi-wen-dai-ni-shen-ba-classloader-nei-he-jie-kai-ta-de-shen-mi-mian-sha/&title=一文带你深扒ClassLoader内核，揭开它的神秘面纱！ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2020/08/22/java14-ban-ben-te-xing-xiang-jie/'>
+                <p class='title'>Java14版本特性详解<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>
+
+
+
+「MoreThanJava」 宣扬的是 「学习，不止 CODE」，本系列 Java 基础教程是自己在结合各方面的知识之后，对 Java 基础的一个总回顾，旨在 「帮助新朋友快速高质量的学...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      <section id="comments">
+        <div id="gitalk-container"></div>
+
+      </section>
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-1-类加载是做什么的？"><span class="toc-text">Part 1. 类加载是做什么的？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-2-ClassLoader-类结构分析"><span class="toc-text">Part 2. ClassLoader 类结构分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-3-Java-类加载流程详解"><span class="toc-text">Part 3. Java 类加载流程详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#第一步：加载（Loading）"><span class="toc-text">第一步：加载（Loading）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第二步：链接（Linking）"><span class="toc-text">第二步：链接（Linking）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#验证：确保被加载的类的正确性"><span class="toc-text">验证：确保被加载的类的正确性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#准备：为类的静态变量分配内存，并将其初始化为默认值"><span class="toc-text">准备：为类的静态变量分配内存，并将其初始化为默认值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解析：把类中的符号引用转换为直接引用（重要）"><span class="toc-text">解析：把类中的符号引用转换为直接引用（重要）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第三步：初始化（Initialization）"><span class="toc-text">第三步：初始化（Initialization）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-4-深入理解双亲委派模型"><span class="toc-text">Part 4. 深入理解双亲委派模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#先来看看-Java-虚拟机入口代码"><span class="toc-text">先来看看 Java 虚拟机入口代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#类加载器的父类都来自哪里？"><span class="toc-text">类加载器的父类都来自哪里？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么这样设计呢？"><span class="toc-text">为什么这样设计呢？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-5-实现自己的类加载器"><span class="toc-text">Part 5. 实现自己的类加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么情况下需要自定义类加载器"><span class="toc-text">什么情况下需要自定义类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一个常规的例子"><span class="toc-text">一个常规的例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Tester-java"><span class="toc-text">Tester.java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MyClassLoader-java"><span class="toc-text">MyClassLoader.java</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ClassLoaderTester-测试类"><span class="toc-text">ClassLoaderTester 测试类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密解密类加载器"><span class="toc-text">加密解密类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络类加载器"><span class="toc-text">网络类加载器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-6-必要的扩展阅读"><span class="toc-text">Part 6. 必要的扩展阅读</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+    </div>
+    
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xxx.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/volantis-x/"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=260045301"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <div>
+    
+      
+  
+
+  <div id="rightmenu-wrapper">
+    <ul class="list-v rightmenu" id="rightmenu-content">
+      <li class='option'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-text' onclick='document.execCommand("copy")'><i class='fa fa-copy fa-fw'></i>复制文本</a>
+        <hr id='hr-text'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-href'><i class='fa fa-link fa-fw'></i>复制链接</a>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-open-href'><i class='fa fa-external-link-square-alt fa-fw'></i>在新标签页打开</a>
+        <hr id='hr-href'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-src'><i class='fa fa-image fa-fw'></i>复制图片地址</a>
+        <hr id='hr-src'>
+      </li>
+      <li class='navigation'>
+        <a class='nav icon-only fix-cursor-default' onclick='history.back()'><i class='fa fa-arrow-left fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='history.forward()'><i class='fa fa-arrow-right fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='window.location.reload()'><i class='fa fa-redo fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' href='/'><i class='fa fa-home fa-fw'></i></a>
+      </li>
+      <hr>
+      
+        
+      
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/volantis-docs/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xvolantis-docs"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 本站源码
+      </a>
+    </li>
+  
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/hexo-theme-volantis/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xhexo-theme-volantis"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 主题源码
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' 
+        
+        
+        
+          onclick="document.execCommand('print')"
+        
+        >
+        <i class='fa fa-print fa-fw'></i> 打印页面
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          <li class='music name'>
+            <p class='nav music-title fix-cursor-default'></p>
+          </li>
+          <li class='music ctrl'>
+            <a class='nav icon-only backward fix-cursor-default' onclick='aplayerBackward()'><i class='fa fa-step-backward fa-fw'></i></a>
+            <a class='nav icon-only toggle fix-cursor-default' onclick='aplayerToggle()'><i class='fa fa-play fa-fw'></i></a>
+            <a class='nav icon-only forward fix-cursor-default' onclick='aplayerForward()'><i class='fa fa-step-forward fa-fw'></i></a>
+          </li>
+          <li class='music volume'>
+            <a class='nav volume'>
+              <div class="aplayer-volume-bar-wrap">
+                <div class="aplayer-volume-bar fix-cursor-pointer">
+                  <div class="aplayer-volume"></div>
+                  <i class='left fa fa-volume-off fa-fw'></i>
+                  <i class='right fa fa-volume-up fa-fw'></i>
+                </div>
+              </div>
+            </a>
+          </li>
+        
+      
+    </ul>
+  </div>
+
+  <script>
+    window.document.oncontextmenu = function (event) {
+      if (event.ctrlKey) return true;
+      if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true;
+      return popMenu(event);
+    };
+    document.addEventListener("click", function (event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      mymenu.style.display = "none";
+    });
+    function popMenu(event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      var menuContent = document.getElementById('rightmenu-content');
+      var screenWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      var screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      mymenu.style.left = event.clientX + "px"; // 获取鼠标位置
+      mymenu.style.top = event.clientY + "px";
+      mymenu.style.display = 'block';
+      if (event.clientX * 2 > screenWidth) {
+        menuContent.classList.add('left');
+      } else {
+        menuContent.classList.remove('left');
+      }
+      if (event.clientY * 2 > screenHeight) {
+        menuContent.classList.add('top');
+      } else {
+        menuContent.classList.remove('top');
+      }
+
+      let hrText = document.getElementById('hr-text');
+      let hrSrc = document.getElementById('hr-src');
+      let hrHref = document.getElementById('hr-href');
+
+      // 选中图片
+      let copySrc = document.getElementById('menu-copy-src');
+      if (copySrc != undefined) {
+        if (event.target.currentSrc) {
+          copySrc.style.display = 'block';
+          copySrc.addEventListener("click", function (e) {
+            copyString(event.target.currentSrc);
+          },{once: true});
+          hrSrc.style.display = 'block';
+        } else {
+          copySrc.style.display = 'none';
+          hrSrc.style.display = 'none';
+        }
+      }
+
+      // 选中按钮
+      // 判断是不是按钮
+      let href = '';
+      if (event.path) {
+        for (i = 0; i < event.path.length; i++) {
+          if (event.path[i].href != undefined && event.path[i].href.length > 0) {
+            href = event.path[i].href;
+          }
+        }
+      }
+
+      let copyText = document.getElementById('menu-copy-text');
+      copyText.style.display = 'none';
+      hrText.style.display = 'none';
+      if (href.length == 0) {
+        // 选中文本
+        if (window.getSelection().toString()) {
+          copyText.style.display = 'block';
+          hrText.style.display = 'block';
+        }
+      }
+
+      // 在新标签页打开
+      let openHref = document.getElementById('menu-open-href');
+      if (openHref != undefined) {
+        if (href.length > 0) {
+          openHref.style.display = 'block';
+          openHref.addEventListener("click", function (e) {
+            window.open(href);
+          },{once: true});
+          hrHref.style.display = 'block';
+        } else {
+          openHref.style.display = 'none';
+          hrHref.style.display = 'none';
+        }
+      }
+      // 复制链接
+      let copyHref = document.getElementById('menu-copy-href');
+      if (copyHref != undefined) {
+        if (href.length > 0) {
+          copyHref.style.display = 'block';
+          copyHref.addEventListener("click", function (e) {
+            copyString(href);
+          },{once: true});
+        } else {
+          copyHref.style.display = 'none';
+        }
+      }
+
+      // 有音乐播放器
+      if (true == true) {
+        // 如果有aplayer，初始化一下
+      	try {
+      		checkAPlayer();
+          updateTitle();
+      	} catch (error) {
+      		console.log(error);
+      	}
+      }
+
+      return false; // 该行代码确保系统自带的右键菜单不会被调出
+    }
+    function hideMenu() {
+      document.getElementById('rightmenu-wrapper').style.display = 'none';
+    }
+    function copyString(str) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      document.body.appendChild(input);
+      input.setAttribute('value', str);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    document.execCommand('click');
+  </script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/001.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/002.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/003.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/004.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/005.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/006.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/012.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/016.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/019.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/025.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/034.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/035.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/038.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/039.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/046.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/051.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/052.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/054.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/056.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+  <script>
+    let APlayerController = new Object();
+    APlayerController.id = '3175833810';  // 设定全局音乐播放ID
+    APlayerController.volume = '0.7';
+  </script>
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js"></script>
+
+  
+    
+<script src="/js/aplayer.js"></script>
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  function pjax_gitalk() {
+    let pageUrl = $.trim($('#pjax-comment-path').text()) === "none" ? 
+      decodeURI(window.location.pathname) : $.trim($('#pjax-comment-path').text());
+    
+    let ALLPATH = '';
+    if(ALLPATH != '') pageUrl = ALLPATH;
+
+    if (document.getElementById('gitalk-container') != null) {
+      var gitalk = new Gitalk({
+        clientID: "a9f57bed080703426741",
+        clientSecret: "03fe7aec06a7794dedfcc123b6475f0231f6a0ce",
+        repo: "wmyskxz.github.io",
+        owner: "wmyskxz",
+        admin: "wmyskxz",
+        id: pageUrl,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      });
+      gitalk.render('gitalk-container');
+    }
+  }
+
+  $(function () {
+    pjax_gitalk();
+  });
+</script>
+
+
+
+
+<!-- darkmodejs -->
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+<!-- scrollreveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    function pjax_scrollrebeal() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '32px',
+        duration: '800',
+        interval: '20',
+        scale: '1',
+        easing: 'ease-out'
+      });
+    }
+
+    $(function () {
+      pjax_scrollrebeal();
+    });
+  </script>
+
+<!-- ******************************** -->
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+<!-- ******************************** -->
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="/js/search.js"></script>
+
+  
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js" data-pjax></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      $.fancybox.close();    // 关闭弹窗
+      $('.l_header .switcher .s-search').removeClass('active'); // 关闭移动端激活的搜索框
+      $('.l_header').removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      $('.wrapper').removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      $('.s-top').unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+
+      try{
+        pjax_fancybox();
+        
+          
+          if ('.cover') {
+            $('.cover').backstretch("resize");
+          } else {
+            $.backstretch("resize");
+          }
+        
+        
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        
+        
+          pjax_scrollrebeal();
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+          pjax_gitalk();
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>
