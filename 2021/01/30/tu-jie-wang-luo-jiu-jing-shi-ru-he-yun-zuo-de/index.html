@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#3.0.0-rc.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>图解|网络究竟是如何运作的？ - 我没有三颗心脏的博客</title>
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+    
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/styles/solarized-light.css">
+
+    
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body>
+  
+  
+  
+  <div class="cover-wrapper">
+    <cover class='cover post' style="display: none;">
+      <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">我没有三颗心脏</p>
+    
+    
+      <p class="subtitle">分享知识&技术&成长&思考</p>
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="search here..." />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation search'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <i class='fas fa-rss fa-fw'></i><p>博客</p>
+            </a>
+          
+            <a href="/learning-path/"
+              
+              
+              id="learning-path">
+              <i class='fas fa-chalkboard fa-fw'></i><p>学习路线</p>
+            </a>
+          
+            <a href="/categories/"
+              
+              
+              id="categories">
+              <i class='fas fa-folder-open fa-fw'></i><p>分类</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <i class='fas fa-tags fa-fw'></i><p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <i class='fas fa-archive fa-fw'></i><p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <i class='fas fa-info-circle fa-fw'></i><p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+    </cover>
+    <header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/learning-path/
+                  
+                  
+                  
+                    id="learning-path"
+                  >
+                  <i class='fas fa-chalkboard fa-fw'></i>学习路线
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/learning-path/
+                  
+                  
+                  
+                    id="learning-path"
+                  >
+                  <i class='fas fa-chalkboard fa-fw'></i>学习路线
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  </div>
+  
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper' id="pjax-container">
+      
+        <!--此文件用来存放一些不方便取值的变量--> 
+<!--思路大概是将值藏到重加载的区域内--> 
+ 
+ 
+ 
+<div id="pjax-data" style="display: none"> 
+  <div id="pjax-ispage">true</div> 
+  <div id="pjax-pageTitle">图解|网络究竟是如何运作的？</div> 
+  <div id="pjax-enable-cover">true</div> 
+  <div id="pjax-comment-path">none</div> 
+  <div id="pjax-comment-placeholder">none</div> 
+</div> 
+ 
+ 
+<script> 
+  // 处理封面 此时 jquery 还没加载 
+  if ("none" == "none") { // 移除封面 
+    document.getElementsByClassName('cover')[0].style.display = "none"; 
+    document.getElementsByClassName('l_body')[0].classList.add("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
+  } else { 
+    if ("none" == "blog") { // 半屏 
+      document.getElementsByClassName('cover')[0].classList.remove("full"); 
+      document.getElementsByClassName('cover')[0].classList.add("half"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
+    } else if ("none" == "docs") { // 全屏 
+      document.getElementsByClassName('cover')[0].classList.remove("half"); 
+      document.getElementsByClassName('cover')[0].classList.add("full"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = ""; 
+    } 
+    document.getElementsByClassName('cover')[0].style.display = ""; 
+    document.getElementsByClassName('l_body', 'show')[0].classList.remove("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.remove("show"); 
+  } 
+</script> 
+
+      
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2021/01/30/tu-jie-wang-luo-jiu-jing-shi-ru-he-yun-zuo-de/">
+      图解|网络究竟是如何运作的？
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E7%BD%91%E7%BB%9C/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>基础知识/网络</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年1月30日</p>
+  </a>
+</div>
+
+            
+          
+            
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-01-30T09:11:03+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年1月30日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：2.7k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：9分钟</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611624706967-image.png" alt=""></p>
+<p>毫无疑问，<strong>互联网</strong>已经彻底改变了人们的生活，不管怎样，它或许是我们建造的最伟大的工具。</p>
+<p><strong>但它是怎么工作的？它属于谁？它身在何方？又是谁来保证它持续运转呢？</strong> <em>(<a href="https://www.yxgapp.com/the-secrets-behind-how-the-internet-works/" target="_blank" rel="noopener" title="网络究竟是如何运作的？">参考视频</a>)</em></p>
+<p>今天就让我们一起来探索探索。</p>
+<h1 id="互联网简史"><a href="#互联网简史" class="headerlink" title="互联网简史"></a>互联网简史</h1><h2 id="ARPA-成立"><a href="#ARPA-成立" class="headerlink" title="ARPA 成立"></a>ARPA 成立</h2><p>1957 年，正值冷战期间，苏联人发射了世界上第一颗人造卫星，代号 SPUTNIK。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611661594560-image.png" alt="Sputnik - wiki"></p>
+<p>当卫星进入行星轨道后，美国人感觉自己技术落后的同时又开始了瞎想：苏联人既然有能力能将卫星正确发射到轨道，那么同样的原子弹也可以精准地丢到美国来。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611661860001-image.png" alt=""></p>
+<p>作为响应，美国国防部组建了研究计划局 <em>(Advanced Research Projects Agency，ARPA)</em>，并开始琢磨着<strong>将科学的技术运用于军事领域当中</strong>。</p>
+<h2 id="分布式通讯网络"><a href="#分布式通讯网络" class="headerlink" title="分布式通讯网络"></a>分布式通讯网络</h2><p><a href="https://www.rand.org/" target="_blank" rel="noopener">兰德</a>公司成立于 1946 年，总部位于加利福尼亚州圣莫尼卡，目前是一家非营利性机构，旨在帮助制定公共政策和改善决策过程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611626580942-image.png" alt="兰德原始建筑"></p>
+<p>在冷战时期，兰德研究人员设想了 <em>「如果美国突然遭遇核袭击」</em> 这样的可能战争场景时发现：<em>如果突然爆发核冲突，通讯系统将受到严重威胁，指挥系统可能会停电。</em></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611626386471-image.png" alt="保罗·巴兰"></p>
+<p>1964 年，一个名叫 <strong>保罗·巴兰(Paul Baran)</strong> 的兰德主要研究人员发表了一篇名为<a href="https://www.rand.org/content/dam/rand/pubs/research_memoranda/2006/RM3420.pdf" target="_blank" rel="noopener" title="《分布式通信》论文">《分布式通信》</a>的论文，其中概述了一种足以抵抗核袭击的<strong>弹性通信系统</strong>。</p>
+<p>尽管<strong>不可能建立一个保证所有单点可用</strong>的通信系统，但巴兰认为，可以想象有一个系统可以迫使敌人摧毁 “n 个站点” 才能让系统瘫痪——只要 n 足够大，即使在热核时代，也可以构建高度可用的系统结构。<br><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611641572588-2021-01-26%2014.10.56.gif" alt=""></p>
+<p>巴兰率先提出通信网络只能围绕两个核心结构构建：「集中式」和「分布式」。</p>
+<p>在由此得出的三种可能网络类型中：A）集中式；B）分散式；C）分布式，发现<strong>分布式分布在发生军事打击时更可靠</strong>。</p>
+<p>但不幸的是，巴兰的理想网络太领先于时代，最终被困在了模拟阶段。</p>
+<h2 id="第一代互联网——阿帕网-ARPANET"><a href="#第一代互联网——阿帕网-ARPANET" class="headerlink" title="第一代互联网——阿帕网(ARPANET)"></a>第一代互联网——阿帕网(ARPANET)</h2><p>直到 1969 年，在 加州大学洛杉矶分校 UCLA，才终于奠定了互联网的第一个基石，并建立了<strong>第一代计算机网络 ARPANET</strong>——一个由美国国防部高级研究计划局 <em>(Advanced Research Projects Agency，ARPA)</em> 开发的第一代互联网。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-26/1611643227688-image.png" alt=""></p>
+<p>矛盾的是，十年前作为军事手段应对冷战威胁的方式开始变成了一种完全不同的网络。</p>
+<p>在 1967 年 10 月于盖特林堡 CM 研讨会上提出的 ARPANET 最初计划中，项目负责人 Larry Roberts 列举了建立该网络的一系列原因。</p>
+<p>他们都不关心军事问题——相反，他们着眼于在计算机之间共享数据负载、提供电子邮件服务、共享数据和程序，并着眼于提供一种用于远程登录和使用计算机的服务。</p>
+<p>在一年后（1968 年 6 月 3 日）发布的最初的 ARPANET 计划计划中，Roberts 写道：</p>
+<blockquote>
+<p>该计划的目标是双重的：</p>
+<p>1）开发技术并获得互连计算机的经验，使得可以进行非常广泛的交互；</p>
+<p>2）通过资源共享来提高和提高计算机研究的效率。</p>
+</blockquote>
+<p><em>(历史趣闻：1969 年 10 月 29 日 UCLA 与斯坦福研究所（SRI）之间成功发出了第一个信号。在网络上发送的第一条消息应该是「Login」，但在发送字母「g」的时候，连接崩溃了。)</em></p>
+<h2 id="ARPANET-发展"><a href="#ARPANET-发展" class="headerlink" title="ARPANET 发展"></a>ARPANET 发展</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-27/1611707413524-image.png" alt="ARPANET 1969-1977 - wiki"></p>
+<p>在随后的几年中，ARPANET 进行了合并和扩展，而公众对这几乎一无所知。</p>
+<p>1971 年，阿帕网扩充到 15 个节点，历经几年成功运行后，已发展成为连接许多大学、研究所和公司的遍及美国领土的计算机网，并能通过卫星通信与相距较远的夏威夷州、英国的伦敦和北欧的挪威连接，使欧洲用户也能通过英国和挪威的节点接入网络。</p>
+<p>后来效仿阿帕网出现了很多不同的网络，由于阿帕网无法做到与其它类计算机网络交流，1973 年春，文顿·瑟夫（Vinton Cerf）和鲍勃·康（Bob Kahn）开始研究如何将阿帕网和另外两个已有的网络相连接。</p>
+<p>尤其是连接卫星网络（SAT NET）和基于夏威夷的分组业务的 ALOHA 网（ALOHA NET），瑟夫设计了新的计算机交流协议，最后被称为<strong>传送控制协议/互联网协议（TCP/IP）</strong>。</p>
+<p>在接下来的时间里，ARPA 网不断发展，联入了越来越多的电脑，并最终促生了现代互联网。</p>
+<h2 id="万维网的发明"><a href="#万维网的发明" class="headerlink" title="万维网的发明"></a>万维网的发明</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-27/1611716584110-image.png" alt="Sir Tim Berners-Lee - wiki"></p>
+<p>二十年后，英国计算机科学家 Sir Tim Berners-Lee 在日内瓦的欧洲核子研究组织 CERN 工作，工作内容为修复 CERN 系统中因不同网络不兼容而造成的混乱。</p>
+<p>他给出的解决方案是：<strong>创建万维网（World Wide Web）</strong>。<em>(标准化服务器和客户端之间的通信)</em></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-27/1611716725148-image.png" alt="Tim Berners-Lee和第一个万维网页面"></p>
+<p>虽然「互联网」和「网站」常被当做同义词使用，但它们不是同一个东西。</p>
+<p>互联网是网络的基础结构，而网站存在于互联网之上，本质上网站是利用互联网来获取信息的途径。</p>
+<h1 id="互联网是如何将我们联系起来的？"><a href="#互联网是如何将我们联系起来的？" class="headerlink" title="互联网是如何将我们联系起来的？"></a>互联网是如何将我们联系起来的？</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-27/1611716970147-image.png" alt=""></p>
+<p>如今互联网已成了跨越全球的互联化点阵，因此我们不得不问：<strong>「互联网是如何将我们所有人联系起来的？」</strong>。</p>
+<h2 id="跨洋光缆"><a href="#跨洋光缆" class="headerlink" title="跨洋光缆"></a>跨洋光缆</h2><p>光缆跨越海洋连接起了各国，这已经不是什么新鲜事。</p>
+<p>早在 1854 年第一条跨大西洋的<strong>电报电缆</strong>就已经开始施工了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611889191303-image.png" alt="1858 年的跨大西洋海底电报电缆 - wiki"></p>
+<p>相较于超复杂的跨洋光缆铺设技术，<a href="https://www.zhihu.com/question/19721234" target="_blank" rel="noopener" title="知乎 | 海底光缆是如何铺设的？">施工过程</a>却出人意料的简单。<em>(<a href="https://zhuanlan.zhihu.com/p/34713589" target="_blank" rel="noopener" title="揭秘！关于海底光缆的最强科普！">了解更多关于海底光缆</a>)</em></p>
+<p>海面上，轮船在放出光缆。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611890185396-image.png" alt=""></p>
+<p>海底下，电缆犁在把光缆固定到海底。</p>
+<p>每隔 40km~60km 还得有个中继器来保证信号。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611890241726-image.png" alt=""></p>
+<p>光缆里面只有光导纤维，外面包裹着厚厚几层保护壳——抵御海水腐蚀和偶尔的鲨鱼攻击等。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611890648980-image.png" alt="典型海底光缆结构解析"></p>
+<p>在海床上，光缆被铺设在由缆线埋设机在海底冲出的一条光缆沟内，最后借由海流让砂自然覆盖住电缆。</p>
+<p>如果海底地面不平，光缆就容易暴露，就容易收到船锚或其他自然灾害的损害。</p>
+<p>2008 年就发生了一场因为光缆受损而造成的事故，导致印度约 60％ 和埃及约 70％ 的互联网服务临时瘫痪。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611891447134-image.png" alt="wiki"></p>
+<p>即使是在现在，光缆受损依然很常见，世界各地的破损光缆要不断进行维修。</p>
+<p>当然，还有很多其他通讯线路，仅切断一根光缆是不可能完全断网的。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611891742824-image.png" alt="2015 年海底光缆绘制图"></p>
+<p>尤其是在近现代，因为卫星时刻环绕地球，并从空中与互联网对接。</p>
+<p>当整个海底光缆铺设完成之后，将有一系列光缆铺满整个国家，直接连至你的家。</p>
+<h1 id="互联网到底归谁所有？"><a href="#互联网到底归谁所有？" class="headerlink" title="互联网到底归谁所有？"></a>互联网到底归谁所有？</h1><p>总的来说，互联网仍然在成长，地球上大约有一半的人可以使用它，所以直到大规模使用达到饱和时，我们才能看到互联网真正的潜力。</p>
+<p><strong>那么互联网到底归谁所有？</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611892595087-image.png" alt=""></p>
+<p>严格来说，它不属于任何人。</p>
+<p>互联网本身就是多种公共网络的自主互联，它是分散的，因此没有任何政府或机构拥有或控制互联网。</p>
+<p>但是政府有权利通过影响改过互联网服务提供商（ISPs）的法律，来控制其公民访问互联网的权限。</p>
+<p>例如，中国限制其公民访问油管（Youtube）等外国网站。<em>(<a href="http://www.midphoto.com/chinese/whatsnew/2016/2.htm" target="_blank" rel="noopener" title="深度分析|为什么我们不能访问谷歌？">深度分析|为什么我们不能访问谷歌？</a>)</em></p>
+<h2 id="ICANN-机构"><a href="#ICANN-机构" class="headerlink" title="ICANN 机构"></a>ICANN 机构</h2><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611893096347-image.png" alt=""></p>
+<p>2016 年，美国政府正式交出数据库所有权，将<strong>互联网域名管理权</strong>交给 ICANN 这个组织——这意味着互联网所有权重新回归到人民大众手里。</p>
+<p><strong>ICAAN</strong> 是一个独立机构，由多个利益相关的社群组成——这表明 ICAAN 会向网络大众征集意见，并<strong>最大可能保持开放和透明</strong>。</p>
+<p>所以你可能没有听过 ICAAN，但该非盈利组织有一项重要举措，以维持互联网安全——<strong>他们管理域名系统（DNS)，主要任务是分配网址</strong>。</p>
+<p>即当你输入网址 <code>www.google.com</code> 时，需要保证你接收到的响应来自谷歌，而不是其他伪造的盗版谷歌。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611894042487-image.png" alt=""></p>
+<h2 id="其他互联网组织"><a href="#其他互联网组织" class="headerlink" title="其他互联网组织"></a>其他互联网组织</h2><p>ICANN 只是确保互联网正常运行的一个组织，但不是唯一一个，还有很多其他组织。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611894767072-image.png" alt="Internet governance - wiki"></p>
+<p>比如互联网工程任务组（Internet Engineering Task Force）和由蒂姆·伯纳斯·李掌管的万维网联合会（The World Wide Web Consortium）。</p>
+<p><strong>这些组织设置标准、制定协议，并确保互联网的安全性和开放性。</strong></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>所以互联网是如何运行的呢？大概总结起来就是：</p>
+<ul>
+<li>通过<strong>海底光缆</strong>实现全球的<strong>物理连接</strong>；</li>
+<li>通过<strong>各种互联网组织</strong>制定的协议、规则<strong>互通互信</strong>；</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611912674482-image.png" alt=""></p>
+<p>不可争辩的是，互联网已经彻底改变了我们的生活，它渗入到我们生活的方方面面。</p>
+<p>人们可以仅通过一部手机，就可以浏览全世界的百科全书，使用搜索引擎解决问题的人也不在少数。</p>
+<p>这些巨量的信息也参杂了巨量的误导信息，在互联网时代，人们更容易用确认偏误来验证自己的观点，从而导致了臭名昭著的<a href="https://baike.baidu.com/item/%E5%9B%9E%E5%A3%B0%E5%AE%A4%E6%95%88%E5%BA%94/15898741?fr=aladdin" target="_blank" rel="noopener" title="百度百科|回声室效应">回声室效应</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-1-29/1611913364923-image.png" alt=""></p>
+<p>我们需要警醒的是<strong>互联网不仅仅有积极的一面</strong>，也有<a href="https://book.douban.com/subject/5379664/" target="_blank" rel="noopener" title="豆瓣|互联网如何毒化了我们的大脑">消极的一面</a>。</p>
+<p>几乎任何技术都有这样的问题，人性使然，我们总是会抱怨人造工具的使用方式，而不是工具本身。</p>
+<p>尽管如此，互联网总归是一个非常强大的工具，但是我们应该正确的使用它。</p>
+<p>希望你对互联网如何工作，谁控制它有了一定的了解，感谢阅读。</p>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://www.wmyskxz.com/2021/01/30/tu-jie-wang-luo-jiu-jing-shi-ru-he-yun-zuo-de/>http://www.wmyskxz.com/2021/01/30/tu-jie-wang-luo-jiu-jing-shi-ru-he-yun-zuo-de/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-01-30T09:11:03+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年1月30日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.wmyskxz.com/2021/01/30/tu-jie-wang-luo-jiu-jing-shi-ru-he-yun-zuo-de/&title=图解|网络究竟是如何运作的？ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+          
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.wmyskxz.com/2021/01/30/tu-jie-wang-luo-jiu-jing-shi-ru-he-yun-zuo-de/&title=图解|网络究竟是如何运作的？ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://service.weibo.com/share/share.php?url=http://www.wmyskxz.com/2021/01/30/tu-jie-wang-luo-jiu-jing-shi-ru-he-yun-zuo-de/&title=图解|网络究竟是如何运作的？ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2021/01/25/gong-zhong-hao-zhong-yu-kai-tong-liu-yan-liao-shuo-dian-xin-li-hua/'>
+                <p class='title'>公众号终于开通留言了，说点心里话<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>
+
+
+初心2017 年，那个时候我还在念大学，刚接触 Java 系列的课程。
+
+在自我学习的过程中，在简书上无意看到一位博主分享的关于他重学 Java 的系列文章，相比书本系统死板的体系，以及对...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      <section id="comments">
+        <div id="gitalk-container"></div>
+
+      </section>
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#互联网简史"><span class="toc-text">互联网简史</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ARPA-成立"><span class="toc-text">ARPA 成立</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分布式通讯网络"><span class="toc-text">分布式通讯网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一代互联网——阿帕网-ARPANET"><span class="toc-text">第一代互联网——阿帕网(ARPANET)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ARPANET-发展"><span class="toc-text">ARPANET 发展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#万维网的发明"><span class="toc-text">万维网的发明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#互联网是如何将我们联系起来的？"><span class="toc-text">互联网是如何将我们联系起来的？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#跨洋光缆"><span class="toc-text">跨洋光缆</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#互联网到底归谁所有？"><span class="toc-text">互联网到底归谁所有？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ICANN-机构"><span class="toc-text">ICANN 机构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他互联网组织"><span class="toc-text">其他互联网组织</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#小结"><span class="toc-text">小结</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+    </div>
+    
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xxx.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/volantis-x/"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=260045301"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <div>
+    
+      
+  
+
+  <div id="rightmenu-wrapper">
+    <ul class="list-v rightmenu" id="rightmenu-content">
+      <li class='option'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-text' onclick='document.execCommand("copy")'><i class='fa fa-copy fa-fw'></i>复制文本</a>
+        <hr id='hr-text'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-href'><i class='fa fa-link fa-fw'></i>复制链接</a>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-open-href'><i class='fa fa-external-link-square-alt fa-fw'></i>在新标签页打开</a>
+        <hr id='hr-href'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-src'><i class='fa fa-image fa-fw'></i>复制图片地址</a>
+        <hr id='hr-src'>
+      </li>
+      <li class='navigation'>
+        <a class='nav icon-only fix-cursor-default' onclick='history.back()'><i class='fa fa-arrow-left fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='history.forward()'><i class='fa fa-arrow-right fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='window.location.reload()'><i class='fa fa-redo fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' href='/'><i class='fa fa-home fa-fw'></i></a>
+      </li>
+      <hr>
+      
+        
+      
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/volantis-docs/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xvolantis-docs"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 本站源码
+      </a>
+    </li>
+  
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/hexo-theme-volantis/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xhexo-theme-volantis"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 主题源码
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' 
+        
+        
+        
+          onclick="document.execCommand('print')"
+        
+        >
+        <i class='fa fa-print fa-fw'></i> 打印页面
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          <li class='music name'>
+            <p class='nav music-title fix-cursor-default'></p>
+          </li>
+          <li class='music ctrl'>
+            <a class='nav icon-only backward fix-cursor-default' onclick='aplayerBackward()'><i class='fa fa-step-backward fa-fw'></i></a>
+            <a class='nav icon-only toggle fix-cursor-default' onclick='aplayerToggle()'><i class='fa fa-play fa-fw'></i></a>
+            <a class='nav icon-only forward fix-cursor-default' onclick='aplayerForward()'><i class='fa fa-step-forward fa-fw'></i></a>
+          </li>
+          <li class='music volume'>
+            <a class='nav volume'>
+              <div class="aplayer-volume-bar-wrap">
+                <div class="aplayer-volume-bar fix-cursor-pointer">
+                  <div class="aplayer-volume"></div>
+                  <i class='left fa fa-volume-off fa-fw'></i>
+                  <i class='right fa fa-volume-up fa-fw'></i>
+                </div>
+              </div>
+            </a>
+          </li>
+        
+      
+    </ul>
+  </div>
+
+  <script>
+    window.document.oncontextmenu = function (event) {
+      if (event.ctrlKey) return true;
+      if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true;
+      return popMenu(event);
+    };
+    document.addEventListener("click", function (event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      mymenu.style.display = "none";
+    });
+    function popMenu(event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      var menuContent = document.getElementById('rightmenu-content');
+      var screenWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      var screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      mymenu.style.left = event.clientX + "px"; // 获取鼠标位置
+      mymenu.style.top = event.clientY + "px";
+      mymenu.style.display = 'block';
+      if (event.clientX * 2 > screenWidth) {
+        menuContent.classList.add('left');
+      } else {
+        menuContent.classList.remove('left');
+      }
+      if (event.clientY * 2 > screenHeight) {
+        menuContent.classList.add('top');
+      } else {
+        menuContent.classList.remove('top');
+      }
+
+      let hrText = document.getElementById('hr-text');
+      let hrSrc = document.getElementById('hr-src');
+      let hrHref = document.getElementById('hr-href');
+
+      // 选中图片
+      let copySrc = document.getElementById('menu-copy-src');
+      if (copySrc != undefined) {
+        if (event.target.currentSrc) {
+          copySrc.style.display = 'block';
+          copySrc.addEventListener("click", function (e) {
+            copyString(event.target.currentSrc);
+          },{once: true});
+          hrSrc.style.display = 'block';
+        } else {
+          copySrc.style.display = 'none';
+          hrSrc.style.display = 'none';
+        }
+      }
+
+      // 选中按钮
+      // 判断是不是按钮
+      let href = '';
+      if (event.path) {
+        for (i = 0; i < event.path.length; i++) {
+          if (event.path[i].href != undefined && event.path[i].href.length > 0) {
+            href = event.path[i].href;
+          }
+        }
+      }
+
+      let copyText = document.getElementById('menu-copy-text');
+      copyText.style.display = 'none';
+      hrText.style.display = 'none';
+      if (href.length == 0) {
+        // 选中文本
+        if (window.getSelection().toString()) {
+          copyText.style.display = 'block';
+          hrText.style.display = 'block';
+        }
+      }
+
+      // 在新标签页打开
+      let openHref = document.getElementById('menu-open-href');
+      if (openHref != undefined) {
+        if (href.length > 0) {
+          openHref.style.display = 'block';
+          openHref.addEventListener("click", function (e) {
+            window.open(href);
+          },{once: true});
+          hrHref.style.display = 'block';
+        } else {
+          openHref.style.display = 'none';
+          hrHref.style.display = 'none';
+        }
+      }
+      // 复制链接
+      let copyHref = document.getElementById('menu-copy-href');
+      if (copyHref != undefined) {
+        if (href.length > 0) {
+          copyHref.style.display = 'block';
+          copyHref.addEventListener("click", function (e) {
+            copyString(href);
+          },{once: true});
+        } else {
+          copyHref.style.display = 'none';
+        }
+      }
+
+      // 有音乐播放器
+      if (true == true) {
+        // 如果有aplayer，初始化一下
+      	try {
+      		checkAPlayer();
+          updateTitle();
+      	} catch (error) {
+      		console.log(error);
+      	}
+      }
+
+      return false; // 该行代码确保系统自带的右键菜单不会被调出
+    }
+    function hideMenu() {
+      document.getElementById('rightmenu-wrapper').style.display = 'none';
+    }
+    function copyString(str) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      document.body.appendChild(input);
+      input.setAttribute('value', str);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    document.execCommand('click');
+  </script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/001.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/002.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/003.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/004.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/005.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/006.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/012.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/016.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/019.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/025.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/034.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/035.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/038.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/039.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/046.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/051.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/052.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/054.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/056.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+  <script>
+    let APlayerController = new Object();
+    APlayerController.id = '3175833810';  // 设定全局音乐播放ID
+    APlayerController.volume = '0.7';
+  </script>
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js"></script>
+
+  
+    
+<script src="/js/aplayer.js"></script>
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  function pjax_gitalk() {
+    let pageUrl = $.trim($('#pjax-comment-path').text()) === "none" ? 
+      decodeURI(window.location.pathname) : $.trim($('#pjax-comment-path').text());
+    
+    let ALLPATH = '';
+    if(ALLPATH != '') pageUrl = ALLPATH;
+
+    if (document.getElementById('gitalk-container') != null) {
+      var gitalk = new Gitalk({
+        clientID: "a9f57bed080703426741",
+        clientSecret: "03fe7aec06a7794dedfcc123b6475f0231f6a0ce",
+        repo: "wmyskxz.github.io",
+        owner: "wmyskxz",
+        admin: "wmyskxz",
+        id: pageUrl,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      });
+      gitalk.render('gitalk-container');
+    }
+  }
+
+  $(function () {
+    pjax_gitalk();
+  });
+</script>
+
+
+
+
+<!-- darkmodejs -->
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+<!-- scrollreveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    function pjax_scrollrebeal() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '32px',
+        duration: '800',
+        interval: '20',
+        scale: '1',
+        easing: 'ease-out'
+      });
+    }
+
+    $(function () {
+      pjax_scrollrebeal();
+    });
+  </script>
+
+<!-- ******************************** -->
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+<!-- ******************************** -->
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="/js/search.js"></script>
+
+  
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js" data-pjax></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      $.fancybox.close();    // 关闭弹窗
+      $('.l_header .switcher .s-search').removeClass('active'); // 关闭移动端激活的搜索框
+      $('.l_header').removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      $('.wrapper').removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      $('.s-top').unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+
+      try{
+        pjax_fancybox();
+        
+          
+          if ('.cover') {
+            $('.cover').backstretch("resize");
+          } else {
+            $.backstretch("resize");
+          }
+        
+        
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        
+        
+          pjax_scrollrebeal();
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+          pjax_gitalk();
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>
