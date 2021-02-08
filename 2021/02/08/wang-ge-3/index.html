@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html>
+<head hexo-theme='https://volantis.js.org/#3.0.0-rc.1'>
+  <meta charset="utf-8">
+  <!-- SEO相关 -->
+  
+    
+  
+  <!-- 渲染优化 -->
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- 页面元数据 -->
+  
+  <title>DNS 是什么？如何运作的？ - 我没有三颗心脏的博客</title>
+  
+
+  
+
+  <!-- feed -->
+  
+
+  <!-- import meta -->
+  
+
+  <!-- link -->
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13/css/all.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.css">
+  
+
+  
+
+  <!-- import link -->
+  
+
+  
+    
+      
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.18.1/styles/solarized-light.css">
+
+    
+  
+  
+    
+<link rel="stylesheet" href="/css/style.css">
+
+  
+
+  
+  
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+<body>
+  
+  
+  
+  <div class="cover-wrapper">
+    <cover class='cover post' style="display: none;">
+      <div class='cover-body'>
+  <div class='a'>
+    
+    
+      <p class="title">我没有三颗心脏</p>
+    
+    
+      <p class="subtitle">分享知识&技术&成长&思考</p>
+    
+  </div>
+  <div class='b'>
+    
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <input type="text" class="input u-search-input" placeholder="search here..." />
+          <i class="icon fas fa-search fa-fw"></i>
+        </form>
+      </div>
+    
+    <div class='menu navigation search'>
+      <div class='list-h'>
+        
+          
+            <a href="/"
+              
+              
+              id="home">
+              <i class='fas fa-rss fa-fw'></i><p>博客</p>
+            </a>
+          
+            <a href="/learning-path/"
+              
+              
+              id="learning-path">
+              <i class='fas fa-chalkboard fa-fw'></i><p>学习路线</p>
+            </a>
+          
+            <a href="/categories/"
+              
+              
+              id="categories">
+              <i class='fas fa-folder-open fa-fw'></i><p>分类</p>
+            </a>
+          
+            <a href="/tags/"
+              
+              
+              id="tags">
+              <i class='fas fa-tags fa-fw'></i><p>标签</p>
+            </a>
+          
+            <a href="/archives/"
+              
+              
+              id="archives">
+              <i class='fas fa-archive fa-fw'></i><p>归档</p>
+            </a>
+          
+            <a href="/about/"
+              
+              
+              id="about">
+              <i class='fas fa-info-circle fa-fw'></i><p>关于</p>
+            </a>
+          
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="scroll-down" style="display: none;"><i class="fa fa-chevron-down scroll-down-effects"></i></div>
+    </cover>
+    <header class="l_header shadow blur">
+  <div class='container'>
+  <div class='wrapper'>
+    <div class='nav-sub'>
+      <p class="title"></p>
+      <ul class='switcher nav-list-h m-phone' id="pjax-header-nav-list">
+        <li><a class="s-comment fas fa-comments fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+          <li><a class="s-toc fas fa-list fa-fw" target="_self" href='javascript:void(0)'></a></li>
+        
+      </ul>
+    </div>
+		<div class="nav-main">
+      
+        
+        <a class="title flat-box" target="_self" href='/'>
+          
+            <img no-lazy class='logo' src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/Logo-NavBar@3x.png'/>
+          
+          
+          
+        </a>
+      
+
+			<div class='menu navigation'>
+				<ul class='nav-list-h m-pc'>
+          
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/learning-path/
+                  
+                  
+                  
+                    id="learning-path"
+                  >
+                  <i class='fas fa-chalkboard fa-fw'></i>学习路线
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+          
+            
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+          
+				</ul>
+			</div>
+
+      <div class="m_search">
+        <form name="searchform" class="form u-search-form">
+          <i class="icon fas fa-search fa-fw"></i>
+          <input type="text" class="input u-search-input" placeholder="Search..." />
+        </form>
+      </div>
+
+			<ul class='switcher nav-list-h m-phone'>
+				
+					<li><a class="s-search fas fa-search fa-fw" target="_self" href='javascript:void(0)'></a></li>
+				
+				<li>
+          <a class="s-menu fas fa-bars fa-fw" target="_self" href='javascript:void(0)'></a>
+          <ul class="menu-phone list-v navigation white-box">
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/
+                  
+                  
+                  
+                    id="home"
+                  >
+                  <i class='fas fa-rss fa-fw'></i>博客
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/learning-path/
+                  
+                  
+                  
+                    id="learning-path"
+                  >
+                  <i class='fas fa-chalkboard fa-fw'></i>学习路线
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/categories/
+                  
+                  
+                  
+                    id="categories"
+                  >
+                  <i class='fas fa-folder-open fa-fw'></i>分类
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/tags/
+                  
+                  
+                  
+                    id="tags"
+                  >
+                  <i class='fas fa-tags fa-fw'></i>标签
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/archives/
+                  
+                  
+                  
+                    id="archives"
+                  >
+                  <i class='fas fa-archive fa-fw'></i>归档
+                </a>
+                
+              </li>
+            
+          
+            
+              
+            
+              <li>
+                <a class="menuitem flat-box faa-parent animated-hover" href=/about/
+                  
+                  
+                  
+                    id="about"
+                  >
+                  <i class='fas fa-info-circle fa-fw'></i>关于
+                </a>
+                
+              </li>
+            
+          
+            
+          </ul>
+        </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+</header>
+
+  </div>
+  
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper' id="pjax-container">
+      
+        <!--此文件用来存放一些不方便取值的变量--> 
+<!--思路大概是将值藏到重加载的区域内--> 
+ 
+ 
+ 
+<div id="pjax-data" style="display: none"> 
+  <div id="pjax-ispage">true</div> 
+  <div id="pjax-pageTitle">DNS 是什么？如何运作的？</div> 
+  <div id="pjax-enable-cover">true</div> 
+  <div id="pjax-comment-path">none</div> 
+  <div id="pjax-comment-placeholder">none</div> 
+</div> 
+ 
+ 
+<script> 
+  // 处理封面 此时 jquery 还没加载 
+  if ("none" == "none") { // 移除封面 
+    document.getElementsByClassName('cover')[0].style.display = "none"; 
+    document.getElementsByClassName('l_body')[0].classList.add("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.add("show"); 
+  } else { 
+    if ("none" == "blog") { // 半屏 
+      document.getElementsByClassName('cover')[0].classList.remove("full"); 
+      document.getElementsByClassName('cover')[0].classList.add("half"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = "none"; 
+    } else if ("none" == "docs") { // 全屏 
+      document.getElementsByClassName('cover')[0].classList.remove("half"); 
+      document.getElementsByClassName('cover')[0].classList.add("full"); 
+      document.getElementsByClassName('scroll-down')[0].style.display = ""; 
+    } 
+    document.getElementsByClassName('cover')[0].style.display = ""; 
+    document.getElementsByClassName('l_body', 'show')[0].classList.remove("nocover"); 
+    document.getElementsByClassName('l_header', 'cover-wrapper')[0].classList.remove("show"); 
+  } 
+</script> 
+
+      
+      
+
+<div class='l_main'>
+  
+
+  
+    <article id="post" class="post white-box reveal shadow article-type-post" itemscope itemprop="blogPost">
+      
+
+
+  <section class='meta'>
+    
+      
+      
+      <div class="meta" id="header-meta">
+        
+          
+  <h1 class="title">
+    <a href="/2021/02/08/wang-ge-3/">
+      DNS 是什么？如何运作的？
+    </a>
+  </h1>
+
+
+        
+        <div class='new-meta-box'>
+          
+            
+          
+            
+              
+  
+  <div class='new-meta-item category'>
+    <a href='/categories/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/%E7%BD%91%E7%BB%9C/' rel="nofollow">
+      <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+      <p>基础知识/网络</p>
+    </a>
+  </div>
+
+
+            
+          
+            
+              <div class="new-meta-item date">
+  <a class='notlink'>
+    <i class="fas fa-calendar-alt fa-fw" aria-hidden="true"></i>
+    <p>发布于：2021年2月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-02-08T17:24:20+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年2月8日</p>
+  </a>
+</div>
+
+            
+          
+            
+              
+
+            
+          
+            
+              
+  <div class="new-meta-item wordcount">
+    <a class='notlink'>
+      <i class="fas fa-keyboard fa-fw" aria-hidden="true"></i>
+      <p>字数：2.2k字</p>
+    </a>
+  </div>
+  <div class="new-meta-item readtime">
+    <a class='notlink'>
+      <i class="fas fa-hourglass-half fa-fw" aria-hidden="true"></i>
+      <p>时长：7分钟</p>
+    </a>
+  </div>
+
+
+            
+          
+        </div>
+        
+          <hr>
+        
+      </div>
+    
+  </section>
+
+
+      <section class="article typo">
+        <div class="article-entry" itemprop="articleBody">
+          
+          
+          <p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612775267339-image.png" alt=""></p>
+<a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们在<a href="https://www.wmyskxz.com/2021/02/01/wang-luo-2/">上一篇</a>说到，IP 地址的发明把我们纷乱复杂的网络设备整齐划一地统一在了<strong>同一个网络</strong>中。</p>
+<p>但是类似于 <code>192.168.1.0</code> 这样的地址并不便于人类记忆，于是发明了 <strong>域名(Domain Name)</strong> 来帮助解决这样的问题。</p>
+<p>对应的，我们也需要一个系统来帮助”翻译”：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-2/1612232538793-image.png" alt=""></p>
+<h1 id="Part-1-DNS-是什么？"><a href="#Part-1-DNS-是什么？" class="headerlink" title="Part 1. DNS 是什么？"></a>Part 1. DNS 是什么？</h1><p>DNS <em>（Domain Name System 的缩写）</em> 的作用非常简单，就是根据域名查出对应的 IP 地址，你可以把它想象成一本<strong>巨大的电话本</strong>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-2/1612235242990-image.png" alt=""></p>
+<p>换句话说，DNS 是将域名映射到响应 IP 地址的服务。</p>
+<h1 id="Part-2-DNS-是如何工作的？"><a href="#Part-2-DNS-是如何工作的？" class="headerlink" title="Part 2. DNS 是如何工作的？"></a>Part 2. DNS 是如何工作的？</h1><p>DNS 是我们今天使用 Internet 的核心。</p>
+<p><a href="https://www.verisign.com/assets/domain-name-report-Q32020.pdf" target="_blank" rel="noopener">最新报告</a>显示，2020 年第三季度有 <code>3.71</code> 亿个域名，如果没有 DNS 将其对应解析成对应的 IP 地址，我们将会在网络世界中迷路。</p>
+<p>当宁想要使用手机打电话给某人，宁几乎不太可能背出确切的电话号码，而是直接使用此人的名字进行搜索和拨号。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-2/1612237425402-image.png" alt=""></p>
+<p>当宁想要加载网站时，DNS 会执行类似的操作。</p>
+<p>解析域名或者主机名需要经历几个不同的阶段。</p>
+<p>在某些情况下，DNS 解析是一个一步就完成的过程，而某些情况下，则需要联系多个 DNS 服务器。</p>
+<p>下图就展示了这一过程<strong>必要的步骤</strong>，并且没有考虑浏览器缓存：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-2/1612249392326-image.png" alt="DNS 如何工作的示例"></p>
+<p>过程可能有些复杂，为了便于理解，我们在进一步说明之前需要先说明两点：<strong>「DNS 服务器和域名的分级」</strong> 以及 <strong>「DNS 缓存」</strong>。</p>
+<h1 id="Part-3-域名和-DNS-服务器的分级"><a href="#Part-3-域名和-DNS-服务器的分级" class="headerlink" title="Part 3. 域名和 DNS 服务器的分级"></a>Part 3. 域名和 DNS 服务器的分级</h1><h2 id="域名的分级"><a href="#域名的分级" class="headerlink" title="域名的分级"></a>域名的分级</h2><p>我们日常上网输入的网址，比如：<code>https://www.google.com</code>，其实可以拆成几个部分看待：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-5/1612518999165-image.png" alt=""></p>
+<p>默认支持的服务类型（HTTP/ HTTPS）、主机名（www）、端口号（80）、默认文档（index.html）是可以省略的，所以以上网址可以省略为：<code>google.com</code>。</p>
+<p>严格来说，<code>google.com</code> 才被称为<strong>域名（全球唯一）</strong>，<code>www</code> 是主机名，对应着一种服务，<code>google.com</code> 域名下不同的主机服务器，可以提供很多不同的服务：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612748244033-image.png" alt=""></p>
+<p><code>www</code>、<code>blog</code> 等很多服务可以部署在同一台服务器上，而一台服务器独占着一个 IP 地址，可见，<strong>域名和 IP 地址的对应关系</strong>可以是<strong>多对一</strong>的，或者<strong>一对多</strong>（负载均衡），也可以<strong>一对一</strong>。</p>
+<p>所有的域名都有一个<strong>根</strong>的概念，所以整个互联网的域名空间看起来会是这样：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612754653538-image.png" alt=""></p>
+<h2 id="DNS-分级"><a href="#DNS-分级" class="headerlink" title="DNS 分级"></a>DNS 分级</h2><p>把全世界所有的电话号码存储在同一个通讯录里面既不现实也效率低下。</p>
+<p>DNS 也是类似，对应域名空间，DNS 也有类似的结构：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612755294400-image.png" alt=""></p>
+<p>整个域名系统采取<strong>分布式存储</strong>。</p>
+<p>全世界<strong>根域名服务器</strong>总共有 13 个，其中 10 个在美国，英国瑞典各 1 个，日本 1 个：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612756134103-image.png" alt="来源：https://root-servers.org/"></p>
+<p>这是逻辑上的数量，这 13 个根域名器服务器背后其实还是有很多台物理的服务器在工作。</p>
+<p>根域名服务器只负责管理<strong>顶级域名服务器</strong>（Top Level Domain，简称 TLD），记录所有 TLD 的位置。</p>
+<p>而 TLD 则对应管理着所有注册在当前顶级域名下的所有<strong>权限服务器</strong>，也就是真实提供服务的服务器的真实 IP 地址。</p>
+<p>这有点儿类似于我们真实的通讯录，比如我们想要给 <em>香克斯</em> 打电话：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612766626972-2021-02-08%2014.42.56.gif" alt=""></p>
+<p>可以这样想象：全世界的域名被<strong>根域名服务器</strong>逻辑的统一在一个通讯录中，而根域名服务器就像右边的导航一样，存储着不同标识对应列表的位置信息；</p>
+<p>而这些标识类似于<strong>顶级域名服务器</strong>，存储着注册其下所有的<strong>权限服务器</strong>（比如 <code>google.com</code> 对应的服务器）信息；</p>
+<p>只有查询<strong>权限服务器</strong>，你才能拿到详细的 IP 地址（不考虑缓存的情况下）；</p>
+<h1 id="Part-4-为什么需要-DNS-缓存？"><a href="#Part-4-为什么需要-DNS-缓存？" class="headerlink" title="Part 4. 为什么需要 DNS 缓存？"></a>Part 4. 为什么需要 DNS 缓存？</h1><p>通过上面通讯录的例子，我们已经足够理解 DNS 查询的主要过程了：<em>（再来看一眼）</em></p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612768826974-image.png" alt=""></p>
+<p>但实际上，真正访问 DNS 服务器之前，我们会在多个地方<strong>缓存</strong>域名与 IP 之间的对应关系：</p>
+<ol>
+<li>这样可以减少对 DNS 服务器的访问，减缓 DNS 服务器的访问压力；</li>
+<li>这样也能够加快域名解析的过程；</li>
+</ol>
+<p><strong>涉及 DNS 的地方就会有缓存</strong>，包括浏览器、操作系统、本地 DNS 服务器、路由器、ISP 提供的递归路由器、根域名服务器等，它们都会对 DNS 结果做一定程度的缓存。</p>
+<p>但是，DNS 缓存也存在一些问题：</p>
+<ol>
+<li>DNS 更改刷新需要时间来传播，这意味着每一台 DNS 服务器缓存更新到最新的 IP 需要一段时间；</li>
+<li>DNS 缓存也是黑客潜在的攻击手段；</li>
+</ol>
+<h1 id="Part-5-一次请求的详细过程"><a href="#Part-5-一次请求的详细过程" class="headerlink" title="Part 5. 一次请求的详细过程"></a>Part 5. 一次请求的详细过程</h1><p>这一次我们来跟踪一次详细的过程，例如我们在浏览器输入网址 <code>www.example.com</code> 并回车：</p>
+<ol>
+<li>查询<strong>浏览器缓存</strong>，有结果则返回；（如果你使用 Chrome 浏览器可以输入 <code>chrome://net-internals/#dns</code> 自行查看）</li>
+<li>查询<strong>系统缓存</strong>，通常存在于 host 文件中，有结果则返回；<ul>
+<li>Mac：<code>/etc/hosts</code></li>
+<li>Windows：<code>C:\Windows\System32\drivers\etc\hosts</code></li>
+</ul>
+</li>
+<li>向<strong>本地 DNS 服务器</strong>，通常是路由器，有结果则返回，否则向上查询直连 ISP 的递归 DNS 服务器；<br> <img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612772452687-image.png" alt=""></li>
+<li>查询 ISP 提供的 <strong>「递归 DNS 服务器」</strong>，有缓存则返回，否则一直递归查询到 <strong>「根服务器」</strong>；</li>
+<li><strong>「递归 DNS 服务器」</strong> 向 <strong>「根服务器」</strong> 查询 <strong>「<code>.com</code> 权威 DNS 服务器」</strong> 的地址；</li>
+<li><strong>「递归 DNS 服务器」</strong> 向 <strong>「<code>.com</code> 权威 DNS 服务器」</strong> 查询 <strong>「<code>example.com</code> 所使用权威 DNS 服务器」</strong> 的地址；</li>
+<li><strong>「递归 DNS 服务器」</strong> 向 <strong>「<code>example.com</code> 所使用权威 DNS 服务器」</strong> 查询解析获得 DNS 记录并<strong>缓存</strong>；</li>
+<li><strong>「递归 DNS 服务器」</strong> 向浏览器返回结果；</li>
+<li>浏览器拿到 IP 地址并向 <code>www.example.com</code> 发送请求；（完毕）</li>
+</ol>
+<p>结合上面的内容，我相信你已经对 DNS 如何工作不再陌生。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612772963469-007hyfXLly1g1cyjwuqvhg301m01vdfp.gif" alt=""></p>
+<h1 id="相关问题"><a href="#相关问题" class="headerlink" title="相关问题"></a>相关问题</h1><h2 id="为什么根-DNS-只有-13-台？"><a href="#为什么根-DNS-只有-13-台？" class="headerlink" title="为什么根 DNS 只有 13 台？"></a>为什么根 DNS 只有 13 台？</h2><p><strong>简而言之</strong>：由于历史和技术原因，对于 IPv4 来说，根 DNS 只能有 13 个。</p>
+<p><strong>不简而言之的简而言之</strong>：</p>
+<p>DNS 消息使用 UDP 协议进行传输，这规定了消息最大的长度在 512 字节（不包含 IP 头部、UDP 头部）。</p>
+<p>有了最大长度限制之后，一个 UDP 协议传输的 DNS 响应能够返回的资源记录数量就是有限的。</p>
+<p><strong>要让所有的根服务器数据能包含在一个 512 字节的 UDP 包中，根服务器只能限制在 13 个。</strong>（事实上改进之后才能容纳 13 个，最开始也没有 13 个这么多）</p>
+<p>（<a href="https://zhuanlan.zhihu.com/p/107492241" target="_blank" rel="noopener">扩展阅读(下3)</a>）</p>
+<h2 id="当键入网址后，到网页显示，其间发生了什么？"><a href="#当键入网址后，到网页显示，其间发生了什么？" class="headerlink" title="当键入网址后，到网页显示，其间发生了什么？"></a>当键入网址后，到网页显示，其间发生了什么？</h2><p>本文涉及输入网址访问，这是自然而然会联想到的问题。但本文只是详细说明了 DNS 查询域名背后 IP 的过程。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-8/1612774979659-image.png" alt="来源：@小林coding"></p>
+<p>该问题涉及浏览器原理、网络协议等细节问题，感兴趣可以<a href="https://zhuanlan.zhihu.com/p/113702574" target="_blank" rel="noopener">戳这里(下4)</a></p>
+<h2 id="美国如果把根域名服务器封了，中国会从网络上消失吗？"><a href="#美国如果把根域名服务器封了，中国会从网络上消失吗？" class="headerlink" title="美国如果把根域名服务器封了，中国会从网络上消失吗？"></a>美国如果把根域名服务器封了，中国会从网络上消失吗？</h2><p>美国拥有最多的根域名服务器，如果美国把根域名服务器封了，中国会从网络上消失吗？</p>
+<p><strong>答案是：不会。</strong> 因为虽然根不在我们手里，但是我们有镜像（备份）。</p>
+<p><a href="https://segmentfault.com/a/1190000023696737" target="_blank" rel="noopener">扩展阅读(下5)</a></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这一篇文章我们又进一步揭开了一点网络关于 DNS 一角的神秘面纱：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-1/1612146383742-image.png" alt=""></p>
+<p>也是使用了 <strong>PPT</strong> 制作了动图帮助大家理解，希望大家能够有所收获。</p>
+<p>后续也会继续跟大家一起学习计算机网络的基础知识，也会尝试着跟着<a href="https://roadmap.sh/backend" target="_blank" rel="noopener">后端学习路线图</a>的脚步跟着大家一起学习进阶。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/BlogImage02/2021-2-1/1612147071259-image.png" alt="https://roadmap.sh/backend"></p>
+<p>（完）</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ol>
+<li>What Is A Domain Name System (DNS) &amp; How Does It Work? - <a href="https://phoenixnap.com/kb/what-is-domain-name-system-works" target="_blank" rel="noopener">https://phoenixnap.com/kb/what-is-domain-name-system-works</a></li>
+<li>域名报告 - <a href="https://www.verisign.com/assets/domain-name-report-Q32020.pdf" target="_blank" rel="noopener">https://www.verisign.com/assets/domain-name-report-Q32020.pdf</a></li>
+<li>根域名服务器只有 13 台？ - <a href="https://zhuanlan.zhihu.com/p/107492241" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/107492241</a></li>
+<li>30张图解：当键入网址后，到网页显示，其间发生了什么？ - <a href="https://zhuanlan.zhihu.com/p/113702574" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/113702574</a></li>
+<li>美国如果把根域名服务器封了，中国会从网络上消失？ - <a href="https://segmentfault.com/a/1190000023696737" target="_blank" rel="noopener">https://segmentfault.com/a/1190000023696737</a></li>
+</ol>
+
+          
+            <div class='article_footer'>
+              
+                
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+
+
+  
+
+  
+    
+    
+
+<section class="widget copyright  desktop mobile">
+  <div class='content'>
+    
+      <blockquote>
+        
+          
+            <p>博客内容遵循 署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</p>
+
+          
+        
+          
+            <p>本文永久链接是：<a href=http://www.wmyskxz.com/2021/02/08/wang-ge-3/>http://www.wmyskxz.com/2021/02/08/wang-ge-3/</a></p>
+          
+        
+      </blockquote>
+    
+  </div>
+</section>
+
+  
+
+  
+    
+    
+
+<section class="widget qrcode  desktop mobile">
+  
+
+  <div class='content article-entry'>
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+      
+        <div class='fancybox'><img src='https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/blog/qrcode/github@volantis.png'
+        
+          height='64px'
+        ></div>
+      
+    
+  </div>
+</section>
+
+  
+
+
+              
+            </div>
+          
+        </div>
+        
+          
+
+
+  <section class='meta' id="footer-meta">
+    <div class='new-meta-box'>
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2021-02-08T17:24:20+08:00">
+  <a class='notlink'>
+    <i class="fas fa-edit fa-fw" aria-hidden="true"></i>
+    <p>更新于：2021年2月8日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.wmyskxz.com/2021/02/08/wang-ge-3/&title=DNS 是什么？如何运作的？ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="" rel="external nofollow noopener noreferrer"
+          
+          href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=http://www.wmyskxz.com/2021/02/08/wang-ge-3/&title=DNS 是什么？如何运作的？ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="" rel="external nofollow noopener noreferrer"
+          
+          href="http://service.weibo.com/share/share.php?url=http://www.wmyskxz.com/2021/02/08/wang-ge-3/&title=DNS 是什么？如何运作的？ - 我没有三颗心脏的博客&summary="
+          
+          >
+          
+            <img src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-org/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+        
+        
+          <div class="prev-next">
+            
+            
+              <a class='next' href='/2021/02/06/weekly1/'>
+                <p class='title'>一周精彩内容分享（第 1 期）："世纪逼空大战"<i class="fas fa-chevron-right" aria-hidden="true"></i></p>
+                <p class='content'>这里记录过去一周，我看到的值得分享的东西。
+一方面是整理记录一下自己一周的学习，另一方面也是期待自己有更多的输出，有更多的价值。
+周刊开源（Github：wmyskxz/weekly），欢迎提交...</p>
+              </a>
+            
+          </div>
+        
+      </section>
+    </article>
+  
+
+  
+    
+
+  <article class="post white-box reveal comments shadow">
+    <section class="article typo">
+      <p ct><i class='fas fa-comments'></i> 评论</p>
+      
+      <section id="comments">
+        <div id="gitalk-container"></div>
+
+      </section>
+    </section>
+  </article>
+
+
+  
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+</div>
+<aside class='l_side'>
+  
+  
+
+  
+    
+    
+
+
+
+  <section class="widget toc-wrapper shadow desktop mobile" id="toc-div" >
+    
+  <header>
+    
+      <i class="fas fa-list fa-fw" aria-hidden="true"></i><span class='name'>本文目录</span>
+    
+  </header>
+
+
+    <div class='content'>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-1-DNS-是什么？"><span class="toc-text">Part 1. DNS 是什么？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-2-DNS-是如何工作的？"><span class="toc-text">Part 2. DNS 是如何工作的？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-3-域名和-DNS-服务器的分级"><span class="toc-text">Part 3. 域名和 DNS 服务器的分级</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#域名的分级"><span class="toc-text">域名的分级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-分级"><span class="toc-text">DNS 分级</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-4-为什么需要-DNS-缓存？"><span class="toc-text">Part 4. 为什么需要 DNS 缓存？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Part-5-一次请求的详细过程"><span class="toc-text">Part 5. 一次请求的详细过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关问题"><span class="toc-text">相关问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么根-DNS-只有-13-台？"><span class="toc-text">为什么根 DNS 只有 13 台？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#当键入网址后，到网页显示，其间发生了什么？"><span class="toc-text">当键入网址后，到网页显示，其间发生了什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#美国如果把根域名服务器封了，中国会从网络上消失吗？"><span class="toc-text">美国如果把根域名服务器封了，中国会从网络上消失吗？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#后记"><span class="toc-text">后记</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考资料"><span class="toc-text">参考资料</span></a></li></ol>
+    </div>
+  </section>
+
+
+  
+
+
+</aside>
+
+
+
+    </div>
+    
+  
+  <footer class="clearfix">
+    <br><br>
+    
+      
+        <br>
+        <div class="social-wrapper">
+          
+            
+              <a href="/atom.xml"
+                class="social fas fa-rss flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="mailto:me@xxx.com"
+                class="social fas fa-envelope flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://github.com/volantis-x/"
+                class="social fab fa-github flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+            
+              <a href="https://music.163.com/#/user/home?id=260045301"
+                class="social fas fa-headphones-alt flat-btn"
+                target="_blank"
+                rel="external nofollow noopener noreferrer">
+              </a>
+            
+          
+        </div>
+      
+    
+      
+        <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank" rel="noopener">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+      
+    
+      
+        本站使用
+        <a href="https://github.com/volantis-x/hexo-theme-volantis/" target="_blank" class="codename">Volantis</a>
+        作为主题，总访问量为
+          <span id="busuanzi_value_site_pv"><i class="fas fa-circle-notch fa-spin fa-fw" aria-hidden="true"></i></span>
+          次
+        
+      
+    
+      
+        <div class='copyright'>
+        <p><a href="/">Copyright © 2017-2020 XXX</a></p>
+
+        </div>
+      
+    
+  </footer>
+
+
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <div>
+    
+      
+  
+
+  <div id="rightmenu-wrapper">
+    <ul class="list-v rightmenu" id="rightmenu-content">
+      <li class='option'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-text' onclick='document.execCommand("copy")'><i class='fa fa-copy fa-fw'></i>复制文本</a>
+        <hr id='hr-text'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-href'><i class='fa fa-link fa-fw'></i>复制链接</a>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-open-href'><i class='fa fa-external-link-square-alt fa-fw'></i>在新标签页打开</a>
+        <hr id='hr-href'>
+        <a class='vlts-menu opt fix-cursor-default' id='menu-copy-src'><i class='fa fa-image fa-fw'></i>复制图片地址</a>
+        <hr id='hr-src'>
+      </li>
+      <li class='navigation'>
+        <a class='nav icon-only fix-cursor-default' onclick='history.back()'><i class='fa fa-arrow-left fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='history.forward()'><i class='fa fa-arrow-right fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' onclick='window.location.reload()'><i class='fa fa-redo fa-fw'></i></a>
+        <a class='nav icon-only fix-cursor-default' href='/'><i class='fa fa-home fa-fw'></i></a>
+      </li>
+      <hr>
+      
+        
+      
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/volantis-docs/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xvolantis-docs"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 本站源码
+      </a>
+    </li>
+  
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' href=https://github.com/volantis-x/hexo-theme-volantis/
+        
+        
+        
+        
+          id="https:githubcomvolantis-xhexo-theme-volantis"
+        >
+        <i class='fa fa-code-branch fa-fw'></i> 主题源码
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          
+    <li>
+      <a class='vlts-menu fix-cursor-default' 
+        
+        
+        
+          onclick="document.execCommand('print')"
+        
+        >
+        <i class='fa fa-print fa-fw'></i> 打印页面
+      </a>
+    </li>
+  
+        
+      
+        
+          <hr>
+        
+      
+        
+          <li class='music name'>
+            <p class='nav music-title fix-cursor-default'></p>
+          </li>
+          <li class='music ctrl'>
+            <a class='nav icon-only backward fix-cursor-default' onclick='aplayerBackward()'><i class='fa fa-step-backward fa-fw'></i></a>
+            <a class='nav icon-only toggle fix-cursor-default' onclick='aplayerToggle()'><i class='fa fa-play fa-fw'></i></a>
+            <a class='nav icon-only forward fix-cursor-default' onclick='aplayerForward()'><i class='fa fa-step-forward fa-fw'></i></a>
+          </li>
+          <li class='music volume'>
+            <a class='nav volume'>
+              <div class="aplayer-volume-bar-wrap">
+                <div class="aplayer-volume-bar fix-cursor-pointer">
+                  <div class="aplayer-volume"></div>
+                  <i class='left fa fa-volume-off fa-fw'></i>
+                  <i class='right fa fa-volume-up fa-fw'></i>
+                </div>
+              </div>
+            </a>
+          </li>
+        
+      
+    </ul>
+  </div>
+
+  <script>
+    window.document.oncontextmenu = function (event) {
+      if (event.ctrlKey) return true;
+      if (/Android|webOS|BlackBerry/i.test(navigator.userAgent)) return true;
+      return popMenu(event);
+    };
+    document.addEventListener("click", function (event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      mymenu.style.display = "none";
+    });
+    function popMenu(event) {
+      var mymenu = document.getElementById('rightmenu-wrapper');
+      var menuContent = document.getElementById('rightmenu-content');
+      var screenWidth = document.documentElement.clientWidth || document.body.clientWidth;
+      var screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
+      mymenu.style.left = event.clientX + "px"; // 获取鼠标位置
+      mymenu.style.top = event.clientY + "px";
+      mymenu.style.display = 'block';
+      if (event.clientX * 2 > screenWidth) {
+        menuContent.classList.add('left');
+      } else {
+        menuContent.classList.remove('left');
+      }
+      if (event.clientY * 2 > screenHeight) {
+        menuContent.classList.add('top');
+      } else {
+        menuContent.classList.remove('top');
+      }
+
+      let hrText = document.getElementById('hr-text');
+      let hrSrc = document.getElementById('hr-src');
+      let hrHref = document.getElementById('hr-href');
+
+      // 选中图片
+      let copySrc = document.getElementById('menu-copy-src');
+      if (copySrc != undefined) {
+        if (event.target.currentSrc) {
+          copySrc.style.display = 'block';
+          copySrc.addEventListener("click", function (e) {
+            copyString(event.target.currentSrc);
+          },{once: true});
+          hrSrc.style.display = 'block';
+        } else {
+          copySrc.style.display = 'none';
+          hrSrc.style.display = 'none';
+        }
+      }
+
+      // 选中按钮
+      // 判断是不是按钮
+      let href = '';
+      if (event.path) {
+        for (i = 0; i < event.path.length; i++) {
+          if (event.path[i].href != undefined && event.path[i].href.length > 0) {
+            href = event.path[i].href;
+          }
+        }
+      }
+
+      let copyText = document.getElementById('menu-copy-text');
+      copyText.style.display = 'none';
+      hrText.style.display = 'none';
+      if (href.length == 0) {
+        // 选中文本
+        if (window.getSelection().toString()) {
+          copyText.style.display = 'block';
+          hrText.style.display = 'block';
+        }
+      }
+
+      // 在新标签页打开
+      let openHref = document.getElementById('menu-open-href');
+      if (openHref != undefined) {
+        if (href.length > 0) {
+          openHref.style.display = 'block';
+          openHref.addEventListener("click", function (e) {
+            window.open(href);
+          },{once: true});
+          hrHref.style.display = 'block';
+        } else {
+          openHref.style.display = 'none';
+          hrHref.style.display = 'none';
+        }
+      }
+      // 复制链接
+      let copyHref = document.getElementById('menu-copy-href');
+      if (copyHref != undefined) {
+        if (href.length > 0) {
+          copyHref.style.display = 'block';
+          copyHref.addEventListener("click", function (e) {
+            copyString(href);
+          },{once: true});
+        } else {
+          copyHref.style.display = 'none';
+        }
+      }
+
+      // 有音乐播放器
+      if (true == true) {
+        // 如果有aplayer，初始化一下
+      	try {
+      		checkAPlayer();
+          updateTitle();
+      	} catch (error) {
+      		console.log(error);
+      	}
+      }
+
+      return false; // 该行代码确保系统自带的右键菜单不会被调出
+    }
+    function hideMenu() {
+      document.getElementById('rightmenu-wrapper').style.display = 'none';
+    }
+    function copyString(str) {
+      const input = document.createElement('input');
+      input.setAttribute('readonly', 'readonly');
+      document.body.appendChild(input);
+      input.setAttribute('value', str);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    document.execCommand('click');
+  </script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5/dist/jquery.min.js"></script>
+
+
+
+  <script>
+    
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/" || "/";
+    if (!ROOT.endsWith('/')) ROOT += '/';
+  </script>
+
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@2/js/instant_page.js" type="module" defer integrity="sha384-OeDn4XE77tdHo8pGtE1apMPmAipjoxUQ++eeJa6EtJCfHlvijigWiJpD7VDPWXV1"></script>
+
+
+
+  
+  
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/jquery-backstretch@2.1.18/jquery.backstretch.min.js"></script>
+
+    <script type="text/javascript">
+      $(function(){
+        var imgs=["https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/001.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/002.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/003.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/004.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/005.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/006.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/012.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/016.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/019.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/025.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/033.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/034.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/035.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/038.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/039.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/042.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/046.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/051.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/052.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/054.jpg", "https://cdn.jsdelivr.net/gh/volantis-x/cdn-wallpaper-minimalist/2020/056.jpg"];
+        if ('true' == 'true') {
+          function shuffle(arr){
+            /*From countercurrent-time*/
+            var n = arr.length;
+            while(n--) {
+              var index = Math.floor(Math.random() * n);
+              var temp = arr[index];
+              arr[index] = arr[n];
+              arr[n] = temp;
+            }
+          }
+          shuffle(imgs);
+        }
+        if ('.cover') {
+          $('.cover').backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        } else {
+          $.backstretch(
+            imgs,
+          {
+            duration: "20000",
+            fade: "1500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+  <script>
+    let APlayerController = new Object();
+    APlayerController.id = '3175833810';  // 设定全局音乐播放ID
+    APlayerController.volume = '0.7';
+  </script>
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10/dist/APlayer.min.js"></script>
+
+  
+    
+<script src="https://cdn.jsdelivr.net/npm/meting@2.0/dist/Meting.min.js"></script>
+
+  
+    
+<script src="/js/aplayer.js"></script>
+
+  
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+  function pjax_gitalk() {
+    let pageUrl = $.trim($('#pjax-comment-path').text()) === "none" ? 
+      decodeURI(window.location.pathname) : $.trim($('#pjax-comment-path').text());
+    
+    let ALLPATH = '';
+    if(ALLPATH != '') pageUrl = ALLPATH;
+
+    if (document.getElementById('gitalk-container') != null) {
+      var gitalk = new Gitalk({
+        clientID: "a9f57bed080703426741",
+        clientSecret: "03fe7aec06a7794dedfcc123b6475f0231f6a0ce",
+        repo: "wmyskxz.github.io",
+        owner: "wmyskxz",
+        admin: "wmyskxz",
+        id: pageUrl,
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      });
+      gitalk.render('gitalk-container');
+    }
+  }
+
+  $(function () {
+    pjax_gitalk();
+  });
+</script>
+
+
+
+
+<!-- darkmodejs -->
+
+
+<!-- 复制 -->
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+    var clipboard = new ClipboardJS('.btn-copy', {
+        target: function (trigger) {
+            return trigger.nextElementSibling
+        }
+    });
+    function wait(callback, seconds) {
+        var timelag = null;
+        timelag = window.setTimeout(callback, seconds)
+    }
+    function pjax_initCopyCode() {
+        var copyHtml = '';
+        copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+        copyHtml += '<i class="fas fa-copy"></i><span>COPY</span>';
+        copyHtml += '</button>';
+        $(".highlight .code pre").before(copyHtml);
+        $(".article pre code").before(copyHtml);
+        clipboard.off('success').on('success', function (e) {
+            let $btn = $(e.trigger);
+            $btn.addClass('copied');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-check-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPIED';
+            wait(function () {
+                $icon.removeClass('fa-check-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        });
+        clipboard.off('error').on('error', function (e) {
+            e.clearSelection();
+            let $btn = $(e.trigger);
+            $btn.addClass('copy-failed');
+            let $icon = $($btn.find('i'));
+            $icon.removeClass('fa-copy');
+            $icon.addClass('fa-times-circle');
+            let $span = $($btn.find('span'));
+            $span[0].innerText = 'COPY FAILED';
+            wait(function () {
+                $icon.removeClass('fa-times-circle');
+                $icon.addClass('fa-copy');
+                $span[0].innerText = 'COPY'
+            }, 2000)
+        })
+    }
+    $(function () {
+        pjax_initCopyCode()
+    });
+</script>
+
+
+<!-- scrollreveal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.6/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    function pjax_scrollrebeal() {
+      ScrollReveal().reveal('.l_main .reveal', {
+        distance: '32px',
+        duration: '800',
+        interval: '20',
+        scale: '1',
+        easing: 'ease-out'
+      });
+    }
+
+    $(function () {
+      pjax_scrollrebeal();
+    });
+  </script>
+
+<!-- ******************************** -->
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  function pjax_fancybox() {
+    $(".article-entry").find("img").not('.inline').not('a img').each(function () { //渲染 fancybox
+      var element = document.createElement("a"); // a 标签
+      $(element).attr("class", "fancybox");
+      $(element).attr("pjax-fancybox", "");  // 过滤 pjax
+      $(element).attr("href", $(this).attr("src"));
+      if ($(this).attr("data-original")) {
+        $(element).attr("href", $(this).attr("data-original"));
+      }
+      $(element).attr("data-fancybox", "images");
+      var caption = "";   // 描述信息
+      if ($(this).attr('alt')) {  // 判断当前页面是否存在描述信息
+        $(element).attr('data-caption', $(this).attr('alt'));
+        caption = $(this).attr('alt');
+      }
+      var div = document.createElement("div");
+      $(div).addClass("fancybox");
+      $(this).wrap(div); // 最外层套 div ，其实主要作用还是 class 样式
+      var span = document.createElement("span");
+      $(span).addClass("image-caption");
+      $(span).text(caption); // 加描述
+      $(this).after(span);  // 再套一层描述
+      $(this).wrap(element);  // 最后套 a 标签
+    })
+    $(".article-entry").find("img").fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+      closeClick: true,
+      helpers: {
+        overlay: {closeClick: true}
+      },
+      buttons: [
+        "zoom",
+        "close"
+      ]
+    });
+  };
+  $(function () {
+    pjax_fancybox();
+  });
+</script>
+
+<!-- ******************************** -->
+
+
+  
+<script src="/js/app.js"></script>
+
+
+
+
+  
+    
+<script src="/js/search.js"></script>
+
+  
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/gh/volantis-x/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js" data-pjax></script>
+
+
+
+  
+<script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+
+
+
+  
+    
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/highlight.min.js"></script>
+
+    <script>hljs.initHighlightingOnLoad();</script>
+  
+
+
+
+
+    
+      
+
+
+<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js"></script>
+
+<!-- 样式位于：source/css/_third-party/pjaxanimate.styl -->
+
+<div class="pjax-animate">
+  
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    <div id="loading-bar-wrapper"><script>NProgress.configure({parent:"#loading-bar-wrapper",trickleSpeed: 100})</script></div>
+    <script>
+      window.ShowLoading = function() {
+        NProgress.start();
+      };
+      window.HideLoading = function() {
+        NProgress.done();
+      }
+    </script>
+  
+</div>
+
+<script>
+    var pjax;
+    document.addEventListener('DOMContentLoaded', function () {
+      pjax = new Pjax({
+        elements: 'a[href]:not([href^="#"]):not([href="javascript:void(0)"]):not([pjax-fancybox])',
+        selectors: [
+          "title",
+          "#pjax-container",
+          "#pjax-header-nav-list"
+        ],
+        cacheBust: false,   // url 地址追加时间戳，用以避免浏览器缓存
+        timeout: 5000
+      });
+    });
+
+    document.addEventListener('pjax:send', function (e) {
+      window.stop(); // 相当于点击了浏览器的停止按钮
+
+      try {
+        var currentUrl = window.location.pathname;
+        var targetUrl = e.triggerElement.href;
+        var banUrl = [""];
+        if (banUrl[0] != "") {
+          banUrl.forEach(item => {
+            if(currentUrl.indexOf(item) != -1 || targetUrl.indexOf(item) != -1) {
+              window.location.href = targetUrl;
+            }
+          });
+        }
+      } catch (error) {}
+
+      window.subData = null; // 移除标题（用于一二级导航栏切换处）
+      $.fancybox.close();    // 关闭弹窗
+      $('.l_header .switcher .s-search').removeClass('active'); // 关闭移动端激活的搜索框
+      $('.l_header').removeClass('z_search-open'); // 关闭移动端激活的搜索框
+      $('.wrapper').removeClass('sub'); // 跳转页面时关闭二级导航
+
+      // 解绑事件 避免重复监听
+      $('.s-top').unbind('click');
+      $('.menu a').unbind('click');
+      $(window).unbind('resize');
+      $(window).unbind('scroll');
+      $(document).unbind('scroll');
+      $(document).unbind('click');
+      $('body').unbind('click');
+      window.ShowLoading();
+    });
+
+    document.addEventListener('pjax:complete', function () {
+      // 关于百度统计对 SPA 页面的处理：
+      // 方案一：百度统计>管理>单页应用设置中，打开开启按钮即可对SPA进行统计。 https://tongji.baidu.com/web/help/article?id=324
+      // 方案二：取消注释下列代码。 https://tongji.baidu.com/web/help/article?id=235
+      // 
+
+      // 关于谷歌统计对 SPA 页面的处理：
+      // 当应用以动态方式加载内容并更新地址栏中的网址时，也应该更新通过 gtag.js 存储的网页网址。
+      // https://developers.google.cn/analytics/devguides/collection/gtagjs/single-page-applications?hl=zh-cn
+      
+
+      $('.nav-main').find('.list-v').not('.menu-phone').removeAttr("style",""); // 移除小尾巴的移除
+      $('.menu-phone.list-v').removeAttr("style",""); // 移除小尾巴的移除
+      $('script[data-pjax], .pjax-reload script').each(function () {
+        $(this).parent().append($(this).remove());
+      });
+
+      try{
+        pjax_fancybox();
+        
+          
+          if ('.cover') {
+            $('.cover').backstretch("resize");
+          } else {
+            $.backstretch("resize");
+          }
+        
+        
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightBlock(block);
+        });
+        
+        
+          pjax_scrollrebeal();
+        
+        
+          pjax_initCopyCode();
+        
+        
+        
+        
+          pjax_gitalk();
+        
+        
+        
+      } catch (e) {
+        console.log(e);
+      }
+      window.HideLoading();
+    });
+
+    document.addEventListener('pjax:error', function (e) {
+      window.HideLoading();
+      window.location.href = e.triggerElement.href;
+    });
+</script>
+
+    
+  </div>
+</body>
+</html>
