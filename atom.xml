@@ -6,7 +6,7 @@
   <link href="http://www.wmyskxz.com/atom.xml" rel="self"/>
   
   <link href="http://www.wmyskxz.com/"/>
-  <updated>2021-12-14T15:42:59.126Z</updated>
+  <updated>2021-12-14T15:44:21.318Z</updated>
   <id>http://www.wmyskxz.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://www.wmyskxz.com/2021/12/14/you-xi-shu-zhi-ce-hua-ru-men-1/"/>
     <id>http://www.wmyskxz.com/2021/12/14/you-xi-shu-zhi-ce-hua-ru-men-1/</id>
     <published>2021-12-14T15:42:05.000Z</published>
-    <updated>2021-12-14T15:42:59.126Z</updated>
+    <updated>2021-12-14T15:44:21.318Z</updated>
     
     <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214205350.png" alt="@dribbble"></p><blockquote><p>PS：本文仅为分享学习成果，如有错误，欢迎指正。</p></blockquote><a id="more"></a><p>这一段时间以来，都在捣鼓制作一个 RPG 向的游戏服务器，其中就涉及到有关<strong>数值策划</strong>的东西。</p><p>买了两本参考书目来看：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214211533.png" alt=""></p><p>但发现几乎都是一套一套成熟的复杂的“拿来主义”，知其然不知所以然，翻看了两下就放下了。</p><p>后来在 B 站上遇到了<a href="https://space.bilibili.com/381528511/channel/detail?cid=114111" target="_blank" rel="noopener" title="从零开始的游戏数值生活">从零开始的游戏数值生活</a>系列视频，解答了我心里面的很多疑惑。</p><p>听讲课的刘勇老师说，它的自研体系制作出了一系列「成功」的游戏，算是“最高荣誉拿齐”了。</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214212504.png" alt="视频截图"></p><p>今天就来跟大家分享一下视频里面的精髓部分。</p><h1 id="数值策划干什么的？"><a href="#数值策划干什么的？" class="headerlink" title="数值策划干什么的？"></a>数值策划干什么的？</h1><p>简单来说，游戏策划的主要工作：1）<strong>保证游戏环境的平衡</strong>；2）<strong>达到预期策划的效果</strong>。</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214213714.png" alt=""></p><p>这里有一个容易遗漏的重点是：<strong>数值是为预期策划效果服务的</strong>，所以，我们的数值应该是与策划高度对齐的。</p><p>而数值策划的日常也可以简单分成前、中、后期：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214214308.png" alt=""></p><h1 id="如何保证平衡？"><a href="#如何保证平衡？" class="headerlink" title="如何保证平衡？"></a>如何保证平衡？</h1><p>首先需要知道，游戏为什么不平衡。其中大部分的锅，可以丢给 <strong>「伤害计算公式」</strong> 来背，另外一部分，则可以丢给 <strong>「属性对应关系」</strong>。</p><h2 id="一对多问题"><a href="#一对多问题" class="headerlink" title="一对多问题"></a>一对多问题</h2><p>我们先来说一下简单的部分，就是「属性对应关系」。不同属性之间，总共只有三种对应关系：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214215124.png" alt=""></p><p>单一属性影响多个属性的设定，就属于一对多的范畴之中了。（比如:敏捷属性会影响攻击、防御、人物移速三个方面）</p><p>如果我们想要做数值平衡，就要保证在不同的属性值 <strong>「成长曲线」</strong> 中，能够找到相对平衡的 <strong>「平均线」</strong>：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214220533.png" alt=""></p><p>而一对多的属性加入之后，数据就很难达到平衡了。</p><p>假设，攻击力会受力量、敏捷、霸气等多个属性值影响，它们直接叠加起来，整个攻击力成长曲线就会非常混乱（如上图右边）。</p><p><strong>所以理论上，多曲线的数据平衡是不成立的。</strong></p><p>一个失败的例子：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214221021.png" alt=""></p><ul><li><strong>一对多</strong>：导致数据很难平衡；</li><li><strong>数据类型和变化范围不一样</strong>：攻击力是<strong>自然数</strong>，是属于无上限的，而暴击加成是一个有限域内的<strong>比例数</strong>（百分比）；</li><li><strong>攻方数据和防方数据掺杂</strong>：攻击力和暴击属性攻击方的数据，而格挡属于防守方；</li></ul><p>简而言之，如果属性值一对多，所面临的的数据平衡问题会几何倍地增长，最终导致游戏无法平衡。</p><h3 id="如何解决？"><a href="#如何解决？" class="headerlink" title="如何解决？"></a>如何解决？</h3><p>不要设计一对多的属性值对应关系。</p><h2 id="多对一的问题"><a href="#多对一的问题" class="headerlink" title="多对一的问题"></a>多对一的问题</h2><p>假设：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214224533.png" alt=""></p><p>那非常完美，因为 <code>武器</code>、<code>角色</code>、<code>饰品</code> 彼此是<strong>独立</strong>的三个来源，不属于 <strong>「一对多」</strong> 的范畴。</p><p>但假如一个玩家的设定是：<code>防御力</code> = <code>衣服防御</code> + <code>腰带防御</code> + <code>鞋子防御</code>，而 <code>衣服</code>、<code>腰带</code>、<code>鞋子</code> 都属于 <code>装备</code> 的范畴，这里就出现了 <strong>「多对一」</strong> 的问题了。</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214225157.png" alt=""></p><p>一对多是致命的，但多对一不是，因为多对一的多指的是「同一类型下的多个内容」，这还属于我们可以自行调节的范畴之内。</p><p>但仍然存在问题，假设：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214230613.png" alt=""></p><ul><li>一颗强化武器的宝石增加 300 攻击力；</li><li>一颗强化防御的宝石增加 80 防御力；</li></ul><p>那么对应下来，一颗攻击宝石的价值几乎就是一颗防御宝石的 4 倍。直接导致的结果就是，玩家本来就喜欢在游戏里面砸攻击力，你反而让效率增加了 4 倍。</p><p><strong>问题的本质是</strong>：同样的投入下，「投入攻击」的性价比比「投入防御」要高得多，这很不公平，也很难平衡。</p><p>有一个极端的例子是：征途有一个玩家疯狂堆防御力，最终导致防御力&gt;攻击力的情况，出现一人屠一国的震撼场景：</p><p><img src="https://cdn.jsdelivr.net/gh/wmyskxz/img/img/20211214231329.png" alt=""></p><h3 id="如何解决？-1"><a href="#如何解决？-1" class="headerlink" title="如何解决？"></a>如何解决？</h3><p>让装备和属性一一对应就好了。</p><p>比如，武器就加攻击力，腰带就加生命值，盔甲就加防御力。但做到如此极致的游戏，是很少见的。（但据我观察，现在很多手游都采用了「一对一」的形式）</p><h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>好了，今天我们知道了「保证游戏平衡」中关于「属性值对应关系」的简单部分：</p><ul><li>杜绝「一对多」的设计；「多对一」很难平衡；</li><li>尽量保证装备与属性「一对一」的关系；</li></ul><p>后续我们将分享关于「计算公式」的秘密，以及如何「达到预期效果」的分享，欢迎关注。</p>]]></content>
     
@@ -33,10 +33,10 @@
     
     
     
-    <category term="一周精彩内容分享" scheme="http://www.wmyskxz.com/categories/%E4%B8%80%E5%91%A8%E7%B2%BE%E5%BD%A9%E5%86%85%E5%AE%B9%E5%88%86%E4%BA%AB/"/>
+    <category term="游戏" scheme="http://www.wmyskxz.com/categories/%E6%B8%B8%E6%88%8F/"/>
     
     
-    <category term="一周精彩内容分享" scheme="http://www.wmyskxz.com/tags/%E4%B8%80%E5%91%A8%E7%B2%BE%E5%BD%A9%E5%86%85%E5%AE%B9%E5%88%86%E4%BA%AB/"/>
+    <category term="游戏" scheme="http://www.wmyskxz.com/tags/%E6%B8%B8%E6%88%8F/"/>
     
   </entry>
   
